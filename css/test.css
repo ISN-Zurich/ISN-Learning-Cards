@@ -1,0 +1,35 @@
+H1 {
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+}
+
+#splashScreen {
+
+
+
+}
+
+#loading:before {
+
+/*ccontent: "Loading..";*/
+content: url(../resources/loading.gif);
+
+}
+
+
+#loginForm{
+
+display: none; 
+
+
+}
+
+#gesturereport{
+display: none; 
+width: 100;
+    margin: 5px;
+    margin-top: 40%;
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+    font-size: 30px;
+
+}
