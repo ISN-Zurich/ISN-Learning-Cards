@@ -1,4 +1,4 @@
-function Connectionstate() {	
+function ConnectionState() {	
 
 	var self = this;
 	self.state = window.navigator.onLine;
@@ -11,4 +11,5 @@ function Connectionstate() {
 	window.addEventListener("online", setState, false);
 }
 
-Connectionstate.prototype.getState = function() {return this.state;};
+ConnectionState.prototype.getState = function() {return this.state;}; //returns true or false!
+ConnectionState.prototype.isOffline = function() {return !this.state;};
