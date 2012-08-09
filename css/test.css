@@ -23,6 +23,30 @@ display: none;
 
 }
 
+#loginButton {
+
+
+
+}
+
+#closeSettings {
+
+
+
+}
+
+#logOutSettings {
+
+
+
+}
+
+#logOut{
+
+
+
+}
+
 #gesturereport{
 display: none; 
 width: 100;
@@ -33,3 +57,80 @@ width: 100;
     font-size: 30px;
 
 }
+
+#courseList{
+
+display: none; 
+
+
+}
+
+#CourseList_FromQuestion{
+
+
+
+
+}
+
+
+#settings{
+
+display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+
+}
+
+#logoutConfirmation{
+
+display: none; 
+
+
+}
+
+
+#cardQuestion1{
+
+display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+
+}
+
+#cardQuestion2{
+
+display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+
+}
+#cardAnswer{
+
+display: none; 
+
+
+}
+
+#titleAnswer{
+
+display: none; 
+
+
+}
+#done{
+
+display: none; 
+
+
+}
+
+#cardFeedback{
+
+display: none; 
+
+
+}
+
+
+
+
+
+
+
