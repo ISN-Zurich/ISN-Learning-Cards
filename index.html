@@ -11,7 +11,7 @@ scale=1, maximum-scale=1" >
 <script type="text/javascript" src="libs/jquery.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
 <script type="text/javascript" src="scripts/transition.js"></script>
-<script type="text/javascript" src="scripts/catchGestures.js"></script>
+<!--<script type="text/javascript" src="scripts/catchGestures.js"></script>-->
 <LINK href="css/test.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -27,7 +27,7 @@ scale=1, maximum-scale=1" >
 <div id="loginForm">
 <!-- <h1> Learning Cards </h1> -->
 <fieldset>
-<form action="doLogin.php" method="POST">
+<form>
 
  <p> 
      <label id="username"> Username </label>
@@ -42,13 +42,70 @@ scale=1, maximum-scale=1" >
      
      <br/>
      
-     <input type="submit" value="Login"/>
+     <input id="loginButton" type="submit" value="Login"/>
  </p>
 </form>
 </fieldset> 
 </div>
 
-<div id="gesturereport"> Detect gesture </div>
+<div id="courseList">  
+<h1> Your Courses </h1>
+
+<div id="courses">
+<ul id="list">
+  <li>Course Title 1</li>
+  <li>Course Title 2</li>
+  <li>Course Title 3</li>
+</ul>
+
+</div>
+</div>
+
+
+
+
+<div id="settings"> 
+
+<input type="image" id= "closeSettings" src="resources/Close.png" name="image" width="60" height="60">
+<h1>Settings </h1>
+<p>Your name </p>
+<p>Your username </p>
+<p>Your email </p>
+
+<br/>
+<button id="logOutSettings" type="button">Log out</button>
+
+</div>
+<div id="logoutConfirmation"> 
+<h1> Do you really want to log out</h1>
+<br/>
+<br/>
+<button id="logOut" type="button">Logout</button>
+</div>
+
+<div id="cardQuestion1">
+<h1> Question Card 1 </h1>
+<p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p
+<br/>
+<button id="CourseList_FromQuestion" type="button">Course List View</button>
+</div>
+
+<div id="cardQuestion2">
+<h1> Question Card 2</h1>
+<p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p
+</div>
+
+<div id="cardAnswer"> 
+<h1>Card Answer View </h1>
+ Answer view Title  
+<br/>
+<br/>
+<button id="done" type="button">Done</button>
+ </div>
+
+
+<div id="cardFeedback"> cardFeedback </div>
+
 
 
 </body>
