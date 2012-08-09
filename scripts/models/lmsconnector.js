@@ -1,6 +1,5 @@
 function sendData(url, data, method, callback) {
-	var connection = new ConnectionState();
-	if (connection.isOffline()) {
+	if (isOffline()) {
 		alert("Sending data is not possible! You are not connected to the internet!");
 	} else { 	//is connected to internet
 		
@@ -11,9 +10,7 @@ function sendData(url, data, method, callback) {
 		};
 		
 		var jsonString = JSON.stringify(json);
-		jQuery.post(urlToPHPService, jsonString, function(data, textStatus, jqXHR) {
-														callback(data, textStatus);
-												}, "json");
+		jQuery.post(urlToPHPService, jsonString, callback(JSON.parse(data), textStatus));
 	}
 };
 

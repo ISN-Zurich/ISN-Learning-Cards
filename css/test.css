@@ -1,0 +1,130 @@
+H1 {
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+}
+
+#splashScreen {
+
+
+
+}
+
+#loading:before {
+
+/*ccontent: "Loading..";*/
+content: url(../resources/loading.gif);
+
+}
+
+
+#loginForm{
+
+display: none; 
+
+
+}
+
+#loginButton {
+
+
+
+}
+
+#closeSettings {
+
+
+
+}
+
+#logOutSettings {
+
+
+
+}
+
+#logOut{
+
+
+
+}
+
+#gesturereport{
+display: none; 
+width: 100;
+    margin: 5px;
+    margin-top: 40%;
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+    font-size: 30px;
+
+}
+
+#courseList{
+
+display: none; 
+
+
+}
+
+#CourseList_FromQuestion{
+
+
+
+
+}
+
+
+#settings{
+
+display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+
+}
+
+#logoutConfirmation{
+
+display: none; 
+
+
+}
+
+
+#cardQuestion{
+
+display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+
+}
+
+#cardAnswer{
+
+display: none; 
+
+
+}
+
+#titleAnswer{
+
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+
+
+}
+#done{
+
+
+
+}
+
+#cardFeedback{
+
+display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+
+
+}
+
+
+
+
+
+
+
