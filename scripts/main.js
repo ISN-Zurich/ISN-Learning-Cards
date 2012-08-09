@@ -1,6 +1,5 @@
 function init() {
 	console.log("0");
-	var connectionState = new ConnectionState();
 	var config = null;
 	
 	console.log("1");
@@ -15,7 +14,7 @@ function init() {
 	
 	console.log("2");
 
-	if (connectionState.isOffline()) { // user is offline
+	if (isOffline()) { // user is offline
 		console.log("3a");
 		if (config.loginState == "loggedOut") {
 			console.log("Sorry, you need to be online to connect to your LMS");

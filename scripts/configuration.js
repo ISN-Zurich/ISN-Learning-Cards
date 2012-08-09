@@ -1,5 +1,4 @@
 var configurationModel = {
-
 	appId : "",
 	appAuthenticationKey : "",
 	userAuthenticationKey : "",
