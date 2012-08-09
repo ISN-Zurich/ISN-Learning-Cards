@@ -1,13 +1,13 @@
-function cbPinch() {
+function cbPinch(t) {
     $('#gesturereport').text('pinch');
 }
 
-function cbStretch() {
+function cbStretch(t) {
     $('#gesturereport').text('stretch');
 }
 
-function cbSwipe(e) {
-    $('#gesturereport').text('swipe');
+function cbSwipe(e,dir) {
+    $('#gesturereport').text('swipe '+ dir);
 }
 
 function cbTap() {
@@ -19,12 +19,13 @@ function cbFlick() {
 }
 
 function cbPinchend(t, dir) {
-    if ( dir == 'widened') {
-	cbStretch();
-    }
-    else {
-	cbPinch();
-    }
+    $('#gesturereport').text('pinch ' + dir);
+    //if ( dir == 'widened') {
+	//cbStretch();
+    //}
+    //else {
+	//cbPinch();
+    //}
 }
 
 function cbSetup() {
@@ -34,8 +35,10 @@ function cbSetup() {
 			  flickTime: 250 };
 
     jester(document, jesteroptions)
-	.pinchend( cbPinchend)
-	.swipe(cbSwipe)
+	//.pinch({narrow:cbPinch, widen:cbStretch, end:cbPinch})
+	.pinchnarrow(cbPinch)
+    .pinchwiden(cbStretch)
+    .swipe(cbSwipe)
 	.tap( cbTap);
 
     //jester(document).flick( cbFlick );
