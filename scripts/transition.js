@@ -101,14 +101,43 @@ jester($("#list")[0]).tap(function(){
 
    });
 
+   jester($("#cardAnswer")[0]).swipe(function(){
+    $("#cardAnswer").hide();
+      $("#cardQuestion2").toggle();
+    $("#splashScreen").hide();
+
+   });
   
-  /*from card answer view to question view by tapping on the title area of it
+  //from card answer view to question view by tapping on the title area of it
   jester($("#titleAnswer")[0]).tap(function(){
     $("#cardAnswer").hide();
       $("#cardQuestion1").toggle();
     $("#splashScreen").hide();
 
-   });*/
+   });
+   
+   //tap on done button in answer view page so that to navigate to feedback view
+   
+    jester($("#done")[0]).tap(function(){
+    $("#cardAnswer").hide();
+      $("#cardFeedback").show();
+    $("#splashScreen").hide();
+
+   });
  
+ // to do the navigation from  card answer view to course list view by pinching
+ 
+ // code
+ 
+ //from feedback view to question view by swiping
+ jester($("#cardFeedback")[0]).swipe(function(){
+    $("#cardFeedback").hide();
+      $("#cardQuestion1").toggle();
+    $("#splashScreen").hide();
+
+   });
+ 
+ 
+ // to do the navigation from feedback view to course list view by pinching 
  
 });

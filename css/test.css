@@ -110,13 +110,12 @@ display: none;
 
 #titleAnswer{
 
-display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
 
 
 }
 #done{
 
-display: none; 
 
 
 }
@@ -124,6 +123,7 @@ display: none;
 #cardFeedback{
 
 display: none; 
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
 
 
 }
