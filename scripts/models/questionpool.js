@@ -1,7 +1,6 @@
-var i = 0;
-
 function Questionpool() {
 	
+	this.i = 0;
 	this.questions = new Array();
 	this.currentQuestion = "";
 	this.answer = "";
@@ -10,10 +9,10 @@ function Questionpool() {
 }
 
 Questionpool.prototype.nextQuestion = function() {
-	this.currentQuestion = this.questions[i].getQuestion();
-	this.answer = this.questions[i].getAnswer();
-	this.feedback = this.questions[i].getFeedback();
-	i = ++i % this.questions.length;
+	this.currentQuestion = this.questions[this.i].getQuestion();
+	this.answer = this.questions[this.i].getAnswer();
+	this.feedback = this.questions[this.i].getFeedback();
+	this.i = (this.i+1) % this.questions.length;
 };
 Questionpool.prototype.getCurrentQuestion = function() {return this.currentQuestion;};
 Questionpool.prototype.getAnswer = function() {return this.answer;};

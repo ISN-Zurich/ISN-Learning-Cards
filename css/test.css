@@ -4,14 +4,16 @@ color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE:
 
 #splashScreen {
 
-
+display:none;
 
 }
 
-#loading:before {
+#loading {
 
 /*ccontent: "Loading..";*/
 content: url(../resources/loading.gif);
+
+display:none;
 
 }
 

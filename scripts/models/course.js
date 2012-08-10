@@ -23,3 +23,12 @@ Course.prototype.nextQuestion = function() {this.questionpool.nextQuestion();};
 Course.prototype.getCurrentQuestion = function() {return this.questionpool.getCurrentQuestion();};
 Course.prototype.getAnswer = function() {return this.questionpool.getAnswer();};
 Course.prototype.getFeedback = function() {return this.questionpool.getFeedback();};
+
+function getCourse(id) {
+	for (c in courses) {
+		if (courses[c].getId() == id) {
+			return courses[c];
+		}
+	}
+	return null;
+}

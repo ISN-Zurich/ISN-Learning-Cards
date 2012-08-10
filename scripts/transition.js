@@ -10,38 +10,51 @@ function loadTransitions() {
 	// from login view to course list by tapping on the login button
 	jester($("#loginButton")[0]).tap(
 			function() {
+				console.log("0");
 				for (var c in courses) {
-					$("#list").add(
-							"<ul id=" + courses[c].getId() + ">" + c.getTitle()
-									+ "</ul>");
-					
-					jester($("#" + courses[c].getId())[0]).tap(function() {
-						currentCourse = c;
-						c.nextQuestion();
-						$("#cardQuestion p").text(c.getCurrentQuestion());
+					$("#list").append(
+							"<li class='listItem' id='course" + courses[c].getId() + "'>" + courses[c].getTitle()
+									+ "</li>");
+					console.log("1");
+					// from course list view to card question view by tapping on a
+					// list item
+					jester($("#course" + courses[c].getId())[0]).tap(function() {
+						alert($(this).attr('id').substring(6));
+						currentCourse = getCourse($(this).attr('id').substring(6));
+						currentCourse.nextQuestion();
+						$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
 						$("#cardQuestion").show();
 						$("#courseList").hide();
 						$("#splashScreen").hide();
 
 					});
+					console.log("2");
 					
 				}
+				console.log("3");
 				$("#courseList").show();
 				$("#loginForm").hide();
 				$("#splashScreen").hide();
 				configurationModel.loginState = "loggedIn";
+				
+				console.log("4");
 
 			});
 
-	// from course list view to card question view by tapping on a
-	// list item
-	for (var c in courses) {
-		
-	}
-
+	
+	
 	// from course list view to settings view by swiping (it should be
 	// done by pinching)
 	jester($("#list")[0]).swipe(function() {
+		$("#settings").show();
+		$("#courseList").hide();
+		$("#splashScreen").hide();
+
+	});
+	
+	// from course list view to settings view by button (it should be
+	// done by pinching)
+	jester($("#btnToSettings")[0]).tap(function() {
 		$("#settings").show();
 		$("#courseList").hide();
 		$("#splashScreen").hide();
@@ -90,8 +103,11 @@ function loadTransitions() {
 		//$("#splashScreen").show();
 		//$("#loading").show();
 		configurationModel.loginState = "loggedOut";
-		localStorage.configuration = JSON.stringify(config);
+		console.log("before storing");
+		localStorage.configuration = JSON.stringify(configurationModel);
 		localStorage.courses = JSON.stringify(courses);
+		console.log("after storing");
+		window.close();
 
 	});
 
@@ -103,8 +119,8 @@ function loadTransitions() {
 //		$("#cardQuestion1").hide();
 //		$("#cardQuestion2").toggle();
 //		$("#splashScreen").hide();
-		c.nextQuestion();
-		$("#cardQuestion p").text(c.getCurrentQuestion());
+		currentCourse.nextQuestion();
+		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
 
 	});
 
@@ -112,7 +128,7 @@ function loadTransitions() {
 	// screen
 	jester($("#cardQuestion")[0]).tap(function() {
 		$("#cardQuestion").hide();
-		$("#cardAnswer").text(c.getAnswer());
+		$("#cardAnswer").text(currentCourse.getAnswer());
 		$("#cardAnswer").show();
 //		$("#splashScreen").hide();
 
@@ -122,18 +138,18 @@ function loadTransitions() {
 	// list view button. It should be done by pinching
 	jester($("#CourseList_FromQuestion")[0]).tap(function() {
 		$("#cardQuestion").hide();
+		$("#cardAnswer").hide();
 		$("#courseList").show();
 //		$("#cardQuestion1").hide();
 //		$("#courseList").toggle();
-//		$("#cardAnswer").toggle();
 //		$("#splashScreen").hide();
 
 	});
 
 	jester($("#cardAnswer")[0]).swipe(function() {
 		$("#cardAnswer").hide();
-		c.nextQuestion();
-		$("#cardQuestion p").text(c.getCurrentQuestion());
+		currentCourse.nextQuestion();
+		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
 		$("#cardQuestion").show();
 //		$("#splashScreen").hide();
 
@@ -152,7 +168,17 @@ function loadTransitions() {
 	// feedback view
 	jester($("#done")[0]).tap(function() {
 		$("#cardAnswer").hide();
-		$("#cardFeedback p").text(c.getFeedback());
+		$("#cardFeedback p").text(currentCourse.getFeedback());
+		$("#cardFeedback").show();
+//		$("#splashScreen").hide();
+
+	});
+	
+	// tap anywhere in answer view page so that to navigate to
+	// feedback view
+	jester($("#cardAnswer")[0]).tap(function() {
+		$("#cardAnswer").hide();
+		$("#cardFeedback p").text(currentCourse.getFeedback());
 		$("#cardFeedback").show();
 //		$("#splashScreen").hide();
 
@@ -165,9 +191,21 @@ function loadTransitions() {
 
 	// from feedback view to question view by swiping
 	jester($("#cardFeedback")[0]).swipe(function() {
+		console.log("Feedback swipe");
 		$("#cardFeedback").hide();
-		c.nextQuestion();
-		$("#cardQuestion p").text(c.getCurrentQuestion());
+		currentCourse.nextQuestion();
+		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
+		$("#cardQuestion").show();
+//		$("#splashScreen").hide();
+
+	});
+	
+	// from feedback view to question view by tap
+	jester($("#cardFeedback")[0]).tap(function() {
+		console.log("Feedback tap");
+		$("#cardFeedback").hide();
+		currentCourse.nextQuestion();
+		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
 		$("#cardQuestion").show();
 //		$("#splashScreen").hide();
 

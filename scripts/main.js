@@ -1,14 +1,20 @@
 $(document).ready(function() {
 
+	$("#splashScreen").show();
 	$("#loading").show();
 	
+	//setTimeout("start()",1000);
+	start();
+});
+	
+function start() {	
 	initModels();
 	
 	if (localStorage.configuration) { // user was already connected to LMS
         configurationModel = JSON.parse(localStorage.configuration);	//take the configuration from the local storage
     }
 	if (localStorage.courses) {
-		courses = JSON.parse(localStorage.courses);
+		//courses = JSON.parse(localStorage.courses);
 	}
 	
 	if (isOffline()) { // user is offline
@@ -24,24 +30,27 @@ $(document).ready(function() {
 		}
 	} else { // user is online
 		if (configurationModel.loginState == "loggedOut") {
+			console.log("login start");
 			loadTransitions();
 			
+			console.log("transitions loaded");
+			
 			$("#loading").hide();
-			$("#loginForm").show();
+			$("#loginForm").show();		
 			
-			
+			console.log("login end");
 			
 		} else if (configurationModel.loginState == "loggedIn") {
 			loadTransitions();
 			$("#courseList").show();
-//			$("#loginForm").hide();
+			$("#loginForm").hide();
 			$("#splashScreen").hide();		
 			
 			
 		}
 	}
 	
-});
+}
 
 
 //function init() {

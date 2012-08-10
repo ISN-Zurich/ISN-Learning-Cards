@@ -21,7 +21,8 @@
 	src="scripts/models/lmsconnector.js"></script>
 <script type="text/javascript" charset="utf-8"
 	src="scripts/models/connectionstate.js"></script>
-	<script type="text/javascript" charset="utf-8" src="scripts/testModels.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="scripts/testModels.js"></script>
 <script type="text/javascript" src="scripts/transition.js"></script>
 <script type="text/javascript" charset="utf-8" src="scripts/main.js"></script>
 
@@ -44,11 +45,11 @@
 			<form>
 
 				<p>
-					<label id="username"> Username </label> <input for="username"
+					<label id="username"> Username </label> <input type="text"
 						name="username" required="required" type="text" /> <br /> <label
 						id="password"> Password </label> <input type="password"
 						name="password" required="required" type="text" /> <br /> <input
-						id="loginButton" type="submit" value="Login" />
+						id="loginButton" type="button" value="Login" />
 				</p>
 			</form>
 		</fieldset>
@@ -65,6 +66,7 @@
 			</ul>
 
 		</div>
+		<button id="btnToSettings" type="button">Settings</button>
 	</div>
 
 	<div id="settings">
@@ -100,7 +102,7 @@
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
 			do eiusmod tempor incididunt ut labore et dolore magna.Lorem ipsum
 			dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-			incididunt ut labore et dolore magna.</p
+			incididunt ut labore et dolore magna.</p>
 		<br /> <br />
 		<button id="done" type="button">Done</button>
 	</div>
