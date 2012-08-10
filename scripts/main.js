@@ -50,7 +50,7 @@ function start() {
 			createCourseList();
 			loadTransitions();
 			
-			$("#courseList").show();
+			$("#coursesListView").show();
 			$("#loginForm").hide();
 			$("#splashScreen").hide();
 

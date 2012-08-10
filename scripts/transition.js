@@ -1,6 +1,6 @@
 function createCourseList() {
 	for (var c in courses) {
-		$("#list").append(
+		$("#coursesList").append(
 				"<li class='listItem' id='course" + courses[c].getId() + "'>" + courses[c].getTitle()
 						+ "</li>");
 		
@@ -11,7 +11,7 @@ function createCourseList() {
 			currentCourse.nextQuestion();
 			$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
 			$("#cardQuestion").show();
-			$("#courseList").hide();
+			$("#coursesListView").hide();
 			$("#splashScreen").hide();
 
 		});
@@ -37,42 +37,42 @@ function loadTransitions() {
 				
 				createCourseList();
 				
-				$("#courseList").show();
+				$("#coursesListView").show();
 				$("#loginForm").hide();
 				$("#splashScreen").hide();
 			});
 	
 	// from course list view to settings view by swiping (it should be
 	// done by pinching)
-	jester($("#list")[0]).swipe(function() {
-		$("#settings").show();
-		$("#courseList").hide();
+	jester($("#coursesList")[0]).swipe(function() {
+		$("#settingsView").show();
+		$("#coursesListView").hide();
 		$("#splashScreen").hide();
 
 	});
 	
 	// from course list view to settings view by button (it should be
 	// done by pinching)
-	jester($("#btnToSettings")[0]).tap(function() {
-		$("#settings").show();
-		$("#courseList").hide();
+	jester($("#coursesListSetIcon")[0]).tap(function() {
+		$("#settingsView").show();
+		$("#coursesListView").hide();
 		$("#splashScreen").hide();
 
 	});
 
 	// from settings to course list by taping on the close button
 	jester($("#closeSettings")[0]).tap(function() {
-		$("#settings").hide();
-		$("#courseList").toggle();
+		$("#settingsView").hide();
+		$("#coursesListView").toggle();
 		$("#splashScreen").hide();
 
 	});
 
 	// from settings to course list by swipping (it should be done by
 	// stretching)
-	jester($("#settings")[0]).swipe(function() {
-		$("#settings").hide();
-		$("#courseList").toggle();
+	jester($("#settingsView")[0]).swipe(function() {
+		$("#settingsView").hide();
+		$("#coursesListView").toggle();
 		$("#splashScreen").hide();
 
 	});
@@ -80,17 +80,17 @@ function loadTransitions() {
 	// from settings to confirmation screen by clicking on the logout
 	// button, the same result sould be obtained by pinching)
 	jester($("#logOutSettings")[0]).tap(function() {
-		$("#settings").hide();
-		$("#logoutConfirmation").toggle();
+		$("#settingsView").hide();
+		$("#logoutConfirmationView").toggle();
 		$("#splashScreen").hide();
 
 	});
 
 	// from logouts confirmation screen to settings by swiping. the same
 	// result should be obtained by pinching and stretching
-	jester($("#logoutConfirmation")[0]).swipe(function() {
-		$("#logoutConfirmation").hide();
-		$("#settings").show();
+	jester($("#logoutConfirmationView")[0]).swipe(function() {
+		$("#logoutConfirmationView").hide();
+		$("#settingsView").show();
 		$("#splashScreen").hide();
 
 	});
@@ -98,7 +98,7 @@ function loadTransitions() {
 	// from logout confirmation screen to splash screen by taping on the
 	// logout button (the final one)
 	jester($("#logOut")[0]).tap(function() {
-		$("#logoutConfirmation").hide();
+		$("#logoutConfirmationView").hide();
 		//$("#splashScreen").show();
 		//$("#loading").show();
 		configurationModel.loginState = "loggedOut";
@@ -138,7 +138,7 @@ function loadTransitions() {
 	jester($("#CourseList_FromQuestion")[0]).tap(function() {
 		$("#cardQuestion").hide();
 		$("#cardAnswer").hide();
-		$("#courseList").show();
+		$("#coursesListView").show();
 //		$("#cardQuestion1").hide();
 //		$("#courseList").toggle();
 //		$("#splashScreen").hide();
