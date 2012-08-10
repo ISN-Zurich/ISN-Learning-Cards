@@ -1,3 +1,24 @@
+function createCourseList() {
+	for (var c in courses) {
+		$("#list").append(
+				"<li class='listItem' id='course" + courses[c].getId() + "'>" + courses[c].getTitle()
+						+ "</li>");
+		
+		// from course list view to card question view by tapping on a
+		// list item
+		jester($("#course" + courses[c].getId())[0]).tap(function() {
+			currentCourse = getCourse($(this).attr('id').substring(6));
+			currentCourse.nextQuestion();
+			$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
+			$("#cardQuestion").show();
+			$("#courseList").hide();
+			$("#splashScreen").hide();
+
+		});
+		
+	}
+}
+
 function loadTransitions() {
 
 	// //from splash screen to login by tapping
@@ -10,38 +31,16 @@ function loadTransitions() {
 	// from login view to course list by tapping on the login button
 	jester($("#loginButton")[0]).tap(
 			function() {
-				console.log("0");
-				for (var c in courses) {
-					$("#list").append(
-							"<li class='listItem' id='course" + courses[c].getId() + "'>" + courses[c].getTitle()
-									+ "</li>");
-					console.log("1");
-					// from course list view to card question view by tapping on a
-					// list item
-					jester($("#course" + courses[c].getId())[0]).tap(function() {
-						alert($(this).attr('id').substring(6));
-						currentCourse = getCourse($(this).attr('id').substring(6));
-						currentCourse.nextQuestion();
-						$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
-						$("#cardQuestion").show();
-						$("#courseList").hide();
-						$("#splashScreen").hide();
-
-					});
-					console.log("2");
-					
-				}
-				console.log("3");
+				configurationModel.loginState = "loggedIn";
+				localStorage.configuration = JSON.stringify(configurationModel);
+				localStorage.courses = JSON.stringify(courses);
+				
+				createCourseList();
+				
 				$("#courseList").show();
 				$("#loginForm").hide();
 				$("#splashScreen").hide();
-				configurationModel.loginState = "loggedIn";
-				
-				console.log("4");
-
 			});
-
-	
 	
 	// from course list view to settings view by swiping (it should be
 	// done by pinching)
@@ -214,4 +213,6 @@ function loadTransitions() {
 	// to do the navigation from feedback view to course list view by
 	// pinching
 
+	
+	
 }
