@@ -1,21 +1,91 @@
-H1 {
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+body {
+
+width:310px;
+height:460px;
 }
+
+H1 {
+color: black; 
+FONT-FAMILY: aria
+l, helvetica, lucida-sans, sans-serif; 
+FONT-SIZE: 28pt; 
+FONT-STYLE: normal;
+FONT-VARIANT: normal;
+text-align:center;
+margin-bottom:30px;
+}
+
+
+
+
 
 #splashScreen {
 
 
+margin-top:15px;
+margin-bottom:15px;
+
+
 
 }
 
-#loading:before {
+#loading {
 
 /*ccontent: "Loading..";*/
 content: url(../resources/loading.gif);
+ margin:60px;
+ /**margin-top:60px;*/
+ margin-left:auto;
+ margin-right:auto;
+ padding:40px;
+ vertical-align:middle;
 
 }
 
 
+#logo_isn {
+
+content: url(../resources/logo_isn.gif);
+vertical-align:bottom;
+padding-bottom:10px;
+padding-right:20px;
+margin-bottom:20px;
+float:left;
+
+
+ }
+ 
+ #css_eth {
+
+content: url(../resources/css_eth.bmp);
+vertical-align:bottom;
+padding-bottom:10px;
+margin-bottom:20px;
+float:left;
+
+
+ }
+
+#eth_logo {
+
+content: url(../resources/eth_logo.gif);
+vertical-align:bottom;
+width:100%;
+height:70px;
+
+
+
+
+ }
+ 
+ fieldset
+{
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+ 
 #loginForm{
 
 display: none; 
@@ -23,7 +93,130 @@ display: none;
 
 }
 
+
+#loginForm {
+
+margin-bottom:30px;
+   
+}
+
+
+#inputs {
+
+padding:10px;
+
+
+}
+
+
+#usernameLabel {
+font: 20px Helvetica, Arial, sans-serif;
+padding-right:15px;
+float:left;
+
+}
+
+#passwordLabel {
+font: 20px Helvetica, Arial, sans-serif;
+padding-right:15px;
+float:left;
+
+}
+
+
+#usernameInput 
+{
+ 
+  -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-moz-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-ms-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-o-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+	/*background: #eae7e7 url(http://cssdeck.com/uploads/media/items/8/8bcLQqF.png) no-repeat;*/
+	border: 1px solid #c8c8c8;
+	color: #777;
+	font: 13px Helvetica, Arial, sans-serif;
+	margin: 0 0 10px;
+	padding: 15px 10px 15px 40px;
+	width: 40%;
+    height:20%;
+}
+    
+
+#password 
+{
+ 
+  -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-moz-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-ms-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-o-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0,0,0,0.08) inset;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+	/*background: #eae7e7 url(http://cssdeck.com/uploads/media/items/8/8bcLQqF.png) no-repeat;*/
+	border: 1px solid #c8c8c8;
+	color: #777;
+	font: 13px Helvetica, Arial, sans-serif;
+	margin: 0 0 10px;
+	padding: 15px 10px 17px 40px;
+	width: 40%;
+    height:20%;
+}
+    
+
+
+
 #loginButton {
+background-color: #ffb94b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f), to(#ffb94b));
+    background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
+    background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
+    background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
+    background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
+    background-image: linear-gradient(top, #fddb6f, #ffb94b);
+    
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    
+     -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+     -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+     box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;    
+    
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d69e31 #e3a037 #d5982d #e3a037;
+
+    float: left;
+    height: 35px;
+    padding: 0;
+    margin-left:auto;
+    margin-right:auto;
+    width: 300px;
+    height:50px;
+    cursor: pointer;
+    font: bold 15px Arial, Helvetica;
+    color: #8f5a0a;
 
 
 
@@ -58,29 +251,158 @@ width: 100;
 
 }
 
-#courseList{
+#coursesListView{ 
 
 display: none; 
 
 
 }
+
+
+
+#coursesListHeader{
+
+/*display:block;*/
+margin-top: 15px;
+margin-bottom: 7px;
+padding-bottom: 15px;
+margin-right: 15px;
+
+}
+
+#coursesListTitle{
+color: black; 
+FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
+ FONT-SIZE: 22pt; FONT-STYLE: normal; 
+ FONT-VARIANT: normal;
+ font-weight: bold;
+ float:left;
+ margin-left: 15px;
+}
+
+#coursesListSetIcon{
+content: url(../resources/Settings.png);
+float:right;
+/*width:22%;
+height:8%;*/
+
+/*background: url(../resources/loading.gif);
+/*background-repeat:no-repeat**/ 
+
+
+}
+
+#courses{ 
+margin-top: 10px;
+margin-left: 15px;
+margin-right: 15px;
+padding-top: 20px;
+
+
+}
+
+ul#coursesList {
+
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 1px #ccc; 
+    -moz-box-shadow: 0 1px 1px #ccc; 
+    box-shadow: 0 1px 1px #ccc; */
+    list-style-type:none;
+    FONT-SIZE: 18pt; 
+    FONT-STYLE: normal; 
+    FONT-VARIANT: normal;
+    text-align: left; 
+    position:relative;
+    
+  
+
+ }
+
+ ul#coursesList li {
+
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out; 
+    list-style-type:none;
+    list-style-position:left;
+    FONT-SIZE: 16 pt; 
+    FONT-STYLE: normal; 
+    FONT-VARIANT: normal;
+    border: 1px solid #ccc;
+    /*border-top: 1px solid #ccc;*/
+   text-align: left; 
+    border-radius: 0 0 0 0;
+    padding:15px;
+    margin-left:-40px;
+    border-top:none;
+    border-right:none;
+    border-left:none;
+   
+  
+       
+}    
+
+
+
+
+ul li:hover{
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;     
+}    
+
+
+/*li span {
+
+content: url(../resources/statistics.png);
+text-align:right;
+float:right;
+vertical-align:top;
+
+}*/
+
+#span1 {
+
+content: url(../resources/statistics.png);
+text-align:right;
+float:right;
+vertical-align:top;
+
+      }
+
+
+#span2 {
+
+content: url(../resources/loading.png);
+text-align:right;
+float:right;
+vertical-align:top;
+
+      }
+
 
 #CourseList_FromQuestion{
 
 
-
-
 }
 
 
-#settings{
+#settingsView{
 
 display: none; 
 color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
 
 }
 
-#logoutConfirmation{
+#logoutConfirmationView{
 
 display: none; 
 
@@ -88,19 +410,14 @@ display: none;
 }
 
 
-#cardQuestion1{
-
-display: none; 
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
-
-}
-
-#cardQuestion2{
+#cardQuestion{
 
 display: none; 
 color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
 
 }
+
+
 #cardAnswer{
 
 display: none; 
@@ -127,7 +444,6 @@ color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE:
 
 
 }
-
 
 
 

@@ -21,47 +21,97 @@ scale=1, maximum-scale=1" >
  <h1> Learning Cards </h1>
  
  <div id="loading"></div>
+  
+ <div id="logo_isn"></div>
+ <div id="css_eth"></div>
+ <div id="eth_logo"></div>
+
 </div>
 
 
-<div id="loginForm">
-<!-- <h1> Learning Cards </h1> -->
-<fieldset>
+<div id="loginForm"> 
+
 <form>
 
- <p> 
-     <label id="username"> Username </label>
+     <label id="usernameLabel"> Username </label>
      
-     <input for="username" name="username" required="required" type="text"/>
+     <input  id="usernameInput" required="required"  type="text"/>
      
-     <br/>
-     
-     <label id="password" > Password </label>
-     
-     <input type="password" name="password" required="required" type="text"/>
-     
-     <br/>
-     
-     <input id="loginButton" type="submit" value="Login"/>
- </p>
-</form>
-</fieldset> 
-</div>
 
-<div id="courseList">  
-<h1> Your Courses </h1>
+     <br/>
+     
+
+     <label id="passwordLabel" > Password </label>
+     
+     <input id="password" name="password" required="required" type="text"/>
+ 
+     <br/>
+     
+     <input id="loginButton" type="button" value="Login"/>
+ 
+  
+</form>
+
+</div> 
+
+
+
+
+
+<div id="coursesListView">  
+   <div id="coursesListHeader">
+       <div id="coursesListTitle"> Your Courses </div>
+       <div id="coursesListSetIcon"> </div>
+   </div>
+
 
 <div id="courses">
-<ul id="list">
-  <li>Course Title 1</li>
-  <li>Course Title 2</li>
-  <li>Course Title 3</li>
-</ul>
+ 
+ 
+ <ul id="coursesList">
+ <li> Course title 1 <span id="span1"> </span></li>
+ <li> Course title 2 <span id="span2"> </span></li>
+ <li> Course title 3 <span id="span2"> </span></li>
+ <li> Course title 4 <span id="span1"> </span></li>
+ <li> Course title 5 <span id="span1"> </span></li>
+ <li> Course title 6 <span id="span2"> </span></li>
+  <li> Course title 7 <span id="span2"> </span></li>
+ <li> Course title 8 <span id="span2"> </span></li>
+ 
+ </ul>
+ 
+ 
+ 
+ <!--<table class="bordered">
+   
+    <tr>     
+        <td>Course title 1</td>
+
+        <td> </td>
+    </tr>        
+    <tr>
+                
+        <td>Course title 2</td>
+        <td></td>
+    </tr>
+    <tr>
+         
+        <td>Course title 3</td>
+        <td></td>
+    </tr>    
+    <tr>
+        
+        <td>Course title 4</td>
+        <td></td>
+
+    </tr>
+     
+</table>-->
 
 </div>
 </div>
 
-<div id="settings"> 
+<div id="settingsView"> 
 
 <input type="image" id= "closeSettings" src="resources/Close.png" name="image" width="60" height="60">
 <h1>Settings </h1>
@@ -73,24 +123,22 @@ scale=1, maximum-scale=1" >
 <button id="logOutSettings" type="button">Log out</button>
 
 </div>
-<div id="logoutConfirmation"> 
+
+<div id="logoutConfirmationView"> 
 <h1> Do you really want to log out</h1>
 <br/>
 <br/>
 <button id="logOut" type="button">Logout</button>
 </div>
 
-<div id="cardQuestion1">
+<div id="cardQuestion">
 <h1> Question Card 1 </h1>
 <p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p
 <br/>
 <button id="CourseList_FromQuestion" type="button">Course List View</button>
 </div>
 
-<div id="cardQuestion2">
-<h1> Question Card 2</h1>
-<p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p>
-</div>
+
 
 <div id="cardAnswer"> 
 <div id="titleAnswer">Answer view Title</div>
@@ -102,6 +150,7 @@ scale=1, maximum-scale=1" >
 
 
 <div id="cardFeedback"> Feedback View </div>
+
 
 
 
