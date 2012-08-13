@@ -1,16 +1,20 @@
+var transitionsLoaded = false;
+
 function createCourseList() {
 	for (var c in courses) {
 		$("#coursesList").append(
 				"<li class='listItem' id='course" + courses[c].getId() + "'>" + courses[c].getTitle()
-						+ "</li>");
+						+ "<span class='span1'></li>"); //addClass - removeClass
+                        
+                        
 		
 		// from course list view to card question view by tapping on a
 		// list item
 		jester($("#course" + courses[c].getId())[0]).tap(function() {
 			currentCourse = getCourse($(this).attr('id').substring(6));
 			currentCourse.nextQuestion();
-			$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
-			$("#cardQuestion").show();
+			$("#cardQuestionView p").text(currentCourse.getCurrentQuestion());
+			$("#cardQuestionView").show();
 			$("#coursesListView").hide();
 			$("#splashScreen").hide();
 
@@ -20,6 +24,8 @@ function createCourseList() {
 }
 
 function loadTransitions() {
+
+    transitionsLoaded = true;
 
 	// //from splash screen to login by tapping
 	//  
@@ -98,7 +104,6 @@ function loadTransitions() {
 	// from logout confirmation screen to splash screen by taping on the
 	// logout button (the final one)
 	jester($("#logOut")[0]).tap(function() {
-		$("#logoutConfirmationView").hide();
 		//$("#splashScreen").show();
 		//$("#loading").show();
 		configurationModel.loginState = "loggedOut";
@@ -106,29 +111,42 @@ function loadTransitions() {
 		localStorage.configuration = JSON.stringify(configurationModel);
 		localStorage.courses = JSON.stringify(courses);
 		console.log("after storing");
-		window.close();
-
+		//window.close();
+        $("#logoutConfirmationView").hide();
+        $("#loading").show();
+        $("#splashScreen").show();
+        start();
 	});
 
 	// from card question view 1 to next one by swiping (in the future
 	// to implement this by an algorithm ..based on the weight of each
 	// learning card
 
-	jester($("#cardQuestion")[0]).swipe(function() {
-//		$("#cardQuestion1").hide();
-//		$("#cardQuestion2").toggle();
+	jester($("#cardQuestionView")[0]).swipe(function() {
+//		$("#cardQuestionView1").hide();
+//		$("#cardQuestionView2").toggle();
 //		$("#splashScreen").hide();
 		currentCourse.nextQuestion();
-		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
+		$("#cardQuestionView p").text(currentCourse.getCurrentQuestion());
 
 	});
 
 	// from card question view to answer view by tapping anywhere on the
 	// screen
-	jester($("#cardQuestion")[0]).tap(function() {
-		$("#cardQuestion").hide();
-		$("#cardAnswer").text(currentCourse.getAnswer());
-		$("#cardAnswer").show();
+	jester($("#cardQuestionView")[0]).tap(function() {
+		$("#cardQuestionView").hide();
+		$("#cardAnswerView p").text("Answer 1: " + currentCourse.getAnswer());
+		$("#cardAnswerView").show();
+//		$("#splashScreen").hide();
+
+	});
+
+    // from card question view to answer view by tapping anywhere on the
+	// screen
+	jester($("#ButtonAnswer")[0]).tap(function() {
+		$("#cardQuestionView").hide();
+		$("#cardAnswerView p").text("Answer 1: " + currentCourse.getAnswer());
+		$("#cardAnswerView").show();
 //		$("#splashScreen").hide();
 
 	});
@@ -136,20 +154,20 @@ function loadTransitions() {
 	// from card question view to course list by tapping on the course
 	// list view button. It should be done by pinching
 	jester($("#CourseList_FromQuestion")[0]).tap(function() {
-		$("#cardQuestion").hide();
-		$("#cardAnswer").hide();
+		$("#cardQuestionView").hide();
+		$("#cardAnswerView").hide();
 		$("#coursesListView").show();
-//		$("#cardQuestion1").hide();
+//		$("#cardQuestionView1").hide();
 //		$("#courseList").toggle();
 //		$("#splashScreen").hide();
 
 	});
 
-	jester($("#cardAnswer")[0]).swipe(function() {
-		$("#cardAnswer").hide();
+	jester($("#cardAnswerView")[0]).swipe(function() {
+		$("#cardAnswerView").hide();
 		currentCourse.nextQuestion();
-		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
-		$("#cardQuestion").show();
+		$("#cardQuestionView p").text(currentCourse.getCurrentQuestion());
+		$("#cardQuestionView").show();
 //		$("#splashScreen").hide();
 
 	});
@@ -157,8 +175,8 @@ function loadTransitions() {
 	// from card answer view to question view by tapping on the title
 	// area of it
 	jester($("#titleAnswer")[0]).tap(function() {
-		$("#cardAnswer").hide();
-		$("#cardQuestion").show();
+		$("#cardAnswerView").hide();
+		$("#cardQuestionView").show();
 //		$("#splashScreen").hide();
 
 	});
@@ -166,19 +184,19 @@ function loadTransitions() {
 	// tap on done button in answer view page so that to navigate to
 	// feedback view
 	jester($("#done")[0]).tap(function() {
-		$("#cardAnswer").hide();
-		$("#cardFeedback p").text(currentCourse.getFeedback());
-		$("#cardFeedback").show();
+		$("#cardAnswerView").hide();
+		$("#cardFeedbackView p").text(currentCourse.getFeedback());
+		$("#cardFeedbackView").show();
 //		$("#splashScreen").hide();
 
 	});
 	
 	// tap anywhere in answer view page so that to navigate to
 	// feedback view
-	jester($("#cardAnswer")[0]).tap(function() {
-		$("#cardAnswer").hide();
-		$("#cardFeedback p").text(currentCourse.getFeedback());
-		$("#cardFeedback").show();
+	jester($("#cardAnswerView")[0]).tap(function() {
+		$("#cardAnswerView").hide();
+		$("#cardFeedbackView p").text(currentCourse.getFeedback());
+		$("#cardFeedbackView").show();
 //		$("#splashScreen").hide();
 
 	});
@@ -189,23 +207,23 @@ function loadTransitions() {
 	// code
 
 	// from feedback view to question view by swiping
-	jester($("#cardFeedback")[0]).swipe(function() {
+	jester($("#cardFeedbackView")[0]).swipe(function() {
 		console.log("Feedback swipe");
-		$("#cardFeedback").hide();
+		$("#cardFeedbackView").hide();
 		currentCourse.nextQuestion();
-		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
-		$("#cardQuestion").show();
+		$("#cardQuestionView p").text(currentCourse.getCurrentQuestion());
+		$("#cardQuestionView").show();
 //		$("#splashScreen").hide();
 
 	});
 	
 	// from feedback view to question view by tap
-	jester($("#cardFeedback")[0]).tap(function() {
+	jester($("#cardFeedbackView")[0]).tap(function() {
 		console.log("Feedback tap");
-		$("#cardFeedback").hide();
+		$("#cardFeedbackView").hide();
 		currentCourse.nextQuestion();
-		$("#cardQuestion p").text(currentCourse.getCurrentQuestion());
-		$("#cardQuestion").show();
+		$("#cardQuestionView p").text(currentCourse.getCurrentQuestion());
+		$("#cardQuestionView").show();
 //		$("#splashScreen").hide();
 
 	});

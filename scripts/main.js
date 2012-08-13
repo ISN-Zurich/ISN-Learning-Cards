@@ -13,7 +13,7 @@ function start() {
 	if (localStorage.configuration) { // user was already connected to LMS
 		configurationModel = JSON.parse(localStorage.configuration); // take the configuration from
 																	// the local storage
-		alert(configurationModel.loginState);
+		//alert(configurationModel.loginState);
 	}
 	// if (localStorage.courses) {
 	// local = localStorage.courses;
@@ -38,7 +38,10 @@ function start() {
 	} else { // user is online
 		if (configurationModel.loginState == "loggedOut") {
 			console.log("login start");
-			loadTransitions();
+			
+            if (!transitionsLoaded) {
+                loadTransitions();
+            }
 
 			console.log("transitions loaded");
 
@@ -48,7 +51,11 @@ function start() {
 			console.log("login end");
 		} else if (configurationModel.loginState == "loggedIn") {
 			createCourseList();
-			loadTransitions();
+            
+			if (!transitionsLoaded) {
+                loadTransitions();
+            }
+
 			
 			$("#coursesListView").show();
 			$("#loginForm").hide();
