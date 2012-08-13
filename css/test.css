@@ -15,9 +15,14 @@ text-align:center;
 margin-bottom:30px;
 }
 
+p {
+color: black; 
+FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
+ FONT-SIZE: 20pt; FONT-STYLE: normal; 
+ FONT-VARIANT: normal;
+ padding: 10px;
 
-
-
+}
 
 #splashScreen {
 
@@ -41,6 +46,14 @@ content: url(../resources/loading.gif);
  vertical-align:middle;
 
 }
+
+#logos {
+
+vertical-align:bottom;
+margin-top:10px;
+
+  
+  }
 
 
 #logo_isn {
@@ -101,7 +114,7 @@ margin-bottom:30px;
 }
 
 
-#inputs {
+.field_container{
 
 padding:10px;
 
@@ -112,6 +125,8 @@ padding:10px;
 #usernameLabel {
 font: 20px Helvetica, Arial, sans-serif;
 padding-right:15px;
+width:100px;
+text-align:right;
 float:left;
 
 }
@@ -119,6 +134,8 @@ float:left;
 #passwordLabel {
 font: 20px Helvetica, Arial, sans-serif;
 padding-right:15px;
+text-align:right;
+width:100px;
 float:left;
 
 }
@@ -147,9 +164,11 @@ float:left;
 	color: #777;
 	font: 13px Helvetica, Arial, sans-serif;
 	margin: 0 0 10px;
-	padding: 15px 10px 15px 40px;
+	padding: 15px 10px 15px 45px;
 	width: 40%;
     height:20%;
+    
+
 }
     
 
@@ -176,9 +195,10 @@ float:left;
 	color: #777;
 	font: 13px Helvetica, Arial, sans-serif;
 	margin: 0 0 10px;
-	padding: 15px 10px 17px 40px;
+	padding: 15px 10px 17px 45px;
 	width: 40%;
     height:20%;
+    float:left;
 }
     
 
@@ -210,8 +230,10 @@ background-color: #ffb94b;
     float: left;
     height: 35px;
     padding: 0;
+    margin-top:20px;
     margin-left:auto;
     margin-right:auto;
+    margin-bottom:20px;
     width: 300px;
     height:50px;
     cursor: pointer;
@@ -410,7 +432,7 @@ display: none;
 }
 
 
-#cardQuestion{
+#cardQuestionView{
 
 display: none; 
 color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
@@ -418,14 +440,95 @@ color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE:
 }
 
 
-#cardAnswer{
+#cardQuestionHeader
+
+{
+margin-top: 15px;
+margin-bottom: 25px;
+padding-bottom: 15px;
+margin-right: 15px;
+
+
+}
+
+#cardQuestionIcon { 
+content: url(../resources/checkbox.png);
+width:20%;
+height:10%;
+float:left;
+
+}
+
+
+
+
+#cardQuestionTitle{
+
+color: black; 
+FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
+ FONT-SIZE: 27pt; FONT-STYLE: normal; 
+ FONT-VARIANT: normal;
+ margin-left: 15px;
+ padding-top:5px;
+}
+
+
+
+
+#ButtonTip {
+
+border:1px solid #d6d6d6; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:none; text-align: center; font-size: 19px;,color: black; background-color: #efefef;
+ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #dedede));
+ background-image: -webkit-linear-gradient(top, #efefef, #dedede);
+ background-image: -moz-linear-gradient(top, #efefef, #dedede);
+ background-image: -ms-linear-gradient(top, #efefef, #dedede);
+ background-image: -o-linear-gradient(top, #efefef, #dedede);
+ background-image: linear-gradient(top, #efefef, #dedede);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#efefef, endColorstr=#dedede);
+     
+ padding-right:50px;
+
+}
+
+#ButtonAnswer{
+
+border:1px solid #d6d6d6; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:none; text-align: center; font-size: 19px;,color: black; background-color: #efefef;
+ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #dedede));
+ background-image: -webkit-linear-gradient(top, #efefef, #dedede);
+ background-image: -moz-linear-gradient(top, #efefef, #dedede);
+ background-image: -ms-linear-gradient(top, #efefef, #dedede);
+ background-image: -o-linear-gradient(top, #efefef, #dedede);
+ background-image: linear-gradient(top, #efefef, #dedede);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#efefef, endColorstr=#dedede);
+ 
+    
+ padding-right:15px;
+ margin-right; 10px;
+
+
+}
+
+.Button:hover{
+ border:1px solid #d6d6d6; background-color: #d6d6d6;
+ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d6d6d6), color-stop(100%, #c5c5c5));
+ background-image: -webkit-linear-gradient(top, #d6d6d6, #c5c5c5);
+ background-image: -moz-linear-gradient(top, #d6d6d6, #c5c5c5);
+ background-image: -ms-linear-gradient(top, #d6d6d6, #c5c5c5);
+ background-image: -o-linear-gradient(top, #d6d6d6, #c5c5c5);
+ background-image: linear-gradient(top, #d6d6d6, #c5c5c5);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d6d6d6, endColorstr=#c5c5c5);
+
+}
+
+
+
+
+
+#cardAnswerView{
 
 display: none; 
 
 
 }
 
-#titleAnswer{
+#titleAnswer {
 
 color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
 

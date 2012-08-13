@@ -22,10 +22,6 @@ scale=1, maximum-scale=1" >
  
  <div id="loading"></div>
   
- <div id="logo_isn"></div>
- <div id="css_eth"></div>
- <div id="eth_logo"></div>
-
 </div>
 
 
@@ -33,18 +29,19 @@ scale=1, maximum-scale=1" >
 
 <form>
 
+     <div class"field_container">
      <label id="usernameLabel"> Username </label>
      
      <input  id="usernameInput" required="required"  type="text"/>
      
-
+    </div>
      <br/>
      
-
+<div class"field_container">
      <label id="passwordLabel" > Password </label>
      
      <input id="password" name="password" required="required" type="text"/>
- 
+   </div>
      <br/>
      
      <input id="loginButton" type="button" value="Login"/>
@@ -55,6 +52,11 @@ scale=1, maximum-scale=1" >
 </div> 
 
 
+<div id="logos">
+ <div id="logo_isn"></div>
+ <div id="css_eth"></div>
+ <div id="eth_logo"></div>
+</div>
 
 
 
@@ -81,35 +83,10 @@ scale=1, maximum-scale=1" >
  </ul>
  
  
- 
- <!--<table class="bordered">
-   
-    <tr>     
-        <td>Course title 1</td>
-
-        <td> </td>
-    </tr>        
-    <tr>
-                
-        <td>Course title 2</td>
-        <td></td>
-    </tr>
-    <tr>
-         
-        <td>Course title 3</td>
-        <td></td>
-    </tr>    
-    <tr>
-        
-        <td>Course title 4</td>
-        <td></td>
-
-    </tr>
-     
-</table>-->
 
 </div>
 </div>
+
 
 <div id="settingsView"> 
 
@@ -131,21 +108,29 @@ scale=1, maximum-scale=1" >
 <button id="logOut" type="button">Logout</button>
 </div>
 
-<div id="cardQuestion">
-<h1> Question Card 1 </h1>
+<div id="cardQuestionView">
+	
+	<div id="cardQuestionHeader"> 
+	<div id="cardQuestionIcon">   </div>
+	<div id="cardQuestionTitle"> Choose some  </div>
+   </div>
+
 <p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p
 <br/>
-<button id="CourseList_FromQuestion" type="button">Course List View</button>
+<!--<button id="CourseList_FromQuestion" type="button">Course List View</button>-->
+<input id="ButtonTip" type="button" value="Get a Tip"/>
+<button id="ButtonAnswer" type="button">Answer</button>
 </div>
 
 
 
-<div id="cardAnswer"> 
+<div id="cardAnswerView"> 
 <div id="titleAnswer">Answer view Title</div>
-<p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p
+<p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p>
 <br/>
-<br/>
-<button id="done" type="button">Done</button>
+
+
+
 </div>
 
 
