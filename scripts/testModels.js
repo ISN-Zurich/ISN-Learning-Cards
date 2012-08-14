@@ -1,5 +1,22 @@
 function initModels() {
 	
+	if(!localStorage.configuration) {
+		initConfiguration();
+	}
+	if(!localStorage.courses) {
+		initCourses();
+	}
+	if(!localStorage.questionpool_1) {
+		initQuPo1();
+	}
+	if(!localStorage.questionpool_2) {
+		initQuPo2();
+	}
+	
+}
+
+
+function initConfiguration() {
 	var configurationModel = {
 			appId : "",
 			appAuthenticationKey : "",
@@ -15,6 +32,11 @@ function initModels() {
 			globalSynchronizationState : ""
 		};
 	
+	localStorage.configuration = JSON.stringify(configurationModel);
+	
+}
+
+function initQuPo1() {
 	var questionpool_1 = [
 	                      {
 	                    	  question: "Solve the equation! 1x1=?",
@@ -25,6 +47,10 @@ function initModels() {
 	                      }
 	                     ];
 	
+	localStorage.questionpool_1 = JSON.stringify(questionpool_1);
+}
+
+function initQuPo2() {
 	var questionpool_2 = [
 	                      {
 	                    	  question: 'Choose the correct translation for the following word! "Car"',
@@ -35,6 +61,10 @@ function initModels() {
 	                      }
 	                    ];
 	
+	localStorage.questionpool_2 = JSON.stringify(questionpool_2);
+	
+}
+function initCourses() {
 	var courseList = [
 	                  {
 	                	  id: "1",
@@ -49,10 +79,16 @@ function initModels() {
 	                  }
 	                 ];
 	
-	localStorage.configuration = JSON.stringify(configurationModel);
-	localStorage.questionpool_1 = JSON.stringify(questionpool_1);
-	localStorage.questionpool_2 = JSON.stringify(questionpool_2);
 	localStorage.courses = JSON.stringify(courseList);
+}
+
+	
+	
+	
+	
+	
+	
+	
 	
 	
 //	var question1 = new Question("Solve the equation! 1x1=?", "1",
@@ -78,4 +114,3 @@ function initModels() {
 //	new Course("1", "Math", questionpool1);
 //	new Course("2", "German", questionpool2);
 	
-}
