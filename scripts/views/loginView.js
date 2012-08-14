@@ -1,8 +1,7 @@
-
 function LoginView() {
     var self = this;
     
-    self.tagID = 'loginForm';
+    self.tagID = 'loginView';
     
     $('#loginButton').click(function(){ self.clickLoginButton(); } );
     
@@ -12,6 +11,7 @@ LoginView.prototype.handleTap = doNothing;
 LoginView.prototype.handleSwipe = doNothing;
 
 LoginView.prototype.open = openView;
+
 LoginView.prototype.close = closeView;
 
 LoginView.prototype.clickLoginButton = function() {
@@ -34,3 +34,7 @@ LoginView.prototype.clickLoginButton = function() {
     }
 };
 
+LoginView.prototype.showForm() {
+    $("#loading").hide();
+    $("#loginForm").show();
+}

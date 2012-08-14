@@ -10,7 +10,7 @@ function closeView() {
 
 function Controller() {
     this.views = {
-     splashView: new SplashView (),
+     //splashView: new SplashView (),
      login: new loginView (), 
      courseList: new coursesView (),
      questionView: new QuestionView (),
@@ -19,9 +19,15 @@ function Controller() {
      settings: new settingsView (),
            };
            
-    this.activeView = this.views[splashView];
+    this.activeView = this.views['login'];
     
-    // instantiate the models
+    
+    this.models = {
+    configuration: new ConfigurationModel ();
+    course: new CourseModel ();
+    questionpool: new QuestionPoolModel ();
+    
+    };
     
     if ( this.models['authentication'].isLoggedIn() ) {
         this.transition('courseList');
@@ -29,6 +35,9 @@ function Controller() {
     else {
         this.transition('login');
     } 
+    
+    setTimeout(this.views['login'].showForm(), 1000);
+    
 } //end of Controller
 
 
@@ -41,33 +50,28 @@ Controller.prototype.transition = function(viewname) {
 
 Controller.prototype.transitionToLogin = function ( ) { this.transition('login'); };
 
+Controller.prototype.transitionToLogout = function ( ) { this.transition('logout'); };
+
+
 Controller.prototype.transitionToCourses =  function () { this.transition('coursesList');};  
 
 
-//to be done more dynamic 
-Controller.prototype.transitionToQuestion = function (courseId) { 
-
-                    
-                    this.transition('questionView');
+Controller.prototype.transitionToQuestion = function (question) { this.transition('questionView');};  
 
 
-
-};  
-
-
-
-
-
-Controller.prototype.transitionToAnswer = function () {this.transition('answerView');};  
-
-Controller.prototype.transitionToFeeedback = function () {this.transition('feedbackView');};  
+Controller.prototype.transitionToAnswer = function () {this.transition('answerView');}; 
+      
+Controller.prototype.transitionToFeedback = function () {this.transition('feedbackView');};  
 
 Controller.prototype.transitionToSettings = function ( ) {this.transition('settings');};
+
+Controller.prototype.transitionToFeedbackMore = function ( ) {this.transition('feedbackMore');};
 
 
 Controller.prototype.swipeCatcher = function () { this.activeView.handleSwipe();};
 
 Controller.prototype.tapCatcher = function () { this.activeView.handleTap();};
+
 
 
 var jesteroptions = { swipeDistance: 100, 
