@@ -35,6 +35,18 @@ ConfigurationModel.prototype.isLoggedIn = function() {
 	return this.configuration.loginState == "loggedIn";
 };
 
+ConfigurationModel.prototype.getDisplayName = function() {
+	return this.configuration.learnerInformation.displayName;
+};
+
+ConfigurationModel.prototype.getUserName = function() {
+	return this.configuration.learnerInformation.userName;
+};
+
+ConfigurationModel.prototype.getEmailAddress = function() {
+	return this.configuration.learnerInformation.emailAddress;
+};
+
 
 
 //function ConfigurationModel() {

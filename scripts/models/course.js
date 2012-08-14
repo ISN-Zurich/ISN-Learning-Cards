@@ -24,6 +24,10 @@ CourseModel.prototype.loadData = function() {
 	this.index = 0;
 };
 
+CourseModel.prototype.isLoaded = function() {
+	return (this.index > this.courseList.length - 1) ? false : this.courseList[this.index].isLoaded;
+};
+
 CourseModel.prototype.getId = function() {
 	return (this.index > this.courseList.length - 1) ? false : this.courseList[this.index].id;
 };

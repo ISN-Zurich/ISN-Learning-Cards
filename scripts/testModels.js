@@ -39,10 +39,12 @@ function initConfiguration() {
 function initQuPo1() {
 	var questionpool_1 = [
 	                      {
+	                    	  type: "Single Choice Question",
 	                    	  question: "Solve the equation! 1x1=?",
 	                    	  answer: "1" 
 	                      }, {
-	                          question: "Solve the equation! 5x1=?",
+	                    	  type: "Single Choice Question",
+	                    	  question: "Solve the equation! 5x1=?",
 	                       	  answer: "5"
 	                      }
 	                     ];
@@ -53,10 +55,12 @@ function initQuPo1() {
 function initQuPo2() {
 	var questionpool_2 = [
 	                      {
+	                    	  type: "Single Choice Question",
 	                    	  question: 'Choose the correct translation for the following word! "Car"',
 	                    	  answer: "Auto" 
 	                      }, {
-	                          question: 'Choose the correct translation for the following word! "Apple"',
+	                    	  type: "Single Choice Question",
+	                    	  question: 'Choose the correct translation for the following word! "Apple"',
 	                       	  answer: "Apfel"
 	                      }
 	                    ];
@@ -70,12 +74,14 @@ function initCourses() {
 	                	  id: "1",
 	                	  title: "Math",
 	                	  syncDateTime: "",
-	                	  syncState: ""
+	                	  syncState: "",
+	                	  isLoaded: false
 	                  }, {
 	                	  id: "2",
 	                	  title: "German",
 	                	  syncDateTime: "",
-	                	  syncState: ""
+	                	  syncState: "",
+	                	  isLoaded: false
 	                  }
 	                 ];
 	

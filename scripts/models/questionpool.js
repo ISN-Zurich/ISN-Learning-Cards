@@ -27,11 +27,15 @@ QuestionPoolModel.prototype.removeData = function(course_id) {
 	localStorage.removeItem("questionpool_" + course_id);
 };
 
-QuestionPoolModel.prototype.getCurrentQuestion = function() {
+QuestionPoolModel.prototype.getQuestionType = function() {
+	return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].type;
+};
+
+QuestionPoolModel.prototype.getQuestionBody = function() {
 	return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].question;
 };
 
-QuestionPoolModel.prototype.getCurrentAnswer = function() {
+QuestionPoolModel.prototype.getAnswer = function() {
 	return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].answer;
 };
 
