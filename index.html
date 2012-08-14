@@ -71,14 +71,14 @@ scale=1, maximum-scale=1" >
  
  
  <ul id="coursesList">
- <li> Course title 1 <span id="span1"> </span></li>
- <li> Course title 2 <span id="span2"> </span></li>
- <li> Course title 3 <span id="span2"> </span></li>
- <li> Course title 4 <span id="span1"> </span></li>
- <li> Course title 5 <span id="span1"> </span></li>
- <li> Course title 6 <span id="span2"> </span></li>
-  <li> Course title 7 <span id="span2"> </span></li>
- <li> Course title 8 <span id="span2"> </span></li>
+ <li> Course title 1 <span class="span1"> </span></li>
+ <li> Course title 2 <span class="span2"> </span></li>
+ <li> Course title 3 <span class="span2"> </span></li>
+ <li> Course title 4 <span class="span1"> </span></li>
+ <li> Course title 5 <span class="span1"> </span></li>
+ <li> Course title 6 <span class="span2"> </span></li>
+  <li> Course title 7 <span class="span2"> </span></li>
+ <li> Course title 8 <span class="span2"> </span></li>
  
  </ul>
  
@@ -90,30 +90,40 @@ scale=1, maximum-scale=1" >
 
 <div id="settingsView"> 
 
-<input type="image" id= "closeSettings" src="resources/Close.png" name="image" width="60" height="60">
-<h1>Settings </h1>
-<p>Your name </p>
-<p>Your username </p>
-<p>Your email </p>
+ <div id="settingsHeader">
+     <div id="closeSettingsIcon"> </div>
+     <div id="settingsTitle"> Settings </div>
+ </div>
 
+<ul> id="settingsData">
+<li> Your name </li>
+<li>Your username </li>
+<li>Your email </li>
+</ul>
 <br/>
 <button id="logOutSettings" type="button">Log out</button>
 
 </div>
 
+
+
+
 <div id="logoutConfirmationView"> 
-<h1> Do you really want to log out</h1>
-<br/>
-<br/>
+   <div id="closeIcon">   </div>
+   <h1> Do you really want to log out</h1>
+  <br/>
+  <br/>
 <button id="logOut" type="button">Logout</button>
 </div>
 
+
+
 <div id="cardQuestionView">
 	
-	<div id="cardQuestionHeader"> 
-	<div id="cardQuestionIcon">   </div>
-	<div id="cardQuestionTitle"> Choose some  </div>
-   </div>
+	<div id="cardQuestionHeader class="cardHeader"> 
+	   <div class="cardHeaderIcon">   </div>
+	   <div id="cardQuestionTitle" class="cardTitle"> Choose some  </div>
+    </div>
 
 <p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p
 <br/>
@@ -125,19 +135,36 @@ scale=1, maximum-scale=1" >
 
 
 <div id="cardAnswerView"> 
-<div id="titleAnswer">Answer view Title</div>
+
+    <div id="cardAnswerHeader" class="cardHeader"> 
+	  <div class="cardHeaderIcon">  </div>
+	  <div id="cardAnswerTitle"  class="cardTitle"> Choose some answer  </div>
+	 <button id="doneButton" type="button">Done</button>
+   </div>
+
 <p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p>
 <br/>
+</div>
 
 
+<div id="cardFeedbackView">
+ 
+  <div id="cardFeedbackHeader">
+     <div id="cardFeedbackIcon">  </div>
+     <div id="cardFeedbackTitle"> Excellent</div>
+  </div>
+
+<p>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. </p>
 
 </div>
 
 
-<div id="cardFeedback"> Feedback View </div>
+<div id="StatisticsView">
+<div id="closeIconStats" class="closeIcon">   </div>
+<p> Lorem ipsum dolor sit amet, consectetur adipisicin </p>
 
 
-
+</div>
 
 </body>
 </html>
