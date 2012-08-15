@@ -43,6 +43,7 @@ CoursesListView.prototype.update = function() {
 			var li = $("<li/>", {
 				  "id": "course" + courseID,
 				  text: courseModel.getTitle(),
+<<<<<<< HEAD
 				  click: function(event){
 				    self.click(event, $(this));
 				  }
@@ -64,4 +65,24 @@ CoursesListView.prototype.click = function(event, element) {
 		  console.log("li item clicked");
 		  this.clickCourseItem(element.attr('id').substring(6));
 	  }
+=======
+				  click: function(){
+					  self.clickCourseItem($(this).attr('id').substring(6));
+				  }
+				}).appendTo("#coursesList");
+			
+			var span = $("<span/>", {
+				"class": "statisticsIcon",
+				click: function(event) {
+					self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
+					event.stopPropagation();
+				}
+			}).appendTo(li);
+			
+			$("<i/>", {
+				"class": courseModel.isLoaded() ? "icon-signal" : "icon-refresh"
+			}).appendTo(span);
+			
+		} while (courseModel.nextCourse());	
+>>>>>>> refs/heads/belinastrack
 };
