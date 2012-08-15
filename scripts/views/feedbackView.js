@@ -4,8 +4,8 @@ function FeedbackView(question) {
 
     self.tagID = 'cardFeedbackView';
     
-$('#FeedbackDoneButon').click(function(){ self.clickFeedbackDoneButton(); } );
-$('#FeedbackMore').click(function(){ self.clickFeedbackMore(); } );
+    $('#FeedbackDoneButon').click(function(){ self.clickFeedbackDoneButton(); } );
+    $('#FeedbackMore').click(function(){ self.clickFeedbackMore(); } );
     
 }
 
@@ -14,27 +14,27 @@ FeedbackView.prototype.handleSwipe = handleSwipe;
 FeedbackView.prototype.close = closeView;
 FeedbackView.prototype.open = openView;
 
-FeedbackView.prototype.clickFeedbackDoneButton() {
+FeedbackView.prototype.clickFeedbackDoneButton = function() {
 
 
-    Controller.models['questionpool'].nextQuestion(); 
-    Controller.transitionToQuestion();  
+    controller.models['questionpool'].nextQuestion(); 
+    controller.transitionToQuestion();  
          
 };
 
 
-FeedbackView.prototype.clickFeedbackMore() {
+FeedbackView.prototype.clickFeedbackMore = function() {
 
-//Controller.transitionToFeedbackMore();         
+//controller.transitionToFeedbackMore();         
 
 };
 
 
 function handleSwipe () {
 
-    Controller.models['questionpool'].nextQuestion(); 
+    controller.models['questionpool'].nextQuestion(); 
     
-    Controller.transitionToQuestion();      
+    controller.transitionToQuestion();      
 
 
 }

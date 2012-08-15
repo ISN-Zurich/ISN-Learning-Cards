@@ -1,7 +1,7 @@
 function LoginView() {
     var self = this;
     
-    self.tagID = 'loginView';
+    self.tagID = 'splashScreen';
     
     $('#loginButton').click(function(){ self.clickLoginButton(); } );
     
@@ -9,8 +9,11 @@ function LoginView() {
 
 LoginView.prototype.handleTap = doNothing;
 LoginView.prototype.handleSwipe = doNothing;
-
-LoginView.prototype.open = openView;
+LoginView.prototype.openDiv = openView;
+LoginView.prototype.open = function() {
+    this.showForm();
+    this.openDiv();
+};    
 
 LoginView.prototype.close = closeView;
 
@@ -18,23 +21,28 @@ LoginView.prototype.clickLoginButton = function() {
     var user, password;
     
     function cbLoginSuccess() {
-        controler.transition('courseList');
+            console.log("is logIn");
+            controller.transition('coursesList');
     }
     
     function cbLoginFailure() {
         // show a login error message
     }
     
-    if ( $("#usernameInput").value  && $("#password").value ) {
+    console.log("check logIn data"); 
+    if ( $("#usernameInput").val()  && $("#password").val() ) {
+            console.log("has logIn data");
+
         // make it visible to the user that we are waiting for the server
-        authenticationModel.login($("#usernameInput").value, 
-                                  $("#password").value, 
+        controller.models['authentication'].login($("#usernameInput").val(), 
+                                  $("#password").val(), 
                                   cbLoginSuccess, 
                                   cbLoginFailure);
+        $("#usernameInput").val("");
+        $("#password").val("");
     }
 };
 
-LoginView.prototype.showForm() {
-    $("#loading").hide();
+LoginView.prototype.showForm = function() {
     $("#loginForm").show();
-}
+};

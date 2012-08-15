@@ -331,7 +331,7 @@ ul#coursesList {
     border-radius: 6px;
     -webkit-box-shadow: 0 1px 1px #ccc; 
     -moz-box-shadow: 0 1px 1px #ccc; 
-    box-shadow: 0 1px 1px #ccc; */
+    box-shadow: 0 1px 1px #ccc; 
     list-style-type:none;
     FONT-SIZE: 18pt; 
     FONT-STYLE: normal; 
@@ -420,7 +420,7 @@ vertical-align:top;
 #settingsView{
 
 display: none; 
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal;
 
 }
 
@@ -434,9 +434,9 @@ display: none;
 
 #closeSettingsIcon{
 
-content: url (../resources/Close.png);
-width=40px;
-height=40px;
+content: url(../resources/Close.png);
+width:40px;
+height:40px;
 
 }
 
@@ -579,8 +579,16 @@ color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE:
 
 }
 
+#StatisticsView {
+    display:none;
+}
 
-.closeIcon {
+#closeIcon {
+
+content: url(../resources/Close.png);
+width:40px;
+height:40px;
+
 }
 
 

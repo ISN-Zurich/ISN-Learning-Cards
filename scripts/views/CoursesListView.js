@@ -1,37 +1,67 @@
-
-function CoursesListView () {
-
+function CoursesListView (controller) {
+	
     var self = this;
     
     self.tagID = 'coursesListView';
+	self.controller = controller;
     
-    $('#coursesList').click(function(){ self.clickCourseItem(item); } );
-    $('#coursesListSetIcon').click(function(){ self.clickSettingsButton(); } );
-    $('#span1').click(function(){ self.clickStatisticsIcon(); } );
-
-
-
+    
+	$('#coursesListSetIcon').click(function(){ self.clickSettingsButton(); } );
 }
 
 CoursesListView.prototype.handleTap = doNothing;
 CoursesListView.prototype.handleSwipe = doNothing;
-CoursesListView.prototype.open = openView;
+CoursesListView.prototype.openDiv = openView;
+CoursesListView.prototype.open = function() {
+	this.update();
+	this.openDiv();
+};
 CoursesListView.prototype.close = closeView;
 
-CoursesListView.prototype.clickCourseItem = function () {
+CoursesListView.prototype.clickCourseItem = function (course_id) {
+	controller.models['questionpool'].loadData(course_id);
+    controller.transitionToQuestion();
+};
 
-        var courseList,courseId; //the course id is similar with the index field of the course model
-        
-    $("#span2").value = courseId
-    courseId = courses.getId(courseId);
-    controler.transitionToQuestion(courseId); //of which course of which     
+CoursesListView.prototype.clickSettingsButton = function () {controller.transitionToSettings();};
 
+CoursesListView.prototype.clickStatisticsIcon = function (courseID) { console.log("statistics button clicked");};
 
-
-
+CoursesListView.prototype.update = function() {
+	var self = this;
+	
+	var courseModel = self.controller.models['course'];
+	courseModel.reset();
+    
+    $("#coursesList").empty();
+    
+	    
+		do {
+			var courseID = courseModel.getId();
+			
+			
+			var li = $("<li/>", {
+				  "id": "course" + courseID,
+				  text: courseModel.getTitle(),
+				  click: function(event){
+				    self.click(event, $(this));
+				  }
+				}).appendTo("#coursesList");
+			
+			$("<span/>", {
+				"class": courseModel.isLoaded() ? "span1" : "span2",
+			}).appendTo(li);
+		} while (courseModel.nextCourse());	
 };
 
 
-CoursesListView.prototype.clickSettingsButton = function () {controler.transitionToSettings();};
-
-CoursesListView.prototype.clickStatisticsIcon = function () { };
+CoursesListView.prototype.click = function(event, element) {
+	var $target = $(event.target);
+	if ( $target.is(".span1") ) {
+		console.log("statistics clicked");
+		this.clickStatisticsIcon(element.parent().attr('id').substring(6));
+	  } else {
+		  console.log("li item clicked");
+		  this.clickCourseItem(element.attr('id').substring(6));
+	  }
+};

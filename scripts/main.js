@@ -1,10 +1,12 @@
+var controller;
+
 $(document).ready(function() {
 
     initModels();
 
 	//$("#splashScreen").show();
 	//$("#loading").show();
-    var c = new Controller ();
+    controller = new Controller();
 
 	//setTimeout("start()", 1000);
 	// start();
