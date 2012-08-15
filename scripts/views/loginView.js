@@ -44,6 +44,5 @@ LoginView.prototype.clickLoginButton = function() {
 };
 
 LoginView.prototype.showForm = function() {
-    $("#loading").hide();
     $("#loginForm").show();
 };

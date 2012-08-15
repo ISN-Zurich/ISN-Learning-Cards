@@ -7,6 +7,7 @@ function closeView() {
 }
 
 function Controller() {
+var self = this;
 	this.models = {
 		authentication : new ConfigurationModel(),
 		course : new CourseModel(),
@@ -17,7 +18,7 @@ function Controller() {
 	this.models['course'].loadData();
 
 	this.views = {
-		splashScreen : new SplashScreen(),
+		splashScreen : new SplashScreen(this),
 		login : new LoginView(),
 		logout : new LogoutView(),
 		coursesList : new CoursesListView(this),
@@ -30,21 +31,33 @@ function Controller() {
 	this.activeView = this.views['splashScreen'];
 
 	if (this.models['authentication'].isLoggedIn()) {
-		console.log("is loggedIn");
+		//console.log("is loggedIn");
 		this.transition('coursesList');
 	} else {
-		console.log("is not loggedIn");
+		//console.log("is not loggedIn");
 		this.transition('login');
 	}
+
+function swipeCatcher() { self.activeView.handleSwipe();};
+
+function tapCatcher() { self.activeView.handleTap();};
+
+var jesteroptions = { swipeDistance: 100, 
+			  avoidFlick: true };
+
+jester(document, jesteroptions)
+    .swipe(swipeCatcher)
+	.tap(tapCatcher);
 
 	console.log("End of Controller");
 } // end of Controller
 
 Controller.prototype.transition = function(viewname) {
-	this.activeView.close();
-	this.activeView = this.views[viewname];
-	this.activeView.open();
-
+	if ( this.views[viewname] ) {
+		this.activeView.close();
+		this.activeView = this.views[viewname];
+		this.activeView.open();
+	}
 };
 
 Controller.prototype.transitionToLogin = function ( ) { this.transition('login'); };
@@ -67,19 +80,6 @@ Controller.prototype.transitionToSettings = function ( ) {this.transition('setti
 Controller.prototype.transitionToFeedbackMore = function ( ) {this.transition('feedbackMore');};
 
 
-function swipeCatcher() { this.activeView.handleSwipe();};
-
-function tapCatcher() { this.activeView.handleTap();};
-
-
-
-var jesteroptions = { swipeDistance: 100, 
-			  flickDistance: 100, 
-			  flickTime: 250 };
-
-jester (document, jesteroptions)
-    .swipe(swipeCatcher)
-	.tap(tapCatcher);
 
 
 

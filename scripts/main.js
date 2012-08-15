@@ -2,7 +2,7 @@ var controller;
 
 $(document).ready(function() {
 
-    //initModels();
+    initModels();
 
 	//$("#splashScreen").show();
 	//$("#loading").show();

@@ -48,8 +48,8 @@ function handleSwipe() {
 
 	// ask the model to select the next question
 	// update the display for the current view 
-
-	controller.models['questionpool'].nextQuestion();
+    console.log("swipe works");
+    controller.models['questionpool'].nextQuestion();
 	this.showQuestionBody();
 	this.showQuestionTitle();
 };
