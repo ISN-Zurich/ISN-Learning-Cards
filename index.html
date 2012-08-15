@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Learning Cards</title>
+
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
+
+
+<script type="text/javascript" charset="utf-8"
+	src="libs/cordova-2.0.0.js"></script>
+<script type="text/javascript" src="libs/jquery.js"></script>
+<script type="text/javascript" src="libs/jester.js"></script>
+<script type="text/javascript" src="scripts/models/configuration.js"></script>
+<script type="text/javascript" src="scripts/models/connectionstate.js"></script>
+<script type="text/javascript" src="scripts/models/course.js"></script>
+<script type="text/javascript" src="scripts/models/questionpool.js"></script>
+<script type="text/javascript" src="scripts/controllers/controller.js"></script>
+<script type="text/javascript" src="scripts/views/answerView.js"></script>
+<script type="text/javascript" src="scripts/views/coursesListView.js"></script>
+<script type="text/javascript" src="scripts/views/feedbackView.js"></script>
+<script type="text/javascript" src="scripts/views/loginView.js"></script>
+<script type="text/javascript" src="scripts/views/logoutView.js"></script>
+<script type="text/javascript" src="scripts/views/questionView.js"></script>
+<script type="text/javascript" src="scripts/views/settingsView.js"></script>
+<script type="text/javascript" src="scripts/views/splashScreen.js"></script>
+<script type="text/javascript" src="scripts/testModels.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+<LINK href="css/test.css" rel="stylesheet" type="text/css">
+<!--<script type="text/javascript" src="scripts/transition.js"></script>-->
+<!--<script type="text/javascript" src="scripts/catchGestures.js"></script>-->
+
+</head>
+
+<body>
+
+
+
+	<div id="splashScreen">
+
+		<h1>Learning Cards</h1>
+
+		<div id="loading"></div>
+
+		<form id="loginForm">
+
+			<div class="field_container">
+				<label id="usernameLabel"> Username </label> <input
+					id="usernameInput" required="required" type="text" />
+
+			</div>
+			<br />
+
+			<div class="field_container">
+				<label id="passwordLabel"> Password </label> <input id="password"
+					name="password" required="required" type="text" />
+			</div>
+			<br /> <input id="loginButton" type="button" value="Login" />
+
+
+		</form>
+
+
+
+
+		<div id="logos">
+			<div id="logo_isn"></div>
+			<div id="css_eth"></div>
+			<div id="eth_logo"></div>
+		</div>
+
+	</div>
+
+	<div id="coursesListView">
+		<div id="coursesListHeader">
+			<div id="coursesListTitle">Your Courses</div>
+			<div id="coursesListSetIcon"></div>
+		</div>
+
+
+		<div id="courses">
+
+
+			<ul id="coursesList">
+
+			</ul>
+
+
+
+		</div>
+	</div>
+
+
+	<div id="settingsView">
+
+		<div id="settingsHeader">
+			<div id="closeSettingsIcon"></div>
+			<div id="settingsTitle">Settings</div>
+		</div>
+
+		<ul id="settingsData">
+			<li>Your name</li>
+			<li>Your username</li>
+			<li>Your email</li>
+		</ul>
+		<br />
+		<button id="logOutSettings" type="button">Log out</button>
+
+	</div>
+
+
+
+
+	<div id="logoutConfirmationView">
+		<div id="closeIcon"></div>
+		<h1>Do you really want to log out</h1>
+		<br /> <br />
+		<button id="logOut" type="button">Logout</button>
+	</div>
+
+
+
+	<div id="cardQuestionView">
+
+		<div id="cardQuestionHeader" class="cardHeader">
+			<div class="cardHeaderIcon"></div>
+			<div id="cardQuestionTitle" class="cardTitle">Choose some</div>
+		</div>
+
+		<p id="cardQuestionBody">Lorem ipsum dolor sit amet, consectetur
+			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna.</p>
+		<br />
+		<button id="CourseList_FromQuestion" type="button">Course
+			List View</button>
+		<input id="ButtonTip" type="button" value="Get a Tip" />
+		<button id="ButtonAnswer" type="button">Answer</button>
+	</div>
+
+
+
+	<div id="cardAnswerView">
+
+		<div id="cardAnswerHeader" class="cardHeader">
+			<div class="cardHeaderIcon"></div>
+			<div id="cardAnswerTitle" class="cardTitle">Choose some answer
+			</div>
+			<button id="doneButton" type="button">Done</button>
+		</div>
+
+		<p id="cardAnswerBody">Lorem ipsum dolor sit amet, consectetur
+			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
+			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
+		<br />
+		<button id="CourseList_FromAnswer" type="button">Course List
+			View</button>
+	</div>
+
+
+	<div id="cardFeedbackView">
+
+		<div id="cardFeedbackHeader">
+			<div id="cardFeedbackIcon"></div>
+			<div id="cardFeedbackTitle">Excellent</div>
+		</div>
+
+		<p id="feedbackBody">Lorem ipsum dolor sit amet, consectetur
+			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
+			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
+		<button id="FeedbackMore" type="button">see Feedback</button>
+		<button id="FeedbackDoneButon" type="button">Done</button>
+	</div>
+
+
+	<div id="StatisticsView">
+		<div id="closeIconStats" class="closeIcon"></div>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicin</p>
+
+
+	</div>
+
+</body>
+</html>

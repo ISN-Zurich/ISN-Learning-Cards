@@ -9,15 +9,15 @@ function SettingsView() {
 
 SettingsView.prototype.handleTap = doNothing;
 SettingsView.prototype.handleSwipe = doNothing;
-
+SettingsView.prototype.openDiv = openView;
 SettingsView.prototype.open = function() {
-	loadData();
-	openView();
+	this.loadData();
+	this.openDiv();
 };
 SettingsView.prototype.close = closeView;
 
 SettingsView.prototype.closeSettings = function() {
-	controller.transitionToCoursesList();
+	controller.transitionToCourses();
 };
 
 SettingsView.prototype.logout = function() {
@@ -26,14 +26,14 @@ SettingsView.prototype.logout = function() {
 
 SettingsView.prototype.loadData = function() {
 	
-	var config = conotroller.models['authentication'];
+	var config = controller.models['authentication'];
 	
-	$("settingsData").empty();
+	$("#settingsData").empty();
 	$("<li/>", {
 	  text: config.getDisplayName()
 	}).appendTo("#settingsData");
 	$("<li/>", {
-		  text: config.getUserName
+		  text: config.getUserName()
 		}).appendTo("#settingsData");
 	$("<li/>", {
 		  text: config.getEmailAddress()

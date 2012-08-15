@@ -1,6 +1,8 @@
 function CourseModel() {
 	this.courseList = [];
 	this.index = 0;
+	
+	this.loadData();
 };
 
 CourseModel.prototype.storeData = function() {

@@ -1,11 +1,11 @@
 function initModels() {
 	
-	if(!localStorage.configuration) {
+	//if(!localStorage.configuration) {
 		initConfiguration();
-	}
-	if(!localStorage.courses) {
+	//}
+	//if(!localStorage.courses) {
 		initCourses();
-	}
+	//}
 	if(!localStorage.questionpool_1) {
 		initQuPo1();
 	}
@@ -23,10 +23,10 @@ function initConfiguration() {
 			userAuthenticationKey : "",
 			urlToLMS : "",
 			learnerInformation : {
-				userId : "",
-				userName : "",
-				displayName : "",
-				emailAddress : ""
+				userId : "123",
+				userName : "Test",
+				displayName : "Test Test",
+				emailAddress : "testjcdak"
 			},
 			loginState : "loggedOut",
 			globalSynchronizationState : ""
@@ -75,13 +75,13 @@ function initCourses() {
 	                	  title: "Math",
 	                	  syncDateTime: "",
 	                	  syncState: "",
-	                	  isLoaded: false
+	                	  isLoaded: true
 	                  }, {
 	                	  id: "2",
 	                	  title: "German",
 	                	  syncDateTime: "",
 	                	  syncState: "",
-	                	  isLoaded: false
+	                	  isLoaded: true
 	                  }
 	                 ];
 	

@@ -1,6 +1,7 @@
 function QuestionPoolModel() {
 	this.questionList = [];
 	this.index = 0;
+	
 };
 
 QuestionPoolModel.prototype.storeData = function(course_id) {
@@ -40,7 +41,7 @@ QuestionPoolModel.prototype.getAnswer = function() {
 };
 
 QuestionPoolModel.prototype.nextQuestion = function() {
-	this.index++;
+	this.index = (this.index + 1) % this.questionList.length;
 	return this.index < this.questionList.length;
 };
 
