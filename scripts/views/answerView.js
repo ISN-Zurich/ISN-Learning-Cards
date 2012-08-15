@@ -5,7 +5,7 @@ function AnswerView() {
     
     $('#doneButton').click(function(){ self.clickDoneButton(); } );
     $('#CourseList_FromAnswer').click(function(){ self.clickCourseListButton(); } );
-    $('#cardAnswerTitle').click(function(){ self.clickTitleArea(); } );
+    jester($('#cardAnswerTitle')[0]).tap(function(){ self.clickTitleArea(); console.log("answer title clicked");} );
     
 } 
 

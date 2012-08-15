@@ -7,6 +7,7 @@
  * Released under MIT License
  *
  * Copyright (C) 2011 by Scott Seaward
+ * Copyright (C) 2012 by Christian Glahn (Android Support Extensions)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +39,7 @@
             var that = this,
                 cacheId = Jester.cacheId,
                 cache = Jester.cache,
-                gestures = "swipe flick tap doubletap pinchnarrow pinchwiden pinchend";
+                gestures = "swipe flick tap twintap taplong twintaplong doubletap pinchnarrow pinchwiden pinchend pinched stretched";
 
             if(!element || !element.nodeType) {
                 throw new TypeError("Jester: no element given.");
@@ -254,11 +255,14 @@
 
             opts.tapDistance    = opts.tapDistance          ||    0;
             opts.tapTime        = opts.tapTime              ||    20;
+            opts.tapLongTime    = opts.tapLongTime          ||    1000;
 
             opts.doubleTapTime  = opts.doubleTapTime        ||    300;
 
+            opts.avoidSwipe     = opts.avoidSwipt           ||    false;
             opts.swipeDistance  = opts.swipeDistance        ||    200;
 
+            opts.avoidFlick     = opts.avoidFlick           ||    false;
             opts.flickTime      = opts.flickTime            ||    300;
             opts.flickDistance  = opts.flickDistance        ||    200;
 
@@ -266,19 +270,29 @@
             opts.deadY          = opts.deadY                ||    0;
 
             if(opts.capture !== false) opts.capture = true;
-            if(typeof opts.preventDefault !== "undefined" && opts.preventDefault !== false) opts.preventDefault = true;
-            if(typeof opts.preventDefault !== "undefined" && opts.stopPropagation !== false) opts.stopPropagation = true;
+            if(typeof opts.preventDefault !== "undefined" && 
+               opts.preventDefault !== false) opts.preventDefault = true;
+            if(typeof opts.preventDefault !== "undefined" && 
+               opts.stopPropagation !== false) opts.stopPropagation = true;
 
             var eventSet = elementCache.eventSet;
 
             var touches;
             var previousTapTime = 0;
+            var previousNumTouches = 0;
+            var lastTouches = 0;
 
             var touchStart = function(evt) {
-                touches = new Jester.TouchGroup(evt);
+                // avoid that multiple touchstart events on Android devices 
+                // confuse the gesture detection.
+                if ( lastTouches < evt.touches.length ) {
+                    lastTouches = evt.touches.length;
+                   
+                    touches = new Jester.TouchGroup(evt);                    
+                    eventSet.execute("start", touches, evt);
 
-                eventSet.execute("start", touches, evt);
-
+                    previousTapTime = (new Date()).getTime();
+                }
                 if(opts.preventDefault) evt.preventDefault();
                 if(opts.stopPropagation) evt.stopPropagation();
             };
@@ -304,47 +318,124 @@
                 }
             };
 
-            var touchEnd = function(evt) {
+            function detectTap() {
+                var nTouch = touches.numTouches();
+                var eTouch = true;
+                for(var i = 0; i < nTouch; i++ ) {
+                    if(!(touches.touch(i).total.x() <= opts.tapDistance && 
+                         touches.touch(i).total.y() <= opts.tapDistance)) {
+                        eTouch = false;
+                        break; 
+                    }
+                }
+                if (eTouch) {
+                    if (touches.touch(0).total.time() < opts.tapTime) {
+                        switch (nTouch) {
+                        case 1:
+                            eventSet.execute("tap", touches);
+                            break;
+                        case 2:
+                            eventSet.execute("twintap", touches);
+                            break
+                        default: 
+                            // event for multitaps
+                            break;
+                        }
+                        
+                        // double tap
+                        var now = (new Date()).getTime();
+                        if((previousNumTouches == nTouch) &&
+                           ((now - previousTapTime) <= opts.doubleTapTime)) {
+                            eventSet.execute("doubletap", touches);
 
+                            // the next tap must not trigger a double tap anymore
+                            previousNumTouches = 0;
+                            previousTapTime  = 0;
+
+                        }
+                        else { 
+                            // if a tap was detected but not triggered
+                            // a double tap then we need to initialize
+                            // the timer
+                            previousNumTouches = nTouch;
+                            previousTapTime  = now;
+                        }
+                    }
+                    if ( touches.touch(0).total.time() >= opts.tapLongTime ) {
+                        switch (nTouch) {
+                        case 1:
+                            eventSet.execute("taplong", touches);
+                            break;
+                        case 2:
+                            eventSet.execute("twintaplong", touches);
+                            break
+                        default: 
+                            // event for multitaps
+                            break;
+                        }
+                        // the next tap must not trigger a double tap anymore
+                        previousNumTouches = 0;
+                        previousTapTime  = 0;
+                    }
+                }
+                else {
+                    // if no tap was detected then the next tap
+                    // will not trigger a double tap
+                    previousNumTouches = 0;
+                    previousTapTime  = 0;
+                }
+            }
+
+            function detectSwipeFlick() {
+                var nTouch = touches.numTouches();
+                if (nTouch == 1) {
+                    var totalX   = touches.touch(0).total.x();
+                    var distance = Math.abs(totalX);
+                    var eventname;
+
+                    if (!opts.avoidSwipe &&
+                        distance >= opts.swipeDistance) {
+                        eventname = "swipe";
+                    }
+                    if (!opts.avoidFlick &&
+                        distance >= opts.flickDistance && 
+                        touches.touch(0).total.time() <= opts.flickTime) {
+                        eventname = "flick";
+                    }
+
+                    if (eventname) {
+                        eventSet.execute(eventname, touches, totalX < 0 ? "left" : "right");
+                    }
+                }
+            }
+
+            function detectPinch() {
+                if (touches.numTouches() == 2 &&
+                    touches.current.scale() !== 1.0){
+                    var pinchDirection = touches.current.scale() < 1.0 ? "narrowed" : "widened";
+                    eventSet.execute("pinchend", touches, pinchDirection);
+                    if (pinchDirection == "narrowed") {
+                        eventSet.execute("pinched", touches);
+                    }
+                    else {
+                        eventSet.execute("stretched", touches);
+                    }
+                }
+            }
+
+            var touchEnd = function(evt) {
+                touches.update(evt);
                 eventSet.execute("end", touches, evt);
 
                 if(opts.preventDefault) evt.preventDefault();
                 if(opts.stopPropagation) evt.stopPropagation();
 
-                if(touches.numTouches() == 1) {
-                    // tap
-                    if(touches.touch(0).total.x() <= opts.tapDistance && touches.touch(0).total.y() <= opts.tapDistance && touches.touch(0).total.time() < opts.tapTime) {
-                        eventSet.execute("tap", touches);
-                    }
-    
-                    // doubletap
-                    if(touches.touch(0).total.time() < opts.tapTime) {
-                        var now = (new Date()).getTime();
-                        if(now - previousTapTime <= opts.doubleTapTime) {
-                            eventSet.execute("doubletap", touches);
-                        }
-                        previousTapTime = now;
-                    }
-
-                    // swipe
-                    if(Math.abs(touches.touch(0).total.x()) >= opts.swipeDistance) {
-                        var swipeDirection = touches.touch(0).total.x() < 0 ? "left" : "right";
-                        eventSet.execute("swipe", touches, swipeDirection);
-                    }
-
-                    // flick
-                    if(Math.abs(touches.touch(0).total.x()) >= opts.flickDistance && touches.touch(0).total.time() <= opts.flickTime) {
-                        var flickDirection = touches.touch(0).total.x() < 0 ? "left" : "right";
-                        eventSet.execute("flick", touches, flickDirection);
-                    }
+                if ( lastTouches > 0 ) {
+                    detectTap();        // tap || doubletap
+                    detectSwipeFlick(); // swipe || flick         
+                    detectPinch();     // pinch || stretch 
                 }
-                else if(touches.numTouches() == 2) {
-                    // pinchend
-                    if(touches.current.scale() !== 1.0) {
-                        var pinchDirection = touches.current.scale() < 1.0 ? "narrowed" : "widened";
-                        eventSet.execute("pinchend", touches, pinchDirection);
-                    }
-                }
+                lastTouches = 0; // for Android, can be always set to 0. 
             };
 
             var stopListening = function() {
@@ -369,8 +460,9 @@
         
             var midpointX = 0;
             var midpointY = 0;
-    
-            var scale = event.scale;
+            
+            var prevTouches;
+            var scale = event.scale || scaleHelper(event);
             var prevScale = scale;
             var deltaScale = scale;
 
@@ -419,9 +511,65 @@
                 midpointY = mpY / numTouches;
 
                 prevScale = scale;
-                scale = event.scale;
+                scale = event.scale || scaleHelper(event);
                 deltaScale = scale - prevScale;
+                that.event = event;
             }
+            
+            function stopPropagation() {
+                this.event.stopPropagation();
+            }
+            
+            // Android devices do not automatically calculate the
+            // scale of the touches in a gesture, while iOS does
+            // so. This function mimics the iphone behavior.
+            //
+            // helper functions of calculating the missing scale on android devices
+            function sizeCalc(touchList) {
+                var _size = 0;
+                if ( touchList && touchList.length > 1 ) {
+                    var minX = touchList[0].pageX, 
+                    maxX = touchList[0].pageX, 
+                    minY = touchList[0].pageY, 
+                    maxY = touchList[0].pageY;
+                    for ( var i = 0; i < touchList.length; i++ ) {
+                        if ( touchList[i].pageX < minX )
+                            minX = touchList[i].pageX;
+                        if ( touchList[i].pageY < minY )
+                            minY = touchList[i].pageY;
+                        if ( touchList[i].pageX > maxX ) 
+                            maxX = touchList[i].pageX;
+                        if ( touchList[i].pageY > maxY )
+                            maxY = touchList[i].pageY;
+                    }
+                    _size = (maxY-minY) * (maxX-minX);
+                }
+                return _size;
+            }
+
+            function scaleHelper(event) {
+                // this calculates the scale changes by the convex hull (rect).
+                var _delta = 1.0;
+
+                if ( prevTouches && prevTouches.length) {
+                    if ( prevTouches.delta && event.touches.length > 1 ) {
+                        var dl = sizeCalc( event.touches ); 
+                        _delta =  dl/prevTouches.delta;
+                    }
+                }
+                else {
+                    // the gesture delta needs to get calculated only
+                    // when a gesture is started
+                    prevTouches = event.touches; 
+                    if ( prevTouches && prevTouches.length > 1 ) {
+                        var dl = sizeCalc( prevTouches ); 
+                        prevTouches.delta = dl;
+                    }
+                }
+                // return default (nothing  changed)
+                return _delta;
+            }
+
 
             return {
                 numTouches: getNumTouches,
@@ -434,6 +582,8 @@
                 delta: {
                     scale: getDeltaScale
                 },
+                event: event,
+                stopPropagation: stopPropagation,
                 update: updateTouches
             };
         },

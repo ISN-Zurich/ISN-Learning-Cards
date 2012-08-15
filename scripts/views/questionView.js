@@ -4,7 +4,7 @@ function QuestionView() {
 
     self.tagID = 'cardQuestionView';
     
-    $('#CourseList_FromQuestion').click(function(){ self.clickCourseListButton(); } );
+    jester($('#CourseList_FromQuestion')[0]).tap(function(event){ self.clickCourseListButton(); event.stopPropagation(); } );
     $('#ButtonAnswer').click(function(){ handleTap(); } );
     
 } 
