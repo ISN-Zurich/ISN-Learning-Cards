@@ -1,7 +1,7 @@
 body {
 
-width:310px;
-height:460px;
+width:100%;
+height:100%;
 }
 
 H1 {
@@ -24,6 +24,7 @@ FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
 
 }
 
+
 #loginView {
 
 
@@ -37,7 +38,7 @@ margin-bottom:15px;
 #loading {
 
 /*ccontent: "Loading..";*/
-content: url(../resources/loading.gif);
+/*content: url(../resources/loading.gif);*/
  margin:60px;
  /**margin-top:60px;*/
  margin-left:auto;
@@ -102,15 +103,8 @@ height:70px;
 #loginForm{
 
 display: none; 
-
-
-}
-
-
-#loginForm {
-
 margin-bottom:30px;
-   
+
 }
 
 
@@ -280,7 +274,14 @@ display: none;
 
 }
 
-
+.header {
+	color: black; 
+FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
+ FONT-SIZE: 27pt; FONT-STYLE: normal; 
+ FONT-VARIANT: normal;
+ font-weight: bold;
+ padding-top: 5px;
+}
 
 #coursesListHeader{
 
@@ -293,17 +294,13 @@ margin-right: 15px;
 }
 
 #coursesListTitle{
-color: black; 
-FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
- FONT-SIZE: 22pt; FONT-STYLE: normal; 
- FONT-VARIANT: normal;
- font-weight: bold;
+
  float:left;
  margin-left: 15px;
 }
 
 #coursesListSetIcon{
-content: url(../resources/Settings.png);
+/*content: url(../resources/Settings.png);*/
 float:right;
 /*width:22%;
 height:8%;*/
@@ -391,9 +388,15 @@ vertical-align:top;
 
 }*/
 
+.statisticsIcon {
+text-align:right;
+float:right;
+vertical-align:top;
+}
+
 .span1 {
 
-content: url(../resources/statistics.png);
+/*content: url(../resources/statistics.png);*/
 text-align:right;
 float:right;
 vertical-align:top;
@@ -403,7 +406,7 @@ vertical-align:top;
 
 .span2 {
 
-content: url(../resources/loading.png);
+/*content: url(../resources/loading.png);*/
 text-align:right;
 float:right;
 vertical-align:top;
@@ -420,7 +423,6 @@ vertical-align:top;
 #settingsView{
 
 display: none; 
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal;
 
 }
 
@@ -434,41 +436,30 @@ display: none;
 
 #closeSettingsIcon{
 
-content: url(../resources/Close.png);
-width:40px;
+/*content: url(../resources/Close.png);*/
+/*width:40px;
 height:40px;
-
+*/
 }
 
 #settingsData {
-
+color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal;
+	
 
 }
 
 #cardQuestionView{
 
 display: none; 
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
-
 }
 
 
-.cardHeader
-
-{
-margin-top: 15px;
-margin-bottom: 25px;
-padding-bottom: 15px;
-margin-right: 15px;
-
-
-}
 
 .cardHeaderIcon { 
-content: url(../resources/checkbox.png);
-width:20%;
-height:10%;
+/*content: url(../resources/checkbox.png);*/
+
 float:left;
+padding-right: 10px;
 
 }
 
@@ -476,13 +467,8 @@ float:left;
 
 
 .cardTitle{
-
-color: black; 
-FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
- FONT-SIZE: 27pt; FONT-STYLE: normal; 
- FONT-VARIANT: normal;
  margin-left: 15px;
- padding-top:5px;
+ 
 }
 
 
@@ -514,7 +500,7 @@ border:1px solid #d6d6d6; -webkit-border-radius: 3px; -moz-border-radius: 3px;bo
  
     
  padding-right:15px;
- margin-right; 10px;
+ margin-right: 10px;
 
 
 }
@@ -543,9 +529,6 @@ display: none;
 
 #cardAnswerTitle {
 
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
-
-
 }
 #doneButton{
 
@@ -556,7 +539,6 @@ color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE:
 #cardFeedbackView{
 
 display: none; 
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
 
 
 }
@@ -575,8 +557,6 @@ color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE:
 #cardFeedbackTitle {
 
 
-color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE: 22pt; FONT-STYLE: normal; FONT-VARIANT: normal
-
 }
 
 #StatisticsView {
@@ -585,10 +565,10 @@ color: black; FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif; FONT-SIZE:
 
 #closeIcon {
 
-content: url(../resources/Close.png);
-width:40px;
+/*content: url(../resources/Close.png);*/
+/*width:40px;
 height:40px;
-
+*/
 }
 
 

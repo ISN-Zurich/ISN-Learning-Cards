@@ -26,7 +26,8 @@
 <script type="text/javascript" src="scripts/views/splashScreen.js"></script>
 <script type="text/javascript" src="scripts/testModels.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<LINK href="css/test.css" rel="stylesheet" type="text/css">
+<link href="css/test.css" rel="stylesheet" type="text/css">
+<link href="css/font-awesome.css" rel="stylesheet" type="text/css">
 <!--<script type="text/javascript" src="scripts/transition.js"></script>-->
 <!--<script type="text/javascript" src="scripts/catchGestures.js"></script>-->
 
@@ -40,9 +41,10 @@
 
 		<h1>Learning Cards</h1>
 
-		<div id="loading"></div>
+		<div id="loading"><i class="icon-refresh"></i></div>
 
-		<form id="loginForm">
+		<div id="loginForm">
+		<form>
 
 			<div class="field_container">
 				<label id="usernameLabel"> Username </label> <input
@@ -59,7 +61,7 @@
 
 
 		</form>
-
+		</div>
 
 
 
@@ -72,9 +74,9 @@
 	</div>
 
 	<div id="coursesListView">
-		<div id="coursesListHeader">
+		<div id="coursesListHeader" class="header">
 			<div id="coursesListTitle">Your Courses</div>
-			<div id="coursesListSetIcon"></div>
+			<div id="coursesListSetIcon"><i class="icon-cog"></i></div>
 		</div>
 
 
@@ -93,8 +95,8 @@
 
 	<div id="settingsView">
 
-		<div id="settingsHeader">
-			<div id="closeSettingsIcon"></div>
+		<div id="settingsHeader" class="header">
+			<div id="closeSettingsIcon"><i class="icon-remove-sign"></i></div>
 			<div id="settingsTitle">Settings</div>
 		</div>
 
@@ -112,7 +114,7 @@
 
 
 	<div id="logoutConfirmationView">
-		<div id="closeIcon"></div>
+		<div id="closeIcon"><i class="icon-remove-sign"></i></div>
 		<h1>Do you really want to log out</h1>
 		<br /> <br />
 		<button id="logOut" type="button">Logout</button>
@@ -122,8 +124,8 @@
 
 	<div id="cardQuestionView">
 
-		<div id="cardQuestionHeader" class="cardHeader">
-			<div class="cardHeaderIcon"></div>
+		<div id="cardQuestionHeader" class="header">
+			<div class="cardHeaderIcon"><i class="icon-check"></i></div>
 			<div id="cardQuestionTitle" class="cardTitle">Choose some</div>
 		</div>
 
@@ -133,16 +135,16 @@
 		<br />
 		<button id="CourseList_FromQuestion" type="button">Course
 			List View</button>
-		<input id="ButtonTip" type="button" value="Get a Tip" />
-		<button id="ButtonAnswer" type="button">Answer</button>
+		<button id="ButtonTip" type="button"><i class="icon-question-sign"></i>Get a Tip</button>
+		<button id="ButtonAnswer" type="button"><i class="icon-exclamation-sign"></i>Answer</button>
 	</div>
 
 
 
 	<div id="cardAnswerView">
 
-		<div id="cardAnswerHeader" class="cardHeader">
-			<div class="cardHeaderIcon"></div>
+		<div id="cardAnswerHeader" class="header">
+			<div class="cardHeaderIcon"><i class="icon-check"></i> </div>
 			<div id="cardAnswerTitle" class="cardTitle">Choose some answer
 			</div>
 			<button id="doneButton" type="button">Done</button>
@@ -160,9 +162,9 @@
 
 	<div id="cardFeedbackView">
 
-		<div id="cardFeedbackHeader">
-			<div id="cardFeedbackIcon"></div>
-			<div id="cardFeedbackTitle">Excellent</div>
+		<div id="cardFeedbackHeader" class="header">
+			<div id="cardFeedbackIcon" class="cardHeaderIcon"><i class="icon-ok-sign"></i></div>
+			<div id="cardFeedbackTitle" class="cardTitle">Excellent</div>
 		</div>
 
 		<p id="feedbackBody">Lorem ipsum dolor sit amet, consectetur
@@ -175,7 +177,7 @@
 
 
 	<div id="StatisticsView">
-		<div id="closeIconStats" class="closeIcon"></div>
+		<div id="closeIconStats" class="closeIcon"><i class="icon-remove-sign"></i></div>
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicin</p>
 
 

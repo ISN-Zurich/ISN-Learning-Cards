@@ -48,16 +48,21 @@ CoursesListView.prototype.update = function() {
 				  }
 				}).appendTo("#coursesList");
 			
-			$("<span/>", {
-				"class": courseModel.isLoaded() ? "span1" : "span2",
+			var span = $("<span/>", {
+				"class": "statisticsIcon"
 			}).appendTo(li);
+			
+			$("<i/>", {
+				"class": courseModel.isLoaded() ? "icon-signal" : "icon-refresh"
+			}).appendTo(span);
+			
 		} while (courseModel.nextCourse());	
 };
 
 
 CoursesListView.prototype.click = function(event, element) {
 	var $target = $(event.target);
-	if ( $target.is(".span1") ) {
+	if ( $target.is("i") ) {
 		console.log("statistics clicked");
 		this.clickStatisticsIcon(element.parent().attr('id').substring(6));
 	  } else {
