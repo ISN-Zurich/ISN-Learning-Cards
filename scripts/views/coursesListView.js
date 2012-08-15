@@ -43,13 +43,17 @@ CoursesListView.prototype.update = function() {
 			var li = $("<li/>", {
 				  "id": "course" + courseID,
 				  text: courseModel.getTitle(),
-				  click: function(event){
-				    self.click(event, $(this));
+				  click: function(){
+					  this.clickCourseItem(element.attr('id').substring(6));
 				  }
 				}).appendTo("#coursesList");
 			
 			var span = $("<span/>", {
-				"class": "statisticsIcon"
+				"class": "statisticsIcon",
+				click: function(event) {
+					this.clickStatisticsIcon(element.parent().attr('id').substring(6));
+					event.stopPropagation();
+				}
 			}).appendTo(li);
 			
 			$("<i/>", {
@@ -64,7 +68,7 @@ CoursesListView.prototype.click = function(event, element) {
 	var $target = $(event.target);
 	if ( $target.is("i") ) {
 		console.log("statistics clicked");
-		this.clickStatisticsIcon(element.parent().attr('id').substring(6));
+		
 	  } else {
 		  console.log("li item clicked");
 		  this.clickCourseItem(element.attr('id').substring(6));

@@ -1,6 +1,8 @@
 var controller;
 
-$(document).ready(function() {
+document.addEventListener("deviceready", init, false);
+
+function init() {
 
     initModels();
 
@@ -10,7 +12,7 @@ $(document).ready(function() {
 
 	//setTimeout("start()", 1000);
 	// start();
-});
+}
 
 function start() {
 	initModels();
