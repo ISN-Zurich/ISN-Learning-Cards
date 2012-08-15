@@ -9,6 +9,7 @@ function LogoutView() {
 
 LogoutView.prototype.handleTap = doNothing;
 LogoutView.prototype.handleSwipe = doNothing;
+LogoutView.prototype.handlePinch = doNothing;
 
 LogoutView.prototype.open = openView;
 

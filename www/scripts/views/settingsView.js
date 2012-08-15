@@ -7,6 +7,7 @@ function SettingsView() {
     $('#logOutSettings').click(function(){ self.logout(); } );
 } 
 
+SettingsView.prototype.handlePinch = doNothing;
 SettingsView.prototype.handleTap = doNothing;
 SettingsView.prototype.handleSwipe = doNothing;
 SettingsView.prototype.openDiv = openView;

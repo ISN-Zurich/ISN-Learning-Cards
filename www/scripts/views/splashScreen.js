@@ -6,6 +6,7 @@ function SplashScreen(controller) {
 
 }
 
+SplashScreen.prototype.handlePinch = doNothing;
 SplashScreen.prototype.handleTap = doNothing;
 SplashScreen.prototype.handleSwipe = doNothing;
 

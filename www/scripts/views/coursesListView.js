@@ -10,6 +10,7 @@ function CoursesListView (controller) {
 }
 
 CoursesListView.prototype.handleTap = doNothing;
+CoursesListView.prototype.handlePinch = doNothing;
 CoursesListView.prototype.handleSwipe = doNothing;
 CoursesListView.prototype.openDiv = openView;
 CoursesListView.prototype.open = function() {
