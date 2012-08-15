@@ -1,8 +1,16 @@
 var controller;
 
+<<<<<<< HEAD
 $(document).ready(function() {
 
     initModels();
+=======
+document.addEventListener("deviceready", init, false);
+
+function init() {
+
+    //initModels();
+>>>>>>> refs/heads/belinastrack
 
 	//$("#splashScreen").show();
 	//$("#loading").show();
@@ -10,7 +18,11 @@ $(document).ready(function() {
 
 	//setTimeout("start()", 1000);
 	// start();
+<<<<<<< HEAD
 });
+=======
+}
+>>>>>>> refs/heads/belinastrack
 
 function start() {
 	initModels();
