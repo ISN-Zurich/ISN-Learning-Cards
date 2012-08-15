@@ -11,8 +11,18 @@ function QuestionView() {
 
 
 
-QuestionView.prototype.handleTap = handleTap;
-QuestionView.prototype.handleSwipe = handleSwipe;
+QuestionView.prototype.handleTap = function() {
+	controller.transitionToAnswer();
+    };
+QuestionView.prototype.handleSwipe = function() {
+
+	// ask the model to select the next question
+	// update the display for the current view 
+    console.log("swipe works");
+    controller.models['questionpool'].nextQuestion();
+	this.showQuestionBody();
+	this.showQuestionTitle();
+};
 QuestionView.prototype.close = closeView;
 QuestionView.prototype.openDiv = openView;
 QuestionView.prototype.open = function() {
@@ -39,18 +49,7 @@ QuestionView.prototype.clickCourseListButton = function() {
 
 };
 
-function handleTap() {
-	controller.transitionToAnswer();
 
-};
 
-function handleSwipe() {
 
-	// ask the model to select the next question
-	// update the display for the current view 
-    console.log("swipe works");
-    controller.models['questionpool'].nextQuestion();
-	this.showQuestionBody();
-	this.showQuestionTitle();
-};
 
