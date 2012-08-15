@@ -44,14 +44,14 @@ CoursesListView.prototype.update = function() {
 				  "id": "course" + courseID,
 				  text: courseModel.getTitle(),
 				  click: function(){
-					  this.clickCourseItem(element.attr('id').substring(6));
+					  self.clickCourseItem($(this).attr('id').substring(6));
 				  }
 				}).appendTo("#coursesList");
 			
 			var span = $("<span/>", {
 				"class": "statisticsIcon",
 				click: function(event) {
-					this.clickStatisticsIcon(element.parent().attr('id').substring(6));
+					self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
 					event.stopPropagation();
 				}
 			}).appendTo(li);
