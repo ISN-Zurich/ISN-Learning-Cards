@@ -7,10 +7,7 @@
  * Released under MIT License
  *
  * Copyright (C) 2011 by Scott Seaward
-<<<<<<< HEAD
-=======
  * Copyright (C) 2012 by Christian Glahn (Android Support Extensions)
->>>>>>> refs/heads/belinastrack
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,11 +39,7 @@
             var that = this,
                 cacheId = Jester.cacheId,
                 cache = Jester.cache,
-<<<<<<< HEAD
-                gestures = "swipe flick tap doubletap pinchnarrow pinchwiden pinchend";
-=======
                 gestures = "swipe flick tap twintap taplong twintaplong doubletap pinchnarrow pinchwiden pinchend pinched stretched";
->>>>>>> refs/heads/belinastrack
 
             if(!element || !element.nodeType) {
                 throw new TypeError("Jester: no element given.");
@@ -262,13 +255,6 @@
 
             opts.tapDistance    = opts.tapDistance          ||    0;
             opts.tapTime        = opts.tapTime              ||    20;
-<<<<<<< HEAD
-
-            opts.doubleTapTime  = opts.doubleTapTime        ||    300;
-
-            opts.swipeDistance  = opts.swipeDistance        ||    200;
-
-=======
             opts.tapLongTime    = opts.tapLongTime          ||    1000;
 
             opts.doubleTapTime  = opts.doubleTapTime        ||    300;
@@ -277,7 +263,6 @@
             opts.swipeDistance  = opts.swipeDistance        ||    200;
 
             opts.avoidFlick     = opts.avoidFlick           ||    false;
->>>>>>> refs/heads/belinastrack
             opts.flickTime      = opts.flickTime            ||    300;
             opts.flickDistance  = opts.flickDistance        ||    200;
 
@@ -285,28 +270,16 @@
             opts.deadY          = opts.deadY                ||    0;
 
             if(opts.capture !== false) opts.capture = true;
-<<<<<<< HEAD
-            if(typeof opts.preventDefault !== "undefined" && opts.preventDefault !== false) opts.preventDefault = true;
-            if(typeof opts.preventDefault !== "undefined" && opts.stopPropagation !== false) opts.stopPropagation = true;
-=======
+
             if(typeof opts.preventDefault !== "undefined" && 
                opts.preventDefault !== false) opts.preventDefault = true;
             if(typeof opts.preventDefault !== "undefined" && 
                opts.stopPropagation !== false) opts.stopPropagation = true;
->>>>>>> refs/heads/belinastrack
 
             var eventSet = elementCache.eventSet;
 
             var touches;
             var previousTapTime = 0;
-<<<<<<< HEAD
-
-            var touchStart = function(evt) {
-                touches = new Jester.TouchGroup(evt);
-
-                eventSet.execute("start", touches, evt);
-
-=======
             var previousNumTouches = 0;
             var lastTouches = 0;
 
@@ -321,7 +294,6 @@
 
                     previousTapTime = (new Date()).getTime();
                 }
->>>>>>> refs/heads/belinastrack
                 if(opts.preventDefault) evt.preventDefault();
                 if(opts.stopPropagation) evt.stopPropagation();
             };
@@ -347,49 +319,6 @@
                 }
             };
 
-<<<<<<< HEAD
-            var touchEnd = function(evt) {
-
-                eventSet.execute("end", touches, evt);
-
-                if(opts.preventDefault) evt.preventDefault();
-                if(opts.stopPropagation) evt.stopPropagation();
-
-                if(touches.numTouches() == 1) {
-                    // tap
-                    if(touches.touch(0).total.x() <= opts.tapDistance && touches.touch(0).total.y() <= opts.tapDistance && touches.touch(0).total.time() < opts.tapTime) {
-                        eventSet.execute("tap", touches);
-                    }
-    
-                    // doubletap
-                    if(touches.touch(0).total.time() < opts.tapTime) {
-                        var now = (new Date()).getTime();
-                        if(now - previousTapTime <= opts.doubleTapTime) {
-                            eventSet.execute("doubletap", touches);
-                        }
-                        previousTapTime = now;
-                    }
-
-                    // swipe
-                    if(Math.abs(touches.touch(0).total.x()) >= opts.swipeDistance) {
-                        var swipeDirection = touches.touch(0).total.x() < 0 ? "left" : "right";
-                        eventSet.execute("swipe", touches, swipeDirection);
-                    }
-
-                    // flick
-                    if(Math.abs(touches.touch(0).total.x()) >= opts.flickDistance && touches.touch(0).total.time() <= opts.flickTime) {
-                        var flickDirection = touches.touch(0).total.x() < 0 ? "left" : "right";
-                        eventSet.execute("flick", touches, flickDirection);
-                    }
-                }
-                else if(touches.numTouches() == 2) {
-                    // pinchend
-                    if(touches.current.scale() !== 1.0) {
-                        var pinchDirection = touches.current.scale() < 1.0 ? "narrowed" : "widened";
-                        eventSet.execute("pinchend", touches, pinchDirection);
-                    }
-                }
-=======
             function detectTap() {
                 var nTouch = touches.numTouches();
                 var eTouch = true;
@@ -508,7 +437,6 @@
                     detectPinch();     // pinch || stretch 
                 }
                 lastTouches = 0; // for Android, can be always set to 0. 
->>>>>>> refs/heads/belinastrack
             };
 
             var stopListening = function() {
@@ -533,14 +461,9 @@
         
             var midpointX = 0;
             var midpointY = 0;
-<<<<<<< HEAD
-    
-            var scale = event.scale;
-=======
             
             var prevTouches;
             var scale = event.scale || scaleHelper(event);
->>>>>>> refs/heads/belinastrack
             var prevScale = scale;
             var deltaScale = scale;
 
@@ -589,12 +512,6 @@
                 midpointY = mpY / numTouches;
 
                 prevScale = scale;
-<<<<<<< HEAD
-                scale = event.scale;
-                deltaScale = scale - prevScale;
-            }
-
-=======
                 scale = event.scale || scaleHelper(event);
                 deltaScale = scale - prevScale;
                 that.event = event;
@@ -603,7 +520,11 @@
             function stopPropagation() {
                 this.event.stopPropagation();
             }
-            
+ 
+            function preventDefault() {
+                this.event.preventDefault();
+            }
+ 
             // Android devices do not automatically calculate the
             // scale of the touches in a gesture, while iOS does
             // so. This function mimics the iphone behavior.
@@ -654,8 +575,6 @@
                 return _delta;
             }
 
-
->>>>>>> refs/heads/belinastrack
             return {
                 numTouches: getNumTouches,
                 touch: getTouch,
@@ -667,11 +586,9 @@
                 delta: {
                     scale: getDeltaScale
                 },
-<<<<<<< HEAD
-=======
                 event: event,
+                preventDefault: preventDefault, 
                 stopPropagation: stopPropagation,
->>>>>>> refs/heads/belinastrack
                 update: updateTouches
             };
         },
@@ -836,5 +753,4 @@
     container["jester"] = function(el, opts) {
         return new Jester.Watcher(el, opts);
     };
-
 }(window));

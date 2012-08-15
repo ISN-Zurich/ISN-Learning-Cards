@@ -7,16 +7,17 @@ function closeView() {
 }
 
 function Controller() {
-var self = this;
+    var self = this;
+
 	this.models = {
 		authentication : new ConfigurationModel(),
 		course : new CourseModel(),
 		questionpool : new QuestionPoolModel()
-
+        
 	};
-
-	this.models['course'].loadData();
-
+    
+	// this.models['course'].loadData();
+    
 	this.views = {
 		splashScreen : new SplashScreen(this),
 		login : new LoginView(),
@@ -27,28 +28,28 @@ var self = this;
 		feedbackView : new FeedbackView(),
 		settings : new SettingsView()
 	};
-
+    
 	this.activeView = this.views['splashScreen'];
-
+    
 	if (this.models['authentication'].isLoggedIn()) {
-		//console.log("is loggedIn");
+		console.log("is loggedIn");
 		this.transition('coursesList');
 	} else {
-		//console.log("is not loggedIn");
+		console.log("is not loggedIn");
 		this.transition('login');
 	}
-
-function swipeCatcher() { self.activeView.handleSwipe();};
-
-function tapCatcher() { self.activeView.handleTap();};
-
-var jesteroptions = { swipeDistance: 100, 
-			  avoidFlick: true };
-
-jester(document, jesteroptions)
+    
+    function swipeCatcher(event) { self.activeView.handleSwipe(event);};
+    
+    function tapCatcher(event) { self.activeView.handleTap(event);};
+    
+    self.jesteroptions = { swipeDistance: 100,
+        avoidFlick: true };
+    
+    jester(document, self.jesteroptions)
     .swipe(swipeCatcher)
 	.tap(tapCatcher);
-
+    
 	console.log("End of Controller");
 } // end of Controller
 
@@ -65,15 +66,15 @@ Controller.prototype.transitionToLogin = function ( ) { this.transition('login')
 Controller.prototype.transitionToLogout = function ( ) { this.transition('logout'); };
 
 
-Controller.prototype.transitionToCourses =  function () { this.transition('coursesList');};  
+Controller.prototype.transitionToCourses =  function () { this.transition('coursesList');};
 
 
-Controller.prototype.transitionToQuestion = function () { this.transition('questionView');};  
+Controller.prototype.transitionToQuestion = function () { this.transition('questionView');};
 
 
-Controller.prototype.transitionToAnswer = function () {this.transition('answerView');}; 
-      
-Controller.prototype.transitionToFeedback = function () {this.transition('feedbackView');};  
+Controller.prototype.transitionToAnswer = function () {this.transition('answerView');};
+
+Controller.prototype.transitionToFeedback = function () {this.transition('feedbackView');};
 
 Controller.prototype.transitionToSettings = function ( ) {this.transition('settings');};
 

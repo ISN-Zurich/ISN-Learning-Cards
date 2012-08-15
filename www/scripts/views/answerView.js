@@ -3,13 +3,10 @@ function AnswerView() {
     
     self.tagID = 'cardAnswerView';
     
-    $('#doneButton').click(function(){ self.clickDoneButton(); } );
-    $('#CourseList_FromAnswer').click(function(){ self.clickCourseListButton(); } );
-<<<<<<< HEAD
-    $('#cardAnswerTitle').click(function(){ self.clickTitleArea(); } );
-=======
+    jester($('#doneButton')[0]).tap(function(){ self.clickDoneButton(); } );
+    jester($('#CourseList_FromAnswer')[0]).tap(function(){ self.clickCourseListButton(); } );
+
     jester($('#cardAnswerTitle')[0]).tap(function(){ self.clickTitleArea(); console.log("answer title clicked");} );
->>>>>>> refs/heads/belinastrack
     
 } 
 

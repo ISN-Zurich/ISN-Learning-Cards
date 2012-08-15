@@ -1,35 +1,25 @@
 var controller;
 
-<<<<<<< HEAD
-$(document).ready(function() {
-
-    initModels();
-=======
 document.addEventListener("deviceready", init, false);
 
 function init() {
-
+    
     //initModels();
->>>>>>> refs/heads/belinastrack
-
+    
 	//$("#splashScreen").show();
 	//$("#loading").show();
     controller = new Controller();
-
+    
 	//setTimeout("start()", 1000);
 	// start();
-<<<<<<< HEAD
-});
-=======
 }
->>>>>>> refs/heads/belinastrack
 
 function start() {
 	initModels();
-
+    
 	if (localStorage.configuration) { // user was already connected to LMS
 		configurationModel = JSON.parse(localStorage.configuration); // take the configuration from
-																	// the local storage
+        // the local storage
 		//alert(configurationModel.loginState);
 	}
 	// if (localStorage.courses) {
@@ -38,7 +28,7 @@ function start() {
 	// courses = JSON.parse(localStorage.courses);
 	// alert(courses.id);
 	// }
-
+    
 	if (isOffline()) { // user is offline
 		if (configurationModel.loginState == "loggedOut") {
 			alert("Sorry, you need to be online to connect to your LMS");
@@ -49,7 +39,7 @@ function start() {
 			$("#courseList").show();
 			$("#loginForm").hide();
 			$("#splashScreen").hide();
-
+            
 			loadTransitions();
 		}
 	} else { // user is online
@@ -59,12 +49,12 @@ function start() {
             if (!transitionsLoaded) {
                 loadTransitions();
             }
-
+            
 			console.log("transitions loaded");
-
+            
 			$("#loading").hide();
 			$("#loginForm").show();
-
+            
 			console.log("login end");
 		} else if (configurationModel.loginState == "loggedIn") {
 			createCourseList();
@@ -72,15 +62,15 @@ function start() {
 			if (!transitionsLoaded) {
                 loadTransitions();
             }
-
+            
 			
 			$("#coursesListView").show();
 			$("#loginForm").hide();
 			$("#splashScreen").hide();
-
+            
 		}
 	}
-
+    
 }
 
 // function coursesArrayToString() {
@@ -90,7 +80,7 @@ function start() {
 // courses[i].getTitle() + '","synchDateTime":"' +
 // course[i].getSynchDateTime() + '","synchState'
 // }
-//	
+//
 // }
 
 // [ {
@@ -134,7 +124,7 @@ function start() {
 // function init() {
 // console.log("0");
 // var config = null;
-//	
+//
 // console.log("1");
 //
 // if (localStorage.configuration) { // user was already connected to LMS
@@ -145,7 +135,7 @@ function start() {
 // console.log("1b");
 // config = configurationModel; //create new configuration
 // }
-//	
+//
 // console.log("2");
 //
 // if (isOffline()) { // user is offline
@@ -169,9 +159,9 @@ function start() {
 // config.loginState = "loggedOut";
 // }
 // }
-//	
+//
 // console.log("4");
-//	
+//
 // localStorage.configuration = JSON.stringify(config);
 //
 // console.log("5");
