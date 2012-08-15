@@ -62,15 +62,3 @@ CoursesListView.prototype.update = function() {
 			
 		} while (courseModel.nextCourse());	
 };
-
-
-CoursesListView.prototype.click = function(event, element) {
-	var $target = $(event.target);
-	if ( $target.is("i") ) {
-		console.log("statistics clicked");
-		
-	  } else {
-		  console.log("li item clicked");
-		  this.clickCourseItem(element.attr('id').substring(6));
-	  }
-};
