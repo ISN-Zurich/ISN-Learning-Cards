@@ -14,6 +14,7 @@ function init() {
 	// start();
 }
 
+function testli() {};
 function start() {
 	initModels();
     
