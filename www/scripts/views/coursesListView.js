@@ -50,7 +50,7 @@ CoursesListView.prototype.update = function() {
                    }).appendTo("#coursesList");
         
         var span = $("<span/>", {
-                     "class": "statisticsIcon",
+                     "class": "right",
                      click: function(event) {
                      self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
                      event.stopPropagation();

@@ -60,11 +60,14 @@
 
 		<div id="loginForm">
 			<form>
-				<input class="loginInput" id="usernameInput" required="required"
-					type="text" placeholder="Username" /> 
-				<input id="password"
-					class="loginInput" name="password" required="required" type="text"
-					placeholder="Password" />
+				<div class="inputBorder">
+					<input class="loginInput" id="usernameInput" required="required"
+						type="text" placeholder="Username" />
+				</div>
+				<div class="inputBorder">
+					<input id="password" class="loginInput" name="password"
+						required="required" type="password" placeholder="Password" />
+				</div>
 				<button id="loginButton" type="button" class="generalButton">Login</button>
 			</form>
 		</div>
@@ -80,36 +83,29 @@
 	</div>
 
 	<div id="coursesListView">
-
 		<div id="coursesListHeader" class="header">
-			<div id="coursesListTitle">Your Courses</div>
-			<div id="coursesListSetIcon" class="iconRight">
+			<div class="left"></div>
+			<div id="coursesListSetIcon" class="right icon">
 				<i class="icon-cog"></i>
 			</div>
+			<div id="coursesListTitle">Your Courses</div>
 		</div>
-
-
 		<div id="courses">
-
-
 			<ul id="coursesList">
-
 			</ul>
-
-
-
 		</div>
 	</div>
 
-
 	<div id="settingsView">
 		<div id="settingsHeader" class="header">
-			<div id="closeSettingsIcon" class="iconRight">
+			<div id="settingsIcon" class="left">
+				<i class="icon-cog"></i>
+			</div>
+			<div id="closeSettingsIcon" class="right icon">
 				<i class="icon-remove-sign"></i>
 			</div>
 			<div id="settingsTitle">Settings</div>
 		</div>
-
 		<ul id="settingsData">
 			<li>Your name</li>
 			<li>Your username</li>
@@ -126,7 +122,7 @@
 
 	<div id="logoutConfirmationView">
 		<div class="header">
-			<div id="closeIcon" class="iconRight">
+			<div id="closeIcon" class="right icon">
 				<i class="icon-remove-sign"></i>
 			</div>
 			<span>Do you really want to log out?</span> <br /> <br />
@@ -139,8 +135,11 @@
 	<div id="cardQuestionView">
 
 		<div id="cardQuestionHeader" class="header">
-			<div class="iconLeft">
+			<div class="left">
 				<i class="icon-check"></i>
+			</div>
+			<div id="CourseList_FromQuestion" class="right icon">
+				<i class="icon-remove-sign"></i>
 			</div>
 			<div id="cardQuestionTitle" class="cardTitle">Choose some</div>
 		</div>
@@ -149,14 +148,11 @@
 			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
 			dolore magna.</p>
 		<br />
-		<button id="CourseList_FromQuestion" type="button">
-			<i class="icon-home"></i>
+		<button id="ButtonTip" type="button" class="left">
+			<i class="icon-question-sign"></i>
 		</button>
-		<button id="ButtonTip" type="button">
-			<i class="iconLeft icon-question-sign"></i>Get a Tip
-		</button>
-		<button id="ButtonAnswer" type="button">
-			<i class="iconLeft icon-exclamation-sign"></i>Answer
+		<button id="ButtonAnswer" type="button" class="right">
+			<i class="icon-exclamation-sign"></i>
 		</button>
 	</div>
 
@@ -165,12 +161,14 @@
 	<div id="cardAnswerView">
 
 		<div id="cardAnswerHeader" class="header">
-			<div class="iconLeft">
+			<div class="left">
 				<i class="icon-check"></i>
+			</div>
+			<div id="CourseList_FromAnswer" class="right icon">
+				<i class="icon-remove-sign"></i>
 			</div>
 			<div id="cardAnswerTitle" class="cardTitle">Choose some answer
 			</div>
-			<button id="doneButton" type="button">Done</button>
 		</div>
 
 		<p id="cardAnswerBody">Lorem ipsum dolor sit amet, consectetur
@@ -178,15 +176,16 @@
 			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
 			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
 		<br />
-		<button id="CourseList_FromAnswer" type="button">Course List
-			View</button>
+		<button id="doneButton" type="button" class="right">
+			<i class="icon-exclamation-sign"></i>
+		</button>
 	</div>
 
 
 	<div id="cardFeedbackView">
 
 		<div id="cardFeedbackHeader" class="header">
-			<div id="iconLeft" class="cardHeaderIcon">
+			<div class="left" id="cardHeaderIcon">
 				<i class="icon-ok-sign"></i>
 			</div>
 			<div id="cardFeedbackTitle" class="cardTitle">Excellent</div>
@@ -196,13 +195,17 @@
 			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
 			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
 			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-		<button id="FeedbackMore" type="button">see Feedback</button>
-		<button id="FeedbackDoneButon" type="button">Done</button>
+		<button id="FeedbackMore" type="button" class="left">
+			<i class="icon-question-sign"></i>
+		</button>
+		<button id="FeedbackDoneButon" type="button" class="right">
+			<i class="icon-exclamation-sign"></i>
+		</button>
 	</div>
 
 
 	<div id="StatisticsView">
-		<div id="closeIconStats" class="iconRight">
+		<div id="closeIconStats" class="right icon">
 			<i class="icon-remove-sign"></i>
 		</div>
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicin</p>

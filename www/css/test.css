@@ -2,31 +2,23 @@ body {
 	width: device-width;
 	height: device-height;
 	overflow: scroll;
-	
 	color: black;
 	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
 	FONT-SIZE: 14pt;
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
+	padding: 10px;
 }
 
 h1 {
-	color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 28pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
+	FONT-SIZE: 20pt;
 	text-align: center;
 	margin-bottom: 30px;
 }
 
-p {
-	/*color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 20pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;*/
-	padding: 10px;
+.icon {
+	font-size: 34pt;
+	vertical-align: top;
 }
 
 button {
@@ -39,66 +31,41 @@ button {
 	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 	font-weight: none;
 	text-align: center;
-	font-size: 18pt; ,
+	font-size: 18pt;
 	color: black;
 	background-color: #efefef;
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef),
-		color-stop(100%, #dedede) );
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #dedede) );
 	background-image: -webkit-linear-gradient(top, #efefef, #dedede);
 	background-image: -moz-linear-gradient(top, #efefef, #dedede);
 	background-image: -ms-linear-gradient(top, #efefef, #dedede);
 	background-image: -o-linear-gradient(top, #efefef, #dedede);
 	background-image: linear-gradient(top, #efefef, #dedede);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
-		startColorstr=#efefef, endColorstr=#dedede );
-}
-
-.button:hover {
-	border: 1px solid #d6d6d6;
-	background-color: #d6d6d6;
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d6d6d6),
-		color-stop(100%, #c5c5c5) );
-	background-image: -webkit-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: -moz-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: -ms-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: -o-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: linear-gradient(top, #d6d6d6, #c5c5c5);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
-		startColorstr=#d6d6d6, endColorstr=#c5c5c5 );
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#efefef, endColorstr=#dedede );
 }
 
 .generalButton {
 	float: left;
 	padding: auto;
-/* 	margin-top: 20px; */
-/* 	margin-left: auto; */
-/* 	margin-right: auto; */
 	margin-bottom: 20px;
 	width: 100%;
-/* 	height: 50px; */
 }
 
 .header {
-	color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 27pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
+	FONT-SIZE: 20pt;
 	font-weight: bold;
 	padding-top: 5px;
-	padding-left: 15px;
 }
 
-.iconLeft {
+.left {
 	float: left;
 	padding-right: 10px;
-	margin-right: 15px;
+	margin-right: 5px;
 }
 
-.iconRight {
+.right {
 	float: right;
 	padding-left: 10px;
-	margin-left: 15px;
+	margin-left: 5px;
 }
 
 #coursesListView {
@@ -130,16 +97,18 @@ button {
 }
 
 #loading {
-	padding-left: auto;
-	padding-right: auto;
-	width: 100%;
-	vertical-align: middle;
+	clear: both;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px 0 10px 0;
+	font-size: 30pt;
+	text-align: center;
 }
 
 #logos {
 	vertical-align: bottom;
 	margin-top: 10px;
-	clear:both;
+	clear: both;
 }
 
 #logo_isn {
@@ -162,20 +131,17 @@ button {
 #eth_logo {
 	content: url(../resources/eth_logo.gif);
 	vertical-align: bottom;
-/* 	width: device-width; */
 	float: left;
-/* 	height: 70px; */
 	width: 100%;
 	padding-bottom: 20px;
 }
 
 #loginForm {
 	display: none;
-	width:100%;
-/* 	margin-bottom: 30px; */
+	width: 100%;
 }
 
-.loginInput {
+.inputBorder {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	-ms-border-radius: 3px;
@@ -191,30 +157,38 @@ button {
 	-ms-transition: all 0.5s ease;
 	-o-transition: all 0.5s ease;
 	transition: all 0.5s ease;
-	/*background: #eae7e7 url(http://cssdeck.com/uploads/media/items/8/8bcLQqF.png) no-repeat;*/
+	margin: 10px auto 10px auto;
+	padding: 10px;
 	border: 1px solid #c8c8c8;
 	color: #777;
+}
+
+.loginInput {
+	box-shadow: none;
+	outline: none;
+	border: none;
+	border-width: 0px;
+	-webkit-appearance: none;
 	font: 12pt Helvetica, Arial, sans-serif;
-/* 	float: left; */
-	text-indent: 5px;
-	padding: 15px 0 15px 0;
-	margin: 10px auto 10px auto;
-/* 	margin: 5px 5px 5px 5px; */
-/* 	padding: 10px 10px 10px 10px; */
-/* 	float: left; */
-/* 	height: 30px; */
-/* 	display: block; */
+	margin: 0;
 	width: 100%;
 }
 
-#courses {
-	margin-top: 10px;
-	margin-left: 15px;
-	margin-right: 15px;
-	padding-top: 20px;
+.loginInput:focus {
+	outline: none;
+	border: none;
+	border-width: 0px;
+	-webkit-appearance: none
 }
 
-ul#coursesList {
+/* #courses { */
+/* 	margin-top: 10px; */
+/* 	margin-left: 15px; */
+/* 	margin-right: 15px; */
+/* 	padding-top: 20px; */
+/* } */
+
+ul {
 	border: solid #ccc 1px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -230,7 +204,7 @@ ul#coursesList {
 	position: relative;
 }
 
-ul#coursesList li {
+li {
 	-o-transition: all 0.1s ease-in-out;
 	-webkit-transition: all 0.1s ease-in-out;
 	-moz-transition: all 0.1s ease-in-out;
@@ -242,7 +216,6 @@ ul#coursesList li {
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
 	border: 1px solid #ccc;
-	/*border-top: 1px solid #ccc;*/
 	text-align: left;
 	border-radius: 0 0 0 0;
 	padding: 15px;
@@ -252,53 +225,8 @@ ul#coursesList li {
 	border-left: none;
 }
 
-ul li:hover {
-	background: #fbf8e9;
-	-o-transition: all 0.1s ease-in-out;
-	-webkit-transition: all 0.1s ease-in-out;
-	-moz-transition: all 0.1s ease-in-out;
-	-ms-transition: all 0.1s ease-in-out;
-	transition: all 0.1s ease-in-out;
-}
-
 .statisticsIcon {
 	text-align: right;
 	float: right;
-	vertical-align: top;
-}
-
-
-/*
-#closeSettingsIcon { /*content: url(../resources/Close.png);
-	/*width:40px;
-height:40px;
-
-	
-}
-
-#settingsData {
-	/*color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 22pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
-}
-
-
-#ButtonTip {
-	padding-right: 50px;
-}
-
-#ButtonAnswer {
-	padding-right: 15px;
-	margin-right: 10px;
-}
-*/
-
-/*
-#closeIcon { /*content: url(../resources/Close.png);*/
-	/*width:40px;
-height:40px;
-*/
-	
+/* 	vertical-align: top; */
 }
