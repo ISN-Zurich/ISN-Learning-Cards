@@ -40,13 +40,61 @@ function initQuPo1() {
 	var questionpool_1 = [
 	                      {
 	                    	  type: "Single Choice Question",
-	                    	  question: "Solve the equation! 1x1=?",
-	                    	  answer: "1" 
-	                      }, {
-	                    	  type: "Single Choice Question",
-	                    	  question: "Solve the equation! 5x1=?",
-	                       	  answer: "5"
-	                      }
+	                    	  question: "Choose the correct answer",
+	                    	  answer: [ 
+	                    	            {
+	                    	            	text:"answer1",
+	                    	            	score: "0"
+	                    	            	
+	                    	            },
+	                    	            
+	                    	            {   text:"answer2",
+	                    	            	score: "1"
+	                    	            	
+	                    	            	
+	                    	            },
+	                    	           
+	                      				{
+	                    	            	text:"answer3",
+	                    	            	score: "0"	            	
+	                      	                    	            	
+	                      	              }
+	                    	            
+	                    	            ],
+	                           correctFeedback: "Excellent",
+	                           errorFeeback: "In order to asnwer this question better you should also take into account the impact of.."
+	                      
+	                      }, 
+	                                {
+	                                	type: "Multiple Choice Question",
+	                                	question: "How could an organization contribute to ..",
+	                                	answer: [ 
+	     	                    	            {
+	     	                    	            	text:"by lending money",
+	     	                    	            	score: "0"
+	     	                    	            	
+	     	                    	            },
+	     	                    	            
+	     	                    	            {   text:"by developing a new business model",
+	     	                    	            	score: "1"
+	     	                    	            	
+	     	                    	            	
+	     	                    	            },
+	     	                    	           
+	     	                      				{
+	     	                    	            	text:"by collaborating with",
+	     	                    	            	score: "1"	            	
+	     	                      	                    	            	
+	     	                      	              }
+	     	                    	            
+	     	                    	            ],
+	                                	
+	     	                   correctFeedback: "Excellent",
+	     	   	               errorFeeback: "In order to asnwer this question better you should also take into account the impact of.."
+	     	   	                      	
+	              
+	                                	
+	                                }
 	                     ];
 	
 	localStorage.questionpool_1 = JSON.stringify(questionpool_1);
