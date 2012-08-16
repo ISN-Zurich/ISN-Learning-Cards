@@ -8,6 +8,7 @@ function LoginView() {
 } 
 
 LoginView.prototype.handleTap = doNothing;
+LoginView.prototype.handlePinch = doNothing;
 LoginView.prototype.handleSwipe = doNothing;
 LoginView.prototype.openDiv = openView;
 LoginView.prototype.open = function() {
