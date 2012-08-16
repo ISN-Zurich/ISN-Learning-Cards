@@ -35,30 +35,30 @@ CoursesListView.prototype.update = function() {
     
     $("#coursesList").empty();
     
-    
-    do {
-        var courseID = courseModel.getId();
-        
-        
-        var li = $("<li/>", {
-                   "id": "course" + courseID,
-                   text: courseModel.getTitle(),
-                   click: function(){
-                   self.clickCourseItem($(this).attr('id').substring(6));
-                   }
-                   }).appendTo("#coursesList");
-        
-        var span = $("<span/>", {
-                     "class": "statisticsIcon",
-                     click: function(event) {
-                     self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
-                     event.stopPropagation();
-                     }
-                     }).appendTo(li);
-        
-        $("<i/>", {
-          "class": courseModel.isLoaded() ? "icon-signal" : "icon-refresh"
-          }).appendTo(span);
-        
-    } while (courseModel.nextCourse());	
+	    
+		do {
+			var courseID = courseModel.getId();
+			
+			
+			var li = $("<li/>", {
+				  "id": "course" + courseID,
+				  text: courseModel.getTitle(),
+				  click: function(){
+					  self.clickCourseItem($(this).attr('id').substring(6));
+				  }
+				}).appendTo("#coursesList");
+			
+			var span = $("<span/>", {
+				"class": "statisticsIcon",
+				click: function(event) {
+					self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
+					event.stopPropagation();
+				}
+			}).appendTo(li);
+			
+			$("<i/>", {
+				"class": courseModel.isLoaded() ? "icon-signal" : "icon-refresh"
+			}).appendTo(span);
+			
+		} while (courseModel.nextCourse());	
 };

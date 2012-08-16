@@ -7,26 +7,15 @@
 	content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
 
 
- <script type="text/javascript" charset="utf-8"
+<script type="text/javascript" charset="utf-8"
 	src="libs/cordova-2.0.0.js"></script>
-    
-<!--
- <script type="text/javascript" charset="utf-8"
-	src="libs/cordova-2.0.0-ios.js"></script>
--->
-    
 <script type="text/javascript" src="libs/jquery.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
-    
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
-
-    <!-- <script type="text/javascript" src="scripts/models/connectionstate.js"></script> -->
-    
+<script type="text/javascript" src="scripts/models/connectionstate.js"></script>
 <script type="text/javascript" src="scripts/models/course.js"></script>
 <script type="text/javascript" src="scripts/models/questionpool.js"></script>
-    
 <script type="text/javascript" src="scripts/controllers/controller.js"></script>
-    
 <script type="text/javascript" src="scripts/views/answerView.js"></script>
 <script type="text/javascript" src="scripts/views/coursesListView.js"></script>
 <script type="text/javascript" src="scripts/views/feedbackView.js"></script>
@@ -35,14 +24,12 @@
 <script type="text/javascript" src="scripts/views/questionView.js"></script>
 <script type="text/javascript" src="scripts/views/settingsView.js"></script>
 <script type="text/javascript" src="scripts/views/splashScreen.js"></script>
-    
 <script type="text/javascript" src="scripts/testModels.js"></script>
-    
 <script type="text/javascript" src="scripts/main.js"></script>
-
-    
 <link href="css/test.css" rel="stylesheet" type="text/css">
 <link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+<!--<script type="text/javascript" src="scripts/transition.js"></script>-->
+<!--<script type="text/javascript" src="scripts/catchGestures.js"></script>-->
 
 </head>
 
@@ -86,7 +73,6 @@
 	</div>
 
 	<div id="coursesListView">
-
 		<div id="coursesListHeader" class="header">
 			<div id="coursesListTitle">Your Courses</div>
 			<div id="coursesListSetIcon"><i class="icon-cog"></i></div>
@@ -107,6 +93,7 @@
 
 
 	<div id="settingsView">
+
 		<div id="settingsHeader" class="header">
 			<div id="closeSettingsIcon"><i class="icon-remove-sign"></i></div>
 			<div id="settingsTitle">Settings</div>
@@ -146,8 +133,6 @@
 		<p id="cardQuestionBody">Lorem ipsum dolor sit amet, consectetur
 			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
 			dolore magna.</p>
-		
-		
 		<br />
 		<button id="CourseList_FromQuestion" type="button">Course
 			List View</button>
@@ -165,14 +150,14 @@
 			</div>
 			<button id="doneButton" type="button">Done</button>
 		</div>
-
-		<p id="cardAnswerBody">Lorem ipsum dolor sit amet, consectetur
-			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
-			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-		<br />
-		<button id="CourseList_FromAnswer" type="button">Course List
-			View</button>
+		
+		<div id="answerContainer"> 
+				<ul id="cardAnswerBody"> static answer</ul>
+			
+		</div>
+		<button id="CourseList_FromAnswer" type="button">Course List View</button>
+	
+		
 	</div>
 
 

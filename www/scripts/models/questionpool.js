@@ -1,6 +1,7 @@
 function QuestionPoolModel() {
 	this.questionList = [];
 	this.index = 0;
+	this.indexAnswer = 0;
 	
 };
 
@@ -36,19 +37,34 @@ QuestionPoolModel.prototype.getQuestionBody = function() {
 	return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].question;
 };
 
-QuestionPoolModel.prototype.getAnswer = function() {
-	return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].answer;
-};
+//QuestionPoolModel.prototype.getAnswer = function() {
+	//return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].answer;
+//};
 
 QuestionPoolModel.prototype.nextQuestion = function() {
 	this.index = (this.index + 1) % this.questionList.length;
 	return this.index < this.questionList.length;
 };
 
+
+//to define a method nextAnswerChoice (). it will read all the possible answers of each question. 
+//either single choice or multiple choice question
+QuestionPoolModel.prototype.nextAnswerChoice = function() {
+this.indexAnswer = (this.indexAnswer + 1);
+return this.indexAnswer < this.questionList[this.index].answer.length;
+};
+
+QuestionPoolModel.prototype.getAnswerChoice = function() {
+	return (this.indexAnswer > this.questionList[this.index].answer.length - 1) ? false : this.questionList[this.index].answer[this.indexAnswer].text;
+};
+
 QuestionPoolModel.prototype.reset = function() {
 	this.index = 0;
 };
 
+QuestionPoolModel.prototype.resetAnswer = function() {
+	this.indexAnswer = 0;
+};
 
 
 

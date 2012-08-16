@@ -2,7 +2,6 @@ function AnswerView() {
     var self = this;
     
     self.tagID = 'cardAnswerView';
-    
     jester($('#doneButton')[0]).tap(function(){ self.clickDoneButton(); } );
     jester($('#CourseList_FromAnswer')[0]).tap(function(){ self.clickCourseListButton(); } );
 
@@ -13,6 +12,7 @@ function AnswerView() {
 
 
 AnswerView.prototype.handleTap = doNothing;
+
 
 AnswerView.prototype.handleSwipe = handleSwipe;
 
@@ -27,10 +27,45 @@ AnswerView.prototype.open = function() {
 };
 
 AnswerView.prototype.showAnswerBody = function() {
-	var currentAnswerBody = controller.models["questionpool"]
-			.getAnswer();
-	$("#cardAnswerBody").text(currentAnswerBody);
+//	var currentAnswerBody = controller.models["questionpool"]
+//			.getAnswer();
+//	$("#cardAnswerBody").text(currentAnswerBody);
+
+	var self = this;
+	var questionpoolModel = controller.models['questionpool'];
+	questionpoolModel.resetAnswer();
+	$("#cardAnswerBody").empty();
+
+	do {
+		//var courseID = courseModel.getId(); we might need to define a method getId() for the answers in the Answers Model
+		
+		
+		var li = $("<li/>", {
+			  //"id": "answer" + answerID,
+			  text: questionpoolModel.getAnswerChoice(),
+			  click: function() {
+				  self.clickAnswerItem($(this)); //to define the tap event  clickAnswerItem()of the user
+			  }
+			}).appendTo("#cardAnswerBody");
+		
+		
+	} while (questionpoolModel.nextAnswerChoice());	
+
 };
+
+
+
+AnswerView.prototype.clickAnswerItem = function(clickedElement) {
+	var span = $("<span/>", {
+		"class": "answerOk",
+	}).appendTo(clickedElement);
+	
+	$("<i/>", {
+		"class": "icon-ok"
+	}).appendTo(span);
+}
+
+
 
 AnswerView.prototype.showAnswerTitle = function() {
 	var currentAnswerTitle = controller.models["questionpool"]

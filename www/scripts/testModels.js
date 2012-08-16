@@ -1,11 +1,11 @@
 function initModels() {
 	
-	//if(!localStorage.configuration) {
+	if(!localStorage.configuration) {
 		initConfiguration();
-	//}
-	//if(!localStorage.courses) {
+	}
+	if(!localStorage.courses) {
 		initCourses();
-	//}
+	}
 	if(!localStorage.questionpool_1) {
 		initQuPo1();
 	}
@@ -39,13 +39,13 @@ function initConfiguration() {
 function initQuPo1() {
 	var questionpool_1 = [
 	                      {
-	                    	  type: "Single Choice Question",
-	                    	  question: "Choose the correct answer",
+	                    	  type: "Single Choice Question 1", 
+	                    	  question: "Choose the correct answer taking into account..Choose the correct answer taking into account..",
 	                    	  answer: [ 
 	                    	            {
 	                    	            	text:"answer1",
-	                    	            	score: "0"
-	                    	            	
+	                    	            	score: "0",
+	   
 	                    	            },
 	                    	            
 	                    	            {   text:"answer2",
@@ -61,13 +61,13 @@ function initQuPo1() {
 	                      	              }
 	                    	            
 	                    	            ],
-	                           correctFeedback: "Excellent",
+	                           correctFeedback: "Excellent", //it is the body of the feedback view if the answer is correct, the feedback title wlll be calculated based on the 
 	                           errorFeeback: "In order to asnwer this question better you should also take into account the impact of.."
 	                      
 	                      }, 
 	                                {
 	                                	type: "Multiple Choice Question",
-	                                	question: "How could an organization contribute to ..",
+	                                	question: "How could an organization contribute to ..after weighing the pros and cos",
 	                                	answer: [ 
 	     	                    	            {
 	     	                    	            	text:"by lending money",
@@ -92,7 +92,7 @@ function initQuPo1() {
 	     	                   correctFeedback: "Excellent",
 	     	   	               errorFeeback: "In order to asnwer this question better you should also take into account the impact of.."
 	     	   	                      	
-	              
+	  
 	                                	
 	                                }
 	                     ];

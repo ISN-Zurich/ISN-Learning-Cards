@@ -13,6 +13,7 @@ function Controller() {
 		authentication : new ConfigurationModel(),
 		course : new CourseModel(),
 		questionpool : new QuestionPoolModel()
+		//answer: new AnswerModel()
         
 	};
     

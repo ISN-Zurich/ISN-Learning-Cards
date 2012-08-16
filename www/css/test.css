@@ -398,6 +398,23 @@ height:40px;
 	display: none;
 }
 
+ul#cardQuestionBody {
+	border: solid #ccc 1px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 1px 1px #ccc;
+	-moz-box-shadow: 0 1px 1px #ccc;
+	box-shadow: 0 1px 1px #ccc;
+	list-style-type: none;
+	FONT-SIZE: 18pt;
+	FONT-STYLE: normal;
+	FONT-VARIANT: normal;
+	text-align: left;
+	position: relative;
+}
+
+
 #ButtonTip {
 	padding-right: 50px;
 }
@@ -417,6 +434,13 @@ height:40px;
 
 #doneButton {
 	
+}
+
+#answerContainer {
+	margin-top: 10px;
+	margin-left: 15px;
+	margin-right: 15px;
+	padding-top: 20px;
 }
 
 #cardFeedbackView {
