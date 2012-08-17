@@ -1,43 +1,20 @@
+/*********************** General ***********************/
 body {
-
 	width: device-width;
 	height: device-height;
 	overflow: scroll;
-	
 	color: black;
 	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 20pt;
+	FONT-SIZE: 14pt;
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
-}
-
-h1 {
-	color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 28pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
-	text-align: center;
-	margin-bottom: 30px;
-}
-
-p {
-	/*color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 20pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;*/
 	padding: 10px;
 }
 
-.header {
-	color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 27pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
-	font-weight: bold;
-	padding-top: 5px;
+h1 {
+	FONT-SIZE: 20pt;
+	text-align: center;
+	margin-bottom: 30px;
 }
 
 button {
@@ -46,11 +23,11 @@ button {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	font-family: arial, helvetica, sans-serif;
-	padding: 10px 10px 10px 10px;
+/* 	padding: 5px 5px 5px 5px; */
 	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 	font-weight: none;
 	text-align: center;
-	font-size: 19px; ,
+	font-size: 34pt;
 	color: black;
 	background-color: #efefef;
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef),
@@ -64,47 +41,113 @@ button {
 		startColorstr=#efefef, endColorstr=#dedede );
 }
 
-.button:hover {
-	border: 1px solid #d6d6d6;
-	background-color: #d6d6d6;
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d6d6d6),
-		color-stop(100%, #c5c5c5) );
-	background-image: -webkit-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: -moz-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: -ms-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: -o-linear-gradient(top, #d6d6d6, #c5c5c5);
-	background-image: linear-gradient(top, #d6d6d6, #c5c5c5);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
-		startColorstr=#d6d6d6, endColorstr=#c5c5c5 );
+.generalButton {
+	float: left;
+	padding: auto;
+	margin-bottom: 20px;
+	width: 100%;
+	font-size: 14pt;
+	padding: 10px;
 }
 
-.iconLeft { /*content: url(../resources/checkbox.png);*/
+.header {
+	FONT-SIZE: 20pt;
+	font-weight: bold;
+	padding-top: 5px;
+}
+
+.left {
 	float: left;
 	padding-right: 10px;
+	margin-right: 5px;
 }
 
-.cardTitle {
-	margin-left: 15px;
+.right {
+	float: right;
+	padding-left: 10px;
+	margin-left: 5px;
 }
 
-#loginView {
-	margin-top: 15px;
-	margin-bottom: 15px;
+ul {
+	border: solid #ccc 1px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 1px 1px #ccc;
+	-moz-box-shadow: 0 1px 1px #ccc;
+	box-shadow: 0 1px 1px #ccc;
+	list-style-type: none;
+	FONT-SIZE: 14pt;
+	FONT-STYLE: normal;
+	FONT-VARIANT: normal;
+	text-align: left;
+	position: relative;
 }
 
-#loading { /*ccontent: "Loading..";*/
-	/*content: url(../resources/loading.gif);*/
-	/*margin: 60px;*/
-	/*margin-top:60px;*/
+li {
+	-o-transition: all 0.1s ease-in-out;
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+	list-style-type: none;
+	list-style-position: left;
+	FONT-SIZE: 16 pt;
+	FONT-STYLE: normal;
+	FONT-VARIANT: normal;
+	border: 1px solid #ccc;
+	text-align: left;
+	border-radius: 0 0 0 0;
+	padding: 15px;
+	margin-left: -40px;
+	border-top: none;
+	border-right: none;
+	border-left: none;
+}
+
+/*********************** Views ***********************/
+#coursesListView {
+	display: none;
+}
+
+#settingsView {
+	display: none;
+}
+
+#logoutConfirmationView {
+	display: none;
+}
+
+#cardQuestionView {
+	display: none;
+}
+
+#cardAnswerView {
+	display: none;
+}
+
+#cardFeedbackView {
+	display: none;
+}
+
+#StatisticsView {
+	display: none;
+}
+
+/*********************** Splash Screen ***********************/
+#loading {
+	clear: both;
 	margin-left: auto;
 	margin-right: auto;
-	/*padding: 40px;*/
-	vertical-align: middle;
+	padding: 10px 0 10px 0;
+	font-size: 30pt;
+	text-align: center;
 }
 
 #logos {
 	vertical-align: bottom;
 	margin-top: 10px;
+	clear: both;
 }
 
 #logo_isn {
@@ -127,345 +170,53 @@ button {
 #eth_logo {
 	content: url(../resources/eth_logo.gif);
 	vertical-align: bottom;
+	float: left;
 	width: 100%;
-	height: 70px;
+	padding-bottom: 20px;
 }
 
-fieldset {
-	border: 0;
-	padding: 0;
-	margin: 0;
-}
-
+/*********************** Login ***********************/
 #loginForm {
 	display: none;
-	margin-bottom: 30px;
+	width: 100%;
 }
 
-.field_container {
+.inputBorder {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
+	-moz-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
+	-ms-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
+	-o-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
+	box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+	margin: 10px auto 10px auto;
 	padding: 10px;
-}
-
-#usernameLabel {
-	/*font: 20px Helvetica, Arial, sans-serif;*/
-	padding-right: 15px;
-	width: 100px;
-	text-align: right;
-	float: left;
-}
-
-#passwordLabel {
-	/*font: 20px Helvetica, Arial, sans-serif;*/
-	padding-right: 15px;
-	text-align: right;
-	width: 100px;
-	float: left;
-}
-
-#usernameInput {
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
-	-o-border-radius: 3px;
-	border-radius: 6px;
-	-webkit-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-moz-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-ms-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-o-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-	/*background: #eae7e7 url(http://cssdeck.com/uploads/media/items/8/8bcLQqF.png) no-repeat;*/
 	border: 1px solid #c8c8c8;
 	color: #777;
-	font: 13px Helvetica, Arial, sans-serif;
-	margin: 0 0 10px;
-	padding: 15px 10px 15px 45px;
-	width: 40%;
-
-	height: 20%;
 }
 
-#password {
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
-	-o-border-radius: 3px;
-	border-radius: 6px;
-	-webkit-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-moz-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-ms-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-o-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-	/*background: #eae7e7 url(http://cssdeck.com/uploads/media/items/8/8bcLQqF.png) no-repeat;*/
-	border: 1px solid #c8c8c8;
-	color: #777;
-	font: 13px Helvetica, Arial, sans-serif;
-	margin: 0 0 10px;
-	padding: 15px 10px 17px 45px;
-	width: 40%;
-	height: 20%;
-	float: left;
+.loginInput {
+	box-shadow: none;
+	outline: none;
+	border: none;
+	border-width: 0px;
+	-webkit-appearance: none;
+	font: 12pt Helvetica, Arial, sans-serif;
+	margin: 0;
+	width: 100%;
 }
 
-#loginButton {
-	/*background-color: #ffb94b;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
-		to(#ffb94b) );
-	background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: linear-gradient(top, #fddb6f, #ffb94b);
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3)
-		inset;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #d69e31 #e3a037 #d5982d #e3a037;*/
-	float: left;
-	/*height: 35px;*/
-	padding: 0;
-	margin-top: 20px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 20px;
-	width: 300px;
-	height: 50px;
-	/*cursor: pointer;*/
-	/*font: bold 15px Arial, Helvetica;*/
-	/*color: #8f5a0a;*/
-}
-
-#closeSettings {
-	
-}
-
-#logOutSettings {
-	
-}
-
-#logOut {
-	
-}
-
-#gesturereport {
-	display: none;
-	width: 100;
-	margin: 5px;
-	margin-top: 40%;
-	text-align: center;
-	font-family: Helvetica, sans-serif;
-	font-size: 30px;
-}
-
-#coursesListView {
-	display: none;
-}
-
-#coursesListHeader { /*display:block;*/
-	margin-top: 15px;
-	margin-bottom: 7px;
-	padding-bottom: 15px;
-	margin-right: 15px;
-}
-
-#coursesListTitle {
-	float: left;
-	margin-left: 15px;
-}
-
-#coursesListSetIcon { /*content: url(../resources/Settings.png);*/
-	float: right;
-	/*width:22%;
-height:8%;*/
-
-	/*background: url(../resources/loading.gif);
-/*background-repeat:no-repeat**/
-}
-
-#courses {
-	margin-top: 10px;
-	margin-left: 15px;
-	margin-right: 15px;
-	padding-top: 20px;
-}
-
-ul#coursesList {
-	border: solid #ccc 1px;
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	-webkit-box-shadow: 0 1px 1px #ccc;
-	-moz-box-shadow: 0 1px 1px #ccc;
-	box-shadow: 0 1px 1px #ccc;
-	list-style-type: none;
-	FONT-SIZE: 18pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
-	text-align: left;
-	position: relative;
-}
-
-ul#coursesList li {
-	-o-transition: all 0.1s ease-in-out;
-	-webkit-transition: all 0.1s ease-in-out;
-	-moz-transition: all 0.1s ease-in-out;
-	-ms-transition: all 0.1s ease-in-out;
-	transition: all 0.1s ease-in-out;
-	list-style-type: none;
-	list-style-position: left;
-	FONT-SIZE: 16 pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
-	border: 1px solid #ccc;
-	/*border-top: 1px solid #ccc;*/
-	text-align: left;
-	border-radius: 0 0 0 0;
-	padding: 15px;
-	margin-left: -40px;
-	border-top: none;
-	border-right: none;
-	border-left: none;
-}
-
-ul li:hover {
-	background: #fbf8e9;
-	-o-transition: all 0.1s ease-in-out;
-	-webkit-transition: all 0.1s ease-in-out;
-	-moz-transition: all 0.1s ease-in-out;
-	-ms-transition: all 0.1s ease-in-out;
-	transition: all 0.1s ease-in-out;
-}
-
-/*li span {
-
-content: url(../resources/statistics.png);
-text-align:right;
-float:right;
-vertical-align:top;
-
-}*/
-.statisticsIcon {
-	text-align: right;
-	float: right;
-	vertical-align: top;
-}
-
-#CourseList_FromQuestion {
-	
-}
-
-#settingsView {
-	display: none;
-}
-
-#logoutConfirmationView {
-	display: none;
-}
-
-#closeSettingsIcon { /*content: url(../resources/Close.png);*/
-	/*width:40px;
-height:40px;
-*/
-	
-}
-
-#settingsData {
-	/*color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 22pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;*/
-}
-
-#cardQuestionView {
-	display: none;
-}
-
-ul#cardQuestionBody {
-	border: solid #ccc 1px;
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	-webkit-box-shadow: 0 1px 1px #ccc;
-	-moz-box-shadow: 0 1px 1px #ccc;
-	box-shadow: 0 1px 1px #ccc;
-	list-style-type: none;
-	FONT-SIZE: 18pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
-	text-align: left;
-	position: relative;
-}
-
-
-#ButtonTip {
-	padding-right: 50px;
-}
-
-#ButtonAnswer {
-	padding-right: 15px;
-	margin-right: 10px;
-}
-
-#cardAnswerView {
-	display: none;
-}
-
-#cardAnswerTitle {
-	
-}
-
-#doneButton {
-	
-}
-
-#answerContainer {
-	margin-top: 10px;
-	margin-left: 15px;
-	margin-right: 15px;
-	padding-top: 20px;
-}
-
-#cardFeedbackView {
-	display: none;
-}
-
-#cardFeedbackHeader {
-	
-}
-
-#cardFeedbackIcon {
-	
-}
-
-#cardFeedbackTitle {
-	
-}
-
-#StatisticsView {
-	display: none;
-}
-
-#closeIcon { /*content: url(../resources/Close.png);*/
-	/*width:40px;
-height:40px;
-*/
-	
+.loginInput:focus {
+	outline: none;
+	border: none;
+	border-width: 0px;
+	-webkit-appearance: none
 }

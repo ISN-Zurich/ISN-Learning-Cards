@@ -6,12 +6,9 @@
 <meta name="viewport"
 	content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
 
-<<<<<<< HEAD
+
 
 <script type="text/javascript" charset="utf-8"
-	src="libs/cordova-2.0.0.js"></script>
-=======
- <script type="text/javascript" charset="utf-8"
 	src="libs/cordova-2.0.0.js"></script>
 
 <!--
@@ -19,8 +16,6 @@
 	src="libs/cordova-2.0.0-ios.js"></script>
 -->    
     
-    
->>>>>>> refs/heads/master
 <script type="text/javascript" src="libs/jquery.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
@@ -53,25 +48,22 @@
 
 		<h1>Learning Cards</h1>
 
-		<div id="loading"><i class="icon-refresh"></i></div>
+		<div id="loading">
+			<i class="icon-refresh"></i>
+		</div>
 
 		<div id="loginForm">
-		<form>
-
-			<div class="field_container">
-				<label id="usernameLabel"> Username </label> <input
-					id="usernameInput" required="required" type="text" />
-
-			</div>
-			<br />
-
-			<div class="field_container">
-				<label id="passwordLabel"> Password </label> <input id="password"
-					name="password" required="required" type="text" />
-			</div>
-			<br /> <button id="loginButton" type="button">Login</button>
-
-		</form>
+			<form>
+				<div class="inputBorder">
+					<input class="loginInput" id="usernameInput" required="required"
+						type="text" placeholder="Username" />
+				</div>
+				<div class="inputBorder">
+					<input id="password" class="loginInput" name="password"
+						required="required" type="password" placeholder="Password" />
+				</div>
+				<button id="loginButton" type="button" class="generalButton">Login</button>
+			</form>
 		</div>
 
 
@@ -86,38 +78,37 @@
 
 	<div id="coursesListView">
 		<div id="coursesListHeader" class="header">
+			<div class="left"></div>
+			<button type="button" id="coursesListSetIcon" class="right">
+				<i class="icon-cog"></i>
+			</button>
 			<div id="coursesListTitle">Your Courses</div>
-			<div id="coursesListSetIcon"><i class="icon-cog"></i></div>
 		</div>
-
-
 		<div id="courses">
-
-
 			<ul id="coursesList">
-
 			</ul>
-
-
-
 		</div>
 	</div>
-
 
 	<div id="settingsView">
 
 		<div id="settingsHeader" class="header">
-			<div id="closeSettingsIcon"><i class="icon-remove-sign"></i></div>
+			<div id="settingsIcon" class="left">
+				<i class="icon-cog"></i>
+			</div>
+			<button type="button"  id="closeSettingsIcon" class="right">
+				<i class="icon-remove-sign"></i>
+			</button>
 			<div id="settingsTitle">Settings</div>
 		</div>
-
 		<ul id="settingsData">
 			<li>Your name</li>
 			<li>Your username</li>
 			<li>Your email</li>
 		</ul>
 		<br />
-		<button id="logOutSettings" type="button">Log out</button>
+		<button id="logOutSettings" type="button" class="generalButton">Log
+			out</button>
 
 	</div>
 
@@ -126,11 +117,12 @@
 
 	<div id="logoutConfirmationView">
 		<div class="header">
-		<div id="closeIcon"><i class="icon-remove-sign"></i></div>
-		<span>Do you really want to log out?</span>
-		<br /> <br />
+			<button type="button" id="closeIcon" class="right">
+				<i class="icon-remove-sign"></i>
+			</button>
+			<span>Do you really want to log out?</span> <br /> <br />
 		</div>
-		<button id="logOut" type="button">Logout</button>
+		<button id="logOut" type="button" class="generalButton">Logout</button>
 	</div>
 
 
@@ -138,7 +130,12 @@
 	<div id="cardQuestionView">
 
 		<div id="cardQuestionHeader" class="header">
-			<div class="iconLeft"><i class="icon-check"></i></div>
+			<div class="left">
+				<i class="icon-check"></i>
+			</div>
+			<button type="button" id="CourseList_FromQuestion" class="right">
+				<i class="icon-remove-sign"></i>
+			</button>
 			<div id="cardQuestionTitle" class="cardTitle">Choose some</div>
 		</div>
 
@@ -146,10 +143,12 @@
 			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
 			dolore magna.</p>
 		<br />
-		<button id="CourseList_FromQuestion" type="button">Course
-			List View</button>
-		<button id="ButtonTip" type="button"><i class="iconLeft icon-question-sign"></i>Get a Tip</button>
-		<button id="ButtonAnswer" type="button"><i class="iconLeft icon-exclamation-sign"></i>Answer</button>
+		<button id="ButtonTip" type="button" class="left">
+			<i class="icon-question-sign"></i>
+		</button>
+		<button id="ButtonAnswer" type="button" class="right">
+			<i class="icon-exclamation-sign"></i>
+		</button>
 	</div>
 
 
@@ -157,26 +156,34 @@
 	<div id="cardAnswerView">
 
 		<div id="cardAnswerHeader" class="header">
-			<div class="iconLeft"><i class="icon-check"></i> </div>
+			<div class="left">
+				<i class="icon-check"></i>
+			</div>
+			<button type="button"  id="CourseList_FromAnswer" class="right">
+				<i class="icon-remove-sign"></i>
+			</button>
 			<div id="cardAnswerTitle" class="cardTitle">Choose some answer
 			</div>
-			<button id="doneButton" type="button">Done</button>
 		</div>
-		
-		<div id="answerContainer"> 
-				<ul id="cardAnswerBody"> static answer</ul>
-			
+
+		<div id="answerContainer">
+			<ul id="cardAnswerBody">
+			</ul>
+
 		</div>
-		<button id="CourseList_FromAnswer" type="button">Course List View</button>
-	
-		
+		<button id="doneButton" type="button" class="right">
+			<i class="icon-exclamation-sign"></i>
+		</button>
+
 	</div>
 
 
 	<div id="cardFeedbackView">
 
 		<div id="cardFeedbackHeader" class="header">
-			<div id="iconLeft" class="cardHeaderIcon"><i class="icon-ok-sign"></i></div>
+			<div class="left" id="cardHeaderIcon">
+				<i class="icon-ok-sign"></i>
+			</div>
 			<div id="cardFeedbackTitle" class="cardTitle">Excellent</div>
 		</div>
 
@@ -184,13 +191,19 @@
 			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
 			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
 			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-		<button id="FeedbackMore" type="button">see Feedback</button>
-		<button id="FeedbackDoneButon" type="button">Done</button>
+		<button id="FeedbackMore" type="button" class="left">
+			<i class="icon-question-sign"></i>
+		</button>
+		<button id="FeedbackDoneButon" type="button" class="right">
+			<i class="icon-exclamation-sign"></i>
+		</button>
 	</div>
 
 
 	<div id="StatisticsView">
-		<div id="closeIconStats" class="closeIcon"><i class="icon-remove-sign"></i></div>
+		<button type="button" id="closeIconStats" class="right">
+			<i class="icon-remove-sign"></i>
+		</button>
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicin</p>
 
 

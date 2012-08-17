@@ -26,11 +26,8 @@ AnswerView.prototype.handleSwipe = function() {
 	this.showQuestionTitle();
 };
 
-<<<<<<< HEAD
 
-AnswerView.prototype.handleSwipe = handleSwipe;
-=======
->>>>>>> refs/heads/master
+
 
 AnswerView.prototype.close = closeView;
 AnswerView.prototype.openDiv = openView;
@@ -73,7 +70,7 @@ AnswerView.prototype.showAnswerBody = function() {
 
 AnswerView.prototype.clickAnswerItem = function(clickedElement) {
 	var span = $("<span/>", {
-		"class": "answerOk",
+		"class": "right",
 	}).appendTo(clickedElement);
 	
 	$("<i/>", {
