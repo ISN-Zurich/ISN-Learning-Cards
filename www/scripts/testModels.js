@@ -6,9 +6,9 @@ function initModels() {
 	if(!localStorage.courses) {
 		initCourses();
 	}
-	if(!localStorage.questionpool_1) {
+	//if(!localStorage.questionpool_1) {
 		initQuPo1();
-	}
+	//}
 	if(!localStorage.questionpool_2) {
 		initQuPo2();
 	}
@@ -58,7 +58,12 @@ function initQuPo1() {
 	                    	            	text:"answer3",
 	                    	            	score: "0"	            	
 	                      	                    	            	
-	                      	              }
+	                      	              },
+	                    	            {
+	                    	            	text:"answer1iiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+	                    	            	score: "0",
+	   
+	                    	            }
 	                    	            
 	                    	            ],
 	                           correctFeedback: "Excellent", //it is the body of the feedback view if the answer is correct, the feedback title wlll be calculated based on the 

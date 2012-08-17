@@ -3,8 +3,8 @@ function SettingsView() {
     
     self.tagID = 'settingsView';
     
-    $('#closeSettingsIcon').click(function(){ self.closeSettings(); } );
-    $('#logOutSettings').click(function(){ self.logout(); } );
+    jester($('#closeSettingsIcon')[0]).tap(function(){ self.closeSettings(); } );
+    jester($('#logOutSettings')[0]).tap(function(){ self.logout(); } );
 } 
 
 SettingsView.prototype.handlePinch = doNothing;

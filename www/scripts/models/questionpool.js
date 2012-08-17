@@ -39,7 +39,7 @@ QuestionPoolModel.prototype.getQuestionBody = function() {
 
 //QuestionPoolModel.prototype.getAnswer = function() {
 	//return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].answer;
-//};
+//}; this function was replaced by the getAnswerChoice below, because our answers are multiple items
 
 QuestionPoolModel.prototype.nextQuestion = function() {
 	this.index = (this.index + 1) % this.questionList.length;
@@ -57,6 +57,14 @@ return this.indexAnswer < this.questionList[this.index].answer.length;
 QuestionPoolModel.prototype.getAnswerChoice = function() {
 	return (this.indexAnswer > this.questionList[this.index].answer.length - 1) ? false : this.questionList[this.index].answer[this.indexAnswer].text;
 };
+
+QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
+	return (this.indexAnswer > this.questionList[this.index].answer.length - 1) ? false : this.questionList[this.index].answer[this.indexAnswer].score;
+};
+
+QuestionPoolModel.prototype.getScore = function(index) {
+	return this.questionList[this.index].answer[index].score;
+}
 
 QuestionPoolModel.prototype.reset = function() {
 	this.index = 0;

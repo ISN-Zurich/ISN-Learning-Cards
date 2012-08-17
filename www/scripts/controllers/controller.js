@@ -12,9 +12,8 @@ function Controller() {
 	this.models = {
 		authentication : new ConfigurationModel(),
 		course : new CourseModel(),
-		questionpool : new QuestionPoolModel()
-		//answer: new AnswerModel()
-        
+		questionpool : new QuestionPoolModel(),
+	    answers: new AnswerModel()   
 	};
     
 	// this.models['course'].loadData();

@@ -6,7 +6,8 @@ function CoursesListView (controller) {
 	self.controller = controller;
     
     
-	$('#coursesListSetIcon').click(function(){ self.clickSettingsButton(); } );
+//	$('#coursesListSetIcon').click(function(){ self.clickSettingsButton(); } );
+	jester($('#coursesListSetIcon')[0]).tap(function(){ self.clickSettingsButton(); } );
 }
 
 CoursesListView.prototype.handleTap = doNothing;
@@ -42,19 +43,20 @@ CoursesListView.prototype.update = function() {
         
         var li = $("<li/>", {
                    "id": "course" + courseID,
-                   text: courseModel.getTitle(),
-                   click: function(){
-                   self.clickCourseItem($(this).attr('id').substring(6));
-                   }
+                   text: courseModel.getTitle()
                    }).appendTo("#coursesList");
         
+        jester(li[0]).tap(function() {
+        	self.clickCourseItem($(this).attr('id').substring(6));
+		  });
+        
         var span = $("<span/>", {
-                     "class": "right",
-                     click: function(event) {
-                     self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
-                     event.stopPropagation();
-                     }
+                     "class": "right"
                      }).appendTo(li);
+        
+        jester(span[0]).tap(function() {
+        	self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
+		  });
         
         $("<i/>", {
           "class": courseModel.isLoaded() ? "icon-signal" : "icon-refresh"

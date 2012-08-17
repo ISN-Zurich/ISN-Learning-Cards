@@ -220,3 +220,12 @@ li {
 	border-width: 0px;
 	-webkit-appearance: none
 }
+
+.listicon {
+	width: 20px;
+	display: block;
+	height: 20px;
+	padding-left: 0px;
+	margin-left: 0px;
+/*    border: 1px solid #fffff;  */
+}

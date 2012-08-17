@@ -3,7 +3,7 @@ function LoginView() {
     
     self.tagID = 'splashScreen';
     
-    $('#loginButton').click(function(){ self.clickLoginButton(); } );
+    jester($('#loginButton')[0]).tap(function(){ self.clickLoginButton(); } );
     
 } 
 

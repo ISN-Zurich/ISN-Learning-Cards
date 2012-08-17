@@ -4,8 +4,8 @@ function FeedbackView(question) {
 
     self.tagID = 'cardFeedbackView';
     
-    $('#FeedbackDoneButon').click(function(){ self.clickFeedbackDoneButton(); } );
-    $('#FeedbackMore').click(function(){ self.clickFeedbackMore(); } );
+    jester($('#FeedbackDoneButon')[0]).tap(function(){ self.clickFeedbackDoneButton(); } );
+    jester($('#FeedbackMore')[0]).tap(function(){ self.clickFeedbackMore(); } );
     
 }
 
@@ -17,7 +17,12 @@ FeedbackView.prototype.handlePinch = function() {
 
 
 FeedbackView.prototype.close = closeView;
-FeedbackView.prototype.open = openView;
+FeedbackView.prototype.openDiv = openView;
+FeedbackView.prototype.open = function() {
+	this.showFeedbackTitle();
+	this.showFeedbackBody();
+	this.openDiv();
+};
 
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
 
@@ -35,6 +40,23 @@ FeedbackView.prototype.clickFeedbackMore = function() {
 };
 
 
+
+FeedbackView.prototype.showFeedbackTitle = function() {
+	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
+	$("#cardFeedbackTitle").text(currentFeedbackTitle);
+	
+	
+		
+};
+
+
+FeedbackView.prototype.showFeedbackBody = function() {
+	
+	
+	
+	
+};
+
 function handleSwipe () {
 
     controller.models['questionpool'].nextQuestion(); 
@@ -42,4 +64,4 @@ function handleSwipe () {
     controller.transitionToQuestion();      
 
 
-}
+};
