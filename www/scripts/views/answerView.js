@@ -67,7 +67,7 @@ AnswerView.prototype.showAnswerBody = function() {
 
 AnswerView.prototype.clickAnswerItem = function(clickedElement) {
 	var span = $("<span/>", {
-		"class": "answerOk",
+		"class": "right",
 	}).appendTo(clickedElement);
 	
 	$("<i/>", {
