@@ -79,6 +79,8 @@ button {
 	FONT-SIZE: 20pt;
 	font-weight: bold;
 	vertical-align: middle;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .container {
@@ -254,4 +256,8 @@ li {
 	padding-left: 0px;
 	margin-left: 0px;
 /*    border: 1px solid #fffff;  */
+}
+
+.correctAnswer {
+	background-color: #CCCCCC;
 }

@@ -52,7 +52,18 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 
 FeedbackView.prototype.showFeedbackBody = function() {
 	
+	$("#feedbackBody").empty();
 	
+	var clone = $("#cardAnswerBody").clone();
+	clone.appendTo("#feedbackBody");
+	
+	var questionpoolModel = controller.models["questionpool"];
+	
+	$("#feedbackBody ul li").each(function(index) {
+		if (questionpoolModel.getScore(index) == 1) {
+			$(this).addClass("correctAnswer");
+		}
+	});
 	
 	
 };

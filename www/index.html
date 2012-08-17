@@ -14,8 +14,8 @@
 <!--
  <script type="text/javascript" charset="utf-8"
 	src="libs/cordova-2.0.0-ios.js"></script>
--->    
-    
+-->
+
 <script type="text/javascript" src="libs/jquery.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
@@ -162,7 +162,7 @@
 					<i class="icon-question-sign"></i>
 				</button>
 				<button id="ButtonAnswer" type="button" class="right">
-					<i class="icon-exclamation-sign"></i>
+					<i class="icon-forward"></i>
 				</button>
 			</div>
 		</div>
@@ -179,21 +179,20 @@
 				<button type="button" id="CourseList_FromAnswer" class="right">
 					<i class="icon-remove-sign"></i>
 				</button>
-				<div id="cardAnswerTitle" class="title">Choose some answer
-				</div>
+				<div id="cardAnswerTitle" class="title">Choose some answer</div>
 			</div>
 		</div>
 		<div class="content">
-		<div id="answerContainer">
-			<ul id="cardAnswerBody">
-			</ul>
+			<div id="answerContainer">
+				<ul id="cardAnswerBody">
+				</ul>
 
-		</div>
+			</div>
 		</div>
 		<div class="bottom">
 			<div class="container">
 				<button id="doneButton" type="button" class="right">
-					<i class="icon-exclamation-sign"></i>
+					<i class="icon-forward"></i>
 				</button>
 			</div>
 		</div>
@@ -209,19 +208,14 @@
 				<div id="cardFeedbackTitle" class="title">Excellent</div>
 			</div>
 		</div>
-		<div class="content">
-			<p id="feedbackBody">Lorem ipsum dolor sit amet, consectetur
-				adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-				dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
-				elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-		</div>
+		<div id="feedbackBody" class="content"></div>
 		<div class="bottom">
 			<div class="container">
 				<button id="FeedbackMore" type="button" class="left">
 					<i class="icon-question-sign"></i>
 				</button>
 				<button id="FeedbackDoneButon" type="button" class="right">
-					<i class="icon-exclamation-sign"></i>
+					<i class="icon-forward"></i>
 				</button>
 			</div>
 		</div>
