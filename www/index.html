@@ -17,16 +17,11 @@
 
 <script type="text/javascript" src="libs/jquery.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
-
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
-
-<!-- <script type="text/javascript" src="scripts/models/connectionstate.js"></script> -->
-
+<script type="text/javascript" src="scripts/models/connectionstate.js"></script>
 <script type="text/javascript" src="scripts/models/course.js"></script>
 <script type="text/javascript" src="scripts/models/questionpool.js"></script>
-
 <script type="text/javascript" src="scripts/controllers/controller.js"></script>
-
 <script type="text/javascript" src="scripts/views/answerView.js"></script>
 <script type="text/javascript" src="scripts/views/coursesListView.js"></script>
 <script type="text/javascript" src="scripts/views/feedbackView.js"></script>
@@ -35,14 +30,12 @@
 <script type="text/javascript" src="scripts/views/questionView.js"></script>
 <script type="text/javascript" src="scripts/views/settingsView.js"></script>
 <script type="text/javascript" src="scripts/views/splashScreen.js"></script>
-
 <script type="text/javascript" src="scripts/testModels.js"></script>
-
 <script type="text/javascript" src="scripts/main.js"></script>
-
-
 <link href="css/test.css" rel="stylesheet" type="text/css">
 <link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+<!--<script type="text/javascript" src="scripts/transition.js"></script>-->
+<!--<script type="text/javascript" src="scripts/catchGestures.js"></script>-->
 
 </head>
 
@@ -97,6 +90,7 @@
 	</div>
 
 	<div id="settingsView">
+
 		<div id="settingsHeader" class="header">
 			<div id="settingsIcon" class="left">
 				<i class="icon-cog"></i>
@@ -170,15 +164,15 @@
 			<div id="cardAnswerTitle" class="cardTitle">Choose some answer
 			</div>
 		</div>
-
-		<p id="cardAnswerBody">Lorem ipsum dolor sit amet, consectetur
-			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
-			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-		<br />
+		
+		<div id="answerContainer"> 
+				<ul id="cardAnswerBody"> </ul>
+			
+		</div>
 		<button id="doneButton" type="button" class="right">
 			<i class="icon-exclamation-sign"></i>
 		</button>
+	
 	</div>
 
 

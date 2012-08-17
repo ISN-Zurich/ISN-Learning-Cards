@@ -36,7 +36,6 @@ CoursesListView.prototype.update = function() {
     
     $("#coursesList").empty();
     
-    
     do {
         var courseID = courseModel.getId();
         

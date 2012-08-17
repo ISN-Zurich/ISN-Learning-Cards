@@ -4,7 +4,7 @@ document.addEventListener("deviceready", init, false);
 
 function init() {
     
-    //initModels();
+    initModels();
     
 	//$("#splashScreen").show();
 	//$("#loading").show();
@@ -13,6 +13,7 @@ function init() {
 	//setTimeout("start()", 1000);
 	// start();
 }
+
 
 function start() {
 	initModels();
