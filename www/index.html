@@ -78,126 +78,153 @@
 	</div>
 
 	<div id="coursesListView">
-		<div id="coursesListHeader" class="header">
-			<div class="left"></div>
-			<button type="button" id="coursesListSetIcon" class="right">
-				<i class="icon-cog"></i>
-			</button>
-			<div id="coursesListTitle">Your Courses</div>
+		<div class="top">
+			<div id="coursesListHeader" class="container">
+				<div class="left"></div>
+				<button type="button" id="coursesListSetIcon" class="right">
+					<i class="icon-cog"></i>
+				</button>
+				<div id="coursesListTitle" class="title">Your Courses</div>
+			</div>
 		</div>
-		<div id="courses">
+		<div id="courses" class="content">
 			<ul id="coursesList">
 			</ul>
 		</div>
 	</div>
 
 	<div id="settingsView">
-
-		<div id="settingsHeader" class="header">
-			<div id="settingsIcon" class="left">
-				<i class="icon-cog"></i>
+		<div class="top">
+			<div id="settingsHeader" class="container">
+				<div id="settingsIcon" class="left title">
+					<i class="icon-cog"></i>
+				</div>
+				<button type="button" id="closeSettingsIcon" class="right">
+					<i class="icon-remove-sign"></i>
+				</button>
+				<div id="settingsTitle" class="title">Settings</div>
 			</div>
-			<button type="button"  id="closeSettingsIcon" class="right">
-				<i class="icon-remove-sign"></i>
-			</button>
-			<div id="settingsTitle">Settings</div>
 		</div>
-		<ul id="settingsData">
-			<li>Your name</li>
-			<li>Your username</li>
-			<li>Your email</li>
-		</ul>
-		<br />
-		<button id="logOutSettings" type="button" class="generalButton">Log
-			out</button>
-
+		<div class="content">
+			<ul id="settingsData">
+				<li>Your name</li>
+				<li>Your username</li>
+				<li>Your email</li>
+			</ul>
+		</div>
+		<div>
+			<button id="logOutSettings" type="button" class="generalButton">Log
+				out</button>
+		</div>
 	</div>
 
 
 
 
 	<div id="logoutConfirmationView">
-		<div class="header">
-			<button type="button" id="closeIcon" class="right">
-				<i class="icon-remove-sign"></i>
-			</button>
-			<span>Do you really want to log out?</span> <br /> <br />
+		<div class="top">
+			<div class="container">
+				<button type="button" id="closeIcon" class="right">
+					<i class="icon-remove-sign"></i>
+				</button>
+			</div>
 		</div>
-		<button id="logOut" type="button" class="generalButton">Logout</button>
+		<div class="content">
+			<p>Do you really want to log out?</p>
+		</div>
+		<div>
+			<button id="logOut" type="button" class="generalButton">Logout</button>
+		</div>
 	</div>
 
 
 
 	<div id="cardQuestionView">
-
-		<div id="cardQuestionHeader" class="header">
-			<div class="left">
-				<i class="icon-check"></i>
+		<div class="top">
+			<div id="cardQuestionHeader" class="container">
+				<div class="left title">
+					<i class="icon-check"></i>
+				</div>
+				<button type="button" id="CourseList_FromQuestion" class="right">
+					<i class="icon-remove-sign"></i>
+				</button>
+				<div id="cardQuestionTitle" class="title">Choose some</div>
 			</div>
-			<button type="button" id="CourseList_FromQuestion" class="right">
-				<i class="icon-remove-sign"></i>
-			</button>
-			<div id="cardQuestionTitle" class="cardTitle">Choose some</div>
 		</div>
-
-		<p id="cardQuestionBody">Lorem ipsum dolor sit amet, consectetur
-			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-			dolore magna.</p>
-		<br />
-		<button id="ButtonTip" type="button" class="left">
-			<i class="icon-question-sign"></i>
-		</button>
-		<button id="ButtonAnswer" type="button" class="right">
-			<i class="icon-exclamation-sign"></i>
-		</button>
+		<div class="content">
+			<p id="cardQuestionBody">Lorem ipsum dolor sit amet, consectetur
+				adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+				dolore magna.</p>
+		</div>
+		<div class="bottom">
+			<div class="container">
+				<button id="ButtonTip" type="button" class="left">
+					<i class="icon-question-sign"></i>
+				</button>
+				<button id="ButtonAnswer" type="button" class="right">
+					<i class="icon-exclamation-sign"></i>
+				</button>
+			</div>
+		</div>
 	</div>
 
 
 
 	<div id="cardAnswerView">
-
-		<div id="cardAnswerHeader" class="header">
-			<div class="left">
-				<i class="icon-check"></i>
-			</div>
-			<button type="button"  id="CourseList_FromAnswer" class="right">
-				<i class="icon-remove-sign"></i>
-			</button>
-			<div id="cardAnswerTitle" class="cardTitle">Choose some answer
+		<div class="top">
+			<div id="cardAnswerHeader" class="container">
+				<div class="left title">
+					<i class="icon-check"></i>
+				</div>
+				<button type="button" id="CourseList_FromAnswer" class="right">
+					<i class="icon-remove-sign"></i>
+				</button>
+				<div id="cardAnswerTitle" class="title">Choose some answer
+				</div>
 			</div>
 		</div>
-
+		<div class="content">
 		<div id="answerContainer">
 			<ul id="cardAnswerBody">
 			</ul>
 
 		</div>
-		<button id="doneButton" type="button" class="right">
-			<i class="icon-exclamation-sign"></i>
-		</button>
-
+		</div>
+		<div class="bottom">
+			<div class="container">
+				<button id="doneButton" type="button" class="right">
+					<i class="icon-exclamation-sign"></i>
+				</button>
+			</div>
+		</div>
 	</div>
 
 
 	<div id="cardFeedbackView">
-
-		<div id="cardFeedbackHeader" class="header">
-			<div class="left" id="cardHeaderIcon">
-				<i class="icon-ok-sign"></i>
+		<div class="top">
+			<div id="cardFeedbackHeader" class="container">
+				<div class="left title" id="cardHeaderIcon">
+					<i class="icon-ok-sign"></i>
+				</div>
+				<div id="cardFeedbackTitle" class="title">Excellent</div>
 			</div>
-			<div id="cardFeedbackTitle" class="cardTitle">Excellent</div>
 		</div>
-
-		<p id="feedbackBody">Lorem ipsum dolor sit amet, consectetur
-			adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-			dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
-			elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-		<button id="FeedbackMore" type="button" class="left">
-			<i class="icon-question-sign"></i>
-		</button>
-		<button id="FeedbackDoneButon" type="button" class="right">
-			<i class="icon-exclamation-sign"></i>
-		</button>
+		<div class="content">
+			<p id="feedbackBody">Lorem ipsum dolor sit amet, consectetur
+				adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+				dolore magna.Lorem ipsum dolor sit amet, consectetur adipisicing
+				elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
+		</div>
+		<div class="bottom">
+			<div class="container">
+				<button id="FeedbackMore" type="button" class="left">
+					<i class="icon-question-sign"></i>
+				</button>
+				<button id="FeedbackDoneButon" type="button" class="right">
+					<i class="icon-exclamation-sign"></i>
+				</button>
+			</div>
+		</div>
 	</div>
 
 

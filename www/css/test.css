@@ -44,31 +44,57 @@ button {
 .generalButton {
 	float: left;
 	padding: auto;
+	width:100%;
 	margin-bottom: 20px;
-	width: 100%;
 	font-size: 14pt;
 	padding: 10px;
 }
 
-.header {
-	FONT-SIZE: 20pt;
-	font-weight: bold;
-	padding-top: 5px;
-}
 
 .left {
-	float: left;
-	padding-right: 10px;
-	margin-right: 5px;
+ 	float: left;
+/* 	padding-right: 10px; */
+	margin-right: 15px;
 }
 
 .right {
 	float: right;
+/* 	padding-left: 10px; */
+	margin-left: 15px;
+}
+
+.top {
+	position: fixed;
+	top: 5px;
+	width: 100%;
+}
+
+.bottom {
+	position: fixed;
+	bottom: 5px;
+	width: 100%;
+}
+
+.title {
+	FONT-SIZE: 20pt;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+.container {
 	padding-left: 10px;
-	margin-left: 5px;
+	padding-right: 10px;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.content {
+	margin-bottom: 55px;
+	margin-top: 55px;
 }
 
 ul {
+	clear:both;
 	border: solid #ccc 1px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -81,7 +107,7 @@ ul {
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
 	text-align: left;
-	position: relative;
+/* 	position: relative; */
 }
 
 li {
