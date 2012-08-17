@@ -40,16 +40,22 @@ function Controller() {
 		this.transition('login');
 	}
     
-    function swipeCatcher(event) { self.activeView.handleSwipe(event);};
-    
-    function tapCatcher(event) { self.activeView.handleTap(event);};
+    function swipeCatcher(event) { self.activeView.handleSwipe(event);}
+    function tapCatcher(event) { self.activeView.handleTap(event);}
     
     self.jesteroptions = { swipeDistance: 100,
         avoidFlick: true };
     
-    jester(document, self.jesteroptions)
+    var gestureHandler = jester(document, self.jesteroptions)
     .swipe(swipeCatcher)
 	.tap(tapCatcher);
+    
+    console.log( 'platform'+ device.platform);
+    if ( device.platform == 'iPhone' ) {
+        
+        function pinchCatcher(event) { self.activeView.handlePinch(event); }
+        gestureHandler.pinched(pinchCatcher);
+    }
     
 	console.log("End of Controller");
 } // end of Controller

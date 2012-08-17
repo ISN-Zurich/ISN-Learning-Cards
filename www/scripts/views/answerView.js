@@ -12,9 +12,25 @@ function AnswerView() {
 
 
 AnswerView.prototype.handleTap = doNothing;
+AnswerView.prototype.handlePinch = function() {
+    controller.transitionToCourses();
+};
 
+AnswerView.prototype.handleSwipe = function() {
+    
+	// ask the model to select the next question
+	// update the display for the current view
+    
+	controller.models['questionpool'].nextQuestion();
+	this.showQuestionBody();
+	this.showQuestionTitle();
+};
+
+<<<<<<< HEAD
 
 AnswerView.prototype.handleSwipe = handleSwipe;
+=======
+>>>>>>> refs/heads/master
 
 AnswerView.prototype.close = closeView;
 AnswerView.prototype.openDiv = openView;
@@ -90,17 +106,6 @@ AnswerView.prototype.clickTitleArea = function() {
 	controller.transitionToQuestion();
 
 };
-
-function handleSwipe() {
-
-	// ask the model to select the next question
-	// update the display for the current view 
-
-	controller.models['questionpool'].nextQuestion();
-	this.showQuestionBody();
-	this.showQuestionTitle();
-};
-
 
 
 // the following could replace the first lines with click..funtions etc.

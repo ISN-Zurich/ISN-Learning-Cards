@@ -16,6 +16,9 @@ function QuestionView() {
 }
 
 
+QuestionView.prototype.handlePinch = function() {
+    controller.transitionToCourses();
+};
 
 QuestionView.prototype.handleTap = function() {
 	controller.transitionToAnswer();

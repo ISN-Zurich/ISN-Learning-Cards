@@ -11,6 +11,11 @@ function FeedbackView(question) {
 
 FeedbackView.prototype.handleTap = doNothing;
 FeedbackView.prototype.handleSwipe = handleSwipe;
+FeedbackView.prototype.handlePinch = function() {
+    controller.transitionToCourses();
+};
+
+
 FeedbackView.prototype.close = closeView;
 FeedbackView.prototype.open = openView;
 
