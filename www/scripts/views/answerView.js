@@ -26,8 +26,8 @@ AnswerView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view
 
-	controller.models['questionpool'].nextQuestion();
-	controller.transitionToQuestion();
+	// controller.models['questionpool'].nextQuestion();
+	// controller.transitionToQuestion();
 };
 
 AnswerView.prototype.close = closeView;
@@ -81,7 +81,6 @@ AnswerView.prototype.showAnswerBody = function() {
 		// i.css("display", "none");
 
 	} while (questionpoolModel.nextAnswerChoice());
-
 };
 
 AnswerView.prototype.clickSingleAnswerItem = function(clickedElement) {
@@ -89,7 +88,8 @@ AnswerView.prototype.clickSingleAnswerItem = function(clickedElement) {
 	// to check if any other elemen is ticked and untick it
 	clickedElement.parent().find("i").removeClass("icon-ok");
 	clickedElement.find("i").toggleClass("icon-ok");
-
+    
+    
 };
 
 AnswerView.prototype.clickMultipleAnswerItem = function(clickedElement) {
