@@ -7,7 +7,6 @@
 	content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
 
 
-
 <script type="text/javascript" charset="utf-8"
 	src="libs/cordova-2.0.0.js"></script>
 
@@ -15,7 +14,7 @@
  <script type="text/javascript" charset="utf-8"
 	src="libs/cordova-2.0.0-ios.js"></script>
 -->
-
+    
 <script type="text/javascript" src="libs/jquery.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
@@ -78,15 +77,15 @@
 	</div>
 
 	<div id="coursesListView">
-		<div class="top">
-			<div id="coursesListHeader" class="container">
+		
+			<div id="coursesListHeader" class="container headerbg top">
 				<div class="left"></div>
-				<button type="button" id="coursesListSetIcon" class="right">
+				<div id="coursesListSetIcon" class="right control">
 					<i class="icon-cog"></i>
-				</button>
+				</div>
 				<div id="coursesListTitle" class="title">Your Courses</div>
 			</div>
-		</div>
+		
 		<div id="courses" class="content">
 			<ul id="coursesList">
 			</ul>
@@ -94,17 +93,15 @@
 	</div>
 
 	<div id="settingsView">
-		<div class="top">
-			<div id="settingsHeader" class="container">
-				<div id="settingsIcon" class="left title">
+        <div id="settingsHeader" class="container headerbg top">
+				<div id="settingsIcon" class="left titleicon">
 					<i class="icon-cog"></i>
 				</div>
-				<button type="button" id="closeSettingsIcon" class="right">
+				<div id="closeSettingsIcon" class="right control">
 					<i class="icon-remove-sign"></i>
-				</button>
+				</div>
 				<div id="settingsTitle" class="title">Settings</div>
 			</div>
-		</div>
 		<div class="content">
 			<ul id="settingsData">
 				<li>Your name</li>
@@ -122,13 +119,11 @@
 
 
 	<div id="logoutConfirmationView">
-		<div class="top">
-			<div class="container">
-				<button type="button" id="closeIcon" class="right">
+			<div class="container headerbg top">
+				<div  id="closeIcon" class="right control">
 					<i class="icon-remove-sign"></i>
-				</button>
+				</div>
 			</div>
-		</div>
 		<div class="content">
 			<p>Do you really want to log out?</p>
 		</div>
@@ -140,48 +135,42 @@
 
 
 	<div id="cardQuestionView">
-		<div class="top">
-			<div id="cardQuestionHeader" class="container">
-				<div class="left title">
+			<div id="cardQuestionHeader" class="container headerbg top">
+				<div class="left titleicon">
 					<i class="icon-check"></i>
 				</div>
-				<button type="button" id="CourseList_FromQuestion" class="right">
+				<div id="CourseList_FromQuestion" class="right control">
 					<i class="icon-remove-sign"></i>
-				</button>
+				</div>
 				<div id="cardQuestionTitle" class="title">Choose some</div>
 			</div>
-		</div>
 		<div class="content">
-			<p id="cardQuestionBody">Lorem ipsum dolor sit amet, consectetur
+			<p id="cardQuestionBody" class="questiontext">Lorem ipsum dolor sit amet, consectetur
 				adipisicing elit, sed do eiusmod tempor incididunt ut labore et
 				dolore magna.</p>
 		</div>
-		<div class="bottom">
-			<div class="container">
-				<button id="ButtonTip" type="button" class="left">
+			<div class="container headerbg bottom">
+				<div id="ButtonTip"  class="left control">
 					<i class="icon-question-sign"></i>
-				</button>
-				<button id="ButtonAnswer" type="button" class="right">
+				</div>
+				<div id="ButtonAnswer" class="right control">
 					<i class="icon-forward"></i>
-				</button>
+				</div>
 			</div>
-		</div>
 	</div>
 
 
 
 	<div id="cardAnswerView">
-		<div class="top">
-			<div id="cardAnswerHeader" class="container">
-				<div class="left title">
+            <div id="cardAnswerHeader" class="container headerbg top">
+				<div class="left titleicon">
 					<i class="icon-check"></i>
 				</div>
-				<button type="button" id="CourseList_FromAnswer" class="right">
+				<div id="CourseList_FromAnswer" class="right control">
 					<i class="icon-remove-sign"></i>
-				</button>
+				</div>
 				<div id="cardAnswerTitle" class="title">Choose some answer</div>
 			</div>
-		</div>
 		<div class="content">
 			<div id="answerContainer">
 				<ul id="cardAnswerBody">
@@ -189,43 +178,37 @@
 
 			</div>
 		</div>
-		<div class="bottom">
-			<div class="container">
-				<button id="doneButton" type="button" class="right">
+			<div class="container bottom">
+				<div id="doneButton" type="button" class="right control">
 					<i class="icon-forward"></i>
-				</button>
+				</div>
 			</div>
-		</div>
 	</div>
 
 
 	<div id="cardFeedbackView">
-		<div class="top">
-			<div id="cardFeedbackHeader" class="container">
-				<div class="left title" id="cardHeaderIcon">
+			<div id="cardFeedbackHeader" class="container headerbg top">
+				<div class="left titleicon" id="cardHeaderIcon">
 					<i class="icon-ok-sign"></i>
 				</div>
 				<div id="cardFeedbackTitle" class="title">Excellent</div>
 			</div>
-		</div>
 		<div id="feedbackBody" class="content"></div>
-		<div class="bottom">
-			<div class="container">
-				<button id="FeedbackMore" type="button" class="left">
+			<div class="container bottom">
+				<div id="FeedbackMore" type="button" class="left control">
 					<i class="icon-question-sign"></i>
-				</button>
-				<button id="FeedbackDoneButon" type="button" class="right">
+				</div>
+				<div id="FeedbackDoneButon" type="button" class="right control">
 					<i class="icon-forward"></i>
-				</button>
+				</div>
 			</div>
-		</div>
 	</div>
 
 
 	<div id="StatisticsView">
-		<button type="button" id="closeIconStats" class="right">
+		<div id="closeIconStats" class="right control">
 			<i class="icon-remove-sign"></i>
-		</button>
+		</div>
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicin</p>
 
 

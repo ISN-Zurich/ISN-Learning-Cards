@@ -8,7 +8,6 @@ body {
 	FONT-SIZE: 14pt;
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
-	padding: 10px;
 }
 
 h1 {
@@ -55,39 +54,49 @@ button {
  	float: left;
 /* 	padding-right: 10px; */
 	margin-right: 15px;
+    margin-left: 0px;
 }
 
 .right {
 	float: right;
 /* 	padding-left: 10px; */
 	margin-left: 15px;
+    margin-right: 0px;
 }
 
 .top {
 	position: fixed;
 	top: 5px;
-	width: 100%;
+	/* width: 100%; */
 }
 
 .bottom {
 	position: fixed;
 	bottom: 5px;
-	width: 100%;
+	/* width: 100%;*/
 }
 
 .title {
-	FONT-SIZE: 20pt;
+    display: table-cell;
+    height: 45px;
+	FONT-SIZE: 14pt;
 	font-weight: bold;
 	vertical-align: middle;
-	margin-top: auto;
-	margin-bottom: auto;
+	/* margin-top: auto;
+	margin-bottom: auto; */
 }
 
 .container {
-	padding-left: 10px;
-	padding-right: 10px;
-	margin-top: auto;
-	margin-bottom: auto;
+/*	padding-left: 10px; */
+/*	padding-right: 10px; */
+    height: 46px;
+     width: 95%;
+	/* margin-top: auto;*/
+	/* margin-bottom: auto;*/
+}
+
+.headerbg {
+        background-color: white;
 }
 
 .content {
@@ -216,14 +225,9 @@ li {
 	-o-border-radius: 3px;
 	border-radius: 6px;
 	-webkit-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-moz-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-ms-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-o-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
 	box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
 	-webkit-transition: all 0.5s ease;
 	-moz-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
 	transition: all 0.5s ease;
 	margin: 10px auto 10px auto;
 	padding: 10px;
@@ -260,4 +264,27 @@ li {
 
 .correctAnswer {
 	background-color: #CCCCCC;
+}
+
+.control {
+    border: 1px solid black;
+    font-size: 28pt;
+    border-radius: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+   /* margin-left: 15px;
+    margin-right: 15px;*/
+    background-color: white;
+}
+
+.titleicon {
+    border: none;
+    font-size: 28pt;
+}
+
+
+.questiontext {
+    display: table-cell;
+    width: 100%;
+    vertical-align: middle;
 }
