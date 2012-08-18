@@ -39,7 +39,7 @@ function initConfiguration() {
 function initQuPo1() {
 	var questionpool_1 = [
 	                      {
-	                    	  type: "Single Choice Question 1", 
+	                    	  type: "Single Choice Question", 
 	                    	  question: "Choose the correct answer taking into account..Choose the correct answer taking into account..",
 	                    	  answer: [ 
 	                    	            {
