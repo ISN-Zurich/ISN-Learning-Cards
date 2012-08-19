@@ -12,6 +12,14 @@ function QuestionView() {
         
         jester(returnButton).tap(cbReturnButtonTap);
     }
+    
+    // center the question body to the middle of the screen
+    function setOrientation() {
+        $("#cardQuestionBody").css('height', window.innerHeight - 110);
+    }
+    setOrientation();
+    window.addEventListener("orientationchange", setOrientation, false);
+    
     //$('#ButtonAnswer').click(function(event){ self.handleTap(); event.stopPropagation();} );
 }
 
