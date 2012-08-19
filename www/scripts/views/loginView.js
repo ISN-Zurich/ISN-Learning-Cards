@@ -23,6 +23,8 @@ LoginView.prototype.clickLoginButton = function() {
     
     function cbLoginSuccess() {
             console.log("is logIn");
+        $("#password").blur();
+        $("#usernameInput").blur();
             controller.transition('coursesList');
     }
     

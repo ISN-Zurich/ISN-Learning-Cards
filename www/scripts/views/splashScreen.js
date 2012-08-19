@@ -13,12 +13,9 @@ SplashScreen.prototype.handleSwipe = doNothing;
 SplashScreen.prototype.closeDiv = closeView;
 
 SplashScreen.prototype.close = function() {
+     $("#loading").remove();
     if( this.controller.models["authentication"].isLoggedIn() ) {
         this.closeDiv();
-    }
-    else {
-        // we remove the loading from the DOM so we don't have to bother about hiding it
-        $("#loading").remove();
     }
 };
 
