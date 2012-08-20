@@ -22,6 +22,11 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 	} catch(err) {
 		questionPoolObject = [];
 	}
+	
+	if (questionPoolObject == []) { //if no questions are available, new ones are created
+		this.createQuPo(course_id);			
+	}
+	
 	this.questionList = questionPoolObject;
 };
 
@@ -75,79 +80,19 @@ QuestionPoolModel.prototype.resetAnswer = function() {
 };
 
 
-
-
-
-
-
-
-//
-//function Questionpool(id) {
-//	
-//	this.i = 0;
-//	this.id = id;
-//	this.questionIds = new Array();
-//	this.currentQuestion = "";
-//	this.answer = "";
-//	this.feedback = "";
-//	
-//}
-//
-//Questionpool.prototype.nextQuestion = function() {
-//	this.currentQuestion = this.questions[this.i].getQuestion();
-//	this.answer = this.questions[this.i].getAnswer();
-//	this.feedback = this.questions[this.i].getFeedback();
-//	this.i = (this.i+1) % this.questions.length;
-//};
-//Questionpool.prototype.getCurrentQuestion = function() {return this.currentQuestion;};
-//Questionpool.prototype.getAnswer = function() {return this.answer;};
-//Questionpool.prototype.getFeedback = function() {return this.feedback;};
-//Questionpool.prototype.addQuestion = function(question) {this.questions.push(question);};
-//
-//
-//
-//var questions = new Array();
-//	
-//function Question(id, question, answer, feedback) {
-//	this.id = id;
-//	this.question = question;
-//	this.answer = answer;
-//	this.feedback = feedback;
-//	
-//	questions.push(this);
-//}
-//
-//Question.prototype.getId = function() {return this.id;};
-//Question.prototype.getQuestion = function() {return this.question;};
-//Question.prototype.getAnswer = function() {return this.answer;};
-//Question.prototype.getFeedback = function() {return this.feedback;};
-//
-//function getQuestion(id) { 
-//	for (var q in questions) {
-//		if (questions[q].getId() == id) {
-//			return questions[q];
-//		}
-//	}
-//	return null;
-//}
-// 
-//function storeQuestion(id) {
-//	var qu = getQuestion(id);
-//	var q = {
-//		question: qu.getQuestion(),
-//		answer: qu.getAnswer(),
-//		feedback: qu.getFeedback()
-//	};
-//	eval("localStorage.question" + questions[i].getId() + "= q");
-//}
-//
-//function storeAllQuestions() {
-//	for (var i in questions) {
-//		var q = {
-//			question: questions[i].getQuestion(),
-//			answer: questions[i].getAnswer(),
-//			feedback: questions[i].getFeedback()
-//		};
-//		eval("localStorage.question" + questions[i].getId() + "= q");
-//	}
-//}
+QuestionPoolMode.prototype.createQuPo(course_id) {
+	if (course_id == 1) {
+		initQuPo1;
+		try {
+			questionPoolObject = JSON.parse(localStorage.getItem("questionpool_1"));
+		} catch(err) {
+			courseObject = [];
+		}
+	} else if (course_id == 2) { //if no questions are available, new ones are created
+		initQuPo2();		
+		try {
+			questionPoolObject = JSON.parse(localStorage.getItem("questionpool_2"));
+		} catch(err) {
+			courseObject = [];
+		}
+}

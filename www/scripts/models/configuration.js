@@ -25,6 +25,11 @@ ConfigurationModel.prototype.loadData = function() {
 		configObject = {};
         console.log("error! while loading");
 	}
+	
+	if (configObject == []) { //if no configuration is available, a new one is created
+		this.createConfiguration();
+	}
+	
 	this.configuration = configObject;
     
     console.log(this.configuration ? "have data" : "no data" );
@@ -59,18 +64,11 @@ ConfigurationModel.prototype.getEmailAddress = function() {
 };
 
 
-
-//function ConfigurationModel() {
-//this.appId = "";
-//this.appAuthenticationKey = "";
-//this.userAuthenticationKey = "";
-//this.urlToLMS = "";
-//this.learnerInformation = {
-//		userId : "",
-//		userName : "",
-//		displayName : "",
-//		emailAddress : ""
-//	};
-//this.loginState = "loggedOut";
-//this.globalSynchronizationState = "";
-//}
+ConfigurationModel.prototype.createConfiguration() {
+	initConfiguration();		
+	try {
+		configObject = JSON.parse(localStorage.getItem("configuration"));
+	} catch(err) {
+		configObject = [];
+	}
+}
