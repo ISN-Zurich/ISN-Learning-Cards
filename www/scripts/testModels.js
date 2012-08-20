@@ -44,7 +44,7 @@ function initQuPo1() {
 	                    	  answer: [ 
 	                    	            {
 	                    	            	text:"answer1",
-	                    	            	score: "0",
+	                    	            	score: "0"
 	   
 	                    	            },
 	                    	            
@@ -61,13 +61,13 @@ function initQuPo1() {
 	                      	              },
 	                    	            {
 	                    	            	text:"answer1iiiiiiiiiiiiiiiiiiiiiiiiiiiii",
-	                    	            	score: "0",
+	                    	            	score: "0"
 	   
 	                    	            }
 	                    	            
 	                    	            ],
 	                           correctFeedback: "Excellent", //it is the body of the feedback view if the answer is correct, the feedback title wlll be calculated based on the 
-	                           errorFeeback: "In order to asnwer this question better you should also take into account the impact of.."
+	                           errorFeedback: "In order to asnwer this question better you should also take into account the impact of.."
 	                      
 	                      }, 
 	                                {
@@ -94,8 +94,8 @@ function initQuPo1() {
 	     	                    	            
 	     	                    	            ],
 	                                	
-	     	                   correctFeedback: "Excellent",
-	     	   	               errorFeeback: "In order to asnwer this question better you should also take into account the impact of.."
+	     	                   correctFeedback: "",
+	     	   	               errorFeedback: "In order to asnwer this question better you should also take into account the impact of.."
 	     	   	                      	
 	  
 	                                	

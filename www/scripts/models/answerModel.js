@@ -15,6 +15,13 @@ AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 
 };
 
+AnswerModel.prototype.getAnswers = function() {
+
+	return this.answerList;
+
+};
+
+
 AnswerModel.prototype.getAnswerResults = function() {
 
 	// to return the the 3 different answer results
@@ -82,3 +89,7 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 	}
 
 };
+
+AnswerModel.prototype.deleteData = function() {
+	this.answerList = [];
+}
