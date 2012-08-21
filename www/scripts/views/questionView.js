@@ -47,12 +47,17 @@ QuestionView.prototype.open = function() {
 	this.showQuestionBody();
 	this.showQuestionTitle();
 	this.openDiv();
+	
+	 //controller.models["answers"].deleteData();
 };
 
 QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
 	$("#cardQuestionBody").text(currentQuestionBody);
+	
+	$("#ButtonTip").hide();
+	
 };
 
 QuestionView.prototype.showQuestionTitle = function() {
