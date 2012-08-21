@@ -23,6 +23,11 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 	} catch(err) {
 		questionPoolObject = [];
 	}
+	
+	if (!questionPoolObject[0]) { //if no questions are available, new ones are created
+		questionPoolObject = this.createPool(course_id);			
+	}
+	
 	this.questionList = questionPoolObject;
 };
 
@@ -86,9 +91,20 @@ QuestionPoolModel.prototype.resetAnswer = function() {
 };
 
 
-
-
-
-
-
-
+QuestionPoolModel.prototype.createPool = function(course_id) {
+	if (course_id == 1) {
+		initQuPo1();
+		try {
+			return JSON.parse(localStorage.getItem("questionpool_1"));
+		} catch(err) {
+			return [];
+		}
+	} else if (course_id == 2) { //if no questions are available, new ones are created
+		initQuPo2();		
+		try {
+			return JSON.parse(localStorage.getItem("questionpool_2"));
+		} catch(err) {
+			return [];
+		}
+	}
+};
