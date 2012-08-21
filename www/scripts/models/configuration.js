@@ -26,8 +26,8 @@ ConfigurationModel.prototype.loadData = function() {
         console.log("error! while loading");
 	}
 	
-	if (configObject == []) { //if no configuration is available, a new one is created
-		this.createConfiguration();
+	if (!configObject.loginState) { //if no configuration is available, a new one is created
+		configObject = this.createConfiguration();
 	}
 	
 	this.configuration = configObject;
@@ -64,11 +64,12 @@ ConfigurationModel.prototype.getEmailAddress = function() {
 };
 
 
-ConfigurationModel.prototype.createConfiguration() {
+ConfigurationModel.prototype.createConfiguration = function() {
+	console.log("create configuration");
 	initConfiguration();		
 	try {
-		configObject = JSON.parse(localStorage.getItem("configuration"));
+		return JSON.parse(localStorage.getItem("configuration"));
 	} catch(err) {
-		configObject = [];
+		return {};
 	}
-}
+};

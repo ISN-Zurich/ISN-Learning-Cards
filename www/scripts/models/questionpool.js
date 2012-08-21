@@ -23,8 +23,8 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 		questionPoolObject = [];
 	}
 	
-	if (questionPoolObject == []) { //if no questions are available, new ones are created
-		this.createQuPo(course_id);			
+	if (!questionPoolObject[0]) { //if no questions are available, new ones are created
+		questionPoolObject = this.createQuPo(course_id);			
 	}
 	
 	this.questionList = questionPoolObject;
@@ -80,19 +80,20 @@ QuestionPoolModel.prototype.resetAnswer = function() {
 };
 
 
-QuestionPoolMode.prototype.createQuPo(course_id) {
+QuestionPoolModel.prototype.createQuPo = function(course_id) {
 	if (course_id == 1) {
-		initQuPo1;
+		initQuPo1();
 		try {
-			questionPoolObject = JSON.parse(localStorage.getItem("questionpool_1"));
+			return JSON.parse(localStorage.getItem("questionpool_1"));
 		} catch(err) {
-			courseObject = [];
+			return [];
 		}
 	} else if (course_id == 2) { //if no questions are available, new ones are created
 		initQuPo2();		
 		try {
-			questionPoolObject = JSON.parse(localStorage.getItem("questionpool_2"));
+			return JSON.parse(localStorage.getItem("questionpool_2"));
 		} catch(err) {
-			courseObject = [];
+			return [];
 		}
-}
+	}
+};

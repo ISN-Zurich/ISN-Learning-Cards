@@ -23,8 +23,8 @@ CourseModel.prototype.loadData = function() {
 		courseObject = [];
 	}
 	
-	if (courseObject == []) { //if no courses are available, new ones are created
-		this.createCourses();
+	if (!courseObject[0]) { //if no courses are available, new ones are created
+		courseObject = this.createCourses();
 	}
 	
 	this.courseList = courseObject;
@@ -57,11 +57,12 @@ CourseModel.prototype.reset = function() {
 };
 
 
-CourseModel.prototype.createCourses() {
+CourseModel.prototype.createCourses = function() {
+	console.log("create courses");
 	initCourses();		
 	try {
-		courseObject = JSON.parse(localStorage.getItem("courses"));
+		return JSON.parse(localStorage.getItem("courses"));
 	} catch(err) {
-		courseObject = [];
+		return [];
 	}
-}
+};
