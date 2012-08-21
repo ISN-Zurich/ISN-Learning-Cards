@@ -83,12 +83,17 @@ AnswerView.prototype.showAnswerTitle = function() {
 
 AnswerView.prototype.clickDoneButton = function() {
 
-	if (controller.models['questionpool'].getAnswer()[0].text) {
+	var questionpoolModel = controller.models['questionpool'];
+	
+	if (questionpoolModel.getAnswer()[0].text) {
+		
+		questionpoolModel.queueCurrentQuestion();
+		
 		this.widget.storeAnswers();
 		controller.transitionToFeedback();
 	} else {
 
-		controller.models['questionpool'].nextQuestion();
+		questionpoolModel.nextQuestion();
 		controller.transitionToQuestion();
 
 	}
