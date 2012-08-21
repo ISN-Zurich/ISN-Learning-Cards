@@ -1,9 +1,9 @@
 function SingleChoiceWidget(interactive) {
 	var self = this;
 
-	self.tickedAnswers =  controller.models["answers"].getAnswers();
+	self.tickedAnswers = controller.models["answers"].getAnswers();
 	self.interactive = interactive;
-	
+
 	if (self.interactive) {
 		self.showAnswer();
 	} else {
@@ -12,14 +12,14 @@ function SingleChoiceWidget(interactive) {
 }
 
 SingleChoiceWidget.prototype.showAnswer = function() {
-	var self = this;	
-	
+	var self = this;
+
 	var questionpoolModel = controller.models["questionpool"];
 	var answers = questionpoolModel.getAnswer();
-	
+
 	$("#cardAnswerBody").empty();
 
-	for(var c = 0; c < answers.length; c++) {
+	for ( var c = 0; c < answers.length; c++) {
 
 		var li = $("<li/>", {
 			"id" : "answer" + c,
@@ -36,10 +36,11 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 		li.prepend(div);
 
 		var i = $("<i/>", {
-			"class": self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
+			"class" : self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
 		}).appendTo(div);
-		
+
 	}
+
 };
 
 SingleChoiceWidget.prototype.showFeedback = function() {
@@ -50,13 +51,12 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	clone.appendTo("#feedbackBody");
 
 	var questionpoolModel = controller.models["questionpool"];
-		$("#feedbackBody ul li").each(function(index) {
-			if (questionpoolModel.getScore(index) == "1") {
-				$(this).addClass("correctAnswer");
-			}
-		});
+	$("#feedbackBody ul li").each(function(index) {
+		if (questionpoolModel.getScore(index) == "1") {
+			$(this).addClass("correctAnswer");
+		}
+	});
 
-	
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 	if (currentFeedbackTitle == "Excellent") {
 		var correctText = questionpoolModel.getCorrectFeedback();
@@ -84,7 +84,6 @@ SingleChoiceWidget.prototype.clickSingleAnswerItem = function(clickedElement) {
 	// to check if any other elemen is ticked and untick it
 	clickedElement.parent().find("i").removeClass("icon-ok");
 	clickedElement.find("i").toggleClass("icon-ok");
-	
 
 };
 
@@ -96,7 +95,7 @@ SingleChoiceWidget.prototype.storeAnswers = function() {
 			answers.push(index);
 		}
 	});
-	
+
 	controller.models["answers"].setAnswers(answers);
 };
 
