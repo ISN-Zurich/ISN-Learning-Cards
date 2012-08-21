@@ -5,7 +5,9 @@ document.addEventListener("deviceready", init, false);
 function init() {
     
 //    initModels();
-    
+	
+	localStorage.removeItem("questionpool_1");
+	
 	//$("#splashScreen").show();
 	//$("#loading").show();
     controller = new Controller();

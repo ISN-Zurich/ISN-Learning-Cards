@@ -33,6 +33,10 @@ FeedbackView.prototype.open = function() {
 
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
 
+	$("#feedbackBody").show();
+	$("#feedbackTip").hide();
+	
+	
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
 
@@ -117,6 +121,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
 
 function handleSwipe() {
 
+	$("#feedbackBody").show();
+	$("#feedbackTip").hide();
+	
 	controller.models['questionpool'].nextQuestion();
 
 	controller.transitionToQuestion();

@@ -45,29 +45,52 @@ AnswerModel.prototype.getAnswerResults = function() {
 AnswerModel.prototype.getMultipleAnswerResults = function() {
 	var questionpool = controller.models["questionpool"];
 	var numberOfAnswers = 0;
-	var points = 0;
 	
 	questionpool.resetAnswer();
 	
+	var correctAnswers = 0;
+	var corr_ticked = 0;
+	var wrong_ticked = 0;
+	
 	do {
-		if (questionpool.getAnswerChoiceScore() == 1 && this.answerList.indexOf(numberOfAnswers) != -1) {
-			points++;
-		} else if (questionpool.getAnswerChoiceScore() == 0 && this.answerList.indexOf(numberOfAnswers) == -1) {
-			points++;
-		}
-		
-		numberOfAnswers++;	
-		
+		if (questionpool.getAnswerChoiceScore() == 1) {
+			correctAnswers++;
+			if (this.answerList.indexOf(numberOfAnswers) != -1) {
+				corr_ticked++;
+				console.log("corr_ticked");
+			} 
+		} else {
+			if (this.answerList.indexOf(numberOfAnswers) != -1) {
+				wrong_ticked++;
+				console.log("wrong_ticked");
+			}
+		}	
+		console.log("nextLoop");
+		numberOfAnswers++;
 	} while(questionpool.nextAnswerChoice());
+
+	console.log("Number of answers: " + numberOfAnswers);
+	console.log("Correct ticked: " + corr_ticked);
+	console.log("Wrong ticked: " + wrong_ticked);
 	
-	points = points/numberOfAnswers;
-	
-	if (points == 1) {
-		return "Excellent";
-	} else if (points == 0) {
+	if ((corr_ticked + wrong_ticked) == numberOfAnswers) {
 		return "Wrong";
-	} else {
+	}
+	
+	if (corr_ticked == 0) {
+		return "Wrong";
+	}
+	
+	if (corr_ticked > 0 && corr_ticked < correctAnswers) {
 		return "Partially Correct";
+	}
+	
+	if (corr_ticked == correctAnswers && wrong_ticked > 0) {
+		return "Partially Correct";
+	}
+	
+	if (corr_ticked == correctAnswers && wrong_ticked == 0) {
+		return "Excellent";
 	}
 	
 };
@@ -80,14 +103,17 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 
 	var returnedResult;
 
-	if (controller.models["questionpool"].getScore(clickedAnswerIndex) == 1) {
-		return returnedResult = "Excellent";
+    if ( !clickedAnswerIndex) {
+       returnedResult = "Wrong";
+	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) == 1) {
+		 returnedResult = "Excellent";
 
 	} else {
 
-		return returnedResult = "Wrong";
+		 returnedResult = "Wrong";
 	}
-
+    console.log( 'XX ' + returnedResult);
+    return returnedResult;
 };
 
 AnswerModel.prototype.deleteData = function() {
