@@ -103,14 +103,17 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 
 	var returnedResult;
 
-	if (controller.models["questionpool"].getScore(clickedAnswerIndex) == 1) {
-		return returnedResult = "Excellent";
+    if ( !clickedAnswerIndex) {
+       returnedResult = "Wrong";
+	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) == 1) {
+		 returnedResult = "Excellent";
 
 	} else {
 
-		return returnedResult = "Wrong";
+		 returnedResult = "Wrong";
 	}
-
+    console.log( 'XX ' + returnedResult);
+    return returnedResult;
 };
 
 AnswerModel.prototype.deleteData = function() {
