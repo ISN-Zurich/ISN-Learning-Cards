@@ -69,7 +69,7 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	} else {
 		var wrongText = questionpoolModel.getWrongFeedback();
 		console.log(wrongText);
-		if (wrongText.length > 0) {
+		if (wrongText && wrongText.length > 0) {
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(wrongText);
 		} else {

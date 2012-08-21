@@ -72,9 +72,10 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 			$("#FeedbackMore").hide();
 		}
 	} else {
+        console.log( 'handle answer results');
 		var wrongText = questionpoolModel.getWrongFeedback();
-		console.log(wrongText);
-		if (wrongText.length > 0) {
+		console.log("XX " + wrongText);
+		if (wrongText && wrongText.length > 0) {
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(wrongText);
 		} else {
