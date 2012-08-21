@@ -8,6 +8,8 @@ body {
 	FONT-SIZE: 14pt;
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
+    margin: 0px;
+    padding: 0px;
 }
 
 h1 {
@@ -66,7 +68,7 @@ button {
 
 .top {
 	position: fixed;
-	top: 5px;
+	top: 0px;
 	/* width: 100%; */
 }
 
@@ -78,30 +80,38 @@ button {
 
 .title {
     display: table-cell;
-    height: 45px;
+    height: 50px;
 	FONT-SIZE: 14pt;
 	font-weight: bold;
 	vertical-align: middle;
-	/* margin-top: auto;
-	margin-bottom: auto; */
+    padding-left: 10px;
+}
+
+.titleicon + .title {
+    padding: 0px;
 }
 
 .container {
-/*	padding-left: 10px; */
-/*	padding-right: 10px; */
-    height: 46px;
-     width: 95%;
+	/* padding-left: 10px;*/
+	/*padding-right: 10px;*/
+    height: 55px;
+     width: 100%;
+    margin: 0px;
 	/* margin-top: auto;*/
 	/* margin-bottom: auto;*/
 }
 
+
 .headerbg {
+    box-shadow: 0px 3px 5px -1px #ccc;
         background-color: white;
 }
 
 .content {
-	margin-bottom: 55px;
-	margin-top: 55px;
+    margin-left: 5px;
+    margin-right: 5px;
+	margin-bottom: 60px;
+	margin-top: 60px;
 }
 
 #cardQuestionBody {
@@ -279,13 +289,18 @@ li {
     border-radius: 3px;
     padding-left: 5px;
     padding-right: 5px;
-   /* margin-left: 15px;
-    margin-right: 15px;*/
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-color: white;
 }
 
 .titleicon {
     border: none;
+    margin-left: 10px;
+    margin-top: 7px;
+    margin-bottom: 5px;
     font-size: 28pt;
 }
 
