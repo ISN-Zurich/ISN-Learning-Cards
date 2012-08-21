@@ -2,6 +2,9 @@ function AnswerView() {
 	var self = this;
 
 	self.tagID = 'cardAnswerView';
+
+	self.widget = null;
+
 	jester($('#doneButton')[0]).tap(function() {
 		self.clickDoneButton();
 	});
@@ -10,6 +13,10 @@ function AnswerView() {
 	});
 
 	jester($('#cardAnswerTitle')[0]).tap(function() {
+		self.clickTitleArea();
+		console.log("answer title clicked");
+	});
+	jester($('#cardAnswerIcon')[0]).tap(function() {
 		self.clickTitleArea();
 		console.log("answer title clicked");
 	});
@@ -23,11 +30,10 @@ AnswerView.prototype.handlePinch = function() {
 
 AnswerView.prototype.handleSwipe = function() {
 
-	// ask the model to select the next question
-	// update the display for the current view
+	controller.models["answers"].deleteData();
 
-	// controller.models['questionpool'].nextQuestion();
-	// controller.transitionToQuestion();
+	controller.models['questionpool'].nextQuestion();
+	controller.transitionToQuestion();
 };
 
 AnswerView.prototype.close = closeView;
@@ -41,60 +47,32 @@ AnswerView.prototype.open = function() {
 };
 
 AnswerView.prototype.showAnswerBody = function() {
-	// var currentAnswerBody = controller.models["questionpool"]
-	// .getAnswer();
-	// $("#cardAnswerBody").text(currentAnswerBody);
 
-	var self = this;
-	var questionpoolModel = controller.models['questionpool'];
-	questionpoolModel.resetAnswer();
-	var questionType = questionpoolModel.getQuestionType();
+	$("#dataErrorMessage").empty();
 	$("#cardAnswerBody").empty();
+	
+	var questionpoolModel = controller.models['questionpool'];
 
-	do {
-		// var courseID = courseModel.getId(); we might need to define a method
-		// getId() for the answers in the Answers Model
+	if (questionpoolModel.getAnswer()[0].text) {
 
-		var li = $("<li/>", {
-			// "id": "answer" + answerID,
-			text : questionpoolModel.getAnswerChoice()
-		}).appendTo("#cardAnswerBody");
-		jester(li[0]).tap(function() {
-			if (questionType == "Multiple Choice Question") {
-				self.clickMultipleAnswerItem($(this));
-			} else {
-				self.clickSingleAnswerItem($(this));
-			}
+		var questionType = questionpoolModel.getQuestionType();
+		var interactive = true;
+		switch (questionType) {
+		case 'Single Choice Question':
+			this.widget = new SingleChoiceWidget(interactive);
+			break;
+		case 'Multiple Choice Question':
+			this.widget = new MultipleChoiceWidget(interactive);
+			break;
+		default:
+			break;
+		}
 
-		});
-
-		var div = $("<div/>", {
-			"class" : "right listicon",
-			text : " "
-		});
-		li.prepend(div);
-
-		var i = $("<i/>", {
-		// "class": "icon-ok"
-		}).appendTo(div);
-
-		// i.css("display", "none");
-
-	} while (questionpoolModel.nextAnswerChoice());
-};
-
-AnswerView.prototype.clickSingleAnswerItem = function(clickedElement) {
-
-	// to check if any other elemen is ticked and untick it
-	clickedElement.parent().find("i").removeClass("icon-ok");
-	clickedElement.find("i").toggleClass("icon-ok");
-    
-    
-};
-
-AnswerView.prototype.clickMultipleAnswerItem = function(clickedElement) {
-	clickedElement.find("i").toggleClass("icon-ok");
-
+	} else {
+		$("<span/>", {
+			text : "Apologize, no data are loaded"
+		}).appendTo($("#dataErrorMessage"));
+	}
 };
 
 AnswerView.prototype.showAnswerTitle = function() {
@@ -105,25 +83,14 @@ AnswerView.prototype.showAnswerTitle = function() {
 
 AnswerView.prototype.clickDoneButton = function() {
 
-	var answers = new Array();
+	if (controller.models['questionpool'].getAnswer()[0].text) {
+		this.widget.storeAnswers();
+		controller.transitionToFeedback();
+	} else {
 
-	$("#cardAnswerBody li").each(function(index) {
-		if ($(this).find("i").hasClass("icon-ok")) {
-			answers.push(index);
-		}
-	});
+		controller.models['questionpool'].nextQuestion();
+		controller.transitionToQuestion();
 
-	if (answers.length > 0) {
-
-		controller.models['answers'].setAnswers(answers);
-
-		controller.transitionToFeedback(); // in feedback view on the open we
-											// will
-		// define the loading for the feedback
-		// of the specific current answer of the
-		// specific current view. similar way
-		// with questionbody and quesiton title
-		// methods
 	}
 
 };
@@ -136,16 +103,7 @@ AnswerView.prototype.clickCourseListButton = function() {
 
 AnswerView.prototype.clickTitleArea = function() {
 
+	this.widget.storeAnswers();
 	controller.transitionToQuestion();
 
 };
-
-// the following could replace the first lines with click..funtions etc.
-
-// jester(element)
-// .swipe(swipeHandler) // attach a handler to the element's swipe event
-// .doubletap(dtHandler); // attach a handler to the element's doubletap event
-/**
- * 
- */
-

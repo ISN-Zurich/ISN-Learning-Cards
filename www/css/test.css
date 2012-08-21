@@ -260,7 +260,8 @@ li {
 	border-width: 0px;
 	-webkit-appearance: none;
 	font: 12pt Helvetica, Arial, sans-serif;
-	margin: 0;
+	margin: 0px;
+	padding: 0px;
 	width: 100%;
 }
 
@@ -310,4 +311,12 @@ li {
     display: table-cell;
     width: 100%;
     vertical-align: middle;
+}
+
+#feedbackTip, #FeedbackMore {
+	display:none;
+}
+
+#logOut {
+	
 }

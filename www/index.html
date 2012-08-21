@@ -23,6 +23,8 @@
 <script type="text/javascript" src="scripts/models/questionpool.js"></script>
 <script type="text/javascript" src="scripts/models/answerModel.js"></script>
 <script type="text/javascript" src="scripts/controllers/controller.js"></script>
+<script type="text/javascript" src="scripts/views/singleChoiceWidget.js"></script>
+<script type="text/javascript" src="scripts/views/multipleChoiceWidget.js"></script>
 <script type="text/javascript" src="scripts/views/answerView.js"></script>
 <script type="text/javascript" src="scripts/views/coursesListView.js"></script>
 <script type="text/javascript" src="scripts/views/feedbackView.js"></script>
@@ -167,7 +169,7 @@
                 <div id="CourseList_FromAnswer" class="right control">
 					<i class="icon-remove-sign"></i>
 				</div>
-				<div class="left titleicon">
+				<div  id="cardAnswerIcon" class="left titleicon">
 					<i class="icon-check"></i>
 				</div>
 				<div id="cardAnswerTitle" class="title">Choose some answer</div>
@@ -176,7 +178,7 @@
 			<div id="answerContainer">
 				<ul id="cardAnswerBody">
 				</ul>
-
+				<div id="dataErrorMessage"></div>
 			</div>
 		</div>
 			<div class="container bottom">
@@ -189,12 +191,16 @@
 
 	<div id="cardFeedbackView">
 			<div id="cardFeedbackHeader" class="container headerbg top">
-				<div class="left titleicon" id="cardHeaderIcon">
+				<div class="left titleicon" id="cardFeedbackIcon">
 					<i class="icon-ok-sign"></i>
 				</div>
 				<div id="cardFeedbackTitle" class="title">Excellent</div>
 			</div>
-		<div id="feedbackBody" class="content"></div>
+		<div class="content">
+			<div id="feedbackBody"></div>
+			<div id="feedbackTip"></div>
+		
+		</div>
 			<div class="container bottom">
 				<div id="FeedbackMore" type="button" class="left control">
 					<i class="icon-question-sign"></i>

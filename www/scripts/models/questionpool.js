@@ -2,6 +2,7 @@ function QuestionPoolModel() {
 	this.questionList = [];
 	this.index = 0;
 	this.indexAnswer = 0;
+	this.queue = [];
 	
 };
 
@@ -22,6 +23,11 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 	} catch(err) {
 		questionPoolObject = [];
 	}
+	
+	if (!questionPoolObject[0]) { //if no questions are available, new ones are created
+		questionPoolObject = this.createPool(course_id);			
+	}
+	
 	this.questionList = questionPoolObject;
 };
 
@@ -37,12 +43,13 @@ QuestionPoolModel.prototype.getQuestionBody = function() {
 	return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].question;
 };
 
-//QuestionPoolModel.prototype.getAnswer = function() {
-	//return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].answer;
-//}; this function was replaced by the getAnswerChoice below, because our answers are multiple items
+QuestionPoolModel.prototype.getAnswer = function() {
+	return (this.index > this.questionList.length - 1) ? false : this.questionList[this.index].answer;
+}; 
 
 QuestionPoolModel.prototype.nextQuestion = function() {
 	this.index = (this.index + 1) % this.questionList.length;
+	//this.index = this.
 	return this.index < this.questionList.length;
 };
 
@@ -63,8 +70,17 @@ QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
 };
 
 QuestionPoolModel.prototype.getScore = function(index) {
-	return this.questionList[this.index].answer[index].score;
-}
+	return (index > this.questionList[this.index].answer.length - 1) ? false : this.questionList[this.index].answer[index].score;
+};
+
+
+QuestionPoolModel.prototype.getCorrectFeedback = function() {
+	return this.questionList[this.index].correctFeedback;
+};
+
+QuestionPoolModel.prototype.getWrongFeedback = function() {
+	return this.questionList[this.index].errorFeedback;
+};
 
 QuestionPoolModel.prototype.reset = function() {
 	this.index = 0;
@@ -75,79 +91,20 @@ QuestionPoolModel.prototype.resetAnswer = function() {
 };
 
 
-
-
-
-
-
-
-//
-//function Questionpool(id) {
-//	
-//	this.i = 0;
-//	this.id = id;
-//	this.questionIds = new Array();
-//	this.currentQuestion = "";
-//	this.answer = "";
-//	this.feedback = "";
-//	
-//}
-//
-//Questionpool.prototype.nextQuestion = function() {
-//	this.currentQuestion = this.questions[this.i].getQuestion();
-//	this.answer = this.questions[this.i].getAnswer();
-//	this.feedback = this.questions[this.i].getFeedback();
-//	this.i = (this.i+1) % this.questions.length;
-//};
-//Questionpool.prototype.getCurrentQuestion = function() {return this.currentQuestion;};
-//Questionpool.prototype.getAnswer = function() {return this.answer;};
-//Questionpool.prototype.getFeedback = function() {return this.feedback;};
-//Questionpool.prototype.addQuestion = function(question) {this.questions.push(question);};
-//
-//
-//
-//var questions = new Array();
-//	
-//function Question(id, question, answer, feedback) {
-//	this.id = id;
-//	this.question = question;
-//	this.answer = answer;
-//	this.feedback = feedback;
-//	
-//	questions.push(this);
-//}
-//
-//Question.prototype.getId = function() {return this.id;};
-//Question.prototype.getQuestion = function() {return this.question;};
-//Question.prototype.getAnswer = function() {return this.answer;};
-//Question.prototype.getFeedback = function() {return this.feedback;};
-//
-//function getQuestion(id) { 
-//	for (var q in questions) {
-//		if (questions[q].getId() == id) {
-//			return questions[q];
-//		}
-//	}
-//	return null;
-//}
-// 
-//function storeQuestion(id) {
-//	var qu = getQuestion(id);
-//	var q = {
-//		question: qu.getQuestion(),
-//		answer: qu.getAnswer(),
-//		feedback: qu.getFeedback()
-//	};
-//	eval("localStorage.question" + questions[i].getId() + "= q");
-//}
-//
-//function storeAllQuestions() {
-//	for (var i in questions) {
-//		var q = {
-//			question: questions[i].getQuestion(),
-//			answer: questions[i].getAnswer(),
-//			feedback: questions[i].getFeedback()
-//		};
-//		eval("localStorage.question" + questions[i].getId() + "= q");
-//	}
-//}
+QuestionPoolModel.prototype.createPool = function(course_id) {
+	if (course_id == 1) {
+		initQuPo1();
+		try {
+			return JSON.parse(localStorage.getItem("questionpool_1"));
+		} catch(err) {
+			return [];
+		}
+	} else if (course_id == 2) { //if no questions are available, new ones are created
+		initQuPo2();		
+		try {
+			return JSON.parse(localStorage.getItem("questionpool_2"));
+		} catch(err) {
+			return [];
+		}
+	}
+};
