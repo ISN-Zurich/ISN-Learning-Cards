@@ -15,7 +15,7 @@ function QuestionView() {
     
     // center the question body to the middle of the screen
     function setOrientation() {
-        $("#cardQuestionBody").css('height', window.innerHeight - 110);
+        $("#cardQuestionBody").css('height', window.innerHeight - 120);
     }
     setOrientation();
     window.addEventListener("orientationchange", setOrientation, false);
