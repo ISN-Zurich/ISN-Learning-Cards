@@ -325,3 +325,10 @@ li {
 	border: 1px solid #ccc;
 	background-color: white;
 }
+
+.placeholder {
+	height: 1.5em; 
+	line-height: 1.2em;
+	color: #999;
+	background: #999;
+}

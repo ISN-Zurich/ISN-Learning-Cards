@@ -1,7 +1,7 @@
 function TextSortWidget(interactive) {
 	var self = this;
 
-//	self.tickedAnswers = controller.models["answers"].getAnswers();
+	self.tickedAnswers = controller.models["answers"].getAnswers();
 	self.interactive = interactive;
 
 	if (self.interactive) {
@@ -22,27 +22,31 @@ TextSortWidget.prototype.showAnswer = function() {
 
 	var mixedAnswers = [];
 
-	while (mixedAnswers.length < answers.length) {
-		var random = Math.floor((Math.random() * answers.length));
+	if (this.tickedAnswers.length == 0) {
+		while (mixedAnswers.length < answers.length) {
+			var random = Math.floor((Math.random() * answers.length));
 
-		if (mixedAnswers.indexOf(random) == -1) {
-			mixedAnswers.push(random);
+			if (mixedAnswers.indexOf(random) == -1) {
+				mixedAnswers.push(random);
+			}
 		}
+	} else {
+		mixedAnswers = this.tickedAnswers;
 	}
-
 	console.log("mixed answers length: " + mixedAnswers.length);
-	
+
 	for ( var c = 0; c < mixedAnswers.length; c++) {
 
 		var li = $("<li/>", {
 			"id" : "answer" + mixedAnswers[c],
-			"class": "sortableListItem",
+			"class" : "sortableListItem",
 			text : answers[mixedAnswers[c]].text
 		}).appendTo("#cardAnswerBody");
 
 	}
 
 	$(".sortable").sortable({
+		placeholder: "placeholder",
 		disabled : false,
 		start : function(event, ui) {
 			$(ui.item).addClass("currentSortedItem");
@@ -103,14 +107,14 @@ TextSortWidget.prototype.storeAnswers = function() {
 	var answers = new Array();
 
 	console.log("XXX" + $("#cardAnswerBody").find(".sortableListItem").length);
-	
+
 	$("#cardAnswerBody").find("li.sortableListItem").each(function(index) {
-		
+
 		var id = $(this).attr("id").substring(6);
-		
-//		console.log("push: " + id);
-//		console.log("index: " + index);
-		
+
+		// console.log("push: " + id);
+		// console.log("index: " + index);
+
 		answers.push(id);
 	});
 
@@ -139,5 +143,5 @@ function createEvent(type, event) {
 			false, 0, null);
 
 	first.target.dispatchEvent(simulatedEvent);
-//	event.preventDefault();
+	// event.preventDefault();
 }
