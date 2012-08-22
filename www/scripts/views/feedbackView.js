@@ -13,7 +13,13 @@ function FeedbackView(question) {
 }
 
 FeedbackView.prototype.handleTap = doNothing;
-FeedbackView.prototype.handleSwipe = handleSwipe;
+FeedbackView.prototype.handleSwipe = function handleSwipe() {
+	$("#feedbackBody").show();
+	$("#feedbackTip").hide();
+	controller.models['questionpool'].nextQuestion();
+	controller.transitionToQuestion();
+};
+
 FeedbackView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
@@ -32,21 +38,15 @@ FeedbackView.prototype.open = function() {
 };
 
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
-
 	$("#feedbackBody").show();
-	$("#feedbackTip").hide();
-	
-	
+	$("#feedbackTip").hide();		
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
-
 };
 
 FeedbackView.prototype.clickFeedbackMore = function() {
-
 	$("#feedbackBody").toggle();
 	$("#feedbackTip").toggle();
-
 };
 
 FeedbackView.prototype.showFeedbackTitle = function() {
@@ -55,9 +55,15 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 
 	if (currentFeedbackTitle == "Wrong") {
 		$("#cardFeedbackIcon i").removeClass("icon-ok-sign");
+		$("#cardFeedbackIcon i").removeClass("icon-ok-circle");
 		$("#cardFeedbackIcon i").addClass("icon-remove-circle");
+	} else if (currentFeedbackTitle == "Partially Correct") {
+		$("#cardFeedbackIcon i").removeClass("icon-remove-circle");
+		$("#cardFeedbackIcon i").removeClass("icon-ok-sign");
+		$("#cardFeedbackIcon i").addClass("icon-ok-circle");
 	} else {
 		$("#cardFeedbackIcon i").removeClass("icon-remove-circle");
+		$("#cardFeedbackIcon i").removeClass("icon-ok-circle");
 		$("#cardFeedbackIcon i").addClass("icon-ok-sign");
 	}
 
@@ -112,6 +118,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		case 'Multiple Choice Question': 
 			this.widget = new MultipleChoiceWidget(interactive);
 			break;
+		case 'Text Sort Question':
+			this.widget = new TextSortWidget(interactive);
+			break;
 	// ...
 		default:
 			break;
@@ -119,13 +128,3 @@ FeedbackView.prototype.showFeedbackBody = function() {
 	
 };
 
-function handleSwipe() {
-
-	$("#feedbackBody").show();
-	$("#feedbackTip").hide();
-	
-	controller.models['questionpool'].nextQuestion();
-
-	controller.transitionToQuestion();
-
-};

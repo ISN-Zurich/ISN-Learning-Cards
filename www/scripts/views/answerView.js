@@ -64,6 +64,9 @@ AnswerView.prototype.showAnswerBody = function() {
 		case 'Multiple Choice Question':
 			this.widget = new MultipleChoiceWidget(interactive);
 			break;
+		case 'Text Sort Question':
+			this.widget = new TextSortWidget(interactive);
+			break;
 		default:
 			break;
 		}
