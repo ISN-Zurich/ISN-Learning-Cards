@@ -120,8 +120,8 @@ AnswerModel.prototype.getTextSortAnswerResults = function() {
 	var numberOfCorrectAnswers = 0;
 
 	for (var i = 0; i < this.answerList.length; i++) {
-		console.log(this.answerList[i]);
-		console.log("i: " + i);
+//		console.log(this.answerList[i]);
+//		console.log("i: " + i);
 		if (this.answerList[i] == i) {
 			numberOfCorrectAnswers++;
 		}
