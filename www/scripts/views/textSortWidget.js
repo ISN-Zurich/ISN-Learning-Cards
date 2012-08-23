@@ -29,13 +29,13 @@ TextSortWidget.prototype.showAnswer = function() {
 			while (mixedAnswers.indexOf(random) != -1) {
 				random = (++random) % answers.length;
 			}
-			
+
 			mixedAnswers.push(random);
 		}
 	} else {
 		mixedAnswers = this.tickedAnswers;
 	}
-//	console.log("mixed answers length: " + mixedAnswers.length);
+	// console.log("mixed answers length: " + mixedAnswers.length);
 
 	for ( var c = 0; c < mixedAnswers.length; c++) {
 
@@ -48,8 +48,8 @@ TextSortWidget.prototype.showAnswer = function() {
 	}
 
 	$(".sortable").sortable({
-		placeholder: "placeholder",
-		scrollSensitivity: 10,
+		placeholder : "placeholder",
+		scrollSensitivity : 10,
 		disabled : false,
 		start : function(event, ui) {
 			$(ui.item).addClass("currentSortedItem");
@@ -73,31 +73,34 @@ TextSortWidget.prototype.showFeedback = function() {
 	});
 	$("#cardAnswerBody").removeClass("sortable");
 
-//	var clone = $("#cardAnswerBody").clone();
-//	clone.appendTo("#feedbackBody");
+	// var clone = $("#cardAnswerBody").clone();
+	// clone.appendTo("#feedbackBody");
 
-//	var questionpoolModel = controller.models["questionpool"];
-//	$("#feedbackBody ul li").each(function(index) {
-////		console.log("Index: " + index);
-////		console.log("Id: " + $(this).attr("id").substring(6));
-//		if (index == $(this).attr("id").substring(6)) {
-//			$(this).addClass("correctAnswer");
-//		}
-//	});
-	
-	var ul = $("<ul/>", {
-	}).appendTo("#feedbackBody");
-	
+	// var questionpoolModel = controller.models["questionpool"];
+	// $("#feedbackBody ul li").each(function(index) {
+	// // console.log("Index: " + index);
+	// // console.log("Id: " + $(this).attr("id").substring(6));
+	// if (index == $(this).attr("id").substring(6)) {
+	// $(this).addClass("correctAnswer");
+	// }
+	// });
+
+	var ul = $("<ul/>", {}).appendTo("#feedbackBody");
+
 	var questionpoolModel = controller.models["questionpool"];
 	var answers = questionpoolModel.getAnswer();
 	var answerModel = controller.models["answers"];
 	var scores = answerModel.getTextSortScoreArray();
-	
-	for (var i = 0; i < answers.length; i++) {
-		var li = $("<li/>", {
-			"class" : scores[i] == "1" ? "correctAnswer" : scores[i] == "0.5" ? "partiallyCorrectAnswer" : "",
-			text : answers[i].text
-		}).appendTo(ul);
+
+	for ( var i = 0; i < answers.length; i++) {
+		var li = $(
+				"<li/>",
+				{
+					"class" : scores[i] == "1" ? "correctAnswer"
+							: scores[i] == "0.5" ? "partiallyCorrectAnswer"
+									: "",
+					text : answers[i].text
+				}).appendTo(ul);
 	}
 
 	var currentFeedbackTitle = answerModel.getAnswerResults();
@@ -129,10 +132,7 @@ TextSortWidget.prototype.storeAnswers = function() {
 	$("#cardAnswerBody").find("li.sortableListItem").each(function(index) {
 
 		var id = $(this).attr("id").substring(6);
-
-		// console.log("push: " + id);
-		// console.log("index: " + index);
-
+		
 		answers.push(id);
 	});
 
@@ -140,16 +140,30 @@ TextSortWidget.prototype.storeAnswers = function() {
 };
 
 TextSortWidget.prototype.enableSorting = function() {
+
 	jester($(".sortable")[0]).start(function(touches, event) {
+		console.log("ScrollTop " + $("ul#cardAnswerBody").scrollTop());
 		createEvent("mousedown", event);
 	});
 
 	jester($(".sortable")[0]).during(function(touches, event) {
 		createEvent("mousemove", event);
+
+		var y = event.changedTouches[0].screenY;
+		if (y < 60) {
+			if (window.pageYOffset > y) {
+				var scroll = y > 20 ? y - 20 : 0;
+				window.scrollTo(0, scroll);
+			}
+		}
 	});
 
 	jester($(".sortable")[0]).end(function(touches, event) {
 		createEvent("mouseup", event);
+		var y = event.changedTouches[0].screenY;
+		if (y < 60) {
+			window.scrollTo(0, 0);
+		}
 	});
 }
 
@@ -161,5 +175,5 @@ function createEvent(type, event) {
 			false, 0, null);
 
 	first.target.dispatchEvent(simulatedEvent);
-	 event.preventDefault();
+	event.preventDefault();
 }

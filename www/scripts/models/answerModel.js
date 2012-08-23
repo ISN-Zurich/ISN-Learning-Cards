@@ -142,8 +142,6 @@ AnswerModel.prototype.getTextSortScoreArray = function() {
 				followingCorrAnswers++;
 				followingIndex++;
 			}
-			console.log("following: " + followingCorrAnswers);
-			console.log("Length: " + this.answerList.length/2);
 			if (followingCorrAnswers + 1 > this.answerList.length / 2) {
 				for ( var j = i; j <= i + followingCorrAnswers; j++) {
 					scores[this.answerList[j]] = "0.5";
