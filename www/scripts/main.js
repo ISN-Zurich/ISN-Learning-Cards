@@ -7,6 +7,7 @@ function init() {
 //    initModels();
 	
 	localStorage.removeItem("questionpool_1");
+	localStorage.removeItem("questionpool_2");
 	
 	//$("#splashScreen").show();
 	//$("#loading").show();
