@@ -4,7 +4,7 @@ document.addEventListener("deviceready", init, false);
 
 function init() {
     
-    initModels();
+    //initModels();
     
 	//$("#splashScreen").show();
 	//$("#loading").show();
