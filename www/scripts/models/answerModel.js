@@ -39,7 +39,7 @@ AnswerModel.prototype.getAnswerResults = function() {
 		return this.getNumericAnswerResults();
 		break;
 	case 'Text Sort Question':
-		return this.getTextSortAnswerResult();
+		return this.getTextSortAnswerResults();
 		break;
 	default:
 		break;
