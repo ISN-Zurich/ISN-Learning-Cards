@@ -320,3 +320,10 @@ li {
 #logOut {
 	
 }
+
+/*********************** Answer View ***********************/
+#numberInputContainer{
+	display: none;
+	
+}
+
