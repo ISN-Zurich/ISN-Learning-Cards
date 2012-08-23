@@ -3,43 +3,60 @@ function SingleChoiceWidget(interactive) {
 
 	self.tickedAnswers = controller.models["answers"].getAnswers();
 	self.interactive = interactive;
+	this.didApologize = false;
 
 	if (self.interactive) {
 		self.showAnswer();
 	} else {
 		self.showFeedback();
 	}
+	
 }
 
 SingleChoiceWidget.prototype.showAnswer = function() {
-	var self = this;
+	var questionpoolModel = controller.models['questionpool'];
 
-	var questionpoolModel = controller.models["questionpool"];
-	var answers = questionpoolModel.getAnswer();
+//	$("#cardAnswerBody").empty();
 
-	$("#cardAnswerBody").empty();
+	if (questionpoolModel.getAnswer()[0].text && questionpoolModel) {
 
-	for ( var c = 0; c < answers.length; c++) {
+		var self = this;
+		//console.log("enter single answer widget answer function");
+		var questionpoolModel = controller.models["questionpool"];
+		var answers = questionpoolModel.getAnswer();
 
-		var li = $("<li/>", {
-			"id" : "answer" + c,
-			text : answers[c].text
-		}).appendTo("#cardAnswerBody");
-		jester(li[0]).tap(function() {
-			self.clickSingleAnswerItem($(this));
-		});
 
-		var div = $("<div/>", {
-			"class" : "right listicon",
-			text : ""
-		});
-		li.prepend(div);
+		$("#cardAnswerBody").empty();
+		$("#numberInputContainer").empty();
+		$("#numberInputContainer").hide();
 
-		var i = $("<i/>", {
-			"class" : self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
-		}).appendTo(div);
+		for ( var c = 0; c < answers.length; c++) {
 
+			var li = $("<li/>", {
+				"id" : "answer" + c,
+				text : answers[c].text
+			}).appendTo("#cardAnswerBody");
+			jester(li[0]).tap(function() {
+				self.clickSingleAnswerItem($(this));
+			});
+
+			var div = $("<div/>", {
+				"class" : "right listicon",
+				text : ""
+			});
+			li.prepend(div);
+
+			var i = $("<i/>", {
+				"class" : self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
+			}).appendTo(div);
+
+		}
+
+	}else {
+		this.didApologize = true;
+		doApologize();
 	}
+//	console.log("enter single answer widget answer function");
 
 };
 
@@ -98,5 +115,26 @@ SingleChoiceWidget.prototype.storeAnswers = function() {
 
 	controller.models["answers"].setAnswers(answers);
 };
+
+
+SingleChoiceWidget.prototype.clickDoneButton = function() {
+	
+	
+	var questionpoolModel = controller.models['questionpool'];
+		
+	if (questionpoolModel.getAnswer()[0].text && questionpoolModel)  {
+			
+		this.widget.storeAnswers();	
+		questionpoolModel.queueCurrentQuestion();
+		controller.transitionToFeedback();
+		} else {
+
+			questionpoolModel.nextQuestion();
+			controller.transitionToQuestion();
+
+		}	
+		
+		
+	};
 
 console.log("end of single choice widget");
