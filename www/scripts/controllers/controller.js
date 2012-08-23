@@ -6,6 +6,20 @@ function closeView() {
 	$("#" + this.tagID).hide();
 }
 
+
+function doApologize(){
+	$("#numberInputContainer").hide();
+	$("#correctNumericFeedback").hide();
+	$("#feedbackBody").empty();
+	$("<span/>", {
+	text : "Apologize, no data are loaded"
+	}).appendTo($("#dataErrorMessage"));
+	
+}
+
+
+
+
 function Controller() {
     var self = this;
 
