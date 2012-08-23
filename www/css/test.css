@@ -321,6 +321,10 @@ li {
 	
 }
 
+.sortable {
+/* 	margin-right: 30px; */
+}
+
 .currentSortedItem {
 	border: 1px solid #ccc;
 	background-color: white;
@@ -329,6 +333,6 @@ li {
 .placeholder {
 	height: 1.5em; 
 	line-height: 1.2em;
-	color: #999;
-	background: #999;
+	color: #ccc;
+	background: #ccc;
 }

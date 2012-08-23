@@ -26,14 +26,16 @@ TextSortWidget.prototype.showAnswer = function() {
 		while (mixedAnswers.length < answers.length) {
 			var random = Math.floor((Math.random() * answers.length));
 
-			if (mixedAnswers.indexOf(random) == -1) {
-				mixedAnswers.push(random);
+			while (mixedAnswers.indexOf(random) != -1) {
+				random = (++random) % answers.length;
 			}
+			
+			mixedAnswers.push(random);
 		}
 	} else {
 		mixedAnswers = this.tickedAnswers;
 	}
-	console.log("mixed answers length: " + mixedAnswers.length);
+//	console.log("mixed answers length: " + mixedAnswers.length);
 
 	for ( var c = 0; c < mixedAnswers.length; c++) {
 
@@ -47,6 +49,7 @@ TextSortWidget.prototype.showAnswer = function() {
 
 	$(".sortable").sortable({
 		placeholder: "placeholder",
+		scrollSensitivity: 10,
 		disabled : false,
 		start : function(event, ui) {
 			$(ui.item).addClass("currentSortedItem");
@@ -75,8 +78,8 @@ TextSortWidget.prototype.showFeedback = function() {
 
 	var questionpoolModel = controller.models["questionpool"];
 	$("#feedbackBody ul li").each(function(index) {
-		console.log("Index: " + index);
-		console.log("Id: " + $(this).attr("id").substring(6));
+//		console.log("Index: " + index);
+//		console.log("Id: " + $(this).attr("id").substring(6));
 		if (index == $(this).attr("id").substring(6)) {
 			$(this).addClass("correctAnswer");
 		}
@@ -143,5 +146,5 @@ function createEvent(type, event) {
 			false, 0, null);
 
 	first.target.dispatchEvent(simulatedEvent);
-	// event.preventDefault();
+	 event.preventDefault();
 }
