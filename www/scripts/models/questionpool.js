@@ -1,10 +1,12 @@
 function QuestionPoolModel() {
 	this.questionList = [];
-	this.index = 0;
 	this.indexAnswer = 0;
+
+	this.reset();
 	this.queue = [];
 	
     this.createQuestionPools();
+
 };
 
 QuestionPoolModel.prototype.storeData = function(course_id) {
@@ -59,14 +61,17 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 	do {
 
 		random = Math.floor((Math.random() * this.questionList.length)); // random
+		
 		// number
 		// between
 		// 0
 		// and
 		// (this.questionList.length
 		// - 1)
-	} while (this.queue.indexOf(random) != -1);
-
+	} while (this.index == random || (this.queue.length < this.questionList.length && jQuery.inArray(random,this.queue) >= 0));
+	//  remove the oldest item from the queue and add the current index to the queue
+	this.queue.shift();
+	this.queue.push(this.index);
 	this.index = random;
 	return this.index < this.questionList.length;
 };
@@ -103,6 +108,7 @@ QuestionPoolModel.prototype.getWrongFeedback = function() {
 };
 
 QuestionPoolModel.prototype.reset = function() {
+	this.queue = [ "-1", "-1", "-1" ];
 	this.index = 0;
 };
 
@@ -120,10 +126,16 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 		} catch (err) {
 			return [];
 		}
+
+	} else if (course_id == 2) { // if no questions are available, new ones
+		// are created
+		initQuPo2();
+
 	} else if (course_id == 2) { //if no questions are available, new ones are created
 		if(!localStorage.questionpool_2) {
             initQuPo2();
         }
+
 		try {
 			return JSON.parse(localStorage.getItem("questionpool_2"));
 		} catch (err) {

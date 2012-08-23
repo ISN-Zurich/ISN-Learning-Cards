@@ -326,7 +326,7 @@ li {
 }
 
 .sortable {
-/* 	margin-right: 30px; */
+
 }
 
 .currentSortedItem {
@@ -340,3 +340,10 @@ li {
 	color: #ccc;
 	background: #ccc;
 }
+
+/*********************** Answer View ***********************/
+#numberInputContainer{
+	display: none;
+	
+}
+

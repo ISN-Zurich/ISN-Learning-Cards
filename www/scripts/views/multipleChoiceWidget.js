@@ -4,6 +4,7 @@ function MultipleChoiceWidget(interactive) {
 	self.tickedAnswers = controller.models["answers"].getAnswers();
 
 	self.interactive = interactive;
+	this.didApologize = false;
 
 	if (self.interactive) {
 		self.showAnswer();
@@ -15,33 +16,44 @@ function MultipleChoiceWidget(interactive) {
 }
 
 MultipleChoiceWidget.prototype.showAnswer = function() {
-	var self = this;
-
-	var questionpoolModel = controller.models["questionpool"];
-	var answers = questionpoolModel.getAnswer();
+	var questionpoolModel = controller.models['questionpool'];
 
 	$("#cardAnswerBody").empty();
 
-	for ( var c = 0; c < answers.length; c++) {
+	if (questionpoolModel.getAnswer()[0].text && questionpoolModel) {
+		var self = this;
 
-		var li = $("<li/>", {
-			"id" : "answer" + c,
-			text : answers[c].text
-		}).appendTo("#cardAnswerBody");
-		jester(li[0]).tap(function() {
-			self.clickMultipleAnswerItem($(this));
-		});
+		var questionpoolModel = controller.models["questionpool"];
+		var answers = questionpoolModel.getAnswer();
 
-		var div = $("<div/>", {
-			"class" : "right listicon",
-			text : ""
-		});
-		li.prepend(div);
+		$("#numberInputContainer").empty();
+		$("#numberInputContainer").hide();
 
-		var i = $("<i/>", {
-			"class" : self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
-		}).appendTo(div);
+		for ( var c = 0; c < answers.length; c++) {
 
+			var li = $("<li/>", {
+				"id" : "answer" + c,
+				text : answers[c].text
+			}).appendTo("#cardAnswerBody");
+			jester(li[0]).tap(function() {
+				self.clickMultipleAnswerItem($(this));
+			});
+
+			var div = $("<div/>", {
+				"class" : "right listicon",
+				text : ""
+			});
+			li.prepend(div);
+
+			var i = $("<i/>", {
+				"class" : self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
+			}).appendTo(div);
+		}
+		
+	}
+	else { 
+		this.didApologize = true;
+		doApologize();
 	}
 };
 
@@ -91,6 +103,7 @@ MultipleChoiceWidget.prototype.clickMultipleAnswerItem = function(
 
 MultipleChoiceWidget.prototype.storeAnswers = function() {
 	var answers = new Array();
+	var questionpoolModel = controller.models["questionpool"];
 
 	$("#cardAnswerBody li").each(function(index) {
 		if ($(this).find("i").hasClass("icon-ok")) {
@@ -100,5 +113,26 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 
 	controller.models["answers"].setAnswers(answers);
 };
+
+
+MultipleChoiceWidget.prototype.clickDoneButton = function() {
+	
+	
+	var questionpoolModel = controller.models['questionpool'];
+		
+	if (questionpoolModel.getAnswer()[0].text && questionpoolModel)  {
+			
+		this.widget.storeAnswers();	
+		questionpoolModel.queueCurrentQuestion();
+		controller.transitionToFeedback();
+		} else {
+
+			questionpoolModel.nextQuestion();
+			controller.transitionToQuestion();
+
+		}	
+		
+		
+	};
 
 console.log("end of mulitple choice widget");
