@@ -21,8 +21,9 @@ CoursesListView.prototype.open = function() {
 CoursesListView.prototype.close = closeView;
 
 CoursesListView.prototype.clickCourseItem = function (course_id) {
+	controller.models['questionpool'].reset();
 	controller.models['questionpool'].loadData(course_id);
-    controller.transitionToQuestion();
+	controller.transitionToQuestion();
 };
 
 CoursesListView.prototype.clickSettingsButton = function () {controller.transitionToSettings();};
