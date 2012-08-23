@@ -9,9 +9,9 @@ function initModels() {
 	// if(!localStorage.questionpool_1) {
 	initQuPo1();
 	// }
-	if (!localStorage.questionpool_2) {
+	//if (!localStorage.questionpool_2) {
 		initQuPo2();
-	}
+//	}
 
 }
 
@@ -235,6 +235,41 @@ function initQuPo1() {
 
 			},
 			{
+				type : "Numeric Question",
+				question : '9 - What is the number',
+				answer : "45",
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
+			},
+			{
+				type : "Numeric Question",
+				question : '20 - testing question',
+				answer : "",
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
+			},
+			
+			{
+				type : "Single Choice Question",
+				question : '21 - testing question 2',
+				answer : [
+				         {
+				        	 text:"",
+				        	 score:"1"
+				         }, {
+				        	 
+				        	 text:"",
+				        	 score:"0"
+				         }
+				          
+				          ],
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
+			},
+			{
 				type : "Multiple Choice Question",
 				question : "7 - What would you choose...",
 				answer : [ {
@@ -280,14 +315,20 @@ function initQuPo1() {
 function initQuPo2() {
 	var questionpool_2 = [
 			{
-				type : "Single Choice Question",
-				question : 'Choose the correct translation for the following word! "Car"',
-				answer : "Auto"
+				type : "Numeric Question",
+				question : '1 - What is the number',
+				answer : "45",
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
 			},
 			{
-				type : "Single Choice Question",
-				question : 'Choose the correct translation for the following word! "Apple"',
-				answer : "Apfel"
+				type : "Numeric Question",
+				question : '2 - How many times..',
+				answer : "21",
+				correctFeedback : "This is the correct feedback of this answer",
+				errorFeedback : " "
+
 			} ];
 
 	localStorage.questionpool_2 = JSON.stringify(questionpool_2);
