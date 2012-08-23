@@ -53,7 +53,7 @@ AnswerView.prototype.showAnswerBody = function() {
 	
 	var questionpoolModel = controller.models['questionpool'];
 
-	if (questionpoolModel.getAnswer()[0].text) {
+	//if (questionpoolModel.getAnswer()[0].text && questionpoolModel.) {
 
 		var questionType = questionpoolModel.getQuestionType();
 		var interactive = true;
@@ -64,15 +64,18 @@ AnswerView.prototype.showAnswerBody = function() {
 		case 'Multiple Choice Question':
 			this.widget = new MultipleChoiceWidget(interactive);
 			break;
+		case 'Numeric Question':
+		this.widget = new NumericQuestionWidget(interactive);
+			break;	
 		default:
 			break;
 		}
 
-	} else {
-		$("<span/>", {
-			text : "Apologize, no data are loaded"
-		}).appendTo($("#dataErrorMessage"));
-	}
+	//} else {
+		//$("<span/>", {
+		//	text : "Apologize, no data are loaded"
+	//	}).appendTo($("#dataErrorMessage"));
+//}
 };
 
 AnswerView.prototype.showAnswerTitle = function() {
@@ -84,20 +87,19 @@ AnswerView.prototype.showAnswerTitle = function() {
 AnswerView.prototype.clickDoneButton = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
-	
-	if (questionpoolModel.getAnswer()[0].text) {
-		
-		questionpoolModel.queueCurrentQuestion();
-		
-		this.widget.storeAnswers();
-		controller.transitionToFeedback();
-	} else {
-
+	console.log('check apology ' + this.widget.didApogize);
+	if ( this.widget.didApologize ) {
+		// if there was a problem with the data, the widget knows
+		// in this case we proceed to the next question
 		questionpoolModel.nextQuestion();
 		controller.transitionToQuestion();
-
 	}
-
+	else {
+		// if there was no error with the data we provide feedback to the learner.
+		this.widget.storeAnswers();	
+		questionpoolModel.queueCurrentQuestion();
+		controller.transitionToFeedback();
+	}
 };
 
 AnswerView.prototype.clickCourseListButton = function() {
