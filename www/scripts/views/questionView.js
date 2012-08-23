@@ -29,7 +29,10 @@ QuestionView.prototype.handlePinch = function() {
 };
 
 QuestionView.prototype.handleTap = function() {
-	controller.transitionToAnswer();
+	
+	
+	 controller.transitionToAnswer();
+	 //controller.models["answers"].deleteData();
 };
 
 QuestionView.prototype.handleSwipe = function() {
