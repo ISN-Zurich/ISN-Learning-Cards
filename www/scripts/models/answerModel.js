@@ -28,19 +28,24 @@ AnswerModel.prototype.getAnswerResults = function() {
 	// excellent, partially correct, wrong
 	var questionType = controller.models['questionpool'].getQuestionType();
 	var clicked;
-
-	if (questionType == "Multiple Choice Question") {
-		return this.getMultipleAnswerResults();
-	} else {
+	
+	switch (questionType) {
+	
+	case 'Single Choice Question':
 		return this.getSingleAnswerResults();
+		break;
+	case 'Multiple Choice Question':
+		return this.getMultipleAnswerResults();
+		break;	
+	case 'Numeric Question':
+		return this.getNumericAnswerResults();
+		break;	
+	default:
+		break;
 	}
 
 };
 
-// the different possible answers of each question will be stored in the local
-// storage, but
-// the "taped" answers of the learner will not be stored. they will be passed on
-// a variable
 
 AnswerModel.prototype.getMultipleAnswerResults = function() {
 	var questionpool = controller.models["questionpool"];
@@ -115,6 +120,28 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
     console.log( 'XX ' + returnedResult);
     return returnedResult;
 };
+
+
+AnswerModel.prototype.getNumericAnswerResults = function() {
+
+	//var typedAnswer=this.answerList[0];
+	var answerModel = controller.models["answers"];
+	//var typedAnswer = answerModel.getAnswers();
+	
+	var questionpoolModel = controller.models['questionpool'];
+	
+	var returnedResult;
+	
+	if (questionpoolModel.getAnswer() == answerModel.getAnswers()) {
+		returnedResult = "Excellent";
+	   }else{
+		   returnedResult = "Wrong";
+	   }
+	
+	 return returnedResult;
+	
+};
+
 
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
