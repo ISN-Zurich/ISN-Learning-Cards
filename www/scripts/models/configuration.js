@@ -1,5 +1,9 @@
 function ConfigurationModel() {
 	this.configuration = {};
+    
+    // initialize the configuration if it does not exist
+    this.createConfiguration();
+    
     this.loadData();
     
     console.log(this.configuration.learnerInformation.userName);
@@ -66,8 +70,12 @@ ConfigurationModel.prototype.getEmailAddress = function() {
 
 ConfigurationModel.prototype.createConfiguration = function() {
 	console.log("create configuration");
-	initConfiguration();		
-	try {
+    
+    if(!localStorage.configuration) {
+		initConfiguration();
+	}
+	
+    try {
 		return JSON.parse(localStorage.getItem("configuration"));
 	} catch(err) {
 		return {};

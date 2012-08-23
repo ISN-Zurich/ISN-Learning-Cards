@@ -23,35 +23,31 @@ function doApologize(){
 function Controller() {
     var self = this;
 
-	this.models = {
-		authentication : new ConfigurationModel(),
-		course : new CourseModel(),
-		questionpool : new QuestionPoolModel(),
-	    answers: new AnswerModel()   
-	};
+    console.log("start controller");
     
+    this.models = {};
+	this.views  = {};
+    
+    this.models.authentication = new ConfigurationModel();
+    this.models.course         = new CourseModel();
+    this.models.questionpool   = new QuestionPoolModel();
+    this.models.answers        = new AnswerModel();
+	
+    console.log("models initialized");
 	// this.models['course'].loadData();
     
-	this.views = {
-		splashScreen : new SplashScreen(this),
-		login : new LoginView(),
-		logout : new LogoutView(),
-		coursesList : new CoursesListView(this),
-		questionView : new QuestionView(),
-		answerView : new AnswerView(),
-		feedbackView : new FeedbackView(),
-		settings : new SettingsView()
-	};
+    this.views.splashScreen = new SplashScreen(this);
+    this.views.login        = new LoginView();
+    this.views.logout       = new LogoutView();
+    this.views.coursesList  = new CoursesListView(this);
+    this.views.questionView = new QuestionView();
+    this.views.answerView   = new AnswerView();
+    this.views.feedbackView = new FeedbackView();
+    this.views.settings     = new SettingsView();
+	
+    console.log('views initialized');
     
 	this.activeView = this.views['splashScreen'];
-    
-	if (this.models['authentication'].isLoggedIn()) {
-		console.log("is loggedIn");
-		this.transition('coursesList');
-	} else {
-		console.log("is not loggedIn");
-		this.transition('login');
-	}
     
     function swipeCatcher(event) { self.activeView.handleSwipe(event);}
     function tapCatcher(event) { self.activeView.handleTap(event);}
@@ -63,12 +59,25 @@ function Controller() {
     .swipe(swipeCatcher)
 	.tap(tapCatcher);
     
+    console.log('core gestures done');
+    
     console.log( 'platform'+ device.platform);
     if ( device.platform == 'iPhone' ) {
         
         function pinchCatcher(event) { self.activeView.handlePinch(event); }
         gestureHandler.pinched(pinchCatcher);
     }
+    
+    console.log('initialize endpoint');
+    
+    if (this.models['authentication'].isLoggedIn()) {
+		console.log("is loggedIn");
+		this.transition('coursesList');
+	} else {
+		console.log("is not loggedIn");
+		this.transition('login');
+	}
+    
     
 	console.log("End of Controller");
 } // end of Controller
@@ -81,24 +90,24 @@ Controller.prototype.transition = function(viewname) {
 	}
 };
 
-Controller.prototype.transitionToLogin = function ( ) { this.transition('login'); };
+Controller.prototype.transitionToLogin = function() { this.transition('login'); };
 
-Controller.prototype.transitionToLogout = function ( ) { this.transition('logout'); };
-
-
-Controller.prototype.transitionToCourses =  function () { this.transition('coursesList');};
+Controller.prototype.transitionToLogout = function() { this.transition('logout'); };
 
 
-Controller.prototype.transitionToQuestion = function () { this.transition('questionView');};
+Controller.prototype.transitionToCourses =  function() { this.transition('coursesList');};
 
 
-Controller.prototype.transitionToAnswer = function () {this.transition('answerView');};
+Controller.prototype.transitionToQuestion = function() { this.transition('questionView');};
 
-Controller.prototype.transitionToFeedback = function () {this.transition('feedbackView');};
 
-Controller.prototype.transitionToSettings = function ( ) {this.transition('settings');};
+Controller.prototype.transitionToAnswer = function() {this.transition('answerView');};
 
-Controller.prototype.transitionToFeedbackMore = function ( ) {this.transition('feedbackMore');};
+Controller.prototype.transitionToFeedback = function() {this.transition('feedbackView');};
+
+Controller.prototype.transitionToSettings = function() {this.transition('settings');};
+
+Controller.prototype.transitionToFeedbackMore = function() {this.transition('feedbackMore');};
 
 
 

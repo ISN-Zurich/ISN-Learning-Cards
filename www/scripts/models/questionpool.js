@@ -1,7 +1,13 @@
 function QuestionPoolModel() {
 	this.questionList = [];
 	this.indexAnswer = 0;
+
 	this.reset();
+
+
+	this.queue = [];
+	
+    this.createQuestionPools();
 
 };
 
@@ -114,15 +120,24 @@ QuestionPoolModel.prototype.resetAnswer = function() {
 
 QuestionPoolModel.prototype.createPool = function(course_id) {
 	if (course_id == 1) {
-		initQuPo1();
+		if(!localStorage.questionpool_1) {
+            initQuPo1();
+        }
 		try {
 			return JSON.parse(localStorage.getItem("questionpool_1"));
 		} catch (err) {
 			return [];
 		}
+
 	} else if (course_id == 2) { // if no questions are available, new ones
 		// are created
 		initQuPo2();
+
+	} else if (course_id == 2) { //if no questions are available, new ones are created
+		if(!localStorage.questionpool_2) {
+            initQuPo2();
+        }
+
 		try {
 			return JSON.parse(localStorage.getItem("questionpool_2"));
 		} catch (err) {
@@ -131,7 +146,14 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 	}
 };
 
+
 QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 	this.queue.shift();
 	this.queue.push(this.index);
 }
+
+QuestionPoolModel.prototype.createQuestionPools = function() {
+    this.createPool(1);
+    this.createPool(2);
+};
+
