@@ -1,7 +1,9 @@
 function CourseModel() {
 	this.courseList = [];
 	this.index = 0;
-	
+    
+    this.createCourses();
+    
 	this.loadData();
 };
 
@@ -59,7 +61,9 @@ CourseModel.prototype.reset = function() {
 
 CourseModel.prototype.createCourses = function() {
 	console.log("create courses");
-	initCourses();		
+    if(!localStorage.courses) {
+        initCourses();
+    }
 	try {
 		return JSON.parse(localStorage.getItem("courses"));
 	} catch(err) {
