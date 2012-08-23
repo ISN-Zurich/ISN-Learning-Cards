@@ -35,12 +35,11 @@ FeedbackView.prototype.clickFeedbackDoneButton = function() {
 
 	$("#feedbackBody").show();
 	$("#feedbackTip").hide();
-	
-	
+
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
 
-};
+ };
 
 FeedbackView.prototype.clickFeedbackMore = function() {
 
@@ -65,43 +64,6 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 
 FeedbackView.prototype.showFeedbackBody = function() {
 
-//	$("#feedbackBody").empty();
-//	$("#feedbackTip").empty();
-//
-//	var clone = $("#cardAnswerBody").clone();
-//	clone.appendTo("#feedbackBody");
-//
-//	var questionpoolModel = controller.models["questionpool"];
-//
-//	$("#feedbackBody ul li").each(function(index) {
-//		if (questionpoolModel.getScore(index) == "1") {
-//			$(this).addClass("correctAnswer");
-//		}
-//	});
-//
-//	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
-//	if (currentFeedbackTitle == "Excellent") {
-//		var correctText = questionpoolModel.getCorrectFeedback();
-//		if (correctText.length > 0) {
-//			$("#FeedbackMore").show();
-//			$("#feedbackTip").text(correctText);
-//		} else {
-//			$("#FeedbackMore").hide();
-//		}
-//	} else
-//
-//	{
-//		var wrongText = questionpoolModel.getWrongFeedback();
-//		console.log(wrongText);
-//		if (wrongText.length > 0) {
-//			$("#FeedbackMore").show();
-//			$("#feedbackTip").text(wrongText);
-//		} else {
-//			$("#FeedbackMore").hide();
-//		}
-//		
-//	}
-
 	var questionpoolModel = controller.models['questionpool'];
 	var questionType = questionpoolModel.getQuestionType();
 	var interactive = false;
@@ -112,6 +74,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		case 'Multiple Choice Question': 
 			this.widget = new MultipleChoiceWidget(interactive);
 			break;
+		case 'Numeric Question':
+			this.widget = new NumericQuestionWidget(interactive);
+				break;	
 	// ...
 		default:
 			break;
