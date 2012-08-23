@@ -285,6 +285,10 @@ li {
 	background-color: #CCCCCC;
 }
 
+.partiallyCorrectAnswer {
+	background-color: #EEEEEE;
+}
+
 .control {
     border: 1px solid black;
     font-size: 28pt;

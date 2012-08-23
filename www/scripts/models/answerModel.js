@@ -117,21 +117,46 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 };
 
 AnswerModel.prototype.getTextSortAnswerResults = function() {
-	var numberOfCorrectAnswers = 0;
+	var scores = this.getTextSortScoreArray();
 
-	for (var i = 0; i < this.answerList.length; i++) {
-//		console.log(this.answerList[i]);
-//		console.log("i: " + i);
-		if (this.answerList[i] == i) {
-			numberOfCorrectAnswers++;
-		}
-	}
-
-	if (numberOfCorrectAnswers == this.answerList.length) {
+	if (scores.indexOf("1") == -1 && scores.indexOf("0.5") == -1) {
+		return "Wrong";
+	} else if (scores.indexOf("0.5") == -1 && scores.indexOf("0") == -1) {
 		return "Excellent";
 	} else {
-		return "Wrong";
+		return "Partially Correct";
 	}
+}
+
+AnswerModel.prototype.getTextSortScoreArray = function() {
+	var scores = [];
+	for ( var i = 0; i < this.answerList.length; i++) {
+		if (this.answerList[i] == i) {
+			scores[i] = "1";
+		} else {
+			var currIndex = this.answerList[i];
+			var followingIndex = i + 1;
+			var followingCorrAnswers = 0;
+			while (followingIndex < this.answerList.length
+					&& this.answerList[followingIndex] == (++currIndex) + "") {
+				followingCorrAnswers++;
+				followingIndex++;
+			}
+			console.log("following: " + followingCorrAnswers);
+			console.log("Length: " + this.answerList.length/2);
+			if (followingCorrAnswers + 1 > this.answerList.length / 2) {
+				for ( var j = i; j <= i + followingCorrAnswers; j++) {
+					scores[this.answerList[j]] = "0.5";
+				}
+			} else {
+				for ( var j = i; j <= i + followingCorrAnswers; j++) {
+					scores[this.answerList[j]] = "0";
+				}
+			}
+			i = i + followingCorrAnswers;
+		}
+	}
+	return scores;
 }
 
 AnswerModel.prototype.deleteData = function() {

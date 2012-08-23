@@ -73,19 +73,34 @@ TextSortWidget.prototype.showFeedback = function() {
 	});
 	$("#cardAnswerBody").removeClass("sortable");
 
-	var clone = $("#cardAnswerBody").clone();
-	clone.appendTo("#feedbackBody");
+//	var clone = $("#cardAnswerBody").clone();
+//	clone.appendTo("#feedbackBody");
 
+//	var questionpoolModel = controller.models["questionpool"];
+//	$("#feedbackBody ul li").each(function(index) {
+////		console.log("Index: " + index);
+////		console.log("Id: " + $(this).attr("id").substring(6));
+//		if (index == $(this).attr("id").substring(6)) {
+//			$(this).addClass("correctAnswer");
+//		}
+//	});
+	
+	var ul = $("<ul/>", {
+	}).appendTo("#feedbackBody");
+	
 	var questionpoolModel = controller.models["questionpool"];
-	$("#feedbackBody ul li").each(function(index) {
-//		console.log("Index: " + index);
-//		console.log("Id: " + $(this).attr("id").substring(6));
-		if (index == $(this).attr("id").substring(6)) {
-			$(this).addClass("correctAnswer");
-		}
-	});
+	var answers = questionpoolModel.getAnswer();
+	var answerModel = controller.models["answers"];
+	var scores = answerModel.getTextSortScoreArray();
+	
+	for (var i = 0; i < answers.length; i++) {
+		var li = $("<li/>", {
+			"class" : scores[i] == "1" ? "correctAnswer" : scores[i] == "0.5" ? "partiallyCorrectAnswer" : "",
+			text : answers[i].text
+		}).appendTo(ul);
+	}
 
-	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
+	var currentFeedbackTitle = answerModel.getAnswerResults();
 	if (currentFeedbackTitle == "Excellent") {
 		var correctText = questionpoolModel.getCorrectFeedback();
 		if (correctText && correctText.length > 0) {
