@@ -3,23 +3,17 @@ body {
 	width: device-width;
 	height: device-height;
 	overflow: scroll;
-	color: black;
+	color: #666;
 	font: 14pt HelveticaNeue, Arial, sans-serif;
-    margin: 0px;
-    padding: 0px;
-}
-
-h1 {
-	FONT-SIZE: 20pt;
-	text-align: center;
-	margin-bottom: 30px;
+	margin: 0px;
+	padding: 0px;
 }
 
 button {
 	border: 1px solid #white;
-	background-color: #999999;
+	background-color: #666;
 	color: white;
-/* 	padding: 5px 5px 5px 5px; */
+	/* 	padding: 5px 5px 5px 5px; */
 	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 	font-weight: none;
 	text-align: center;
@@ -28,26 +22,25 @@ button {
 
 .generalButton {
 	float: right;
-	width:46px;
+	width: 46px;
 	margin-bottom: 20px;
 	font-size: 14pt;
 	padding: 2px;
 	border: 1px solid white;
 }
 
-
 .left {
- 	float: left;
-/* 	padding-right: 10px; */
+	float: left;
+	/* 	padding-right: 10px; */
 	margin-right: 15px;
-    margin-left: 0px;
+	margin-left: 0px;
 }
 
 .right {
 	float: right;
-/* 	padding-left: 10px; */
+	/* 	padding-left: 10px; */
 	margin-left: 15px;
-    margin-right: 0px;
+	margin-right: 0px;
 }
 
 .top {
@@ -67,51 +60,49 @@ button {
 }
 
 .title {
-    display: table-cell;
-    height: 50px;
+	display: table-cell;
+	height: 50px;
 	FONT-SIZE: 14pt;
 	font-weight: bold;
 	vertical-align: middle;
-    padding-left: 10px;
+	padding-left: 10px;
 }
 
-.titleicon + .title {
-    padding: 0px;
+.titleicon+.title {
+	padding: 0px;
 }
 
-.container {
-	/* padding-left: 10px;*/
+.container { /* padding-left: 10px;*/
 	/*padding-right: 10px;*/
-    height: 55px;
-     width: 100%;
-    margin: 0px;
+	height: 55px;
+	width: 100%;
+	margin: 0px;
 	/* margin-top: auto;*/
 	/* margin-bottom: auto;*/
 }
 
-
 .headerbg {
-    box-shadow: 0px 3px 5px -1px #ccc;
-    -webkit-box-shadow: 0px 3px 5px -1px #ccc;
-    background-color: white;
+	box-shadow: 0px 3px 5px -1px #ccc;
+	-webkit-box-shadow: 0px 3px 5px -1px #ccc;
+	background-color: white;
 }
 
 .content {
-    margin-left: 5px;
-    margin-right: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
 	margin-bottom: 60px;
 	margin-top: 60px;
 }
 
 #cardQuestionBody {
-    padding-left: 20px;
-    padding-right: 20px;
-    display: table-cell;
-    vertical-align: middle;
+	padding-left: 20px;
+	padding-right: 20px;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 ul {
-	clear:both;
+	clear: both;
 	border: solid #ccc 1px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -124,7 +115,7 @@ ul {
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
 	text-align: left;
-/* 	position: relative; */
+	/* 	position: relative; */
 }
 
 li {
@@ -178,14 +169,105 @@ li {
 }
 
 /*********************** Splash Screen ***********************/
-#loading {
-	clear: both;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 10px 0 10px 0;
-	font-size: 30pt;
-	text-align: center;
+#mainTitle {
+	FONT-SIZE: 20pt;
+	margin: 65px auto 10px 10px;
 }
+
+#cardsTitle {
+	color: #4169E1;
+	font-weight: bold;
+}
+
+#cards {
+	color:white;
+	position: absolute;
+	top: 70px;
+	right: 90px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+#card1 {
+	position: absolute;
+	left: 15px;
+	top: 12px;
+	z-index: -1;
+	background-color: #4169E1;
+	transform: rotate(15deg);
+	-webkit-transform: rotate(15deg); /* Safari and Chrome */
+	height: 40px;
+	width: 60px;
+	padding-left: 1px;
+	padding-top: 1px;
+}
+
+#card2 {
+	position: absolute;
+	z-index: -2;
+	background-color: #1E90FF;
+	height: 50px;
+	width: 60px; 
+	padding-left: 1px;
+	padding-top: 1px;
+}
+
+#card3 {
+	position: absolute;
+	left: -15px;
+	top: -10px;
+	z-index: -3;
+	background-color: #B0E0E6; 
+	transform: rotate(-15deg);
+	-webkit-transform: rotate(-15deg); /* Safari and Chrome */
+	height: 60px;
+	width: 60px;
+	padding-left: 1px;
+	padding-top: 1px;
+}
+
+#cover {
+	height: 100%;
+	width: 100%;
+	background-color: white;
+}
+
+#loading { /* 	font-family: Helvetica, sans-serif; */
+	font-size: 100px;
+	height: 200px;
+	width: 200px;
+	text-align: center;
+	vertical-align: middle; margin-left : auto;
+	margin-right: auto;
+	/* 	margin: 100px; */
+	-webkit-animation: spin 4s 2 linear;
+	margin-left: auto;
+	/* padding-top: 40px; */
+	/* 	border: 1px solid black; */
+}
+
+.centered {
+	display: inline-block;
+	text-align: center;
+	/* 	vertical-align: middle; */
+	line-height: 200px;
+/* 	height: 100%; */
+/* 	width: 100%; */
+}
+
+#rotation {
+	
+}
+
+@-webkit-keyframes spin { 
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform: rotate(360deg);}
+}
+@-webkit-keyframes spinoff { 
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform: rotate(-360deg);}
+}
+
 
 #logos {
 	vertical-align: bottom;
@@ -218,13 +300,13 @@ li {
 	margin: 0px;
 	padding: 5px;
 	border-left: 1px solid white;
-	color: #999999;
+	color: #666;
 	background-color: #ddd;
-/* 	width:89%; */
+	/* 	width:89%; */
 }
 
 *[placeholder] {
-	color: #999999;
+	color: #666;
 }
 
 .loginInput:focus {
@@ -235,9 +317,10 @@ li {
 }
 
 #loginButton {
-	float:right;
+	float: right;
 	height: 104px;
 	width: 49px;
+	font-size: 43px;
 }
 
 .listicon {
@@ -246,7 +329,7 @@ li {
 	height: 20px;
 	padding-left: 0px;
 	margin-left: 0px;
-/*    border: 1px solid #fffff;  */
+	/*    border: 1px solid #fffff;  */
 }
 
 .correctAnswer {
@@ -258,35 +341,34 @@ li {
 }
 
 .control {
-    border: 1px solid black;
-    font-size: 28pt;
-    border-radius: 3px;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    background-color: white;
+	border: 1px solid black;
+	font-size: 28pt;
+	border-radius: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: white;
 }
 
 .titleicon {
-    border: none;
-    margin-left: 10px;
-    margin-top: 7px;
-    margin-bottom: 5px;
-    font-size: 28pt;
+	border: none;
+	margin-left: 10px;
+	margin-top: 7px;
+	margin-bottom: 5px;
+	font-size: 28pt;
 }
-
 
 .questiontext {
-    display: table-cell;
-    width: 100%;
-    vertical-align: middle;
+	display: table-cell;
+	width: 100%;
+	vertical-align: middle;
 }
 
-#feedbackTip, #FeedbackMore {
-	display:none;
+#feedbackTip,#FeedbackMore {
+	display: none;
 }
 
 #logOut {
@@ -294,7 +376,7 @@ li {
 }
 
 .sortable {
-
+	
 }
 
 .currentSortedItem {
@@ -303,15 +385,13 @@ li {
 }
 
 .placeholder {
-	height: 1.5em; 
+	height: 1.5em;
 	line-height: 1.2em;
 	color: #ccc;
 	background: #ccc;
 }
 
 /*********************** Answer View ***********************/
-#numberInputContainer{
+#numberInputContainer {
 	display: none;
-	
 }
-
