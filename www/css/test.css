@@ -4,10 +4,7 @@ body {
 	height: device-height;
 	overflow: scroll;
 	color: black;
-	FONT-FAMILY: arial, helvetica, lucida-sans, sans-serif;
-	FONT-SIZE: 14pt;
-	FONT-STYLE: normal;
-	FONT-VARIANT: normal;
+	font: 14pt HelveticaNeue, Arial, sans-serif;
     margin: 0px;
     padding: 0px;
 }
@@ -19,36 +16,23 @@ h1 {
 }
 
 button {
-	border: 1px solid #d6d6d6;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	font-family: arial, helvetica, sans-serif;
+	border: 1px solid #white;
+	background-color: #999999;
+	color: white;
 /* 	padding: 5px 5px 5px 5px; */
 	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 	font-weight: none;
 	text-align: center;
 	font-size: 34pt;
-	color: black;
-	background-color: #efefef;
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef),
-		color-stop(100%, #dedede) );
-	background-image: -webkit-linear-gradient(top, #efefef, #dedede);
-	background-image: -moz-linear-gradient(top, #efefef, #dedede);
-	background-image: -ms-linear-gradient(top, #efefef, #dedede);
-	background-image: -o-linear-gradient(top, #efefef, #dedede);
-	background-image: linear-gradient(top, #efefef, #dedede);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
-		startColorstr=#efefef, endColorstr=#dedede );
 }
 
 .generalButton {
-	float: left;
-	padding: auto;
-	width:100%;
+	float: right;
+	width:46px;
 	margin-bottom: 20px;
 	font-size: 14pt;
-	padding: 10px;
+	padding: 2px;
+	border: 1px solid white;
 }
 
 
@@ -76,6 +60,10 @@ button {
 	position: fixed;
 	bottom: 5px;
 	/* width: 100%;*/
+}
+
+.static {
+	position: static;
 }
 
 .title {
@@ -203,31 +191,7 @@ li {
 	vertical-align: bottom;
 	margin-top: 10px;
 	clear: both;
-}
-
-#logo_isn {
-	content: url(../resources/logo_isn.gif);
-	vertical-align: bottom;
-	padding-bottom: 10px;
-	padding-right: 20px;
-	margin-bottom: 20px;
-	float: left;
-}
-
-#css_eth {
-	content: url(../resources/css_eth.bmp);
-	vertical-align: bottom;
-	padding-bottom: 10px;
-	margin-bottom: 20px;
-	float: left;
-}
-
-#eth_logo {
-	content: url(../resources/eth_logo.gif);
-	vertical-align: bottom;
-	float: left;
-	width: 100%;
-	padding-bottom: 20px;
+	content: url(../resources/logos_small.png);
 }
 
 /*********************** Login ***********************/
@@ -237,20 +201,11 @@ li {
 }
 
 .inputBorder {
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
-	-o-border-radius: 3px;
-	border-radius: 6px;
-	-webkit-box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	box-shadow: 0 1px 0 #fff, 0 -2px 5px rgba(0, 0, 0, 0.08) inset;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-	margin: 10px auto 10px auto;
 	padding: 10px;
-	border: 1px solid #c8c8c8;
-	color: #777;
+	border: 1px solid white;
+	background-color: #ddd;
+	height: 30px;
+	margin-right: 50px;
 }
 
 .loginInput {
@@ -259,17 +214,30 @@ li {
 	border: none;
 	border-width: 0px;
 	-webkit-appearance: none;
-	font: 12pt Helvetica, Arial, sans-serif;
+	font-size: 12pt;
 	margin: 0px;
-	padding: 0px;
-	width: 100%;
+	padding: 5px;
+	border-left: 1px solid white;
+	color: #999999;
+	background-color: #ddd;
+/* 	width:89%; */
+}
+
+*[placeholder] {
+	color: #999999;
 }
 
 .loginInput:focus {
 	outline: none;
 	border: none;
 	border-width: 0px;
-	-webkit-appearance: none
+	-webkit-appearance: none;
+}
+
+#loginButton {
+	float:right;
+	height: 104px;
+	width: 49px;
 }
 
 .listicon {
