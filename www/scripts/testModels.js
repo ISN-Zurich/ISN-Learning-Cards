@@ -307,7 +307,159 @@ function initQuPo1() {
 				correctFeedback : "",
 				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
 
-			} ];
+			}, {
+				type : "Text Sort Question",
+				question : "8 - Sort alphabetically",
+				answer : [ {
+					text : "A",
+					score : "0"
+
+				},
+
+				{
+					text : "B",
+					score : "1"
+
+				},
+
+				{
+					text : "C",
+					score : "1"
+
+				},
+
+				{
+					text : "D",
+					score : "1"
+
+				},
+
+				{
+					text : "E",
+					score : "1"
+
+				}
+
+				],
+
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
+			}, {
+				type : "Text Sort Question",
+				question : "12 - Sort alphabetically",
+				answer : [ {
+					text : "A",
+					score : "0"
+
+				},
+
+				{
+					text : "B",
+					score : "1"
+
+				},
+
+				{
+					text : "C",
+					score : "1"
+
+				},
+
+				{
+					text : "D",
+					score : "1"
+
+				},
+
+				{
+					text : "E",
+					score : "1"
+
+				}
+
+				],
+
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
+			},{
+				type : "Text Sort Question",
+				question : "10 - Sort alphabetically",
+				answer : [ {
+					text : "A",
+					score : "0"
+
+				},
+
+				{
+					text : "B",
+					score : "1"
+
+				},
+
+				{
+					text : "C",
+					score : "1"
+
+				},
+
+				{
+					text : "D",
+					score : "1"
+
+				},
+
+				{
+					text : "E",
+					score : "1"
+
+				}
+
+				],
+
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
+			},{
+				type : "Text Sort Question",
+				question : "11 - Sort alphabetically",
+				answer : [ {
+					text : "A",
+					score : "0"
+
+				},
+
+				{
+					text : "B",
+					score : "1"
+
+				},
+
+				{
+					text : "C",
+					score : "1"
+
+				},
+
+				{
+					text : "D",
+					score : "1"
+
+				},
+
+				{
+					text : "E",
+					score : "1"
+
+				}
+
+				],
+
+				correctFeedback : "",
+				errorFeedback : "In order to asnwer this question better you should also take into account the impact of.."
+
+			}];
 
 	localStorage.questionpool_1 = JSON.stringify(questionpool_1);
 }
