@@ -18,11 +18,11 @@ function NumericQuestionWidget(interactive) {
 NumericQuestionWidget.prototype.showAnswer = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
-//	$("#numberInputContainer").empty();
-//	$("#numberInputContainer").removeClass("correctAnswer");
+	// $("#numberInputContainer").empty();
+	// $("#numberInputContainer").removeClass("correctAnswer");
 	$("#cardAnswerBody").empty();
 
-	if (questionpoolModel.getAnswer() && questionpoolModel) {
+	if (questionpoolModel.questionList && questionpoolModel.getAnswer()) {
 		$("#numberInputContainer").empty();
 		$("#numberInputContainer").removeClass("correctAnswer");
 		$("#cardAnswerBody").empty();
@@ -31,11 +31,11 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 
 		$("<input/>", {
 			"id" : "numberInput",
-			"class": "loginInput",
-			"type": "number"
+			"class" : "loginInput",
+			"type" : "number"
 		}).appendTo($("#numberInputContainer"));
 
-	}else {
+	} else {
 		this.didApologize = true;
 		doApologize();
 	}
@@ -73,23 +73,23 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		}
 	} else { // current feedback title is wrong
 		console.log('handle answer results');
-		
+
 		var clone = $("#numberInputContainer").clone();
 		$(numberInputContainer).remove("#numberInput");
 		clone.appendTo("#feedbackBody");
 		$(numberInputContainer).text(typedAnswer);
-		
+
 		$("<div/>", {
 			"id" : "numericFeedback",
 			text : "the correct answer is"
 		}).appendTo($(feedbackBody));
-	
+
 		$("<div/>", {
 			"id" : "correctNumericFeedback",
-			"class": "inputBorder correctAnswer",
+			"class" : "inputBorder correctAnswer",
 			text : correctAnswer
 		}).appendTo($(feedbackBody));
-			
+
 		var wrongText = questionpoolModel.getWrongFeedback();
 		console.log("XX " + wrongText);
 		if (wrongText && wrongText.length > 0) {
@@ -108,32 +108,27 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 	var questionpoolModel = controller.models["questionpool"];
 
 	var numericAnswer = $("#numberInput").val();
-	
+
 	controller.models["answers"].setAnswers(numericAnswer);
 	$("#numberInput").val("");
 };
 
 NumericQuestionWidget.prototype.clickDoneButton = function() {
-	
-	
-var questionpoolModel = controller.models['questionpool'];
-	
+
+	var questionpoolModel = controller.models['questionpool'];
+
 	if (questionpoolModel.getAnswer()) {
-		
-	this.widget.storeAnswers();	
-	questionpoolModel.queueCurrentQuestion();
-	controller.transitionToFeedback();
+
+		this.widget.storeAnswers();
+		questionpoolModel.queueCurrentQuestion();
+		controller.transitionToFeedback();
 	} else {
 
 		questionpoolModel.nextQuestion();
 		controller.transitionToQuestion();
 
-	}	
-	
-	
+	}
+
 };
-
-
-
 
 console.log("end of numeric choice widget");

@@ -18,7 +18,7 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 
 //	$("#cardAnswerBody").empty();
 
-	if (questionpoolModel.getAnswer()[0].text && questionpoolModel) {
+	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].text) {
 
 		var self = this;
 		//console.log("enter single answer widget answer function");

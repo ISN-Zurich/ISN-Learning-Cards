@@ -4,6 +4,8 @@ function TextSortWidget(interactive) {
 	self.tickedAnswers = controller.models["answers"].getAnswers();
 	self.interactive = interactive;
 
+	this.didApologize = false;
+	
 	if (self.interactive) {
 		self.showAnswer();
 	} else {
@@ -18,49 +20,56 @@ TextSortWidget.prototype.showAnswer = function() {
 	var answers = questionpoolModel.getAnswer();
 
 	$("#cardAnswerBody").empty();
-	$("#cardAnswerBody").addClass("sortable");
 
-	var mixedAnswers = [];
+	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].text) {
 
-	if (this.tickedAnswers.length == 0) {
-		while (mixedAnswers.length < answers.length) {
-			var random = Math.floor((Math.random() * answers.length));
+		$("#cardAnswerBody").addClass("sortable");
 
-			while (mixedAnswers.indexOf(random) != -1) {
-				random = (++random) % answers.length;
+		var mixedAnswers = [];
+
+		if (this.tickedAnswers.length == 0) {
+			while (mixedAnswers.length < answers.length) {
+				var random = Math.floor((Math.random() * answers.length));
+
+				while (mixedAnswers.indexOf(random) != -1) {
+					random = (++random) % answers.length;
+				}
+
+				mixedAnswers.push(random);
 			}
-
-			mixedAnswers.push(random);
+		} else {
+			mixedAnswers = this.tickedAnswers;
 		}
+		// console.log("mixed answers length: " + mixedAnswers.length);
+
+		for ( var c = 0; c < mixedAnswers.length; c++) {
+
+			var li = $("<li/>", {
+				"id" : "answer" + mixedAnswers[c],
+				"class" : "sortableListItem",
+				text : answers[mixedAnswers[c]].text
+			}).appendTo("#cardAnswerBody");
+
+		}
+
+		$(".sortable").sortable({
+			placeholder : "placeholder",
+			scrollSensitivity : 10,
+			disabled : false,
+			start : function(event, ui) {
+				$(ui.item).addClass("currentSortedItem");
+			},
+			stop : function(event, ui) {
+				$(ui.item).removeClass("currentSortedItem");
+			}
+		});
+		$(".sortable").disableSelection();
+
+		self.enableSorting();
 	} else {
-		mixedAnswers = this.tickedAnswers;
+		this.didApologize = true;
+		doApologize();
 	}
-	// console.log("mixed answers length: " + mixedAnswers.length);
-
-	for ( var c = 0; c < mixedAnswers.length; c++) {
-
-		var li = $("<li/>", {
-			"id" : "answer" + mixedAnswers[c],
-			"class" : "sortableListItem",
-			text : answers[mixedAnswers[c]].text
-		}).appendTo("#cardAnswerBody");
-
-	}
-
-	$(".sortable").sortable({
-		placeholder : "placeholder",
-		scrollSensitivity : 10,
-		disabled : false,
-		start : function(event, ui) {
-			$(ui.item).addClass("currentSortedItem");
-		},
-		stop : function(event, ui) {
-			$(ui.item).removeClass("currentSortedItem");
-		}
-	});
-	$(".sortable").disableSelection();
-
-	self.enableSorting();
 
 };
 
@@ -132,7 +141,7 @@ TextSortWidget.prototype.storeAnswers = function() {
 	$("#cardAnswerBody").find("li.sortableListItem").each(function(index) {
 
 		var id = $(this).attr("id").substring(6);
-		
+
 		answers.push(id);
 	});
 
