@@ -32,7 +32,7 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		$("<input/>", {
 			"id" : "numberInput",
 			"class": "loginInput",
-			"type": "text"
+			"type": "number"
 		}).appendTo($("#numberInputContainer"));
 
 	}else {
