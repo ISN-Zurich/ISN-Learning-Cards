@@ -9,6 +9,9 @@ function FeedbackView(question) {
 	jester($('#FeedbackMore')[0]).tap(function() {
 		self.clickFeedbackMore();
 	});
+	jester($('#CourseList_FromFeedback')[0]).tap(function() {
+		self.clickCourseListButton();
+	});
 
 }
 
@@ -93,5 +96,11 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		default:
 			break;
 	}
+
+};
+
+FeedbackView.prototype.clickCourseListButton = function() {
+
+	controller.transitionToCourses();
 
 };
