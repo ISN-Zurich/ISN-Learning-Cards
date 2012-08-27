@@ -13,7 +13,7 @@ SplashScreen.prototype.handleSwipe = doNothing;
 SplashScreen.prototype.open = function() {
 	var self = this;
 	
-	setTimeout(function() { self.controller.transitionToEndpoint(); }, 2000);
+	setTimeout(function() { self.controller.transitionToEndpoint(); }, 1000);
 };
 
 SplashScreen.prototype.closeDiv = closeView;

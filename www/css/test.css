@@ -3,21 +3,15 @@ body {
 	width: device-width;
 	height: device-height;
 	overflow: scroll;
-	color: black;
-	font: 14pt HelveticaNeue, Arial, sans-serif;
+	color: #666;
+	font: 19px HelveticaNeue, Arial, sans-serif;
 	margin: 0px;
 	padding: 0px;
 }
 
-h1 {
-	FONT-SIZE: 20pt;
-	text-align: center;
-	margin-bottom: 30px;
-}
-
 button {
 	border: 1px solid #white;
-	background-color: #999999;
+	background-color: #666;
 	color: white;
 	/* 	padding: 5px 5px 5px 5px; */
 	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
@@ -41,13 +35,16 @@ button {
 	border-right: 2px solid white;
 	margin: 1px 0px 0px 0px;
 	height: auto; 
+	position: fixed;
+	right: 0px;
+	top: 60px;
 
 }
 
 .left {
 	float: left;
 	/* 	padding-right: 10px; */
-	margin-right: 15px;
+	margin-right: 5px;
 	margin-left: 0px;
 }
 
@@ -77,15 +74,18 @@ button {
 .title {
 	display: table-cell;
 	height: 50px;
-	FONT-SIZE: 14pt;
-	font-weight: bold;
-	vertical-align: middle;
+	FONT-SIZE: 22px;
+	font-weight:  900;
 	padding-left: 10px;
 	color: #4169E1;
+	vertical-align: bottom;
+	padding: 0px;
 }
 
-.titleicon+.title {
+.titleicon {
 	padding: 0px;
+	vertical-align: bottom;
+	FONT-SIZE: 10px;
 }
 
 .container { /* padding-left: 10px;*/
@@ -103,6 +103,7 @@ button {
 	background-color: white;
 }
 
+
 .content { /*     margin-left: 5px; */
 	/*     margin-right: 5px; */
 	margin-bottom: 60px;
@@ -112,8 +113,9 @@ button {
 #cardQuestionBody {
 	padding-left: 20px;
 	padding-right: 20px;
-	display: table-cell;
+/* 	display: table-cell; */
 	vertical-align: middle;
+/* 	height: 100%; */
 }
 
 ul { /* 	clear:both; */
@@ -131,7 +133,6 @@ ul { /* 	clear:both; */
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
 	text-align: left;
-
 	/* 	position: relative; */
 }
 
@@ -185,14 +186,105 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 }
 
 /*********************** Splash Screen ***********************/
-#loading {
-	clear: both;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 10px 0 10px 0;
-	font-size: 30pt;
-	text-align: center;
+#mainTitle {
+	FONT-SIZE: 20pt;
+	margin: 65px auto 10px 10px;
 }
+
+#cardsTitle {
+	color: #4169E1;
+	font-weight: bold;
+}
+
+#cards {
+	color:white;
+	position: absolute;
+	top: 70px;
+	right: 90px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+#card1 {
+	position: absolute;
+	left: 15px;
+	top: 12px;
+	z-index: -1;
+	background-color: #4169E1;
+	transform: rotate(15deg);
+	-webkit-transform: rotate(15deg); /* Safari and Chrome */
+	height: 40px;
+	width: 60px;
+	padding-left: 1px;
+	padding-top: 1px;
+}
+
+#card2 {
+	position: absolute;
+	z-index: -2;
+	background-color: #1E90FF;
+	height: 50px;
+	width: 60px; 
+	padding-left: 1px;
+	padding-top: 1px;
+}
+
+#card3 {
+	position: absolute;
+	left: -15px;
+	top: -10px;
+	z-index: -3;
+	background-color: #B0E0E6; 
+	transform: rotate(-15deg);
+	-webkit-transform: rotate(-15deg); /* Safari and Chrome */
+	height: 60px;
+	width: 60px;
+	padding-left: 1px;
+	padding-top: 1px;
+}
+
+#cover {
+	height: 100%;
+	width: 100%;
+	background-color: white;
+}
+
+#loading { /* 	font-family: Helvetica, sans-serif; */
+	font-size: 100px;
+	height: 200px;
+	width: 200px;
+	text-align: center;
+	vertical-align: middle; margin-left : auto;
+	margin-right: auto;
+	/* 	margin: 100px; */
+	-webkit-animation: spin 4s 2 linear;
+	margin-left: auto;
+	/* padding-top: 40px; */
+	/* 	border: 1px solid black; */
+}
+
+.centered {
+	display: inline-block;
+	text-align: center;
+	/* 	vertical-align: middle; */
+	line-height: 200px;
+/* 	height: 100%; */
+/* 	width: 100%; */
+}
+
+#rotation {
+	
+}
+
+@-webkit-keyframes spin { 
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform: rotate(360deg);}
+}
+@-webkit-keyframes spinoff { 
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform: rotate(-360deg);}
+}
+
 
 #logos {
 	vertical-align: bottom;
@@ -225,13 +317,13 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	margin: 0px;
 	padding: 5px;
 	border-left: 1px solid white;
-	color: #999999;
+	color: #666;
 	background-color: #ddd;
 	/* 	width:89%; */
 }
 
 *[placeholder] {
-	color: #999999;
+	color: #666;
 }
 
 .loginInput:focus {
@@ -245,6 +337,7 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	float: right;
 	height: 104px;
 	width: 49px;
+	font-size: 43px;
 }
 
 .listicon {
@@ -257,11 +350,22 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 }
 
 .correctAnswer {
-	background-color: #CCCCCC;
+	background-color: #33CC33;
+	border: 1px solid white;
+	color: white;
+	height:100%;
 }
 
 .partiallyCorrectAnswer {
 	background-color: #EEEEEE;
+}
+
+.ticked {
+	
+	/*padding:0px;
+	margin:0px;*/
+	background-color: #88AAFF;
+	color: white;
 }
 
 .control {
@@ -286,9 +390,9 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 }
 
 .questiontext {
-	display: table-cell;
-	width: 100%;
-	vertical-align: middle;
+/* 	display: table-cell; */
+/* 	width: 100%; */
+/* 	vertical-align: middle; */
 }
 
 #feedbackTip,#FeedbackMore {
@@ -316,15 +420,21 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 }
 
 /*********************** Answer View ***********************/
-#numberInputContainer {
-	display: none;
-}
 
 #answerContainer {
-	margin: 0px;
-	padding: 0px;
+/* 	margin: 0px; */
+/* 	padding: 0px; */
 }
 
 .marginForButtons {
 	margin-right: 51px;
+}
+
+.answerLi {
+	padding: 0px;
+}
+
+.text {
+/* 	margin: 15px; */
+	padding: 15px;
 }
