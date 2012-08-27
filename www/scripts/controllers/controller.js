@@ -71,6 +71,13 @@ function Controller() {
 		gestureHandler.pinched(pinchCatcher);
 	}
 	
+	//set correct height of icon button
+	window.addEventListener("resize", function() {setButtonHeight();}, false);
+	window.addEventListener("orientationchange", function() {setButtonHeight();}, false);
+
+	setButtonHeight();
+	
+	
 	this.activeView.open();
 	
 	console.log("End of Controller");
@@ -126,4 +133,16 @@ Controller.prototype.transitionToSettings = function() {
 
 Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
+};
+
+function setButtonHeight() {
+	console.log("setButtonHeight");
+	var windowheight = $(window).height();
+	var height;
+	if (windowheight > 70) {
+		height = windowheight - 70;
+	} else {
+		height = windowheight;
+	}
+	$(".iconButton").css("height", height);
 };
