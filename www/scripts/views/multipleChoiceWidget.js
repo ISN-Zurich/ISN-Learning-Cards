@@ -26,32 +26,30 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 		var questionpoolModel = controller.models["questionpool"];
 		var answers = questionpoolModel.getAnswer();
 
-		$("#numberInputContainer").empty();
-		$("#numberInputContainer").hide();
+		var ul = $("<ul/>", {
+		}).appendTo("#cardAnswerBody");
 
 		for ( var c = 0; c < answers.length; c++) {
 
-			var li = $("<li/>", {
-				"id" : "answer" + c,
-				text : answers[c].text
-			}).appendTo("#cardAnswerBody");
+			var li = $(
+					"<li/>",
+					{
+						"id" : "answer" + c,
+						"class" : "answerLi"
+								+ (self.tickedAnswers.indexOf(c) != -1 ? " ticked"
+										: "")
+					}).appendTo(ul);
 			jester(li[0]).tap(function() {
 				self.clickMultipleAnswerItem($(this));
 			});
 
 			var div = $("<div/>", {
-				"class" : "right listicon",
-				text : ""
-			});
-			li.prepend(div);
-
-			var i = $("<i/>", {
-				"class" : self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
-			}).appendTo(div);
+				"class" : "text",
+				text : answers[c].text
+			}).appendTo(li);
 		}
-		
-	}
-	else { 
+
+	} else {
 		this.didApologize = true;
 		doApologize();
 	}
@@ -69,7 +67,9 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 	var questionpoolModel = controller.models["questionpool"];
 	$("#feedbackBody ul li").each(function(index) {
 		if (questionpoolModel.getScore(index) == "1") {
-			$(this).addClass("correctAnswer");
+			var div = $("<div/>", {
+				"class" : "right correctAnswer icon-checkmark"
+			}).prependTo(this);
 		}
 	});
 
@@ -83,7 +83,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 			$("#FeedbackMore").hide();
 		}
 	} else {
-        console.log( 'handle answer results');
+		console.log('handle answer results');
 		var wrongText = questionpoolModel.getWrongFeedback();
 		console.log("XX " + wrongText);
 		if (wrongText && wrongText.length > 0) {
@@ -98,7 +98,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 
 MultipleChoiceWidget.prototype.clickMultipleAnswerItem = function(
 		clickedElement) {
-	clickedElement.find("i").toggleClass("icon-ok");
+	clickedElement.toggleClass("ticked");
 };
 
 MultipleChoiceWidget.prototype.storeAnswers = function() {
@@ -106,7 +106,7 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 	var questionpoolModel = controller.models["questionpool"];
 
 	$("#cardAnswerBody li").each(function(index) {
-		if ($(this).find("i").hasClass("icon-ok")) {
+		if ($(this).hasClass("ticked")) {
 			answers.push(index);
 		}
 	});
@@ -114,25 +114,22 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
-
 MultipleChoiceWidget.prototype.clickDoneButton = function() {
-	
-	
+
 	var questionpoolModel = controller.models['questionpool'];
-		
-	if (questionpoolModel.getAnswer()[0].text && questionpoolModel)  {
-			
-		this.widget.storeAnswers();	
+
+	if (questionpoolModel.getAnswer()[0].text && questionpoolModel) {
+
+		this.widget.storeAnswers();
 		questionpoolModel.queueCurrentQuestion();
 		controller.transitionToFeedback();
-		} else {
+	} else {
 
-			questionpoolModel.nextQuestion();
-			controller.transitionToQuestion();
+		questionpoolModel.nextQuestion();
+		controller.transitionToQuestion();
 
-		}	
-		
-		
-	};
+	}
+
+};
 
 console.log("end of mulitple choice widget");

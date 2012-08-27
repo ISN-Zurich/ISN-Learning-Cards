@@ -23,7 +23,10 @@ TextSortWidget.prototype.showAnswer = function() {
 
 	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].text) {
 
-		$("#cardAnswerBody").addClass("sortable");
+		var ul = $("<ul/>", {
+			"class": "sortable"
+		}).appendTo("#cardAnswerBody");
+		
 
 		var mixedAnswers = [];
 
@@ -48,7 +51,7 @@ TextSortWidget.prototype.showAnswer = function() {
 				"id" : "answer" + mixedAnswers[c],
 				"class" : "sortableListItem",
 				text : answers[mixedAnswers[c]].text
-			}).appendTo("#cardAnswerBody");
+			}).appendTo(ul);
 
 		}
 
@@ -80,7 +83,6 @@ TextSortWidget.prototype.showFeedback = function() {
 	$(".sortable").sortable({
 		disabled : true
 	});
-	$("#cardAnswerBody").removeClass("sortable");
 
 	// var clone = $("#cardAnswerBody").clone();
 	// clone.appendTo("#feedbackBody");

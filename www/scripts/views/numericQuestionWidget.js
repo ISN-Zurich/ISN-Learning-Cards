@@ -23,18 +23,25 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 	$("#cardAnswerBody").empty();
 
 	if (questionpoolModel.questionList && questionpoolModel.getAnswer()) {
-		$("#numberInputContainer").empty();
-		$("#numberInputContainer").removeClass("correctAnswer");
-		$("#cardAnswerBody").empty();
-		$("#numberInputContainer").show();
+//		$("#numberInputContainer").empty();
+//		$("#numberInputContainer").removeClass("correctAnswer");
+//		$("#cardAnswerBody").empty();
+//		$("#numberInputContainer").show();
 		console.log("entered numeric answer body");
 
-		$("<input/>", {
+		var div = $("<div/>", {
+			"id": "numberInputContainer",
+			"class": "inputBorder"
+		}).appendTo("#cardAnswerBody");
+		
+		var input = $("<input/>", {
 			"id" : "numberInput",
 			"class" : "loginInput",
 			"type" : "number"
-		}).appendTo($("#numberInputContainer"));
+		}).appendTo(div);
 
+		$("#numberInputContainer")[0].addEventListener("blur", function() {setButtonHeight();});
+		
 	} else {
 		this.didApologize = true;
 		doApologize();
@@ -45,10 +52,10 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 NumericQuestionWidget.prototype.showFeedback = function() {
 	console.log("start show feedback in numeric choice");
 
-	$("#numberInputContainer").show();
+//	$("#numberInputContainer").show();
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
-	$("#numberInputContainer").show();
+//	$("#numberInputContainer").show();
 
 	var questionpoolModel = controller.models["questionpool"];
 	var answerModel = controller.models["answers"];
@@ -56,14 +63,23 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var correctAnswer = questionpoolModel.getAnswer();
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 
+	
+//	var clone = $("#numberInputContainer").clone();
+//	$("#numberInputContainer").remove("#numberInput");
+//	$("#numberInputContainer").text(typedAnswer);
+//	clone.appendTo("#feedbackBody");
+	
+	var div = $("<div/>", {
+		"id": "typedAnswer",
+		"class": "inputBorder",
+		text: typedAnswer
+	}).appendTo("#feedbackBody");
+	
+	
 	if (currentFeedbackTitle == "Excellent") {
 
-		var clone = $("#numberInputContainer").clone();
-		$(numberInputContainer).remove("#numberInput");
-		clone.appendTo("#feedbackBody");
-		$(numberInputContainer).addClass("correctAnswer");
-		$(numberInputContainer).text(typedAnswer);
-
+		$("#typedAnswer").addClass("correctAnswer");
+		
 		var correctText = questionpoolModel.getCorrectFeedback();
 		if (correctText.length > 0) {
 			$("#FeedbackMore").show();
@@ -74,21 +90,16 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	} else { // current feedback title is wrong
 		console.log('handle answer results');
 
-		var clone = $("#numberInputContainer").clone();
-		$(numberInputContainer).remove("#numberInput");
-		clone.appendTo("#feedbackBody");
-		$(numberInputContainer).text(typedAnswer);
-
 		$("<div/>", {
 			"id" : "numericFeedback",
 			text : "the correct answer is"
-		}).appendTo($(feedbackBody));
+		}).appendTo("#feedbackBody");
 
 		$("<div/>", {
 			"id" : "correctNumericFeedback",
 			"class" : "inputBorder correctAnswer",
 			text : correctAnswer
-		}).appendTo($(feedbackBody));
+		}).appendTo("#feedbackBody");
 
 		var wrongText = questionpoolModel.getWrongFeedback();
 		console.log("XX " + wrongText);
