@@ -15,12 +15,13 @@ function QuestionView() {
     
     // center the question body to the middle of the screen
     function setOrientation() {
-        $("#cardQuestionBody").css('height', window.innerHeight - 70);
-        $("#cardQuestionBody").css('width', window.innerWidth - 100);
+        $(".cardBody").css('height', window.innerHeight - 70);
+        $(".cardBody").css('width', window.innerWidth - 100);
         
     }
     setOrientation();
     window.addEventListener("orientationchange", setOrientation, false);
+    window.addEventListener("resize", setOrientation, false);
     
     //$('#ButtonAnswer').click(function(event){ self.handleTap(); event.stopPropagation();} );
 }

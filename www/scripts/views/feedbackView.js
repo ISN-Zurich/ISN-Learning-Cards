@@ -12,6 +12,16 @@ function FeedbackView(question) {
 	jester($('#CourseList_FromFeedback')[0]).tap(function() {
 		self.clickCourseListButton();
 	});
+	
+	 // center the feedback body to the middle of the screen
+    function setOrientation() {
+        $(".cardBody").css('height', window.innerHeight - 70);
+        $(".cardBody").css('width', window.innerWidth - 100);
+        
+    }
+    setOrientation();
+    window.addEventListener("orientationchange", setOrientation, false);
+    window.addEventListener("resize", setOrientation, false);
 
 }
 
@@ -30,6 +40,9 @@ FeedbackView.prototype.handlePinch = function() {
 FeedbackView.prototype.closeDiv = closeView;
 FeedbackView.prototype.close = function() {
 	controller.models["answers"].deleteData();
+	$("#feedbackTip").empty();
+	$("#feedbackTip").hide();
+	$("#feedbackBody").show();
 	this.closeDiv();
 
 };
@@ -41,9 +54,6 @@ FeedbackView.prototype.open = function() {
 };
 
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
-	$("#feedbackBody").show();
-	$("#feedbackTip").hide();
-
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
 
