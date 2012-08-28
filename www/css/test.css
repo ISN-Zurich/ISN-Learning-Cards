@@ -113,9 +113,8 @@ button {
 #cardQuestionBody {
 	padding-left: 20px;
 	padding-right: 20px;
-/* 	display: table-cell; */
+	display: table-cell;
 	vertical-align: middle;
-/* 	height: 100%; */
 }
 
 ul { /* 	clear:both; */

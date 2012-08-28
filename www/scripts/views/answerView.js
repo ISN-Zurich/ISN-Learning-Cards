@@ -28,13 +28,7 @@ AnswerView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
 
-AnswerView.prototype.handleSwipe = function() {
-
-	controller.models["answers"].deleteData();
-
-	controller.models['questionpool'].nextQuestion();
-	controller.transitionToQuestion();
-};
+AnswerView.prototype.handleSwipe = doNothing;
 
 AnswerView.prototype.close = closeView;
 AnswerView.prototype.openDiv = openView;

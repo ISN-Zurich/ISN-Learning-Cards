@@ -38,12 +38,11 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 			"id" : "numberInput",
 			"class" : "loginInput",
 			"type" : "number"
-		})
+		}).appendTo(div);
 		
-		input.focus();
-		input.appendTo(div);
 		
 		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
+		input.focus();
 		
 	} else {
 		this.didApologize = true;
