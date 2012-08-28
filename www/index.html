@@ -41,7 +41,7 @@
 <script type="text/javascript" src="scripts/testModels.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 <link href="css/test.css" rel="stylesheet" type="text/css">
-<link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+<!-- <link href="css/font-awesome.css" rel="stylesheet" type="text/css"> -->
 <link href="libs/icomoon/style.css" rel="stylesheet" type="text/css">
 <!--<script type="text/javascript" src="scripts/transition.js"></script>-->
 <!--<script type="text/javascript" src="scripts/catchGestures.js"></script>-->
@@ -59,23 +59,23 @@
 				Learning <span id="cardsTitle">Cards</span>
 			</div>
 			<div id="cards">
-				<div id="card1">A</div>
-				<div id="card2">B</div>
-				<div id="card3">C</div>
+				<div id="card1">N</div>
+				<div id="card2">S</div>
+				<div id="card3">I</div>
 			</div>
 		</div>
 
 		<div id="cover">
 			<div id="loading">
 				<div class="centered">
-					<span class="icon-aperture-alt"></span>
+					<span class="icon-loading"></span>
 				</div>
 			</div>
 			<div id="loginForm">
 				<form>
 
 					<button id="loginButton" type="button" class="generalButton">
-						<span class="icon-arrow-right-alt1"></span>
+						<span class="icon-enter"></span>
 					</button>
 
 					<div class="inputBorder">
@@ -99,7 +99,7 @@
 
 		<div id="coursesListHeader" class="container headerbg top">
 			<div class="left"></div>
-			<div id="coursesListSetIcon" class="right control">
+			<div id="coursesListSetIcon" class="generalButton returnButton right">
 				<span class="icon-cog"></span>
 			</div>
 			<div id="coursesListTitle" class="title">Your Courses</div>
@@ -113,8 +113,8 @@
 
 	<div id="settingsView">
 		<div id="settingsHeader" class="container headerbg top">
-			<div id="closeSettingsIcon" class="right control">
-				<span class="icon-x-altx-alt"></span>
+			<div id="closeSettingsIcon" class="generalButton returnButton right">
+				<span class="icon-cross"></span>
 			</div>
 
 			<div id="settingsIcon" class="left titleicon">
@@ -124,7 +124,7 @@
 		</div>
 		<div class="content">
 			<div id="logOutSettings" class="generalButton iconButton">
-				<span class="icon-x-altx-alt"></span>
+				<span class="icon-exit"></span>
 			</div>
 			<ul id="settingsData" class="marginForButtons">
 				<li>Your name</li>
@@ -140,15 +140,19 @@
 
 	<div id="logoutConfirmationView">
 		<div class="container headerbg top">
-			<div id="closeIcon" class="right control">
-				<span class="icon-x-altx-alt"></span>
+			<div id="closeIcon" class="generalButton returnButton right">
+				<span class="icon-cross"></span>
 			</div>
+			<div id="logoutConfirmationTitle" class="title">Logout?</div>
 		</div>
 		<div class="content">
 			<div id="logOut" class="generalButton iconButton">
-				<span class="icon-x-altx-alt"></span>
+				<span class="icon-exit"></span>
 			</div>
-			<div class="marginForButtons">Do you really want to log out?</div>
+			<div class="cardBody">If you logout you will not be able to
+				continue learning until you have authenticated again. Please note
+				that you cannot authenticate while you are not connected to the
+				Internet. Do you really want to log out?</div>
 		</div>
 	</div>
 
@@ -156,25 +160,26 @@
 
 	<div id="cardQuestionView">
 		<div id="cardQuestionHeader" class="container headerbg top">
-			<div id="CourseList_FromQuestion" class="right control">
-				<span class="icon-x-altx-alt"></span>
+			<div id="CourseList_FromQuestion"
+				class="generalButton returnButton right">
+				<span class="icon-cross"></span>
 			</div>
 			<div class="left titleicon">
-				<span class="icon-checkmark"></span>
+				<span id="questionIcon"></span>
 			</div>
 			<div id="cardQuestionTitle" class="title">Choose some</div>
 		</div>
 		<div class="content">
 			<div id="ButtonAnswer" class="generalButton iconButton">
-				<span class="icon-arrow-right-alt1"></span>
+				<span class="icon-arrow-right"></span>
 			</div>
 			<div id="cardQuestionBody" class="cardBody">Lorem ipsum dolor
 				sit amet, consectetur adipisicing elit, sed do eiusmod tempor
 				incididunt ut labore et dolore magna.</div>
 		</div>
 		<div class="container bottom">
-			<div id="ButtonTip" class="left control">
-				<span class="icon-help"></span>
+			<div id="ButtonTip" class="generalButton">
+				<span class="icon-question"></span>
 			</div>
 		</div>
 	</div>
@@ -183,17 +188,17 @@
 
 	<div id="cardAnswerView">
 		<div id="cardAnswerHeader" class="container headerbg top">
-			<div id="CourseList_FromAnswer" class="right control">
-				<span class="icon-x-altx-alt"></span>
+			<div id="CourseList_FromAnswer" class="generalButton returnButton right">
+				<span class="icon-cross"></span>
 			</div>
 			<div id="cardAnswerIcon" class="left titleicon">
-				<span class="icon-checkmark"></span>
+				<span id="answerIcon"></span>
 			</div>
 			<div id="cardAnswerTitle" class="title">Choose some answer</div>
 		</div>
 		<div class="content" id="answerContainer">
 			<div id="doneButton" class="generalButton iconButton">
-				<span class="icon-arrow-right-alt1"></span>
+				<span class="icon-arrow-right"></span>
 			</div>
 			<div id="cardAnswerBody" class="marginForButtons"></div>
 			<!-- 				<div class="inputBorder" id="numberInputContainer"></div> -->
@@ -205,32 +210,36 @@
 
 	<div id="cardFeedbackView">
 		<div id="cardFeedbackHeader" class="container headerbg top">
-			<div id="CourseList_FromFeedback" class="right control">
-				<span class="icon-x-altx-alt"></span>
+			<div id="CourseList_FromFeedback" class="generalButton returnButton right">
+				<span class="icon-cross"></span>
 			</div>
 			<div class="left titleicon" id="cardFeedbackIcon">
-				<span class="icon-checkmark"></span>
+				<span id="feedbackIcon"></span>
 			</div>
 			<div id="cardFeedbackTitle" class="title">Excellent</div>
 		</div>
 		<div class="content">
-			<div class="generalButton iconButton">
-				<div id="FeedbackDoneButon" class="">
-					<span class="icon-arrow-right-alt1"></span>
+			<div class="iconButton">
+				<div id="FeedbackDoneButon" class="generalButton">
+					<span class="icon-arrow-right"></span>
 				</div>
-				<div id="FeedbackMore" class="bottom">
-					<span class="icon-help"></span>
+				<div id="FeedbackMore" class="generalButton">
+					<span class="icon-question"></span>
 				</div>
 			</div>
-			<div id="feedbackBody" class="marginForButtons"></div>
-			<div id="feedbackTip" class="cardBody"></div>
+			<div id="feedbackBody" class="marginForButtons">Lorem ipsum
+				dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+				incididunt ut labore et dolore magna.</div>
+			<div id="feedbackTip" class="cardBody">Lorem ipsum dolor sit
+				amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+				ut labore et dolore magna.</div>
 		</div>
 	</div>
 
 
 	<div id="StatisticsView">
-		<div id="closeIconStats" class="right control">
-			<span class="icon-x-altx-alt"></span>
+		<div id="closeIconStats" class="generalButton returnButton right">
+			<span class="icon-cross"></span>
 		</div>
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicin</p>
 

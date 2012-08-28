@@ -69,17 +69,17 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 	$("#cardFeedbackTitle").text(currentFeedbackTitle);
 
 	if (currentFeedbackTitle == "Wrong") {
-		$("#cardFeedbackIcon i").removeClass("icon-ok-sign");
-		$("#cardFeedbackIcon i").removeClass("icon-ok-circle");
-		$("#cardFeedbackIcon i").addClass("icon-remove-circle");
+		$("#feedbackIcon").removeClass("icon-happy");
+		$("#feedbackIcon").removeClass("icon-smiley");
+		$("#feedbackIcon").addClass("icon-neutral");
 	} else if (currentFeedbackTitle == "Partially Correct") {
-		$("#cardFeedbackIcon i").removeClass("icon-remove-circle");
-		$("#cardFeedbackIcon i").removeClass("icon-ok-sign");
-		$("#cardFeedbackIcon i").addClass("icon-ok-circle");
+		$("#feedbackIcon").removeClass("icon-happy");
+		$("#feedbackIcon").removeClass("icon-neutral");
+		$("#feedbackIcon").addClass("icon-smiley");
 	} else {
-		$("#cardFeedbackIcon i").removeClass("icon-remove-circle");
-		$("#cardFeedbackIcon i").removeClass("icon-ok-circle");
-		$("#cardFeedbackIcon i").addClass("icon-ok-sign");
+		$("#feedbackIcon").removeClass("icon-neutral");
+		$("#feedbackIcon").removeClass("icon-smiley");
+		$("#feedbackIcon").addClass("icon-happy");
 	}
 
 };

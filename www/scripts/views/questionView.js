@@ -70,6 +70,25 @@ QuestionView.prototype.showQuestionTitle = function() {
 	var currentQuestionTitle = controller.models["questionpool"]
 			.getQuestionType();
 	$("#cardQuestionTitle").text(currentQuestionTitle);
+	
+	$("#questionIcon").removeClass();
+	
+	switch (currentQuestionTitle) {
+	case 'Single Choice Question':
+		$("#questionIcon").addClass("icon-checkmark");
+		break;
+	case 'Multiple Choice Question':
+		$("#questionIcon").addClass("icon-checkmark");
+		break;
+	case 'Text Sort Question':
+		$("#questionIcon").addClass("icon-move-vertical");
+		break;
+	case 'Numeric Question':
+		$("#questionIcon").addClass("icon-pencil");
+		break;
+	default:
+		break;
+	}
 };
 
 QuestionView.prototype.clickCourseListButton = function() {

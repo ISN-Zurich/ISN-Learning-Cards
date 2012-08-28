@@ -9,50 +9,99 @@ body {
 	padding: 0px;
 }
 
-button {
-	border: 1px solid #white;
-	background-color: #666;
-	color: white;
-	/* 	padding: 5px 5px 5px 5px; */
-	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
-	font-weight: none;
-	text-align: center;
-	font-size: 34pt;
+/* button { */
+/* 	border: 1px solid #white; */
+/* 	background-color: #666; */
+/* 	color: white; */
+/* 	padding: 5px 5px 5px 5px; */
+/* 	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3); */
+/* 	font-weight: none; */
+/* 	text-align: center; */
+/* 	font-size: 34pt; */
+/* } */
+.returnButton { /* 	float: right; */
+	/* 	width: 46px; */
+	/* 	height: 46px; */
+	/* 	font-size: 14pt; */
+	/* 	padding: 2px; */
+	/* 	border: 1px solid white; */
+	/* 	background-color: #999999; */
+	/* 	color: white; */
+	/* 	vertical-align: middle; */
+	/* 	text-align: center; */
+	border-right: 2px solid white;
+	margin: 2px 3px 0px 0px;
+	height: 46px;
+	position: absolute;
+	right: 0px;
+	top: 0px;
 }
 
-.generalButton {
-	float: right;
+.generalButton { /* 	float: right; */
 	width: 46px;
-	margin-bottom: 20px;
-	font-size: 14pt;
+	height: auto;
+	/* 	margin-bottom: 20px; */
+	font-size: 40px;
 	padding: 2px;
 	border: 1px solid white;
 	background-color: #999999;
 	color: white;
+	vertical-align: middle;
+	text-align: center;
+	margin-right:5px;
 }
 
 .iconButton {
-	border-right: 2px solid white;
+/* 	border-right: 2px solid white; */
 	margin: 1px 0px 0px 0px;
-	height: auto; 
+	height: auto;
 	position: fixed;
 	right: 0px;
 	top: 60px;
+}
 
+.verticalCentered {
+	display: block;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+#FeedbackDoneButon {
+	width:100%;
+	height: 100%;
+	border-right: 1px solid white;
+/* 	margin: 0px 3px 0px 0px; */
+/* 	padding: 0px 0px 0px 0px; */
+	margin: 0px;
+/* 	margin-left:0px; */
+/* 	margin-right: 1px; */
+}
+
+#FeedbackMore {
+	width: 100%;
+	height: 46px;
+	position: absolute;
+	bottom: 0px;
+	border-right: 1px solid white;
+/* 	margin: 0px 3px 0px 0px; */
+	margin: 0px;
+/* 	margin-left:0px; */
+	border-bottom: none;
+/* 	padding: 0px; */
 }
 
 .left {
 	float: left;
 	/* 	padding-right: 10px; */
-	margin-right: 5px;
-	margin-left: 0px;
+	/* 	margin-right: 5px; */
+	/* 	margin-left: 0px; */
 }
 
 .right {
 	float: right;
 	/* 	padding-left: 10px; */
-	margin-left: 15px;
-	margin-right: 0px;
+	/* 	margin-left: 15px; */
+	/* 	margin-right: 0px; */
 }
 
 .top {
@@ -72,20 +121,22 @@ button {
 }
 
 .title {
-	display: table-cell;
+/* 	display: table-cell; */
 	height: 50px;
-	FONT-SIZE: 22px;
-	font-weight:  900;
-	padding-left: 10px;
+	font-size: 22px;
+	font-weight: 900;
+	padding: 0px 0px 0px 0px;
 	color: #4169E1;
-	vertical-align: bottom;
-	padding: 0px;
+/* 	vertical-align: bottom; */
+	margin-right: 50px;
+	margin-top: auto;
 }
 
 .titleicon {
 	padding: 0px;
 	vertical-align: bottom;
-	FONT-SIZE: 10px;
+	font-size: 7px;
+	border: 1px solid black;
 }
 
 .container { /* padding-left: 10px;*/
@@ -102,7 +153,6 @@ button {
 	-webkit-box-shadow: 0px 3px 5px -1px #ccc;
 	background-color: white;
 }
-
 
 .content { /*     margin-left: 5px; */
 	/*     margin-right: 5px; */
@@ -142,7 +192,7 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	/* 	transition: all 0.1s ease-in-out; */
 	list-style-type: none;
 	list-style-position: left;
-	FONT-SIZE: 16 pt;
+	FONT-SIZE: 20px;
 	FONT-STYLE: normal;
 	FONT-VARIANT: normal;
 	border-bottom: 1px solid white;
@@ -184,6 +234,10 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	display: none;
 }
 
+#splashScreen {
+/* 	display: none; */
+}
+
 /*********************** Splash Screen ***********************/
 #mainTitle {
 	FONT-SIZE: 20pt;
@@ -196,7 +250,7 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 }
 
 #cards {
-	color:white;
+	color: white;
 	position: absolute;
 	top: 70px;
 	right: 90px;
@@ -223,7 +277,7 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	z-index: -2;
 	background-color: #1E90FF;
 	height: 50px;
-	width: 60px; 
+	width: 60px;
 	padding-left: 1px;
 	padding-top: 1px;
 }
@@ -233,7 +287,7 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	left: -15px;
 	top: -10px;
 	z-index: -3;
-	background-color: #B0E0E6; 
+	background-color: #B0E0E6;
 	transform: rotate(-15deg);
 	-webkit-transform: rotate(-15deg); /* Safari and Chrome */
 	height: 60px;
@@ -253,7 +307,8 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	height: 200px;
 	width: 200px;
 	text-align: center;
-	vertical-align: middle; margin-left : auto;
+	vertical-align: middle;
+	margin-left: auto;
 	margin-right: auto;
 	/* 	margin: 100px; */
 	-webkit-animation: spin 4s 2 linear;
@@ -267,8 +322,8 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	text-align: center;
 	/* 	vertical-align: middle; */
 	line-height: 200px;
-/* 	height: 100%; */
-/* 	width: 100%; */
+	/* 	height: 100%; */
+	/* 	width: 100%; */
 }
 
 #rotation {
@@ -277,13 +332,13 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 
 @-webkit-keyframes spin { 
 	0% {-webkit-transform: rotate(0deg);}
-	100% {-webkit-transform: rotate(360deg);}
-}
-@-webkit-keyframes spinoff { 
-	0% {-webkit-transform: rotate(0deg);}
-	100% {-webkit-transform: rotate(-360deg);}
+	100% {-webkit-transform:rotate(360deg);}
 }
 
+@-webkit-keyframes spinoff { 
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform:rotate(-360deg);}
+}
 
 #logos {
 	vertical-align: bottom;
@@ -352,32 +407,29 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	background-color: #33CC33;
 	border: 1px solid white;
 	color: white;
-	height:100%;
+	height: 100%;
 }
 
 .partiallyCorrectAnswer {
 	background-color: #EEEEEE;
 }
 
-.ticked {
-	
-	/*padding:0px;
+.ticked { /*padding:0px;
 	margin:0px;*/
 	background-color: #88AAFF;
 	color: white;
 }
 
-.control {
-	border: 1px solid black;
+.control { /* 	border: 1px solid black; */
 	font-size: 28pt;
 	border-radius: 3px;
 	padding-left: 5px;
 	padding-right: 5px;
 	margin-left: 10px;
-	margin-right: 10px;
+	margin-right: 5px;
 	margin-top: 5px;
 	margin-bottom: 5px;
-	background-color: white;
+	/* 	background-color: white; */
 }
 
 .titleicon {
@@ -388,12 +440,12 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	font-size: 28pt;
 }
 
-.questiontext {
-/* 	display: table-cell; */
-/* 	width: 100%; */
-/* 	vertical-align: middle; */
+.questiontext { /* 	display: table-cell; */
+	/* 	width: 100%; */
+	/* 	vertical-align: middle;*/
+	
 }
-
+/**/
 #feedbackTip,#FeedbackMore {
 	display: none;
 }
@@ -419,10 +471,9 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 }
 
 /*********************** Answer View ***********************/
-
-#answerContainer {
-/* 	margin: 0px; */
-/* 	padding: 0px; */
+#answerContainer { /* 	margin: 0px; */
+	/* 	padding: 0px; */
+	
 }
 
 .marginForButtons {
@@ -433,7 +484,12 @@ li { /* 	-o-transition: all 0.1s ease-in-out; */
 	padding: 0px;
 }
 
-.text {
-/* 	margin: 15px; */
+.text { /* 	margin: 15px; */
 	padding: 15px;
+}
+
+#numberInputContainer, #numberInput, 
+#typedAnswer, #numericFeedback, 
+#correctNumericFeedback {
+	width: 95%;
 }

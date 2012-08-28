@@ -73,7 +73,6 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 				"class" : "right correctAnswer icon-checkmark"
 			}).prependTo(this);
 			
-//			div.css("height", "30px"); //$(this).css("height")
 		}
 	});
 	

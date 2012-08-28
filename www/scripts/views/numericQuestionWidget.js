@@ -37,12 +37,13 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		var input = $("<input/>", {
 			"id" : "numberInput",
 			"class" : "loginInput",
-			"type" : "number"
+			"type" : "number",
+			"autofocus": "autofocus"
 		}).appendTo(div);
 		
 		
 		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
-		input.focus();
+//		$("#numberInput")[0].focus();
 		
 	} else {
 		this.didApologize = true;
