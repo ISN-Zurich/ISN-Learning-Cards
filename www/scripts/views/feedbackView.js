@@ -12,6 +12,16 @@ function FeedbackView(question) {
 	jester($('#CourseList_FromFeedback')[0]).tap(function() {
 		self.clickCourseListButton();
 	});
+	
+	 // center the feedback body to the middle of the screen
+    function setOrientation() {
+        $(".cardBody").css('height', window.innerHeight - 70);
+        $(".cardBody").css('width', window.innerWidth - 100);
+        
+    }
+    setOrientation();
+    window.addEventListener("orientationchange", setOrientation, false);
+    window.addEventListener("resize", setOrientation, false);
 
 }
 
@@ -30,6 +40,9 @@ FeedbackView.prototype.handlePinch = function() {
 FeedbackView.prototype.closeDiv = closeView;
 FeedbackView.prototype.close = function() {
 	controller.models["answers"].deleteData();
+	$("#feedbackTip").empty();
+	$("#feedbackTip").hide();
+	$("#feedbackBody").show();
 	this.closeDiv();
 
 };
@@ -41,9 +54,6 @@ FeedbackView.prototype.open = function() {
 };
 
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
-	$("#feedbackBody").show();
-	$("#feedbackTip").hide();
-
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
 
@@ -59,17 +69,17 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 	$("#cardFeedbackTitle").text(currentFeedbackTitle);
 
 	if (currentFeedbackTitle == "Wrong") {
-		$("#cardFeedbackIcon i").removeClass("icon-ok-sign");
-		$("#cardFeedbackIcon i").removeClass("icon-ok-circle");
-		$("#cardFeedbackIcon i").addClass("icon-remove-circle");
+		$("#feedbackIcon").removeClass("icon-happy");
+		$("#feedbackIcon").removeClass("icon-smiley");
+		$("#feedbackIcon").addClass("icon-neutral");
 	} else if (currentFeedbackTitle == "Partially Correct") {
-		$("#cardFeedbackIcon i").removeClass("icon-remove-circle");
-		$("#cardFeedbackIcon i").removeClass("icon-ok-sign");
-		$("#cardFeedbackIcon i").addClass("icon-ok-circle");
+		$("#feedbackIcon").removeClass("icon-happy");
+		$("#feedbackIcon").removeClass("icon-neutral");
+		$("#feedbackIcon").addClass("icon-smiley");
 	} else {
-		$("#cardFeedbackIcon i").removeClass("icon-remove-circle");
-		$("#cardFeedbackIcon i").removeClass("icon-ok-circle");
-		$("#cardFeedbackIcon i").addClass("icon-ok-sign");
+		$("#feedbackIcon").removeClass("icon-neutral");
+		$("#feedbackIcon").removeClass("icon-smiley");
+		$("#feedbackIcon").addClass("icon-happy");
 	}
 
 };

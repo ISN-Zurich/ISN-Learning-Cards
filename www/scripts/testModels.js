@@ -479,7 +479,7 @@ function initQuPo2() {
 				question : '2 - How many times..',
 				answer : "21",
 				correctFeedback : "This is the correct feedback of this answer",
-				errorFeedback : " "
+				errorFeedback : ""
 
 			} ];
 

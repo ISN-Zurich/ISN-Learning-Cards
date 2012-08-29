@@ -59,8 +59,8 @@ CoursesListView.prototype.update = function() {
         	self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
 		  });
         
-        $("<i/>", {
-          "class": courseModel.isLoaded() ? "icon-signal" : "icon-refresh"
+        $("<span/>", {
+          "class": courseModel.isLoaded() ? "icon-bars" : "icon-aperture-alt"
           }).appendTo(span);
         
     } while (courseModel.nextCourse());	

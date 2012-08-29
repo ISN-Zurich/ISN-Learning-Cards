@@ -15,10 +15,13 @@ function QuestionView() {
     
     // center the question body to the middle of the screen
     function setOrientation() {
-        $("#cardQuestionBody").css('height', window.innerHeight - 120);
+        $(".cardBody").css('height', window.innerHeight - 70);
+        $(".cardBody").css('width', window.innerWidth - 100);
+        
     }
     setOrientation();
     window.addEventListener("orientationchange", setOrientation, false);
+    window.addEventListener("resize", setOrientation, false);
     
     //$('#ButtonAnswer').click(function(event){ self.handleTap(); event.stopPropagation();} );
 }
@@ -67,6 +70,25 @@ QuestionView.prototype.showQuestionTitle = function() {
 	var currentQuestionTitle = controller.models["questionpool"]
 			.getQuestionType();
 	$("#cardQuestionTitle").text(currentQuestionTitle);
+	
+	$("#questionIcon").removeClass();
+	
+	switch (currentQuestionTitle) {
+	case 'Single Choice Question':
+		$("#questionIcon").addClass("icon-checkmark");
+		break;
+	case 'Multiple Choice Question':
+		$("#questionIcon").addClass("icon-checkmark");
+		break;
+	case 'Text Sort Question':
+		$("#questionIcon").addClass("icon-move-vertical");
+		break;
+	case 'Numeric Question':
+		$("#questionIcon").addClass("icon-pencil");
+		break;
+	default:
+		break;
+	}
 };
 
 QuestionView.prototype.clickCourseListButton = function() {

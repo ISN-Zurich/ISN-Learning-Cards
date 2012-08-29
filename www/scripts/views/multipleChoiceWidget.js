@@ -61,7 +61,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
 
-	var clone = $("#cardAnswerBody").clone();
+	var clone = $("#cardAnswerBody ul").clone();
 	clone.appendTo("#feedbackBody");
 
 	var questionpoolModel = controller.models["questionpool"];

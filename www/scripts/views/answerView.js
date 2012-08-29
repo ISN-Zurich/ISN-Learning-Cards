@@ -20,6 +20,16 @@ function AnswerView() {
 		self.clickTitleArea();
 		console.log("answer title clicked");
 	});
+	
+	// center the answer body to the middle of the screen
+    function setOrientation() {
+        $(".cardBody").css('height', window.innerHeight - 70);
+        $(".cardBody").css('width', window.innerWidth - 100);
+        
+    }
+    setOrientation();
+    window.addEventListener("orientationchange", setOrientation, false);
+    window.addEventListener("resize", setOrientation, false);
 
 }
 
@@ -28,13 +38,7 @@ AnswerView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
 
-AnswerView.prototype.handleSwipe = function() {
-
-	controller.models["answers"].deleteData();
-
-	controller.models['questionpool'].nextQuestion();
-	controller.transitionToQuestion();
-};
+AnswerView.prototype.handleSwipe = doNothing;
 
 AnswerView.prototype.close = closeView;
 AnswerView.prototype.openDiv = openView;
@@ -49,7 +53,9 @@ AnswerView.prototype.open = function() {
 AnswerView.prototype.showAnswerBody = function() {
 
 	$("#dataErrorMessage").empty();
+	$("#dataErrorMessage").hide();
 	$("#cardAnswerBody").empty();
+	
 
 	var questionpoolModel = controller.models['questionpool'];
 
@@ -85,6 +91,25 @@ AnswerView.prototype.showAnswerTitle = function() {
 	var currentAnswerTitle = controller.models["questionpool"]
 			.getQuestionType();
 	$("#cardAnswerTitle").text(currentAnswerTitle);
+	
+	$("#answerIcon").removeClass();
+	
+	switch (currentAnswerTitle) {
+	case 'Single Choice Question':
+		$("#answerIcon").addClass("icon-checkmark");
+		break;
+	case 'Multiple Choice Question':
+		$("#answerIcon").addClass("icon-checkmark");
+		break;
+	case 'Text Sort Question':
+		$("#answerIcon").addClass("icon-move-vertical");
+		break;
+	case 'Numeric Question':
+		$("#answerIcon").addClass("icon-pencil");
+		break;
+	default:
+		break;
+	}
 };
 
 AnswerView.prototype.clickDoneButton = function() {

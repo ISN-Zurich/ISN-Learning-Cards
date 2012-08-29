@@ -17,6 +17,8 @@ function NumericQuestionWidget(interactive) {
 
 NumericQuestionWidget.prototype.showAnswer = function() {
 
+	var self = this;
+	
 	var questionpoolModel = controller.models['questionpool'];
 	// $("#numberInputContainer").empty();
 	// $("#numberInputContainer").removeClass("correctAnswer");
@@ -37,10 +39,13 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		var input = $("<input/>", {
 			"id" : "numberInput",
 			"class" : "loginInput",
-			"type" : "number"
+			"type" : "number",
+			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : ""
 		}).appendTo(div);
-
-		$("#numberInputContainer")[0].addEventListener("blur", function() {setButtonHeight();});
+		
+		
+		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
+//		$("#numberInput")[0].focus();
 		
 	} else {
 		this.didApologize = true;
@@ -121,7 +126,6 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 	var numericAnswer = $("#numberInput").val();
 
 	controller.models["answers"].setAnswers(numericAnswer);
-	$("#numberInput").val("");
 };
 
 NumericQuestionWidget.prototype.clickDoneButton = function() {

@@ -21,24 +21,48 @@
 	font-style: normal;
 	speak: none;
 }
-.icon-aperture-alt:before {
+.icon-neutral:before {
+	content: "\22";
+}
+.icon-smiley:before {
 	content: "\23";
 }
-.icon-arrow-right-alt1:before {
-	content: "\21";
-}
-.icon-help:before {
-	content: "\26";
-}
-.icon-x-altx-alt:before {
+.icon-happy:before {
 	content: "\24";
 }
+.icon-move-vertical:before {
+	content: "\29";
+}
+.icon-arrow-right:before {
+	content: "\e015";
+}
+.icon-bars:before {
+	content: "\e021";
+}
+.icon-enter:before {
+	content: "\e000";
+}
 .icon-cog:before {
-	content: "\25";
+	content: "\e01f";
+}
+.icon-cross:before {
+	content: "\e005";
 }
 .icon-checkmark:before {
-	content: "\28";
+	content: "\e059";
 }
-.icon-cancel:before {
-	content: "\29";
+.icon-question:before {
+	content: "\e04c";
+}
+.icon-aperture-alt:before {
+	content: "\e002";
+}
+.icon-pencil:before {
+	content: "\e046";
+}
+.icon-exit:before {
+	content: "\e001";
+}
+.icon-loading:before {
+	content: "\e003";
 }
