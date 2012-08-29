@@ -53,7 +53,9 @@ AnswerView.prototype.open = function() {
 AnswerView.prototype.showAnswerBody = function() {
 
 	$("#dataErrorMessage").empty();
+	$("#dataErrorMessage").hide();
 	$("#cardAnswerBody").empty();
+	
 
 	var questionpoolModel = controller.models['questionpool'];
 

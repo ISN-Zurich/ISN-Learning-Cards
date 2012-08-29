@@ -8,12 +8,11 @@ function closeView() {
 }
 
 function doApologize() {
-	$("#numberInputContainer").hide();
-	$("#correctNumericFeedback").hide();
 	$("#feedbackBody").empty();
 	$("<span/>", {
 		text : "Apologize, no data are loaded"
 	}).appendTo($("#dataErrorMessage"));
+	$("#dataErrorMessage").show();
 }
 
 function Controller() {

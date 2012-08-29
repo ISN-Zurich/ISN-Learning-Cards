@@ -5,7 +5,7 @@ function TextSortWidget(interactive) {
 	self.interactive = interactive;
 
 	this.didApologize = false;
-	
+
 	if (self.interactive) {
 		self.showAnswer();
 	} else {
@@ -24,9 +24,8 @@ TextSortWidget.prototype.showAnswer = function() {
 	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].text) {
 
 		var ul = $("<ul/>", {
-			"class": "sortable"
+			"class" : "sortable"
 		}).appendTo("#cardAnswerBody");
-		
 
 		var mixedAnswers = [];
 
@@ -104,14 +103,16 @@ TextSortWidget.prototype.showFeedback = function() {
 	var scores = answerModel.getTextSortScoreArray();
 
 	for ( var i = 0; i < answers.length; i++) {
-		var li = $(
-				"<li/>",
-				{
-					"class" : scores[i] == "1" ? "correctAnswer"
-							: scores[i] == "0.5" ? "partiallyCorrectAnswer"
-									: "",
-					text : answers[i].text
-				}).appendTo(ul);
+		var li = $("<li/>", {
+			"class" : scores[i] == "0.5" || scores[i] == "1.5" ? "ticked" : "",
+			text : answers[i].text
+		}).appendTo(ul);
+
+		if (scores[i] == "1" || scores[i] == "1.5") {
+			var div = $("<div/>", {
+				"class" : "right correctAnswer icon-checkmark"
+			}).prependTo(li);
+		}
 	}
 
 	var currentFeedbackTitle = answerModel.getAnswerResults();
