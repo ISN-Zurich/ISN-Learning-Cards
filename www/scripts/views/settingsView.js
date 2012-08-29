@@ -4,7 +4,10 @@ function SettingsView() {
     self.tagID = 'settingsView';
     
     jester($('#closeSettingsIcon')[0]).tap(function(){ self.closeSettings(); } );
-    jester($('#logOutSettings')[0]).tap(function(){ self.logout(); } );
+//    jester($('#logOutSettings')[0]).tap(function(){ self.logout(); } );
+    $('#logOutSettings').click(function() {
+    	self.logout();
+    });
 } 
 
 SettingsView.prototype.handlePinch = doNothing;

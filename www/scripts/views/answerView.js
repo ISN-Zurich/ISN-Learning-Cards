@@ -50,29 +50,35 @@ AnswerView.prototype.showAnswerBody = function() {
 
 	$("#dataErrorMessage").empty();
 	$("#cardAnswerBody").empty();
-	
+
 	var questionpoolModel = controller.models['questionpool'];
 
-	if (questionpoolModel.getAnswer()[0].text) {
+	// if (questionpoolModel.getAnswer()[0].text && questionpoolModel.) {
 
-		var questionType = questionpoolModel.getQuestionType();
-		var interactive = true;
-		switch (questionType) {
-		case 'Single Choice Question':
-			this.widget = new SingleChoiceWidget(interactive);
-			break;
-		case 'Multiple Choice Question':
-			this.widget = new MultipleChoiceWidget(interactive);
-			break;
-		default:
-			break;
-		}
-
-	} else {
-		$("<span/>", {
-			text : "Apologize, no data are loaded"
-		}).appendTo($("#dataErrorMessage"));
+	var questionType = questionpoolModel.getQuestionType();
+	var interactive = true;
+	switch (questionType) {
+	case 'Single Choice Question':
+		this.widget = new SingleChoiceWidget(interactive);
+		break;
+	case 'Multiple Choice Question':
+		this.widget = new MultipleChoiceWidget(interactive);
+		break;
+	case 'Text Sort Question':
+		this.widget = new TextSortWidget(interactive);
+		break;
+	case 'Numeric Question':
+		this.widget = new NumericQuestionWidget(interactive);
+		break;
+	default:
+		break;
 	}
+
+	// } else {
+	// $("<span/>", {
+	// text : "Apologize, no data are loaded"
+	// }).appendTo($("#dataErrorMessage"));
+	// }
 };
 
 AnswerView.prototype.showAnswerTitle = function() {
@@ -83,16 +89,20 @@ AnswerView.prototype.showAnswerTitle = function() {
 
 AnswerView.prototype.clickDoneButton = function() {
 
-	if (controller.models['questionpool'].getAnswer()[0].text) {
-		this.widget.storeAnswers();
-		controller.transitionToFeedback();
-	} else {
-
-		controller.models['questionpool'].nextQuestion();
+	var questionpoolModel = controller.models['questionpool'];
+	console.log('check apology ' + this.widget.didApologize);
+	if (this.widget.didApologize) {
+		// if there was a problem with the data, the widget knows
+		// in this case we proceed to the next question
+		questionpoolModel.nextQuestion();
 		controller.transitionToQuestion();
-
+	} else {
+		// if there was no error with the data we provide feedback to the
+		// learner.
+		this.widget.storeAnswers();
+		questionpoolModel.queueCurrentQuestion();
+		controller.transitionToFeedback();
 	}
-
 };
 
 AnswerView.prototype.clickCourseListButton = function() {

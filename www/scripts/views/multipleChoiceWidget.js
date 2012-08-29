@@ -2,9 +2,10 @@ function MultipleChoiceWidget(interactive) {
 	var self = this;
 
 	self.tickedAnswers = controller.models["answers"].getAnswers();
-	
+
 	self.interactive = interactive;
-	
+	this.didApologize = false;
+
 	if (self.interactive) {
 		self.showAnswer();
 		console.log("interactive true");
@@ -15,53 +16,63 @@ function MultipleChoiceWidget(interactive) {
 }
 
 MultipleChoiceWidget.prototype.showAnswer = function() {
-	var self = this;	
-	
-	var questionpoolModel = controller.models["questionpool"];
-	var answers = questionpoolModel.getAnswer();
-	
+	var questionpoolModel = controller.models['questionpool'];
+
 	$("#cardAnswerBody").empty();
 
-	for(var c = 0; c < answers.length; c++) {
+	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].text) {
+		var self = this;
 
-		var li = $("<li/>", {
-			"id" : "answer" + c,
-			text : answers[c].text
+		var questionpoolModel = controller.models["questionpool"];
+		var answers = questionpoolModel.getAnswer();
+
+		var ul = $("<ul/>", {
 		}).appendTo("#cardAnswerBody");
-		jester(li[0]).tap(function() {
-			self.clickMultipleAnswerItem($(this));
-		});
 
-		var div = $("<div/>", {
-			"class" : "right listicon",
-			text : ""
-		});
-		li.prepend(div);
-		
-		var i = $("<i/>", {
-			"class": self.tickedAnswers.indexOf(c) != -1 ? "icon-ok" : ""
-		}).appendTo(div);
-		
+		for ( var c = 0; c < answers.length; c++) {
+
+			var li = $(
+					"<li/>",
+					{
+						"id" : "answer" + c,
+						"class" : "answerLi"
+								+ (self.tickedAnswers.indexOf(c) != -1 ? " ticked"
+										: "")
+					}).appendTo(ul);
+			jester(li[0]).tap(function() {
+				self.clickMultipleAnswerItem($(this));
+			});
+
+			var div = $("<div/>", {
+				"class" : "text",
+				text : answers[c].text
+			}).appendTo(li);
+		}
+
+	} else {
+		this.didApologize = true;
+		doApologize();
 	}
 };
 
 MultipleChoiceWidget.prototype.showFeedback = function() {
 	console.log("start show feedback in multiple choice");
-	
-	$("#feedbackBody").empty();	
+
+	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
 
 	var clone = $("#cardAnswerBody").clone();
 	clone.appendTo("#feedbackBody");
 
 	var questionpoolModel = controller.models["questionpool"];
-		$("#feedbackBody ul li").each(function(index) {
-			if (questionpoolModel.getScore(index) == "1") {
-				$(this).addClass("correctAnswer");
-			}
-		});
+	$("#feedbackBody ul li").each(function(index) {
+		if (questionpoolModel.getScore(index) == "1") {
+			var div = $("<div/>", {
+				"class" : "right correctAnswer icon-checkmark"
+			}).prependTo(this);
+		}
+	});
 
-	
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 	if (currentFeedbackTitle == "Excellent") {
 		var correctText = questionpoolModel.getCorrectFeedback();
@@ -72,7 +83,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 			$("#FeedbackMore").hide();
 		}
 	} else {
-        console.log( 'handle answer results');
+		console.log('handle answer results');
 		var wrongText = questionpoolModel.getWrongFeedback();
 		console.log("XX " + wrongText);
 		if (wrongText && wrongText.length > 0) {
@@ -85,21 +96,40 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 	}
 };
 
-MultipleChoiceWidget.prototype.clickMultipleAnswerItem = function(clickedElement) {
-	clickedElement.find("i").toggleClass("icon-ok");
+MultipleChoiceWidget.prototype.clickMultipleAnswerItem = function(
+		clickedElement) {
+	clickedElement.toggleClass("ticked");
 };
 
 MultipleChoiceWidget.prototype.storeAnswers = function() {
 	var answers = new Array();
+	var questionpoolModel = controller.models["questionpool"];
 
 	$("#cardAnswerBody li").each(function(index) {
-		if ($(this).find("i").hasClass("icon-ok")) {
+		if ($(this).hasClass("ticked")) {
 			answers.push(index);
 		}
 	});
-	
+
 	controller.models["answers"].setAnswers(answers);
 };
 
-console.log("end of mulitple choice widget");
+MultipleChoiceWidget.prototype.clickDoneButton = function() {
 
+	var questionpoolModel = controller.models['questionpool'];
+
+	if (questionpoolModel.getAnswer()[0].text && questionpoolModel) {
+
+		this.widget.storeAnswers();
+		questionpoolModel.queueCurrentQuestion();
+		controller.transitionToFeedback();
+	} else {
+
+		questionpoolModel.nextQuestion();
+		controller.transitionToQuestion();
+
+	}
+
+};
+
+console.log("end of mulitple choice widget");
