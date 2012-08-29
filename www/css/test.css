@@ -29,8 +29,8 @@ body {
 	/* 	color: white; */
 	/* 	vertical-align: middle; */
 	/* 	text-align: center; */
-	border-right: 2px solid white;
-	margin: 2px 3px 0px 0px;
+	border-right: 1px solid white;
+	margin: 0px 4px 0px 0px;
 	height: 46px;
 	position: absolute;
 	right: 0px;
@@ -48,7 +48,7 @@ body {
 	color: white;
 	vertical-align: middle;
 	text-align: center;
-	margin-right:5px;
+/* 	margin-right:5px; */
 }
 
 .iconButton {
@@ -67,21 +67,23 @@ body {
 }
 
 #FeedbackDoneButon {
-	width:100%;
+/* 	width:100%; */
 	height: 100%;
 	border-right: 1px solid white;
 /* 	margin: 0px 3px 0px 0px; */
 /* 	padding: 0px 0px 0px 0px; */
-	margin: 0px;
+/* 	margin: 0px; */
 /* 	margin-left:0px; */
 /* 	margin-right: 1px; */
 }
 
 #FeedbackMore {
-	width: 100%;
-	height: 46px;
-	position: absolute;
-	bottom: 0px;
+/* 	width: 100%; */
+/* 	height: 46px; */
+	position: fixed;
+	bottom: 5px;
+	right: 0px;
+	z-index: 1;
 	border-right: 1px solid white;
 /* 	margin: 0px 3px 0px 0px; */
 	margin: 0px;
