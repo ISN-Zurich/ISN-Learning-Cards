@@ -1,52 +1,73 @@
-function CourseModel() {
+function CourseModel(controller) {
+	var self = this;
+	
+	this.controller = controller;
+	
 	this.courseList = [];
 	this.index = 0;
-    
-    this.createCourses();
-    
-	this.loadData();
+
+	$(document).bind("questionpoolready", function(e, courseID) {
+		console.log("model questionPool ready called " + courseID);
+		self.courseIsLoaded(courseID);
+	});
+	
+	this.createCourses();
+
+	this.loadFromServer();
 };
 
 CourseModel.prototype.storeData = function() {
 	var courseString;
 	try {
 		courseString = JSON.stringify(this.courseList);
-	} catch(err) {
+	} catch (err) {
 		courseString = "";
 	}
 	localStorage.setItem("courses", courseString);
 };
 
-CourseModel.prototype.loadData = function() {
+CourseModel.prototype.loadData = function() {	
 	var courseObject;
 	try {
 		courseObject = JSON.parse(localStorage.getItem("courses"));
-	} catch(err) {
+	} catch (err) {
 		courseObject = [];
 	}
-	
-	if (!courseObject[0]) { //if no courses are available, new ones are created
+
+	if (!courseObject[0]) { // if no courses are available, new ones are created
 		courseObject = this.createCourses();
 	}
-	
+
 	this.courseList = courseObject;
 	this.index = 0;
 };
 
-CourseModel.prototype.isLoaded = function() {
-	return (this.index > this.courseList.length - 1) ? false : this.courseList[this.index].isLoaded;
+CourseModel.prototype.isLoaded = function(courseId) {
+	if (courseId > 0) {
+		for (var c in this.courseList) {
+			if (this.courseList[c].id == courseId) {
+				return this.courseList[c].isLoaded;
+			}
+		}
+		return false;
+	}
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].isLoaded;
 };
 
 CourseModel.prototype.getId = function() {
-	return (this.index > this.courseList.length - 1) ? false : this.courseList[this.index].id;
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].id;
 };
 
 CourseModel.prototype.getTitle = function() {
-	return (this.index > this.courseList.length - 1) ? false : this.courseList[this.index].title;
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].title;
 };
 
 CourseModel.prototype.getSyncState = function() {
-	return (this.index > this.courseList.length - 1) ? false : this.courseList[this.index].syncState;
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].syncState;
 };
 
 CourseModel.prototype.nextCourse = function() {
@@ -58,15 +79,52 @@ CourseModel.prototype.reset = function() {
 	this.index = 0;
 };
 
-
 CourseModel.prototype.createCourses = function() {
 	console.log("create courses");
-    if(!localStorage.courses) {
-        initCourses();
-    }
+	if (!localStorage.courses) {
+		initCourses();
+	}
 	try {
 		return JSON.parse(localStorage.getItem("courses"));
-	} catch(err) {
+	} catch (err) {
 		return [];
 	}
 };
+
+CourseModel.prototype.loadFromServer = function() {
+	var self = this;
+	jQuery.get(
+					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php/1.json",
+					function(data) {
+						console.log("success");
+						var courseObject;
+						try {
+							courseObject = JSON.parse(data);
+						} catch (err) {
+							courseObject = [];
+						}
+
+						if (!courseObject[0]) { // if no courses are available, new ones are created
+							courseObject = self.createCourses();
+						}
+						console.log(courseObject);
+						self.courseList = courseObject;
+						self.index = 0;
+						self.storeData();
+						
+						for (var c in courseObject) {
+							self.courseList[c].isLoaded = false;
+							self.controller.models["questionpool"].loadFromServer(courseObject[c].id);
+						}
+					});
+};
+
+CourseModel.prototype.courseIsLoaded = function(courseId) {
+	for (var c in this.courseList) {
+		if (this.courseList[c].id == courseId) {
+			this.courseList[c].isLoaded = true;
+			console.log(this.courseList[c].id + " is loaded");
+			break;
+		}
+	}
+}

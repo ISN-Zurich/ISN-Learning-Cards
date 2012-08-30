@@ -1,4 +1,6 @@
-function QuestionPoolModel() {
+function QuestionPoolModel(controller) {
+	this.controller = controller;
+	
 	this.questionList = [];
 	this.indexAnswer = 0;
 
@@ -152,4 +154,33 @@ QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 QuestionPoolModel.prototype.createQuestionPools = function() {
     this.createPool(1);
     this.createPool(2);
+};
+
+QuestionPoolModel.prototype.loadFromServer = function(courseId) {
+	
+	var self = this;
+	jQuery.getJSON(
+					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/questions.php/" + courseId + ".json",
+					function(data) {
+						console.log("success");
+						console.log("JSON: " + data);
+						var questionPoolObject;
+						try {
+							questionPoolObject = data.questions; //JSON.parse(data);
+//							controller.models["courses"].courseLoaded(data.courseID);
+						} catch (err) {
+							console.log("Error: Couldn't parse JSON for course" + data.courseID);
+							questionPoolObject = [];
+						}
+
+						if (!questionPoolObject[0]) { // if no courses are available, new ones are created
+							console.log("no questionpool loaded");
+							questionPoolObject = self.createPool(data.courseID);
+						}
+						console.log("Object: " + questionPoolObject);
+						self.questionList = questionPoolObject;
+						self.index = 0;
+						self.storeData(data.courseID);
+						$(document).trigger("questionpoolready", data.courseID);
+					});
 };

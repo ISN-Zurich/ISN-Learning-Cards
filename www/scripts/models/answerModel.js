@@ -132,14 +132,13 @@ AnswerModel.prototype.getTextSortAnswerResults = function() {
 	} else {
 		return "Partially Correct";
 	}
-}
+};
 
 AnswerModel.prototype.getTextSortScoreArray = function() {
 	var scores = [];
 	var corr = false;
 	for ( var i = 0; i < this.answerList.length; i++) {
 		if (this.answerList[i] == i) {
-			scores[i] = "1";
 			corr = true;
 		}
 		var currIndex = this.answerList[i];
@@ -151,7 +150,6 @@ AnswerModel.prototype.getTextSortScoreArray = function() {
 			followingIndex++;
 		}
 		if (followingCorrAnswers + 1 > this.answerList.length / 2) {
-			scores[i] = "1.5";
 			for ( var j = i; j <= i + followingCorrAnswers; j++) {
 				if (corr) {
 					scores[this.answerList[j]] = "1.5";
@@ -161,17 +159,19 @@ AnswerModel.prototype.getTextSortScoreArray = function() {
 			}
 		} else {
 			for ( var j = i; j <= i + followingCorrAnswers; j++) {
-				if (!(j == i && corr)) {
+				if (corr) {
+					scores[this.answerList[j]] = "1";
+				} else {
 					scores[this.answerList[j]] = "0";
 				}
-			}
+			}1
 		}
 		i = i + followingCorrAnswers;
 		corr = false;
 
 	}
 	return scores;
-}
+};
 
 AnswerModel.prototype.getNumericAnswerResults = function() {
 
@@ -195,4 +195,4 @@ AnswerModel.prototype.getNumericAnswerResults = function() {
 
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
-}
+};
