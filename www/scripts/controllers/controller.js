@@ -23,13 +23,13 @@ function Controller() {
 	this.models = {};
 	this.views = {};
 
+	this.models.connection = new ConnectionState();
 	this.models.authentication = new ConfigurationModel();
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel();
 
 	console.log("models initialized");
-	// this.models['course'].loadData();
 
 	this.views.splashScreen = new SplashScreen(this);
 	this.views.login = new LoginView();

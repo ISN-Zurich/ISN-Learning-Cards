@@ -11,6 +11,8 @@ function CourseModel(controller) {
 		self.courseIsLoaded(courseID);
 	});
 	
+	$(document).bind("switchtoonline", function() {self.switchToOnline();});
+	
 	this.createCourses();
 
 	this.loadFromServer();
@@ -127,4 +129,14 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 			break;
 		}
 	}
-}
+};
+
+CourseModel.prototype.switchToOnline = function() {
+	console.log("switch to online - load all not yet loaded courses");
+	for (var c in this.courseList) {
+		if (!this.courseList[c].isLoaded) {
+			console.log(this.courseList[c].id + " is not loaded yet");
+			this.controller.models["questionpool"].loadFromServer(this.courseList[c].id);
+		}
+	}
+};
