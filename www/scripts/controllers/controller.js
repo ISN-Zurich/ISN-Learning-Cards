@@ -24,8 +24,8 @@ function Controller() {
 	this.views = {};
 
 	this.models.authentication = new ConfigurationModel();
-	this.models.course = new CourseModel();
-	this.models.questionpool = new QuestionPoolModel();
+	this.models.course = new CourseModel(this);
+	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel();
 
 	console.log("models initialized");
@@ -133,6 +133,11 @@ Controller.prototype.transitionToSettings = function() {
 Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
 };
+
+Controller.prototype.synchronizeModels = function() {
+	this.models["courses"].loadFromServer();
+};
+
 
 function setButtonHeight() {
 	console.log("setButtonHeight");
