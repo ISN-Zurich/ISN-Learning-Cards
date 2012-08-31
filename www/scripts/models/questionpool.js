@@ -7,7 +7,7 @@ function QuestionPoolModel(controller) {
 	this.reset();
 	this.queue = [];
 
-	this.createQuestionPools();
+//	this.createQuestionPools();
 
 };
 

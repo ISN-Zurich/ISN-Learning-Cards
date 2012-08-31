@@ -8,6 +8,11 @@ function SettingsView() {
     $('#logOutSettings').click(function() {
     	self.logout();
     });
+    
+    $(document).bind("authenticationready", function(e, courseID) {
+		console.log("authentication ready called " + courseID);
+		self.loadData();
+	});
 } 
 
 SettingsView.prototype.handlePinch = doNothing;
@@ -17,6 +22,9 @@ SettingsView.prototype.openDiv = openView;
 SettingsView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();
+	
+	controller.models['authentication'].loadFromServer();
+	
 };
 SettingsView.prototype.close = closeView;
 
