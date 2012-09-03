@@ -19,7 +19,7 @@ function CourseModel(controller) {
 	$(document).bind("switchtoonline", function() {
 		self.switchToOnline();
 	});
-	
+
 	$(document).bind("authenticationready", function() {
 		self.loadFromServer();
 	});
@@ -133,46 +133,58 @@ CourseModel.prototype.loadFromServer = function() {
 	console.log("loadFromServer-Course is called");
 	var self = this;
 	self.checkForTimeOut();
-	if (self.controller.models['authentication'].isLoggedIn() &&
-			!self.syncState) {
+	if (self.controller.models['authentication'].isLoggedIn()
+			&& !self.syncState) {
 		var userId = self.controller.models['authentication'].getUserId();
 		console.log("loadFromServer-Course for user " + userId);
-		jQuery.getJSON(
-				"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php/"
-						+ userId + ".json", function(data) {
-					console.log("success");
-					var courseObject;
-					try {
-						courseObject = data;
 
-					} catch (err) {
-						courseObject = {};
-						console.log("Couldn't load courses from server " + err);
-					}
-					console.log("course data loaded from server");
-
-					// if (!courseObject[0]) { // if no courses are available,
-					// // new ones are created
-					// courseObject = self.createCourses();
-					// }
-					console.log(courseObject);
-					self.courseList = courseObject.courses || [];
-					self.syncDateTime = (new Date()).getTime();
-					self.syncState = true;
-					self.syncTimeOut = courseObject.syncTimeOut;
-					self.index = 0;
-					self.storeData();
-					console.log("JSON CourseList: " + self.courseList);
-					self.reset();
-
-					$(document).trigger("courselistupdate");
-
-					for ( var c in self.courseList) {
-						self.courseList[c].isLoaded = false;
-						self.controller.models["questionpool"]
-								.loadFromServer(self.courseList[c].id);
-					}
+		$.ajax({
+					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
+					type : 'GET',
+					dataType : 'json',
+					success : createCourseList,
+					error: function() { console.log("Error while loading course list from server"); },
+					beforeSend : setHeader
 				});
+
+		function setHeader(xhr) {
+			xhr.setRequestHeader('userid', userId);
+		}
+
+		function createCourseList(data) {
+			console.log("success");
+			var courseObject;
+			try {
+				courseObject = data;
+
+			} catch (err) {
+				courseObject = {};
+				console.log("Couldn't load courses from server " + err);
+			}
+			console.log("course data loaded from server");
+
+			// if (!courseObject[0]) { // if no courses are available,
+			// // new ones are created
+			// courseObject = self.createCourses();
+			// }
+			console.log(courseObject);
+			self.courseList = courseObject.courses || [];
+			self.syncDateTime = (new Date()).getTime();
+			self.syncState = true;
+			self.syncTimeOut = courseObject.syncTimeOut;
+			self.index = 0;
+			self.storeData();
+			console.log("JSON CourseList: " + self.courseList);
+			self.reset();
+
+			$(document).trigger("courselistupdate");
+
+			for ( var c in self.courseList) {
+				self.courseList[c].isLoaded = false;
+				self.controller.models["questionpool"]
+						.loadFromServer(self.courseList[c].id);
+			}
+		}
 	}
 };
 
