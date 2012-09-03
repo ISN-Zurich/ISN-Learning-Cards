@@ -64,7 +64,7 @@ CourseModel.prototype.loadData = function() {
 	// courseObject.syncDateTime
 	// : 0
 	this.syncState = courseObject.syncState || false;
-	this.syncTimeOut = (courseObject.syncTimeOut * 1000) || 600000;
+	this.syncTimeOut = (courseObject.syncTimeOut * 1000) || 60000;
 	this.index = 0;
 
 	this.checkForTimeOut();
@@ -73,6 +73,7 @@ CourseModel.prototype.loadData = function() {
 CourseModel.prototype.checkForTimeOut = function() {
 	var timeDelta = ((new Date()).getTime() - this.syncDateTime);
 	console.log("timeDelta: " + timeDelta);
+	console.log("syncTimeOut: " + this.syncTimeOut);
 	if (timeDelta > this.syncTimeOut) {
 		this.syncState = false;
 		console.log("check for timeout is false");
@@ -135,17 +136,18 @@ CourseModel.prototype.loadFromServer = function() {
 	if (self.controller.models['authentication'].isLoggedIn() &&
 			!self.syncState) {
 		var userId = self.controller.models['authentication'].getUserId();
-		console.log("loadFromServer-Course for user" + userId);
-		jQuery.get(
+		console.log("loadFromServer-Course for user " + userId);
+		jQuery.getJSON(
 				"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php/"
 						+ userId + ".json", function(data) {
 					console.log("success");
 					var courseObject;
 					try {
-						courseObject = JSON.parse(data);
+						courseObject = data;
 
 					} catch (err) {
 						courseObject = {};
+						console.log("Couldn't load courses from server " + err);
 					}
 					console.log("course data loaded from server");
 
@@ -154,12 +156,14 @@ CourseModel.prototype.loadFromServer = function() {
 					// courseObject = self.createCourses();
 					// }
 					console.log(courseObject);
-					self.courseList = courseObject.courses;
+					self.courseList = courseObject.courses || [];
 					self.syncDateTime = (new Date()).getTime();
 					self.syncState = true;
 					self.syncTimeOut = courseObject.syncTimeOut;
 					self.index = 0;
 					self.storeData();
+					console.log("JSON CourseList: " + self.courseList);
+					self.reset();
 
 					$(document).trigger("courselistupdate");
 

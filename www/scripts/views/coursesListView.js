@@ -18,8 +18,8 @@ function CoursesListView(controller) {
 		self.courseIsLoaded(courseID);
 	});
 
-	$(document).bind("courselistupdate", function(e, courseID) {
-		console.log("course list update called " + courseID);
+	$(document).bind("courselistupdate", function(e) {
+		console.log("course list update called");
 		if (self.active) {
 			self.update();
 		}
@@ -64,7 +64,9 @@ CoursesListView.prototype.update = function() {
 	courseModel.reset();
 	$("#coursesList").empty();
 
-	if (!courseModel.getTitle()) {
+	console.log("First course id: " + courseModel.getId());
+	
+	if (courseModel.courseList.length == 0) {
 		var li = $("<li/>", {
 			text : "No Courses"
 		}).appendTo("#coursesList");
