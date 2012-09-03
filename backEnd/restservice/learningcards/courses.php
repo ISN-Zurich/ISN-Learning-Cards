@@ -8,8 +8,11 @@ require_once 'Services/User/classes/class.ilObjUser.php';
 
 global $ilUser;
 
-$userId = $_SERVER['PATH_INFO'];
-$userId = preg_replace("/\//",	"", $userId);
+$userId = get_userid_from_headers();
+// $userId = $_SERVER['PATH_INFO'];
+// $userId = preg_replace("/\//",	"", $userId);
+
+logging(" my userid is ". $userId);
 
 $ilUser->setId($userId);
 $ilUser->read();
@@ -19,7 +22,12 @@ $SYNC_TIMEOUT = 60;
 
 //read header variable to get userId
 
-
+function get_userid_from_headers() {
+	$myheaders = getallheaders();
+	$userid = $myheaders["userid"];
+	
+	return $userid;
+}
 
 //$courses = getCourses($userId);
 
@@ -45,6 +53,7 @@ function getCourses($userId) {
 // 			"syncState" => false,
 // 			"isLoaded" => false
 // 	));
+	
 	
 	
 	$ilUser->setId($userId);

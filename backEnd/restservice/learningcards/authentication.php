@@ -11,13 +11,27 @@ global $ilUser;
 $ilUser->setId("12979");
 $ilUser->read();
 
-$learnerInformation = array(
-		"userId" => $ilUser->getId(),
-		"userName" =>  $ilUser->getLogin(),
-		"displayName" => $ilUser->getFullName(),
-		"emailAddress" => $ilUser->getEmail());
+$authenticationData = array(
+		
+		"appId" => "",
+		"appAuthenticationKey" => "",
+		"userAuthenticationKey" => "",
+		"urlToLMS" => "",
+		"learnerInformation" => array(
+				"userId" => $ilUser->getId(),
+				"userName" =>  $ilUser->getLogin(),
+				"displayName" => $ilUser->getFullName(),
+				"emailAddress" => $ilUser->getEmail()
+		                            ),
+		"loginState" => "loggedOut",
+		"globalSynchronizationState" => false
+						);
 
-echo(json_encode($learnerInformation));
+logging(" sending authentication info");
+
+echo(json_encode($authenticationData));
+
+
 
 //echo($ilUser->getUserIdByLogin("isabella"));
 
