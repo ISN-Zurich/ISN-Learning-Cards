@@ -20,6 +20,8 @@ function Controller() {
 
 	console.log("start controller");
 
+	$.ajaxSetup({ cache: false });
+	
 	this.models = {};
 	this.views = {};
 
