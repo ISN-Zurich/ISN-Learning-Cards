@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ */
+
+//syncTimeOut provides a way for the server to tell the clients how often they are allowed to synchronize
+$SYNC_TIMEOUT = 60;
+
 chdir("../..");
 
 require_once ('restservice/include/inc.header.php');
@@ -8,59 +15,78 @@ require_once 'Services/User/classes/class.ilObjUser.php';
 
 global $ilUser;
 
-$userId = get_userid_from_headers();
-// $userId = $_SERVER['PATH_INFO'];
-// $userId = preg_replace("/\//",	"", $userId);
+$userID = get_userid_from_headers();
+logging(" my userid is ". $userID);
 
-logging(" my userid is ". $userId);
+$return_data = getCourseList($userID);
 
-$ilUser->setId($userId);
-$ilUser->read();
-echo(json_encode($ilUser->_getAllUserData()));
+header('content-type: application/json');
+echo (json_encode($return_data));
 
-$SYNC_TIMEOUT = 60;
 
-//read header variable to get userId
 
+/**
+ * Reads header variable to get userId
+ * 
+ * @return userId
+ */
 function get_userid_from_headers() {
 	$myheaders = getallheaders();
-	$userid = $myheaders["userid"];
-	
-	return $userid;
-}
+	$userId = $myheaders["userid"];
 
-//$courses = getCourses($userId);
+	if (!($userId > 0)) {
+		$userId = "12979"; //for debugging
+	}
 
-// $c = array ("courses" => $courses, 
-// 			"syncDateTime" => 0,
-// 			"syncState" => false,
-// 			"syncTimeOut" => $SYNC_TIMEOUT);
+	logging("userid from header: " . $userId);
 
-// header('content-type: application/json');
-// echo(json_encode($c));
-
-function getCourses($userId) {
-// 	return array( array(
-// 			"id" => "1",
-// 			"title" => "Politics",
-// 			"syncDateTime" => 0,
-// 			"syncState" => false,
-// 			"isLoaded" => false
-// 	), array(
-// 			"id" => "2",
-// 			"title" => "Economics",
-// 			"syncDateTime" => 0,
-// 			"syncState" => false,
-// 			"isLoaded" => false
-// 	));
-	
-	
-	
+	global $ilUser;
 	$ilUser->setId($userId);
 	$ilUser->read();
-	echo($ilUser->_getAllUserData());
+	//FIXME: test if users exists
+
+	return $userId;
 }
 
+
+/**
+ * Gets the course list for the specified user
+ *
+ * @return course list array
+ */
+function getCourseList($userId) {
+	global $ilObjDataCache;
+
+	include_once 'Services/Membership/classes/class.ilParticipants.php';
+
+	//loads all courses in which the current user is a member
+	$items = ilParticipants::_getMembershipByType($userId, 'crs');
+
+	$courses = array();
+	foreach($items as $key => $obj_id)	{
+		$title       = $ilObjDataCache->lookupTitle($obj_id);
+		$description = $ilObjDataCache->lookupDescription($obj_id);
+
+		//FIXME: check if questionpool for the course exists
+		//only if a questionpool exists the course is added to the list
+		array_push($courses,
+				array("id"             => $obj_id,
+						"title"        => $title,
+						"syncDateTime" => 0,
+						"syncState"    => false,
+						"isLoaded"     => false,
+						"description"  => $description));
+
+	}
+
+	//data structure for front end models
+	$courseList = array("courses" => $courses,
+			"syncDateTime" => 0,
+			"syncState" => false,
+			"syncTimeOut" => $SYNC_TIMEOUT);
+
+	return $courseList;
+}
 
 
 function logging($message) {

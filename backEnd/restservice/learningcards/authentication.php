@@ -12,7 +12,7 @@ $ilUser->setId("12979");
 $ilUser->read();
 
 $authenticationData = array(
-		
+
 		"appId" => "",
 		"appAuthenticationKey" => "",
 		"userAuthenticationKey" => "",
@@ -22,12 +22,12 @@ $authenticationData = array(
 				"userName" =>  $ilUser->getLogin(),
 				"displayName" => $ilUser->getFullName(),
 				"emailAddress" => $ilUser->getEmail()
-		                            ),
+		),
 		"loginState" => "loggedOut",
 		"globalSynchronizationState" => false
-						);
+);
 
-logging(" sending authentication info");
+logging("sending authentication info");
 
 echo(json_encode($authenticationData));
 
@@ -43,7 +43,7 @@ echo(json_encode($authenticationData));
 
 function logging($message) {
 	$log_prefix = "authentication.php: ";
-	
+
 	error_log($log_prefix . $message, 0);
 }
 
