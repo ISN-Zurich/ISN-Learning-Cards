@@ -7,7 +7,7 @@ function QuestionPoolModel(controller) {
 	this.reset();
 	this.queue = [];
 
-//	this.createQuestionPools();
+	// this.createQuestionPools();
 
 };
 
@@ -91,16 +91,16 @@ QuestionPoolModel.prototype.nextAnswerChoice = function() {
 
 QuestionPoolModel.prototype.getAnswerChoice = function() {
 	return (this.indexAnswer > this.questionList[this.index].answer.length - 1) ? false
-			: this.questionList[this.index].answer[this.indexAnswer].text;
+			: this.questionList[this.index].answer[this.indexAnswer].answertext;
 };
 
 QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
 	return (this.indexAnswer > this.questionList[this.index].answer.length - 1) ? false
-			: this.questionList[this.index].answer[this.indexAnswer].score;
+			: this.questionList[this.index].answer[this.indexAnswer].points;
 };
 
 QuestionPoolModel.prototype.getScore = function(index) {
-	return (index < this.questionList[this.index].answer.length) ? this.questionList[this.index].answer[index].score
+	return (index < this.questionList[this.index].answer.length) ? this.questionList[this.index].answer[index].points
 			: false;
 };
 
@@ -137,7 +137,7 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 		initQuPo2();
 
 	} else if (course_id == 2) { // if no questions are available, new ones
-									// are created
+		// are created
 		if (!localStorage.questionpool_2) {
 			initQuPo2();
 		}
@@ -166,7 +166,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 	jQuery
 			.getJSON(
 					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/questions.php/"
-							+ courseId + ".json", function(data) {
+							+ courseId, function(data) {
 						console.log("success");
 						console.log("JSON: " + data);
 						var questionPoolObject;
@@ -189,7 +189,8 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 							self.questionList = questionPoolObject;
 							self.index = 0;
 							self.storeData(data.courseID);
-							$(document).trigger("questionpoolready", data.courseID);
+							$(document).trigger("questionpoolready",
+									data.courseID);
 						}
 					});
 };

@@ -21,7 +21,7 @@ TextSortWidget.prototype.showAnswer = function() {
 
 	$("#cardAnswerBody").empty();
 
-	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].text) {
+	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].answertext) {
 
 		var ul = $("<ul/>", {
 			"class" : "sortable"
@@ -49,7 +49,7 @@ TextSortWidget.prototype.showAnswer = function() {
 			var li = $("<li/>", {
 				"id" : "answer" + mixedAnswers[c],
 				"class" : "sortableListItem",
-				text : answers[mixedAnswers[c]].text
+				text : answers[mixedAnswers[c]].answertext
 			}).appendTo(ul);
 
 		}
@@ -105,7 +105,7 @@ TextSortWidget.prototype.showFeedback = function() {
 	for ( var i = 0; i < answers.length; i++) {
 		var li = $("<li/>", {
 			"class" : scores[i] == "0.5" || scores[i] == "1.5" ? "ticked" : "",
-			text : answers[i].text
+			text : answers[i].answertext
 		}).appendTo(ul);
 
 		if (scores[i] == "1" || scores[i] == "1.5") {
