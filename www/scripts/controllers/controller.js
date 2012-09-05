@@ -20,16 +20,20 @@ function Controller() {
 
 	console.log("start controller");
 
+	$.ajaxSetup({ cache: false });
+	
 	this.models = {};
 	this.views = {};
 
-	this.models.authentication = new ConfigurationModel();
-	this.models.course = new CourseModel();
-	this.models.questionpool = new QuestionPoolModel();
+	this.models.connection = new ConnectionState();
+	this.models.authentication = new ConfigurationModel(this);
+	this.models.course = new CourseModel(this);
+	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel();
 
+	this.models.authentication.loadFromServer();
+	
 	console.log("models initialized");
-	// this.models['course'].loadData();
 
 	this.views.splashScreen = new SplashScreen(this);
 	this.views.login = new LoginView();
@@ -133,6 +137,11 @@ Controller.prototype.transitionToSettings = function() {
 Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
 };
+
+Controller.prototype.synchronizeModels = function() {
+	this.models["courses"].loadFromServer();
+};
+
 
 function setButtonHeight() {
 	console.log("setButtonHeight");

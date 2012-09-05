@@ -1,11 +1,13 @@
-function QuestionPoolModel() {
+function QuestionPoolModel(controller) {
+	this.controller = controller;
+
 	this.questionList = [];
 	this.indexAnswer = 0;
 
 	this.reset();
 	this.queue = [];
-	
-    this.createQuestionPools();
+
+//	this.createQuestionPools();
 
 };
 
@@ -61,15 +63,18 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 	do {
 
 		random = Math.floor((Math.random() * this.questionList.length)); // random
-		
+
 		// number
 		// between
 		// 0
 		// and
 		// (this.questionList.length
 		// - 1)
-	} while (this.index == random || (this.queue.length < this.questionList.length && jQuery.inArray(random,this.queue) >= 0));
-	//  remove the oldest item from the queue and add the current index to the queue
+	} while (this.index == random
+			|| (this.queue.length < this.questionList.length && jQuery.inArray(
+					random, this.queue) >= 0));
+	// remove the oldest item from the queue and add the current index to the
+	// queue
 	this.queue.shift();
 	this.queue.push(this.index);
 	this.index = random;
@@ -118,9 +123,9 @@ QuestionPoolModel.prototype.resetAnswer = function() {
 
 QuestionPoolModel.prototype.createPool = function(course_id) {
 	if (course_id == 1) {
-		if(!localStorage.questionpool_1) {
-            initQuPo1();
-        }
+		if (!localStorage.questionpool_1) {
+			initQuPo1();
+		}
 		try {
 			return JSON.parse(localStorage.getItem("questionpool_1"));
 		} catch (err) {
@@ -131,10 +136,11 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 		// are created
 		initQuPo2();
 
-	} else if (course_id == 2) { //if no questions are available, new ones are created
-		if(!localStorage.questionpool_2) {
-            initQuPo2();
-        }
+	} else if (course_id == 2) { // if no questions are available, new ones
+									// are created
+		if (!localStorage.questionpool_2) {
+			initQuPo2();
+		}
 
 		try {
 			return JSON.parse(localStorage.getItem("questionpool_2"));
@@ -150,6 +156,40 @@ QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 }
 
 QuestionPoolModel.prototype.createQuestionPools = function() {
-    this.createPool(1);
-    this.createPool(2);
+	this.createPool(1);
+	this.createPool(2);
+};
+
+QuestionPoolModel.prototype.loadFromServer = function(courseId) {
+
+	var self = this;
+	jQuery
+			.getJSON(
+					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/questions.php/"
+							+ courseId + ".json", function(data) {
+						console.log("success");
+						console.log("JSON: " + data);
+						var questionPoolObject;
+						try {
+							questionPoolObject = data.questions; // JSON.parse(data);
+							// controller.models["courses"].courseLoaded(data.courseID);
+						} catch (err) {
+							console.log("Error: Couldn't parse JSON for course"
+									+ data.courseID);
+							questionPoolObject = [];
+						}
+
+						// if (!questionPoolObject[0]) { // if no courses are
+						// available, new ones are created
+						// console.log("no questionpool loaded");
+						// questionPoolObject = self.createPool(data.courseID);
+						// }
+						if (questionPoolObject[0]) {
+							console.log("Object: " + questionPoolObject);
+							self.questionList = questionPoolObject;
+							self.index = 0;
+							self.storeData(data.courseID);
+							$(document).trigger("questionpoolready", data.courseID);
+						}
+					});
 };

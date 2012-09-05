@@ -1,0 +1,109 @@
+{
+    "courseID": "2",
+    "questions": 
+
+[ {
+				"type" : "Numeric Question",
+				"question" : "20 - testing question",
+				"answer" : "",
+				"correctFeedback" : "",
+				"errorFeedback" : "In order to asnwer this question better you should also take into account the impact of.."
+
+			},
+			
+			{
+				"type" : "Single Choice Question",
+				"question" : "21 - testing question 2",
+				"answer" : [
+				         {
+				        	 "text":"",
+				        	 "score":"1"
+				         }, {
+				        	 
+				        	 "text":"",
+				        	 "score":"0"
+				         }
+				          
+				          ],
+				"correctFeedback" : "",
+				"errorFeedback" : "In order to asnwer this question better you should also take into account the impact of.."
+
+			},
+			{
+				"type" : "Multiple Choice Question",
+				"question" : "7 - What would you choose...",
+				"answer" : [ {
+					"text" : "uni",
+					"score" : "0"
+
+				},
+
+				{
+					"text" : "market",
+					"score" : "1"
+
+				},
+
+				{
+					"text" : "any other",
+					"score" : "1"
+
+				},
+
+				{
+					"text" : "institution",
+					"score" : "1"
+
+				},
+
+				{
+					"text" : "non for profit organisation",
+					"score" : "1"
+
+				}
+
+				],
+
+				"correctFeedback" : "",
+				"errorFeedback" : "In order to asnwer this question better you should also take into account the impact of.."
+
+			}, {
+				"type" : "Text Sort Question",
+				"question" : "8 - Sort alphabetically",
+				"answer" : [ {
+					"text" : "A",
+					"score" : "0"
+
+				},
+
+				{
+					"text" : "B",
+					"score" : "1"
+
+				},
+
+				{
+					"text" : "C",
+					"score" : "1"
+
+				},
+
+				{
+					"text" : "D",
+					"score" : "1"
+
+				},
+
+				{
+					"text" : "E",
+					"score" : "1"
+
+				}
+
+				],
+
+				"correctFeedback" : "",
+				"errorFeedback" : "In order to asnwer this question better you should also take into account the impact of.."
+
+			} ]
+}

@@ -1,12 +1,12 @@
-function ConfigurationModel() {
+function ConfigurationModel(controller) {
 	this.configuration = {};
+	
+	this.controller = controller;
     
+	this.firstLogin = true;
     // initialize the configuration if it does not exist
-    this.createConfiguration();
+//    this.createConfiguration();
     
-    this.loadData();
-    
-    console.log(this.configuration.learnerInformation.userName);
 }
 
 ConfigurationModel.prototype.storeData = function() {
@@ -26,24 +26,26 @@ ConfigurationModel.prototype.loadData = function() {
 	try {
 		configObject = JSON.parse(localStorage.getItem("configuration"));
 	} catch(err) {
-		configObject = {};
         console.log("error! while loading");
 	}
 	
-	if (!configObject.loginState) { //if no configuration is available, a new one is created
-		configObject = this.createConfiguration();
+	if (!configObject) {
+		configObject = {loginState: "loggedOut"};
 	}
+	
+//	if (!configObject.loginState) { //if no configuration is available, a new one is created
+//		configObject = this.createConfiguration();
+//	}
 	
 	this.configuration = configObject;
     
-    console.log(this.configuration ? "have data" : "no data" );
-    console.log(this.configuration.loginState);
 };
 
 ConfigurationModel.prototype.login = function(username, password, success, error) {
 	this.configuration.loginState = "loggedIn";
     this.storeData();
-	success();
+    this.loadFromServer();
+    success();
 };
 
 ConfigurationModel.prototype.logout = function() {
@@ -63,6 +65,10 @@ ConfigurationModel.prototype.getUserName = function() {
 	return this.configuration.learnerInformation.userName;
 };
 
+ConfigurationModel.prototype.getUserId = function() {
+	return this.configuration.learnerInformation.userId;
+};
+
 ConfigurationModel.prototype.getEmailAddress = function() {
 	return this.configuration.learnerInformation.emailAddress;
 };
@@ -80,4 +86,39 @@ ConfigurationModel.prototype.createConfiguration = function() {
 	} catch(err) {
 		return {};
 	}
+};
+
+ConfigurationModel.prototype.loadFromServer = function() {
+
+	var self = this;
+	jQuery
+			.getJSON(
+					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/1.json", function(data) {
+						console.log("success");
+						console.log("JSON: " + data);
+						var authenticationObject;
+						try {
+							authenticationObject = data; // JSON.parse(data);
+							// controller.models["courses"].courseLoaded(data.courseID);
+							console.log("authenticationData from server");
+						} catch (err) {
+							console.log("Error: Couldn't parse JSON for authentication");
+							authenticationObject = {};
+						}
+
+						// if (!questionPoolObject[0]) { // if no courses are
+						// available, new ones are created
+						// console.log("no questionpool loaded");
+						// questionPoolObject = self.createPool(data.courseID);
+						// }
+//						if (authenticationObject[0]) {
+							console.log("Object: " + authenticationObject);
+							authenticationObject.loginState = self.configuration.loginState;
+							self.configuration = authenticationObject;
+							self.storeData();
+							
+							$(document).trigger("authenticationready", authenticationObject.learnerInformation.userId);
+							
+							//						}
+					});
 };
