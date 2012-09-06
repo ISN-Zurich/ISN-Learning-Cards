@@ -42,14 +42,16 @@ function getQuestions($courseId) {
 					$questionPool->read();
 					if($questionPool->getOnline()) {
 						$questionList = $questionPool->getQuestionList();
-						logging("Question list: " . json_encode($questionList));
+// 						logging("Question list: " . json_encode($questionList));
 						foreach ($questionList as $question) {
 								
 							//get the question, filter all html-tags and line breaks
-							$questionText = preg_replace("/<..[a-zA-Z]*>/", "",$question["question_text"]);
-							$questionText = preg_replace("/\\r\\n/", "",$questionText);
-							$questionText = preg_replace("/\"/", "'", $questionText);
-								
+// 							$questionText = preg_replace("/<..[a-zA-Z]*>/", "",$question["question_text"]);
+// 							$questionText = preg_replace("/<br....>/", "",$questionText);
+// 							$questionText = preg_replace("/\\r\\n/", "",$questionText);
+// 							$questionText = preg_replace("/\"/", "'", $questionText);
+							$questionText = $question["question_text"];	
+							
 							//get the question type
 							$type = $question["type_tag"];
 								
@@ -82,10 +84,12 @@ function getQuestions($courseId) {
 					}
 				}
 			}
-
+			
 		}
 	}
 
+	logging("Questionpool before return: " . json_encode($questions));
+	
 	return array(
 			"courseID" => $courseId,
 			"questions" => $questions);
