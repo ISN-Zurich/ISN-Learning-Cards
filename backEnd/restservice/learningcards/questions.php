@@ -46,9 +46,13 @@ function getQuestions($courseId) {
 						foreach ($questionList as $question) {
 
 							//get the question, filter all html-tags and line breaks
-							$questionText = preg_replace("/<..[a-zA-Z]*>/", "",$question["question_text"]);
-							$questionText = preg_replace("/\\r\\n/", "",$questionText);
-							$questionText = preg_replace("/\"/", "'", $questionText);
+
+
+							//$questionText = preg_replace("/<..[a-zA-Z]*>/", "",$question["question_text"]);
+							//$questionText = preg_replace("/\\r\\n/", "",$questionText);
+							//$questionText = preg_replace("/\"/", "'", $questionText);
+
+							$questionText = $question["question_text"];
 
 							
 							//get the question type
@@ -75,6 +79,8 @@ function getQuestions($courseId) {
 							//get feedback
 							$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
 							$feedbackError = $assQuestion->getFeedbackGeneric(0);
+							
+							
 							array_push($questions, array(
 									"type" => $type,
 									"question" => $questionText,

@@ -61,7 +61,7 @@ QuestionView.prototype.open = function() {
 QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
-	$("#cardQuestionBody").text(currentQuestionBody);
+	$("#cardQuestionBody").html(currentQuestionBody);
 	
 	$("#ButtonTip").hide();
 	

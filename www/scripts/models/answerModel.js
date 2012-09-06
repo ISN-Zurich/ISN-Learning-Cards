@@ -58,7 +58,7 @@ AnswerModel.prototype.getMultipleAnswerResults = function() {
 	var wrong_ticked = 0;
 
 	do {
-		if (questionpool.getAnswerChoiceScore() == 1) {
+		if (questionpool.getAnswerChoiceScore() > 0) {
 			correctAnswers++;
 			if (this.answerList.indexOf(numberOfAnswers) != -1) {
 				corr_ticked++;
@@ -110,7 +110,7 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 
 	if (!clickedAnswerIndex) {
 		returnedResult = "Wrong";
-	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) == 1) {
+	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) > 0) {
 		returnedResult = "Excellent";
 
 	} else {
