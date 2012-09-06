@@ -42,6 +42,7 @@ QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view 
     console.log("swipe works");
+    controller.models['questionpool'].queueCurrentQuestion();
     controller.models['questionpool'].nextQuestion();
 	this.showQuestionBody();
 	this.showQuestionTitle();
