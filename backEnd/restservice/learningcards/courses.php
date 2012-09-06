@@ -1,71 +1,124 @@
 <?php
 
+/**
+ *
+ */
+
+//syncTimeOut provides a way for the server to tell the clients how often they are allowed to synchronize
+$SYNC_TIMEOUT = 60;
+
+require_once '../logging/logger.php';
+
 chdir("../..");
 
 require_once ('restservice/include/inc.header.php');
-
 require_once 'Services/User/classes/class.ilObjUser.php';
+require_once 'Modules/Course/classes/class.ilCourseItems.php';
 
-global $ilUser;
+global $ilUser, $class_for_logging;
 
-$userId = get_userid_from_headers();
-// $userId = $_SERVER['PATH_INFO'];
-// $userId = preg_replace("/\//",	"", $userId);
+$class_for_logging = "courses.php";
 
-logging(" my userid is ". $userId);
+$userID = get_userid_from_headers();
+logging(" my userid is ". $userID);
 
-$ilUser->setId($userId);
-$ilUser->read();
-echo(json_encode($ilUser->_getAllUserData()));
+$return_data = getCourseList($userID);
 
-$SYNC_TIMEOUT = 60;
+header('content-type: application/json');
+echo (json_encode($return_data));
 
-//read header variable to get userId
 
+
+/**
+ * Reads header variable to get userId
+ *
+ * @return userId
+ */
 function get_userid_from_headers() {
 	$myheaders = getallheaders();
-	$userid = $myheaders["userid"];
-	
-	return $userid;
-}
+	$userId = $myheaders["userid"];
 
-//$courses = getCourses($userId);
+	if (!($userId > 0)) {
+		$userId = "12979"; //for debugging
+	}
 
-// $c = array ("courses" => $courses, 
-// 			"syncDateTime" => 0,
-// 			"syncState" => false,
-// 			"syncTimeOut" => $SYNC_TIMEOUT);
+	logging("userid from header: " . $userId);
 
-// header('content-type: application/json');
-// echo(json_encode($c));
-
-function getCourses($userId) {
-// 	return array( array(
-// 			"id" => "1",
-// 			"title" => "Politics",
-// 			"syncDateTime" => 0,
-// 			"syncState" => false,
-// 			"isLoaded" => false
-// 	), array(
-// 			"id" => "2",
-// 			"title" => "Economics",
-// 			"syncDateTime" => 0,
-// 			"syncState" => false,
-// 			"isLoaded" => false
-// 	));
-	
-	
-	
+	global $ilUser;
 	$ilUser->setId($userId);
 	$ilUser->read();
-	echo($ilUser->_getAllUserData());
+	//FIXME: test if users exists
+	//method $ilUser->checkUserId() seems not to work in the way as expected!
+
+	return $userId;
 }
 
 
+/**
+ * Gets the course list for the specified user
+ *
+ * @return course list array
+ */
+function getCourseList($userId) {
+	global $ilObjDataCache;
 
-function logging($message) {
-	$log_prefix = "courses.php: ";
+	include_once 'Services/Membership/classes/class.ilParticipants.php';
 
-	error_log($log_prefix . $message, 0);
+	//loads all courses in which the current user is a member
+	$items = ilParticipants::_getMembershipByType($userId, 'crs');
+    logging("items".json_encode($items));
+
+	$courses = array();
+	foreach($items as $key => $obj_id)	{
+
+		//references are needed to get course items (= questionpools, tests, ...)
+		$item_references = ilObject::_getAllReferences($obj_id);
+
+		logging("items references".json_encode($item_references));
+		
+		//check if questionpool for the course exists
+		//only if a questionpool exists the course is added to the list
+		$hasQuestions = false;
+		if(is_array($item_references) && count($item_references)) {
+			foreach($item_references as $ref_id) {
+				$courseItems = new ilCourseItems($ref_id);
+				$courseItemsList = $courseItems->getAllItems();
+
+				logging("Questions: " . json_encode($courseItemsList));
+				
+				foreach($courseItemsList as $courseItem) {
+					if (strcmp($courseItem["type"], "qpl") == 0) {
+						$hasQuestions = true;
+						logging("course " . $obj_id . " has question pool");
+					}
+				}
+
+			}
+		}
+		
+		if ($hasQuestions) {
+
+			$title       = $ilObjDataCache->lookupTitle($obj_id);
+			$description = $ilObjDataCache->lookupDescription($obj_id);
+
+			array_push($courses,
+					array("id"             => $obj_id,
+							"title"        => $title,
+							"syncDateTime" => 0,
+							"syncState"    => false,
+							"isLoaded"     => false,
+							"description"  => $description));
+
+			//[{"id":"12968","ref_id":"1786","title":"Introduction to NATO","syncDateTime":0,"syncState":false,"isLoaded":false,"description":"Test Question Pool for \\"Lernkarten App\\""}]
+		}
+	}
+	//data structure for front end models
+	$courseList = array("courses" => $courses,
+			"syncDateTime" => 0,
+			"syncState" => false,
+			"syncTimeOut" => $SYNC_TIMEOUT);
+
+	return $courseList;
+
 }
 ?>

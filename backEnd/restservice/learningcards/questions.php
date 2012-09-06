@@ -1,42 +1,87 @@
 <?php
 
+require_once '../logging/logger.php';
 
-$courseId = $_SERVER['PATH_INFO'];
-$courseId = preg_replace("/\//",	"", $courseId);
-$courseId = preg_replace("/\.json/",	"", $courseId);
-logging($courseId);
+chdir("../..");
 
+require_once ('restservice/include/inc.header.php');
 
+require_once 'Services/User/classes/class.ilObjUser.php';
+require_once 'Modules/Course/classes/class.ilCourseItems.php';
+require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
+require_once 'Modules/TestQuestionPool/classes/class.assQuestion.php';
 
-echo(json_encode(getQuestionPools($courseId)));
+global $class_for_logging;
 
-function getQuestionPools($courseId) {
+$class_for_logging = "questions.php";
+
+$courseID = $_SERVER['PATH_INFO'];
+
+$courseID = preg_replace("/\//", "", $courseID);
+// $courseID = preg_replace("/\.json/",	"", $courseID);
+logging($courseID);
+
+$return_data = getQuestions($courseID);
+
+echo(json_encode($return_data));
+
+function getQuestions($courseId) {
+	$item_references = ilObject::_getAllReferences($courseId);
+
+	$questions = array();
+	if(is_array($item_references) && count($item_references)) {
+		foreach($item_references as $ref_id) {
+			$courseItems = new ilCourseItems($ref_id);
+			$courseItemsList = $courseItems->getAllItems();
+
+			logging("Questions: " . json_encode($courseItemsList));
+
+			foreach($courseItemsList as $courseItem) {
+				if (strcmp($courseItem["type"], "qpl") == 0) {
+					$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
+					$questionPool->read();
+					if($questionPool->getOnline()) {
+						$questionList = $questionPool->getQuestionList();
+						logging("Question list: " . json_encode($questionList));
+						foreach ($questionList as $question) {
+							
+							//get the question, filter all html-tags and line breaks
+							$questionText = preg_replace("/<..[a-zA-Z]*>/", "",$question["question_text"]);
+							$questionText = preg_replace("/\\r\\n/", "",$questionText);
+							$questionText = preg_replace("/\"/", "'", $questionText);
+							
+							//get the question type
+							$type = $question["type_tag"];
+							
+							$assQuestion = new $type();
+							$assQuestion->loadFromDb($question["question_id"]);
+							//$assQuestion->setId($question["question_id"]);
+							
+							//get solutions
+							//$assQuestion->loadFromDb($question["question_id"]); //loads only the suggested solutions
+							$answerList = $assQuestion->getAnswers();
+							logging("Answers: " . json_encode($answerList));
+							
+							//get feedback
+							$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
+							$feedbackError = $assQuestion->getFeedbackGeneric(0);
+							array_push($questions, array(
+									"type" => $type,
+									"question" => $questionText,
+									"answer" => "",
+									"correctFeedback" => $feedbackCorrect,
+									"errorFeedback" => $feedbackError));
+						}
+					}
+				}
+			}
+
+		}
+	}
+
 	return array(
 			"courseID" => $courseId,
-			"questions"=> array(
-					array(
-							"type" => "Numeric Question",
-							"question" => "1 - What is the number",
-							"answer" => "45",
-							"correctFeedback" => "",
-							"errorFeedback" => "In order to asnwer this question better you should also take into account the impact of.."
-
-					),
-					array(
-							"type" => "Numeric Question",
-							"question" => "2 - How many times..",
-							"answer" => "21",
-							"correctFeedback" => "This is the correct feedback of this answer",
-							"errorFeedback" => ""
-
-					)
-			)
-	);
+			"questions" => $questions);
 }
 
-function logging($message) {
-	$log_prefix = "questions.php: ";
-
-	error_log($log_prefix . $message, 0);
-}
 ?>
