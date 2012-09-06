@@ -66,7 +66,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 
 	var questionpoolModel = controller.models["questionpool"];
 	$("#feedbackBody ul li").each(function(index) {
-		if (questionpoolModel.getScore(index) == "1") {
+		if (questionpoolModel.getScore(index) > 0) {
 			var div = $("<div/>", {
 				"class" : "right correctAnswer icon-checkmark"
 			}).prependTo(this);
