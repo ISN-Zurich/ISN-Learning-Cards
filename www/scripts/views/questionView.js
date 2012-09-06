@@ -74,16 +74,16 @@ QuestionView.prototype.showQuestionTitle = function() {
 	$("#questionIcon").removeClass();
 	
 	switch (currentQuestionTitle) {
-	case 'Single Choice Question':
+	case 'assSingleChoice':
 		$("#questionIcon").addClass("icon-checkmark");
 		break;
-	case 'Multiple Choice Question':
+	case 'assMultipleChoice':
 		$("#questionIcon").addClass("icon-checkmark");
 		break;
-	case 'Text Sort Question':
+	case 'assOrderingQuestion':
 		$("#questionIcon").addClass("icon-move-vertical");
 		break;
-	case 'Numeric Question':
+	case 'assNumeric':
 		$("#questionIcon").addClass("icon-pencil");
 		break;
 	default:

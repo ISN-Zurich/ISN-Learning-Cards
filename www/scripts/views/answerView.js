@@ -64,16 +64,16 @@ AnswerView.prototype.showAnswerBody = function() {
 	var questionType = questionpoolModel.getQuestionType();
 	var interactive = true;
 	switch (questionType) {
-	case 'Single Choice Question':
+	case 'assSingleChoice':
 		this.widget = new SingleChoiceWidget(interactive);
 		break;
-	case 'Multiple Choice Question':
+	case 'assMultipleChoice':
 		this.widget = new MultipleChoiceWidget(interactive);
 		break;
-	case 'Text Sort Question':
+	case 'assOrderingQuestion':
 		this.widget = new TextSortWidget(interactive);
 		break;
-	case 'Numeric Question':
+	case 'assNumeric':
 		this.widget = new NumericQuestionWidget(interactive);
 		break;
 	default:
@@ -95,16 +95,16 @@ AnswerView.prototype.showAnswerTitle = function() {
 	$("#answerIcon").removeClass();
 	
 	switch (currentAnswerTitle) {
-	case 'Single Choice Question':
+	case 'assSingleChoice':
 		$("#answerIcon").addClass("icon-checkmark");
 		break;
-	case 'Multiple Choice Question':
+	case 'assMultipleChoice':
 		$("#answerIcon").addClass("icon-checkmark");
 		break;
-	case 'Text Sort Question':
+	case 'assOrderingQuestion':
 		$("#answerIcon").addClass("icon-move-vertical");
 		break;
-	case 'Numeric Question':
+	case 'assNumeric':
 		$("#answerIcon").addClass("icon-pencil");
 		break;
 	default:

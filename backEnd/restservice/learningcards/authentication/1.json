@@ -1,0 +1,14 @@
+{
+		"appId" : "",
+		"appAuthenticationKey" : "",
+		"userAuthenticationKey" : "",
+		"urlToLMS" : "",
+		"learnerInformation" : {
+			"userId" : "1",
+			"userName" : "Bella",
+			"displayName" : "Test Test",
+			"emailAddress" : "isn@ethz.ch"
+		},
+		"loginState" : "loggedOut",
+		"globalSynchronizationState" : false
+	}

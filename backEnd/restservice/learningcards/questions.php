@@ -44,24 +44,34 @@ function getQuestions($courseId) {
 						$questionList = $questionPool->getQuestionList();
 						logging("Question list: " . json_encode($questionList));
 						foreach ($questionList as $question) {
-							
+
 							//get the question, filter all html-tags and line breaks
 							$questionText = preg_replace("/<..[a-zA-Z]*>/", "",$question["question_text"]);
 							$questionText = preg_replace("/\\r\\n/", "",$questionText);
 							$questionText = preg_replace("/\"/", "'", $questionText);
+
 							
 							//get the question type
 							$type = $question["type_tag"];
-							
+						
+								
+							require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
+								
 							$assQuestion = new $type();
 							$assQuestion->loadFromDb($question["question_id"]);
 							//$assQuestion->setId($question["question_id"]);
-							
+								
 							//get solutions
 							//$assQuestion->loadFromDb($question["question_id"]); //loads only the suggested solutions
-							$answerList = $assQuestion->getAnswers();
-							logging("Answers: " . json_encode($answerList));
-							
+							if (strcmp($type, "assNumeric") == 0) {
+								$answerList = array();
+								array_push($answerList, $assQuestion->getLowerLimit());
+								array_push($answerList, $assQuestion->getUpperLimit());
+							} else {
+								$answerList = $assQuestion->getAnswers();
+							}
+								
+
 							//get feedback
 							$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
 							$feedbackError = $assQuestion->getFeedbackGeneric(0);

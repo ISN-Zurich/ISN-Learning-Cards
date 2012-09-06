@@ -20,7 +20,7 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 
 	$("#cardAnswerBody").empty();
 
-	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].text) {
+	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].answertext) {
 		var self = this;
 
 		var questionpoolModel = controller.models["questionpool"];
@@ -45,7 +45,7 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 
 			var div = $("<div/>", {
 				"class" : "text",
-				text : answers[c].text
+				text : answers[c].answertext
 			}).appendTo(li);
 		}
 

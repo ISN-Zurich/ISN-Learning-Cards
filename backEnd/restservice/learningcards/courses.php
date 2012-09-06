@@ -66,16 +66,14 @@ function getCourseList($userId) {
 
 	//loads all courses in which the current user is a member
 	$items = ilParticipants::_getMembershipByType($userId, 'crs');
-    logging("items".json_encode($items));
 
-	$courses = array();
+    	$courses = array();
 	foreach($items as $key => $obj_id)	{
 
 		//references are needed to get course items (= questionpools, tests, ...)
 		$item_references = ilObject::_getAllReferences($obj_id);
 
-		logging("items references".json_encode($item_references));
-		
+
 		//check if questionpool for the course exists
 		//only if a questionpool exists the course is added to the list
 		$hasQuestions = false;

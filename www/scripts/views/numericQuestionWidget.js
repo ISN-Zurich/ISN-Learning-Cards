@@ -65,7 +65,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var questionpoolModel = controller.models["questionpool"];
 	var answerModel = controller.models["answers"];
 	var typedAnswer = answerModel.getAnswers();
-	var correctAnswer = questionpoolModel.getAnswer();
+	var correctAnswer = questionpoolModel.getAnswer()[0];
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 
 	
