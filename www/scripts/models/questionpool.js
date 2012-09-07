@@ -60,6 +60,9 @@ QuestionPoolModel.prototype.getAnswer = function() {
 QuestionPoolModel.prototype.nextQuestion = function() {
 	// this.index = (this.index + 1) % this.questionList.length;
 	var random;
+	var constant = 10;
+	
+	
 	do {
 
 		random = Math.floor((Math.random() * this.questionList.length)); // random
@@ -71,14 +74,17 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 		// (this.questionList.length
 		// - 1)
 	} while (this.index == random
-			|| (this.queue.length < this.questionList.length && jQuery.inArray(
+			|| (this.queue.length*2 <= this.questionList.length && jQuery.inArray(
 					random, this.queue) >= 0));
 	// remove the oldest item from the queue and add the current index to the
 	// queue
-	this.queue.shift();
-	this.queue.push(this.index);
+	
+
+	 
 	this.index = random;
 	return this.index < this.questionList.length;
+   
+
 };
 
 // to define a method nextAnswerChoice (). it will read all the possible answers
@@ -151,8 +157,13 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 };
 
 QuestionPoolModel.prototype.queueCurrentQuestion = function() {
+	
+	if (this.questionList.length >= constant)
+	 {	
+		
 	this.queue.shift();
 	this.queue.push(this.index);
+	 }
 }
 
 QuestionPoolModel.prototype.createQuestionPools = function() {
