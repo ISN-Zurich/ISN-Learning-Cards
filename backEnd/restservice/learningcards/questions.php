@@ -99,7 +99,7 @@ function getQuestions($courseId) {
 							array_push($questions, array(
 									"type" => $type,
 									"question" => $questionText,
-									"answer" => "",
+									"answer" => $answerList,
 									"correctFeedback" => $feedbackCorrect,
 									"errorFeedback" => $feedbackError));
 						}
