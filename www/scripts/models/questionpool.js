@@ -251,7 +251,7 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 	}
 };
 
-<<<<<<< HEAD
+
 QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 	var constant = 10;
 	
