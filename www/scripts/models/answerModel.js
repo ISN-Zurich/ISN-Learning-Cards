@@ -1,13 +1,17 @@
+//***********************************************************ANSWER MODEL**********************************************************************************
+// The answer model handles the answering 
+
+
+// Constructor. It 
 function AnswerModel() {
 	this.answerList = [];
 
 };
 
 AnswerModel.prototype.getAnswerBody = function() {
-}; // will assing a class
-// with highligted
-// foreground to the
-// correct answers
+}; // will assing a class with highligted  foreground to the correct answers
+// 
+
 
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 

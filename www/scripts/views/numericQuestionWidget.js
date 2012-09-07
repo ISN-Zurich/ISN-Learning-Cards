@@ -1,34 +1,45 @@
+//***********************************************************NUMERIC CHOICE WIDGET**********************************************************************************
+//The Multiple choice widget has two views, an answer and a feedback view.
+
+
+
+//********************************************************** CONSTRUCTOR *******************************************************
+
 function NumericQuestionWidget(interactive) {
 	var self = this;
 
-	self.tickedAnswers = controller.models["answers"].getAnswers();
+	self.tickedAnswers = controller.models["answers"].getAnswers(); // a list with the typed answer
 
 	self.interactive = interactive;
-	this.didApologize = false;
-	if (self.interactive) {
-		self.showAnswer();
+	this.didApologize = false; // a flag tracking when questions with no data are loaded and an error message is displayed on the screen
+	//Check the boolean value of intractive. This is set through the answer and feedback view.
+	if (self.interactive) { 
+		// when answer view is active, then interactive variable is set to true. 
+		self.showAnswer(); //displays the answer body of the multiple choice widget
 		console.log("interactive true");
 	} else {
+		//when feedback view is active, then interactive is set to false. 
 		console.log("interactive false");
-		self.showFeedback();
+		self.showFeedback(); //displays the feedback body of the multiple choice widget
 	}
+} // end of consructor
 
-}
+
+//**********************************************************METHODS***************************************
+
+
+//Creation of answer body for numeric questions. It contains a input field.
+
 
 NumericQuestionWidget.prototype.showAnswer = function() {
 
 	var self = this;
 	
 	var questionpoolModel = controller.models['questionpool'];
-	// $("#numberInputContainer").empty();
-	// $("#numberInputContainer").removeClass("correctAnswer");
-	$("#cardAnswerBody").empty();
+		$("#cardAnswerBody").empty();
 
-	if (questionpoolModel.questionList && questionpoolModel.getAnswer()) {
-//		$("#numberInputContainer").empty();
-//		$("#numberInputContainer").removeClass("correctAnswer");
-//		$("#cardAnswerBody").empty();
-//		$("#numberInputContainer").show();
+		// Check if there is a question pool and if there are answers for a specific question in order to display the answer body
+		if (questionpoolModel.questionList && questionpoolModel.getAnswer()) {
 		console.log("entered numeric answer body");
 
 		var div = $("<div/>", {
@@ -45,22 +56,25 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		
 		
 		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
-//		$("#numberInput")[0].focus();
+
 		
 	} else {
+		//if there are no data for a question or there is no questionpool then display the error message
 		this.didApologize = true;
 		doApologize();
 	}
 
 };
 
+//Creation of feedback body for numeric questions. It contains one or two input fields, based on the answer results
+
 NumericQuestionWidget.prototype.showFeedback = function() {
 	console.log("start show feedback in numeric choice");
 
-//	$("#numberInputContainer").show();
+
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
-//	$("#numberInputContainer").show();
+
 
 	var questionpoolModel = controller.models["questionpool"];
 	var answerModel = controller.models["answers"];
@@ -68,12 +82,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var correctAnswer = questionpoolModel.getAnswer()[0];
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 
-	
-//	var clone = $("#numberInputContainer").clone();
-//	$("#numberInputContainer").remove("#numberInput");
-//	$("#numberInputContainer").text(typedAnswer);
-//	clone.appendTo("#feedbackBody");
-	
+
 	var div = $("<div/>", {
 		"id": "typedAnswer",
 		"class": "inputBorder",
