@@ -60,7 +60,6 @@ QuestionPoolModel.prototype.getAnswer = function() {
 QuestionPoolModel.prototype.nextQuestion = function() {
 	// this.index = (this.index + 1) % this.questionList.length;
 	var random;
-	var constant = 10;
 	
 	
 	do {
@@ -157,6 +156,7 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 };
 
 QuestionPoolModel.prototype.queueCurrentQuestion = function() {
+	var constant = 10;
 	
 	if (this.questionList.length >= constant)
 	 {	
