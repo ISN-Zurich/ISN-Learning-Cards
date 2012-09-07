@@ -302,5 +302,4 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						}
 					});
 };
-=======
->>>>>>> refs/remotes/isabella/master
+
