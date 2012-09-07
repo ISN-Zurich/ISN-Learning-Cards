@@ -1,12 +1,26 @@
+/**
+ * does nothing
+ */
 function doNothing() {
 }
+
+/**
+ * opens a view
+ */
 function openView() {
 	$("#" + this.tagID).show();
 }
+
+/**
+ * closes a view
+ */
 function closeView() {
 	$("#" + this.tagID).hide();
 }
 
+/**
+ * shows apologize message if not question data is loaded
+ */
 function doApologize() {
 	$("#feedbackBody").empty();
 	$("<span/>", {
@@ -15,6 +29,9 @@ function doApologize() {
 	$("#dataErrorMessage").show();
 }
 
+/**
+ * Controller
+ */
 function Controller() {
 	var self = this;
 
@@ -25,16 +42,18 @@ function Controller() {
 	this.models = {};
 	this.views = {};
 
-	this.models.connection = new ConnectionState();
+	//initialize models
+	this.models.connection = new ConnectionState(this);
 	this.models.authentication = new ConfigurationModel(this);
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
-	this.models.answers = new AnswerModel();
+	this.models.answers = new AnswerModel(this);
 
 	this.models.authentication.loadFromServer();
 	
 	console.log("models initialized");
 
+	//initialize views
 	this.views.splashScreen = new SplashScreen(this);
 	this.views.login = new LoginView();
 	this.views.logout = new LogoutView();
@@ -65,6 +84,7 @@ function Controller() {
 
 	console.log('core gestures done');
 
+	//if device is an iPhone enable pinching
 	console.log('platform' + device.platform);
 	if (device.platform == 'iPhone') {
 
@@ -77,15 +97,17 @@ function Controller() {
 	//set correct height of icon button
 	window.addEventListener("resize", function() {setButtonHeight();}, false);
 	window.addEventListener("orientationchange", function() {setButtonHeight();}, false);
-
-	setButtonHeight();
 	
+	setButtonHeight();
 	
 	this.activeView.open();
 	
 	console.log("End of Controller");
 } // end of Controller
 
+/**
+ * closes the current view and opens the specified one
+ */
 Controller.prototype.transition = function(viewname) {
 	if (this.views[viewname]) {
 		this.activeView.close();
@@ -94,6 +116,10 @@ Controller.prototype.transition = function(viewname) {
 	}
 };
 
+/**
+ * if user is already login, the course list is shown
+ * otherwise the login form is shown
+ */
 Controller.prototype.transitionToEndpoint = function() {
 	console.log('initialize endpoint');
 	
@@ -106,6 +132,9 @@ Controller.prototype.transitionToEndpoint = function() {
 	}
 };
 
+/**
+ * transition to the specified view
+ */
 Controller.prototype.transitionToLogin = function() {
 	this.transition('login');
 };
@@ -138,11 +167,9 @@ Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
 };
 
-Controller.prototype.synchronizeModels = function() {
-	this.models["courses"].loadFromServer();
-};
-
-
+/**
+ * sets the current height for icon buttons
+ */
 function setButtonHeight() {
 	console.log("setButtonHeight");
 	var windowheight = $(window).height();
