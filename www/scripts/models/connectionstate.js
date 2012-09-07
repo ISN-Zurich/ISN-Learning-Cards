@@ -1,25 +1,13 @@
-//	var connectionState = window.navigator.onLine ? "online" : "offline";
-//
-//	window.addEventListener("offline", function() {
-//		connectionState = "offline";
-//	}, false);
-//	window.addEventListener("online", function() {
-//		connectionState = "online";
-//	}, false);
-//
-//
-//function isOffline() {
-//	return connectionState == "offline";
-//}
-
+/**
+ * This model holds the current connection state (online = true, offline = false). 
+ * Every time an online or offline event is triggered, it updates its connection state
+ */
 function ConnectionState() {
 
 	var self = this;
 	self.state = window.navigator.onLine;
 
 	console.log("connection state: " + window.navigator.onLine);
-	
-	
 
 	window.addEventListener("offline", function() {
 		self.setState(false);
@@ -29,12 +17,17 @@ function ConnectionState() {
 	}, true);
 }
 
-// ConnectionState.prototype.getState = function() {return this.state;};
-// returns true or false!
+/**
+ * @return true if the connection state is offline, otherwise false
+ */
 ConnectionState.prototype.isOffline = function() {
 	return !this.state;
 };
 
+/**
+ * sets the state of the connection state
+ * if the connection state is set to online, the switchtoonline event is triggered
+ */
 ConnectionState.prototype.setState = function(state) {
 	console.log("connection state changed");
 	self.state = state;

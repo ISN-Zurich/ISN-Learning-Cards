@@ -1,105 +1,75 @@
+/**
+ * This model holds the data about the current configuration
+ */
 function ConfigurationModel(controller) {
 	this.configuration = {};
-	
+
 	this.controller = controller;
-    
-	this.firstLogin = true;
-    // initialize the configuration if it does not exist
-//    this.createConfiguration();
-    
+
+	// initialize the configuration if it does not exist
+	// this.createConfiguration();
+
 }
 
+/**
+ * stores the data into the local storage (key = "configuration") 
+ * therefor the json object is converted into a string
+ */
 ConfigurationModel.prototype.storeData = function() {
 	var configString;
 	try {
 		configString = JSON.stringify(this.configuration);
 	} catch (err) {
 		configString = "";
-        console.log("error while storing");
+		console.log("error while storing");
 	}
-    console.log(configString);
+	console.log(configString);
 	localStorage.setItem("configuration", configString);
 };
 
+/**
+ * loads the data from the local storage (key = "configuration") 
+ * therefor the string is converted into a json object
+ */
 ConfigurationModel.prototype.loadData = function() {
 	var configObject;
 	try {
 		configObject = JSON.parse(localStorage.getItem("configuration"));
-	} catch(err) {
-        console.log("error! while loading");
+	} catch (err) {
+		console.log("error! while loading");
 	}
-	
+
 	if (!configObject) {
-		configObject = {loginState: "loggedOut"};
+		configObject = {
+			loginState : "loggedOut"
+		};
 	}
-	
-//	if (!configObject.loginState) { //if no configuration is available, a new one is created
-//		configObject = this.createConfiguration();
-//	}
-	
+
+	// if (!configObject.loginState) { //if no configuration is available, a new
+	// one is created
+	// configObject = this.createConfiguration();
+	// }
+
 	this.configuration = configObject;
-    
+
 };
 
-ConfigurationModel.prototype.login = function(username, password, success, error) {
-	this.configuration.loginState = "loggedIn";
-    this.storeData();
-    this.loadFromServer();
-    success();
-};
-
-ConfigurationModel.prototype.logout = function() {
-	this.configuration.loginState = "loggedOut";
-    this.storeData();
-};
-
-ConfigurationModel.prototype.isLoggedIn = function() {
-	return this.configuration.loginState == "loggedIn" ? true : false;
-};
-
-ConfigurationModel.prototype.getDisplayName = function() {
-	return this.configuration.learnerInformation.displayName;
-};
-
-ConfigurationModel.prototype.getUserName = function() {
-	return this.configuration.learnerInformation.userName;
-};
-
-ConfigurationModel.prototype.getUserId = function() {
-	return this.configuration.learnerInformation.userId;
-};
-
-ConfigurationModel.prototype.getEmailAddress = function() {
-	return this.configuration.learnerInformation.emailAddress;
-};
-
-
-ConfigurationModel.prototype.createConfiguration = function() {
-	console.log("create configuration");
-    
-    if(!localStorage.configuration) {
-		initConfiguration();
-	}
-	
-    try {
-		return JSON.parse(localStorage.getItem("configuration"));
-	} catch(err) {
-		return {};
-	}
-};
-
+/**
+ * loads the configuration data from the server and stores it in the local storage
+ * when all data is loaded, the authenticationready event is triggered
+ */
 ConfigurationModel.prototype.loadFromServer = function() {
 
 	var self = this;
 	jQuery
 			.getJSON(
-					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/1.json", function(data) {
+					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/1.json",
+					function(data) {
 						console.log("success");
 						console.log("JSON: " + data);
 						var authenticationObject;
 						try {
-							authenticationObject = data; // JSON.parse(data);
-							// controller.models["courses"].courseLoaded(data.courseID);
+							authenticationObject = data;
 							console.log("authenticationData from server");
 						} catch (err) {
 							console.log("Error: Couldn't parse JSON for authentication");
@@ -111,14 +81,85 @@ ConfigurationModel.prototype.loadFromServer = function() {
 						// console.log("no questionpool loaded");
 						// questionPoolObject = self.createPool(data.courseID);
 						// }
-//						if (authenticationObject[0]) {
-							console.log("Object: " + authenticationObject);
-							authenticationObject.loginState = self.configuration.loginState;
-							self.configuration = authenticationObject;
-							self.storeData();
-							
-							$(document).trigger("authenticationready", authenticationObject.learnerInformation.userId);
-							
-							//						}
+
+						console.log("Object: " + authenticationObject);
+						authenticationObject.loginState = self.configuration.loginState;
+						self.configuration = authenticationObject;
+						self.storeData();
+
+						$(document).trigger("authenticationready",
+								authenticationObject.learnerInformation.userId);
+
 					});
+};
+
+/**
+ * TODO: should send authentication data to the server?
+ */
+ConfigurationModel.prototype.login = function(username, password, success,
+		error) {
+	this.configuration.loginState = "loggedIn";
+	this.storeData();
+	this.loadFromServer();
+	success();
+};
+
+/**
+ * TODO: should delete all data?
+ */
+ConfigurationModel.prototype.logout = function() {
+	this.configuration.loginState = "loggedOut";
+	this.storeData();
+};
+
+/**
+ * @return true if user is logged in, otherwise false
+ */
+ConfigurationModel.prototype.isLoggedIn = function() {
+	return this.configuration.loginState == "loggedIn" ? true : false;
+};
+
+/**
+ * @return the full name of the user
+ */
+ConfigurationModel.prototype.getDisplayName = function() {
+	return this.configuration.learnerInformation.displayName;
+};
+
+/**
+ * @return the username
+ */
+ConfigurationModel.prototype.getUserName = function() {
+	return this.configuration.learnerInformation.userName;
+};
+
+/**
+ * @return the user id
+ */
+ConfigurationModel.prototype.getUserId = function() {
+	return this.configuration.learnerInformation.userId;
+};
+
+/**
+ * @return the email address of the user
+ */
+ConfigurationModel.prototype.getEmailAddress = function() {
+	return this.configuration.learnerInformation.emailAddress;
+};
+
+/**
+ * if no configuration is stored in the local storage, a new one is created
+ */
+ConfigurationModel.prototype.createConfiguration = function() {
+	console.log("create configuration");
+
+	if (!localStorage.configuration) {
+		initConfiguration();
+	}
+
+	try {
+		return JSON.parse(localStorage.getItem("configuration"));
+	} catch (err) {
+		return {};
+	}
 };
