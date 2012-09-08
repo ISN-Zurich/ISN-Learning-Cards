@@ -1,3 +1,7 @@
+/** ***********************************************************
+ * VIEW HELPERS
+ */
+
 /**
  * does nothing
  */
@@ -29,7 +33,7 @@ function doApologize() {
 	$("#dataErrorMessage").show();
 }
 
-/**
+/** ***********************************************************
  * Controller
  */
 function Controller() {
