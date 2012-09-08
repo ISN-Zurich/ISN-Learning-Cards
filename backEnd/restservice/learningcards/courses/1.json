@@ -1,0 +1,17 @@
+{"courses": [ {
+		"id" : "1",
+		"title" : "Politics",
+		"syncDateTime" : 0,
+		"syncState" : false,
+		"isLoaded" : false
+	}, {
+		"id" : "2",
+		"title" : "Economics",
+		"syncDateTime" : 0,
+		"syncState" : false,
+		"isLoaded" : false
+	}],
+    "syncDateTime" : 0,
+    "syncState" : false,
+    "syncTimeOut": 60
+}

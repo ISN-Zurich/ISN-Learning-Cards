@@ -1,3 +1,6 @@
+/**
+ * View for displaying the login form
+ */
 function LoginView() {
     var self = this;
     
@@ -5,22 +8,13 @@ function LoginView() {
     
     jester($('#loginButton')[0]).tap(function(){ self.clickLoginButton(); } );
 
-    $("#usernameInput")[0].addEventListener("focus", focusLogos);
-    
-    $("#password")[0].addEventListener("focus", focusLogos);
-  
-    $("#usernameInput")[0].addEventListener("blur",unfocusLogos);
-    
+    //if keyboard is displayed, move the logos up
+    //if keyboard is not displayed anymore, move logos down
+    $("#usernameInput")[0].addEventListener("focus", focusLogos);   
+    $("#password")[0].addEventListener("focus", focusLogos); 
+    $("#usernameInput")[0].addEventListener("blur",unfocusLogos);    
     $("#password")[0].addEventListener("blur" ,unfocusLogos);
-    
-//    $("#usernameInput").focus(toggleLogos);
-//    
-//    $("#password").focus(toggleLogos);
-//  
-//    $("#usernameInput").blur(toggleLogos);
-//    
-//    $("#password").blur(toggleLogos);
-    
+     
     function focusLogos(e) {
     	console.log("focus logos " + e.currentTarget.id);
     	$("#logos").removeClass("bottom");
@@ -35,19 +29,35 @@ function LoginView() {
    
 } 
 
-
-
+/**
+ * tap, swipe and pinch do nothing
+ */
 LoginView.prototype.handleTap = doNothing;
 LoginView.prototype.handlePinch = doNothing;
 LoginView.prototype.handleSwipe = doNothing;
+
+/**
+ * opens the view
+ */
 LoginView.prototype.openDiv = openView;
+
+/**
+ * shows the login form
+ */
 LoginView.prototype.open = function() {
     this.showForm();
     this.openDiv();
 };    
-
+/**
+ * closes the view
+ */
 LoginView.prototype.close = closeView;
 
+/**
+ * click on the login button sends data to the authenication model
+ * data is only send, if input fields contain some values
+ * after successful login, the course list is displayed
+ */
 LoginView.prototype.clickLoginButton = function() {
     var user, password;
     
@@ -59,14 +69,14 @@ LoginView.prototype.clickLoginButton = function() {
     }
     
     function cbLoginFailure() {
-        // show a login error message
+        //TODO show a login error message
     }
     
     console.log("check logIn data"); 
     if ( $("#usernameInput").val()  && $("#password").val() ) {
             console.log("has logIn data");
 
-        // make it visible to the user that we are waiting for the server
+        //TODO make it visible to the user that we are waiting for the server
         controller.models['authentication'].login($("#usernameInput").val(), 
                                   $("#password").val(), 
                                   cbLoginSuccess, 
@@ -76,6 +86,9 @@ LoginView.prototype.clickLoginButton = function() {
     }
 };
 
+/**
+ * displays the login form
+ */
 LoginView.prototype.showForm = function() {
     $("#loginForm").show();
 };

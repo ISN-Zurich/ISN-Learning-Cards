@@ -829,7 +829,47 @@ class ilInitialisation
 		// stop immediately to avoid redirection madness.
         return true;
         
-        // removed 50+ lines of redirection madness ;-)
+		// if target given, try to go there
+		if ($_GET["target"] != "")
+		{
+			$this->initUserAccount();
+
+			// target is accessible -> goto target
+			include_once("Services/Init/classes/class.ilStartUpGUI.php");
+			if	(ilStartUpGUI::_checkGoto($_GET["target"]))
+			{
+				// Disabled: GET parameter is kept, since no redirect. smeyer
+				// additional parameter capturing for survey access codes
+				/*
+				$survey_parameter = "";
+				if (array_key_exists("accesscode", $_GET))
+				{
+					$survey_parameter = "&accesscode=" . $_GET["accesscode"];
+				}
+				*/
+				// Disabled redirect for public section
+				return true;
+				#ilUtil::redirect(ILIAS_HTTP_PATH.
+				#	"/goto.php?target=".$_GET["target"].$survey_parameter);
+			}
+			else	// target is not accessible -> login
+			{
+				$this->goToLogin($_GET['auth_stat']);
+			}
+		}
+
+		$_GET["ref_id"] = ROOT_FOLDER_ID;
+
+		$_GET["cmd"] = "frameset";
+		$jump_script = "repository.php";
+
+		$script = $this->updir.$jump_script."?reloadpublic=1&cmd=".$_GET["cmd"]."&ref_id=".$_GET["ref_id"];
+
+		// todo do it better, if JS disabled
+		//echo "<script language=\"Javascript\">\ntop.location.href = \"".$script."\";\n</script>\n";
+		echo "<script language=\"Javascript\">\ntop.location.href = \"".$script."\";\n</script>\n".
+			'Please click <a href="'.$script.'">here</a> if you are not redirected automatically.';
+		exit;
 	}
 
 

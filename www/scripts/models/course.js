@@ -1,10 +1,14 @@
+/**
+ * This model holds the course list and information about
+ * the current synchronization of the data with the server
+ */
 function CourseModel(controller) {
 	var self = this;
 
 	this.controller = controller;
 
 	this.courseList = [];
-	this.index = 0;
+	this.index = 0; //index of the current course
 
 	this.syncDateTime = 0;
 	this.syncState = false;
@@ -30,6 +34,10 @@ function CourseModel(controller) {
 
 };
 
+/**
+ * stores the data into the local storage (key = "courses") 
+ * therefor the data is combined into a json object which is converted into a string
+ */
 CourseModel.prototype.storeData = function() {
 	var courseString;
 	try {
@@ -45,6 +53,10 @@ CourseModel.prototype.storeData = function() {
 	localStorage.setItem("courses", courseString);
 };
 
+/**
+ * loads the data from the local storage (key = "courses") 
+ * therefor the string is converted into a json object of which the data is taken
+ */
 CourseModel.prototype.loadData = function() {
 	var courseObject;
 	try {
@@ -59,10 +71,7 @@ CourseModel.prototype.loadData = function() {
 	// }
 
 	this.courseList = courseObject.courses || [];
-	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime(); // courseObject.syncDateTime
-	// ?
-	// courseObject.syncDateTime
-	// : 0
+	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime(); 
 	this.syncState = courseObject.syncState || false;
 	this.syncTimeOut = (courseObject.syncTimeOut * 1000) || 60000;
 	this.index = 0;
@@ -70,65 +79,12 @@ CourseModel.prototype.loadData = function() {
 	this.checkForTimeOut();
 };
 
-CourseModel.prototype.checkForTimeOut = function() {
-	var timeDelta = ((new Date()).getTime() - this.syncDateTime);
-	console.log("timeDelta: " + timeDelta);
-	console.log("syncTimeOut: " + this.syncTimeOut);
-	if (timeDelta > this.syncTimeOut) {
-		this.syncState = false;
-		console.log("check for timeout is false");
-	}
-};
-
-CourseModel.prototype.isLoaded = function(courseId) {
-	if (courseId > 0) {
-		for ( var c in this.courseList) {
-			if (this.courseList[c].id == courseId) {
-				return this.courseList[c].isLoaded;
-			}
-		}
-		return false;
-	}
-	return (this.index > this.courseList.length - 1) ? false
-			: this.courseList[this.index].isLoaded;
-};
-
-CourseModel.prototype.getId = function() {
-	return (this.index > this.courseList.length - 1) ? false
-			: this.courseList[this.index].id;
-};
-
-CourseModel.prototype.getTitle = function() {
-	return (this.index > this.courseList.length - 1) ? false
-			: this.courseList[this.index].title;
-};
-
-CourseModel.prototype.getSyncState = function() {
-	return (this.index > this.courseList.length - 1) ? false
-			: this.courseList[this.index].syncState;
-};
-
-CourseModel.prototype.nextCourse = function() {
-	this.index++;
-	return this.index < this.courseList.length;
-};
-
-CourseModel.prototype.reset = function() {
-	this.index = 0;
-};
-
-CourseModel.prototype.createCourses = function() {
-	console.log("create courses");
-	if (!localStorage.courses) {
-		initCourses();
-	}
-	try {
-		return JSON.parse(localStorage.getItem("courses"));
-	} catch (err) {
-		return [];
-	}
-};
-
+/**
+ * if the user is logged in and the syncState is set to false, 
+ * it loads the course list from the server and stores it in the local storage 
+ * when all data is loaded, the courselistupdate event is triggered and
+ * the question pools are told to load their data from the server
+ */
 CourseModel.prototype.loadFromServer = function() {
 	console.log("loadFromServer-Course is called");
 	var self = this;
@@ -172,7 +128,6 @@ CourseModel.prototype.loadFromServer = function() {
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;
 			self.syncTimeOut = courseObject.syncTimeOut;
-			self.index = 0;
 			self.storeData();
 			console.log("JSON CourseList: " + self.courseList);
 			self.reset();
@@ -188,6 +143,83 @@ CourseModel.prototype.loadFromServer = function() {
 	}
 };
 
+/**
+ * @return the id of the current course
+ */
+CourseModel.prototype.getId = function() {
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].id;
+};
+
+/**
+ * @return the title of the current course
+ */
+CourseModel.prototype.getTitle = function() {
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].title;
+};
+
+/**
+ * @return the synchronization state of the current course
+ */
+CourseModel.prototype.getSyncState = function() {
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].syncState;
+};
+
+/**
+ * increases index 
+ * @return true if a course with an appropriate index exists, otherwise false
+ */
+CourseModel.prototype.nextCourse = function() {
+	this.index++;
+	return this.index < this.courseList.length;
+};
+
+/**
+ * sets index to 0
+ */
+CourseModel.prototype.reset = function() {
+	this.index = 0;
+};
+
+/**
+ * sets syncState to false if the time that passed since the last 
+ * synchronization is greater than the value of syncTimeOut
+ */
+CourseModel.prototype.checkForTimeOut = function() {
+	var timeDelta = ((new Date()).getTime() - this.syncDateTime);
+	console.log("timeDelta: " + timeDelta);
+	console.log("syncTimeOut: " + this.syncTimeOut);
+	if (timeDelta > this.syncTimeOut) {
+		this.syncState = false;
+		console.log("check for timeout is false");
+	}
+};
+
+/**
+ * if a course id is passed to the method, it returns true, if the course with
+ * the specified id is loaded, otherwise false
+ * 
+ * if no course id is passed, it returns true, if the current course is loaded,
+ * otherwise false
+ */
+CourseModel.prototype.isLoaded = function(courseId) {
+	if (courseId > 0) {
+		for ( var c in this.courseList) {
+			if (this.courseList[c].id == courseId) {
+				return this.courseList[c].isLoaded;
+			}
+		}
+		return false;
+	}
+	return (this.index > this.courseList.length - 1) ? false
+			: this.courseList[this.index].isLoaded;
+};
+
+/**
+ * sets the isLoaded of the course with the specified course id to true
+ */
 CourseModel.prototype.courseIsLoaded = function(courseId) {
 	for ( var c in this.courseList) {
 		if (this.courseList[c].id == courseId) {
@@ -198,6 +230,11 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 	}
 };
 
+/**
+ * if syncState is false, it loads the data for the course list from the server
+ * if syncState is true, it loaded the data for all not yet loaded question pools
+ * from the server
+ */
 CourseModel.prototype.switchToOnline = function() {
 	console.log("switch to online - load all not yet loaded courses");
 
@@ -213,5 +250,20 @@ CourseModel.prototype.switchToOnline = function() {
 						.loadFromServer(this.courseList[c].id);
 			}
 		}
+	}
+};
+
+/**
+ * if no course list is stored in the local storage, a new one is created
+ */
+CourseModel.prototype.createCourses = function() {
+	console.log("create courses");
+	if (!localStorage.courses) {
+		initCourses();
+	}
+	try {
+		return JSON.parse(localStorage.getItem("courses"));
+	} catch (err) {
+		return [];
 	}
 };

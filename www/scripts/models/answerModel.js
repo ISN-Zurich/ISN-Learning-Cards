@@ -1,13 +1,17 @@
+//***********************************************************ANSWER MODEL**********************************************************************************
+// The answer model handles the answering 
+
+
+// Constructor. It 
 function AnswerModel() {
 	this.answerList = [];
 
 };
 
 AnswerModel.prototype.getAnswerBody = function() {
-}; // will assing a class
-// with highligted
-// foreground to the
-// correct answers
+}; // will assing a class with highligted  foreground to the correct answers
+// 
+
 
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 
@@ -29,16 +33,16 @@ AnswerModel.prototype.getAnswerResults = function() {
 
 	switch (questionType) {
 
-	case 'Single Choice Question':
+	case 'assSingleChoice':
 		return this.getSingleAnswerResults();
 		break;
-	case 'Multiple Choice Question':
+	case 'assMultipleChoice':
 		return this.getMultipleAnswerResults();
 		break;
-	case 'Numeric Question':
+	case 'assNumeric':
 		return this.getNumericAnswerResults();
 		break;
-	case 'Text Sort Question':
+	case 'assOrderingQuestion':
 		return this.getTextSortAnswerResults();
 		break;
 	default:
@@ -58,7 +62,7 @@ AnswerModel.prototype.getMultipleAnswerResults = function() {
 	var wrong_ticked = 0;
 
 	do {
-		if (questionpool.getAnswerChoiceScore() == 1) {
+		if (questionpool.getAnswerChoiceScore() > 0) {
 			correctAnswers++;
 			if (this.answerList.indexOf(numberOfAnswers) != -1) {
 				corr_ticked++;
@@ -110,7 +114,7 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 
 	if (!clickedAnswerIndex) {
 		returnedResult = "Wrong";
-	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) == 1) {
+	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) > 0) {
 		returnedResult = "Excellent";
 
 	} else {
@@ -183,7 +187,7 @@ AnswerModel.prototype.getNumericAnswerResults = function() {
 
 	var returnedResult;
 
-	if (questionpoolModel.getAnswer() == answerModel.getAnswers()) {
+	if (questionpoolModel.getAnswer()[0] == answerModel.getAnswers()) {
 		returnedResult = "Excellent";
 	} else {
 		returnedResult = "Wrong";

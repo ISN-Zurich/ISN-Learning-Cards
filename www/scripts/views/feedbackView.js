@@ -1,3 +1,6 @@
+/**
+ * View for displaying the feedback
+ */
 function FeedbackView(question) {
 	var self = this;
 
@@ -20,12 +23,22 @@ function FeedbackView(question) {
         
     }
     setOrientation();
+    //when orientation changes, set the new width and height
+    //resize event should be caught, too, because not all devices
+    //send an oritentationchange even
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
 
 }
 
+/**
+ * tap does nothing
+ */
 FeedbackView.prototype.handleTap = doNothing;
+
+/**
+ * swipe leads to new question
+ */
 FeedbackView.prototype.handleSwipe = function handleSwipe() {
 	$("#feedbackBody").show();
 	$("#feedbackTip").hide();
@@ -33,11 +46,21 @@ FeedbackView.prototype.handleSwipe = function handleSwipe() {
 	controller.transitionToQuestion();
 };
 
+/**
+ * pinch leads to course list
+ */
 FeedbackView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
 
+/**
+ * closes the view
+ */
 FeedbackView.prototype.closeDiv = closeView;
+
+/**
+ * deletes data from answer model
+ */
 FeedbackView.prototype.close = function() {
 	controller.models["answers"].deleteData();
 	$("#feedbackTip").empty();
@@ -46,24 +69,49 @@ FeedbackView.prototype.close = function() {
 	this.closeDiv();
 
 };
+
+/**
+ * opens the view
+ */
 FeedbackView.prototype.openDiv = openView;
+
+/**
+ * shows feedback title and body
+ */
 FeedbackView.prototype.open = function() {
 	this.showFeedbackTitle();
 	this.showFeedbackBody();
 	this.openDiv();
 };
 
+/**
+ * click on feedback done button leads to new question
+ */
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
 
 };
 
+/**
+ * click on feedback more button toggles the feedback body and the tip
+ */
 FeedbackView.prototype.clickFeedbackMore = function() {
 	$("#feedbackBody").toggle();
 	$("#feedbackTip").toggle();
 };
 
+/**
+ * click on the course list button leads to course list
+ */
+FeedbackView.prototype.clickCourseListButton = function() {
+	controller.transitionToCourses();
+};
+
+
+/**
+ * shows feedback title and corresponding icon
+ */
 FeedbackView.prototype.showFeedbackTitle = function() {
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 	$("#cardFeedbackTitle").text(currentFeedbackTitle);
@@ -84,33 +132,30 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 
 };
 
+/**
+ * calls the appropriate widget to show the feedback body
+ */
 FeedbackView.prototype.showFeedbackBody = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
 	var questionType = questionpoolModel.getQuestionType();
 	var interactive = false;
 	switch (questionType) {
-		case 'Single Choice Question':
+		case 'assSingleChoice':
 			this.widget = new SingleChoiceWidget(interactive);
 			break;
-		case 'Multiple Choice Question':
+		case 'assMultipleChoice':
 			this.widget = new MultipleChoiceWidget(interactive);
 			break;
-		case 'Numeric Question':
+		case 'assNumeric':
 			this.widget = new NumericQuestionWidget(interactive);
 			break;
-		case 'Text Sort Question':
+		case 'assOrderingQuestion':
 			this.widget = new TextSortWidget(interactive);
 			break;
-		// ...
 		default:
 			break;
 	}
 
 };
 
-FeedbackView.prototype.clickCourseListButton = function() {
-
-	controller.transitionToCourses();
-
-};

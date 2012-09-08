@@ -1,3 +1,6 @@
+/**
+ * View for displaying questions
+ */
 function QuestionView() {
     var self = this;
     
@@ -20,24 +23,32 @@ function QuestionView() {
         
     }
     setOrientation();
+    //when orientation changes, set the new width and height
+    //resize event should be caught, too, because not all devices
+    //send an oritentationchange event 
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
     
-    //$('#ButtonAnswer').click(function(event){ self.handleTap(); event.stopPropagation();} );
 }
 
-
+/**
+ * pinch leads to the course list
+ */
 QuestionView.prototype.handlePinch = function() {
     controller.transitionToCourses();
 };
 
+/**
+ * tap leads to the answer view
+ */
 QuestionView.prototype.handleTap = function() {
-	
-	
 	 controller.transitionToAnswer();
-	 //controller.models["answers"].deleteData();
 };
 
+/**
+ * swipe shows a new question
+ * updates question body and title
+ */
 QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view 
@@ -47,8 +58,19 @@ QuestionView.prototype.handleSwipe = function() {
 	this.showQuestionTitle();
 };
 
+/**
+ * closes the view
+ */
 QuestionView.prototype.close = closeView;
+
+/**
+ * opens the view
+ */
 QuestionView.prototype.openDiv = openView;
+
+/**
+ * shows the question body and title
+ */
 QuestionView.prototype.open = function() {
 	this.showQuestionBody();
 	this.showQuestionTitle();
@@ -57,40 +79,52 @@ QuestionView.prototype.open = function() {
 	 //controller.models["answers"].deleteData();
 };
 
+/**
+ * shows the current question text
+ */
 QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
-	$("#cardQuestionBody").text(currentQuestionBody);
+	$("#cardQuestionBody").html(currentQuestionBody);
 	
 	$("#ButtonTip").hide();
 	
 };
 
+/**
+ * shows the current question title and the corresponding icon
+ */
 QuestionView.prototype.showQuestionTitle = function() {
 	var currentQuestionTitle = controller.models["questionpool"]
 			.getQuestionType();
-	$("#cardQuestionTitle").text(currentQuestionTitle);
 	
 	$("#questionIcon").removeClass();
 	
 	switch (currentQuestionTitle) {
-	case 'Single Choice Question':
+	case 'assSingleChoice':
 		$("#questionIcon").addClass("icon-checkmark");
+		$("#cardQuestionTitle").text("Single Choice Question");
 		break;
-	case 'Multiple Choice Question':
+	case 'assMultipleChoice':
 		$("#questionIcon").addClass("icon-checkmark");
+		$("#cardQuestionTitle").text("Multiple Choice Question");
 		break;
-	case 'Text Sort Question':
+	case 'assOrderingQuestion':
 		$("#questionIcon").addClass("icon-move-vertical");
+		$("#cardQuestionTitle").text("Text Order Question");
 		break;
-	case 'Numeric Question':
+	case 'assNumeric':
 		$("#questionIcon").addClass("icon-pencil");
+		$("#cardQuestionTitle").text("Numeric Question");
 		break;
 	default:
 		break;
 	}
 };
 
+/**
+ * click on the course list button leads to course list
+ */
 QuestionView.prototype.clickCourseListButton = function() {
 	controller.transitionToCourses();
 };
