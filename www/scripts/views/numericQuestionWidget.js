@@ -57,7 +57,7 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		
 		
 		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
-		$("#numberInput")[0].focus();
+//		$("#numberInput")[0].focus();
 		
 	} else {
 		//if there are no data for a question or there is no questionpool then display the error message
