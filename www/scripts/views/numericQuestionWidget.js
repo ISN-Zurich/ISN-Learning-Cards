@@ -27,6 +27,9 @@ function NumericQuestionWidget(interactive) {
 
 //**********************************************************METHODS***************************************
 
+NumericQuestionWidget.prototype.cleanup = function() {
+    $("#numberInput").blur();
+};
 
 //Creation of answer body for numeric questions. It contains a input field.
 
@@ -76,7 +79,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
 	
-	$("#numberInput").blur();
+	
 	
 	var questionpoolModel = controller.models["questionpool"];
 	var answerModel = controller.models["answers"];

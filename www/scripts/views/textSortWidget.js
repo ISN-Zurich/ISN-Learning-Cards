@@ -18,6 +18,8 @@ function TextSortWidget(interactive) {
 	}
 }
 
+TextSortWidget.prototype.cleanup = doNothing;
+
 /**
  * displays the answer for text sort questions
  */

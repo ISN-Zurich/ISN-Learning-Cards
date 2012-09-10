@@ -30,6 +30,7 @@ function SingleChoiceWidget(interactive) {
 
 //**********************************************************METHODS***************************************
 
+SingleChoiceWidget.prototype.cleanup = doNothing;
 
 //Creation of answer body for single choice questions. It contains a list with the possible solutions. Only one of them can be ticked each time.
 

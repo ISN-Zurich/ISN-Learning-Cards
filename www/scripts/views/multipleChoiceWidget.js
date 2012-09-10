@@ -34,6 +34,8 @@ function MultipleChoiceWidget(interactive) {
 
 //**********************************************************METHODS***************************************
 
+MultipleChoiceWidget.prototype.cleanup = doNothing;
+
 
 // Creation of answer body for multiple choice questions. It contains a list with the possible solutions.
 
