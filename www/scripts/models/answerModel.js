@@ -112,7 +112,7 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 
 	var returnedResult;
 
-	if (!clickedAnswerIndex) {
+	if (clickedAnswerIndex < 0) {
 		returnedResult = "Wrong";
 	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) > 0) {
 		returnedResult = "Excellent";
