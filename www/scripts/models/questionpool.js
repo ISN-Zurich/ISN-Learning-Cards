@@ -130,7 +130,6 @@ QuestionPoolModel.prototype.getAnswer = function() {
  */
 QuestionPoolModel.prototype.nextQuestion = function() {
 	var random;
-	var constant = 10;
 	
 	do {
 		//generates a random number between 0 and questionList.length - 1
@@ -250,5 +249,57 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 			return [];
 		}
 	}
+};
+
+
+QuestionPoolModel.prototype.queueCurrentQuestion = function() {
+	var constant = 10;
+	
+	if (this.questionList.length >= constant)
+	 {	
+		
+	this.queue.shift();
+	this.queue.push(this.index);
+	 }
+}
+
+QuestionPoolModel.prototype.createQuestionPools = function() {
+	this.createPool(1);
+	this.createPool(2);
+};
+
+QuestionPoolModel.prototype.loadFromServer = function(courseId) {
+
+	var self = this;
+	jQuery
+			.getJSON(
+					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/questions.php/"
+							+ courseId, function(data) {
+						console.log("success");
+						console.log("JSON: " + data);
+						var questionPoolObject;
+						try {
+							questionPoolObject = data.questions; // JSON.parse(data);
+							// controller.models["courses"].courseLoaded(data.courseID);
+						} catch (err) {
+							console.log("Error: Couldn't parse JSON for course"
+									+ data.courseID);
+							questionPoolObject = [];
+						}
+
+						// if (!questionPoolObject[0]) { // if no courses are
+						// available, new ones are created
+						// console.log("no questionpool loaded");
+						// questionPoolObject = self.createPool(data.courseID);
+						// }
+						if (questionPoolObject[0]) {
+							console.log("Object: " + questionPoolObject);
+							self.questionList = questionPoolObject;
+							self.index = 0;
+							self.storeData(data.courseID);
+							$(document).trigger("questionpoolready",
+									data.courseID);
+						}
+					});
 };
 
