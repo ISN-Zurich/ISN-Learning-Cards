@@ -40,12 +40,13 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 			"id" : "numberInput",
 			"class" : "loginInput",
 			"type" : "number",
-			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : ""
+			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : "",
+			"placeholder": "Enter number here"
 		}).appendTo(div);
 		
 		
 		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
-//		$("#numberInput")[0].focus();
+		$("#numberInput")[0].focus();
 		
 	} else {
 		this.didApologize = true;
@@ -61,7 +62,9 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
 //	$("#numberInputContainer").show();
-
+	
+	$("#numberInput").blur();
+	
 	var questionpoolModel = controller.models["questionpool"];
 	var answerModel = controller.models["answers"];
 	var typedAnswer = answerModel.getAnswers();
