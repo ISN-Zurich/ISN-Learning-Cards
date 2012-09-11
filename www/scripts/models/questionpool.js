@@ -1,6 +1,6 @@
 /**
- * This model holds the question of an question pool
- * and a queue for the last answered questions
+ * This model holds the question of an question pool and a queue for the last
+ * answered questions
  */
 function QuestionPoolModel(controller) {
 	this.controller = controller;
@@ -11,17 +11,17 @@ function QuestionPoolModel(controller) {
 
 	this.reset();
 	this.queue = [];
-	
-	//if the question list length is less than this constant,
-	//the queue is not used
+
+	// if the question list length is less than this constant,
+	// the queue is not used
 	this.queueConstant = 4;
-	
+
 	// this.createQuestionPools();
 
 };
 
 /**
- * stores the data into the local storage (key = "questionpool_[course_id]") 
+ * stores the data into the local storage (key = "questionpool_[course_id]")
  * therefor the questionlist is converted into a string
  */
 QuestionPoolModel.prototype.storeData = function(course_id) {
@@ -35,22 +35,22 @@ QuestionPoolModel.prototype.storeData = function(course_id) {
 };
 
 /**
- * loads the data from the local storage (key = "questionpool_[course_id]") 
+ * loads the data from the local storage (key = "questionpool_[course_id]")
  * therefor the string is converted into an array
  */
 QuestionPoolModel.prototype.loadData = function(course_id) {
 	var questionPoolObject;
 	try {
 		questionPoolObject = JSON.parse(localStorage.getItem("questionpool_"
-				+ course_id));
+				+ course_id)) || [];
 	} catch (err) {
 		questionPoolObject = [];
 	}
 
-	if (!questionPoolObject[0]) { // if no questions are available, new ones
+//	if (!questionPoolObject[0]) { // if no questions are available, new ones
 		// are created
-		questionPoolObject = this.createPool(course_id);
-	}
+//		questionPoolObject = this.createPool(course_id);
+//	}
 
 	this.questionList = questionPoolObject;
 };
@@ -62,33 +62,47 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 	var self = this;
-	jQuery
-			.getJSON(
-					"http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/questions.php/"
-							+ courseId, function(data) {
-						console.log("success");
-						console.log("JSON: " + data);
-						var questionPoolObject;
-						try {
-							questionPoolObject = data.questions;
-						} catch (err) {
-							console.log("Error: Couldn't parse JSON for course"
-									+ data.courseID);
-							questionPoolObject = [];
-						}
 
-						// if (!questionPoolObject[0]) { // if no courses are
-						// available, new ones are created
-						// console.log("no questionpool loaded");
-						// questionPoolObject = self.createPool(data.courseID);
-						// }
-						
-						console.log("Object: " + questionPoolObject);
-						self.questionList = questionPoolObject || [];;
-						self.index = 0;
-						self.storeData(data.courseID);
-						$(document).trigger("questionpoolready", data.courseID);
-					});
+	$.ajax({
+				url : "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/questions.php/"
+					+ courseId,
+				type : 'GET',
+				dataType : 'json',
+				success :function(data) {
+					console.log("success");
+					console.log("JSON: " + data);
+					var questionPoolObject;
+					try {
+						questionPoolObject = data.questions;
+					} catch (err) {
+						console.log("Error: Couldn't parse JSON for course"
+								+ data.courseID);
+						questionPoolObject = [];
+					}
+
+					// if (!questionPoolObject[0]) { // if no courses are
+					// available, new ones are created
+					// console.log("no questionpool loaded");
+					// questionPoolObject = self.createPool(data.courseID);
+					// }
+
+					console.log("Object: " + questionPoolObject);
+					self.questionList = questionPoolObject || [];
+					;
+					self.index = 0;
+					self.storeData(data.courseID);
+					$(document).trigger("questionpoolready", data.courseID);
+				},
+				error : function() {
+					console.log("Error while loading question pool from server");
+				},
+				beforeSend : setHeader
+			});
+
+	function setHeader(xhr) {
+		xhr.setRequestHeader('sessionkey', sessionKey);
+	}
+					
 };
 
 /**
@@ -123,34 +137,33 @@ QuestionPoolModel.prototype.getAnswer = function() {
 };
 
 /**
- * sets the index to the index of the next question
- * a random number is created. if the random number is not the
- * same as the current index and is not an index that is stored
- * in the queue, the new index is the random number
+ * sets the index to the index of the next question a random number is created.
+ * if the random number is not the same as the current index and is not an index
+ * that is stored in the queue, the new index is the random number
  */
 QuestionPoolModel.prototype.nextQuestion = function() {
 	var random;
-	
+
 	do {
-		//generates a random number between 0 and questionList.length - 1
+		// generates a random number between 0 and questionList.length - 1
 		random = Math.floor((Math.random() * this.questionList.length));
 	} while (this.index == random
-			|| (this.queue.length*2 <= this.questionList.length && jQuery.inArray(
-					random, this.queue) >= 0));
-		 
+			|| (this.queue.length * 2 <= this.questionList.length && jQuery
+					.inArray(random, this.queue) >= 0));
+
 	this.index = random;
 	return this.index < this.questionList.length;
 };
 
 /**
- * puts the current index into the queue, if the length of the 
- * question list is greater than the queue constant
+ * puts the current index into the queue, if the length of the question list is
+ * greater than the queue constant
  */
 QuestionPoolModel.prototype.queueCurrentQuestion = function() {
-	if (this.questionList.length >= this.queueConstant){	
+	if (this.questionList.length >= this.queueConstant) {
 		this.queue.shift();
 		this.queue.push(this.index);
-	 }
+	}
 }
 
 /**
@@ -178,7 +191,8 @@ QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
 };
 
 /**
- * @return the score of the answer with the specified index of the current question
+ * @return the score of the answer with the specified index of the current
+ *         question
  */
 QuestionPoolModel.prototype.getScore = function(index) {
 	return (index < this.questionList[this.index].answer.length) ? this.questionList[this.index].answer[index].points
@@ -223,8 +237,8 @@ QuestionPoolModel.prototype.createQuestionPools = function() {
 };
 
 /**
- * if course_id is 1 or 2 and no questionpools with those indices
- * are already stored in the local storage, new ones are created 
+ * if course_id is 1 or 2 and no questionpools with those indices are already
+ * stored in the local storage, new ones are created
  */
 QuestionPoolModel.prototype.createPool = function(course_id) {
 	if (course_id == 1) {
@@ -237,7 +251,7 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 			return [];
 		}
 
-	} else if (course_id == 2) { 
+	} else if (course_id == 2) {
 		// if no questions are available, new ones are created
 		if (!localStorage.questionpool_2) {
 			initQuPo2();
@@ -251,16 +265,14 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 	}
 };
 
-
 QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 	var constant = 10;
-	
-	if (this.questionList.length >= constant)
-	 {	
-		
-	this.queue.shift();
-	this.queue.push(this.index);
-	 }
+
+	if (this.questionList.length >= constant) {
+
+		this.queue.shift();
+		this.queue.push(this.index);
+	}
 }
 
 QuestionPoolModel.prototype.createQuestionPools = function() {
@@ -302,4 +314,3 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						}
 					});
 };
-

@@ -22,7 +22,7 @@ global $class_for_logging;
 $class_for_logging = "questions.php";
 
 
-$userID = get_userid_from_headers();
+$userID = get_session_user_from_headers();
 logging(" my userid is ". $userID);
 
 $courseID = $_SERVER['PATH_INFO'];

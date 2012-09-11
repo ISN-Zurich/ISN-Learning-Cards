@@ -91,9 +91,8 @@ CourseModel.prototype.loadFromServer = function() {
 	self.checkForTimeOut();
 	if (self.controller.models['authentication'].isLoggedIn()
 			&& !self.syncState) {
-		var userId = self.controller.models['authentication'].getUserId();
-		console.log("loadFromServer-Course for user " + userId);
-
+		var sessionKey = self.controller.models['authentication'].getSessionKey();
+		
 		$.ajax({
 					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
 					type : 'GET',
@@ -104,7 +103,7 @@ CourseModel.prototype.loadFromServer = function() {
 				});
 
 		function setHeader(xhr) {
-			xhr.setRequestHeader('userid', userId);
+			xhr.setRequestHeader('sessionkey', sessionKey);
 		}
 
 		function createCourseList(data) {
