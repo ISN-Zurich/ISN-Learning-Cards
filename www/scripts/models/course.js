@@ -240,7 +240,7 @@ CourseModel.prototype.switchToOnline = function() {
 
 	this.checkForTimeOut();
 
-	if (!this.syncState) {
+	if (this.syncState) {
 		this.loadFromServer();
 	} else {
 		for ( var c in this.courseList) {

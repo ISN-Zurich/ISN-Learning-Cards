@@ -68,7 +68,7 @@ AnswerView.prototype.handleSwipe = doNothing;
 
 
 // Closing of the answer view
-AnswerView.prototype.close = closeView;
+AnswerView.prototype.closeDiv = closeView;
 
 //Shows the container div element of the current view 
 AnswerView.prototype.openDiv = openView;
@@ -81,6 +81,12 @@ AnswerView.prototype.open = function() {
 	this.openDiv();
 
 };
+
+AnswerView.prototype.close = function() {
+    this.widget.cleanup();
+    this.closeDiv();
+};
+
 
 //loads a subview-widget based on the specific question type. It is displayed within the main body area of the answer view
 AnswerView.prototype.showAnswerBody = function() {

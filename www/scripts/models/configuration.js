@@ -5,7 +5,18 @@ function ConfigurationModel(controller) {
 	this.configuration = {};
 
 	this.controller = controller;
-
+	
+	this.loadData();
+	
+	clientKey = this.configuration.appAuthenticationKey;
+	//this.clientKey = localStorage.getItem("ClientKey");
+	if ( !this.clientKey || 
+		 !this.clientKey.length) {
+		this.register();
+	}
+	else {
+		this.loadFromServer();
+	}
 	// initialize the configuration if it does not exist
 	// this.createConfiguration();
 
@@ -59,7 +70,7 @@ ConfigurationModel.prototype.loadData = function() {
  * storage when all data is loaded, the authenticationready event is triggered
  */
 ConfigurationModel.prototype.loadFromServer = function() {
-
+    // FIXME: Only authenticate if the client key is present
 	var self = this;
 	jQuery
 			.getJSON(
@@ -234,4 +245,43 @@ ConfigurationModel.prototype.createConfiguration = function() {
 	} catch (err) {
 		return {};
 	}
+};
+
+//it is called whenver my client(app) key is empty
+ConfigurationModel.prototype.register = function() {
+	var appID = "ch.ethz.isn.learningcards";
+	var deviceID =  device.uuid;
+	
+	
+
+		$.ajax({
+			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/registration.php',
+			type : 'GET',
+			dataType : 'json',
+			success : appRegistration,
+			error: function() { console.log("Error while registering the app with the backend"); },
+			beforeSend : setHeaders
+		});
+	
+		
+	function setHeaders(xhr) {
+			xhr.setRequestHeader('AppID', appID);
+			xhr.setRequestHeader('UUID', deviceID);
+			console.log("uuid:" +deviceID);
+	
+	}
+	
+	
+	function appRegistration(data){
+		//localStorage.setItem(data.ClientKey);
+		this.configuration.appAuthenticationKey = data.ClientKey;
+		this.storeData();
+		// we can now savely load the user data
+		this.loadFromServer();
+	}
+	
+	
+	
+	
+	
 };
