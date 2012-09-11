@@ -12,8 +12,8 @@ function ConfigurationModel(controller) {
 }
 
 /**
- * stores the data into the local storage (key = "configuration") 
- * therefor the json object is converted into a string
+ * stores the data into the local storage (key = "configuration") therefor the
+ * json object is converted into a string
  */
 ConfigurationModel.prototype.storeData = function() {
 	var configString;
@@ -28,8 +28,8 @@ ConfigurationModel.prototype.storeData = function() {
 };
 
 /**
- * loads the data from the local storage (key = "configuration") 
- * therefor the string is converted into a json object
+ * loads the data from the local storage (key = "configuration") therefor the
+ * string is converted into a json object
  */
 ConfigurationModel.prototype.loadData = function() {
 	var configObject;
@@ -55,8 +55,8 @@ ConfigurationModel.prototype.loadData = function() {
 };
 
 /**
- * loads the configuration data from the server and stores it in the local storage
- * when all data is loaded, the authenticationready event is triggered
+ * loads the configuration data from the server and stores it in the local
+ * storage when all data is loaded, the authenticationready event is triggered
  */
 ConfigurationModel.prototype.loadFromServer = function() {
 
@@ -72,7 +72,8 @@ ConfigurationModel.prototype.loadFromServer = function() {
 							authenticationObject = data;
 							console.log("authenticationData from server");
 						} catch (err) {
-							console.log("Error: Couldn't parse JSON for authentication");
+							console
+									.log("Error: Couldn't parse JSON for authentication");
 							authenticationObject = {};
 						}
 
@@ -83,7 +84,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 						// }
 
 						console.log("Object: " + authenticationObject);
-						authenticationObject.loginState = self.configuration.loginState;
+//						authenticationObject.loginState = self.configuration.loginState;
 						self.configuration = authenticationObject;
 						self.storeData();
 
@@ -94,29 +95,100 @@ ConfigurationModel.prototype.loadFromServer = function() {
 };
 
 /**
- * TODO: should send authentication data to the server?
+ * logs in user
  */
 ConfigurationModel.prototype.login = function(username, password, success,
 		error) {
-	this.configuration.loginState = "loggedIn";
-	this.storeData();
-	this.loadFromServer();
-	success();
+//	this.configuration.loginState = "loggedIn";
+//	this.storeData();
+//	this.loadFromServer();
+//	success();
+
+	passwordHash = faultylabs.MD5(password);
+	challenge = faultylabs.MD5(username + passwordHash
+			+ this.configuration.appAuthenticationKey)
+	var auth = {
+		"uuid" : device.uuid,
+		"username" : username,
+		"challenge" : challenge
+	};
+	
+	if (this.sendAuthToServer(auth)) {
+		this.loadFromServer();
+		success();
+	} else {
+		error();
+	}
 };
 
 /**
- * TODO: should delete all data?
+ * logs out user
  */
 ConfigurationModel.prototype.logout = function() {
-	this.configuration.loginState = "loggedOut";
-	this.storeData();
+	//this.configuration.loginState = "loggedOut";
+	//this.storeData();
+	this.sendLogoutToServer();
 };
+
+/**
+ * sends authentication data to the server
+ */
+ConfigurationModel.prototype.sendAuthToServer = function(authData) {
+	$.ajax({
+		url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authenticationBella.php/login',
+		type : 'GET',
+		dataType : 'json',
+		success : function(data) {
+			try {
+				if (data != -1) {
+					this.configuration.userAuthenticationKey = data;
+					return("success");
+				}
+			} catch (err) {
+				console.log("Couldn't authenticate to server " + err);
+			}
+			return("error");
+		},
+		error : function() {
+			console.log("Error while authentication to server");
+			return("error");
+		},
+		beforeSend : setHeader
+	});
+
+	function setHeader(xhr) {
+		xhr.setRequestHeader('authdata', authData);
+	}
+}
+
+/**
+ * invalidates the current session key
+ */
+ConfigurationModel.prototype.sendLogoutToServer = function() {
+	var self = this;
+	$.ajax({
+		url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authenticationBella.php/logout',
+		type : 'GET',
+		dataType : 'json',
+		success : function() {
+			self.configuration.userAuthenticationKey = "";
+		},
+		error : function() {
+			console.log("Error while logging out from server");
+		},
+		beforeSend : setHeader
+	});
+
+	function setHeader(xhr) {
+		xhr.setRequestHeader('sessionkey', self.confiuration.userAuthenticationKey);
+	}
+}
 
 /**
  * @return true if user is logged in, otherwise false
  */
 ConfigurationModel.prototype.isLoggedIn = function() {
-	return this.configuration.loginState == "loggedIn" ? true : false;
+	return this.configuration.userAuthenticationKey != "" ? true : false;
 };
 
 /**
