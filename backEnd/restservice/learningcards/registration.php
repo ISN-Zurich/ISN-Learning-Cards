@@ -22,7 +22,7 @@ function get_appkey_from_headers() {
 
 	logging("app id from header: " .$appID);
 	logging("device id from header: " .$deviceID);
-	
+
 
 	//global $ilUser;
 	//$ilUser->setId($userId);
@@ -37,16 +37,14 @@ function get_appkey_from_headers() {
 
 
 function generateAppKey($appId, $uuid){
-	
+
 	global $ilDB;
-	$randomSeed = rand();
-	$appKey = md5($uuid . $appId . $randomSeed);
 
 	$tables=$ilDB->listTables();
-	
+
 	//$ilDB->dropTable("isnlc_reg_info");
-	
-	
+
+
 	// get list of tables
 	// $ilDB->listTables();
 	logging(" check if our table is present already ");
@@ -54,8 +52,8 @@ function generateAppKey($appId, $uuid){
 		logging("create a new table");
 		//create table that will store the app keys and any such info in the database
 		// FIXME: ONLY CREATE IF THE TABLE DOES NOT EXIST
-	
-		
+
+
 		$fields= array(
 				"app_id" => array(
 						'type' => 'text',
@@ -74,17 +72,28 @@ function generateAppKey($appId, $uuid){
 		$ilDB->createTable("isnlc_reg_info",$fields);
 		//$ilDB->addPrimaryKey("isnlc_registration_info", array("id"));
 	}
-	
-	//store the app keys in the database
-	$affected_rows= $ilDB->manipulateF("INSERT INTO isnlc_reg_info (app_id, uuid, client_key) VALUES ".
-			" (%s,%s,%s)",
-			array("text", "text", "text"),
-			array($appId, $uuid, $appKey));
-	
-	logging("return appkey " . $appKey );
-	
+
+	$result = $ilDB->query("SELECT client_key FROM isnlc_reg_info WHERE uuid = " .$ilDB->quote($uuid, "text") . " AND app_id =" .$ilDB->quote($appId, "text"));
+	$fetch = $ilDB->fetchAssoc($result);
+	logging("fetch: " . json_encode($fetch));
+	$appKey = $fetch["client_key"];
+
+	if ($appKey == null) {
+
+		$randomSeed = rand();
+		$appKey = md5($uuid . $appId . $randomSeed);
+		//store the app keys in the database
+		$affected_rows= $ilDB->manipulateF("INSERT INTO isnlc_reg_info (app_id, uuid, client_key) VALUES ".
+				" (%s,%s,%s)",
+				array("text", "text", "text"),
+				array($appId, $uuid, $appKey));
+
+		logging("return appkey " . $appKey );
+	}
+
 	return $appKey; //we need the output in json format
-	
+
+
 };
 
 ?>

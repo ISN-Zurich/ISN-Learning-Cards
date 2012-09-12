@@ -25,15 +25,16 @@ $class_for_logging = "questions.php";
 $userID = get_session_user_from_headers();
 logging(" my userid is ". $userID);
 
-$courseID = $_SERVER['PATH_INFO'];
-$courseID = preg_replace("/\//", "", $courseID); //remove leading backslash
-// $courseID = preg_replace("/\.json/",	"", $courseID);
-logging($courseID);
+if ($userID != 0) {
+	$courseID = $_SERVER['PATH_INFO'];
+	$courseID = preg_replace("/\//", "", $courseID); //remove leading backslash
+	// $courseID = preg_replace("/\.json/",	"", $courseID);
+	logging($courseID);
 
-$return_data = getQuestions($courseID);
+	$return_data = getQuestions($courseID);
 
-echo(json_encode($return_data));
-
+	echo(json_encode($return_data));
+}
 
 /**
  * Gets the question pool for the specified course
@@ -45,10 +46,10 @@ function getQuestions($courseId) {
 	$item_references = ilObject::_getAllReferences($courseId);
 
 	$questions = array();
-	
+
 	if(is_array($item_references) && count($item_references)) {
 		foreach($item_references as $ref_id) {
-			
+				
 			//get all course items for a course (= questionpools, tests, ...)
 			$courseItems = new ilCourseItems($ref_id);
 			$courseItemsList = $courseItems->getAllItems();
@@ -56,7 +57,7 @@ function getQuestions($courseId) {
 			logging("Questions: " . json_encode($courseItemsList));
 
 			foreach($courseItemsList as $courseItem) {
-				
+
 				//the course item has to be of type "qpl" (= questionpool)
 				if (strcmp($courseItem["type"], "qpl") == 0) {
 					$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
@@ -69,6 +70,9 @@ function getQuestions($courseId) {
 
 						foreach ($questionList as $question) {
 
+							//get id
+							$questionId = $question["question_id"];
+							
 							//get the question
 							$questionText = $question["question_text"];
 
@@ -97,6 +101,7 @@ function getQuestions($courseId) {
 
 							//add question into the question list
 							array_push($questions, array(
+									"id" => $questionId,
 									"type" => $type,
 									"question" => $questionText,
 									"answer" => $answerList,

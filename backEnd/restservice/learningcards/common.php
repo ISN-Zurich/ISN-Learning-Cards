@@ -6,14 +6,16 @@
  * @return userId
  */
 function get_session_user_from_headers() {
+	logging("entered get session user from header");
+	
 	$myheaders = getallheaders();
 	$sessionKey = $myheaders["sessionkey"];
 
 	$userId = getUserIdForSessionKey($sessionKey);
 
-	if (!($userId > 0)) {
-		$userId = "12979"; //for debugging
-	}
+	//if (!($userId > 0)) {
+		//$userId = "12979"; //for debugging
+	//}
 
 	logging("userid from header: " . $userId);
 
@@ -38,8 +40,11 @@ function getUserIdForSessionKey($sessionKey) {
 	$userId = 0;
 
 	if ($sessionKey) {
-		$result = $ilDB->query("SELECT user_id FROM auth_info WHERE session_key = " .$ilDB->quote($sessionkey, "text"));
-		$userId = $ilDB->fetchAssoc($result);
+		$result = $ilDB->query("SELECT user_id FROM isnlc_auth_info WHERE session_key = " .$ilDB->quote($sessionKey, "text"));
+		$userIdArray = $ilDB->fetchAssoc($result);
+		$userId = $userIdArray["user_id"];
+		
+		logging("user id for session key: " . $userId);
 	}
 	return $userId;
 }
