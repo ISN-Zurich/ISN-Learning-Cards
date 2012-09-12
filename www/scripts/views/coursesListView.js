@@ -21,7 +21,8 @@ function CoursesListView(controller) {
 	$(document).bind("courselistupdate", function(e) {
 		console.log("course list update called");
 		if (self.active) {
-			self.update();
+			console.log("course list view is active");
+			self.update(true);
 		}
 	});
 }
@@ -31,33 +32,35 @@ CoursesListView.prototype.handlePinch = doNothing;
 CoursesListView.prototype.handleSwipe = doNothing;
 CoursesListView.prototype.openDiv = openView;
 CoursesListView.prototype.open = function() {
+	console.log("open course list view");
 	this.active = true;
-	this.update();
+	this.update(false);
 	this.openDiv();
 };
 CoursesListView.prototype.closeDiv = closeView;
 CoursesListView.prototype.close = function() {
+	console.log("close course list view");
 	this.active = false;
 	this.closeDiv();
 };
 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
-	if (controller.models['course'].isLoaded(course_id)) {
-		controller.models['questionpool'].reset();
-		controller.models['questionpool'].loadData(course_id);
-		controller.transitionToQuestion();
+	if (this.controller.models['course'].isLoaded(course_id)) {
+		this.controller.models['questionpool'].reset();
+		this.controller.models['questionpool'].loadData(course_id);
+		this.controller.transitionToQuestion();
 	}
 };
 
 CoursesListView.prototype.clickSettingsButton = function() {
-	controller.transitionToSettings();
+	this.controller.transitionToSettings();
 };
 
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 };
 
-CoursesListView.prototype.update = function() {
+CoursesListView.prototype.update = function(update) {
 	var self = this;
 
 	var courseModel = self.controller.models['course'];
@@ -67,11 +70,12 @@ CoursesListView.prototype.update = function() {
 	console.log("First course id: " + courseModel.getId());
 	
 	if (courseModel.courseList.length == 0) {
+		
 		var li = $("<li/>", {
-			text : "No Courses"
-		}).appendTo("#coursesList");
+			text : (update ? "No Courses" : "Courses are being loaded")
+		}).appendTo("#coursesList");	
+		
 	} else {
-
 		do {
 			var courseID = courseModel.getId();
 
@@ -95,7 +99,7 @@ CoursesListView.prototype.update = function() {
 					});
 
 			$("<span/>", {
-				"class" : courseModel.isLoaded() ? "icon-bars" : "icon-loading"
+				"class" : courseModel.isSynchronized(courseID) ? "icon-bars" : "icon-loading"
 			}).appendTo(span);
 
 		} while (courseModel.nextCourse());

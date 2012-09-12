@@ -1,6 +1,6 @@
 /**
- * This model holds the course list and information about
- * the current synchronization of the data with the server
+ * This model holds the course list and information about the current
+ * synchronization of the data with the server
  */
 function CourseModel(controller) {
 	var self = this;
@@ -8,7 +8,7 @@ function CourseModel(controller) {
 	this.controller = controller;
 
 	this.courseList = [];
-	this.index = 0; //index of the current course
+	this.index = 0; // index of the current course
 
 	this.syncDateTime = 0;
 	this.syncState = false;
@@ -35,8 +35,8 @@ function CourseModel(controller) {
 };
 
 /**
- * stores the data into the local storage (key = "courses") 
- * therefor the data is combined into a json object which is converted into a string
+ * stores the data into the local storage (key = "courses") therefor the data is
+ * combined into a json object which is converted into a string
  */
 CourseModel.prototype.storeData = function() {
 	var courseString;
@@ -54,8 +54,8 @@ CourseModel.prototype.storeData = function() {
 };
 
 /**
- * loads the data from the local storage (key = "courses") 
- * therefor the string is converted into a json object of which the data is taken
+ * loads the data from the local storage (key = "courses") therefor the string
+ * is converted into a json object of which the data is taken
  */
 CourseModel.prototype.loadData = function() {
 	var courseObject;
@@ -71,7 +71,7 @@ CourseModel.prototype.loadData = function() {
 	// }
 
 	this.courseList = courseObject.courses || [];
-	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime(); 
+	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime();
 	this.syncState = courseObject.syncState || false;
 	this.syncTimeOut = (courseObject.syncTimeOut * 1000) || 60000;
 	this.index = 0;
@@ -80,25 +80,38 @@ CourseModel.prototype.loadData = function() {
 };
 
 /**
- * if the user is logged in and the syncState is set to false, 
- * it loads the course list from the server and stores it in the local storage 
- * when all data is loaded, the courselistupdate event is triggered and
- * the question pools are told to load their data from the server
+ * if the user is logged in and the syncState is set to false, it loads the
+ * course list from the server and stores it in the local storage when all data
+ * is loaded, the courselistupdate event is triggered and the question pools are
+ * told to load their data from the server
  */
 CourseModel.prototype.loadFromServer = function() {
 	console.log("loadFromServer-Course is called");
 	var self = this;
+	var syncStateCache = new Array();
 	self.checkForTimeOut();
 	if (self.controller.models['authentication'].isLoggedIn()
 			&& !self.syncState) {
-		var sessionKey = self.controller.models['authentication'].getSessionKey();
-		
-		$.ajax({
+		var sessionKey = self.controller.models['authentication']
+				.getSessionKey();
+
+		// save current syncStates for this course
+		if (self.courseList && self.courseList.length > 0) {
+			for ( var c in self.courseList) {
+				syncStateCache[self.courseList[c].id] = self.courseList[c].syncState;
+			}
+		}
+
+		$
+				.ajax({
 					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
 					type : 'GET',
 					dataType : 'json',
 					success : createCourseList,
-					error: function() { console.log("Error while loading course list from server"); },
+					error : function() {
+						console
+								.log("Error while loading course list from server");
+					},
 					beforeSend : setHeader
 				});
 
@@ -131,10 +144,15 @@ CourseModel.prototype.loadFromServer = function() {
 			console.log("JSON CourseList: " + self.courseList);
 			self.reset();
 
+			for (var c in self.courseList) {
+				self.courseList[c].syncState = syncStateCache[self.courseList[c].id] || false;
+			}
+
 			$(document).trigger("courselistupdate");
 
 			for ( var c in self.courseList) {
 				self.courseList[c].isLoaded = false;
+
 				self.controller.models["questionpool"]
 						.loadFromServer(self.courseList[c].id);
 			}
@@ -167,7 +185,8 @@ CourseModel.prototype.getSyncState = function() {
 };
 
 /**
- * increases index 
+ * increases index
+ * 
  * @return true if a course with an appropriate index exists, otherwise false
  */
 CourseModel.prototype.nextCourse = function() {
@@ -183,7 +202,7 @@ CourseModel.prototype.reset = function() {
 };
 
 /**
- * sets syncState to false if the time that passed since the last 
+ * sets syncState to false if the time that passed since the last
  * synchronization is greater than the value of syncTimeOut
  */
 CourseModel.prototype.checkForTimeOut = function() {
@@ -217,12 +236,14 @@ CourseModel.prototype.isLoaded = function(courseId) {
 };
 
 /**
- * sets the isLoaded of the course with the specified course id to true
+ * sets the isLoaded and the synchState of the course with the specified course
+ * id to true
  */
 CourseModel.prototype.courseIsLoaded = function(courseId) {
 	for ( var c in this.courseList) {
 		if (this.courseList[c].id == courseId) {
 			this.courseList[c].isLoaded = true;
+			this.courseList[c].syncState = true;
 			console.log(this.courseList[c].id + " is loaded");
 			break;
 		}
@@ -230,9 +251,24 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 };
 
 /**
+ * @return true, if the course with the specified id is synchronized,otherwise
+ *         false
+ */
+CourseModel.prototype.isSynchronized = function(courseId) {
+	if (courseId > 0) {
+		for ( var c in this.courseList) {
+			if (this.courseList[c].id == courseId) {
+				return this.courseList[c].syncState;
+			}
+		}
+	}
+	return false;
+};
+
+/**
  * if syncState is false, it loads the data for the course list from the server
- * if syncState is true, it loaded the data for all not yet loaded question pools
- * from the server
+ * if syncState is true, it loaded the data for all not yet loaded question
+ * pools from the server
  */
 CourseModel.prototype.switchToOnline = function() {
 	console.log("switch to online - load all not yet loaded courses");

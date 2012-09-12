@@ -25,3 +25,7 @@ SplashScreen.prototype.close = function() {
     }
 };
 
+SplashScreen.prototype.showNoConnectionMessage = function() {
+	$("#loginForm").text("Sorry, you need to be online to connect to your LMS");
+}
+

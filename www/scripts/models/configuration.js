@@ -8,8 +8,9 @@ function ConfigurationModel(controller) {
 
 	
 //	this.configuration.appAuthenticationKey = "";
+//	this.configuration.userAuthenticationKey = "";
 //	this.storeData();
-//	
+	
 	console.log("Configuration Storage: "
 			+ localStorage.getItem("configuration"));
 
@@ -87,7 +88,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 	if (this.configuration.userAuthenticationKey
 			&& this.configuration.userAuthenicationKey != "") {
 		$.ajax({
-					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authenticationBella.php',
+					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -168,6 +169,9 @@ ConfigurationModel.prototype.logout = function() {
 	// this.configuration.loginState = "loggedOut";
 	// this.storeData();
 	this.sendLogoutToServer();
+	console.log("user logged out");
+	this.configuration.userAuthenticationKey = "";
+	this.storeData();
 
 	
 };
@@ -179,12 +183,12 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
 	$
 			.ajax({
-				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authenticationBella.php/login',
+				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/login',
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
 					try {
-						if (data && data.userAuthenticationKey != -1) {
+						if (data && data.userAuthenticationKey != "") {
 							console.log("userAuthenticationKey: "
 									+ data.userAuthenticationKey);
 							self.configuration.userAuthenticationKey = data.userAuthenticationKey;
@@ -221,13 +225,11 @@ ConfigurationModel.prototype.sendLogoutToServer = function() {
 	var self = this;
 	$
 			.ajax({
-				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authenticationBella.php/logout',
+				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/logout',
 				type : 'GET',
 				dataType : 'json',
 				success : function() {
-					console.log("user logged out");
-					self.configuration.userAuthenticationKey = "";
-					self.storeData();
+					
 				},
 				error : function() {
 					console.log("Error while logging out from server");
@@ -236,6 +238,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function() {
 			});
 
 	function setHeader(xhr) {
+		console.log("session key to be invalidated: " + self.configuration.userAuthenticationKey);
 		xhr.setRequestHeader('sessionkey',
 				self.configuration.userAuthenticationKey);
 	}
@@ -275,6 +278,13 @@ ConfigurationModel.prototype.getUserId = function() {
  */
 ConfigurationModel.prototype.getEmailAddress = function() {
 	return this.configuration.learnerInformation.emailAddress;
+};
+
+/**
+ * @return the language of the user
+ */
+ConfigurationModel.prototype.getLanguage = function() {
+	return this.configuration.learnerInformation.language;
 };
 
 /**

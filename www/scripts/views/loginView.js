@@ -1,10 +1,12 @@
 /**
  * View for displaying the login form
  */
-function LoginView() {
+function LoginView(controller) {
 	var self = this;
 
 	self.tagID = 'splashScreen';
+	this.controller = controller;
+	this.active = false;
 
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
@@ -49,11 +51,20 @@ LoginView.prototype.openDiv = openView;
 LoginView.prototype.open = function() {
 	this.showForm();
 	this.openDiv();
+
+	this.active = true;
 };
 /**
  * closes the view
  */
-LoginView.prototype.close = closeView;
+LoginView.prototype.closeDiv = closeView;
+LoginView.prototype.close = function() {
+	$("#password").blur();
+	$("#usernameInput").blur();
+	this.active = false;
+	
+	this.closeDiv();
+}
 
 /**
  * click on the login button sends data to the authenication model data is only
@@ -62,12 +73,13 @@ LoginView.prototype.close = closeView;
  */
 LoginView.prototype.clickLoginButton = function() {
 	var user, password;
+	var self = this;
 
 	function cbLoginSuccess() {
-		console.log("is logIn");
-		$("#password").blur();
-		$("#usernameInput").blur();
-		controller.transition('coursesList');
+		if (self.active) {
+			console.log("is logIn");
+			controller.transitionToCourses();
+		}
 	}
 
 	function cbLoginFailure() {
@@ -80,9 +92,9 @@ LoginView.prototype.clickLoginButton = function() {
 		console.log("has logIn data");
 
 		$(document).bind("authenticationready", cbLoginSuccess);
-		
+
 		$(document).bind("authenticationfailed", cbLoginFailure);
-		
+
 		// TODO make it visible to the user that we are waiting for the server
 		controller.models['authentication'].login($("#usernameInput").val(), $(
 				"#password").val());
@@ -96,4 +108,14 @@ LoginView.prototype.clickLoginButton = function() {
  */
 LoginView.prototype.showForm = function() {
 	$("#loginForm").show();
+	$("#errormessage").hide();
+	if (this.controller.models["connection"].isOffline()) {
+		this.showErrorMessage("Sorry, you need to be online to connect to your LMS");
+	}
+	
 };
+
+LoginView.prototype.showErrorMessage = function(message) {
+	$("#errormessage").text(message);
+	$("#errormessage").show();
+}

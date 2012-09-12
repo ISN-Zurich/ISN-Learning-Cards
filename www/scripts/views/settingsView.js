@@ -9,8 +9,8 @@ function SettingsView() {
     	self.logout();
     });
     
-    $(document).bind("authenticationready", function(e, courseID) {
-		console.log("authentication ready called " + courseID);
+    $(document).bind("authenticationready", function(e, userID) {
+		console.log("authentication ready called " + userID);
 		self.loadData();
 	});
 } 
@@ -29,6 +29,7 @@ SettingsView.prototype.open = function() {
 SettingsView.prototype.close = closeView;
 
 SettingsView.prototype.closeSettings = function() {
+	console.log("close settings button clicked");
 	controller.transitionToCourses();
 };
 
@@ -49,5 +50,8 @@ SettingsView.prototype.loadData = function() {
 		}).appendTo("#settingsData");
 	$("<li/>", {
 		  text: config.getEmailAddress()
+		}).appendTo("#settingsData");
+	$("<li/>", {
+		  text: config.getLanguage()
 		}).appendTo("#settingsData");
 };

@@ -5,9 +5,16 @@
 function ConnectionState() {
 
 	var self = this;
-	self.state = window.navigator.onLine;
+	
+	var networkState = navigator.network.connection.type;
+	
+	if (networkState == Connection.NONE) {
+		self.state = false;
+	} else {
+		self.state = true;
+	}
 
-	console.log("connection state: " + window.navigator.onLine);
+	console.log("connection state: " + self.state);
 
 	window.addEventListener("offline", function() {
 		self.setState(false);
