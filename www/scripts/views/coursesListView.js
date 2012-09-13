@@ -7,6 +7,8 @@ function CoursesListView(controller) {
 
 	self.active = false;
 
+	self.firstLoad = true;
+	
 	// $('#coursesListSetIcon').click(function(){ self.clickSettingsButton(); }
 	// );
 	jester($('#coursesListSetIcon')[0]).tap(function() {
@@ -20,7 +22,9 @@ function CoursesListView(controller) {
 
 	$(document).bind("courselistupdate", function(e) {
 		console.log("course list update called");
+		self.firstLoad = false;
 		if (self.active) {
+			console.log("course list view is active");
 			self.update();
 		}
 	});
@@ -31,26 +35,29 @@ CoursesListView.prototype.handlePinch = doNothing;
 CoursesListView.prototype.handleSwipe = doNothing;
 CoursesListView.prototype.openDiv = openView;
 CoursesListView.prototype.open = function() {
+	console.log("open course list view");
 	this.active = true;
 	this.update();
+	this.firstLoad = false;
 	this.openDiv();
 };
 CoursesListView.prototype.closeDiv = closeView;
 CoursesListView.prototype.close = function() {
+	console.log("close course list view");
 	this.active = false;
 	this.closeDiv();
 };
 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
-	if (controller.models['course'].isLoaded(course_id)) {
-		controller.models['questionpool'].reset();
-		controller.models['questionpool'].loadData(course_id);
-		controller.transitionToQuestion();
+	if (this.controller.models['course'].isLoaded(course_id)) {
+		this.controller.models['questionpool'].reset();
+		this.controller.models['questionpool'].loadData(course_id);
+		this.controller.transitionToQuestion();
 	}
 };
 
 CoursesListView.prototype.clickSettingsButton = function() {
-	controller.transitionToSettings();
+	this.controller.transitionToSettings();
 };
 
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
@@ -67,11 +74,12 @@ CoursesListView.prototype.update = function() {
 	console.log("First course id: " + courseModel.getId());
 	
 	if (courseModel.courseList.length == 0) {
+		
 		var li = $("<li/>", {
-			text : "No Courses"
-		}).appendTo("#coursesList");
+			text : (self.firstLoad ? "Courses are being loaded" : "No Courses")
+		}).appendTo("#coursesList");	
+		
 	} else {
-
 		do {
 			var courseID = courseModel.getId();
 
@@ -95,7 +103,7 @@ CoursesListView.prototype.update = function() {
 					});
 
 			$("<span/>", {
-				"class" : courseModel.isLoaded() ? "icon-bars" : "icon-loading"
+				"class" : courseModel.isSynchronized(courseID) ? "icon-bars" : "icon-loading"
 			}).appendTo(span);
 
 		} while (courseModel.nextCourse());

@@ -38,8 +38,7 @@ switch($path) {
 						"userId" => $userId,
 						"userName" =>  $ilUser->getLogin(),
 						"displayName" => $ilUser->getFullName(),
-						"emailAddress" => $ilUser->getEmail(),
-						"language" => $ilUser->getLanguage()
+						"emailAddress" => $ilUser->getEmail()
 				),
 				//get rid of following 2 lines
 				"loginState" => "loggedOut",
@@ -52,6 +51,7 @@ switch($path) {
 		break;
 }
 
+return;
 
 /**
  * authenticates the user and creates a new session key
@@ -97,15 +97,14 @@ function authenticate() {
 			logging("Session Key: " . $sessionKey);
 			storeAuthDataInDB($userId, $clientKey, $sessionKey);
 			logging("after authentication stored in db");
-				
+			
 			return array(
 					"userAuthenticationKey" => $sessionKey,
 					"learnerInformation" => array(
 							"userId" => $ilUser->getId(),
 							"userName" =>  $ilUser->getLogin(),
 							"displayName" => $ilUser->getFullName(),
-							"emailAddress" => $ilUser->getEmail(),
-							"language" => $ilUser->getLanguage()
+							"emailAddress" => $ilUser->getEmail()
 					));
 		}
 			
@@ -123,7 +122,6 @@ function authenticate() {
  */
 function logout() {
 	$sessionKey = get_session_user_from_headers();
-	logging("session key before invalidation: " . $sessionKey);
 	invalidateSessionKey($sessionKey);
 }
 
@@ -151,15 +149,8 @@ function getClientKeyForUUID($UUID, $APPID) {
 
 	logging("uuid is " . $UUID);
 
-	$testresult = $ilDB->query("SELECT * FROM isnlc_reg_info");
-	while ($record = $ilDB->fetchAssoc($testresult))
-	{
-		logging("***" . json_encode($record));
-	}
-
 	$result = $ilDB->query("SELECT client_key FROM isnlc_reg_info WHERE uuid = " .$ilDB->quote($UUID, "text") . " AND app_id =" .$ilDB->quote($APPID, "text"));
 	$fetch = $ilDB->fetchAssoc($result);
-	logging("fetch: " . json_encode($fetch));
 	$clientKey = $fetch["client_key"];
 	logging("client key: " . $clientKey);
 	return $clientKey;
@@ -173,13 +164,13 @@ function storeAuthDataInDB($userid, $clientKey, $sessionKey) {
 	global $ilDB;
 
 	logging("enter store auth in db " .$userid ."**" . $clientKey . "**" .$sessionKey);
-
+	
 	// get list of tables
 	// check if our table is present already
 	if (!in_array("isnlc_auth_info",$ilDB->listTables())) {
 
 		logging("create new auth info table");
-
+		
 		$fields= array(
 				"user_id" => array(
 						'type' => 'text',
@@ -196,19 +187,13 @@ function storeAuthDataInDB($userid, $clientKey, $sessionKey) {
 		);
 
 		$ilDB->createTable("isnlc_auth_info",$fields);
+		$ilDB->addPrimaryKey("isnlc_registration_info", array("session_key"));
 	}
 
-	$old_session_key_result = $ilDB->query("SELECT session_key FROM isnlc_auth_info WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
-	$old_session_key =  $ilDB->fetchAssoc($old_session_key_result);
-
-	if ($old_session_key) {
-		$ilDB->manipulate("UPDATE isnlc_auth_info SET session_key = " . $ilDB->quote($sessionKey, "text") . " WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
-	} else {
-		$ilDB->manipulateF("INSERT isnlc_auth_info(user_id, client_key, session_key)  VALUES ".
-				" (%s,%s,%s)",
-				array("text", "text", "text"),
-				array($userid, $clientKey, $sessionKey));
-	}
+	$result = $ilDB->manipulateF("INSERT isnlc_auth_info(user_id, client_key, session_key)  VALUES ".
+			" (%s,%s,%s)",
+			array("text", "text", "text"),
+			array($userid, $clientKey, $sessionKey));
 	logging("at the end of authentication store in db");
 }
 
@@ -216,9 +201,7 @@ function storeAuthDataInDB($userid, $clientKey, $sessionKey) {
  * deletes all information for the specified session from the database
  */
 function invalidateSessionKey($sessionkey) {
-	logging("entered invalidate session key");
 	global $ilDB;
 	$result = $ilDB->manipulate("DELETE FROM isnlc_auth_info WHERE session_key = " .$ilDB->quote($sessionkey, "text"));
-	logging("end of invalidate session key");
 }
 ?>

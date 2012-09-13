@@ -33,7 +33,7 @@ function doApologize() {
 	$("#dataErrorMessage").show();
 }
 
-/** ***********************************************************
+/*******************************************************************************
  * Controller
  */
 function Controller() {
@@ -41,12 +41,14 @@ function Controller() {
 
 	console.log("start controller");
 
-	$.ajaxSetup({ cache: false });
-	
+	$.ajaxSetup({
+		cache : false
+	});
+
 	this.models = {};
 	this.views = {};
 
-	//initialize models
+	// initialize models
 	this.models.connection = new ConnectionState(this);
 	this.models.authentication = new ConfigurationModel(this);
 	this.models.course = new CourseModel(this);
@@ -54,12 +56,12 @@ function Controller() {
 	this.models.answers = new AnswerModel(this);
 
 	this.models.authentication.loadFromServer();
-	
+
 	console.log("models initialized");
 
-	//initialize views
+	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
-	this.views.login = new LoginView();
+	this.views.login = new LoginView(this);
 	this.views.logout = new LogoutView();
 	this.views.coursesList = new CoursesListView(this);
 	this.views.questionView = new QuestionView();
@@ -88,7 +90,7 @@ function Controller() {
 
 	console.log('core gestures done');
 
-	//if device is an iPhone enable pinching
+	// if device is an iPhone enable pinching
 	console.log('platform' + device.platform);
 	if (device.platform == 'iPhone') {
 
@@ -97,15 +99,19 @@ function Controller() {
 		}
 		gestureHandler.pinched(pinchCatcher);
 	}
-	
-	//set correct height of icon button
-	window.addEventListener("resize", function() {setButtonHeight();}, false);
-	window.addEventListener("orientationchange", function() {setButtonHeight();}, false);
-	
+
+	// set correct height of icon button
+	window.addEventListener("resize", function() {
+		setButtonHeight();
+	}, false);
+	window.addEventListener("orientationchange", function() {
+		setButtonHeight();
+	}, false);
+
 	setButtonHeight();
-	
+
 	this.activeView.open();
-	
+
 	console.log("End of Controller");
 } // end of Controller
 
@@ -121,12 +127,12 @@ Controller.prototype.transition = function(viewname) {
 };
 
 /**
- * if user is already login, the course list is shown
- * otherwise the login form is shown
+ * if user is already login, the course list is shown otherwise the login form
+ * is shown
  */
 Controller.prototype.transitionToEndpoint = function() {
 	console.log('initialize endpoint');
-	
+
 	if (this.models['authentication'].isLoggedIn()) {
 		console.log("is loggedIn");
 		this.transition('coursesList');

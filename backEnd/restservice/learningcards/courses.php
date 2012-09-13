@@ -20,7 +20,7 @@ global $ilUser, $class_for_logging;
 $class_for_logging = "courses.php";
 
 
-$userID = get_userid_from_headers();
+$userID = get_session_user_from_headers();
 logging(" my userid is ". $userID);
 
 $return_data = getCourseList($userID);

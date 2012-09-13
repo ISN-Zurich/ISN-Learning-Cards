@@ -5,22 +5,47 @@
  *
  * @return userId
  */
-function get_userid_from_headers() {
+function get_session_user_from_headers() {
+	logging("entered get session user from header");
+	
 	$myheaders = getallheaders();
-	$userId = $myheaders["userid"];
+	$sessionKey = $myheaders["sessionkey"];
 
-	if (!($userId > 0)) {
-		$userId = "12979"; //for debugging
-	}
+	$userId = getUserIdForSessionKey($sessionKey);
+
+	//if (!($userId > 0)) {
+		//$userId = "12979"; //for debugging
+	//}
 
 	logging("userid from header: " . $userId);
 
-	global $ilUser;
-	$ilUser->setId($userId);
-	$ilUser->read();
-	//FIXME: test if users exists
-	//method $ilUser->checkUserId() does not to work in the way as expected!
+	if ($userId > 0) {
+		global $ilUser;
+		$ilUser->setId($userId);
+		$ilUser->read();
+		if(!$ilUser->getLogin()) {
+			//TODO remove all data entries for this user id from our own tables
+			$userId = 0;
+		}
+	}
+	return $userId;
+}
 
+/**
+ * @return the user id for the specified session key
+ */
+function getUserIdForSessionKey($sessionKey) {
+	global $ilDB;
+
+	$userId = 0;
+
+	if ($sessionKey) {
+		$result = $ilDB->query("SELECT user_id FROM isnlc_auth_info WHERE session_key = " .$ilDB->quote($sessionKey, "text"));
+		$userIdArray = $ilDB->fetchAssoc($result);
+		$userId = $userIdArray["user_id"];
+		
+		logging("user id for session key: " . $userId);
+	}
 	return $userId;
 }
 
@@ -39,7 +64,7 @@ function isValidQuestionPool($questionpool) {
 	//question pool has to be online
 	if($questionpool->getOnline()) {
 		$questionList = $questionpool->getQuestionList();
-			
+
 		//question pool has to contain at least 4 questions
 		if (count($questionList) >= 4) {
 			$onlyValidTypes = true;
@@ -57,3 +82,5 @@ function isValidQuestionPool($questionpool) {
 
 	return $validQuestionPool;
 }
+
+?>

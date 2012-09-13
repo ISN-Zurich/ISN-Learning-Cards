@@ -129,15 +129,19 @@ AnswerView.prototype.showAnswerTitle = function() {
 	switch (currentAnswerTitle) {
 	case 'assSingleChoice':
 		$("#answerIcon").addClass("icon-checkmark");
+		$("#cardAnswerTitle").text("Single Choice Question");
 		break;
 	case 'assMultipleChoice':
 		$("#answerIcon").addClass("icon-checkmark");
+		$("#cardAnswerTitle").text("Multiple Choice Question");
 		break;
 	case 'assOrderingQuestion':
 		$("#answerIcon").addClass("icon-move-vertical");
+		$("#cardAnswerTitle").text("Text Order Question");
 		break;
 	case 'assNumeric':
 		$("#answerIcon").addClass("icon-pencil");
+		$("#cardAnswerTitle").text("Numeric Question");
 		break;
 	default:
 		break;
