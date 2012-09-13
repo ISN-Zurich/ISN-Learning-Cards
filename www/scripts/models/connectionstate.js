@@ -1,13 +1,15 @@
 /**
- * This model holds the current connection state (online = true, offline = false). 
- * Every time an online or offline event is triggered, it updates its connection state
+ * This model holds the current connection state (online = true, offline =
+ * false). Every time an online or offline event is triggered, it updates its
+ * connection state
  */
-function ConnectionState() {
+function ConnectionState(controller) {
 
 	var self = this;
-	
+	self.controller = controller;
+
 	var networkState = navigator.network.connection.type;
-	
+
 	if (networkState == Connection.NONE) {
 		self.state = false;
 	} else {
@@ -16,12 +18,8 @@ function ConnectionState() {
 
 	console.log("connection state: " + self.state);
 
-	window.addEventListener("offline", function() {
-		self.setState(false);
-	}, true);
-	window.addEventListener("online", function() {
-		self.setState(true);
-	}, true);
+	window.addEventListener("offline", self.goOffline, true);
+	window.addEventListener("online", self.goOnline, true);
 }
 
 /**
@@ -32,14 +30,34 @@ ConnectionState.prototype.isOffline = function() {
 };
 
 /**
- * sets the state of the connection state
- * if the connection state is set to online, the switchtoonline event is triggered
+ * sets the state of the connection state to true (online)
+ * the switchtoonline event is triggered
  */
-ConnectionState.prototype.setState = function(state) {
-	console.log("connection state changed");
-	self.state = state;
-	console.log("get change state event - new state: " + self.state);
-	if (self.state) {
-		$(document).trigger("switchtoonline");
+ConnectionState.prototype.goOnline = function() {
+	console.log("**online**");
+	this.state = true;
+	
+	//trigger event
+	$(document).trigger("switchtoonline");
+	
+	//if a pending logout exists, send the logout to the server
+	sessionKey = localStorage.getItem("pendingLogout");
+	if (sessionKey) {
+		localStorage.removeItem("pendingLogout");
+		this.controller.models["authentication"].sendLogoutToServer(sessionKey);
 	}
+	
+	//hide no connection error message in login view
+	this.controller.views["login"].hideErrorMessage();
+};
+
+/**
+ * sets the state of the connection state to false (offline)
+ */
+ConnectionState.prototype.goOffline = function() {
+	console.log("**offline**");
+	this.state = false;
+	
+	//show no connection error message in login view
+	this.controller.views["login"].showErrorMessage("Sorry, you need to be online to connect to your LMS");
 };

@@ -6,11 +6,10 @@ var APP_ID = "ch.ethz.isn.learningcards";
 function ConfigurationModel(controller) {
 	this.configuration = {};
 
-	
-//	this.configuration.appAuthenticationKey = "";
-//	this.configuration.userAuthenticationKey = "";
-//	this.storeData();
-	
+	// this.configuration.appAuthenticationKey = "";
+	// this.configuration.userAuthenticationKey = "";
+	// this.storeData();
+
 	console.log("Configuration Storage: "
 			+ localStorage.getItem("configuration"));
 
@@ -87,7 +86,8 @@ ConfigurationModel.prototype.loadFromServer = function() {
 	var self = this;
 	if (this.configuration.userAuthenticationKey
 			&& this.configuration.userAuthenicationKey != "") {
-		$.ajax({
+		$
+				.ajax({
 					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php',
 					type : 'GET',
 					dataType : 'json',
@@ -173,7 +173,6 @@ ConfigurationModel.prototype.logout = function() {
 	this.configuration.userAuthenticationKey = "";
 	this.storeData();
 
-	
 };
 
 /**
@@ -187,25 +186,29 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
-					try {
-						if (data && data.userAuthenticationKey != "") {
+					if (data && data.userAuthenticationKey != "") {
+						try {
 							console.log("userAuthenticationKey: "
 									+ data.userAuthenticationKey);
 							self.configuration.userAuthenticationKey = data.userAuthenticationKey;
 							self.configuration.learnerInformation = data.learnerInformation;
 							self.storeData();
+						} catch (err) {
+							console.log("Couldn't authenticate to server "
+									+ err);
+							$(document).trigger("authenticationfailed", "wrong data structure");
 						}
-					} catch (err) {
-						console.log("Couldn't authenticate to server " + err);
-						$(document).trigger("authenticationfailed");
-						return false;
+
+						$(document).trigger("authenticationready",
+								self.configuration.userAuthenticationKey);
+					} else {
+						console.log("Wrong username or password!")
+						$(document).trigger("authenticationfailed", "nouser");
 					}
-					$(document).trigger("authenticationready",
-							self.configuration.userAuthenticationKey);
 				},
 				error : function() {
 					console.log("Error while authentication to server");
-					$(document).trigger("authenticationfailed");
+					$(document).trigger("authenticationfailed", "connectionerror");
 				},
 				beforeSend : setHeader
 			});
@@ -219,28 +222,36 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 }
 
 /**
- * invalidates the current session key
+ * invalidates the specified session key or if no session key is specified the
+ * current session key
  */
-ConfigurationModel.prototype.sendLogoutToServer = function() {
+ConfigurationModel.prototype.sendLogoutToServer = function(
+		userAuthenticationKey) {
 	var self = this;
+	var sessionKey;
+	if (userAuthenticationKey) {
+		sessionKey = userAuthenticationKey;
+	} else {
+		sessionKey = self.configuration.userAuthenticationKey;
+	}
 	$
 			.ajax({
 				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/logout',
 				type : 'GET',
 				dataType : 'json',
 				success : function() {
-					
+
 				},
 				error : function() {
 					console.log("Error while logging out from server");
+					localStorage.setItem("pendingLogout", sessionKey);
 				},
 				beforeSend : setHeader
 			});
 
 	function setHeader(xhr) {
-		console.log("session key to be invalidated: " + self.configuration.userAuthenticationKey);
-		xhr.setRequestHeader('sessionkey',
-				self.configuration.userAuthenticationKey);
+		console.log("session key to be invalidated: " + sessionKey);
+		xhr.setRequestHeader('sessionkey', sessionKey);
 	}
 }
 
@@ -316,7 +327,8 @@ ConfigurationModel.prototype.register = function() {
 	var self = this;
 	var deviceID = device.uuid;
 
-	$.ajax({
+	$
+			.ajax({
 				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/registration.php',
 				type : 'GET',
 				dataType : 'json',
