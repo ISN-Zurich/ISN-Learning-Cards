@@ -62,7 +62,7 @@ LoginView.prototype.close = function() {
 	$("#password").blur();
 	$("#usernameInput").blur();
 	this.active = false;
-	
+
 	this.closeDiv();
 }
 
@@ -74,6 +74,7 @@ LoginView.prototype.close = function() {
 LoginView.prototype.clickLoginButton = function() {
 	var user, password;
 	var self = this;
+	var offline = self.controller.models["connection"].isOffline();
 
 	function cbLoginSuccess() {
 		if (self.active) {
@@ -82,13 +83,27 @@ LoginView.prototype.clickLoginButton = function() {
 		}
 	}
 
-	function cbLoginFailure() {
-		// TODO show a login error message
-		console.log("authentication failed");
+	function cbLoginFailure(e, errormessage) {
+		console.log("authentication failed, reason: " + errormessage);
+		switch (errormessage) {
+		case "connectionerror":
+			if (!offline) {
+				self.showErrorMessage("Authentication failed! Please try again!");
+			}
+			break;
+		case "nouser":
+			console.log("no user error");
+			self.showErrorMessage("Wrong username or password!");
+			break;
+		default:
+			break;
+		}
 	}
 
 	console.log("check logIn data");
+	console.log("offline: " + offline);
 	if ($("#usernameInput").val() && $("#password").val()) {
+		if (!offline) {
 		console.log("has logIn data");
 
 		$(document).bind("authenticationready", cbLoginSuccess);
@@ -98,8 +113,12 @@ LoginView.prototype.clickLoginButton = function() {
 		// TODO make it visible to the user that we are waiting for the server
 		controller.models['authentication'].login($("#usernameInput").val(), $(
 				"#password").val());
-		$("#usernameInput").val("");
-		$("#password").val("");
+//		$("#usernameInput").val("");
+//		$("#password").val("");
+		self.showErrorMessage("Authentication data is sent to the server. Please wait!");
+		}
+	} else {
+		self.showErrorMessage("Please enter your username and password!");
 	}
 };
 
@@ -108,14 +127,14 @@ LoginView.prototype.clickLoginButton = function() {
  */
 LoginView.prototype.showForm = function() {
 	$("#loginForm").show();
-	$("#errormessage").hide();
-	if (this.controller.models["connection"].isOffline()) {
-		this.showErrorMessage("Sorry, you need to be online to connect to your LMS");
-	}
-	
 };
 
 LoginView.prototype.showErrorMessage = function(message) {
 	$("#errormessage").text(message);
 	$("#errormessage").show();
+}
+
+LoginView.prototype.hideErrorMessage = function() {
+	$("#errormessage").text("");
+	$("#errormessage").hide();
 }
