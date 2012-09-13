@@ -7,6 +7,8 @@ function CoursesListView(controller) {
 
 	self.active = false;
 
+	self.firstLoad = true;
+	
 	// $('#coursesListSetIcon').click(function(){ self.clickSettingsButton(); }
 	// );
 	jester($('#coursesListSetIcon')[0]).tap(function() {
@@ -20,9 +22,10 @@ function CoursesListView(controller) {
 
 	$(document).bind("courselistupdate", function(e) {
 		console.log("course list update called");
+		self.firstLoad = false;
 		if (self.active) {
 			console.log("course list view is active");
-			self.update(true);
+			self.update();
 		}
 	});
 }
@@ -34,7 +37,8 @@ CoursesListView.prototype.openDiv = openView;
 CoursesListView.prototype.open = function() {
 	console.log("open course list view");
 	this.active = true;
-	this.update(false);
+	this.update();
+	this.firstLoad = false;
 	this.openDiv();
 };
 CoursesListView.prototype.closeDiv = closeView;
@@ -60,7 +64,7 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 };
 
-CoursesListView.prototype.update = function(update) {
+CoursesListView.prototype.update = function() {
 	var self = this;
 
 	var courseModel = self.controller.models['course'];
@@ -72,7 +76,7 @@ CoursesListView.prototype.update = function(update) {
 	if (courseModel.courseList.length == 0) {
 		
 		var li = $("<li/>", {
-			text : (update ? "No Courses" : "Courses are being loaded")
+			text : (self.firstLoad ? "Courses are being loaded" : "No Courses")
 		}).appendTo("#coursesList");	
 		
 	} else {
