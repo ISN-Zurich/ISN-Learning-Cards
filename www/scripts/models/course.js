@@ -69,7 +69,7 @@ CourseModel.prototype.loadData = function() {
 	// created
 	// courseObject = this.createCourses();
 	// }
-
+	
 	this.courseList = courseObject.courses || [];
 	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime();
 	this.syncState = courseObject.syncState || false;

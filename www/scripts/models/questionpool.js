@@ -55,6 +55,7 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 	// }
 
 	this.questionList = questionPoolObject;
+	this.reset();
 };
 
 /**
@@ -237,6 +238,7 @@ QuestionPoolModel.prototype.getWrongFeedback = function() {
 QuestionPoolModel.prototype.reset = function() {
 	this.queue = [ "-1", "-1", "-1" ];
 	this.id = 0;
+	this.activeQuestion = {};
 	if (this.questionList.length > 0) {
 		this.nextQuestion();
 	}
@@ -284,19 +286,4 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 			return [];
 		}
 	}
-};
-
-QuestionPoolModel.prototype.queueCurrentQuestion = function() {
-	var constant = 10;
-
-	if (this.questionList.length >= constant) {
-
-		this.queue.shift();
-		this.queue.push(this.id);
-	}
-}
-
-QuestionPoolModel.prototype.createQuestionPools = function() {
-	this.createPool(1);
-	this.createPool(2);
 };
