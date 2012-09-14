@@ -115,7 +115,8 @@ FeedbackView.prototype.clickCourseListButton = function() {
  */
 FeedbackView.prototype.showFeedbackTitle = function() {
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
-	$("#cardFeedbackTitle").text(currentFeedbackTitle);
+	//$("#cardFeedbackTitle").text(currentFeedbackTitle);
+	$("#cardFeedbackTitle").text(jQuery.i18n.prop('msg_' +currentFeedbackTitle + 'Results_title'));
 
 //	if (currentFeedbackTitle == "Wrong") {
 //		$("#feedbackIcon").removeClass("icon-happy");
@@ -131,30 +132,9 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 //		$("#feedbackIcon").addClass("icon-happy");
 //	}
 
-	$("#feedbackIcon").removeClass();
-	$("#feedbackIcon").removeClass();
-	$("#feedbackIcon").addClass();
-	
-	
-	switch (currentFeedbackTitle) {
-	case 'wrong':
-		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_partiallyCorrect_icon'));
-		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_excellent_icon'));
-		$("#feedbackIcon").addClass(jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
-		break;
-	case 'partiallyCorrect':
-		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_excellent_icon'));
-		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_wrong_icon'));
-		$("#feedbackIcon").addClass(jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
-		break;
-	case 'excellent':
-		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_wrong_icon'));
-		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_partiallyCorrect_icon'));
-		$("#feedbackIcon").addClass(jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
-		break;
-	default:
-		break;
-	}
+
+
+	$("#feedbackIcon").attr('class',jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
 	
 	
 };
