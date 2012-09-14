@@ -51,7 +51,7 @@ SettingsView.prototype.loadData = function() {
 	$("<li/>", {
 		  text: config.getEmailAddress()
 		}).appendTo("#settingsData");
-	$("<li/>", {
-		  text: config.getLanguage()
+	$("<li/>", {  
+		  text: jQuery.i18n.prop('msg_' + config.getLanguage() + '_title')
 		}).appendTo("#settingsData");
 };
