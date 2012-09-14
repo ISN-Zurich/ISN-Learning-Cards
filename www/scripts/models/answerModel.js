@@ -2,17 +2,7 @@
  * The answer model holds/handles the answers of a question of every type
  */
 
-<<<<<<< HEAD
-function AnswerModel() {
-	this.answerList = []; //array that will store the answers of the current question
 
-};
-
-/**
- * Stores the ticked-selected answers to answers array
- */
-
-=======
 // Constructor. It 
 function AnswerModel() {
 	this.answerList = [];
@@ -21,7 +11,7 @@ function AnswerModel() {
 
 };
 
->>>>>>> refs/remotes/isabella/master
+
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
 };
@@ -37,21 +27,14 @@ AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
-<<<<<<< HEAD
-
-/**
- * Get the answer resutls 
- */
 
 
-AnswerModel.prototype.getAnswerResults = function() {
-=======
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 };
->>>>>>> refs/remotes/isabella/master
+
 
 AnswerModel.prototype.getAnswerResults = function() {
 	console.log("answer score: " + this.answerScore);
@@ -75,16 +58,10 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	}
 };
 
-<<<<<<< HEAD
 
-/**
- * Calculate the answer results (excellent, wrong, partially correct) for multiple choice questions
- */
 
-AnswerModel.prototype.getMultipleAnswerResults = function() {
-=======
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
->>>>>>> refs/remotes/isabella/master
+
 	var questionpool = controller.models["questionpool"];
 
 	var correctAnswers = questionpool.getAnswer();
@@ -131,57 +108,15 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	}
 };
 
-<<<<<<< HEAD
-/**
- * Calculate the answer results (excellent, wrong) for single choice questions
- */
-
-AnswerModel.prototype.getSingleAnswerResults = function() {
-
-	var clickedAnswerIndex = this.answerList[0];
-	// var correctAnswer =
-	// controller.models.["questionpool"].["answer"][2].score;
-
-	var returnedResult;
-
-	if (clickedAnswerIndex && clickedAnswerIndex < 0) {
-		returnedResult = "Wrong";
-	} else if (controller.models["questionpool"].getScore(clickedAnswerIndex) > 0) {
-		returnedResult = "Excellent";
-	} else {
-		returnedResult = "Wrong";
-	}
-	console.log('XX ' + returnedResult);
-	return returnedResult;
-};
-
-
-/**
- * Calculate the answer results (excellent,partially correct wrong) for text sorting questions based on scoring 
- */
-
-AnswerModel.prototype.getTextSortAnswerResults = function() {
-	var scores = this.getTextSortScoreArray();
-
-	if (scores.indexOf("0.5") == -1 && scores.indexOf("0") == -1
-			&& scores.indexOf("1") == -1) {
-		return "Excellent";
-	} else if (scores.indexOf("1.5") == -1 && scores.indexOf("0.5") == -1) {
-		return "Wrong";
-	} else {
-		return "Partially Correct";
-	}
-};
 
 
 
 /**
  * Calculate the scoring for text sorting questions
  */
-AnswerModel.prototype.getTextSortScoreArray = function() {
-=======
+
 AnswerModel.prototype.calculateTextSortScore = function() {
->>>>>>> refs/remotes/isabella/master
+
 	var scores = [];
 	this.answerScore = 0;
 
@@ -226,47 +161,26 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 	this.answerScoreList = scores;
 };
 
-<<<<<<< HEAD
 
 /**
  * Calculate the answer results (excellent, wrong) for numeric questions
  */
 
-AnswerModel.prototype.getNumericAnswerResults = function() {
 
-	var answerModel = controller.models["answers"];
-
-=======
 AnswerModel.prototype.calculateNumericScore = function() {
 
 	var answerModel = controller.models["answers"];
->>>>>>> refs/remotes/isabella/master
 	var questionpoolModel = controller.models['questionpool'];
 
 	if (questionpoolModel.getAnswer()[0] == answerModel.getAnswers()) {
-<<<<<<< HEAD
 		//if the answers provided in the question pool are the same with the ones the learner selected
-		returnedResult = "Excellent";
-=======
 		this.answerScore = 1;
->>>>>>> refs/remotes/isabella/master
 	} else {
 		this.answerScore = 0;
 	}
-<<<<<<< HEAD
 
-	return returnedResult;
 };
 
 
-/**
- * Empty the answers array 
-*/
 
-AnswerModel.prototype.deleteData = function() {
-	this.answerList = [];
-};
-=======
-};
 
->>>>>>> refs/remotes/isabella/master
