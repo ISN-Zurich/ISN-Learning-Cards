@@ -20,6 +20,7 @@ function NumericQuestionWidget(interactive) {
 	} else {
 		//when feedback view is active, then interactive is set to false. 
 		console.log("interactive false");
+		controller.models["answers"].calculateNumericScore();
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 	}
 } // end of consructor
@@ -85,7 +86,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var answerModel = controller.models["answers"];
 	var typedAnswer = answerModel.getAnswers();
 	var correctAnswer = questionpoolModel.getAnswer()[0];
-	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
+	var currentFeedbackTitle = answerModel.getAnswerResults();
 
 
 	var div = $("<div/>", {
@@ -93,7 +94,6 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		"class": "inputBorder",
 		text: typedAnswer
 	}).appendTo("#feedbackBody");
-	
 	
 	if (currentFeedbackTitle == "Excellent") {
 

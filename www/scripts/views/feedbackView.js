@@ -79,8 +79,8 @@ FeedbackView.prototype.openDiv = openView;
  * shows feedback title and body
  */
 FeedbackView.prototype.open = function() {
-	this.showFeedbackTitle();
 	this.showFeedbackBody();
+	this.showFeedbackTitle();
 	this.openDiv();
 };
 

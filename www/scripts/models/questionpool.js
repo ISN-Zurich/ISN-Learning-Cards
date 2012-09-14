@@ -9,6 +9,7 @@ function QuestionPoolModel(controller) {
 	this.id = 0;
 	this.indexAnswer = 0;
 	this.activeQuestion = {};
+	this.mixedAnswers = [];
 
 	this.reset();
 	this.queue = [];
@@ -140,6 +141,28 @@ QuestionPoolModel.prototype.getAnswer = function() {
 	return this.activeQuestion.answer;
 };
 
+QuestionPoolModel.prototype.getMixedAnswersArray = function() {
+	return this.mixedAnswers;
+};
+
+QuestionPoolModel.prototype.mixAnswers = function() {
+	var answers = this.activeQuestion.answer;
+	this.mixedAnswers = [];
+	while (this.mixedAnswers.length < answers.length) {
+		var random = Math.floor((Math.random() * answers.length));
+
+		// if the current random number is already in the mixed
+		// answers
+		// array
+		// the the next element as random number
+		while (this.mixedAnswers.indexOf(random) != -1) {
+			random = (++random) % answers.length;
+		}
+
+		this.mixedAnswers.push(random);
+	}
+}
+
 /**
  * sets the id to the id of the next question a random number is created. if the
  * random number is not the same as the current id and is not an id that is
@@ -208,10 +231,7 @@ QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
  *         question
  */
 QuestionPoolModel.prototype.getScore = function(index) {
-	console.log("Active Question: " + JSON.stringify(this.activeQuestion));
-	console.log("index: " + index);
-	console.log("answer length: " + this.activeQuestion.answer.length);
-	if (index && index >= 0) {
+	if (index >= 0 && index < this.activeQuestion.answer.length) { //index && 
 		return this.activeQuestion.answer[index].points;
 	} else {
 		return -1;

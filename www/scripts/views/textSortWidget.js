@@ -1,11 +1,15 @@
 /**
  * Widget for displaying text sort questions
- * @param interactive if true answerview is shown, otherwise feedback view
+ * 
+ * @param interactive
+ *            if true answerview is shown, otherwise feedback view
  */
 function TextSortWidget(interactive) {
 	var self = this;
 
-	//loads answers from model for displaying already by the user ordered elements
+	// loads answers from model for displaying already by the user ordered
+	// elements
+
 	self.tickedAnswers = controller.models["answers"].getAnswers();
 	self.interactive = interactive;
 
@@ -14,6 +18,7 @@ function TextSortWidget(interactive) {
 	if (self.interactive) {
 		self.showAnswer();
 	} else {
+		controller.models["answers"].calculateTextSortScore();
 		self.showFeedback();
 	}
 }
@@ -31,33 +36,47 @@ TextSortWidget.prototype.showAnswer = function() {
 
 	$("#cardAnswerBody").empty();
 
-	if (questionpoolModel.questionList && questionpoolModel.getAnswer()[0].answertext) {
+	if (questionpoolModel.questionList
+			&& questionpoolModel.getAnswer()[0].answertext) {
 
-		//create a new unordered list
+		// create a new unordered list
 		var ul = $("<ul/>", {
 			"class" : "sortable"
 		}).appendTo("#cardAnswerBody");
 
-		var mixedAnswers = [];
+		var mixedAnswers;
 
-		//if sorting has not started yet, mix the answers
+		// if sorting has not started yet, mix the answers
 		if (this.tickedAnswers.length == 0) {
-			while (mixedAnswers.length < answers.length) {
-				var random = Math.floor((Math.random() * answers.length));
-
-				//if the current random number is already in the mixed answers array
-				//the the next element as random number
-				while (mixedAnswers.indexOf(random) != -1) {
-					random = (++random) % answers.length;
-				}
-
-				mixedAnswers.push(random);
-			}
+			var tmp_answerModel = new AnswerModel();
+			do {
+				tmp_answerModel.deleteData();
+				questionpoolModel.mixAnswers();
+				mixedAnswers = questionpoolModel.getMixedAnswersArray();
+//				while (mixedAnswers.length < answers.length) {
+//					var random = Math.floor((Math.random() * answers.length));
+//
+//					// if the current random number is already in the mixed
+//					// answers
+//					// array
+//					// the the next element as random number
+//					while (mixedAnswers.indexOf(random) != -1) {
+//						random = (++random) % answers.length;
+//					}
+//
+//					mixedAnswers.push(random);
+//				}
+				
+				//if the order of mixed answers is correct or partially correct, 
+				//generate a new order
+				tmp_answerModel.setAnswers(mixedAnswers);
+				tmp_answerModel.calculateTextSortScore();
+			} while (tmp_answerModel.getAnswerResults() != "Wrong");
 		} else {
 			mixedAnswers = this.tickedAnswers;
 		}
-		
-		//for each possible answer create a list item
+
+		// for each possible answer create a list item
 		for ( var c = 0; c < mixedAnswers.length; c++) {
 			var li = $("<li/>", {
 				"id" : "answer" + mixedAnswers[c],
@@ -66,7 +85,7 @@ TextSortWidget.prototype.showAnswer = function() {
 			}).appendTo(ul);
 		}
 
-		//make the list sortable using JQuery UI's function
+		// make the list sortable using JQuery UI's function
 		$(".sortable").sortable({
 			placeholder : "placeholder",
 			scrollSensitivity : 10,
@@ -104,18 +123,17 @@ TextSortWidget.prototype.showFeedback = function() {
 	var questionpoolModel = controller.models["questionpool"];
 	var answers = questionpoolModel.getAnswer();
 	var answerModel = controller.models["answers"];
-	var scores = answerModel.getTextSortScoreArray();
+	var scores = answerModel.getScoreList();
 
-	//iterate over all answers
+	// iterate over all answers
 	for ( var i = 0; i < answers.length; i++) {
 		var li = $("<li/>", {
-			//if score is 0.5 or 1.5 show user that he/she ticked the answer
-			"class" : scores[i] == "0.5" || scores[i] == "1.5" ? "ticked" : "",
+			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "ticked" : "",
 			text : answers[i].answertext
 		}).appendTo(ul);
 
-		//if score is 1 or 1.5 show a checkmark
-		if (scores[i] == "1" || scores[i] == "1.5") {
+		// if score is 0.5 or 1.5 show a checkmark
+		if (scores[i] == "0.5" || scores[i] == "1.5") {
 			var div = $("<div/>", {
 				"class" : "right correctAnswer icon-checkmark"
 			}).prependTo(li);
@@ -158,9 +176,8 @@ TextSortWidget.prototype.storeAnswers = function() {
 };
 
 /**
- * catches touch events and creates correspoding mouse events
- * this has to be done because JQuery UI's sortable function
- * listens for mouse events
+ * catches touch events and creates correspoding mouse events this has to be
+ * done because JQuery UI's sortable function listens for mouse events
  */
 TextSortWidget.prototype.enableSorting = function() {
 
@@ -172,7 +189,7 @@ TextSortWidget.prototype.enableSorting = function() {
 	jester($(".sortable")[0]).during(function(touches, event) {
 		createEvent("mousemove", event);
 
-		//if an element is dragged on the header, scroll the list down	
+		// if an element is dragged on the header, scroll the list down
 		var y = event.changedTouches[0].screenY;
 		if (y < 60) {
 			if (window.pageYOffset > y) {
