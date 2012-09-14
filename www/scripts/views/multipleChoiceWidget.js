@@ -25,7 +25,8 @@ function MultipleChoiceWidget(interactive) {
 		console.log("interactive true");
 	} else {
 		console.log("interactive false");
-		self.showFeedback(); 
+		controller.models["answers"].calculateMultipleChoiceScore();
+		self.showFeedback(); //displays the feedback body of the multiple choice widget
 	}
 } // end of consructor
 
@@ -49,32 +50,36 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 		var questionpoolModel = controller.models["questionpool"];
 		var answers = questionpoolModel.getAnswer(); //returns an array containing the possible answers
 
+		var mixedAnswers;
+		if (this.tickedAnswers.length == 0) {
+			questionpoolModel.mixAnswers();
+		}			
+		mixedAnswers = questionpoolModel.getMixedAnswersArray();
+		
 		//creation of an unordered list to host the possible answers
 		var ul = $("<ul/>", {
 		}).appendTo("#cardAnswerBody");
 
 		
-	    for ( var c = 0; c < answers.length; c++) {
-
-		// when an answer item is clicked a highlighted background color is applied to it via "ticked" class
+		for ( var c = 0; c < mixedAnswers.length; c++) {
+			// when an answer item is clicked a highlighted background color is
+			// applied to it via "ticked" class
 			var li = $(
 					"<li/>",
 					{
-						"id" : "answer" + c,
+						"id" : "answer" + mixedAnswers[c],
 						"class" : "answerLi"
-								+ (self.tickedAnswers.indexOf(c) != -1 ? " ticked"
-										: "")
+								+ (self.tickedAnswers.indexOf(mixedAnswers[c]) != -1 ? " ticked" : "")
 					}).appendTo(ul);
-			
-			//handler when taping on an item on the answer list
+			// handler when taping on an item on the answer list
 			jester(li[0]).tap(function() {
 				self.clickMultipleAnswerItem($(this));
 			});
-
-			// displays the text value for each answer item on the multiple choice list 
+			// displays the text value for each answer item on the single choice
+			// list
 			var div = $("<div/>", {
 				"class" : "text",
-				text : answers[c].answertext
+				text : answers[mixedAnswers[c]].answertext
 			}).appendTo(li);
 		}
 
@@ -91,7 +96,7 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 
 MultipleChoiceWidget.prototype.showFeedback = function() {
 	console.log("start show feedback in multiple choice");
-
+	
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
 
@@ -99,7 +104,8 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 	clone.appendTo("#feedbackBody"); 
 
 	var questionpoolModel = controller.models["questionpool"];
-	$("#feedbackBody ul li").each(function(index) {
+	$("#feedbackBody ul li").each(function() {
+		var index = parseInt($(this).attr('id').substring(6));
 		if (questionpoolModel.getScore(index) > 0) {
 			var div = $("<div/>", {
 				"class" : "right correctAnswer icon-checkmark" //applies a green tick to the correct question
@@ -149,7 +155,8 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 
 	$("#cardAnswerBody li").each(function(index) {
 		if ($(this).hasClass("ticked")) {
-			answers.push(index);
+			var tickedIndex = parseInt($(this).attr('id').substring(6));
+			answers.push(tickedIndex);
 		}
 	});
 

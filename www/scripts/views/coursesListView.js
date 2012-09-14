@@ -49,7 +49,7 @@ CoursesListView.prototype.close = function() {
 };
 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
-	if (this.controller.models['course'].isLoaded(course_id)) {
+	if (this.controller.models['course'].isSynchronized(course_id)) {
 		this.controller.models['questionpool'].reset();
 		this.controller.models['questionpool'].loadData(course_id);
 		this.controller.transitionToQuestion();

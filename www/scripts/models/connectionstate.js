@@ -30,23 +30,23 @@ ConnectionState.prototype.isOffline = function() {
 };
 
 /**
- * sets the state of the connection state to true (online)
- * the switchtoonline event is triggered
+ * sets the state of the connection state to true (online) the switchtoonline
+ * event is triggered
  */
 ConnectionState.prototype.goOnline = function() {
 	console.log("**online**");
 	this.state = true;
-	
-	//trigger event
+
+	// trigger event
 	$(document).trigger("switchtoonline");
-	
-	//if a pending logout exists, send the logout to the server
+
+	// if a pending logout exists, send the logout to the server
 	sessionKey = localStorage.getItem("pendingLogout");
 	if (sessionKey) {
 		localStorage.removeItem("pendingLogout");
 		this.controller.models["authentication"].sendLogoutToServer(sessionKey);
 	}
-	
+
 	//hide no connection error message in login view
 	
 	$(document).trigger("errormessagehide");
@@ -54,6 +54,28 @@ ConnectionState.prototype.goOnline = function() {
 	//this.controller.views["login"].hideErrorMessage();
 	
 	
+
+
+	// if a pending course list exist, load the course list from the server
+	var pendingCourseList = localStorage.getItem("pendingCourseList");
+	if (pendingCourseList) {
+		this.controller.models["course"].loadFromServer();
+	}
+
+	// if a pending question pool exist, load the question pool from the server
+	var courseList = this.controller.models["course"].courseList;
+	if (courseList) {
+		for ( var c in courseList) {
+			var pendingQuestionPools = localStorage
+					.getItem("pendingQuestionPool_" + courseList[c].id);
+			if (pendingQuestionPools) {
+				this.controller.models["questionpool"]
+						.loadFromServer(courseList[c].id);
+			}
+		}
+	}
+
+
 };
 
 /**
@@ -62,7 +84,8 @@ ConnectionState.prototype.goOnline = function() {
 ConnectionState.prototype.goOffline = function() {
 	console.log("**offline**");
 	this.state = false;
-	
-	//show no connection error message in login view
-	this.controller.views["login"].showErrorMessage("Sorry, you need to be online to connect to your LMS");
+
+	// show no connection error message in login view
+	this.controller.views["login"]
+			.showErrorMessage("Sorry, you need to be online to connect to your LMS");
 };

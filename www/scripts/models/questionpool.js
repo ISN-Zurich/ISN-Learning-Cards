@@ -9,6 +9,7 @@ function QuestionPoolModel(controller) {
 	this.id = 0;
 	this.indexAnswer = 0;
 	this.activeQuestion = {};
+	this.mixedAnswers = [];
 
 	this.reset();
 	this.queue = [];
@@ -74,31 +75,49 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 				dataType : 'json',
 				success : function(data) {
 					console.log("success");
+					
+					//if this was an pending question pool, remove it from the storage
+					localStorage.removeItem("pendingQuestionPool" + courseId);
+					
+					
 					if (data) {
 						console.log("JSON: " + data);
 						var questionPoolObject;
-						try {
-							questionPoolObject = data.questions;
-						} catch (err) {
-							console
-									.log("Error: Couldn't parse JSON for course");
-							questionPoolObject = [];
-						}
+						
+						questionPoolObject = data.questions;
+						
 
 						// if (!questionPoolObject[0]) { // if no courses are
 						// available, new ones are created
 						// console.log("no questionpool loaded");
 						// questionPoolObject = self.createPool(data.courseID);
 						// }
+						
+						if (!questionPoolObject) {
+							questionPoolObject = [];
+						}
 						console.log("Object: " + questionPoolObject);
-						self.questionList = questionPoolObject || [];
-
-						self.reset();
-						self.storeData(data.courseID);
+						
+						var questionPoolString;
+						try {
+							questionPoolString = JSON.stringify(questionPoolObject);
+						} catch (err) {
+							questionPoolString = "";
+						}
+						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
+						
+//						self.questionList = questionPoolObject || [];
+//
+//						self.reset();
+//						self.storeData(data.courseID);
 						$(document).trigger("questionpoolready", data.courseID);
 					}
 				},
 				error : function() {
+					
+					//if there was an error while sending the request,
+					//store the course id for the question pool in the local storage
+					localStorage.setItem("pendingQuestionPool_" + courseId, true);
 					console
 							.log("Error while loading question pool from server");
 				},
@@ -139,6 +158,28 @@ QuestionPoolModel.prototype.getQuestionBody = function() {
 QuestionPoolModel.prototype.getAnswer = function() {
 	return this.activeQuestion.answer;
 };
+
+QuestionPoolModel.prototype.getMixedAnswersArray = function() {
+	return this.mixedAnswers;
+};
+
+QuestionPoolModel.prototype.mixAnswers = function() {
+	var answers = this.activeQuestion.answer;
+	this.mixedAnswers = [];
+	while (this.mixedAnswers.length < answers.length) {
+		var random = Math.floor((Math.random() * answers.length));
+
+		// if the current random number is already in the mixed
+		// answers
+		// array
+		// the the next element as random number
+		while (this.mixedAnswers.indexOf(random) != -1) {
+			random = (++random) % answers.length;
+		}
+
+		this.mixedAnswers.push(random);
+	}
+}
 
 /**
  * sets the id to the id of the next question a random number is created. if the
@@ -208,10 +249,7 @@ QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
  *         question
  */
 QuestionPoolModel.prototype.getScore = function(index) {
-	console.log("Active Question: " + JSON.stringify(this.activeQuestion));
-	console.log("index: " + index);
-	console.log("answer length: " + this.activeQuestion.answer.length);
-	if (index && index >= 0) {
+	if (index >= 0 && index < this.activeQuestion.answer.length) { //index && 
 		return this.activeQuestion.answer[index].points;
 	} else {
 		return -1;

@@ -172,6 +172,17 @@ ConfigurationModel.prototype.logout = function() {
 	console.log("user logged out");
 	this.configuration.userAuthenticationKey = "";
 	this.storeData();
+	
+	//remove pending course list request
+	localStorage.removeItem("pendingCourseList");
+	
+	// remove all pending question pool requests 
+	var courseList = this.controller.models["course"].courseList;
+	if (courseList) {
+		for ( var c in courseList) {
+			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
+		}
+	}
 
 };
 
@@ -182,8 +193,8 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
 	$
 			.ajax({
-				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/login',
-				type : 'GET',
+				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php',
+				type : 'POST',
 				dataType : 'json',
 				success : function(data) {
 					if (data && data.userAuthenticationKey != "") {
@@ -237,8 +248,8 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 	}
 	$
 			.ajax({
-				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php/logout',
-				type : 'GET',
+				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php',
+				type : 'DELETE',
 				dataType : 'json',
 				success : function() {
 

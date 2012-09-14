@@ -18,7 +18,10 @@ function NumericQuestionWidget(interactive) {
 		console.log("interactive true");
 	} else {
 		console.log("interactive false");
-		self.showFeedback(); 
+
+		controller.models["answers"].calculateNumericScore();
+		self.showFeedback(); //displays the feedback body of the multiple choice widget
+
 	}
 } // end of consructor
 
@@ -83,7 +86,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var answerModel = controller.models["answers"];
 	var typedAnswer = answerModel.getAnswers();
 	var correctAnswer = questionpoolModel.getAnswer()[0];
-	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
+	var currentFeedbackTitle = answerModel.getAnswerResults();
 
     //display in an input field with the typed numeric answer of the learner
 	var div = $("<div/>", {
@@ -91,7 +94,6 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		"class": "inputBorder",
 		text: typedAnswer
 	}).appendTo("#feedbackBody");
-	
 	
 	if (currentFeedbackTitle == "Excellent") {
 		//if the typed numeric answer is correct, add background color to the above input field

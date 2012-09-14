@@ -100,6 +100,7 @@ LoginView.prototype.clickLoginButton = function() {
 			break;
 		case "nouser":
 			console.log("no user error");
+			$("#password").val("");
 			self.showErrorMessage("Wrong username or password!");
 			break;
 		default:

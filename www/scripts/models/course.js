@@ -1,3 +1,5 @@
+var DEFAULT_SYNC_TIMEOUT = 60000;
+
 /**
  * This model holds the course list and information about the current
  * synchronization of the data with the server
@@ -13,7 +15,7 @@ function CourseModel(controller) {
 	this.syncDateTime = 0;
 	this.syncState = false;
 	// this.syncTimeOut = 3600000;
-	this.syncTimeOut = 60000;
+	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 
 	$(document).bind("questionpoolready", function(e, courseID) {
 		console.log("model questionPool ready called " + courseID);
@@ -69,11 +71,11 @@ CourseModel.prototype.loadData = function() {
 	// created
 	// courseObject = this.createCourses();
 	// }
-	
+
 	this.courseList = courseObject.courses || [];
 	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime();
 	this.syncState = courseObject.syncState || false;
-	this.syncTimeOut = (courseObject.syncTimeOut * 1000) || 60000;
+	this.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 	this.index = 0;
 
 	this.checkForTimeOut();
@@ -92,6 +94,7 @@ CourseModel.prototype.loadFromServer = function() {
 	self.checkForTimeOut();
 	if (self.controller.models['authentication'].isLoggedIn()
 			&& !self.syncState) {
+
 		var sessionKey = self.controller.models['authentication']
 				.getSessionKey();
 
@@ -109,6 +112,7 @@ CourseModel.prototype.loadFromServer = function() {
 					dataType : 'json',
 					success : createCourseList,
 					error : function() {
+						localStorage.setItem("pendingCourseList", true);
 						console
 								.log("Error while loading course list from server");
 					},
@@ -121,6 +125,10 @@ CourseModel.prototype.loadFromServer = function() {
 
 		function createCourseList(data) {
 			console.log("success");
+
+			// if there was an pending course list, remove it from the storage
+			localStorage.removeItem("pendingCourseList");
+
 			var courseObject;
 			try {
 				courseObject = data;
@@ -139,13 +147,15 @@ CourseModel.prototype.loadFromServer = function() {
 			self.courseList = courseObject.courses || [];
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;
-			self.syncTimeOut = courseObject.syncTimeOut;
+			self.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 			self.storeData();
 			console.log("JSON CourseList: " + self.courseList);
 			self.reset();
 
-			for (var c in self.courseList) {
-				self.courseList[c].syncState = syncStateCache[self.courseList[c].id] || false;
+			if (syncStateCache.length > 0) {
+				for ( var c in self.courseList) {
+					self.courseList[c].syncState = syncStateCache[self.courseList[c].id];
+				}
 			}
 
 			$(document).trigger("courselistupdate");
@@ -156,6 +166,7 @@ CourseModel.prototype.loadFromServer = function() {
 				self.controller.models["questionpool"]
 						.loadFromServer(self.courseList[c].id);
 			}
+
 		}
 	}
 };
@@ -244,6 +255,7 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 		if (this.courseList[c].id == courseId) {
 			this.courseList[c].isLoaded = true;
 			this.courseList[c].syncState = true;
+			this.storeData();
 			console.log(this.courseList[c].id + " is loaded");
 			break;
 		}
