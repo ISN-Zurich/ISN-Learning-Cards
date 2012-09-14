@@ -307,7 +307,8 @@ ConfigurationModel.prototype.getEmailAddress = function() {
  * @return the language of the user
  */
 ConfigurationModel.prototype.getLanguage = function() {
-		if (this.configuration.learnerInformation && this.configuration.learnerInformation.language && this.configuration.learnerInformation.language.length){
+	//return "el"; // JUST for testing
+	if (this.configuration.learnerInformation && this.configuration.learnerInformation.language && this.configuration.learnerInformation.language.length){
 		return this.configuration.learnerInformation.language;
 	} 
 	return this.configuration.defaultLanguage ? this.configuration.defaultLanguage : "en";
