@@ -19,11 +19,9 @@ function SingleChoiceWidget(interactive) {
 
 	//Check the boolean value of intractive. This is set through the answer and feedback view.
 	if (self.interactive) {
-		// when answer view is active, then interactive variable is set to true. 
-		self.showAnswer(); //displays the answer body of the multiple choice widget
+		self.showAnswer(); 
 	} else {
-		//when feedback view is active, then interactive is set to false. 
-		self.showFeedback(); //displays the feedback body of the multiple choice widget
+		self.showFeedback(); 
 	}
 	
 }
@@ -105,7 +103,7 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	if (currentFeedbackTitle == "Excellent") {
 		var correctText = questionpoolModel.getCorrectFeedback();//gets correct feedback text 
 		if (correctText.length > 0) {
-			// when extra feedback info is available then display display it
+			// when extra feedback info is available
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(correctText);
 		} else {
@@ -130,7 +128,7 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 //Handling behavior when click on the an item of the single answers list
 SingleChoiceWidget.prototype.clickSingleAnswerItem = function(clickedElement) {
 
-	// to check if any other elemen is ticked and untick it
+	// to check if any other element is ticked and untick it
 	clickedElement.parent().find("li").removeClass("ticked");
 	//add a background color to the clicked element
 	clickedElement.addClass("ticked");
@@ -150,26 +148,5 @@ SingleChoiceWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
-//Handling behavior when click on the done-forward button on the right of the screen
-SingleChoiceWidget.prototype.clickDoneButton = function() {
-	
-	
-	var questionpoolModel = controller.models['questionpool'];
-		
-	if (questionpoolModel.getAnswer()[0].text && questionpoolModel)  {
-	// if the question has data and if there is a question pool move to the feedback view 
-			
-		this.widget.storeAnswers();	
-		questionpoolModel.queueCurrentQuestion();
-		controller.transitionToFeedback();
-		} else {
-	//if the question has no data then move to the next question
-			questionpoolModel.nextQuestion();
-			controller.transitionToQuestion();
-
-		}	
-		
-		
-	};
 
 console.log("end of single choice widget");
