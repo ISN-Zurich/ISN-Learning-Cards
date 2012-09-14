@@ -123,11 +123,11 @@ AnswerView.prototype.showAnswerBody = function() {
 AnswerView.prototype.showAnswerTitle = function() {
 	var currentAnswerTitle = controller.models["questionpool"]
 			.getQuestionType(); 
-	$("#cardAnswerTitle").text(currentAnswerTitle); // display as title of the page the specific question type
+	//$("#cardAnswerTitle").text(currentAnswerTitle); // display as title of the page the specific question type
 
 	$("#answerIcon").removeClass();
-	$("#answerIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_icon'));
-	$("#cardAnswerTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
+	$("#answerIcon").addClass(jQuery.i18n.prop('msg_' + currentAnswerTitle + '_icon'));
+	$("#cardAnswerTitle").text(jQuery.i18n.prop('msg_' +currentAnswerTitle + '_title'));
 	
 	//	switch (currentAnswerTitle) {
 //	case 'assSingleChoice':
