@@ -54,7 +54,7 @@ function getQuestions($courseId) {
 			$courseItems = new ilCourseItems($ref_id);
 			$courseItemsList = $courseItems->getAllItems();
 
-			logging("Questions: " . json_encode($courseItemsList));
+//			logging("Questions: " . json_encode($courseItemsList));
 
 			foreach($courseItemsList as $courseItem) {
 
@@ -66,7 +66,7 @@ function getQuestions($courseId) {
 					//check if question pool is valid
 					if(isValidQuestionPool($questionPool)) {
 						$questionList = $questionPool->getQuestionList();
-						logging("Question list: " . json_encode($questionList));
+//						logging("Question list: " . json_encode($questionList));
 
 						foreach ($questionList as $question) {
 

@@ -14,22 +14,25 @@ global $ilUser, $class_for_logging;
 
 $class_for_logging = "authentication.php";
 
-$path = $_SERVER['PATH_INFO'];
-$path = preg_replace("/\//", "", $path); //remove leading backslash
+//$path = $_SERVER['PATH_INFO'];
+//$path = preg_replace("/\//", "", $path); //remove leading backslash
 
-logging("path: '" . $path . "'");
+$request_method = $_SERVER['REQUEST_METHOD'];
 
-switch($path) {
-	case "login":
+logging("request method: '" . $request_method . "'");
+
+switch($request_method) {
+	case "PUT":
+	case "POST":
 		logging("in log in");
 		$response = json_encode(authenticate());
 		logging("login response: " . $response);
 		echo($response);
 		break;
-	case "logout":
+	case "DELETE":
 		logout();
 		break;
-	default:
+	case "GET":
 		$userId = get_session_user_from_headers();
 
 		$authenticationData = array(
@@ -49,6 +52,8 @@ switch($path) {
 		logging("sending authentication info");
 
 		echo(json_encode($authenticationData));
+		break;
+	default:
 		break;
 }
 
