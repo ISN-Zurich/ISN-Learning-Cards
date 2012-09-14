@@ -132,6 +132,7 @@ Controller.prototype.setupLanguage = function() {
 	        $("#coursesListTitle").text(msg_courses_list_title);
 	        $("#settingsTitle").text(msg_settings_title);
 	        $("#logoutConfirmationTitle").text(msg_logout_title);
+	        $(".cardBody").text(msg_logout_body);
 	        
 	    }
 	})
