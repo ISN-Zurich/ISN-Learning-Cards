@@ -19,6 +19,7 @@
 <script type="text/javascript" src="libs/jquery-ui.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
 <script type="text/javascript" src="libs/md5_faultylabs/md5.js"></script>
+<script type="text/javascript" src="libs/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
 <script type="text/javascript" src="scripts/models/connectionstate.js"></script>
 <script type="text/javascript" src="scripts/models/course.js"></script>
@@ -81,15 +82,17 @@
 
 					<div class="inputBorder">
 						<input class="loginInput" id="usernameInput" required="required"
-							type="text" placeholder="Username" />
+							type="text" placeholder="" />
 					</div>
 					<div class="inputBorder">
 						<input id="password" class="loginInput" name="password"
-							required="required" type="password" placeholder="Password" />
+							required="required" type="password" placeholder="" />
 					</div>
 
 				</form>
 				<div id="errormessage"></div>
+				<div id="warningmessage"></div>
+				
 			</div>
 		</div>
 
@@ -104,7 +107,7 @@
 			<div id="coursesListSetIcon" class="generalButton returnButton right">
 				<span class="icon-cog"></span>
 			</div>
-			<div id="coursesListTitle" class="title">Your Courses</div>
+			<div id="coursesListTitle" class="title"></div>
 		</div>
 
 		<div id="courses" class="content">
@@ -122,7 +125,7 @@
 			<div id="settingsIcon" class="left titleicon">
 				<span class="icon-cog"></span>
 			</div>
-			<div id="settingsTitle" class="title">Settings</div>
+			<div id="settingsTitle" class="title"></div>
 		</div>
 		<div class="content">
 			<div id="logOutSettings" class="generalButton iconButton">
@@ -145,16 +148,13 @@
 			<div id="closeIcon" class="generalButton returnButton right">
 				<span class="icon-cross"></span>
 			</div>
-			<div id="logoutConfirmationTitle" class="title">Logout?</div>
+			<div id="logoutConfirmationTitle" class="title"></div>
 		</div>
 		<div class="content">
 			<div id="logOut" class="generalButton iconButton">
 				<span class="icon-exit"></span>
 			</div>
-			<div class="cardBody">If you logout you will not be able to
-				continue learning until you have authenticated again. Please note
-				that you cannot authenticate while you are not connected to the
-				Internet. Do you really want to log out?</div>
+			<div class="cardBody"></div>
 		</div>
 	</div>
 
@@ -175,9 +175,7 @@
 			<div id="ButtonAnswer" class="generalButton iconButton">
 				<span class="icon-arrow-right"></span>
 			</div>
-			<div id="cardQuestionBody" class="cardBody">Lorem ipsum dolor
-				sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-				incididunt ut labore et dolore magna.</div>
+			<div id="cardQuestionBody" class="cardBody"></div>
 		</div>
 		<div class="container bottom">
 			<div id="ButtonTip" class="generalButton">
@@ -196,7 +194,7 @@
 			<div id="cardAnswerIcon" class="left titleicon">
 				<span id="answerIcon"></span>
 			</div>
-			<div id="cardAnswerTitle" class="title">Choose some answer</div>
+			<div id="cardAnswerTitle" class="title"></div>
 		</div>
 		<div class="content" id="answerContainer">
 			<div id="doneButton" class="generalButton iconButton">
@@ -218,7 +216,7 @@
 			<div class="left titleicon" id="cardFeedbackIcon">
 				<span id="feedbackIcon"></span>
 			</div>
-			<div id="cardFeedbackTitle" class="title">Excellent</div>
+			<div id="cardFeedbackTitle" class="title"></div>
 		</div>
 		<div class="content">
 			<div class="iconButton">
@@ -229,12 +227,8 @@
 					<span class="icon-question"></span>
 				</div>
 			</div>
-			<div id="feedbackBody" class="marginForButtons">Lorem ipsum
-				dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-				incididunt ut labore et dolore magna.</div>
-			<div id="feedbackTip" class="cardBody">Lorem ipsum dolor sit
-				amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-				ut labore et dolore magna.</div>
+			<div id="feedbackBody" class="marginForButtons"></div>
+			<div id="feedbackTip" class="cardBody"></div>
 		</div>
 	</div>
 
