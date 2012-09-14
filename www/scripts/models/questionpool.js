@@ -78,24 +78,33 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 					if (data) {
 						console.log("JSON: " + data);
 						var questionPoolObject;
-						try {
-							questionPoolObject = data.questions;
-						} catch (err) {
-							console
-									.log("Error: Couldn't parse JSON for course");
-							questionPoolObject = [];
-						}
+						
+						questionPoolObject = data.questions;
+						
 
 						// if (!questionPoolObject[0]) { // if no courses are
 						// available, new ones are created
 						// console.log("no questionpool loaded");
 						// questionPoolObject = self.createPool(data.courseID);
 						// }
+						
+						if (!questionPoolObject) {
+							questionPoolObject = [];
+						}
 						console.log("Object: " + questionPoolObject);
-						self.questionList = questionPoolObject || [];
-
-						self.reset();
-						self.storeData(data.courseID);
+						
+						var questionPoolString;
+						try {
+							questionPoolString = JSON.stringify(questionPoolObject);
+						} catch (err) {
+							questionPoolString = "";
+						}
+						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
+						
+//						self.questionList = questionPoolObject || [];
+//
+//						self.reset();
+//						self.storeData(data.courseID);
 						$(document).trigger("questionpoolready", data.courseID);
 					}
 				},

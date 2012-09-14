@@ -69,7 +69,7 @@ CourseModel.prototype.loadData = function() {
 	// created
 	// courseObject = this.createCourses();
 	// }
-	
+
 	this.courseList = courseObject.courses || [];
 	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime();
 	this.syncState = courseObject.syncState || false;
@@ -88,73 +88,82 @@ CourseModel.prototype.loadData = function() {
 CourseModel.prototype.loadFromServer = function() {
 	console.log("loadFromServer-Course is called");
 	var self = this;
-	var syncStateCache = new Array();
-	self.checkForTimeOut();
-	if (self.controller.models['authentication'].isLoggedIn()
-			&& !self.syncState) {
-		var sessionKey = self.controller.models['authentication']
-				.getSessionKey();
+	if (self.controller.models['connection'].isOffline()) {
+		// TODO do something if user cannnot connect to server because he/she is
+		// offline
+		// self.loadData();
+	} else {
+		var syncStateCache = new Array();
+		self.checkForTimeOut();
+		if (self.controller.models['authentication'].isLoggedIn()
+				&& !self.syncState) {
 
-		// save current syncStates for this course
-		if (self.courseList && self.courseList.length > 0) {
-			for ( var c in self.courseList) {
-				syncStateCache[self.courseList[c].id] = self.courseList[c].syncState;
-			}
-		}
+			var sessionKey = self.controller.models['authentication']
+					.getSessionKey();
 
-		$
-				.ajax({
-					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
-					type : 'GET',
-					dataType : 'json',
-					success : createCourseList,
-					error : function() {
-						console
-								.log("Error while loading course list from server");
-					},
-					beforeSend : setHeader
-				});
-
-		function setHeader(xhr) {
-			xhr.setRequestHeader('sessionkey', sessionKey);
-		}
-
-		function createCourseList(data) {
-			console.log("success");
-			var courseObject;
-			try {
-				courseObject = data;
-
-			} catch (err) {
-				courseObject = {};
-				console.log("Couldn't load courses from server " + err);
-			}
-			console.log("course data loaded from server");
-
-			// if (!courseObject[0]) { // if no courses are available,
-			// // new ones are created
-			// courseObject = self.createCourses();
-			// }
-			console.log(courseObject);
-			self.courseList = courseObject.courses || [];
-			self.syncDateTime = (new Date()).getTime();
-			self.syncState = true;
-			self.syncTimeOut = courseObject.syncTimeOut;
-			self.storeData();
-			console.log("JSON CourseList: " + self.courseList);
-			self.reset();
-
-			for (var c in self.courseList) {
-				self.courseList[c].syncState = syncStateCache[self.courseList[c].id] || false;
+			// save current syncStates for this course
+			if (self.courseList && self.courseList.length > 0) {
+				for ( var c in self.courseList) {
+					syncStateCache[self.courseList[c].id] = self.courseList[c].syncState;
+				}
 			}
 
-			$(document).trigger("courselistupdate");
+			$
+					.ajax({
+						url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
+						type : 'GET',
+						dataType : 'json',
+						success : createCourseList,
+						error : function() {
+							console
+									.log("Error while loading course list from server");
+						},
+						beforeSend : setHeader
+					});
 
-			for ( var c in self.courseList) {
-				self.courseList[c].isLoaded = false;
+			function setHeader(xhr) {
+				xhr.setRequestHeader('sessionkey', sessionKey);
+			}
 
-				self.controller.models["questionpool"]
-						.loadFromServer(self.courseList[c].id);
+			function createCourseList(data) {
+				console.log("success");
+				var courseObject;
+				try {
+					courseObject = data;
+
+				} catch (err) {
+					courseObject = {};
+					console.log("Couldn't load courses from server " + err);
+				}
+				console.log("course data loaded from server");
+
+				// if (!courseObject[0]) { // if no courses are available,
+				// // new ones are created
+				// courseObject = self.createCourses();
+				// }
+				console.log(courseObject);
+				self.courseList = courseObject.courses || [];
+				self.syncDateTime = (new Date()).getTime();
+				self.syncState = true;
+				self.syncTimeOut = courseObject.syncTimeOut;
+				self.storeData();
+				console.log("JSON CourseList: " + self.courseList);
+				self.reset();
+
+				if (syncStateCache.length > 0) {
+					for ( var c in self.courseList) {
+						self.courseList[c].syncState = syncStateCache[self.courseList[c].id];
+					}
+				}
+
+				$(document).trigger("courselistupdate");
+
+				for ( var c in self.courseList) {
+					self.courseList[c].isLoaded = false;
+
+					self.controller.models["questionpool"]
+							.loadFromServer(self.courseList[c].id);
+				}
 			}
 		}
 	}
@@ -244,6 +253,7 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 		if (this.courseList[c].id == courseId) {
 			this.courseList[c].isLoaded = true;
 			this.courseList[c].syncState = true;
+			 this.storeData();
 			console.log(this.courseList[c].id + " is loaded");
 			break;
 		}
