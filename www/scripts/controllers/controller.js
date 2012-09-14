@@ -54,6 +54,7 @@ function Controller() {
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel(this);
+	this.models.statistics = new StatisticsModel(this);
 
 	this.models.authentication.loadFromServer();
 
@@ -68,6 +69,7 @@ function Controller() {
 	this.views.answerView = new AnswerView();
 	this.views.feedbackView = new FeedbackView();
 	this.views.settings = new SettingsView();
+	this.views.statisticsView = new StatisticsView();
 
 	console.log('views initialized');
 
@@ -175,6 +177,10 @@ Controller.prototype.transitionToSettings = function() {
 
 Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
+};
+
+Controller.prototype.transitionToStatistics = function() {
+	this.transition('statisticsView');
 };
 
 /**

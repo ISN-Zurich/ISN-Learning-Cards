@@ -27,7 +27,6 @@ function MultipleChoiceWidget(interactive) {
 	} else {
 		//when feedback view is active, then interactive is set to false. 
 		console.log("interactive false");
-		controller.models["answers"].calculateMultipleChoiceScore();
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 	}
 } // end of consructor
@@ -53,7 +52,7 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 		var answers = questionpoolModel.getAnswer(); //returns an array containing the possible answers
 
 		var mixedAnswers;
-		if (this.tickedAnswers.length == 0) {
+		if (!questionpoolModel.currAnswersMixed()) {
 			questionpoolModel.mixAnswers();
 		}			
 		mixedAnswers = questionpoolModel.getMixedAnswersArray();
@@ -164,6 +163,10 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 
 	controller.models["answers"].setAnswers(answers);
 };
+
+MultipleChoiceWidget.prototype.calculateAnswerScore = function() {
+	controller.models["answers"].calculateMultipleChoiceScore();
+}
 
 //Handling behavior when click on the done-forward button on the right of the screen
 
