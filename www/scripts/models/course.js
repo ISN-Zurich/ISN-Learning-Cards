@@ -1,3 +1,5 @@
+var DEFAULT_SYNC_TIMEOUT = 60000;
+
 /**
  * This model holds the course list and information about the current
  * synchronization of the data with the server
@@ -13,7 +15,7 @@ function CourseModel(controller) {
 	this.syncDateTime = 0;
 	this.syncState = false;
 	// this.syncTimeOut = 3600000;
-	this.syncTimeOut = 60000;
+	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 
 	$(document).bind("questionpoolready", function(e, courseID) {
 		console.log("model questionPool ready called " + courseID);
@@ -73,7 +75,7 @@ CourseModel.prototype.loadData = function() {
 	this.courseList = courseObject.courses || [];
 	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime();
 	this.syncState = courseObject.syncState || false;
-	this.syncTimeOut = (courseObject.syncTimeOut * 1000) || 60000;
+	this.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 	this.index = 0;
 
 	this.checkForTimeOut();
@@ -88,83 +90,83 @@ CourseModel.prototype.loadData = function() {
 CourseModel.prototype.loadFromServer = function() {
 	console.log("loadFromServer-Course is called");
 	var self = this;
-	if (self.controller.models['connection'].isOffline()) {
-		// TODO do something if user cannnot connect to server because he/she is
-		// offline
-		// self.loadData();
-	} else {
-		var syncStateCache = new Array();
-		self.checkForTimeOut();
-		if (self.controller.models['authentication'].isLoggedIn()
-				&& !self.syncState) {
+	var syncStateCache = new Array();
+	self.checkForTimeOut();
+	if (self.controller.models['authentication'].isLoggedIn()
+			&& !self.syncState) {
 
-			var sessionKey = self.controller.models['authentication']
-					.getSessionKey();
+		var sessionKey = self.controller.models['authentication']
+				.getSessionKey();
 
-			// save current syncStates for this course
-			if (self.courseList && self.courseList.length > 0) {
+		// save current syncStates for this course
+		if (self.courseList && self.courseList.length > 0) {
+			for ( var c in self.courseList) {
+				syncStateCache[self.courseList[c].id] = self.courseList[c].syncState;
+			}
+		}
+
+		$
+				.ajax({
+					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
+					type : 'GET',
+					dataType : 'json',
+					success : createCourseList,
+					error : function() {
+						localStorage.setItem("pendingCourseList", true);
+						console
+								.log("Error while loading course list from server");
+					},
+					beforeSend : setHeader
+				});
+
+		function setHeader(xhr) {
+			xhr.setRequestHeader('sessionkey', sessionKey);
+		}
+
+		function createCourseList(data) {
+			console.log("success");
+
+			// if there was an pending course list, remove it from the storage
+			localStorage.removeItem("pendingCourseList");
+
+			var courseObject;
+			try {
+				courseObject = data;
+
+			} catch (err) {
+				courseObject = {};
+				console.log("Couldn't load courses from server " + err);
+			}
+			console.log("course data loaded from server");
+
+			// if (!courseObject[0]) { // if no courses are available,
+			// // new ones are created
+			// courseObject = self.createCourses();
+			// }
+			console.log(courseObject);
+			self.courseList = courseObject.courses || [];
+			self.syncDateTime = (new Date()).getTime();
+			self.syncState = true;
+			self.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
+			self.storeData();
+			console.log("JSON CourseList: " + self.courseList);
+			self.reset();
+
+			if (syncStateCache.length > 0) {
 				for ( var c in self.courseList) {
-					syncStateCache[self.courseList[c].id] = self.courseList[c].syncState;
+					self.courseList[c].syncState = syncStateCache[self.courseList[c].id];
 				}
 			}
 
-			$
-					.ajax({
-						url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
-						type : 'GET',
-						dataType : 'json',
-						success : createCourseList,
-						error : function() {
-							console
-									.log("Error while loading course list from server");
-						},
-						beforeSend : setHeader
-					});
+			$(document).trigger("courselistupdate");
 
-			function setHeader(xhr) {
-				xhr.setRequestHeader('sessionkey', sessionKey);
+			for ( var c in self.courseList) {
+				self.courseList[c].isLoaded = false;
+
+				self.controller.models["questionpool"]
+						.loadFromServer(self.courseList[c].id);
 			}
 
-			function createCourseList(data) {
-				console.log("success");
-				var courseObject;
-				try {
-					courseObject = data;
-
-				} catch (err) {
-					courseObject = {};
-					console.log("Couldn't load courses from server " + err);
-				}
-				console.log("course data loaded from server");
-
-				// if (!courseObject[0]) { // if no courses are available,
-				// // new ones are created
-				// courseObject = self.createCourses();
-				// }
-				console.log(courseObject);
-				self.courseList = courseObject.courses || [];
-				self.syncDateTime = (new Date()).getTime();
-				self.syncState = true;
-				self.syncTimeOut = courseObject.syncTimeOut;
-				self.storeData();
-				console.log("JSON CourseList: " + self.courseList);
-				self.reset();
-
-				if (syncStateCache.length > 0) {
-					for ( var c in self.courseList) {
-						self.courseList[c].syncState = syncStateCache[self.courseList[c].id];
-					}
-				}
-
-				$(document).trigger("courselistupdate");
-
-				for ( var c in self.courseList) {
-					self.courseList[c].isLoaded = false;
-
-					self.controller.models["questionpool"]
-							.loadFromServer(self.courseList[c].id);
-				}
-			}
 		}
 	}
 };
@@ -253,7 +255,7 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 		if (this.courseList[c].id == courseId) {
 			this.courseList[c].isLoaded = true;
 			this.courseList[c].syncState = true;
-			 this.storeData();
+			this.storeData();
 			console.log(this.courseList[c].id + " is loaded");
 			break;
 		}

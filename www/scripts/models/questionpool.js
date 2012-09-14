@@ -75,6 +75,11 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 				dataType : 'json',
 				success : function(data) {
 					console.log("success");
+					
+					//if this was an pending question pool, remove it from the storage
+					localStorage.removeItem("pendingQuestionPool" + courseId);
+					
+					
 					if (data) {
 						console.log("JSON: " + data);
 						var questionPoolObject;
@@ -109,6 +114,10 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 					}
 				},
 				error : function() {
+					
+					//if there was an error while sending the request,
+					//store the course id for the question pool in the local storage
+					localStorage.setItem("pendingQuestionPool_" + courseId, true);
 					console
 							.log("Error while loading question pool from server");
 				},

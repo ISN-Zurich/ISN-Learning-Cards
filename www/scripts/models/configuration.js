@@ -172,6 +172,17 @@ ConfigurationModel.prototype.logout = function() {
 	console.log("user logged out");
 	this.configuration.userAuthenticationKey = "";
 	this.storeData();
+	
+	//remove pending course list request
+	localStorage.removeItem("pendingCourseList");
+	
+	// remove all pending question pool requests 
+	var courseList = this.controller.models["course"].courseList;
+	if (courseList) {
+		for ( var c in courseList) {
+			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
+		}
+	}
 
 };
 
