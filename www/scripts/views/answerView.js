@@ -118,6 +118,7 @@ AnswerView.prototype.showAnswerBody = function() {
 
 };
 
+
 //Displays the title area of the answer view, containg a title icon  the title text 
 AnswerView.prototype.showAnswerTitle = function() {
 	var currentAnswerTitle = controller.models["questionpool"]
@@ -125,27 +126,29 @@ AnswerView.prototype.showAnswerTitle = function() {
 	$("#cardAnswerTitle").text(currentAnswerTitle); // display as title of the page the specific question type
 
 	$("#answerIcon").removeClass();
-// displays a different icon on the title of the page according to the type of the question. making use of iconmoon classes for each icon.
-	switch (currentAnswerTitle) {
-	case 'assSingleChoice':
-		$("#answerIcon").addClass("icon-checkmark");
-		$("#cardAnswerTitle").text("Single Choice Question");
-		break;
-	case 'assMultipleChoice':
-		$("#answerIcon").addClass("icon-checkmark");
-		$("#cardAnswerTitle").text("Multiple Choice Question");
-		break;
-	case 'assOrderingQuestion':
-		$("#answerIcon").addClass("icon-move-vertical");
-		$("#cardAnswerTitle").text("Text Order Question");
-		break;
-	case 'assNumeric':
-		$("#answerIcon").addClass("icon-pencil");
-		$("#cardAnswerTitle").text("Numeric Question");
-		break;
-	default:
-		break;
-	}
+	$("#answerIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_icon'));
+	$("#cardAnswerTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
+	
+	//	switch (currentAnswerTitle) {
+//	case 'assSingleChoice':
+//		$("#answerIcon").addClass("icon-checkmark");
+//		$("#cardAnswerTitle").text("Single Choice Question");
+//		break;
+//	case 'assMultipleChoice':
+//		$("#answerIcon").addClass("icon-checkmark");
+//		$("#cardAnswerTitle").text("Multiple Choice Question");
+//		break;
+//	case 'assOrderingQuestion':
+//		$("#answerIcon").addClass("icon-move-vertical");
+//		$("#cardAnswerTitle").text("Text Order Question");
+//		break;
+//	case 'assNumeric':
+//		$("#answerIcon").addClass("icon-pencil");
+//		$("#cardAnswerTitle").text("Numeric Question");
+//		break;
+//	default:
+//		break;
+//	}
 };
 
 // Handling the behavior of the "forward-done" button on the answer view
