@@ -48,7 +48,12 @@ ConnectionState.prototype.goOnline = function() {
 	}
 	
 	//hide no connection error message in login view
-	this.controller.views["login"].hideErrorMessage();
+	
+	$(document).trigger("errormessagehide");
+	
+	//this.controller.views["login"].hideErrorMessage();
+	
+	
 };
 
 /**
