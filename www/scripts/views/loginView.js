@@ -10,6 +10,12 @@ function LoginView(controller) {
 
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
+		
+   $(document).bind("errormessagehide", function() {
+			console.log(" hide error message loaded ");
+			self.hideErrorMessage();
+		});	
+		
 	});
 
 	// if keyboard is displayed, move the logos up
@@ -112,7 +118,7 @@ LoginView.prototype.clickLoginButton = function() {
 			controller.models['authentication'].login(
 					$("#usernameInput").val(), $("#password").val());
 
-			self.showErrorMessage("Authentication data is sent to the server. Please wait!");
+			self.showWarningMessage("Authentication data is sent to the server. Please wait!");
 		}
 	} else {
 		self.showErrorMessage("Please enter your username and password!");
@@ -134,14 +140,36 @@ LoginView.prototype.showForm = function() {
  * shows the specified error message
  */
 LoginView.prototype.showErrorMessage = function(message) {
+	$("#warningmessage").hide();
 	$("#errormessage").text(message);
 	$("#errormessage").show();
 }
+
+
+/**
+ * shows the specified warning message
+ */
+LoginView.prototype.showWarningMessage = function(message) {
+	$("#errormessage").hide();
+	$("#warningmessage").text(message);
+	$("#warningmessage").show();
+}
+
 
 /**
  * hides the specified error message
  */
 LoginView.prototype.hideErrorMessage = function() {
+	
 	$("#errormessage").text("");
 	$("#errormessage").hide();
+}
+
+
+/**
+ * hides the specified warning message
+ */
+LoginView.prototype.hideErrorMessage = function() {
+	$("#warningmessage").text("");
+	$("#warningmessage").hide();
 }
