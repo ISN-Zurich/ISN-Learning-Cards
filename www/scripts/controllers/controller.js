@@ -55,9 +55,13 @@ function Controller() {
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel(this);
 
+	
 	this.models.authentication.loadFromServer();
-
+	
 	console.log("models initialized");
+	
+	//initialize user interface language
+	this.setupLanguage();
 
 	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
@@ -114,6 +118,24 @@ function Controller() {
 
 	console.log("End of Controller");
 } // end of Controller
+
+Controller.prototype.setupLanguage = function() {
+	jQuery.i18n.properties({
+	    name:'textualStrings', 
+	    path:'translations/', 
+	    mode:'both',
+	    language:this.models.authentication.getLanguage(), 
+	    callback: function() {
+	    	// initialize the static strings on all views.
+	        $("#usernameInput").attr("placeholder", msg_placeholder_username);
+	        $("#password").attr("placeholder", msg_placeholder_password);
+	        $("#coursesListTitle").text(msg_courses_list_title);
+	        $("#settingsTitle").text(msg_settings_title);
+	        $("#logoutConfirmationTitle").text(msg_logout_title);
+	        
+	    }
+	})
+}
 
 /**
  * closes the current view and opens the specified one
