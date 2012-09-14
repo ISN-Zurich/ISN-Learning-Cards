@@ -44,7 +44,7 @@ AnswerModel.prototype.getAnswerResults = function() {
 	} else if (this.answerScore == 0) {
 		return "Wrong";
 	} else {
-		return "Partially Correct";
+		return "PartiallyCorrect";
 	}
 };
 
