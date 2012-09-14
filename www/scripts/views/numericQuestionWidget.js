@@ -14,13 +14,11 @@ function NumericQuestionWidget(interactive) {
 	this.didApologize = false; // a flag tracking when questions with no data are loaded and an error message is displayed on the screen
 	//Check the boolean value of intractive. This is set through the answer and feedback view.
 	if (self.interactive) { 
-		// when answer view is active, then interactive variable is set to true. 
-		self.showAnswer(); //displays the answer body of the multiple choice widget
+		self.showAnswer(); 
 		console.log("interactive true");
 	} else {
-		//when feedback view is active, then interactive is set to false. 
 		console.log("interactive false");
-		self.showFeedback(); //displays the feedback body of the multiple choice widget
+		self.showFeedback(); 
 	}
 } // end of consructor
 
@@ -87,7 +85,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var correctAnswer = questionpoolModel.getAnswer()[0];
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 
-
+    //display in an input field with the typed numeric answer of the learner
 	var div = $("<div/>", {
 		"id": "typedAnswer",
 		"class": "inputBorder",
@@ -96,24 +94,28 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	
 	
 	if (currentFeedbackTitle == "Excellent") {
-
+		//if the typed numeric answer is correct, add background color to the above input field
 		$("#typedAnswer").addClass("correctAnswer");
-		
 		var correctText = questionpoolModel.getCorrectFeedback();
 		if (correctText.length > 0) {
+			//if extra feedback info is available for the correct answer
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(correctText);
 		} else {
+			//if no extra feedback information is available
 			$("#FeedbackMore").hide();
 		}
-	} else { // current feedback title is wrong
+	} else { 
+		// if the typed numeric answer is wrong
 		console.log('handle answer results');
-
+     
+		// add the following message 
 		$("<div/>", {
 			"id" : "numericFeedback",
 			text : "the correct answer is"
 		}).appendTo("#feedbackBody");
 
+		//display below the message in an input field with the correct answer
 		$("<div/>", {
 			"id" : "correctNumericFeedback",
 			"class" : "inputBorder correctAnswer",
@@ -123,15 +125,19 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		var wrongText = questionpoolModel.getWrongFeedback();
 		console.log("XX " + wrongText);
 		if (wrongText && wrongText.length > 0) {
+			// if extra info is available when we have wrong feedback display it
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(wrongText);
 		} else {
+			//if no feedback is available then hide the tip button
 			$("#FeedbackMore").hide();
 		}
 
 	}
 
 };
+
+//Storing the typed number
 
 NumericQuestionWidget.prototype.storeAnswers = function() {
 
@@ -142,22 +148,6 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(numericAnswer);
 };
 
-NumericQuestionWidget.prototype.clickDoneButton = function() {
 
-	var questionpoolModel = controller.models['questionpool'];
-
-	if (questionpoolModel.getAnswer()) {
-
-		this.widget.storeAnswers();
-		questionpoolModel.queueCurrentQuestion();
-		controller.transitionToFeedback();
-	} else {
-
-		questionpoolModel.nextQuestion();
-		controller.transitionToQuestion();
-
-	}
-
-};
 
 console.log("end of numeric choice widget");
