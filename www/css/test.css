@@ -417,6 +417,35 @@ li {
 	font-size: 43px;
 }
 
+
+
+#errormessage {
+	display: none;
+	border: 1px solid white;
+	background-color:#a52a2a;
+	color:white;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	margin-top: 20px;	
+}
+
+
+
+#warningmessage {
+	display: none;
+	border: 1px solid white;
+	background-color: #4169E1;
+	color:white;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	margin-top: 20px;
+
+}
+
+
+
 .listicon {
 	width: 20px;
 	display: block;
