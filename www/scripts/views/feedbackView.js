@@ -34,6 +34,7 @@ function FeedbackView(question) {
 /**
  * tap does nothing
  */
+
 FeedbackView.prototype.handleTap = doNothing;
 
 /**
@@ -116,20 +117,46 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 	$("#cardFeedbackTitle").text(currentFeedbackTitle);
 
-	if (currentFeedbackTitle == "Wrong") {
-		$("#feedbackIcon").removeClass("icon-happy");
-		$("#feedbackIcon").removeClass("icon-smiley");
-		$("#feedbackIcon").addClass("icon-neutral");
-	} else if (currentFeedbackTitle == "Partially Correct") {
-		$("#feedbackIcon").removeClass("icon-happy");
-		$("#feedbackIcon").removeClass("icon-neutral");
-		$("#feedbackIcon").addClass("icon-smiley");
-	} else {
-		$("#feedbackIcon").removeClass("icon-neutral");
-		$("#feedbackIcon").removeClass("icon-smiley");
-		$("#feedbackIcon").addClass("icon-happy");
-	}
+//	if (currentFeedbackTitle == "Wrong") {
+//		$("#feedbackIcon").removeClass("icon-happy");
+//		$("#feedbackIcon").removeClass("icon-smiley");
+//		$("#feedbackIcon").addClass("icon-neutral");
+//	} else if (currentFeedbackTitle == "Partially Correct") {
+//		$("#feedbackIcon").removeClass("icon-happy");
+//		$("#feedbackIcon").removeClass("icon-neutral");
+//		$("#feedbackIcon").addClass("icon-smiley");
+//	} else {
+//		$("#feedbackIcon").removeClass("icon-neutral");
+//		$("#feedbackIcon").removeClass("icon-smiley");
+//		$("#feedbackIcon").addClass("icon-happy");
+//	}
 
+	$("#feedbackIcon").removeClass();
+	$("#feedbackIcon").removeClass();
+	$("#feedbackIcon").addClass();
+	
+	
+	switch (currentFeedbackTitle) {
+	case 'wrong':
+		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_partiallyCorrect_icon'));
+		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_excellent_icon'));
+		$("#feedbackIcon").addClass(jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
+		break;
+	case 'partiallyCorrect':
+		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_excellent_icon'));
+		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_wrong_icon'));
+		$("#feedbackIcon").addClass(jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
+		break;
+	case 'excellent':
+		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_wrong_icon'));
+		$("#feedbackIcon").removeClass(jQuery.i18n.prop('msg_partiallyCorrect_icon'));
+		$("#feedbackIcon").addClass(jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
+		break;
+	default:
+		break;
+	}
+	
+	
 };
 
 /**
