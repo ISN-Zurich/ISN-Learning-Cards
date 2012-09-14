@@ -1,17 +1,15 @@
-//***********************************************************ANSWER MODEL**********************************************************************************
-// The answer model handles the answering 
+/** 
+ * The answer model holds/handles the answers of a question of every type
+ */
 
-
-// Constructor. It 
 function AnswerModel() {
-	this.answerList = [];
+	this.answerList = []; //array that will store the answers of the current question
 
 };
 
-AnswerModel.prototype.getAnswerBody = function() {
-}; // will assing a class with highligted  foreground to the correct answers
-// 
-
+/**
+ * Stores the ticked-selected answers to answers array
+ */
 
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 
@@ -19,11 +17,20 @@ AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 
 };
 
+/**
+ * Get the selected answers of the learner
+ */
 AnswerModel.prototype.getAnswers = function() {
 
 	return this.answerList;
 
 };
+
+
+/**
+ * Get the answer resutls 
+ */
+
 
 AnswerModel.prototype.getAnswerResults = function() {
 
@@ -50,6 +57,11 @@ AnswerModel.prototype.getAnswerResults = function() {
 	}
 
 };
+
+
+/**
+ * Calculate the answer results (excellent, wrong, partially correct) for multiple choice questions
+ */
 
 AnswerModel.prototype.getMultipleAnswerResults = function() {
 	var questionpool = controller.models["questionpool"];
@@ -104,6 +116,10 @@ AnswerModel.prototype.getMultipleAnswerResults = function() {
 
 };
 
+/**
+ * Calculate the answer results (excellent, wrong) for single choice questions
+ */
+
 AnswerModel.prototype.getSingleAnswerResults = function() {
 
 	var clickedAnswerIndex = this.answerList[0];
@@ -123,6 +139,11 @@ AnswerModel.prototype.getSingleAnswerResults = function() {
 	return returnedResult;
 };
 
+
+/**
+ * Calculate the answer results (excellent,partially correct wrong) for text sorting questions based on scoring 
+ */
+
 AnswerModel.prototype.getTextSortAnswerResults = function() {
 	var scores = this.getTextSortScoreArray();
 
@@ -136,6 +157,11 @@ AnswerModel.prototype.getTextSortAnswerResults = function() {
 	}
 };
 
+
+
+/**
+ * Calculate the scoring for text sorting questions
+ */
 AnswerModel.prototype.getTextSortScoreArray = function() {
 	var scores = [];
 	var corr = false;
@@ -175,25 +201,33 @@ AnswerModel.prototype.getTextSortScoreArray = function() {
 	return scores;
 };
 
+
+/**
+ * Calculate the answer results (excellent, wrong) for numeric questions
+ */
+
 AnswerModel.prototype.getNumericAnswerResults = function() {
 
-	// var typedAnswer=this.answerList[0];
 	var answerModel = controller.models["answers"];
-	// var typedAnswer = answerModel.getAnswers();
 
 	var questionpoolModel = controller.models['questionpool'];
 
 	var returnedResult;
 
 	if (questionpoolModel.getAnswer()[0] == answerModel.getAnswers()) {
+		//if the answers provided in the question pool are the same with the ones the learner selected
 		returnedResult = "Excellent";
 	} else {
 		returnedResult = "Wrong";
 	}
 
 	return returnedResult;
-
 };
+
+
+/**
+ * Empty the answers array 
+*/
 
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
