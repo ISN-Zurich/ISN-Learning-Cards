@@ -28,7 +28,6 @@ function FeedbackView(question) {
     //send an oritentationchange even
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
-
 }
 
 /**
@@ -115,7 +114,7 @@ FeedbackView.prototype.clickCourseListButton = function() {
  */
 FeedbackView.prototype.showFeedbackTitle = function() {
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
-	//$("#cardFeedbackTitle").text(currentFeedbackTitle);
+	
 	$("#cardFeedbackTitle").text(jQuery.i18n.prop('msg_' +currentFeedbackTitle + 'Results_title'));
 
 //	if (currentFeedbackTitle == "Wrong") {
