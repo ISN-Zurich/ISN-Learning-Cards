@@ -349,7 +349,9 @@ ConfigurationModel.prototype.register = function() {
 				type : 'GET',
 				dataType : 'json',
 				success : appRegistration,
-				error : function() {
+				error : function(request) {
+                  console.log("ERROR status code is : " + request.status);
+                  console.log("ERROR returned data is: "+ request.responseText);
 					console
 							.log("Error while registering the app with the backend");
 				},
@@ -359,8 +361,7 @@ ConfigurationModel.prototype.register = function() {
 	function setHeaders(xhr) {
 		xhr.setRequestHeader('AppID', APP_ID);
 		xhr.setRequestHeader('UUID', deviceID);
-		console.log("uuid:" + deviceID);
-
+		console.log("register uuid:" + deviceID);
 	}
 
 	function appRegistration(data) {
