@@ -4,7 +4,6 @@
  * This class loads the questions for the in the path specified course id from ILIAS and
  * returns an json-object with the question list
  */
-
 require_once '../logging/logger.php';
 require_once './common.php';
 
