@@ -207,4 +207,4 @@ StatisticsModel.prototype.getBestDayAndScore = function() {
 		}
 	}
 };
->>>>>>> refs/remotes/isabella/master
+
