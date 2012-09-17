@@ -25,8 +25,12 @@ StatisticsView.prototype.closeStatistics = function() {
 StatisticsView.prototype.loadData = function() {
 	
 	var statisticsModel = controller.models['statistics'];
+	statisticsModel.calculateValues();
 	
 	$("#statisticsData").empty();
+	$("<li/>", {
+		  text: "Average Score: " + statisticsModel.getAverageScore()
+		}).appendTo("#statisticsData");
 	$("<li/>", {
 	  text: "Average Speed: " + statisticsModel.getAverageSpeed()
 	}).appendTo("#statisticsData");
