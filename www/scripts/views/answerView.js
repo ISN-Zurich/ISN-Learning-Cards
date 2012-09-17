@@ -156,7 +156,6 @@ AnswerView.prototype.clickDoneButton = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
 	var answerModel = controller.models['answers'];
-	var statisticsModel = controller.models['statistics'];
 	console.log('check apology ' + this.widget.didApologize);
 	if (this.widget.didApologize) {
 		// if there was a problem with the data, the widget knows
@@ -170,7 +169,7 @@ AnswerView.prototype.clickDoneButton = function() {
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
 		this.widget.calculateAnswerScore();
-		statisticsModel.addScore(questionpoolModel.activeQuestion.id, answerModel.answerScore);
+		answerModel.storeScoreInDB();
 		controller.transitionToFeedback();
 	}
 };

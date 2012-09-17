@@ -75,8 +75,8 @@ QuestionView.prototype.open = function() {
 	this.showQuestionTitle();
 	this.openDiv();
 
-	if (!controller.models["statistics"].hasStarted()) {
-		controller.models["statistics"].startTimer();
+	if (!controller.models["answers"].hasStarted()) {
+		controller.models["answers"].startTimer(controller.models["questionpool"].id);
 	}
 };
 
@@ -131,6 +131,6 @@ QuestionView.prototype.showQuestionTitle = function() {
  * click on the course list button leads to course list
  */
 QuestionView.prototype.clickCourseListButton = function() {
-	controller.models["statistics"].resetTimer();
+	controller.models["answers"].resetTimer();
 	controller.transitionToCourses();
 };
