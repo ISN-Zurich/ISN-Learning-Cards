@@ -259,7 +259,7 @@ li {
 /*********************** Splash Screen ***********************/
 #mainTitle {
 	font-size: 20pt;
-	margin: 65px auto 10px 10px;
+	margin: 30px auto 10px 10px;
 }
 
 #cardsTitle {
@@ -270,7 +270,7 @@ li {
 #cards {
 	color: white;
 	position: absolute;
-	top: 70px;
+	top: 35px;
 	right: 90px;
 	font-size: 15px;
 	font-weight: bold;
