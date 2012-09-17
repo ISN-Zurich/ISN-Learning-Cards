@@ -30,4 +30,11 @@ StatisticsView.prototype.loadData = function() {
 	$("<li/>", {
 	  text: "Average Speed: " + statisticsModel.getAverageSpeed()
 	}).appendTo("#statisticsData");
+	
+	$("<li/>", {
+		  text: "Handled Cards: " + statisticsModel.getHandledCards()
+		}).appendTo("#statisticsData");
+	
+	
+	statisticsModel.getHandledCards();
 };
