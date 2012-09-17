@@ -15,7 +15,7 @@ function AnswerModel() {
 	this.initDB();
 
 //	this.db.transaction(function(tx){
-//	    tx.executeSql("DELETE FROM statistics", [],
+//	    tx.executeSql("DROP TABLE statistics", [],
 //	        function() {},
 //	        function() {});
 //	    });
@@ -200,14 +200,10 @@ AnswerModel.prototype.resetTimer = function() {
 AnswerModel.prototype.initDB = function() {
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
-	this.db
-			.transaction(function(transaction) {
-				transaction
-						.executeSql(
+	this.db.transaction(function(transaction) {
+				transaction.executeSql(
 								'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT, day DATETIME, score INTEGER, duration INTEGER);',
-								[], function() {/* nullDataHandler */
-								}, function() {/* errorHandler */
-								});
+								[]);
 			});
 };
 
@@ -218,8 +214,8 @@ AnswerModel.prototype.storeScoreInDB = function() {
 	this.db.transaction(function(transaction) {
 				transaction.executeSql(
 								'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)',
-								[ this.currentCourseId, this.currentQuestionId,
-										day, this.answerScore, duration ]);
+								[ self.currentCourseId, self.currentQuestionId,
+										day, self.answerScore, duration ], function() {console.log("successfully inserted");}, function(tx, e) {console.log("error! NOT inserted: " + e.message);});
 			});
 	
 	this.resetTimer();
