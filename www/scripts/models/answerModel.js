@@ -1,5 +1,7 @@
-//***********************************************************ANSWER MODEL**********************************************************************************
-// The answer model handles the answering 
+/** 
+ * The answer model holds/handles the answers of a question of every type
+ */
+
 
 // Constructor. It 
 function AnswerModel() {
@@ -9,10 +11,14 @@ function AnswerModel() {
 
 };
 
+
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
 };
 
+/**
+ * Get the selected answers of the learner
+ */
 AnswerModel.prototype.getAnswers = function() {
 	return this.answerList;
 };
@@ -21,11 +27,14 @@ AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
+
+
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 };
+
 
 AnswerModel.prototype.getAnswerResults = function() {
 	console.log("answer score: " + this.answerScore);
@@ -35,7 +44,7 @@ AnswerModel.prototype.getAnswerResults = function() {
 	} else if (this.answerScore == 0) {
 		return "Wrong";
 	} else {
-		return "Partially Correct";
+		return "PartiallyCorrect";
 	}
 };
 
@@ -49,7 +58,10 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	}
 };
 
+
+
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
+
 	var questionpool = controller.models["questionpool"];
 
 	var correctAnswers = questionpool.getAnswer();
@@ -96,7 +108,15 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	}
 };
 
+
+
+
+/**
+ * Calculate the scoring for text sorting questions
+ */
+
 AnswerModel.prototype.calculateTextSortScore = function() {
+
 	var scores = [];
 	this.answerScore = 0;
 
@@ -141,15 +161,26 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 	this.answerScoreList = scores;
 };
 
+
+/**
+ * Calculate the answer results (excellent, wrong) for numeric questions
+ */
+
+
 AnswerModel.prototype.calculateNumericScore = function() {
 
 	var answerModel = controller.models["answers"];
 	var questionpoolModel = controller.models['questionpool'];
 
 	if (questionpoolModel.getAnswer()[0] == answerModel.getAnswers()) {
+		//if the answers provided in the question pool are the same with the ones the learner selected
 		this.answerScore = 1;
 	} else {
 		this.answerScore = 0;
 	}
+
 };
+
+
+
 

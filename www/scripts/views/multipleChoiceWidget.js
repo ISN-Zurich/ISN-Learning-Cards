@@ -21,11 +21,9 @@ function MultipleChoiceWidget(interactive) {
 	
 	//Check the boolean value of intractive. This is set through the answer and feedback view.
 	if (self.interactive) { 
-		// when answer view is active, then interactive variable is set to true. 
-		self.showAnswer(); //displays the answer body of the multiple choice widget
+		self.showAnswer(); 
 		console.log("interactive true");
 	} else {
-		//when feedback view is active, then interactive is set to false. 
 		console.log("interactive false");
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 	}
@@ -131,11 +129,11 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 		var wrongText = questionpoolModel.getWrongFeedback(); //gets wrong feedback text 
 		console.log("XX " + wrongText);
 		if (wrongText && wrongText.length > 0) {
-			// when extra feedback info is available then display it 
+			// when extra feedback info is available 
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(wrongText);
 		} else {
-			//if no extra feedback information is available then hide the tip button
+			//if no extra feedback information is available 
 			$("#FeedbackMore").hide();
 		}
 
@@ -167,25 +165,5 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 MultipleChoiceWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateMultipleChoiceScore();
 }
-
-//Handling behavior when click on the done-forward button on the right of the screen
-
-MultipleChoiceWidget.prototype.clickDoneButton = function() {
-
-	var questionpoolModel = controller.models['questionpool'];
-
-	if (questionpoolModel.getAnswer()[0].text && questionpoolModel) {
- // if the question has data and if there is a question pool move to the feedback view 
-		this.widget.storeAnswers();
-		questionpoolModel.queueCurrentQuestion();
-		controller.transitionToFeedback();
-	} else {
-  //if the question has no data then move to the next question
-		questionpoolModel.nextQuestion();
-		controller.transitionToQuestion();
-
-	}
-
-};
 
 console.log("end of mulitple choice widget");

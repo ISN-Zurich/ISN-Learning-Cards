@@ -222,6 +222,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 
 						$(document).trigger("authenticationready",
 								self.configuration.userAuthenticationKey);
+						self.controller.setupLanguage();
 					} else {
 						console.log("Wrong username or password!")
 						$(document).trigger("authenticationfailed", "nouser");
@@ -317,7 +318,11 @@ ConfigurationModel.prototype.getEmailAddress = function() {
  * @return the language of the user
  */
 ConfigurationModel.prototype.getLanguage = function() {
-	return this.configuration.learnerInformation.language;
+	//return "el"; // JUST for testing
+	if (this.configuration.learnerInformation && this.configuration.learnerInformation.language && this.configuration.learnerInformation.language.length){
+		return this.configuration.learnerInformation.language;
+	} 
+	return this.configuration.defaultLanguage ? this.configuration.defaultLanguage : "en";
 };
 
 /**
@@ -355,7 +360,9 @@ ConfigurationModel.prototype.register = function() {
 				type : 'GET',
 				dataType : 'json',
 				success : appRegistration,
-				error : function() {
+				error : function(request) {
+                  console.log("ERROR status code is : " + request.status);
+                  console.log("ERROR returned data is: "+ request.responseText);
 					console
 							.log("Error while registering the app with the backend");
 				},
@@ -365,13 +372,13 @@ ConfigurationModel.prototype.register = function() {
 	function setHeaders(xhr) {
 		xhr.setRequestHeader('AppID', APP_ID);
 		xhr.setRequestHeader('UUID', deviceID);
-		console.log("uuid:" + deviceID);
-
+		console.log("register uuid:" + deviceID);
 	}
 
 	function appRegistration(data) {
 		// localStorage.setItem(data.ClientKey);
 		self.configuration.appAuthenticationKey = data.ClientKey;
+		self.configuration.defaultLanguage = data.defaultLanguage || "en";
 		self.storeData();
 		// we can now savely load the user data
 		self.loadFromServer();

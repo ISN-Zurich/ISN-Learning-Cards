@@ -47,6 +47,15 @@ ConnectionState.prototype.goOnline = function() {
 		this.controller.models["authentication"].sendLogoutToServer(sessionKey);
 	}
 
+	//hide no connection error message in login view
+	
+	$(document).trigger("errormessagehide");
+	
+	//this.controller.views["login"].hideErrorMessage();
+	
+	
+
+
 	// if a pending course list exist, load the course list from the server
 	var pendingCourseList = localStorage.getItem("pendingCourseList");
 	if (pendingCourseList) {
@@ -66,8 +75,7 @@ ConnectionState.prototype.goOnline = function() {
 		}
 	}
 
-	// hide no connection error message in login view
-	this.controller.views["login"].hideErrorMessage();
+
 };
 
 /**

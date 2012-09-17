@@ -28,12 +28,12 @@ function FeedbackView(question) {
     //send an oritentationchange even
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
-
 }
 
 /**
  * tap does nothing
  */
+
 FeedbackView.prototype.handleTap = doNothing;
 
 /**
@@ -114,22 +114,28 @@ FeedbackView.prototype.clickCourseListButton = function() {
  */
 FeedbackView.prototype.showFeedbackTitle = function() {
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
-	$("#cardFeedbackTitle").text(currentFeedbackTitle);
+	
+	$("#cardFeedbackTitle").text(jQuery.i18n.prop('msg_' +currentFeedbackTitle + 'Results_title'));
 
-	if (currentFeedbackTitle == "Wrong") {
-		$("#feedbackIcon").removeClass("icon-happy");
-		$("#feedbackIcon").removeClass("icon-smiley");
-		$("#feedbackIcon").addClass("icon-neutral");
-	} else if (currentFeedbackTitle == "Partially Correct") {
-		$("#feedbackIcon").removeClass("icon-happy");
-		$("#feedbackIcon").removeClass("icon-neutral");
-		$("#feedbackIcon").addClass("icon-smiley");
-	} else {
-		$("#feedbackIcon").removeClass("icon-neutral");
-		$("#feedbackIcon").removeClass("icon-smiley");
-		$("#feedbackIcon").addClass("icon-happy");
-	}
+//	if (currentFeedbackTitle == "Wrong") {
+//		$("#feedbackIcon").removeClass("icon-happy");
+//		$("#feedbackIcon").removeClass("icon-smiley");
+//		$("#feedbackIcon").addClass("icon-neutral");
+//	} else if (currentFeedbackTitle == "Partially Correct") {
+//		$("#feedbackIcon").removeClass("icon-happy");
+//		$("#feedbackIcon").removeClass("icon-neutral");
+//		$("#feedbackIcon").addClass("icon-smiley");
+//	} else {
+//		$("#feedbackIcon").removeClass("icon-neutral");
+//		$("#feedbackIcon").removeClass("icon-smiley");
+//		$("#feedbackIcon").addClass("icon-happy");
+//	}
 
+
+
+	$("#feedbackIcon").attr('class',jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
+	
+	
 };
 
 /**

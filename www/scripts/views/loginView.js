@@ -10,6 +10,12 @@ function LoginView(controller) {
 
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
+		
+   $(document).bind("errormessagehide", function() {
+			console.log(" hide error message loaded ");
+			self.hideErrorMessage();
+		});	
+		
 	});
 
 	// if keyboard is displayed, move the logos up
@@ -89,13 +95,12 @@ LoginView.prototype.clickLoginButton = function() {
 		switch (errormessage) {
 		case "connectionerror":
 			if (self.controller.models["connection"].isOffline()) {
-				self.showErrorMessage("Authentication failed! Please try again!");
+				self.showErrorMessage(jQuery.i18n.prop('msg_connection_message'));
 			}
 			break;
 		case "nouser":
 			console.log("no user error");
-			$("#password").val("");
-			self.showErrorMessage("Wrong username or password!");
+			self.showErrorMessage(jQuery.i18n.prop('msg_authenticationFail_message'));
 			break;
 		default:
 			break;
@@ -112,11 +117,11 @@ LoginView.prototype.clickLoginButton = function() {
 
 			controller.models['authentication'].login(
 					$("#usernameInput").val(), $("#password").val());
-
-			self.showErrorMessage("Authentication data is sent to the server. Please wait!");
+			self.showWarningMessage(jQuery.i18n.prop('msg_warning_message'));
 		}
 	} else {
-		self.showErrorMessage("Please enter your username and password!");
+		self.showErrorMessage(jQuery.i18n.prop('msg_authentication_message'));
+		//self.showErrorMessage("Please enter your username and password!");
 	}
 };
 
@@ -127,7 +132,8 @@ LoginView.prototype.showForm = function() {
 	$("#loginForm").show();
 	this.hideErrorMessage();
 	if (self.controller.models["connection"].isOffline()) {
-		this.showErrorMessage("Sorry, you need to be online to connect to your LMS");
+		this.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
+		//this.showErrorMessage("Sorry, you need to be online to connect to your LMS");
 	}
 };
 
@@ -135,14 +141,36 @@ LoginView.prototype.showForm = function() {
  * shows the specified error message
  */
 LoginView.prototype.showErrorMessage = function(message) {
+	$("#warningmessage").hide();
 	$("#errormessage").text(message);
 	$("#errormessage").show();
 }
+
+
+/**
+ * shows the specified warning message
+ */
+LoginView.prototype.showWarningMessage = function(message) {
+	$("#errormessage").hide();
+	$("#warningmessage").text(message);
+	$("#warningmessage").show();
+}
+
 
 /**
  * hides the specified error message
  */
 LoginView.prototype.hideErrorMessage = function() {
+	
 	$("#errormessage").text("");
 	$("#errormessage").hide();
+}
+
+
+/**
+ * hides the specified warning message
+ */
+LoginView.prototype.hideErrorMessage = function() {
+	$("#warningmessage").text("");
+	$("#warningmessage").hide();
 }

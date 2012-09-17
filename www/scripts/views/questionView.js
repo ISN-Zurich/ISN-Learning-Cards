@@ -100,27 +100,31 @@ QuestionView.prototype.showQuestionTitle = function() {
 			.getQuestionType();
 
 	$("#questionIcon").removeClass();
+	
+	$("#questionIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_icon'));
+	$("#cardQuestionTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
+	
+//	switch (currentQuestionTitle) {
+//	case 'assSingleChoice':
+//		$("#questionIcon").addClass(jQuery.i18n.prop('msg_singleChoice_icon'));
+//		$("#cardQuestionTitle").text("Single Choice Question");
+//		break;
+//	case 'assMultipleChoice':
+//		$("#questionIcon").addClass("icon-checkmark");
+//		$("#cardQuestionTitle").text("Multiple Choice Question");
+//		break;
+//	case 'assOrderingQuestion':
+//		$("#questionIcon").addClass("icon-move-vertical");
+//		$("#cardQuestionTitle").text("Text Order Question");
+//		break;
+//	case 'assNumeric':
+//		$("#questionIcon").addClass("icon-pencil");
+//		$("#cardQuestionTitle").text("Numeric Question");
+//		break;
+//	default:
+//		break;
+//	}
 
-	switch (currentQuestionTitle) {
-	case 'assSingleChoice':
-		$("#questionIcon").addClass("icon-checkmark");
-		$("#cardQuestionTitle").text("Single Choice Question");
-		break;
-	case 'assMultipleChoice':
-		$("#questionIcon").addClass("icon-checkmark");
-		$("#cardQuestionTitle").text("Multiple Choice Question");
-		break;
-	case 'assOrderingQuestion':
-		$("#questionIcon").addClass("icon-move-vertical");
-		$("#cardQuestionTitle").text("Text Order Question");
-		break;
-	case 'assNumeric':
-		$("#questionIcon").addClass("icon-pencil");
-		$("#cardQuestionTitle").text("Numeric Question");
-		break;
-	default:
-		break;
-	}
 };
 
 /**
