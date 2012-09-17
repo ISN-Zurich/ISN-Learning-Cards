@@ -1,4 +1,4 @@
-//***********************************************************SINGLE CHOICE WIDGET**********************************************************************************
+//*******************************************SINGLE CHOICE WIDGET*************************************
 //The Single choice widget has two views, an answer and a feedback view.
 //The anwer view contains a list with possible solutions and the selected answer by the user is highlighted.
 //The feedback view contains the list with the possible solutions highlighted by both the correct answer and learner's ticked answer.
@@ -8,16 +8,18 @@
 
 function SingleChoiceWidget(interactive) {
 	var self = this;
-
+    self.interactive = interactive;
+	self.didApologize = false; // a flag tracking when questions with no data
+                               // are loaded and an error message is displayed
+                               // on the screen
+    
+    console.log('check for previous answers');
 	self.tickedAnswers = controller.models["answers"].getAnswers();// a list
 																	// with the
 																	// currently
 																	// selected
 																	// answers
-	self.interactive = interactive;
-	this.didApologize = false; // a flag tracking when questions with no data
-								// are loaded and an error message is displayed
-								// on the screen
+    console.log('ok');
 
 	// Check the boolean value of intractive. This is set through the answer and
 	// feedback view.
@@ -30,9 +32,7 @@ function SingleChoiceWidget(interactive) {
 		controller.models["answers"].calculateSingleChoiceScore();
 		self.showFeedback(); // displays the feedback body of the multiple
 								// choice widget
-
 	}
-
 }
 
 // **********************************************************METHODS***************************************
@@ -51,8 +51,7 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 			&& questionpoolModel.getAnswer()[0].answertext) {
 
 		var self = this;
-		var questionpoolModel = controller.models["questionpool"];
-		var answers = questionpoolModel.getAnswer();// returns an array
+        var answers = questionpoolModel.getAnswer();// returns an array
 													// containing the possible
 													// answers
 
@@ -94,7 +93,6 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 		this.didApologize = true;
 		doApologize();
 	}
-
 };
 
 // Creation of feedback body for single choice questions. It contains the list
@@ -116,7 +114,6 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 			var div = $("<div/>", {
 				"class" : "right correctAnswer icon-checkmark"
 			}).prependTo(this);
-
 		}
 	});
 
@@ -151,7 +148,7 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 		}
 	} else { // if the answer results are wrong
 		var wrongText = questionpoolModel.getWrongFeedback();// gets wrong
-																// feedback text
+                                                             // feedback text
 		console.log(wrongText);
 		if (wrongText && wrongText.length > 0) {
 			// when extra feedback info is available then display it

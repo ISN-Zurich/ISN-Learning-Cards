@@ -55,6 +55,10 @@ LoginView.prototype.openDiv = openView;
  * shows the login form
  */
 LoginView.prototype.open = function() {
+    // hide unnecessary errors and warnings 
+    this.hideErrorMessage();
+    this.hideWarningMessage();
+    
 	this.showForm();
 	this.openDiv();
 
@@ -170,7 +174,7 @@ LoginView.prototype.hideErrorMessage = function() {
 /**
  * hides the specified warning message
  */
-LoginView.prototype.hideErrorMessage = function() {
+LoginView.prototype.hideWarningMessage = function() {
 	$("#warningmessage").text("");
 	$("#warningmessage").hide();
 }
