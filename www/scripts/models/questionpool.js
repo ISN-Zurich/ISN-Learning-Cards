@@ -10,6 +10,7 @@ function QuestionPoolModel(controller) {
 	this.indexAnswer = 0;
 	this.activeQuestion = {};
 	this.mixedAnswers = [];
+	this.currentAnswersAreMixed = false;
 
 	this.reset();
 	this.queue = [];
@@ -163,6 +164,10 @@ QuestionPoolModel.prototype.getMixedAnswersArray = function() {
 	return this.mixedAnswers;
 };
 
+QuestionPoolModel.prototype.currAnswersMixed = function() {
+	return this.currentAnswersAreMixed;
+}
+
 QuestionPoolModel.prototype.mixAnswers = function() {
 	var answers = this.activeQuestion.answer;
 	this.mixedAnswers = [];
@@ -179,6 +184,7 @@ QuestionPoolModel.prototype.mixAnswers = function() {
 
 		this.mixedAnswers.push(random);
 	}
+	this.currentAnswersAreMixed = true;
 }
 
 /**
@@ -202,6 +208,7 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 	this.id = newId;
 
 	this.activeQuestion = this.questionList[random];
+	this.currentAnswersAreMixed = false;
 	// for (var q in this.questionList) {
 	// if (this.questionList[q].id == this.id) {
 	// this.activeQuestion = this.questionList[q];
@@ -277,6 +284,7 @@ QuestionPoolModel.prototype.reset = function() {
 	this.queue = [ "-1", "-1", "-1" ];
 	this.id = 0;
 	this.activeQuestion = {};
+	this.currentAnswersAreMixed = false;
 	if (this.questionList.length > 0) {
 		this.nextQuestion();
 	}

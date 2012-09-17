@@ -2,58 +2,57 @@
  * View for displaying questions
  */
 function QuestionView() {
-    var self = this;
-    
-    self.tagID = 'cardQuestionView';
-    
-    var returnButton = $('#CourseList_FromQuestion')[0];
-    if ( returnButton) {
-        function cbReturnButtonTap(event) {
-            self.clickCourseListButton();
-            event.stopPropagation();
-        }
-        
-        jester(returnButton).tap(cbReturnButtonTap);
-    }
-    
-    // center the question body to the middle of the screen
-    function setOrientation() {
-        $(".cardBody").css('height', window.innerHeight - 70);
-        $(".cardBody").css('width', window.innerWidth - 100);
-        
-    }
-    setOrientation();
-    //when orientation changes, set the new width and height
-    //resize event should be caught, too, because not all devices
-    //send an oritentationchange event 
-    window.addEventListener("orientationchange", setOrientation, false);
-    window.addEventListener("resize", setOrientation, false);
-    
+	var self = this;
+
+	self.tagID = 'cardQuestionView';
+
+	var returnButton = $('#CourseList_FromQuestion')[0];
+	if (returnButton) {
+		function cbReturnButtonTap(event) {
+			self.clickCourseListButton();
+			event.stopPropagation();
+		}
+
+		jester(returnButton).tap(cbReturnButtonTap);
+	}
+
+	// center the question body to the middle of the screen
+	function setOrientation() {
+		$(".cardBody").css('height', window.innerHeight - 70);
+		$(".cardBody").css('width', window.innerWidth - 100);
+
+	}
+	setOrientation();
+	// when orientation changes, set the new width and height
+	// resize event should be caught, too, because not all devices
+	// send an oritentationchange event
+	window.addEventListener("orientationchange", setOrientation, false);
+	window.addEventListener("resize", setOrientation, false);
+
 }
 
 /**
  * pinch leads to the course list
  */
 QuestionView.prototype.handlePinch = function() {
-    controller.transitionToCourses();
+	controller.transitionToCourses();
 };
 
 /**
  * tap leads to the answer view
  */
 QuestionView.prototype.handleTap = function() {
-	 controller.transitionToAnswer();
+	controller.transitionToAnswer();
 };
 
 /**
- * swipe shows a new question
- * updates question body and title
+ * swipe shows a new question updates question body and title
  */
 QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
-	// update the display for the current view 
-    console.log("swipe works");
-    controller.models['questionpool'].nextQuestion();
+	// update the display for the current view
+	console.log("swipe works");
+	controller.models['questionpool'].nextQuestion();
 	this.showQuestionBody();
 	this.showQuestionTitle();
 };
@@ -75,8 +74,10 @@ QuestionView.prototype.open = function() {
 	this.showQuestionBody();
 	this.showQuestionTitle();
 	this.openDiv();
-	
-	 //controller.models["answers"].deleteData();
+
+	if (!controller.models["answers"].hasStarted()) {
+		controller.models["answers"].startTimer(controller.models["questionpool"].id);
+	}
 };
 
 /**
@@ -86,9 +87,9 @@ QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
 	$("#cardQuestionBody").html(currentQuestionBody);
-	
+
 	$("#ButtonTip").hide();
-	
+
 };
 
 /**
@@ -97,7 +98,7 @@ QuestionView.prototype.showQuestionBody = function() {
 QuestionView.prototype.showQuestionTitle = function() {
 	var currentQuestionTitle = controller.models["questionpool"]
 			.getQuestionType();
-	
+
 	$("#questionIcon").removeClass();
 	
 	$("#questionIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_icon'));
@@ -123,12 +124,13 @@ QuestionView.prototype.showQuestionTitle = function() {
 //	default:
 //		break;
 //	}
+
 };
 
 /**
  * click on the course list button leads to course list
  */
 QuestionView.prototype.clickCourseListButton = function() {
+	controller.models["answers"].resetTimer();
 	controller.transitionToCourses();
 };
-

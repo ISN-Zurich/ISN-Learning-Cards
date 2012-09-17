@@ -18,8 +18,6 @@ function NumericQuestionWidget(interactive) {
 		console.log("interactive true");
 	} else {
 		console.log("interactive false");
-
-		controller.models["answers"].calculateNumericScore();
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 
 	}
@@ -150,6 +148,8 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(numericAnswer);
 };
 
-
+NumericQuestionWidget.prototype.calculateAnswerScore = function() {
+	controller.models["answers"].calculateNumericScore();
+}
 
 console.log("end of numeric choice widget");

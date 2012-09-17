@@ -1,16 +1,25 @@
-/** 
+/**
  * The answer model holds/handles the answers of a question of every type
  */
-
-
-// Constructor. It 
+// Constructor. It
 function AnswerModel() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 
-};
+	this.currentCourseId = -1;
+	this.currentQuestionId = -1;
+	this.start = -1;
 
+	this.db;
+	this.initDB();
+
+//	this.db.transaction(function(tx){
+//	    tx.executeSql("DELETE FROM statistics", [],
+//	        function() {},
+//	        function() {});
+//	    });
+};
 
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
@@ -27,14 +36,11 @@ AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
-
-
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 };
-
 
 AnswerModel.prototype.getAnswerResults = function() {
 	console.log("answer score: " + this.answerScore);
@@ -57,8 +63,6 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 		this.answerScore = 0;
 	}
 };
-
-
 
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
@@ -108,13 +112,9 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	}
 };
 
-
-
-
 /**
  * Calculate the scoring for text sorting questions
  */
-
 AnswerModel.prototype.calculateTextSortScore = function() {
 
 	var scores = [];
@@ -161,19 +161,17 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 	this.answerScoreList = scores;
 };
 
-
 /**
  * Calculate the answer results (excellent, wrong) for numeric questions
  */
-
-
 AnswerModel.prototype.calculateNumericScore = function() {
 
 	var answerModel = controller.models["answers"];
 	var questionpoolModel = controller.models['questionpool'];
 
 	if (questionpoolModel.getAnswer()[0] == answerModel.getAnswers()) {
-		//if the answers provided in the question pool are the same with the ones the learner selected
+		// if the answers provided in the question pool are the same with the
+		// ones the learner selected
 		this.answerScore = 1;
 	} else {
 		this.answerScore = 0;
@@ -181,6 +179,49 @@ AnswerModel.prototype.calculateNumericScore = function() {
 
 };
 
+AnswerModel.prototype.setCurrentCourseId = function(courseId) {
+	this.currentCourseId = courseId;
+};
 
+AnswerModel.prototype.startTimer = function(questionId) {
+	this.start = (new Date()).getTime();
+	this.currentQuestionId = questionId
+};
 
+AnswerModel.prototype.hasStarted = function() {
+	return this.start != -1;
+};
+
+AnswerModel.prototype.resetTimer = function() {
+	this.start = -1;
+	this.currentQuestionId = -1;
+};
+
+AnswerModel.prototype.initDB = function() {
+	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
+			100000);
+	this.db
+			.transaction(function(transaction) {
+				transaction
+						.executeSql(
+								'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT, day DATETIME, score INTEGER, duration INTEGER);',
+								[], function() {/* nullDataHandler */
+								}, function() {/* errorHandler */
+								});
+			});
+};
+
+AnswerModel.prototype.storeScoreInDB = function() {
+	var self = this;
+	var day = new Date();
+	var duration = ((new Date()).getTime() - this.start);
+	this.db.transaction(function(transaction) {
+				transaction.executeSql(
+								'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)',
+								[ this.currentCourseId, this.currentQuestionId,
+										day, this.answerScore, duration ]);
+			});
+	
+	this.resetTimer();
+};
 

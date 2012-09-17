@@ -29,7 +29,6 @@ function SingleChoiceWidget(interactive) {
 							// widget
 	} else {
 		// when feedback view is active, then interactive is set to false.
-		controller.models["answers"].calculateSingleChoiceScore();
 		self.showFeedback(); // displays the feedback body of the multiple
 								// choice widget
 	}
@@ -56,7 +55,7 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 													// answers
 
 		var mixedAnswers;
-		if (this.tickedAnswers.length == 0) {
+		if (!questionpoolModel.currAnswersMixed()) {
 			questionpoolModel.mixAnswers();
 		}			
 		mixedAnswers = questionpoolModel.getMixedAnswersArray();
@@ -186,6 +185,11 @@ SingleChoiceWidget.prototype.storeAnswers = function() {
 
 	controller.models["answers"].setAnswers(answers);
 };
+
+
+SingleChoiceWidget.prototype.calculateAnswerScore = function() {
+	controller.models["answers"].calculateSingleChoiceScore();
+}
 
 
 // Handling behavior when click on the done-forward button on the right of the

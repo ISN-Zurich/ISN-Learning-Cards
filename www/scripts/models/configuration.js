@@ -170,16 +170,25 @@ ConfigurationModel.prototype.logout = function() {
 	// this.storeData();
 	this.sendLogoutToServer();
 	console.log("user logged out");
-	this.configuration.userAuthenticationKey = "";
+	this.configuration = {
+		"appAuthenticationKey": this.configuration.appAuthenticationKey,
+		"userAuthenticationKey" : "",
+		"learnerInformation" : {
+			"userId" : 0
+		}
+	};
+	// this.configuration.userAuthenticationKey = "";
 	this.storeData();
-	
-	//remove pending course list request
+
+	// remove course list and pending course list request
 	localStorage.removeItem("pendingCourseList");
-	
-	// remove all pending question pool requests 
+	localStorage.removeItem("courses");
+
+	// remove all question pools and all pending question pool requests
 	var courseList = this.controller.models["course"].courseList;
 	if (courseList) {
 		for ( var c in courseList) {
+			localStorage.removeItem("questionpool_" + courseList[c].id);
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
 		}
 	}
@@ -207,7 +216,8 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						} catch (err) {
 							console.log("Couldn't authenticate to server "
 									+ err);
-							$(document).trigger("authenticationfailed", "wrong data structure");
+							$(document).trigger("authenticationfailed",
+									"wrong data structure");
 						}
 
 						$(document).trigger("authenticationready",
@@ -220,7 +230,8 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 				},
 				error : function() {
 					console.log("Error while authentication to server");
-					$(document).trigger("authenticationfailed", "connectionerror");
+					$(document).trigger("authenticationfailed",
+							"connectionerror");
 				},
 				beforeSend : setHeader
 			});

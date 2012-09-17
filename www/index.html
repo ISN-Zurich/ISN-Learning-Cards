@@ -25,6 +25,7 @@
 <script type="text/javascript" src="scripts/models/course.js"></script>
 <script type="text/javascript" src="scripts/models/questionpool.js"></script>
 <script type="text/javascript" src="scripts/models/answerModel.js"></script>
+<script type="text/javascript" src="scripts/models/statistics.js"></script>
 <script type="text/javascript" src="scripts/controllers/controller.js"></script>
 <script type="text/javascript" src="scripts/views/singleChoiceWidget.js"></script>
 <script type="text/javascript"
@@ -39,6 +40,7 @@
 <script type="text/javascript" src="scripts/views/logoutView.js"></script>
 <script type="text/javascript" src="scripts/views/questionView.js"></script>
 <script type="text/javascript" src="scripts/views/settingsView.js"></script>
+<script type="text/javascript" src="scripts/views/statisticsView.js"></script>
 <script type="text/javascript" src="scripts/views/splashScreen.js"></script>
 <script type="text/javascript" src="scripts/testModels.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
@@ -100,7 +102,7 @@
 
 	</div>
 
-	<div id="coursesListView"  class="viewblock">
+	<div id="coursesListView" class="viewblock">
 
 		<div id="coursesListHeader" class="container headerbg top">
 			<!-- <div class="left"></div> -->
@@ -188,7 +190,8 @@
 
 	<div id="cardAnswerView" class="viewblock">
 		<div id="cardAnswerHeader" class="container headerbg top">
-			<div id="CourseList_FromAnswer" class="generalButton returnButton right">
+			<div id="CourseList_FromAnswer"
+				class="generalButton returnButton right">
 				<span class="icon-cross"></span>
 			</div>
 			<div id="cardAnswerIcon" class="left titleicon">
@@ -210,7 +213,8 @@
 
 	<div id="cardFeedbackView" class="viewblock">
 		<div id="cardFeedbackHeader" class="container headerbg top">
-			<div id="CourseList_FromFeedback" class="generalButton returnButton right">
+			<div id="CourseList_FromFeedback"
+				class="generalButton returnButton right">
 				<span class="icon-cross"></span>
 			</div>
 			<div class="left titleicon" id="cardFeedbackIcon">
@@ -233,13 +237,22 @@
 	</div>
 
 
-	<div id="StatisticsView" class="viewblock">
-		<div id="closeIconStats" class="generalButton returnButton right">
-			<span class="icon-cross"></span>
+	<div id="statisticsView" class="viewblock">
+		<div id="statisticsHeader" class="container headerbg top">
+			<div id="closeStatisticsIcon"
+				class="generalButton returnButton right">
+				<span class="icon-cross"></span>
+			</div>
+
+			<div id="statisticsIcon" class="left titleicon">
+				<span class="icon-bars"></span>
+			</div>
+			<div id="statisticsTitle" class="title">Statistics</div>
 		</div>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicin</p>
-
-
+		<div class="content">
+			<ul id="statisticsData" class="marginForButtons">
+			</ul>
+		</div>
 	</div>
 
 </body>
