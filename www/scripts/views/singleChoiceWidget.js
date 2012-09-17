@@ -190,8 +190,7 @@ SingleChoiceWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
-<<<<<<< HEAD
-=======
+
 // Handling behavior when click on the done-forward button on the right of the
 // screen
 SingleChoiceWidget.prototype.clickDoneButton = function() {
@@ -213,6 +212,6 @@ SingleChoiceWidget.prototype.clickDoneButton = function() {
 	}
 
 };
->>>>>>> refs/remotes/isabella/master
+
 
 console.log("end of single choice widget");
