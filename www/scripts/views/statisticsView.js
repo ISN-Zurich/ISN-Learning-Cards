@@ -38,6 +38,16 @@ StatisticsView.prototype.loadData = function() {
 		avgSpeed =  0;
 	}
 	
+	var handledCards = statisticsModel.getHandledCards();
+	if (handledCards < 0) {
+		handledCards =  0;
+	}
+	
+	var progress = statisticsModel.getProgress();
+	if (progress < 0) {
+		progress =  0;
+	}
+	
 	var bestDay = statisticsModel.getBestDay();
 	if (!bestDay) {
 		bestDay = "";
@@ -50,15 +60,24 @@ StatisticsView.prototype.loadData = function() {
 	
 	$("#statisticsData").empty();
 	$("<li/>", {
-		  text: "Average Score: " + avgScore + "%"
-		}).appendTo("#statisticsData");
-	$("<li/>", {
-	  text: "Average Speed: " + avgSpeed + " sec"
-	}).appendTo("#statisticsData");
-	$("<li/>", {
 		  text: "Best Day: " + bestDay
 		}).appendTo("#statisticsData");
 	$("<li/>", {
 	  text: "Best Score: " + bestScore + "%"
 	}).appendTo("#statisticsData");
-};
+	$("<li/>", {
+		  text: "Average Score: " + avgScore + "%"
+		}).appendTo("#statisticsData");
+	$("<li/>", {
+	  text: "Average Speed: " + avgSpeed + " sec"
+	}).appendTo("#statisticsData");	
+	$("<li/>", {
+		  text: "Handled Cards: " + handledCards
+		}).appendTo("#statisticsData");
+	
+	$("<li/>", {
+		  text: "Progress: " + progress +"% correct answers"
+		}).appendTo("#statisticsData");
+	
+	
+	};

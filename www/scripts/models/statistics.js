@@ -7,6 +7,9 @@ function StatisticsModel(controller) {
 	this.db;
 	this.initDB();
 
+
+	this.handledCards= -1;
+	this.progress= -1;
 	this.currentCourseId = -1;
 	this.averageScore = -1;
 	this.averageSpeed = -1;
@@ -17,6 +20,8 @@ function StatisticsModel(controller) {
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 
+	this.handledCards= -1;
+	this.progress= -1;
 	this.averageScore = -1;
 	this.averageSpeed = -1;
 	this.bestDay;
@@ -61,10 +66,20 @@ StatisticsModel.prototype.getBestDay = function() {
 	return this.bestDay;
 };
 
+
+StatisticsModel.prototype.getHandledCards = function() {
+	return this.handledCards;
+};
+
+StatisticsModel.prototype.getProgress = function() {
+	return this.progress;
+};
+
 StatisticsModel.prototype.initDB = function() {
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 };
+
 
 StatisticsModel.prototype.calculateValues = function() {
 	var today = new Date().getTime();
@@ -73,7 +88,10 @@ StatisticsModel.prototype.calculateValues = function() {
 	// using JQuery Deferred for triggering the statisticcalculationsdone event
 	// only after the calculate methods are done
 	$.when(self.calculateAverageScore(today),
-			self.calculateAverageSpeed(today), self.calculateBestDayAndScore())
+			self.calculateAverageSpeed(today), 
+			self.calculateHandledCards(today),
+			self.calculateProgress(today),
+			self.calculateBestDayAndScore())
 			.then(function() {
 				$(document).trigger("statisticcalculationsdone");
 			});
@@ -198,5 +216,61 @@ StatisticsModel.prototype.calculateBestDayAndScore = function() {
 		self.bestScore = Math.round(bestScore * 100);
 		dfd.resolve();
 	}
+	return dfd.promise();
+};
+
+StatisticsModel.prototype.calculateHandledCards = function(day) {
+	var dfd = $.Deferred();
+	var self = this;
+	day -= 1000*60*60*24;
+	self.db.transaction(function(transaction){
+		transaction.executeSql('SELECT COUNT(*) as c FROM statistics WHERE course_id=?'
+				+ ' AND day>=?', [self.currentCourseId, day ], resultDataHandler,errorHandler);
+	});
+	
+	function errorHandler(tx, e){
+		console.log("error! NOT inserted: " + e.message);	 
+	}; 
+
+	function resultDataHandler(transaction, results){
+		if (results.rows.length > 0){
+			var row = results.rows.item(0);
+			console.log("number of handled cards:" +row['c']);
+			self.handledCards = row['c'];
+	
+		}
+		dfd.resolve();
+	};
+	return dfd.promise();
+};
+
+
+StatisticsModel.prototype.calculateProgress = function(day){
+	var dfd = $.Deferred();
+	var self=this;
+	day -= 1000*60*60*24;
+	
+	self.db.transaction(function(transaction){
+		transaction.executeSql('SELECT  COUNT(id) as numCorrect  FROM statistics  WHERE score=?'
+				+ ' AND day>=?', [1,day], resultDataHandler,errorHandler);
+	});
+	
+	function errorHandler(tx, e){
+		console.log("error! NOT inserted: " + e.message);	 
+	}; 
+	
+	function resultDataHandler(transaction, results){
+		var progress;
+		if (results.rows.length > 0){
+			row = results.rows.item(0);
+			console.log("number of correct questions:" +row['numCorrect']);
+			console.log("number of answered questions:" +self.handledCards);
+			
+			self.progress= Math.round((row['numCorrect'])/(self.handledCards)*100);
+			console.log("progress: " + self.progress);
+	
+		}
+		dfd.resolve();
+	};
 	return dfd.promise();
 };
