@@ -8,12 +8,13 @@ function StatisticsModel(controller) {
 	this.initDB();
 
 
-	var handledCards;
+	this.handledCards= -1;
+	this.progress=-1;
 	this.currentCourseId = -1;
 	this.averageScore = -1;
 	this.averageSpeed = -1;
 
-};
+}
 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
@@ -27,81 +28,31 @@ StatisticsModel.prototype.getAverageSpeed = function() {
 	return this.averageSpeed;
 };
 
+
+StatisticsModel.prototype.getHandledCards = function() {
+	return this.handledCards;
+};
+
+
+StatisticsModel.prototype.getProgress = function() {
+	return this.progress;
+};
+
+
+
 StatisticsModel.prototype.initDB = function() {
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 };
 
 
-StatisticsModel.prototype.getHandledCards = function() {
-
-	this.db.transaction(function(transaction){
-	transaction.executeSql('SELECT COUNT(id) FROM statistics ',[], resultDataHandler,errorHandler);
-});
-	
-	function errorHandler(tx, e){
-		 console.log("error! NOT inserted: " + e.message);	 
-}; 
-
-
-	function resultDataHandler(transaction, results){
-//		//var handledCards [];
-//		//count =0;
-//		//for (var i=0; i< results.rows.length; i++){	
-var row = results.rows.length;
-//		//row = results.rows.item(0);	
-	console.log("number of handled cards:" +row);
-	handledCards = row;
-//			//count++; 
-		
-//		//}
-//		//return count;
-	};
-
-};
-
-
-
-
-
-//StatisticsModel.prototype.loadFromDB = function() {
-//	allStatistics = [];
-//	this.db.transaction(function(transaction) {
-//		transaction.executeSql('SELECT * FROM statistics;', [],
-//				dataSelectHandler, function() {/* errorHandler */
-//				});
-//	});
-//
-//	function dataSelectHandler(transaction, results) {
-//		for ( var i = 0; i < results.rows.length; i++) {
-//			row = results.rows.item(i);
-//			if (!allStatistics[row['course_id']]) {
-//				allStatistics[row['course_id']] = [];
-//			}
-//			allStatistics[row['course_id']].push({
-//				"question" : row['question_id'],
-//				"score" : row['score'],
-//				"day" : row['day'],
-//				"speed" : row['speed']
-//			});
-//		}
-//
-//		console.log("Load from DB:");
-//		for ( var c in allStatistics) {
-//			for ( var q in allStatistics[c]) {
-//				console.log("Course: " + c + " Question: "
-//						+ allStatistics[c][q].question + " Score: "
-//						+ allStatistics[c][q].score);
-//			}
-//		}
-//	}
-//
-//};
 
 StatisticsModel.prototype.calculateValues = function() {
 	var today = new Date();
 	this.calculateAverageScore(today);
 	this.calculateAverageSpeed(today);
+	this.calculateHandledCards(today);
+	this.calculateProgress(today);
 }
 
 StatisticsModel.prototype.calculateAverageScore = function(day) {
@@ -170,6 +121,10 @@ StatisticsModel.prototype.calculateAverageSpeed = function(day) {
 	}
 };
 
+
+
+
+
 StatisticsModel.prototype.getBestDayAndScore = function() {
 	var self = this;
 	console.log("COURSE: " + self.currentCourseId);
@@ -206,5 +161,62 @@ StatisticsModel.prototype.getBestDayAndScore = function() {
 			console.log("SCORE: " + row['score1']);
 		}
 	}
+};
+
+
+StatisticsModel.prototype.calculateHandledCards = function(day) {
+	var self = this;
+	day -= 1000*60*60*24;
+	self.db.transaction(function(transaction){
+		transaction.executeSql('SELECT COUNT(*) as c FROM statistics WHERE course_id=?'
+				+ ' AND day>=?', [self.currentCourseId, day ], resultDataHandler,errorHandler);
+	});
+	
+	function errorHandler(tx, e){
+		console.log("error! NOT inserted: " + e.message);	 
+	}; 
+
+
+	function resultDataHandler(transaction, results){
+		if (results.rows.length > 0){
+			var row = results.rows.item(0);
+			console.log("number of handled cards:" +row['c']);
+			self.handledCards = row['c'];
+	
+		}
+		
+	};
+
+};
+
+
+StatisticsModel.prototype.calculateProgress = function(day){
+	var self=this;
+	day -= 1000*60*60*24;
+	
+	self.db.transaction(function(transaction){
+		transaction.executeSql('SELECT  COUNT(id) as numCorrect  FROM statistics  WHERE score=?'
+				+ ' AND day>=?', [1,day], resultDataHandler,errorHandler);
+	});
+	
+	function errorHandler(tx, e){
+		console.log("error! NOT inserted: " + e.message);	 
+	}; 
+	
+	function resultDataHandler(transaction, results){
+		var progress;
+		if (results.rows.length > 0){
+			row = results.rows.item(0);
+			console.log("number of correct questions:" +row['numCorrect']);
+			console.log("number of answered questions:" +self.handledCards);
+			
+			self.progress= Math.round((row['numCorrect'])/(self.handledCards)*100);
+			console.log("progress: " + self.progress);
+	
+		}
+		
+	};
+	
+	
 };
 
