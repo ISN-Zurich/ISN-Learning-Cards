@@ -5,6 +5,8 @@ function StatisticsView() {
     
     jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); } );
 //    jester($('#logOutStatistics')[0]).tap(function(){ self.logout(); } );
+    
+    $(document).bind("statisticcalculationsdone", function() {self.loadData();});
 } 
 
 StatisticsView.prototype.handlePinch = doNothing;
@@ -25,13 +27,38 @@ StatisticsView.prototype.closeStatistics = function() {
 StatisticsView.prototype.loadData = function() {
 	
 	var statisticsModel = controller.models['statistics'];
-	statisticsModel.calculateValues();
+	
+	var avgScore = statisticsModel.getAverageScore();
+	if (avgScore < 0) {
+		avgScore =  0;
+	}
+	
+	var avgSpeed = statisticsModel.getAverageSpeed();
+	if (avgSpeed < 0) {
+		avgSpeed =  0;
+	}
+	
+	var bestDay = statisticsModel.getBestDay();
+	if (!bestDay) {
+		bestDay = "";
+	}
+	
+	var bestScore = statisticsModel.getBestScore();
+	if (bestScore < 0) {
+		bestScore =  0;
+	}
 	
 	$("#statisticsData").empty();
 	$("<li/>", {
-		  text: "Average Score: " + statisticsModel.getAverageScore()
+		  text: "Average Score: " + avgScore + "%"
 		}).appendTo("#statisticsData");
 	$("<li/>", {
-	  text: "Average Speed: " + statisticsModel.getAverageSpeed()
+	  text: "Average Speed: " + avgSpeed + " sec"
+	}).appendTo("#statisticsData");
+	$("<li/>", {
+		  text: "Best Day: " + bestDay
+		}).appendTo("#statisticsData");
+	$("<li/>", {
+	  text: "Best Score: " + bestScore + "%"
 	}).appendTo("#statisticsData");
 };
