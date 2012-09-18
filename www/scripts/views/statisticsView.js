@@ -39,6 +39,9 @@ StatisticsView.prototype.loadData = function() {
 		  text: "Handled Cards: " + statisticsModel.getHandledCards()
 		}).appendTo("#statisticsData");
 	
+	$("<li/>", {
+		  text: "Progress: " + statisticsModel.getProgress() +"% correct answers"
+		}).appendTo("#statisticsData");
 	
-	statisticsModel.getHandledCards();
-};
+	
+	};
