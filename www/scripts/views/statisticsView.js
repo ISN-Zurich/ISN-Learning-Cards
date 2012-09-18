@@ -27,21 +27,32 @@ StatisticsView.prototype.loadData = function() {
 	var statisticsModel = controller.models['statistics'];
 	statisticsModel.calculateValues();
 	
-	$("#statisticsData").empty();
-	$("<li/>", {
-		  text: "Average Score: " + statisticsModel.getAverageScore()
-		}).appendTo("#statisticsData");
-	$("<li/>", {
-	  text: "Average Speed: " + statisticsModel.getAverageSpeed()
-	}).appendTo("#statisticsData");
+	//$("#statisticsBody").empty();
+	$("#statBestDayValue").text("");
+	$("#statBestScoreValue").text("");
+	$("#statHandledCardsValue").text(statisticsModel.getHandledCards());
+	$("#statAverageScoreValue").text(statisticsModel.getAverageScore());
+	$("#statProgressValue").text(statisticsModel.getProgress());
+	$("#statSpeedValue").text(statisticsModel.getAverageSpeed());
 	
-	$("<li/>", {
-		  text: "Handled Cards: " + statisticsModel.getHandledCards()
-		}).appendTo("#statisticsData");
 	
-	$("<li/>", {
-		  text: "Progress: " + statisticsModel.getProgress() +"% correct answers"
-		}).appendTo("#statisticsData");
 	
+	
+//	$("#statisticsData").empty();
+//	$("<li/>", {
+//		  text: "Average Score: " + statisticsModel.getAverageScore()
+//		}).appendTo("#statisticsData");
+//	$("<li/>", {
+//	  text: "Average Speed: " + statisticsModel.getAverageSpeed()
+//	}).appendTo("#statisticsData");
+//	
+//	$("<li/>", {
+//		  text: "Handled Cards: " + statisticsModel.getHandledCards()
+//		}).appendTo("#statisticsData");
+//	
+//	$("<li/>", {
+//		  text: "Progress: " + statisticsModel.getProgress() +"% correct answers"
+//		}).appendTo("#statisticsData");
+//	
 	
 	};

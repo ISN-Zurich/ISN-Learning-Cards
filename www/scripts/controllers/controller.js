@@ -134,6 +134,14 @@ Controller.prototype.setupLanguage = function() {
 	        $("#coursesListTitle").text(msg_courses_list_title);
 	        $("#settingsTitle").text(msg_settings_title);
 	        $("#logoutConfirmationTitle").text(msg_logout_title);
+	        $("#statBestDayTitle").text(msg_bestDay_title);
+	        $("#statBestScoreTitle").text(msg_bestScore_title);
+	        $("#statHandledCardsTitle").text(msg_handledCards_title);
+	        $("#statAverageScoreTitle").text(msg_averageScore_title);
+	        $("#statProgressTitle").text(msg_progress_title);
+	        $("#statsProgressInfo").text(msg_progress_info);
+	        $("#statSpeedTitle").text(msg_speed_title);
+	        $("#statsSpeedinfo").text(msg_speed_info);
 	        $(".cardBody").text(msg_logout_body);
 	        
 	    }
