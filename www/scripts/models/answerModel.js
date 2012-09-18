@@ -222,7 +222,8 @@ AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
-	this.currentQuestionId = questionId
+	this.currentQuestionId = questionId;
+	console.log("currentQuestionId: " + this.currentQuestionId);
 };
 
 AnswerModel.prototype.hasStarted = function() {
@@ -231,7 +232,6 @@ AnswerModel.prototype.hasStarted = function() {
 
 AnswerModel.prototype.resetTimer = function() {
 	this.start = -1;
-	this.currentQuestionId = -1;
 };
 
 AnswerModel.prototype.initDB = function() {

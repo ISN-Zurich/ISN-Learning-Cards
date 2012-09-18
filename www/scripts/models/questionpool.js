@@ -278,6 +278,13 @@ QuestionPoolModel.prototype.getWrongFeedback = function() {
 };
 
 /**
+ * @return the id of the current question
+ */
+QuestionPoolModel.prototype.getId = function() {
+	return this.activeQuestion.id;
+};
+
+/**
  * resets the queue and the question id
  */
 QuestionPoolModel.prototype.reset = function() {
