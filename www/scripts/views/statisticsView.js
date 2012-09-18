@@ -5,6 +5,8 @@ function StatisticsView() {
     
     jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); } );
 //    jester($('#logOutStatistics')[0]).tap(function(){ self.logout(); } );
+    
+    $(document).bind("statisticcalculationsdone", function() {self.loadData();});
 } 
 
 StatisticsView.prototype.handlePinch = doNothing;
@@ -25,8 +27,37 @@ StatisticsView.prototype.closeStatistics = function() {
 StatisticsView.prototype.loadData = function() {
 	
 	var statisticsModel = controller.models['statistics'];
-	statisticsModel.calculateValues();
 	
+	var avgScore = statisticsModel.getAverageScore();
+	if (avgScore < 0) {
+		avgScore =  0;
+	}
+	
+	var avgSpeed = statisticsModel.getAverageSpeed();
+	if (avgSpeed < 0) {
+		avgSpeed =  0;
+	}
+	
+	var handledCards = statisticsModel.getHandledCards();
+	if (handledCards < 0) {
+		handledCards =  0;
+	}
+	
+	var progress = statisticsModel.getProgress();
+	if (progress < 0) {
+		progress =  0;
+	}
+	
+	var bestDay = statisticsModel.getBestDay();
+	if (!bestDay) {
+		bestDay = "";
+	}
+	
+	var bestScore = statisticsModel.getBestScore();
+	if (bestScore < 0) {
+		bestScore =  0;
+	}
+
 	//$("#statisticsBody").empty();
 	$("#statBestDayValue").text("");
 	$("#statBestScoreValue").text("");
@@ -36,6 +67,7 @@ StatisticsView.prototype.loadData = function() {
 	$("#statSpeedValue").text(statisticsModel.getAverageSpeed());
 	
 	
+
 	
 	
 //	$("#statisticsData").empty();

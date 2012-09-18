@@ -76,7 +76,7 @@ QuestionView.prototype.open = function() {
 	this.openDiv();
 
 	if (!controller.models["answers"].hasStarted()) {
-		controller.models["answers"].startTimer(controller.models["questionpool"].id);
+		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
 	}
 };
 

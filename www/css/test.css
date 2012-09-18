@@ -553,3 +553,43 @@ li {
 #dataErrorMessage {
 	display: none;
 }
+
+
+/*********************** Statistics View ***********************/
+
+
+.statitem{
+	display:block;
+	padding-left:10px;
+	padding-right:15px;
+	padding-bottom:10px;
+	float:left;
+	font-weight:bold;
+	width:35%;
+	height:25%;
+	
+}
+
+.stattitle{
+	float:left;
+	font-size: 24px;
+	font-weight:bold;
+}
+
+.statvalue{
+	float:left;
+	font-size: 28px;
+	font-weight:bold;
+}
+
+.statsiconchange{
+	float:right;
+}
+
+.statsinfo{
+	clear:both;
+	font-size: 18px;
+	font-weight:bold;
+}
+
+
