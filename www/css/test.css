@@ -560,30 +560,36 @@ li {
 
 .statitem{
 	display:block;
-	padding-left:10px;
-	padding-right:15px;
-	padding-bottom:10px;
+	padding-left:6px;
+	padding-right:9px;
+	padding-bottom:20px;
 	float:left;
 	font-weight:bold;
-	width:42%;
-	height:25%;
+	width:45%;
+	height:28%;
 	
 }
 
 .stattitle{
 	/*float:left;*/
-	font-size: 24px;
-	font-weight:bold;
+	font-size: 25px;
+	/*font-weight:bold;*/
+	padding-bottom:5px;
 }
 
 .statvalue{
 	float:left;
 	font-size: 28px;
 	font-weight:bold;
+	/*padding-right:10px;*/
 }
 
 .statsiconchange{
-	float:right;
+	/*float:right;*/
+	font-size: 28px;
+	padding-top:5px;
+	padding-bottom:5px;
+	margin-left:10px;
 }
 
 .statsinfo{
