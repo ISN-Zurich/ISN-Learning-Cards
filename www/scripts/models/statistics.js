@@ -51,6 +51,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 		console.log("ALL ROWS: " + results.rows.length);
 		for ( var i = 0; i < results.rows.length; i++) {
 			row = results.rows.item(i);
+			
 			console.log(i + ": " + JSON.stringify(row));
 		}
 	}
@@ -282,7 +283,7 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(statistics
 		console.log("row: " + JSON.stringify(row));
 		oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
 		newAverageSpeed = self.statistics['averageSpeed'];
-		self.improvement['averageSpeed'] = newAverageSpeed - oldAverageSpeed;
+		self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed) * (-1);
 		console.log("improvement average speed: " + self.improvement['averageSpeed']);
 		$(document).trigger("statisticcalculationsdone");
 	}
