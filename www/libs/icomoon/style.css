@@ -77,3 +77,9 @@
 .icon-arrow-down:before {
 	content: "\31";
 }
+.icon-fire:before {
+	content: "\32";
+}
+.icon-diamond:before {
+	content: "\33";
+}
