@@ -63,11 +63,25 @@ StatisticsView.prototype.loadData = function() {
 	//$("#statisticsBody").empty();
 	$("#statBestDayValue").text(bestDay);
 	$("#statBestScoreValue").text(bestScore+"%");
-	$("#statHandledCardsValue").text(improvement['handledCards']);
-	$("#statsHandledCardsIconchange").addClass("icon-arrow-down");
-	$("#statAverageScoreValue").text(improvement['averageScore']+"%");
-	$("#statProgressValue").text(improvement['progress']+"%");
-	$("#statSpeedValue").text(improvement['averageSpeed']);
+	$("#statHandledCardsValue").text(handledCards);
+	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvement['handledCards']));
+	$("#statAverageScoreValue").text(avgScore+"%");
+	$("#statsAverageScoreIconchange").addClass(checkImprovement(improvement['averageScore']));
+	$("#statProgressValue").text(progress+"%");
+	$("#statsProgressIconchange").addClass(checkImprovement(improvement['progress']));
+	$("#statSpeedValue").text(avgSpeed);
+	$("#statsSpeedIconchange").addClass(checkImprovement(improvement['averageSpeed']));
+	
+	function  checkImprovement(improvementValue) {
+		if (improvementValue > 0){
+			return msg_positiveImprovement_icon;
+		}else if (improvementValue < 0){
+			return msg_negativeImprovement_icon;
+		}else{
+			return msg_neutralImprovement_icon;
+		} }
+
+};	
 	
 // ******isabella refactoring*********
 //	$("#statisticsData").empty();
@@ -91,22 +105,6 @@ StatisticsView.prototype.loadData = function() {
 //		  text: "Progress: " + progress +"% correct answers " + improvement['progress']
 //		}).appendTo("#statisticsData");
 
-//******** very old******************	
-//	$("#statisticsData").empty();
-//	$("<li/>", {
-//		  text: "Average Score: " + statisticsModel.getAverageScore()
-//		}).appendTo("#statisticsData");
-//	$("<li/>", {
-//	  text: "Average Speed: " + statisticsModel.getAverageSpeed()
-//	}).appendTo("#statisticsData");
-//	
-//	$("<li/>", {
-//		  text: "Handled Cards: " + statisticsModel.getHandledCards()
-//		}).appendTo("#statisticsData");
-//	
-//	$("<li/>", {
-//		  text: "Progress: " + statisticsModel.getProgress() +"% correct answers"
-//		}).appendTo("#statisticsData");
-//	
+
 	
-	};
+
