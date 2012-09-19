@@ -4,8 +4,8 @@
 function StatisticsModel(controller) {
 	this.controller = controller;
 
-	this.db;
-	this.initDB();
+	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
+			100000);
 
 	this.currentCourseId = -1
 
@@ -62,11 +62,6 @@ StatisticsModel.prototype.getStatistics = function() {
 
 StatisticsModel.prototype.getImprovement = function() {
 	return this.improvement;
-};
-
-StatisticsModel.prototype.initDB = function() {
-	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
-			100000);
 };
 
 StatisticsModel.prototype.initQueries = function() {
@@ -281,7 +276,23 @@ StatisticsModel.prototype.calculateImprovementProgress = function(statisticsMode
 	console.log("rows in calculate improvement progress: " + results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		oldProgress = Math.round(((row['numCorrect']) / (self.statistics['handledCards'])) * 100);
+		//get the number of handled cards
+		self.getDataFromDB(self.queries['handledCards'].query, self.queries['handledCards'].values24hBefore,
+				function(statisticsModel, transaction, results) {
+					statisticsModel.calculateImprovementProgressHelperFunction(statisticsModel, transaction, results, row['numCorrect']);
+				}
+		);
+	}
+};
+
+StatisticsModel.prototype.calculateImprovementProgressHelperFunction = function(statisticsModel, transaction, 
+																			results, numCorrect) {
+	var self = statisticsModel;
+	if (results.rows.length > 0) {
+		var row = results.rows.item(0);
+		console.log("number of handled cards:" + row['c']);
+		handledCards = row['c'];
+		oldProgress = Math.round((numCorrect / handledCards) * 100);
 		newProgress = self.statistics['progress'];
 		self.improvement['progress'] = newProgress - oldProgress;
 		console.log("improvement progress: " + self.improvement['progress']);
