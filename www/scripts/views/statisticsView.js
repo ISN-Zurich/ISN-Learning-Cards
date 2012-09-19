@@ -59,15 +59,14 @@ StatisticsView.prototype.loadData = function() {
 	}
 
 	//$("#statisticsBody").empty();
-	$("#statBestDayValue").text("");
-	$("#statBestScoreValue").text("");
+	$("#statBestDayValue").text(statisticsModel.getBestDay());
+	$("#statBestScoreValue").text(statisticsModel.getBestScore()+"%");
 	$("#statHandledCardsValue").text(statisticsModel.getHandledCards());
-	$("#statAverageScoreValue").text(statisticsModel.getAverageScore());
-	$("#statProgressValue").text(statisticsModel.getProgress());
+	$("#statsHandledCardsIconchange").addClass("icon-arrow-down");
+	$("#statAverageScoreValue").text(statisticsModel.getAverageScore()+"%");
+	$("#statProgressValue").text(statisticsModel.getProgress()+"%");
 	$("#statSpeedValue").text(statisticsModel.getAverageSpeed());
 	
-	
-
 	
 	
 //	$("#statisticsData").empty();

@@ -1,6 +1,7 @@
 @font-face {
 	font-family: 'icomoon';
-	src: url('fonts/icomoon.eot?#') format('eot'),
+	src:url('fonts/icomoon.eot');
+	src:url('fonts/icomoon.eot?#iefix') format('embedded-opentype'),
 		url('fonts/icomoon.svg#icomoon') format('svg'),
 		url('fonts/icomoon.woff') format('woff'),
 		url('fonts/icomoon.ttf') format('truetype');
@@ -13,6 +14,8 @@
 	font-family: 'icomoon';
 	content: attr(data-icon);
 	speak: none;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
 }
 
 /* Use the following CSS code if you want to have a class per icon */
@@ -20,49 +23,54 @@
 	font-family: 'icomoon';
 	font-style: normal;
 	speak: none;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
 }
-.icon-neutral:before {
+.icon-pause:before {
+	content: "\21";
+}
+.icon-arrow-up:before {
 	content: "\22";
 }
-.icon-smiley:before {
+.icon-arrow-down:before {
 	content: "\23";
 }
-.icon-happy:before {
+.icon-untitled:before {
 	content: "\24";
 }
-.icon-move-vertical:before {
+.icon-untitled-2:before {
+	content: "\25";
+}
+.icon-untitled-3:before {
+	content: "\26";
+}
+.icon-untitled-4:before {
+	content: "\27";
+}
+.icon-untitled-5:before {
+	content: "\28";
+}
+.icon-untitled-6:before {
 	content: "\29";
 }
-.icon-arrow-right:before {
-	content: "\e015";
+.icon-untitled-7:before {
+	content: "\2a";
 }
-.icon-bars:before {
-	content: "\e021";
+.icon-untitled-8:before {
+	content: "\2b";
 }
-.icon-enter:before {
-	content: "\e000";
+.icon-untitled-9:before {
+	content: "\2c";
 }
-.icon-cog:before {
-	content: "\e01f";
+.icon-untitled-10:before {
+	content: "\2d";
 }
-.icon-cross:before {
-	content: "\e005";
+.icon-untitled-11:before {
+	content: "\2e";
 }
-.icon-checkmark:before {
-	content: "\e059";
+.icon-untitled-12:before {
+	content: "\2f";
 }
-.icon-question:before {
-	content: "\e04c";
-}
-.icon-aperture-alt:before {
-	content: "\e002";
-}
-.icon-pencil:before {
-	content: "\e046";
-}
-.icon-exit:before {
-	content: "\e001";
-}
-.icon-loading:before {
-	content: "\e003";
+.icon-untitled-13:before {
+	content: "\30";
 }

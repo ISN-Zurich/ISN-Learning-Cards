@@ -565,13 +565,13 @@ li {
 	padding-bottom:10px;
 	float:left;
 	font-weight:bold;
-	width:35%;
+	width:42%;
 	height:25%;
 	
 }
 
 .stattitle{
-	float:left;
+	/*float:left;*/
 	font-size: 24px;
 	font-weight:bold;
 }
