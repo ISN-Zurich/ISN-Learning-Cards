@@ -27,33 +27,35 @@ StatisticsView.prototype.closeStatistics = function() {
 StatisticsView.prototype.loadData = function() {
 	
 	var statisticsModel = controller.models['statistics'];
+	var statistics = statisticsModel.getStatistics();
+	var improvement = statisticsModel.getImprovement();
 	
-	var avgScore = statisticsModel.getAverageScore();
+	var avgScore = statistics['averageScore'];
 	if (avgScore < 0) {
 		avgScore =  0;
 	}
 	
-	var avgSpeed = statisticsModel.getAverageSpeed();
+	var avgSpeed = statistics['averageSpeed'];
 	if (avgSpeed < 0) {
 		avgSpeed =  0;
 	}
 	
-	var handledCards = statisticsModel.getHandledCards();
+	var handledCards = statistics['handledCards'];
 	if (handledCards < 0) {
 		handledCards =  0;
 	}
 	
-	var progress = statisticsModel.getProgress();
+	var progress = statistics['progress'];
 	if (progress < 0) {
 		progress =  0;
 	}
 	
-	var bestDay = statisticsModel.getBestDay();
+	var bestDay = statistics['bestDay'];
 	if (!bestDay) {
 		bestDay = "";
 	}
 	
-	var bestScore = statisticsModel.getBestScore();
+	var bestScore = statistics['bestScore'];
 	if (bestScore < 0) {
 		bestScore =  0;
 	}
@@ -66,17 +68,17 @@ StatisticsView.prototype.loadData = function() {
 	  text: "Best Score: " + bestScore + "%"
 	}).appendTo("#statisticsData");
 	$("<li/>", {
-		  text: "Average Score: " + avgScore + "%"
+		  text: "Average Score: " + avgScore + "% " + improvement['averageScore']
 		}).appendTo("#statisticsData");
 	$("<li/>", {
-	  text: "Average Speed: " + avgSpeed + " sec"
+	  text: "Average Speed: " + avgSpeed + " sec " + improvement['averageSpeed']
 	}).appendTo("#statisticsData");	
 	$("<li/>", {
-		  text: "Handled Cards: " + handledCards
+		  text: "Handled Cards: " + handledCards + " " + improvement['handledCards']
 		}).appendTo("#statisticsData");
 	
 	$("<li/>", {
-		  text: "Progress: " + progress +"% correct answers"
+		  text: "Progress: " + progress +"% correct answers " + improvement['progress']
 		}).appendTo("#statisticsData");
 	
 	

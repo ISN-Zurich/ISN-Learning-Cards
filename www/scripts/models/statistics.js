@@ -7,38 +7,44 @@ function StatisticsModel(controller) {
 	this.db;
 	this.initDB();
 
+	this.currentCourseId = -1
 
-	this.handledCards= -1;
-	this.progress= -1;
-	this.currentCourseId = -1;
-	this.averageScore = -1;
-	this.averageSpeed = -1;
-	this.bestDay;
-	this.bestScore = -1;
+	this.statistics = [];
+	this.statistics['handledCards'] = -1;
+	this.statistics['progress'] = -1;
+	this.statistics['averageScore'] = -1;
+	this.statistics['averageSpeed'] = -1;
+	this.statistics['bestDay'];
+	this.statistics['bestScore'] = -1;
+
+	this.improvement = [];
+	this.improvement['handledCards'] = 0;
+	this.improvement['progress'] = 0;
+	this.improvement['averageScore'] = 0;
+	this.improvement['averageSpeed'] = 0;
+	
+	this.queries = [];
+	this.initQueries();
+
 };
 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 
-	this.handledCards= -1;
-	this.progress= -1;
-	this.averageScore = -1;
-	this.averageSpeed = -1;
-	this.bestDay;
-	this.bestScore = -1;
-	
-	this.db.transaction(function(transaction) {
-		transaction.executeSql(
-						'SELECT * FROM statistics WHERE course_id=?',
-						[ courseId],
-						dataSelectHandler,
-						function(tx, e) {
-							console
-									.log("Error for select average score: "
-											+ e.message);
+	for ( var s in this.statistics) {
+		this.statistics[s] = -1;
+	}
+
+	// Display all entries of the database
+	 this.db.transaction(function(transaction) {
+		transaction
+				.executeSql('SELECT * FROM statistics WHERE course_id=?',
+						[ courseId ], dataSelectHandler, function(tx, e) {
+							console.log("Error for select average score: "
+									+ e.message);
 						});
 	});
-	
+
 	function dataSelectHandler(transaction, results) {
 		console.log("ALL ROWS: " + results.rows.length);
 		for ( var i = 0; i < results.rows.length; i++) {
@@ -46,33 +52,16 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 			console.log(i + ": " + JSON.stringify(row));
 		}
 	}
-	
+
 	this.calculateValues();
 };
 
-StatisticsModel.prototype.getAverageScore = function() {
-	return this.averageScore;
+StatisticsModel.prototype.getStatistics = function() {
+	return this.statistics;
 };
 
-StatisticsModel.prototype.getAverageSpeed = function() {
-	return this.averageSpeed;
-};
-
-StatisticsModel.prototype.getBestScore = function() {
-	return this.bestScore;
-};
-
-StatisticsModel.prototype.getBestDay = function() {
-	return this.bestDay;
-};
-
-
-StatisticsModel.prototype.getHandledCards = function() {
-	return this.handledCards;
-};
-
-StatisticsModel.prototype.getProgress = function() {
-	return this.progress;
+StatisticsModel.prototype.getImprovement = function() {
+	return this.improvement;
 };
 
 StatisticsModel.prototype.initDB = function() {
@@ -80,197 +69,226 @@ StatisticsModel.prototype.initDB = function() {
 			100000);
 };
 
+StatisticsModel.prototype.initQueries = function() {
+	this.queries['avgScore'] = {query: "", values: [], values24hBefore: []};
+	this.queries['avgSpeed'] = {query: "", values: [], values24hBefore: []};
+	this.queries['handledCards'] = {query: "", values: [], values24hBefore: []};
+	this.queries['progress'] = {query: "", values: [], values24hBefore: []};
+	this.queries['best'] = {query: "", values: [], values24hBefore: []};
+	
+	// average score
+	this.queries['avgScore'].query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=?'
+			+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
+	
+	// average speed
+	this.queries['avgSpeed'].query = 'SELECT sum(duration) as duration, count(id) as num FROM statistics WHERE course_id=?'
+			+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
+	
+	// handled cards
+	this.queries['handledCards'].query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND day>=? AND day<=?';
+	
+	// progress
+	this.queries['progress'].query = 'SELECT  COUNT(id) as numCorrect  FROM statistics  WHERE course_id=? AND score=?'
+			+ ' AND day>=? AND day<=?';
+	
+	// best day and score
+	this.queries['best'].query = "SELECT DATE(day/1000, 'unixepoch') as day, sum(score) as score, count(id) as num"
+			+ " FROM statistics WHERE course_id=?"
+			+ " GROUP BY DATE(day/1000, 'unixepoch')";
+};
+
+StatisticsModel.prototype.initQueryValues = function() {
+	var timeNow = new Date().getTime();
+	var time24hAgo = timeNow - 1000 * 60 * 60 * 24;
+	var time48hAgo = timeNow - 1000 * 60 * 60 * 24 * 2;
+	console.log("now: " + timeNow);
+	console.log("24 hours ago: " + time24hAgo);
+	console.log("48 hours ago: " + time48hAgo);
+	// average score
+	this.queries['avgScore'].values = [ this.currentCourseId, time24hAgo, timeNow ];
+	this.queries['avgScore'].values24hBefore = [ this.currentCourseId, time48hAgo, time24hAgo ];
+
+	// average speed
+	this.queries['avgSpeed'].values = [ this.currentCourseId, time24hAgo, timeNow ];
+	this.queries['avgSpeed'].values24hBefore = [ this.currentCourseId, time48hAgo, time24hAgo ];
+
+	// handled cards
+	this.queries['handledCards'].values = [ this.currentCourseId, time24hAgo, timeNow ];
+	this.queries['handledCards'].values24hBefore = [ this.currentCourseId, time48hAgo, time24hAgo ];
+
+	// progress
+	this.queries['progress'].values = [ this.currentCourseId, 1, time24hAgo, timeNow ];
+	this.queries['progress'].values24hBefore = [ this.currentCourseId, 1, time48hAgo, time24hAgo ];
+
+	// best day and score
+	this.queries['best'].values = [ this.currentCourseId ];
+};
 
 StatisticsModel.prototype.calculateValues = function() {
-	var today = new Date().getTime();
 	var self = this;
+	self.initQueryValues();
 
-	// using JQuery Deferred for triggering the statisticcalculationsdone event
-	// only after the calculate methods are done
-	$.when(self.calculateAverageScore(today),
-			self.calculateAverageSpeed(today), 
-			self.calculateHandledCards(today),
-			self.calculateProgress(today),
-			self.calculateBestDayAndScore())
-			.then(function() {
-				$(document).trigger("statisticcalculationsdone");
-			});
-}
+	// calculate handled cards
+	self.getDataFromDB(self.queries['handledCards'].query, self.queries['handledCards'].values,
+			self.calculateHandledCards);
+	
+	// calculate average score
+	self.getDataFromDB(self.queries['avgScore'].query, self.queries['avgScore'].values, self.calculateAverageScore);
 
-StatisticsModel.prototype.calculateAverageScore = function(day) {
-	var dfd = $.Deferred();
-	var self = this;
-	console.log("course: " + self.currentCourseId);
-	console.log("day: " + day);
-	// returns the score and the number of answered cards of the last 24-hours
-	// before the specified timestamp
-	// we take the last 24-hours so that we have a constant time intervall (no
-	// matter if we call this function
-	// in the morning or in the evening)
-	day -= 1000 * 60 * 60 * 24;
-	self.db
-			.transaction(function(transaction) {
-				transaction
-						.executeSql(
-								'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=?'
-										+ ' AND day>=?' + ' GROUP BY course_id',
-								[ self.currentCourseId, day ],
-								dataSelectHandler,
-								function(tx, e) {
-									console
-											.log("Error for select average score: "
-													+ e.message);
-								});
-			});
+	// calculate average speed
+	self.getDataFromDB(self.queries['avgSpeed'].query, self.queries['avgSpeed'].values, self.calculateAverageSpeed);
 
-	function dataSelectHandler(transaction, results) {
-		console.log("rows: " + results.rows.length);
-		if (results.rows.length > 0) {
-			row = results.rows.item(0);
-			console.log("row: " + JSON.stringify(row));
-			self.averageScore = Math.round((row['score'] / row['num']) * 100);
-			console.log("AVERAGE SCORE: " + self.averageScore);
-		}
-		dfd.resolve();
-	}
+	// calculate progress
+	self.getDataFromDB(self.queries['progress'].query, self.queries['progress'].values, self.calculateProgress);
 
-	return dfd.promise();
+	// calculate best day and score
+	self.getDataFromDB(self.queries['best'].query, self.queries['best'].values, self.calculateBestDayAndScore);
 };
 
-StatisticsModel.prototype.calculateAverageSpeed = function(day) {
-	var dfd = $.Deferred();
+StatisticsModel.prototype.getDataFromDB = function(query, values, cbResult) {
 	var self = this;
-	console.log("course: " + self.currentCourseId);
-	console.log("day: " + day);
-	// returns the speed and the number of answered cards of the last 24-hours
-	// before the specified timestamp
-	// we take the last 24-hours so that we have a constant time intervall (no
-	// matter if we call this function
-	// in the morning or in the evening)
-	day -= 1000 * 60 * 60 * 24;
-	self.db
-			.transaction(function(transaction) {
-				transaction
-						.executeSql(
-								'SELECT sum(duration) as duration, count(id) as num FROM statistics WHERE course_id=?'
-										+ ' AND day>=?' + ' GROUP BY course_id',
-								[ self.currentCourseId, day ],
-								dataSelectHandler,
-								function(tx, e) {
-									console
-											.log("Error for select average speed: "
-													+ e.message);
-								});
-			});
-
-	function dataSelectHandler(transaction, results) {
-		console.log("rows: " + results.rows.length);
-		if (results.rows.length > 0) {
-			row = results.rows.item(0);
-			console.log("row: " + JSON.stringify(row));
-			self.averageSpeed = Math
-					.round((row['duration'] / row['num']) / 1000);
-			console.log("AVERAGE SPEED: " + self.averageSpeed);
-			dfd.resolve();
-		}
-		return dfd.promise();
-	}
-};
-
-StatisticsModel.prototype.calculateBestDayAndScore = function() {
-	var dfd = $.Deferred();
-	var self = this;
-	console.log("course: " + self.currentCourseId);
-	self.db
-			.transaction(function(transaction) {
-				transaction
-						.executeSql(
-								"SELECT DATE(day/1000, 'unixepoch') as day, sum(score) as score, count(id) as num FROM statistics WHERE course_id=?"
-										+ " GROUP BY DATE(day/1000, 'unixepoch')",
-								[ self.currentCourseId ],
-								dataSelectHandler,
-								function(tx, e) {
-									console
-											.log("Error for select best day and score: "
-													+ e.message);
-								});
-			});
-
-	function dataSelectHandler(transaction, results) {
-		console.log("rows: " + results.rows.length);
-		var bestDay;
-		var bestScore = -1;
-		for ( var i = 0; i < results.rows.length; i++) {
-			row = results.rows.item(i);
-			console.log(JSON.stringify(row));
-			score = row['score'] / row['num'];
-			if (score >= bestScore) {
-				day = row['day'];
-				bestDay = day;
-				bestScore = score;
-			}
-		}
-		console.log("best day: " + bestDay);
-		self.bestDay = bestDay;
-		console.log("best score: " + bestScore);
-		self.bestScore = Math.round(bestScore * 100);
-		dfd.resolve();
-	}
-	return dfd.promise();
-};
-
-StatisticsModel.prototype.calculateHandledCards = function(day) {
-	var dfd = $.Deferred();
-	var self = this;
-	day -= 1000*60*60*24;
-	self.db.transaction(function(transaction){
-		transaction.executeSql('SELECT COUNT(*) as c FROM statistics WHERE course_id=?'
-				+ ' AND day>=?', [self.currentCourseId, day ], resultDataHandler,errorHandler);
+	self.db.transaction(function(transaction) {
+		transaction.executeSql(query, values, function(transaction, results) {cbResult(self, transaction, results);}, 
+				self.dbErrorFunction);
 	});
-	
-	function errorHandler(tx, e){
-		console.log("error! NOT inserted: " + e.message);	 
-	}; 
-
-	function resultDataHandler(transaction, results){
-		if (results.rows.length > 0){
-			var row = results.rows.item(0);
-			console.log("number of handled cards:" +row['c']);
-			self.handledCards = row['c'];
-	
-		}
-		dfd.resolve();
-	};
-	return dfd.promise();
 };
 
+StatisticsModel.prototype.calculateHandledCards = function(statisticsModel, transaction, results) {
+	var self = statisticsModel;
+	if (results.rows.length > 0) {
+		var row = results.rows.item(0);
+		console.log("number of handled cards:" + row['c']);
+		self.statistics['handledCards'] = row['c'];
+		
+		// calculate improvement
+		self.getDataFromDB(self.queries['handledCards'].query, self.queries['handledCards'].values24hBefore, self.calculateImprovementHandledCards);
+	}
+};
 
-StatisticsModel.prototype.calculateProgress = function(day){
-	var dfd = $.Deferred();
-	var self=this;
-	day -= 1000*60*60*24;
-	
-	self.db.transaction(function(transaction){
-		transaction.executeSql('SELECT  COUNT(id) as numCorrect  FROM statistics  WHERE score=?'
-				+ ' AND day>=?', [1,day], resultDataHandler,errorHandler);
-	});
-	
-	function errorHandler(tx, e){
-		console.log("error! NOT inserted: " + e.message);	 
-	}; 
-	
-	function resultDataHandler(transaction, results){
-		var progress;
-		if (results.rows.length > 0){
-			row = results.rows.item(0);
-			console.log("number of correct questions:" +row['numCorrect']);
-			console.log("number of answered questions:" +self.handledCards);
-			
-			self.progress= Math.round((row['numCorrect'])/(self.handledCards)*100);
-			console.log("progress: " + self.progress);
-	
+StatisticsModel.prototype.calculateAverageScore = function(statisticsModel, transaction, results) {
+	var self = statisticsModel;
+	console.log("rows: " + results.rows.length);
+	if (results.rows.length > 0) {
+		row = results.rows.item(0);
+		console.log("row: " + JSON.stringify(row));
+		self.statistics['averageScore'] = Math.round((row['score'] / row['num']) * 100);
+		console.log("AVERAGE SCORE: " + self.statistics['averageScore']);
+		
+		// calculate improvement
+		self.getDataFromDB(self.queries['avgScore'].query, self.queries['avgScore'].values24hBefore, self.calculateImprovementAverageScore);
+	}
+};
+
+StatisticsModel.prototype.calculateAverageSpeed = function(statisticsModel, transaction, results) {
+	var self = statisticsModel;
+	console.log("rows: " + results.rows.length);
+	if (results.rows.length > 0) {
+		row = results.rows.item(0);
+		console.log("row: " + JSON.stringify(row));
+		self.statistics['averageSpeed'] = Math.round((row['duration'] / row['num']) / 1000);
+		console.log("AVERAGE SPEED: " + self.statistics['averageSpeed']);
+		
+		// calculate improvement
+		self.getDataFromDB(self.queries['avgSpeed'].query, self.queries['avgSpeed'].values24hBefore, self.calculateImprovementAverageSpeed);
+	}
+};
+
+StatisticsModel.prototype.calculateProgress = function(statisticsModel, transaction, results) {
+	var self = statisticsModel;
+	if (results.rows.length > 0) {
+		row = results.rows.item(0);
+		console.log("number of correct questions:" + row['numCorrect']);
+		console.log("number of answered questions:"
+				+ self.statistics['handledCards']);
+		self.statistics['progress'] = Math.round(((row['numCorrect']) / (self.statistics['handledCards'])) * 100);
+		console.log("progress: " + self.statistics['progress']);
+		
+		// calculate improvement
+		self.getDataFromDB(self.queries['progress'].query, self.queries['progress'].values24hBefore, self.calculateImprovementProgress);
+	}
+};
+
+StatisticsModel.prototype.calculateBestDayAndScore = function(statisticsModel, transaction,
+		results) {
+	console.log("rows: " + results.rows.length);
+	var self = statisticsModel;
+	var bestDay;
+	var bestScore = -1;
+	for ( var i = 0; i < results.rows.length; i++) {
+		row = results.rows.item(i);
+		console.log(JSON.stringify(row));
+		score = row['score'] / row['num'];
+		if (score >= bestScore) {
+			bestDay = row['day'];
+			bestScore = score;
 		}
-		dfd.resolve();
-	};
-	return dfd.promise();
+	}
+	console.log("best day: " + bestDay);
+	self.statistics['bestDay'] = bestDay;
+	console.log("best score: " + bestScore);
+	self.statistics['bestScore'] = Math.round(bestScore * 100);
+	$(document).trigger("statisticcalculationsdone");
+};
+
+StatisticsModel.prototype.calculateImprovementHandledCards = function(statisticsModel, 
+		transaction, results) {
+	var self = statisticsModel;
+	console.log("rows in calculate improvement handled cards: " + results.rows.length);
+	if (results.rows.length > 0) {
+		var row = results.rows.item(0);
+		console.log("number of handled cards:" + row['c']);
+		oldHandledCards = row['c'];
+		newHandledCards = self.statistics['handledCards'];
+		self.improvement['handledCards'] = newHandledCards - oldHandledCards;
+		console.log("improvement handled cards: " + self.improvement['handledCards']);
+		$(document).trigger("statisticcalculationsdone");
+	}
+};
+
+StatisticsModel.prototype.calculateImprovementAverageScore = function(statisticsModel, 
+		transaction, results) {
+	var self = statisticsModel;
+	console.log("rows in calculate improvement average score: " + results.rows.length);
+	if (results.rows.length > 0) {
+		row = results.rows.item(0);
+		console.log("row: " + JSON.stringify(row));
+		oldAverageScore = Math.round((row['score'] / row['num']) * 100);
+		newAverageScore = self.statistics['averageScore'];
+		self.improvement['averageScore'] = newAverageScore - oldAverageScore;
+		console.log("improvement average score: " + self.improvement['averageScore']);
+		$(document).trigger("statisticcalculationsdone");
+	}
+};
+
+StatisticsModel.prototype.calculateImprovementAverageSpeed = function(statisticsModel, 
+		transaction, results) {
+	var self = statisticsModel;
+	console.log("rows in calculate improvement average speed: " + results.rows.length);
+	if (results.rows.length > 0) {
+		row = results.rows.item(0);
+		console.log("row: " + JSON.stringify(row));
+		oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
+		newAverageSpeed = self.statistics['averageSpeed'];
+		self.improvement['averageSpeed'] = newAverageSpeed - oldAverageSpeed;
+		console.log("improvement average speed: " + self.improvement['averageSpeed']);
+		$(document).trigger("statisticcalculationsdone");
+	}
+};
+
+StatisticsModel.prototype.calculateImprovementProgress = function(statisticsModel, 
+		transaction, results) {
+	var self = statisticsModel;
+	console.log("rows in calculate improvement progress: " + results.rows.length);
+	if (results.rows.length > 0) {
+		row = results.rows.item(0);
+		oldProgress = Math.round(((row['numCorrect']) / (self.statistics['handledCards'])) * 100);
+		newProgress = self.statistics['progress'];
+		self.improvement['progress'] = newProgress - oldProgress;
+		console.log("improvement progress: " + self.improvement['progress']);
+		$(document).trigger("statisticcalculationsdone");
+	}
+};
+
+StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
+	console.log("DB Error: " + e.message);
 };
