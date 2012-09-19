@@ -4,8 +4,8 @@
 function StatisticsModel(controller) {
 	this.controller = controller;
 
-	this.db;
-	this.initDB();
+	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
+			100000);
 
 	this.currentCourseId = -1
 
@@ -16,6 +16,8 @@ function StatisticsModel(controller) {
 	this.statistics['averageSpeed'] = -1;
 	this.statistics['bestDay'];
 	this.statistics['bestScore'] = -1;
+	this.statistics['stackHandler'] = -1;
+	this.statistics['cardBurner']
 
 	this.improvement = [];
 	this.improvement['handledCards'] = 0;
@@ -64,17 +66,13 @@ StatisticsModel.prototype.getImprovement = function() {
 	return this.improvement;
 };
 
-StatisticsModel.prototype.initDB = function() {
-	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
-			100000);
-};
-
 StatisticsModel.prototype.initQueries = function() {
 	this.queries['avgScore'] = {query: "", values: [], values24hBefore: []};
 	this.queries['avgSpeed'] = {query: "", values: [], values24hBefore: []};
 	this.queries['handledCards'] = {query: "", values: [], values24hBefore: []};
 	this.queries['progress'] = {query: "", values: [], values24hBefore: []};
 	this.queries['best'] = {query: "", values: [], values24hBefore: []};
+	this.queries['stackHandler'] = {query: "", values: [], values24hBefore: []};
 	
 	// average score
 	this.queries['avgScore'].query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=?'
@@ -95,6 +93,9 @@ StatisticsModel.prototype.initQueries = function() {
 	this.queries['best'].query = "SELECT DATE(day/1000, 'unixepoch') as day, sum(score) as score, count(id) as num"
 			+ " FROM statistics WHERE course_id=?"
 			+ " GROUP BY DATE(day/1000, 'unixepoch')";
+	
+	// stack handler
+	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=?';
 };
 
 StatisticsModel.prototype.initQueryValues = function() {
@@ -122,6 +123,9 @@ StatisticsModel.prototype.initQueryValues = function() {
 
 	// best day and score
 	this.queries['best'].values = [ this.currentCourseId ];
+	
+	// stack handler
+	this.queries['stackHandler'].values = [ this.currentCourseId ];
 };
 
 StatisticsModel.prototype.calculateValues = function() {
@@ -143,6 +147,9 @@ StatisticsModel.prototype.calculateValues = function() {
 
 	// calculate best day and score
 	self.getDataFromDB(self.queries['best'].query, self.queries['best'].values, self.calculateBestDayAndScore);
+	
+	// calculate stack handler
+	self.getDataFromDB(self.queries['stackHandler'].query, self.queries['stackHandler'].values, self.calculateStackHandler);
 };
 
 StatisticsModel.prototype.getDataFromDB = function(query, values, cbResult) {
@@ -159,6 +166,12 @@ StatisticsModel.prototype.calculateHandledCards = function(statisticsModel, tran
 		var row = results.rows.item(0);
 		console.log("number of handled cards:" + row['c']);
 		self.statistics['handledCards'] = row['c'];
+		if (row['c'] > 100) {
+			self.statistics['cardBurner'] = 100;
+		} else {
+			self.statistics['cardBurner'] = row['c'];
+		}
+		console.log("card burner: " + self.statistics['cardBurner']);
 		
 		// calculate improvement
 		self.getDataFromDB(self.queries['handledCards'].query, self.queries['handledCards'].values24hBefore, self.calculateImprovementHandledCards);
@@ -281,13 +294,49 @@ StatisticsModel.prototype.calculateImprovementProgress = function(statisticsMode
 	console.log("rows in calculate improvement progress: " + results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		oldProgress = Math.round(((row['numCorrect']) / (self.statistics['handledCards'])) * 100);
+		//get the number of handled cards
+		self.getDataFromDB(self.queries['handledCards'].query, self.queries['handledCards'].values24hBefore,
+				function(statisticsModel, transaction, results) {
+					statisticsModel.calculateImprovementProgressHelperFunction(statisticsModel, transaction, results, row['numCorrect']);
+				}
+		);
+	}
+};
+
+StatisticsModel.prototype.calculateImprovementProgressHelperFunction = function(statisticsModel, transaction, 
+		results, numCorrect) {
+	var self = statisticsModel;
+	if (results.rows.length > 0) {
+		var row = results.rows.item(0);
+		console.log("number of handled cards:" + row['c']);
+		handledCards = row['c'];
+		oldProgress = Math.round((numCorrect / handledCards) * 100);
 		newProgress = self.statistics['progress'];
 		self.improvement['progress'] = newProgress - oldProgress;
 		console.log("improvement progress: " + self.improvement['progress']);
 		$(document).trigger("statisticcalculationsdone");
 	}
 };
+
+StatisticsModel.prototype.calculateStackHandler = function(statisticsModel, 
+		transaction, results) {
+	var self = statisticsModel;
+	allCards = controller.models["questionpool"].questionList;
+	handledCards = [];
+	numHandledCards = 0;
+	for ( var i = 0; i < results.rows.length; i++) {
+		row = results.rows.item(i);
+		handledCards.push(row['question_id']);
+	}
+	for (var a in allCards) {
+		if (handledCards.indexOf(allCards[a].id) != -1) {
+			numHandledCards++;
+		}
+	}
+	numAllCards = allCards.length;
+	self.statistics['stackHandler'] = Math.round((numHandledCards/numAllCards)*100);
+	console.log("stackHandler: " + self.statistics['stackHandler'] + " handled: " + numHandledCards + " all: " + numAllCards);
+}
 
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
 	console.log("DB Error: " + e.message);
