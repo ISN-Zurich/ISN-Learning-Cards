@@ -31,7 +31,7 @@ function AnswerModel() {
 		// update table with correct data for timestamp
 //		var update = "";
 //		tx
-//				.executeSql('SELECT id, day FROM statistics WHERE course_id="12984"',
+//				.executeSql('SELECT id, day FROM statistics WHERE course_id="12968"',
 //						[], function dataSelectHandler(transaction,
 //								results) {
 //							console.log("ALL ROWS: " + results.rows.length);
@@ -52,8 +52,8 @@ function AnswerModel() {
 //							console.log("Error for select average score: "
 //									+ e.message);
 //						});
-//		
-//
+////		
+////
 //	});
 
 };
