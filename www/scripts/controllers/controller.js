@@ -144,10 +144,12 @@ Controller.prototype.setupLanguage = function() {
 	        $("#statSpeedTitle").text(msg_speed_title);
 	        $("#statsSpeedinfo").text(msg_speed_info);
 	        $("#achievementsTitle").text(msg_achievements_title);
+	        $("#stackHandlerIcon").addClass(msg_achievements_Handler_icon);
 	        $("#stackHandlerTitle").text(msg_achievementsHandler_title);
 	        $("#stackHandlerExplanation").text(msg_achievementsHandler_explanation);
 	        $("#stackHandlerResultText1").text(msg_achievements_text1);
 	        $("#stackHandlerResultText2").text(msg_achievements_text2);
+	        $("#cardBurnerIcon").addClass(msg_achievements_Burner_icon);
 	        $("#cardBurnerTitle").text(msg_achievementsBurner_title);
 	        $("#cardBurnerExplanation").text(msg_achievementsBurner_explanation);
 	        $("#cardBurnerResultText1").text(msg_achievements_text1);

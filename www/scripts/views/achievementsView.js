@@ -10,7 +10,7 @@ function AchievementsView(){
 	    
 	 self.tagID = 'achievementsView';
 	
-	
+	 jester($('#closeAchievementsIcon')[0]).tap(function(){ self.closeAchievements(); } );
 	
 }; 
 
@@ -19,7 +19,22 @@ AchievementsView.prototype.handleTap = doNothing;
 AchievementsView.prototype.handleSwipe = doNothing;
 AchievementsView.prototype.openDiv = openView;
 AchievementsView.prototype.open = function() {
-		this.openDiv();	
+	this.showAchievementsBody();
+	this.openDiv();	
 };
 
 AchievementsView.prototype.close = closeView;
+
+AchievementsView.prototype.closeAchievements = function() {
+	console.log("close Achievements button clicked");
+	controller.transitionToCourses();
+};
+
+AchievementsView.prototype.showAchievementsBody = function() {
+	
+	
+	
+	
+	
+	
+}
