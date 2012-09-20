@@ -62,26 +62,12 @@ function get_statistics_from_headers() {
 	return json_decode($statistics, true);
 }
 
-/**
- * reads last id on client database from the header
- */
-function get_last_id_from_headers() {
-	logging("in get last id from headers");
-
-	$myheaders = getallheaders();
-	$lastId = $myheaders["last_id"];
-	
-	logging("last id from client db: " . $lastId);
-
-	return $lastId;
-}
-
 function setStatistics($userId, $statistics) {
 	global $ilDB;
 
 	logging("in set statistics");
 
-	$result = $ilDB->query("SELECT max(id) as last_id FROM isnlc_statistics");
+	$result = $ilDB->query("SELECT max(id) as last_id FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text"));
 	$record = $ilDB->fetchAssoc($result);
 	$lastId = $record['last_id'];
 
@@ -97,9 +83,9 @@ function setStatistics($userId, $statistics) {
 		
 		logging(json_encode($statisticItem));
 		$ilDB->manipulateF("INSERT INTO isnlc_statistics(user_id, id, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-				array("text", "integer", "text", "text", "timestamp", "float", "integer"),
+				array("text", "integer", "text", "text", "integer", "float", "integer"),
 				array($userId, $statisticItem['id'], $statisticItem['course_id'], $statisticItem['question_id'],
-						date('Y-m-d H:i:s', $statisticItem['day']/1000), $statisticItem['score'], $statisticItem['duration']));
+						$statisticItem['day'], $statisticItem['score'], $statisticItem['duration']));
 	}
 
 	logging("after inserting");
@@ -130,7 +116,7 @@ function getStatistics($userId) {
 
 function generateTable() {
 	global $ilDB;
-	
+
 	//$ilDB->dropTable("isnlc_statistics");
 
 	logging("check if our table is present already");
@@ -154,7 +140,8 @@ function generateTable() {
 						'length'=> 255
 				),
 				"day" => array(
-						'type' => 'timestamp'
+						'type' => 'integer',
+						'length'=> 8
 				),
 				"score" => array(
 						'type' => 'float'

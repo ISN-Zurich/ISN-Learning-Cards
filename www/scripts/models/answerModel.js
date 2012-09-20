@@ -239,7 +239,7 @@ AnswerModel.prototype.initDB = function() {
 			.transaction(function(transaction) {
 				transaction
 						.executeSql(
-								'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT, day DATETIME, score INTEGER, duration INTEGER);',
+								'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT, day INTEGER, score NUMERIC, duration INTEGER);',
 								[]);
 				// transaction.executeSql(
 				// 'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL
@@ -275,9 +275,12 @@ AnswerModel.prototype.storeScoreInDB = function() {
 };
 
 AnswerModel.prototype.deleteDB = function() {
+	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {
-		tx.executeSql("DROP TABLE statistics", [], function() {
+		tx.executeSql("DELETE FROM statistics", [], function() {
+			console.log("statistics table cleared");
 		}, function() {
+			console.log("error: statistics table not cleared");
 		});
 	});
 };

@@ -166,23 +166,27 @@ ConfigurationModel.prototype.login = function(username, password) {
  * logs out user
  */
 ConfigurationModel.prototype.logout = function() {
-	// this.configuration.loginState = "loggedOut";
-	// this.storeData();
-	this.sendLogoutToServer();
-	console.log("user logged out");
-	this.configuration = {
-		"appAuthenticationKey": this.configuration.appAuthenticationKey,
-		"userAuthenticationKey" : "",
-		"learnerInformation" : {
-			"userId" : 0
-		}
-	};
-	// this.configuration.userAuthenticationKey = "";
-	this.storeData();
-
+	//send statistics data to server
+	this.controller.models['statistics'].sendToServer();
+	
+	var self = this;
+	$(document).bind("statisticssenttoserver", function() {
+		self.sendLogoutToServer();
+		console.log("user logged out");
+		self.configuration = {
+			"appAuthenticationKey": self.configuration.appAuthenticationKey,
+			"userAuthenticationKey" : "",
+			"learnerInformation" : {
+				"userId" : 0
+			}
+		};
+		self.storeData();
+	});
+		
 	// remove course list and pending course list request
 	localStorage.removeItem("pendingCourseList");
 	localStorage.removeItem("courses");
+	$("#coursesList").empty(); //empty course list in course list view
 
 	// remove all question pools and all pending question pool requests
 	var courseList = this.controller.models["course"].courseList;
@@ -192,6 +196,9 @@ ConfigurationModel.prototype.logout = function() {
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
 		}
 	}
+	
+	// drop statistics data table from local database
+	this.controller.models['answers'].deleteDB();
 
 };
 
@@ -223,6 +230,9 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						$(document).trigger("authenticationready",
 								self.configuration.userAuthenticationKey);
 						self.controller.setupLanguage();
+						
+						//get statistics data from server
+						self.controller.models['statistics'].loadFromServer();
 					} else {
 						console.log("Wrong username or password!")
 						$(document).trigger("authenticationfailed", "nouser");
