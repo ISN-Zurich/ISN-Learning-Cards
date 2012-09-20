@@ -27,7 +27,8 @@ switch($request_method) {
 		if ($userId > 0) {
 			logging("has valid user");
 			$statistics = get_statistics_from_headers();
-			setStatistics($userId, $statistics);
+			$uuid = get_uuid_from_headers();
+			setStatistics($userId, $uuid, $statistics);
 			logging("end of PUT");
 		}
 		break;
@@ -57,17 +58,33 @@ function get_statistics_from_headers() {
 
 	$myheaders = getallheaders();
 	$statistics = $myheaders["statistics"];
-	logging(json_decode($statistics, true));
+	logging("statistics from header: " . json_decode($statistics, true));
 	
 	return json_decode($statistics, true);
 }
 
-function setStatistics($userId, $statistics) {
+/**
+ * reads statistics data from the header
+ */
+function get_uuid_from_headers() {
+	logging("in get uuid from headers");
+	
+	$myheaders = getallheaders();
+	$uuid = $myheaders["uuid"];
+
+	logging("uuid from header: " . $uuid);
+	
+	return $uuid;
+}
+
+
+function setStatistics($userId, $uuid, $statistics) {
 	global $ilDB;
 
 	logging("in set statistics");
 
-	$result = $ilDB->query("SELECT max(id) as last_id FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text"));
+	$result = $ilDB->query("SELECT max(id) as last_id FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text") .
+			" AND uuid = " . $ilDB->quote($uuid, "text"));
 	$record = $ilDB->fetchAssoc($result);
 	$lastId = $record['last_id'];
 
@@ -80,12 +97,17 @@ function setStatistics($userId, $statistics) {
 	
 	for ($i = ($lastId + 1); $i < count($statistics); $i++) {
 		$statisticItem = $statistics[$i];
-		
 		logging(json_encode($statisticItem));
-		$ilDB->manipulateF("INSERT INTO isnlc_statistics(user_id, id, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-				array("text", "integer", "text", "text", "integer", "float", "integer"),
-				array($userId, $statisticItem['id'], $statisticItem['course_id'], $statisticItem['question_id'],
+		
+		$myID = $ilDB->nextID("isnlc_statistics");
+		logging("new ID: " . $myID);
+		
+		$ilDB->manipulateF("INSERT INTO isnlc_statistics(id, user_id, uuid, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+				array("integer", "text", "text", "text", "text", "integer", "float", "integer"),
+				array ($myID, $userId, $uuid, $statisticItem['course_id'], $statisticItem['question_id'],
 						$statisticItem['day'], $statisticItem['score'], $statisticItem['duration']));
+		
+		logging("after insert");
 	}
 
 	logging("after inserting");
@@ -100,8 +122,7 @@ function getStatistics($userId) {
 	$result = $ilDB->query("SELECT * FROM isnlc_statistics WHERE user_id = " . $ilDB->quote($userId, "text"));
 	while ($record = $ilDB->fetchAssoc($result)){
 		logging(json_encode($record));
-		 array_push($statistics, array(
-				"id" => $record['id'],
+		array_push($statistics, array(
 				"course_id" => $record['course_id'],
 				"question_id" => $record['question_id'],
 				"day" => $record['day'],
@@ -117,19 +138,23 @@ function getStatistics($userId) {
 function generateTable() {
 	global $ilDB;
 
-	//$ilDB->dropTable("isnlc_statistics");
+// 	$ilDB->dropTable("isnlc_statistics");
 
 	logging("check if our table is present already");
 	if (!in_array("isnlc_statistics",$ilDB->listTables())) {
 		logging("create a new table");
 		$fields= array(
+				"id" => array(
+						'type' => 'integer',
+						'length'=> 4
+				),
 				"user_id" => array(
 						'type' => 'text',
 						'length'=> 255
 				),
-				"id" => array(
-						'type' => 'integer',
-						'length'=> 4
+				"uuid" => array(
+						'type' => 'text',
+						'length'=> 255
 				),
 				"course_id" => array(
 						'type' => 'text',
@@ -153,9 +178,13 @@ function generateTable() {
 		);
 
 		$ilDB->createTable("isnlc_statistics",$fields);
-		$ilDB->addPrimaryKey("isnlc_statistics", array("user_id", "id"));
+		$ilDB->addPrimaryKey("isnlc_statistics", array("id"));
 
+		$ilDB->createSequence("isnlc_statistics");
+		
 		logging("after creating the table");
+		
+		
 	}
 }
 

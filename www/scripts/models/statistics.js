@@ -28,6 +28,8 @@ function StatisticsModel(controller) {
 	this.queries = [];
 	this.initQueries();
 
+	// setInterval(function() {console.log("interval is active");}, 5000);
+
 };
 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
@@ -414,75 +416,87 @@ StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
 StatisticsModel.prototype.loadFromServer = function() {
 	var self = this;
 	if (self.controller.models['authentication'].isLoggedIn()) {
-		$
-				.ajax({
-					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
-					type : 'GET',
-					dataType : 'json',
-					success : function(data) {
-						console.log("success");
-						console.log("JSON: " + data);
-						var statisticsObject;
-						try {
-							statisticsObject = data;
-							console.log("statistics data from server");
-						} catch (err) {
-							console
-									.log("Error: Couldn't parse JSON for statistics");
-						}
+		$.ajax({
+			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data) {
+				console.log("success");
+				console.log("JSON: " + data);
+				var statisticsObject;
+				try {
+					statisticsObject = data;
+					console.log("statistics data from server");
+				} catch (err) {
+					console
+					.log("Error: Couldn't parse JSON for statistics");
+				}
 
-						if (!statisticsObject) {
-							statisticsObject = [];
-						}
+				if (!statisticsObject) {
+					statisticsObject = [];
+				}
 
-						self.queryDB(
-								"SELECT max(id) as last_id FROM statistics",
-								[], lastIdCb);
+//				self.queryDB(
+//				"SELECT max(id) as last_id FROM statistics",
+//				[], lastIdCb);
 
-						function lastIdCb(statisticsModel, transaction, results) {
-							var self = statisticsModel;
-							if (results.rows.length > 0) {
-								var row = results.rows.item(0);
-								lastId = row['last_id'];
+//				function lastIdCb(statisticsModel, transaction, results) {
+//				var self = statisticsModel;
+//				if (results.rows.length > 0) {		
+//				var row = results.rows.item(0);
+				// lastId =
+				// row['last_id'];
+				//
+				// if (!lastId)
+				// {
+				// lastId = -1;
+				// }
 
-								if (!lastId) {
-									lastId = -1;
-								}
+				// console
+				// .log("last id
+				// from client
+				// db: "
+				// + lastId);
+//				console.log("count statistics: "+ statisticsObject.length);
 
-								console
-										.log("last id from client db: "
-												+ lastId);
-								console.log("count statistics: "
-										+ statisticsObject.length);
+				// for ( var i =
+				// (lastId + 1);
+				// i <
+				// statisticsObject.length;
+				// i++) {
+				for ( var i = 0; i < statisticsObject.length; i++) {
+					statisticItem = statisticsObject[i];
 
-								for ( var i = (lastId + 1); i < statisticsObject.length; i++) {
-									statisticItem = statisticsObject[i];
+					console
+					.log(JSON
+							.stringify(statisticItem));
+					query = "INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?,?,?,?,?)";
+					values = [
+					          statisticItem['course_id'],
+					          statisticItem['question_id'],
+					          statisticItem['day'],
+					          statisticItem['score'],
+					          statisticItem['duration'] ];
+					self.queryDB(query, values, function(statisticsModel, transaction,results) {
+						console.log("after inserting");
+					});
 
-									console.log(JSON.stringify(statisticItem));
-									query = "INSERT INTO statistics(id, course_id, question_id, day, score, duration) VALUES (?,?,?,?,?,?)";
-									values = [ statisticItem['id'],
-											statisticItem['course_id'],
-											statisticItem['question_id'],
-											statisticItem['day'],
-											statisticItem['score'],
-											statisticItem['duration'] ];
-									self.queryDB(query, values, function(
-											statisticsModel, transaction,
-											results) {
-										console.log("after inserting");
-									})
+				}
+//				},
+//				function() {
+//				console.log("error: statistics table not cleared");
+//				});
 
-								}
-							}
-						}
+//			}
+//			}
 
-					},
-					error : function() {
-						console
-								.log("Error while getting statistics data from server");
-					},
-					beforeSend : setHeader
-				});
+			},
+			error : function() {
+				console
+				.log("Error while getting statistics data from server");
+			},
+			beforeSend : setHeader
+		});
 
 		function setHeader(xhr) {
 			xhr.setRequestHeader('sessionkey',
@@ -512,23 +526,24 @@ StatisticsModel.prototype.sendToServer = function(authData) {
 		statistics = JSON.stringify(header);
 
 		$.ajax({
-			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
-			type : 'PUT',
-			success : function() {
-				console
-						.log("statistics data successfully send to the server");
-				$(document).trigger("statisticssenttoserver");
-			},
-			error : function() {
-				console
-						.log("Error while sending statistics data to server");
-			},
-			beforeSend : setHeader
-		});
+					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
+					type : 'PUT',
+					success : function() {
+						console
+								.log("statistics data successfully send to the server");
+						$(document).trigger("statisticssenttoserver");
+					},
+					error : function() {
+						console
+								.log("Error while sending statistics data to server");
+					},
+					beforeSend : setHeader
+				});
 
 		function setHeader(xhr) {
 			xhr.setRequestHeader('sessionkey',
 					self.controller.models['authentication'].getSessionKey());
+			xhr.setRequestHeader('uuid', device.uuid);
 			xhr.setRequestHeader('statistics', statistics);
 
 		}
