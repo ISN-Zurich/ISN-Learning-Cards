@@ -112,6 +112,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		// add the following message 
 		$("<div/>", {
 			"id" : "numericFeedback",
+			"class": "text",
 			text : "the correct answer is"
 		}).appendTo("#feedbackBody");
 

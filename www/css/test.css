@@ -33,18 +33,20 @@ body {
 	/* 	text-align: center; */
 /* 	border-right: 1px solid white; */
 	/* margin: 0px 4px 0px 0px; */
-	height: 50px;
-	line-height: 55px;
+	height: 49px;
+	line-height: 49px;
 	border-right: 1px solid white;
 	border-top: 1px solid white;
+	border-bottom: 1px solid white;
 	position: fixed;
 	right: 0px;
 	top: 0px;
+	vertical-align: middle;
 }
 
 .generalButton {
     /* 	float: right; */
-	width: 50px;
+	width: 49px;
 /* 	height: auto; */
 	/* 	margin-bottom: 20px; */
 	font-size: 40px;
@@ -57,9 +59,10 @@ body {
 }
 
 .iconButton {
-/* 	border-right: 2px solid white; */
+	border-left: 1px solid white;
 	margin: 0px 0px 0px 0px;
-	border: 1px solid white;
+	border-bottom: 1px solid white;
+	border-right: 1px solid white;
 /* 	height: auto; */
 	position: fixed;
 	right: 0px;
@@ -85,8 +88,8 @@ body {
 
 #FeedbackMore {
 /* 	width: 100%; */
-	height: 50px;
-	line-height:55px;
+	height: 49px;
+	line-height:49px;
 	position: fixed;
 	bottom: 1px;
 	right: 1px;
@@ -177,7 +180,8 @@ body {
     /*     margin-left: 5px; */
 	/*     margin-right: 5px; */
     /* 	margin-bottom: 60px; */
-	margin-top: 60px;
+	margin-top: 55px;
+/* 	border-top:1px solid white; */
 }
 
 .cardBody {
@@ -189,7 +193,10 @@ body {
 
 ul {
     /* 	clear:both; */
-	border: solid white 2px;
+	border-top: solid white 1px;
+	border-left: solid white 1px;
+	border-right: solid white 1px;
+	border-bottom: solid white 1px;
 	background-color: #ddd;
 	color: #999;
 	/* 	-moz-border-radius: 6px; */
@@ -543,7 +550,7 @@ li {
 }
 
 .marginForButtons {
-	margin-right: 51px;
+	margin-right: 54px;
 }
 
 .answerLi {
@@ -558,7 +565,7 @@ li {
 #numberInputContainer, #numberInput, 
 #typedAnswer, #numericFeedback, 
 #correctNumericFeedback {
-	width: 95%;
+	width: 100%;
 }
 #dataErrorMessage {
 	display: none;
