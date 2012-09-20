@@ -46,6 +46,7 @@ CoursesListView.prototype.close = function() {
 	console.log("close course list view");
 	this.active = false;
 	this.closeDiv();
+	$("#coursesList").empty();
 };
 
 CoursesListView.prototype.clickCourseItem = function(course_id) {

@@ -143,11 +143,6 @@ ConfigurationModel.prototype.loadFromServer = function() {
  * logs in user
  */
 ConfigurationModel.prototype.login = function(username, password) {
-	// this.configuration.loginState = "loggedIn";
-	// this.storeData();
-	// this.loadFromServer();
-	// success();
-
 	console.log("client key: " + this.configuration.appAuthenticationKey);
 
 	passwordHash = faultylabs.MD5(password);
@@ -182,11 +177,6 @@ ConfigurationModel.prototype.logout = function() {
 		};
 		self.storeData();
 	});
-		
-	// remove course list and pending course list request
-	localStorage.removeItem("pendingCourseList");
-	localStorage.removeItem("courses");
-	$("#coursesList").empty(); //empty course list in course list view
 
 	// remove all question pools and all pending question pool requests
 	var courseList = this.controller.models["course"].courseList;
@@ -196,6 +186,11 @@ ConfigurationModel.prototype.logout = function() {
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
 		}
 	}
+	
+	// remove course list and pending course list request
+	localStorage.removeItem("pendingCourseList");
+	localStorage.removeItem("courses");
+	this.controller.models['course'].resetCourseList();
 	
 	// drop statistics data table from local database
 	this.controller.models['answers'].deleteDB();
