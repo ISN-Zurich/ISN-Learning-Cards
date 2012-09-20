@@ -74,6 +74,7 @@ function Controller() {
 	this.views.feedbackView = new FeedbackView();
 	this.views.settings = new SettingsView();
 	this.views.statisticsView = new StatisticsView();
+	this.views.achievements = new AchievementsView();
 
 	console.log('views initialized');
 
@@ -134,6 +135,25 @@ Controller.prototype.setupLanguage = function() {
 	        $("#coursesListTitle").text(msg_courses_list_title);
 	        $("#settingsTitle").text(msg_settings_title);
 	        $("#logoutConfirmationTitle").text(msg_logout_title);
+	        $("#statBestDayTitle").text(msg_bestDay_title);
+	        $("#statBestScoreTitle").text(msg_bestScore_title);
+	        $("#statHandledCardsTitle").text(msg_handledCards_title);
+	        $("#statAverageScoreTitle").text(msg_averageScore_title);
+	        $("#statProgressTitle").text(msg_progress_title);
+	        $("#statsProgressInfo").text(msg_progress_info);
+	        $("#statSpeedTitle").text(msg_speed_title);
+	        $("#statsSpeedinfo").text(msg_speed_info);
+	        $("#achievementsTitle").text(msg_achievements_title);
+	        $("#stackHandlerIcon").addClass(msg_achievements_Handler_icon);
+	        $("#stackHandlerTitle").text(msg_achievementsHandler_title);
+	        $("#stackHandlerExplanation").text(msg_achievementsHandler_explanation);
+	        $("#stackHandlerResultText1").text(msg_achievements_text1);
+	        $("#stackHandlerResultText2").text(msg_achievements_text2);
+	        $("#cardBurnerIcon").addClass(msg_achievements_Burner_icon);
+	        $("#cardBurnerTitle").text(msg_achievementsBurner_title);
+	        $("#cardBurnerExplanation").text(msg_achievementsBurner_explanation);
+	        $("#cardBurnerResultText1").text(msg_achievements_text1);
+	        $("#cardBurnerResultText2").text(msg_achievements_text2);
 	        $(".cardBody").text(msg_logout_body);
 	        
 	    }
@@ -204,6 +224,10 @@ Controller.prototype.transitionToFeedbackMore = function() {
 
 Controller.prototype.transitionToStatistics = function() {
 	this.transition('statisticsView');
+};
+
+Controller.prototype.transitionToAchievements = function() {
+	this.transition('achievements');
 };
 
 /**
