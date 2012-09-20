@@ -41,6 +41,7 @@
 <script type="text/javascript" src="scripts/views/questionView.js"></script>
 <script type="text/javascript" src="scripts/views/settingsView.js"></script>
 <script type="text/javascript" src="scripts/views/statisticsView.js"></script>
+<script type="text/javascript" src="scripts/views/achievementsView.js"></script>
 <script type="text/javascript" src="scripts/views/splashScreen.js"></script>
 <script type="text/javascript" src="scripts/testModels.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
@@ -77,7 +78,6 @@
 			</div>
 			<div id="loginForm">
 				<form>
-
 					<button id="loginButton" type="button" class="generalButton">
 						<span class="icon-enter"></span>
 					</button>
@@ -141,8 +141,6 @@
 
 		</div>
 	</div>
-
-
 
 
 	<div id="logoutConfirmationView" class="viewblock">
@@ -324,6 +322,35 @@
 			<ul id="statisticsData" class="marginForButtons">
 			</ul>
 		</div> -->
+	</div>
+
+
+	<div id="achievementsView" class="viewblock">
+		<div id="achievementsHeader" class="container headerbg top">
+			<div id="closeAchievementsIcon"
+				class="generalButton returnButton right">
+				<span class="icon-cross"></span>
+			</div>
+			<div id="achievementsTitle" class="title"></div>
+		</div>
+		<div class="content">
+		<div id="StackHandlerContainer">
+	    <div id="stackHandlerIcon"></div>
+	    <div id="stackHandlerTitle"></div>
+	    <div id="stackHandlerExplanation"></div>
+	    <div id="stackHandlerResultText1"></div>
+	    <div id="stackHandlerResultText2"></div>
+		</div>
+		
+        <div id="CardBurnerContainer">
+		<div id="cardBurnerIcon"></div>
+	    <div id="cardBurnerTitle"></div>
+	    <div id="cardBurnerExplanation"></div>
+	    <div id="cardBurnerResultText1"></div>
+	    <div id="cardBurnerResultText2"></div>
+		</div>
+        		
+		</div>
 	</div>
 
 </body>
