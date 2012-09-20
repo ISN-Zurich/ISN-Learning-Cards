@@ -31,33 +31,36 @@ body {
 	/* 	color: white; */
 	/* 	vertical-align: middle; */
 	/* 	text-align: center; */
-	border-right: 1px solid white;
+/* 	border-right: 1px solid white; */
 	/* margin: 0px 4px 0px 0px; */
-	height: 46px;
-	position: absolute;
+	height: 50px;
+	line-height: 55px;
+	border-right: 1px solid white;
+	border-top: 1px solid white;
+	position: fixed;
 	right: 0px;
 	top: 0px;
 }
 
 .generalButton {
     /* 	float: right; */
-	width: 46px;
-	height: auto;
+	width: 50px;
+/* 	height: auto; */
 	/* 	margin-bottom: 20px; */
 	font-size: 40px;
 	padding: 2px;
-	border: 1px solid white;
 	background-color: #999999;
 	color: white;
-	vertical-align: middle;
+/* 	vertical-align: middle; */
 	text-align: center;
 /* 	margin-right:5px; */
 }
 
 .iconButton {
 /* 	border-right: 2px solid white; */
-	margin: 1px 0px 0px 0px;
-	height: auto;
+	margin: 0px 0px 0px 0px;
+	border: 1px solid white;
+/* 	height: auto; */
 	position: fixed;
 	right: 0px;
 	top: 55px;
@@ -71,8 +74,8 @@ body {
 
 #FeedbackDoneButon {
 /* 	width:100%; */
-	height: 100%;
-	border-right: 1px solid white;
+/* 	height: 100%; */
+/* 	border-right: 1px solid white; */
 /* 	margin: 0px 3px 0px 0px; */
 /* 	padding: 0px 0px 0px 0px; */
 /* 	margin: 0px; */
@@ -82,16 +85,19 @@ body {
 
 #FeedbackMore {
 /* 	width: 100%; */
-/* 	height: 46px; */
+	height: 50px;
+	line-height:55px;
 	position: fixed;
-	bottom: 5px;
-	right: 0px;
+	bottom: 1px;
+	right: 1px;
 	z-index: 1;
-	border-right: 1px solid white;
+	border-top: 1px solid white;
 /* 	margin: 0px 3px 0px 0px; */
 	margin: 0px;
 /* 	margin-left:0px; */
-	border-bottom: none;
+/* 	border-bottom: none; */
+/* 	border-left: none; */
+/* 	border-right: none; */
 /* 	padding: 0px; */
 }
 
@@ -141,10 +147,14 @@ body {
 }
 
 .titleicon {
+	height:50px;
+	line-height: 55px;
 	padding: 0px;
-	vertical-align: bottom;
-	font-size: 7px;
-	border: 1px solid black;
+	vertical-align: middle;
+	font-size: 30px;
+	margin-left: 5px;
+	margin-right: 5px;
+/* 	border: 1px solid black; */
 }
 
 .container {
@@ -486,13 +496,13 @@ li {
 	/* 	background-color: white; */
 }
 
-.titleicon {
-	border: none;
-	margin-left: 10px;
-	margin-top: 7px;
-	margin-bottom: 5px;
-	font-size: 28pt;
-}
+/* .titleicon { */
+/* 	border: none; */
+/* 	margin-left: 10px; */
+/* 	margin-top: 7px; */
+/* 	margin-bottom: 5px; */
+/* 	font-size: 28pt; */
+/* } */
 
 .questiontext {
     /* 	display: table-cell; */

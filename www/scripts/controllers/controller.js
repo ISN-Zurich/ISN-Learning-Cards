@@ -213,10 +213,11 @@ function setButtonHeight() {
 	console.log("setButtonHeight");
 	var windowheight = $(window).height();
 	var height;
-	if (windowheight > 70) {
-		height = windowheight - 70;
+	if (windowheight > 61) {
+		height = windowheight - 61;
 	} else {
 		height = windowheight;
 	}
-	$(".iconButton").css("height", height);
+	$(".iconButton").css("height", height + "px");
+	$(".iconButton").css("line-height", height + "px");
 };
