@@ -54,33 +54,42 @@ ConnectionState.prototype.goOnline = function() {
 	//this.controller.views["login"].hideErrorMessage();
 	
 	
-
-
+    console.log('check synchronization - course list');
 	// if a pending course list exist, load the course list from the server
 	var pendingCourseList = localStorage.getItem("pendingCourseList");
 	if (pendingCourseList) {
 		this.controller.models["course"].loadFromServer();
 	}
-
+    
+    console.log('check synchronization - question pools');
 	// if a pending question pool exist, load the question pool from the server
-	var courseList = this.controller.models["course"].courseList;
-	if (courseList) {
-		for ( var c in courseList) {
-			var pendingQuestionPools = localStorage
-					.getItem("pendingQuestionPool_" + courseList[c].id);
-			if (pendingQuestionPools) {
-				this.controller.models["questionpool"]
-						.loadFromServer(courseList[c].id);
-			}
-		}
-	}
-	
+    if ( this.controller && this.controller.models && this.controller.models["course"] && this.controller.models["course"].courseList) {
+         console.log( 'got models ' );
+        var courseList = this.controller.models["course"].courseList;
+        if (courseList) {
+            console.log( 'interate course list ' );
+            for ( var c in courseList) {
+                console.log( 'check course ' + c );
+                
+                var pendingQuestionPools = localStorage
+                .getItem("pendingQuestionPool_" + courseList[c].id);
+                if (pendingQuestionPools) {
+                    console.log('check synchronization - question pool missing for course ' + c);
+                    this.controller.models["questionpool"]
+                    .loadFromServer(courseList[c].id);
+                }
+            }
+        }
+    }
+
+    console.log('check synchronization - statistics');
 	// if pending statistics exist, send them to the server
 	var pendingStatistics = localStorage.getItem("pendingStatistics");
 	if (pendingStatistics) {
 		this.controller.models["statistics"].sendToServer();
 	}
-
+    
+    console.log('check synchronization DONE');
 
 };
 
