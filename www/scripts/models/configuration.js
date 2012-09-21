@@ -157,6 +157,7 @@ ConfigurationModel.prototype.login = function(username, password) {
 	};
 
 	this.sendAuthToServer(auth);
+	
 };
 
 /**

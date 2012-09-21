@@ -38,6 +38,8 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	for ( var s in this.statistics) {
 		this.statistics[s] = -1;
 	}
+	
+	console.log("course-id: " + courseId);
 
 	// Display all entries of the database
 	this.db.transaction(function(transaction) {
@@ -588,32 +590,50 @@ StatisticsModel.prototype.sendToServer = function() {
 
 	function sendStatistics(statisticsModel, transaction, results) {
 		var self = statisticsModel;
-		statistics = "";
-		header = [];
-		for ( var i = 0; i < results.rows.length; i++) {
-			row = results.rows.item(i);
-			header.push(row);
-			console.log(i + ": " + JSON.stringify(row));
+		statistics = [];
+		uuid = "";
+		sessionkey = "";
+		if (localStorage.getItem("pendingStatistics")) {
+			var pendingStatistics = {};
+			try {
+				pendingStatistics = JSON.parse(localStorage.getItem("pendingStatistics"));
+			} catch (err) {
+				console.log("error! while loading pending statistics");
+			}
+			
+			sessionkey = pendingStatistics.sessionkey;
+			uuid = pendingStatistics.uuid;
+			statistics = pendingStatistics.statistics;
+		}else {
+			
+			for ( var i = 0; i < results.rows.length; i++) {
+				row = results.rows.item(i);
+				statistics.push(row);
+				console.log("sending " + i + ": " + JSON.stringify(row));
+			}
+			sessionkey = self.controller.models['authentication'].getSessionKey();
+			uuid = device.uuid;
 		}
-		statistics = JSON.stringify(header);
-
+		
+		statistics = JSON.stringify(statistics);
+		
 		$.ajax({
 			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
 			type : 'PUT',
+			data : statistics,
 			success : function() {
 				console
 				.log("statistics data successfully send to the server");
-				localStorage.removeItem("pendingStatistics");
+				
 				$(document).trigger("statisticssenttoserver");
 			},
 			error : function() {
 				console
 				.log("Error while sending statistics data to server");
 				var statisticsToStore = {
-						"sessionkey" : self.controller.models['authentication']
-				.getSessionKey(),
-				"uuid" : device.uuid,
-				"statistics" : statistics
+					sessionkey : self.controller.models['authentication'].getSessionKey(),
+					uuid : device.uuid,
+					statistics : statistics
 				};
 				localStorage.setItem("pendingStatistics", JSON.stringify(statisticsToStore));
 				$(document).trigger("statisticssenttoserver");
@@ -622,25 +642,9 @@ StatisticsModel.prototype.sendToServer = function() {
 		});
 
 		function setHeader(xhr) {
-			if (localStorage.getItem("pendingStatistics")) {
-				var pendingStatistics = {};
-				try {
-					pendingStatistics = JSON.parse(localStorage.getItem("pendingStatistics"));
-				} catch (err) {
-					console.log("error! while loading pending statistics");
-				}
-				
-				xhr.setRequestHeader('sessionkey', pendingStatistics.sessionkey);
-				xhr.setRequestHeader('uuid', pendingStatistics.uuid);
-				xhr.setRequestHeader('statistics', pendingStatistics.statistics);
-			} else {
-				xhr.setRequestHeader('sessionkey',
-						self.controller.models['authentication'].getSessionKey());
-				xhr.setRequestHeader('uuid', device.uuid);
-				xhr.setRequestHeader('statistics', statistics);
-			}
-
+			xhr.setRequestHeader('sessionkey', self.controller.models['authentication'].getSessionKey());
+			xhr.setRequestHeader('uuid', device.uuid);
 		}
 	}
 
-}
+};

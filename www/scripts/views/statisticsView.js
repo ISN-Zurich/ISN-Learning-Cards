@@ -52,7 +52,7 @@ StatisticsView.prototype.loadData = function() {
 	
 	var avgSpeed = statistics['averageSpeed'];
 	if (avgSpeed <= 0) {
-		avgSpeed =  "";
+		avgSpeed =  "-";
 	}
 	
 	var handledCards = statistics['handledCards'];
@@ -67,7 +67,7 @@ StatisticsView.prototype.loadData = function() {
 	
 	var bestDay = statistics['bestDay'];
 	if (!bestDay) {
-		bestDay = "";
+		bestDay = "-";
 	}
 	
 	var bestScore = statistics['bestScore'];
