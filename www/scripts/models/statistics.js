@@ -117,7 +117,7 @@ StatisticsModel.prototype.initQueries = function() {
 			+ ' AND day>=? AND day<=?';
 
 	// best day and score
-	this.queries['best'].query = "SELECT DATE(day/1000, 'unixepoch') as day, sum(score) as score, count(id) as num"
+	this.queries['best'].query = "SELECT min(day) as day, sum(score) as score, count(id) as num"
 			+ " FROM statistics WHERE course_id=?"
 			+ " GROUP BY DATE(day/1000, 'unixepoch')";
 
