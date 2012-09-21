@@ -145,6 +145,8 @@ ConfigurationModel.prototype.loadFromServer = function() {
 ConfigurationModel.prototype.login = function(username, password) {
 	console.log("client key: " + this.configuration.appAuthenticationKey);
 
+	username = username.trim(); //remove leading and trailling white spaces
+	
 	passwordHash = faultylabs.MD5(password);
 	console.log("md5 password: " + passwordHash);
 	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()
