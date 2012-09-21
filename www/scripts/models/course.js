@@ -314,3 +314,13 @@ CourseModel.prototype.createCourses = function() {
 		return [];
 	}
 };
+
+CourseModel.prototype.resetCourseList = function() {
+	this.courseList = [];
+	this.index = 0; // index of the current course
+
+	this.syncDateTime = 0;
+	this.syncState = false;
+	// this.syncTimeOut = 3600000;
+	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
+};

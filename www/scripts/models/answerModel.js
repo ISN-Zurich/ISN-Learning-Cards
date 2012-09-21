@@ -1,16 +1,62 @@
-/** 
+var DB_VERSION = 1;
+
+/**
  * The answer model holds/handles the answers of a question of every type
  */
-
-
-// Constructor. It 
+// Constructor. It
 function AnswerModel() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 
-};
+	this.currentCourseId = -1;
+	this.currentQuestionId = -1;
+	this.start = -1;
 
+	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
+			100000);
+	if (!localStorage.getItem("db_version")) {
+		// this.deleteDB();
+		this.initDB();
+	}
+
+	// alter the date structure
+//	this.db.transaction(function(tx) {
+		// tx.executeSql("ALTER TABLE statistics CHANGE day timestamp
+		// DATETIME");
+		// tx.executeSql("ALTER TABLE statistics ADD day DATE");
+
+		// get all wrong timestamps
+		// generate proper timestamp
+		// update table with correct data for timestamp
+//		var update = "";
+//		tx
+//				.executeSql('SELECT id, day FROM statistics WHERE course_id="12968"',
+//						[], function dataSelectHandler(transaction,
+//								results) {
+//							console.log("ALL ROWS: " + results.rows.length);
+//							for ( var i = 0; i < results.rows.length; i++) {
+//								row = results.rows.item(i);
+//								console.log(i + ": " + JSON.stringify(row));
+//								var timestamp = Date.parse(row['day']);
+//								console.log("NEW DAY: " + timestamp);
+//								tx
+//								.executeSql("UPDATE statistics SET day=" + timestamp + " WHERE id=" + row['id'] + ";", [], function() {
+//									console.log("successfully updated");
+//								}, function(tx, e) {
+//									console.log("error! NOT updated: "
+//											+ e.message);
+//								});
+//							}
+//						}, function(tx, e) {
+//							console.log("Error for select average score: "
+//									+ e.message);
+//						});
+////		
+////
+//	});
+
+};
 
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
@@ -27,14 +73,11 @@ AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
-
-
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 };
-
 
 AnswerModel.prototype.getAnswerResults = function() {
 	console.log("answer score: " + this.answerScore);
@@ -57,8 +100,6 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 		this.answerScore = 0;
 	}
 };
-
-
 
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
@@ -108,13 +149,9 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	}
 };
 
-
-
-
 /**
  * Calculate the scoring for text sorting questions
  */
-
 AnswerModel.prototype.calculateTextSortScore = function() {
 
 	var scores = [];
@@ -161,19 +198,17 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 	this.answerScoreList = scores;
 };
 
-
 /**
  * Calculate the answer results (excellent, wrong) for numeric questions
  */
-
-
 AnswerModel.prototype.calculateNumericScore = function() {
 
 	var answerModel = controller.models["answers"];
 	var questionpoolModel = controller.models['questionpool'];
 
 	if (questionpoolModel.getAnswer()[0] == answerModel.getAnswers()) {
-		//if the answers provided in the question pool are the same with the ones the learner selected
+		// if the answers provided in the question pool are the same with the
+		// ones the learner selected
 		this.answerScore = 1;
 	} else {
 		this.answerScore = 0;
@@ -181,6 +216,71 @@ AnswerModel.prototype.calculateNumericScore = function() {
 
 };
 
+AnswerModel.prototype.setCurrentCourseId = function(courseId) {
+	this.currentCourseId = courseId;
+};
 
+AnswerModel.prototype.startTimer = function(questionId) {
+	this.start = (new Date()).getTime();
+	this.currentQuestionId = questionId;
+	console.log("currentQuestionId: " + this.currentQuestionId);
+};
 
+AnswerModel.prototype.hasStarted = function() {
+	return this.start != -1;
+};
 
+AnswerModel.prototype.resetTimer = function() {
+	this.start = -1;
+};
+
+AnswerModel.prototype.initDB = function() {
+	this.db
+			.transaction(function(transaction) {
+				transaction
+						.executeSql(
+								'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT, day INTEGER, score NUMERIC, duration INTEGER);',
+								[]);
+				// transaction.executeSql(
+				// 'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL
+				// PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT,
+				// timestamp DATETIME, day DATE, score INTEGER, duration
+				// INTEGER);',
+				// []);
+			});
+	localStorage.setItem("db_version", DB_VERSION);
+};
+
+AnswerModel.prototype.storeScoreInDB = function() {
+	var self = this;
+	var day = new Date();
+	var duration = ((new Date()).getTime() - this.start);
+	// var day = timestamp.toISOString().substring(0,9);
+	this.db
+			.transaction(function(transaction) {
+				transaction
+						.executeSql(
+								'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)',
+								[ self.currentCourseId, self.currentQuestionId,
+										day.getTime(), self.answerScore, duration ],
+								function() {
+									console.log("successfully inserted");
+								}, function(tx, e) {
+									console.log("error! NOT inserted: "
+											+ e.message);
+								});
+			});
+
+	this.resetTimer();
+};
+
+AnswerModel.prototype.deleteDB = function() {
+	localStorage.removeItem("db_version");
+	this.db.transaction(function(tx) {
+		tx.executeSql("DELETE FROM statistics", [], function() {
+			console.log("statistics table cleared");
+		}, function() {
+			console.log("error: statistics table not cleared");
+		});
+	});
+};

@@ -155,17 +155,21 @@ AnswerView.prototype.showAnswerTitle = function() {
 AnswerView.prototype.clickDoneButton = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
+	var answerModel = controller.models['answers'];
 	console.log('check apology ' + this.widget.didApologize);
 	if (this.widget.didApologize) {
 		// if there was a problem with the data, the widget knows
 		// in this case we proceed to the next question
+		statisticsModel.resetTimer();
 		questionpoolModel.nextQuestion();
 		controller.transitionToQuestion();
 	} else {
 		// if there was no error with the data we provide feedback to the
 		// learner.
-		this.widget.storeAnswers();
 		questionpoolModel.queueCurrentQuestion();
+		this.widget.storeAnswers();
+		this.widget.calculateAnswerScore();
+		answerModel.storeScoreInDB();
 		controller.transitionToFeedback();
 	}
 };

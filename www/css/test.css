@@ -10,7 +10,8 @@ body {
 }
 
 /* button { */
-/* 	border: 1px solid #white; */
+/* 	
+ */
 /* 	background-color: #666; */
 /* 	color: white; */
 /* 	padding: 5px 5px 5px 5px; */
@@ -31,33 +32,39 @@ body {
 	/* 	color: white; */
 	/* 	vertical-align: middle; */
 	/* 	text-align: center; */
-	border-right: 1px solid white;
+/* 	border-right: 1px solid white; */
 	/* margin: 0px 4px 0px 0px; */
-	height: 46px;
-	position: absolute;
+	height: 49px;
+	line-height: 49px;
+	border-right: 1px solid white;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	position: fixed;
 	right: 0px;
 	top: 0px;
+	vertical-align: middle;
 }
 
 .generalButton {
     /* 	float: right; */
-	width: 46px;
-	height: auto;
+	width: 49px;
+/* 	height: auto; */
 	/* 	margin-bottom: 20px; */
 	font-size: 40px;
 	padding: 2px;
-	border: 1px solid white;
 	background-color: #999999;
 	color: white;
-	vertical-align: middle;
+/* 	vertical-align: middle; */
 	text-align: center;
 /* 	margin-right:5px; */
 }
 
 .iconButton {
-/* 	border-right: 2px solid white; */
-	margin: 1px 0px 0px 0px;
-	height: auto;
+	border-left: 1px solid white;
+	margin: 0px 0px 0px 0px;
+	border-bottom: 1px solid white;
+	border-right: 1px solid white;
+/* 	height: auto; */
 	position: fixed;
 	right: 0px;
 	top: 55px;
@@ -71,8 +78,8 @@ body {
 
 #FeedbackDoneButon {
 /* 	width:100%; */
-	height: 100%;
-	border-right: 1px solid white;
+/* 	height: 100%; */
+/* 	border-right: 1px solid white; */
 /* 	margin: 0px 3px 0px 0px; */
 /* 	padding: 0px 0px 0px 0px; */
 /* 	margin: 0px; */
@@ -82,16 +89,19 @@ body {
 
 #FeedbackMore {
 /* 	width: 100%; */
-/* 	height: 46px; */
+	height: 49px;
+	line-height:49px;
 	position: fixed;
-	bottom: 5px;
-	right: 0px;
+	bottom: 1px;
+	right: 1px;
 	z-index: 1;
-	border-right: 1px solid white;
+	border-top: 1px solid white;
 /* 	margin: 0px 3px 0px 0px; */
 	margin: 0px;
 /* 	margin-left:0px; */
-	border-bottom: none;
+/* 	border-bottom: none; */
+/* 	border-left: none; */
+/* 	border-right: none; */
 /* 	padding: 0px; */
 }
 
@@ -141,10 +151,14 @@ body {
 }
 
 .titleicon {
+	height:50px;
+	line-height: 55px;
 	padding: 0px;
-	vertical-align: bottom;
-	font-size: 7px;
-	border: 1px solid black;
+	vertical-align: middle;
+	font-size: 30px;
+	margin-left: 5px;
+	margin-right: 5px;
+/* 	border: 1px solid black; */
 }
 
 .container {
@@ -167,7 +181,8 @@ body {
     /*     margin-left: 5px; */
 	/*     margin-right: 5px; */
     /* 	margin-bottom: 60px; */
-	margin-top: 60px;
+	margin-top: 55px;
+/* 	border-top:1px solid white; */
 }
 
 .cardBody {
@@ -179,7 +194,10 @@ body {
 
 ul {
     /* 	clear:both; */
-	border: solid white 2px;
+	border-top: solid white 1px;
+	border-left: solid white 1px;
+	border-right: solid white 1px;
+	border-bottom: solid white 1px;
 	background-color: #ddd;
 	color: #999;
 	/* 	-moz-border-radius: 6px; */
@@ -242,7 +260,7 @@ li {
 	display: none;
 }
 
-#StatisticsView {
+#statisticsView {
 	display: none;
 }
 
@@ -363,6 +381,8 @@ li {
 	vertical-align: bottom;
 	margin-top: 10px;
 	clear: both;
+	width:100%;
+	height:15%;
 	content: url(../resources/logos_small.png);
 }
 
@@ -486,13 +506,13 @@ li {
 	/* 	background-color: white; */
 }
 
-.titleicon {
-	border: none;
-	margin-left: 10px;
-	margin-top: 7px;
-	margin-bottom: 5px;
-	font-size: 28pt;
-}
+/* .titleicon { */
+/* 	border: none; */
+/* 	margin-left: 10px; */
+/* 	margin-top: 7px; */
+/* 	margin-bottom: 5px; */
+/* 	font-size: 28pt; */
+/* } */
 
 .questiontext {
     /* 	display: table-cell; */
@@ -533,7 +553,7 @@ li {
 }
 
 .marginForButtons {
-	margin-right: 51px;
+	margin-right: 54px;
 }
 
 .answerLi {
@@ -548,8 +568,182 @@ li {
 #numberInputContainer, #numberInput, 
 #typedAnswer, #numericFeedback, 
 #correctNumericFeedback {
-	width: 95%;
+	width: 100%;
 }
 #dataErrorMessage {
 	display: none;
 }
+
+
+/*********************** Statistics View ***********************/
+
+
+#statisticsBody {
+	
+	/*padding:0px;
+	margin-top:60px;
+	width:100%;*/
+	font-size:0px; /*set the font size to 0, in order the children elements that are displayed as inline blocks, not to have any space between them. The space is applied by default when you use inline block*/
+	
+}
+
+
+
+.statitem1{
+	display:inline-block;
+	background-color: #4169E1;
+	color:white;
+	border-right: 1px solid white;
+	border-left: 1px solid white;
+	border-bottom: 1px solid white; 
+	margin-left:-2px;
+	margin-right:0px;
+	/*padding:10px;
+	margin-left:-1px;
+	/*float:left;*/
+	font-weight:bold;
+	width:49.5%;
+	height:100px;
+	
+}
+
+
+
+.statitem2{
+	display:inline-block;
+	border-right: 1px solid white; 
+	border-left: 1px solid white;
+	border-bottom: 1px solid white; 
+	background-color: #ddd;
+	color:white;
+	margin-left:-2px;
+	margin-right:0px;
+	/*padding:10px;
+	margin-left:-1px;
+	/*float:left;*/
+	font-weight:bold;
+	width:49.5%;
+	height:auto;
+	
+}
+
+.stattitle1{
+	/*float:left;*/
+	font-size: 18px;
+	color:white;
+	/*font-weight:bold;*/
+	padding-top:10px;
+	padding-left:15px;
+	padding-bottom:5px;
+}
+.stattitle2{
+	/*float:left;*/
+	font-size: 18px;
+	color:#4169E1;
+	/*font-weight:bold;*/
+	padding-top:10px;
+	padding-left:15px;
+	padding-bottom:5px;
+	
+}
+
+.statvalue1{
+	float:left;
+	font-size: 28px;
+	font-weight:bold;
+	padding-left:15px;
+	
+	
+	/*margin-right:15px;*/
+}
+
+
+.statvalue2{
+	float:left;
+	font-size: 28px;
+	font-weight:bold;
+	padding-left:15px;
+	/*margin-right:15px;*/
+}
+.statsiconchange{
+	/*float:right;*/
+	font-size: 28px;
+	padding-top:-13px;
+	margin-left:-50px;
+	padding-bottom:5px;
+	
+
+}
+
+.statsinfo{
+	clear:both;
+	font-size: 16px;
+	padding-left:15px;
+	padding-bottom:5px;
+	
+}
+
+.red{
+	
+color:red;
+}
+
+.green{
+	
+color:green;
+}
+/*********************** Achievements View ***********************/
+
+#achievementsView {
+	display: none;
+}
+
+.achievementContainer{
+	
+	border-bottom: 1px solid white; 
+}
+
+#stackHandlerTitle{
+	font-size:25px;
+	font-weight:bold;
+	padding-left:5px;
+	
+}
+
+#stackHandlerIcon {
+	font-size:70px;
+	margin-left:25px;
+	padding-top:15px;
+	padding-right:10px;
+	float:left;
+	
+}
+
+.achievementResults{
+	padding-top:15px;
+	width:auto;
+	height:auto;
+	background-color:#ddd;
+	
+}
+
+
+#cardBurnerTitle{
+	font-size:25px;
+	font-weight:bold;
+	padding-left:5px;
+	
+}
+
+#cardBurnerIcon{
+	font-size:70px;
+	margin-left:25px;
+	padding-top:15px;
+	padding-right:10px;
+	float:left;
+	
+}
+
+
+
+
