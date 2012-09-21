@@ -49,13 +49,15 @@ function Controller() {
 	this.views = {};
 
 	// initialize models
-	this.models.connection = new ConnectionState(this);
+	
 	this.models.authentication = new ConfigurationModel(this);
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel(this);
 	this.models.statistics = new StatisticsModel(this);
-
+    
+    // add synchronization triggers at the end of the model initialization just to be careful 
+    this.models.connection = new ConnectionState(this);
 	
 	this.models.authentication.loadFromServer();
 	
@@ -64,17 +66,19 @@ function Controller() {
 	//initialize user interface language
 	this.setupLanguage();
 
+    console.log('languages are set up');
+
 	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
 	this.views.login = new LoginView(this);
-	this.views.logout = new LogoutView();
-	this.views.coursesList = new CoursesListView(this);
-	this.views.questionView = new QuestionView();
-	this.views.answerView = new AnswerView();
-	this.views.feedbackView = new FeedbackView();
-	this.views.settings = new SettingsView();
-	this.views.statisticsView = new StatisticsView();
-	this.views.achievements = new AchievementsView();
+    this.views.logout = new LogoutView();
+    this.views.coursesList = new CoursesListView(this);
+    this.views.questionView = new QuestionView();
+    this.views.answerView = new AnswerView();
+    this.views.feedbackView = new FeedbackView();
+    this.views.settings = new SettingsView();
+    this.views.statisticsView = new StatisticsView(this);
+    this.views.achievements = new AchievementsView();
 
 	console.log('views initialized');
 
