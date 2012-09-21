@@ -1,11 +1,12 @@
-function StatisticsView() {
+function StatisticsView(controller) {
     var self = this;
     
     self.tagID = 'statisticsView';
+    self.controller = controller;
     
-    jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); } );
-//    jester($('#logOutStatistics')[0]).tap(function(){ self.logout(); } );
+    console.log( 'statistics view init touch events');
     
+    jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); });
     
     jester($('#statsSlot1')[0]).tap(function() {
 		self.clickToAchievements();
@@ -15,35 +16,37 @@ function StatisticsView() {
     jester($('#statsSlot2')[0]).tap(function() {
 		self.clickToAchievements();
 	});
+    
+    console.log('bind the application events');
     $(document).bind("statisticcalculationsdone", function() {self.loadData();});
     
-    
-} 
+    console.log('done');
+}
 
 StatisticsView.prototype.handlePinch = doNothing;
-StatisticsView.prototype.handleTap = doNothing;
+StatisticsView.prototype.handleTap   = doNothing;
 StatisticsView.prototype.handleSwipe = doNothing;
-StatisticsView.prototype.openDiv = openView;
-StatisticsView.prototype.open = function() {
+StatisticsView.prototype.close       = closeView;
+StatisticsView.prototype.openDiv     = openView;
+
+StatisticsView.prototype.open        = function() {
 	this.loadData();
 	this.openDiv();	
 };
-StatisticsView.prototype.close = closeView;
 
 StatisticsView.prototype.closeStatistics = function() {
 	console.log("close Statistics button clicked");
-	controller.transitionToCourses();
+	this.controller.transitionToCourses();
 };
 
 
 StatisticsView.prototype.clickToAchievements = function() {
 	console.log("slot 1 or slot 2 clicked");
-	controller.transitionToAchievements();
+	this.controller.transitionToAchievements();
 };
 
 StatisticsView.prototype.loadData = function() {
-	
-	var statisticsModel = controller.models['statistics'];
+	var statisticsModel = this.controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
 	var improvement = statisticsModel.getImprovement();
 	
@@ -68,10 +71,9 @@ StatisticsView.prototype.loadData = function() {
 	}
 	
 	var bestDay = statistics['bestDay'];
-	if (!bestDay)
-		// if our database does not know better, today is the best day!
+	if (!bestDay) {
+		// if the database does not know better, today is the best day!
 		bestDay = new Date().getTime();
-
 	}
 	var oBestDay = new Date(bestDay);
 	
@@ -101,8 +103,8 @@ StatisticsView.prototype.loadData = function() {
 
 		}else{
 			return msg_neutralImprovement_icon + " green";
-		} }
-
+		}
+    }
 
 };	
 	
