@@ -168,16 +168,22 @@ ConfigurationModel.prototype.logout = function() {
 	$(document).bind("statisticssenttoserver", function() {
 		self.sendLogoutToServer();
 		console.log("user logged out");
+		
 		self.configuration = {
-			"appAuthenticationKey": self.configuration.appAuthenticationKey,
-			"userAuthenticationKey" : "",
-			"learnerInformation" : {
-				"userId" : 0
-			}
+				"appAuthenticationKey": self.configuration.appAuthenticationKey,
+				"userAuthenticationKey" : "",
+				"learnerInformation" : {
+					"userId" : 0
+				}
 		};
 		self.storeData();
+		
+		// drop statistics data table from local database
+		self.controller.models['answers'].deleteDB();
 	});
 
+	
+	
 	// remove all question pools and all pending question pool requests
 	var courseList = this.controller.models["course"].courseList;
 	if (courseList) {
@@ -192,8 +198,7 @@ ConfigurationModel.prototype.logout = function() {
 	localStorage.removeItem("courses");
 	this.controller.models['course'].resetCourseList();
 	
-	// drop statistics data table from local database
-	this.controller.models['answers'].deleteDB();
+	
 
 };
 

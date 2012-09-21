@@ -74,6 +74,12 @@ ConnectionState.prototype.goOnline = function() {
 			}
 		}
 	}
+	
+	// if pending statistics exist, send them to the server
+	var pendingStatistics = localStorage.getItem("pendingStatistics");
+	if (pendingStatistics) {
+		this.controller.models["statistics"].sendToServer();
+	}
 
 
 };
@@ -87,5 +93,5 @@ ConnectionState.prototype.goOffline = function() {
 
 	// show no connection error message in login view
 	this.controller.views["login"]
-			.showErrorMessage("Sorry, you need to be online to connect to your LMS");
+			.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
 };

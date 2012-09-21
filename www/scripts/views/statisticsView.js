@@ -51,8 +51,8 @@ StatisticsView.prototype.loadData = function() {
 	}
 	
 	var avgSpeed = statistics['averageSpeed'];
-	if (avgSpeed < 0) {
-		avgSpeed =  0;
+	if (avgSpeed <= 0) {
+		avgSpeed =  "";
 	}
 	
 	var handledCards = statistics['handledCards'];
@@ -85,16 +85,17 @@ StatisticsView.prototype.loadData = function() {
 	$("#statProgressValue").text(progress+"%");
 	$("#statsProgressIconchange").addClass(checkImprovement(improvement['progress']));
 	$("#statSpeedValue").text(avgSpeed);
-	$("#statsSpeedIconchange").addClass(checkImprovement(improvement['averageSpeed']));
-	
-	function  checkImprovement(improvementValue) {
-		if (improvementValue > 0){
+	$("#statsSpeedIconchange").addClass(checkImprovement(improvement['averageSpeed']));	
+
+	function checkImprovement(improvementValue) {
+		if (improvementValue > 0) {
 			return msg_positiveImprovement_icon + " green";
-		}else if (improvementValue < 0){
+		} else if (improvementValue < 0) {
 			return msg_negativeImprovement_icon + " red";
-		}else{
+		} else {
 			return msg_neutralImprovement_icon;
-		} }
+		}
+	}
 
 };	
 	

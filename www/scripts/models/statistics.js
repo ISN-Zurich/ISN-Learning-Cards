@@ -229,8 +229,12 @@ StatisticsModel.prototype.calculateAverageScore = function(statisticsModel,
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
 		console.log("row: " + JSON.stringify(row));
-		self.statistics['averageScore'] = Math
+		if (row['num'] == 0) {
+			self.statistics['averageScore'] = 0;
+		} else {
+			self.statistics['averageScore'] = Math
 				.round((row['score'] / row['num']) * 100);
+		}
 		console.log("AVERAGE SCORE: " + self.statistics['averageScore']);
 
 		// calculate improvement
@@ -247,8 +251,12 @@ StatisticsModel.prototype.calculateAverageSpeed = function(statisticsModel,
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
 		console.log("row: " + JSON.stringify(row));
-		self.statistics['averageSpeed'] = Math
+		if (row['num'] == 0) {
+			self.statistics['averageSpeed'] = 0;
+		} else {
+			self.statistics['averageSpeed'] = Math
 				.round((row['duration'] / row['num']) / 1000);
+		}
 		console.log("AVERAGE SPEED: " + self.statistics['averageSpeed']);
 
 		// calculate improvement
@@ -266,8 +274,12 @@ StatisticsModel.prototype.calculateProgress = function(statisticsModel,
 		console.log("number of correct questions:" + row['numCorrect']);
 		console.log("number of answered questions:"
 				+ self.statistics['handledCards']);
-		self.statistics['progress'] = Math
-				.round(((row['numCorrect']) / (self.statistics['handledCards'])) * 100);
+		if (self.statistics['handledCards'] == 0) {
+			self.statistics['progress'] = 0;
+		} else {
+			self.statistics['progress'] = Math
+			.round(((row['numCorrect']) / (self.statistics['handledCards'])) * 100);
+		}
 		console.log("progress: " + self.statistics['progress']);
 
 		// calculate improvement
@@ -286,7 +298,10 @@ StatisticsModel.prototype.calculateBestDayAndScore = function(statisticsModel,
 	for ( var i = 0; i < results.rows.length; i++) {
 		row = results.rows.item(i);
 		console.log(JSON.stringify(row));
-		score = row['score'] / row['num'];
+		score = 0;
+		if (row['num'] != 0) {
+			score = row['score'] / row['num'];
+		}
 		if (score >= bestScore) {
 			bestDay = row['day'];
 			bestScore = score;
@@ -313,6 +328,12 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(
 		console.log("improvement handled cards: "
 				+ self.improvement['handledCards']);
 		$(document).trigger("statisticcalculationsdone");
+	} else {
+		if (self.statistics['handledCards'] > 0) {
+			self.improvement['handledCards'] = self.statistics['handledCards'];
+		} else {
+			self.improvement['handledCards'] = 0;
+		}
 	}
 };
 
@@ -324,12 +345,21 @@ StatisticsModel.prototype.calculateImprovementAverageScore = function(
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
 		console.log("row: " + JSON.stringify(row));
-		oldAverageScore = Math.round((row['score'] / row['num']) * 100);
+		var oldAverageScore = 0;
+		if (row['num'] != 0) {
+			oldAverageScore = Math.round((row['score'] / row['num']) * 100);
+		}
 		newAverageScore = self.statistics['averageScore'];
 		self.improvement['averageScore'] = newAverageScore - oldAverageScore;
 		console.log("improvement average score: "
 				+ self.improvement['averageScore']);
 		$(document).trigger("statisticcalculationsdone");
+	} else {
+		if (self.statistics['averageScore'] > 0) {
+			self.improvement['averageScore'] = self.statistics['averageScore'];
+		} else {
+			self.improvement['averageScore'] = 0;
+		}
 	}
 };
 
@@ -341,13 +371,22 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
 		console.log("row: " + JSON.stringify(row));
-		oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
+		var oldAverageSpeed = 0;
+		if (row['num'] != 0) {
+			oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
+		}
 		newAverageSpeed = self.statistics['averageSpeed'];
 		self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed)
 				* (-1);
 		console.log("improvement average speed: "
 				+ self.improvement['averageSpeed']);
 		$(document).trigger("statisticcalculationsdone");
+	} else {
+		if (self.statistics['averageSpeed'] > 0) {
+			self.improvement['averageSpeed'] = self.statistics['averageSpeed'];
+		} else {
+			self.improvement['averageSpeed'] = 0;
+		}
 	}
 };
 
@@ -366,6 +405,12 @@ StatisticsModel.prototype.calculateImprovementProgress = function(
 							statisticsModel, transaction, results,
 							row['numCorrect']);
 				});
+	} else {
+		if (self.statistics['progress'] > 0) {
+			self.improvement['progress'] = self.statistics['progress'];
+		} else {
+			self.improvement['progress'] = 0;
+		}
 	}
 };
 
@@ -376,11 +421,20 @@ StatisticsModel.prototype.calculateImprovementProgressHelperFunction = function(
 		var row = results.rows.item(0);
 		console.log("number of handled cards:" + row['c']);
 		handledCards = row['c'];
-		oldProgress = Math.round((numCorrect / handledCards) * 100);
+		var oldProgress = 0;
+		if (handledCards != 0) {
+			oldProgress = Math.round((numCorrect / handledCards) * 100);
+		}
 		newProgress = self.statistics['progress'];
 		self.improvement['progress'] = newProgress - oldProgress;
 		console.log("improvement progress: " + self.improvement['progress']);
 		$(document).trigger("statisticcalculationsdone");
+	} else {
+		if (self.statistics['progress'] > 0) {
+			self.improvement['progress'] = self.statistics['progress'];
+		} else {
+			self.improvement['progress'] = 0;
+		}
 	}
 };
 
@@ -400,8 +454,12 @@ StatisticsModel.prototype.calculateStackHandler = function(statisticsModel,
 		}
 	}
 	numAllCards = allCards.length;
-	self.statistics['stackHandler'] = Math
-			.round((numHandledCards / numAllCards) * 100);
+	if (numAllCards == 0) {
+		self.statistics['stackHandler'] = 0;
+	} else {
+		self.statistics['stackHandler'] = Math
+				.round((numHandledCards / numAllCards) * 100);
+	}
 	console.log("stackHandler: " + self.statistics['stackHandler']
 			+ " handled: " + numHandledCards + " all: " + numAllCards);
 }
@@ -416,87 +474,101 @@ StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
 StatisticsModel.prototype.loadFromServer = function() {
 	var self = this;
 	if (self.controller.models['authentication'].isLoggedIn()) {
-		$.ajax({
-			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data) {
-				console.log("success");
-				console.log("JSON: " + data);
-				var statisticsObject;
-				try {
-					statisticsObject = data;
-					console.log("statistics data from server");
-				} catch (err) {
-					console
-					.log("Error: Couldn't parse JSON for statistics");
-				}
+		$
+				.ajax({
+					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
+					type : 'GET',
+					dataType : 'json',
+					success : function(data) {
+						console.log("success");
+						console.log("JSON: " + data);
+						var statisticsObject;
+						try {
+							statisticsObject = data;
+							console.log("statistics data from server");
+						} catch (err) {
+							console
+									.log("Error: Couldn't parse JSON for statistics");
+						}
 
-				if (!statisticsObject) {
-					statisticsObject = [];
-				}
+						if (!statisticsObject) {
+							statisticsObject = [];
+						}
 
-//				self.queryDB(
-//				"SELECT max(id) as last_id FROM statistics",
-//				[], lastIdCb);
+						// self.queryDB(
+						// "SELECT max(id) as last_id FROM statistics",
+						// [], lastIdCb);
 
-//				function lastIdCb(statisticsModel, transaction, results) {
-//				var self = statisticsModel;
-//				if (results.rows.length > 0) {		
-//				var row = results.rows.item(0);
-				// lastId =
-				// row['last_id'];
-				//
-				// if (!lastId)
-				// {
-				// lastId = -1;
-				// }
+						// function lastIdCb(statisticsModel, transaction,
+						// results) {
+						// var self = statisticsModel;
+						// if (results.rows.length > 0) {
+						// var row = results.rows.item(0);
+						// lastId =
+						// row['last_id'];
+						//
+						// if (!lastId)
+						// {
+						// lastId = -1;
+						// }
 
-				// console
-				// .log("last id
-				// from client
-				// db: "
-				// + lastId);
-//				console.log("count statistics: "+ statisticsObject.length);
+						// console
+						// .log("last id
+						// from client
+						// db: "
+						// + lastId);
+						// console.log("count statistics: "+
+						// statisticsObject.length);
 
-				// for ( var i =
-				// (lastId + 1);
-				// i <
-				// statisticsObject.length;
-				// i++) {
-				for ( var i = 0; i < statisticsObject.length; i++) {
-					statisticItem = statisticsObject[i];
+						// for ( var i =
+						// (lastId + 1);
+						// i <
+						// statisticsObject.length;
+						// i++) {
+						for ( var i = 0; i < statisticsObject.length; i++) {
+							statisticItem = statisticsObject[i];
 
-					console
-					.log(JSON
-							.stringify(statisticItem));
-					query = "INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?,?,?,?,?)";
-					values = [
-					          statisticItem['course_id'],
-					          statisticItem['question_id'],
-					          statisticItem['day'],
-					          statisticItem['score'],
-					          statisticItem['duration'] ];
-					self.queryDB(query, values, function(statisticsModel, transaction,results) {
-						console.log("after inserting");
-					});
+							console.log(JSON.stringify(statisticItem));
 
-				}
-//				},
-//				function() {
-//				console.log("error: statistics table not cleared");
-//				});
+							self
+									.queryDB(
+											"SELECT id FROM statistics WHERE day = ?",
+											[ statisticItem['day'] ],
+											checkIfItemExists);
 
-//			}
-//			}
+							function checkIfItemExists(statisticsModel,
+									transaction, results) {
+								if (results.rows.length == 0) {
+									query = "INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?,?,?,?,?)";
+									values = [ statisticItem['course_id'],
+											statisticItem['question_id'],
+											statisticItem['day'],
+											statisticItem['score'],
+											statisticItem['duration'] ];
+									self.queryDB(query, values, function(
+											statisticsModel, transaction,
+											results) {
+										console.log("after inserting");
+									});
+								}
+							}
 
-			},
-			error : function() {
-				console
-				.log("Error while getting statistics data from server");
-			},
-			beforeSend : setHeader
-		});
+						}
+						// },
+						// function() {
+						// console.log("error: statistics table not cleared");
+						// });
+
+						// }
+						// }
+
+					},
+					error : function() {
+						console
+								.log("Error while getting statistics data from server");
+					},
+					beforeSend : setHeader
+				});
 
 		function setHeader(xhr) {
 			xhr.setRequestHeader('sessionkey',
@@ -509,7 +581,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 /**
  * sends statistics data to the server
  */
-StatisticsModel.prototype.sendToServer = function(authData) {
+StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
 
 	self.queryDB('SELECT * FROM statistics', [], sendStatistics);
@@ -526,25 +598,47 @@ StatisticsModel.prototype.sendToServer = function(authData) {
 		statistics = JSON.stringify(header);
 
 		$.ajax({
-					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
-					type : 'PUT',
-					success : function() {
-						console
-								.log("statistics data successfully send to the server");
-						$(document).trigger("statisticssenttoserver");
-					},
-					error : function() {
-						console
-								.log("Error while sending statistics data to server");
-					},
-					beforeSend : setHeader
-				});
+			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
+			type : 'PUT',
+			success : function() {
+				console
+				.log("statistics data successfully send to the server");
+				localStorage.removeItem("pendingStatistics");
+				$(document).trigger("statisticssenttoserver");
+			},
+			error : function() {
+				console
+				.log("Error while sending statistics data to server");
+				var statisticsToStore = {
+						"sessionkey" : self.controller.models['authentication']
+				.getSessionKey(),
+				"uuid" : device.uuid,
+				"statistics" : statistics
+				};
+				localStorage.setItem("pendingStatistics", JSON.stringify(statisticsToStore));
+				$(document).trigger("statisticssenttoserver");
+			},
+			beforeSend : setHeader
+		});
 
 		function setHeader(xhr) {
-			xhr.setRequestHeader('sessionkey',
-					self.controller.models['authentication'].getSessionKey());
-			xhr.setRequestHeader('uuid', device.uuid);
-			xhr.setRequestHeader('statistics', statistics);
+			if (localStorage.getItem("pendingStatistics")) {
+				var pendingStatistics = {};
+				try {
+					pendingStatistics = JSON.parse(localStorage.getItem("pendingStatistics"));
+				} catch (err) {
+					console.log("error! while loading pending statistics");
+				}
+				
+				xhr.setRequestHeader('sessionkey', pendingStatistics.sessionkey);
+				xhr.setRequestHeader('uuid', pendingStatistics.uuid);
+				xhr.setRequestHeader('statistics', pendingStatistics.statistics);
+			} else {
+				xhr.setRequestHeader('sessionkey',
+						self.controller.models['authentication'].getSessionKey());
+				xhr.setRequestHeader('uuid', device.uuid);
+				xhr.setRequestHeader('statistics', statistics);
+			}
 
 		}
 	}
