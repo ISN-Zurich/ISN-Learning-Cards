@@ -143,11 +143,6 @@ ConfigurationModel.prototype.loadFromServer = function() {
  * logs in user
  */
 ConfigurationModel.prototype.login = function(username, password) {
-	// this.configuration.loginState = "loggedIn";
-	// this.storeData();
-	// this.loadFromServer();
-	// success();
-
 	console.log("client key: " + this.configuration.appAuthenticationKey);
 
 	passwordHash = faultylabs.MD5(password);
@@ -166,23 +161,39 @@ ConfigurationModel.prototype.login = function(username, password) {
  * logs out user
  */
 ConfigurationModel.prototype.logout = function() {
-	// this.configuration.loginState = "loggedOut";
-	// this.storeData();
-	this.sendLogoutToServer();
-	console.log("user logged out");
-	this.configuration.userAuthenticationKey = "";
-	this.storeData();
+	//send statistics data to server
+	this.controller.models['statistics'].sendToServer();
 	
-	//remove pending course list request
-	localStorage.removeItem("pendingCourseList");
-	
-	// remove all pending question pool requests 
+	var self = this;
+	$(document).bind("statisticssenttoserver", function() {
+		self.sendLogoutToServer();
+		console.log("user logged out");
+		self.configuration = {
+			"appAuthenticationKey": self.configuration.appAuthenticationKey,
+			"userAuthenticationKey" : "",
+			"learnerInformation" : {
+				"userId" : 0
+			}
+		};
+		self.storeData();
+	});
+
+	// remove all question pools and all pending question pool requests
 	var courseList = this.controller.models["course"].courseList;
 	if (courseList) {
 		for ( var c in courseList) {
+			localStorage.removeItem("questionpool_" + courseList[c].id);
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
 		}
 	}
+	
+	// remove course list and pending course list request
+	localStorage.removeItem("pendingCourseList");
+	localStorage.removeItem("courses");
+	this.controller.models['course'].resetCourseList();
+	
+	// drop statistics data table from local database
+	this.controller.models['answers'].deleteDB();
 
 };
 
@@ -207,12 +218,16 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						} catch (err) {
 							console.log("Couldn't authenticate to server "
 									+ err);
-							$(document).trigger("authenticationfailed", "wrong data structure");
+							$(document).trigger("authenticationfailed",
+									"wrong data structure");
 						}
 
 						$(document).trigger("authenticationready",
 								self.configuration.userAuthenticationKey);
 						self.controller.setupLanguage();
+						
+						//get statistics data from server
+						self.controller.models['statistics'].loadFromServer();
 					} else {
 						console.log("Wrong username or password!")
 						$(document).trigger("authenticationfailed", "nouser");
@@ -220,7 +235,8 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 				},
 				error : function() {
 					console.log("Error while authentication to server");
-					$(document).trigger("authenticationfailed", "connectionerror");
+					$(document).trigger("authenticationfailed",
+							"connectionerror");
 				},
 				beforeSend : setHeader
 			});

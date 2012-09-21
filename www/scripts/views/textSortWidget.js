@@ -18,7 +18,6 @@ function TextSortWidget(interactive) {
 	if (self.interactive) {
 		self.showAnswer();
 	} else {
-		controller.models["answers"].calculateTextSortScore();
 		self.showFeedback();
 	}
 }
@@ -47,7 +46,7 @@ TextSortWidget.prototype.showAnswer = function() {
 		var mixedAnswers;
 
 		// if sorting has not started yet, mix the answers
-		if (this.tickedAnswers.length == 0) {
+		if (!questionpoolModel.currAnswersMixed()) {
 			var tmp_answerModel = new AnswerModel();
 			do {
 				tmp_answerModel.deleteData();
@@ -174,6 +173,10 @@ TextSortWidget.prototype.storeAnswers = function() {
 
 	controller.models["answers"].setAnswers(answers);
 };
+
+TextSortWidget.prototype.calculateAnswerScore = function() {
+	controller.models["answers"].calculateTextSortScore();
+}
 
 /**
  * catches touch events and creates correspoding mouse events this has to be

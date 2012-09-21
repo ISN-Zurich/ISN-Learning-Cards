@@ -35,23 +35,25 @@ switch($request_method) {
 	case "GET":
 		$userId = get_session_user_from_headers();
 
-		$authenticationData = array(
+		if ($userId > 0) {
+			$authenticationData = array(
 
-				"learnerInformation" => array(
-						"userId" => $userId,
-						"userName" =>  $ilUser->getLogin(),
-						"displayName" => $ilUser->getFullName(),
-						"emailAddress" => $ilUser->getEmail(),
-						"language" => $ilUser->getLanguage()
-				),
-				//get rid of following 2 lines
-				"loginState" => "loggedOut",
-				"globalSynchronizationState" => false
-		);
+					"learnerInformation" => array(
+							"userId" => $userId,
+							"userName" =>  $ilUser->getLogin(),
+							"displayName" => $ilUser->getFullName(),
+							"emailAddress" => $ilUser->getEmail(),
+							"language" => $ilUser->getLanguage()
+					),
+					//get rid of following 2 lines
+					"loginState" => "loggedOut",
+					"globalSynchronizationState" => false
+			);
 
-		logging("sending authentication info");
+			logging("sending authentication info");
 
-		echo(json_encode($authenticationData));
+			echo(json_encode($authenticationData));
+		}
 		break;
 	default:
 		break;
@@ -102,7 +104,7 @@ function authenticate() {
 			logging("Session Key: " . $sessionKey);
 			storeAuthDataInDB($userId, $clientKey, $sessionKey);
 			logging("after authentication stored in db");
-				
+
 			return array(
 					"userAuthenticationKey" => $sessionKey,
 					"learnerInformation" => array(

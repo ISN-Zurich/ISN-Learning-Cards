@@ -46,12 +46,15 @@ CoursesListView.prototype.close = function() {
 	console.log("close course list view");
 	this.active = false;
 	this.closeDiv();
+	$("#coursesList").empty();
 };
 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
 	if (this.controller.models['course'].isSynchronized(course_id)) {
 		this.controller.models['questionpool'].reset();
 		this.controller.models['questionpool'].loadData(course_id);
+		
+		this.controller.models['answers'].setCurrentCourseId(course_id);
 		this.controller.transitionToQuestion();
 	}
 };
@@ -62,6 +65,8 @@ CoursesListView.prototype.clickSettingsButton = function() {
 
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
+	this.controller.models['statistics'].setCurrentCourseId(courseID);
+	this.controller.transitionToStatistics();
 };
 
 CoursesListView.prototype.update = function() {
