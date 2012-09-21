@@ -42,7 +42,6 @@ body {
 	position: fixed;
 	right: 0px;
 	top: 0px;
-	vertical-align: middle;
 }
 
 .generalButton {
@@ -199,7 +198,7 @@ ul {
 	border-right: solid white 1px;
 	border-bottom: solid white 1px;
 	background-color: #ddd;
-	color: #999;
+	color:#696969;;
 	/* 	-moz-border-radius: 6px; */
 	/* 	-webkit-border-radius: 6px; */
 	/* 	border-radius: 6px; */
@@ -411,7 +410,7 @@ li {
 	padding: 5px;
     border-radius: 0;
 	border-left: 3px solid white;
-	color: #666;
+	color:#696969;
 	background-color: #ddd;
 	/* 	width:89%; */
 }
@@ -432,9 +431,14 @@ li {
 
 #loginButton {
 	float: right;
-	height: 104px;
-	width: 49px;
-	font-size: 43px;
+	height: 98px;
+	line-height: 98px;
+	width: 45px;
+	font-size: 39px;
+	/*vertical-align: middle;*/
+	padding-right:4px;
+	text-align:center;
+	border: 1px solid white;
 }
 
 
@@ -596,17 +600,15 @@ li {
 	border-right: 1px solid white;
 	border-left: 1px solid white;
 	border-bottom: 1px solid white; 
-	margin-left:-2px;
 	margin-right:0px;
 	/*padding:10px;
-	margin-left:-1px;
+	margin-left:0px;
 	/*float:left;*/
 	font-weight:bold;
-	width:49.5%;
+	width:49%;
 	height:100px;
 	
 }
-
 
 
 .statitem2{
@@ -615,15 +617,13 @@ li {
 	border-left: 1px solid white;
 	border-bottom: 1px solid white; 
 	background-color: #ddd;
-	color:white;
-	margin-left:-2px;
+	color: #696969;
 	margin-right:0px;
 	/*padding:10px;
 	margin-left:-1px;
 	/*float:left;*/
 	font-weight:bold;
-	width:49.5%;
-	height:auto;
+	width:49%;
 	
 }
 
@@ -699,51 +699,47 @@ color:green;
 }
 
 .achievementContainer{
-	
+	clear:both;
 	border-bottom: 1px solid white; 
-}
-
-#stackHandlerTitle{
-	font-size:25px;
-	font-weight:bold;
-	padding-left:5px;
 	
 }
-
-#stackHandlerIcon {
-	font-size:70px;
-	margin-left:25px;
-	padding-top:15px;
-	padding-right:10px;
-	float:left;
-	
-}
-
 .achievementResults{
-	padding-top:15px;
-	width:auto;
-	height:auto;
+	display:block;
+	padding-top:10px;
+	/*width:auto;
+	height:auto;*/
 	background-color:#ddd;
-	
+	padding-bottom:5px;
+
 }
 
 
-#cardBurnerTitle{
+
+
+.achievementsResutlsTitle{
 	font-size:25px;
 	font-weight:bold;
-	padding-left:5px;
+	padding-left:15px;
 	
 }
 
-#cardBurnerIcon{
-	font-size:70px;
-	margin-left:25px;
-	padding-top:15px;
+
+.achievementResutlsIcon {
+	display:block;
+	font-size:65px;
+	margin-left:20px;
+	padding-top:8px;
 	padding-right:10px;
 	float:left;
 	
 }
 
+.achievementsResutlsText{
+	
+	
+}
 
-
-
+.blue{
+	
+	color:#4169E1;
+}
