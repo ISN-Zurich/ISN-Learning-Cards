@@ -192,7 +192,7 @@ body {
 }
 
 ul {
-    /* 	clear:both; */
+/*     clear:both; */
 	border-top: solid white 1px;
 	border-left: solid white 1px;
 	border-right: solid white 1px;
@@ -210,6 +210,13 @@ ul {
 	font-style: normal;
 	font-variant: normal;
 	text-align: left;
+	padding: 0px;
+	margin:0px;
+	-webkit-margin-before: 0px;
+	-webkit-margin-after: 0px;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	-webkit-padding-start: 0px;
 	/* 	position: relative; */
 }
 
@@ -220,15 +227,17 @@ li {
 	/* 	-ms-transition: all 0.1s ease-in-out; */
 	/* 	transition: all 0.1s ease-in-out; */
 	list-style-type: none;
-	list-style-position: left;
+	list-style-position: inside;
 	font-size: 20px;
 	font-style: normal;
 	font-variant: normal;
 	border-bottom: 1px solid white;
 	text-align: left;
+	padding: 0px;
+	margin:0px;
 	/* 	border-radius: 0 0 0 0; */
-	padding: 15px;
-	margin-left: -40px;
+/* 	padding: 15px; */
+/* 	margin-left: -40px; */
 	/* 	border-top: none; */
 	/* 	border-right: none; */
 	/* 	border-left: none; */
@@ -480,10 +489,15 @@ li {
 }
 
 .correctAnswer {
+/* 	display: inline-block; */
 	background-color: #33CC33;
-	border: 1px solid white;
+	border-left: 1px solid white;
 	color: white;
-	height: 100%;
+/* 	height: 100%; */
+/* 	line-height: 100%; */
+	width: 30px;
+	text-align: center;
+	margin:0px;
 }
 
 .partiallyCorrectAnswer {
@@ -491,8 +505,8 @@ li {
 }
 
 .ticked {
-    /*padding:0px;
-	margin:0px;*/
+    padding:0px;
+	margin:0px;
 	background-color: #88AAFF;
 	color: white;
 }
@@ -565,8 +579,10 @@ li {
 }
 
 .text {
-    /* 	margin: 15px; */
+    margin-right: 35px;
 	padding: 15px;
+	padding-left: 7px;
+	padding-right:0px;
 }
 
 #numberInputContainer, #numberInput, 
@@ -734,12 +750,24 @@ color:green;
 	
 }
 
-.achievementsResutlsText{
-	
-	
-}
+
 
 .blue{
 	
 	color:#4169E1;
 }
+
+.courseListIcon {
+	border-left: 1px solid white;
+	width: 53px;
+	font-size: 40px;
+	text-align: center;
+	vertical-align: middle;
+/* 	padding: 0px; */
+/* 	maring: 0px; */
+}
+
+.marginForCourseList {
+	margin-right: 56px;
+}
+

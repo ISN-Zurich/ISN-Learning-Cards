@@ -42,16 +42,24 @@ SettingsView.prototype.loadData = function() {
 	var config = controller.models['authentication'];
 	
 	$("#settingsData").empty();
-	$("<li/>", {
-	  text: config.getDisplayName()
-	}).appendTo("#settingsData");
-	$("<li/>", {
-		  text: config.getUserName()
-		}).appendTo("#settingsData");
-	$("<li/>", {
-		  text: config.getEmailAddress()
-		}).appendTo("#settingsData");
-	$("<li/>", {  
-		  text: jQuery.i18n.prop('msg_' + config.getLanguage() + '_title')
-		}).appendTo("#settingsData");
+	liName = $("<li/>", {}).appendTo("#settingsData");
+	$("<div/>", {
+		text: config.getDisplayName(),
+		"class": "text"
+	}).appendTo(liName);
+	liUserName = $("<li/>", {}).appendTo("#settingsData");
+	$("<div/>", {
+		text: config.getUserName(),
+		"class": "text"
+	}).appendTo(liUserName);
+	liEmail = $("<li/>", {}).appendTo("#settingsData");
+	$("<div/>", {
+		text: config.getEmailAddress(),
+		"class": "text"
+	}).appendTo(liEmail);
+	liLang = $("<li/>", {}).appendTo("#settingsData");
+	$("<div/>", {
+		text: jQuery.i18n.prop('msg_' + config.getLanguage() + '_title'),
+		"class": "text"
+	}).appendTo(liLang);
 };

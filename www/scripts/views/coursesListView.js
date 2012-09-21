@@ -28,6 +28,16 @@ function CoursesListView(controller) {
 			self.update();
 		}
 	});
+	
+	function setOrientation() {
+       	self.setIconSize(); 
+    }
+    
+    //when orientation changes, set the new width and height
+    //resize event should be caught, too, because not all devices
+    //send an oritentationchange even
+    window.addEventListener("orientationchange", setOrientation, false);
+    window.addEventListener("resize", setOrientation, false);
 }
 
 CoursesListView.prototype.handleTap = doNothing;
@@ -40,6 +50,7 @@ CoursesListView.prototype.open = function() {
 	this.update();
 	this.firstLoad = false;
 	this.openDiv();
+	this.setIconSize();
 };
 CoursesListView.prototype.closeDiv = closeView;
 CoursesListView.prototype.close = function() {
@@ -90,15 +101,21 @@ CoursesListView.prototype.update = function() {
 
 			var li = $("<li/>", {
 				"id" : "course" + courseID,
-				text : courseModel.getTitle()
+				
 			}).appendTo("#coursesList");
 
 			jester(li[0]).tap(function() {
 				self.clickCourseItem($(this).attr('id').substring(6));
 			});
 
-			var span = $("<span/>", {
-				"class" : "right"
+			span = $("<div/>", {
+				"class" : "courseListIcon right" + (courseModel.isSynchronized(courseID) ? " icon-bars" : " icon-loading")
+			}).appendTo(li);
+
+			
+			$("<div/>", {
+				"class" : "text marginForCourseList",
+				text : courseModel.getTitle()
 			}).appendTo(li);
 
 			jester(span[0]).tap(
@@ -107,11 +124,9 @@ CoursesListView.prototype.update = function() {
 								.substring(6));
 					});
 
-			$("<span/>", {
-				"class" : courseModel.isSynchronized(courseID) ? "icon-bars" : "icon-loading"
-			}).appendTo(span);
-
+			
 		} while (courseModel.nextCourse());
+		self.setIconSize();
 	}
 };
 
@@ -121,4 +136,13 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 			+ $("#course" + courseId + " .icon-loading").length);
 	$("#course" + courseId + " .icon-loading").addClass("icon-bars")
 			.removeClass("icon-loading");
+};
+
+CoursesListView.prototype.setIconSize = function() {
+	$("#coursesList li").each(function() {
+		console.log("height: " + $(this).height());
+		height = $(this).height();
+		$(this).find(".courseListIcon").height(height);
+		$(this).find(".courseListIcon").css("line-height", height + "px");
+	});
 };

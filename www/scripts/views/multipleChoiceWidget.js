@@ -67,8 +67,7 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 					"<li/>",
 					{
 						"id" : "answer" + mixedAnswers[c],
-						"class" : "answerLi"
-								+ (self.tickedAnswers.indexOf(mixedAnswers[c]) != -1 ? " ticked" : "")
+						"class" : (self.tickedAnswers.indexOf(mixedAnswers[c]) != -1 ? " ticked" : ""),
 					}).appendTo(ul);
 			// handler when taping on an item on the answer list
 			jester(li[0]).tap(function() {
@@ -164,6 +163,15 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 
 MultipleChoiceWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateMultipleChoiceScore();
-}
+};
+
+MultipleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
+	$("#feedbackBody ul li").each(function() {
+		console.log("height: " + $(this).height());
+		height = $(this).height();
+		$(this).find(".correctAnswer").height(height);
+		$(this).find(".correctAnswer").css("line-height", height + "px");
+	});
+};
 
 console.log("end of mulitple choice widget");
