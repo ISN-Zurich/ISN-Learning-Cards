@@ -71,8 +71,7 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 					"<li/>",
 					{
 						"id" : "answer" + mixedAnswers[c],
-						"class" : "answerLi"
-								+ (self.tickedAnswers.indexOf(mixedAnswers[c]) != -1 ? " ticked" : "")
+						"class" : (self.tickedAnswers.indexOf(mixedAnswers[c]) != -1 ? " ticked" : "") //"answerLi" + 
 					}).appendTo(ul);
 			// handler when taping on an item on the answer list
 			jester(li[0]).tap(function() {
@@ -214,5 +213,13 @@ SingleChoiceWidget.prototype.clickDoneButton = function() {
 
 };
 
+SingleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
+	$("#feedbackBody ul li").each(function() {
+		console.log("height: " + $(this).height());
+		height = $(this).height();
+		$(this).find(".correctAnswer").height(height);
+		$(this).find(".correctAnswer").css("line-height", height + "px");
+	});
+};
 
 console.log("end of single choice widget");

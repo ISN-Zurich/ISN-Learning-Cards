@@ -79,11 +79,15 @@ TextSortWidget.prototype.showAnswer = function() {
 		for ( var c = 0; c < mixedAnswers.length; c++) {
 			var li = $("<li/>", {
 				"id" : "answer" + mixedAnswers[c],
-				"class" : "sortableListItem",
-				text : answers[mixedAnswers[c]].answertext
+				"class" : "sortableListItem"
 			}).appendTo(ul);
-		}
-
+			
+			var div = $("<div/>", {
+				"class" : "text",
+				text : answers[mixedAnswers[c]].answertext
+			}).appendTo(li);
+		}	
+		
 		// make the list sortable using JQuery UI's function
 		$(".sortable").sortable({
 			placeholder : "placeholder",
@@ -127,10 +131,14 @@ TextSortWidget.prototype.showFeedback = function() {
 	// iterate over all answers
 	for ( var i = 0; i < answers.length; i++) {
 		var li = $("<li/>", {
-			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "ticked" : "",
-			text : answers[i].answertext
+			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "ticked" : ""
 		}).appendTo(ul);
 
+		var div = $("<div/>", {
+			"class" : "text",
+			text : answers[i].answertext
+		}).appendTo(li);
+		
 		// if score is 0.5 or 1.5 show a checkmark
 		if (scores[i] == "0.5" || scores[i] == "1.5") {
 			var div = $("<div/>", {
@@ -209,7 +217,7 @@ TextSortWidget.prototype.enableSorting = function() {
 			window.scrollTo(0, 0);
 		}
 	});
-}
+};
 
 /**
  * creates a new mouse event of the specified type
@@ -224,3 +232,12 @@ function createEvent(type, event) {
 	first.target.dispatchEvent(simulatedEvent);
 	event.preventDefault();
 }
+
+TextSortWidget.prototype.setCorrectAnswerTickHeight = function() {
+	$("#feedbackBody ul li").each(function() {
+		console.log("height: " + $(this).height());
+		height = $(this).height();
+		$(this).find(".correctAnswer").height(height);
+		$(this).find(".correctAnswer").css("line-height", height + "px");
+	});
+};

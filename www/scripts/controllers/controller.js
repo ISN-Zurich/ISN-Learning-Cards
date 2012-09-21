@@ -137,6 +137,7 @@ Controller.prototype.setupLanguage = function() {
 	        $("#logoutConfirmationTitle").text(msg_logout_title);
 	        $("#statBestDayTitle").text(msg_bestDay_title);
 	        $("#statBestScoreTitle").text(msg_bestScore_title);
+	        $("#statsBestScoreInfo").text(msg_bestScore_info);
 	        $("#statHandledCardsTitle").text(msg_handledCards_title);
 	        $("#statAverageScoreTitle").text(msg_averageScore_title);
 	        $("#statProgressTitle").text(msg_progress_title);
@@ -147,13 +148,13 @@ Controller.prototype.setupLanguage = function() {
 	        $("#stackHandlerIcon").addClass(msg_achievements_Handler_icon);
 	        $("#stackHandlerTitle").text(msg_achievementsHandler_title);
 	        $("#stackHandlerExplanation").text(msg_achievementsHandler_explanation);
-	        $("#stackHandlerResultText1").text(msg_achievements_text1);
-	        $("#stackHandlerResultText2").text(msg_achievements_text2);
+	        $("#starterStackHandler").text(msg_achievements_text1);
+	        $("#doneStackHandler").text(msg_achievements_text2);
 	        $("#cardBurnerIcon").addClass(msg_achievements_Burner_icon);
 	        $("#cardBurnerTitle").text(msg_achievementsBurner_title);
 	        $("#cardBurnerExplanation").text(msg_achievementsBurner_explanation);
-	        $("#cardBurnerResultText1").text(msg_achievements_text1);
-	        $("#cardBurnerResultText2").text(msg_achievements_text2);
+	        $("#starterCardBurner").text(msg_achievements_text1);
+	        $("#doneCardBurner").text(msg_achievements_text2);
 	        $(".cardBody").text(msg_logout_body);
 	        
 	    }

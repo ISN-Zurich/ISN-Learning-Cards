@@ -96,6 +96,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	if (currentFeedbackTitle == "Excellent") {
 		//if the typed numeric answer is correct, add background color to the above input field
 		$("#typedAnswer").addClass("correctAnswer");
+		$("#typedAnswer").css("text-align", "left");
 		var correctText = questionpoolModel.getCorrectFeedback();
 		if (correctText.length > 0) {
 			//if extra feedback info is available for the correct answer
@@ -122,6 +123,8 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 			"class" : "inputBorder correctAnswer",
 			text : correctAnswer
 		}).appendTo("#feedbackBody");
+		
+		$("#correctNumericFeedback").css("text-align", "left");
 
 		var wrongText = questionpoolModel.getWrongFeedback();
 		console.log("XX " + wrongText);
@@ -152,5 +155,7 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 NumericQuestionWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateNumericScore();
 }
+
+NumericQuestionWidget.prototype.setCorrectAnswerTickHeight = doNothing;
 
 console.log("end of numeric choice widget");

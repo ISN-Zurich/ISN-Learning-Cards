@@ -79,9 +79,9 @@
 			</div>
 			<div id="loginForm">
 				<form>
-					<button id="loginButton" type="button" class="generalButton">
+					<div id="loginButton"  class="generalButton">
 						<span class="icon-enter"></span>
-					</button>
+					</div>
 
 					<div class="inputBorder">
 						<input class="loginInput" id="usernameInput" required="required"
@@ -206,8 +206,8 @@
 			</div>
 			<div id="cardAnswerBody" class="marginForButtons">
 				<ul>
-					<li>1</li>
-					<li>2</li>
+					<li class="ticked"><div class="right correctAnswer icon-checkmark"></div><div class="text">1</div></li>
+					<li class="ticked"><div class="right correctAnswer icon-checkmark"></div><div class="text">2</div></li>
 				</ul>
 			</div>
 			<!-- 				<div class="inputBorder" id="numberInputContainer"></div> -->
@@ -258,44 +258,38 @@
 					<div class="stattitle1" id="statBestDayTitle">Best Day</div>
 					<div class="statvalue1" id="statBestDayValue"></div>
 					<div class="statsiconchange" id="statsBestDayIconchange"></div>
-					<div class="statsinfo" id="statsBestDayInfo"></div>
-				</div>
-				<div id="statsSlot2" class="statitem1">
+					<div class="statsinfo" id="statBestDayInfo">xx</div>
+				</div><div id="statsSlot2" class="statitem1">
 					<div class="stattitle1" id="statBestScoreTitle">BestScore</div>
 					<div class="statvalue1" id="statBestScoreValue"></div>
 					<div class="statsiconchange" id="statsBestScoreIconchange"></div>
-					<div class="statsinfo" id="statsBestScoreInfo"></div>
+					<div class="statsinfo" id="statsBestScoreInfo">xx</div>
 				</div>
 				<div id="statsSlot3" class="statitem2">
-					<div class="stattitle2" id="statHandledCardsTitle">Handled
-						Cards</div>
+					<div class="stattitle2" id="statHandledCardsTitle">HandledCards</div>
 					<div class="statvalue2" id="statHandledCardsValue"></div>
 					<div class="statsiconchange" id="statsHandledCardsIconchange">
 					</div>
-					<div class="statsinfo" id="statsHandledCardsInfo"></div>
-				</div>
-				<div id="statsSlot4" class="statitem2">
+					<!--<div class="statsinfo" id="statsHandledCardsInfo"></div>  -->
+				</div><div id="statsSlot4" class="statitem2">
 					<div class="stattitle2" id="statAverageScoreTitle">Average
 						Score</div>
 					<div class="statvalue2" id="statAverageScoreValue"></div>
 					<div class="statsiconchange" id="statsAverageScoreIconchange">
 					</div>
-					<div class="statsinfo" id="statsAverageScoreInfo"></div>
+					<!--<div class="statsinfo" id="statsAverageScoreInfo"></div>-->
 				</div>
 				<div id="statsSlot5" class="statitem2">
 					<div class="stattitle2" id="statProgressTitle">Progress</div>
 					<div class="statvalue2" id="statProgressValue"></div>
 					<div class="statsiconchange" id="statsProgressIconchange"></div>
 					<div class="statsinfo" id="statsProgressInfo"></div>
-				</div>
-				<div id="statsSlot6" class="statitem2">
+				</div><div id="statsSlot6" class="statitem2">
 					<div class="stattitle2" id="statSpeedTitle">Speed</div>
 					<div class="statvalue2" id="statSpeedValue"></div>
 					<div class="statsiconchange" id="statsSpeedIconchange"></div>
 					<div class="statsinfo" id="statsSpeedinfo"></div>
 				</div>
-
-
 			</div>
 			<!-- <div class="content">
 			<ul id="statisticsData" class="marginForButtons">
@@ -314,22 +308,26 @@
 		</div>
 		<div class="content">
 			<div id="StackHandlerContainer" class="achievementContainer">
-				<div id="stackHandlerIcon"></div>
-				<div id=stackHandlerResults class="achievementResults">
-					<div id="stackHandlerTitle"></div>
+				<div id="stackHandlerIcon" class="achievementResutlsIcon"></div>
+				<div id="stackHandlerResults" class="achievementResults ">
+					<div id="stackHandlerTitle" class="achievementsResutlsTitle"></div>
 					<div id="stackHandlerExplanation"></div>
-					<div id="stackHandlerResultText1"></div>
-					<div id="stackHandlerResultText2"></div>
+					<div id="stackHandlerResultText">
+						<span id="starterStackHandler"></span> <span
+							id="valueStackHandler"></span> <span id="doneStackHandler"></span>
+					</div>
 				</div>
 			</div>
 
 			<div id="CardBurnerContainer" class="achievementContainer">
-				<div id="cardBurnerIcon"></div>
+				<div id="cardBurnerIcon" class="achievementResutlsIcon"></div>
 				<div id="cardBurnerResutls" class="achievementResults">
-					<div id="cardBurnerTitle"></div>
+					<div id="cardBurnerTitle" class="achievementsResutlsTitle"></div>
 					<div id="cardBurnerExplanation"></div>
-					<div id="cardBurnerResultText1"></div>
-					<div id="cardBurnerResultText2"></div>
+					<div id="cardBurnerResultText">
+						<span id="starterCardBurner"></span> <span id="valueCardBurner"></span>
+						<span id="doneCardBurner"></span>
+					</div>
 				</div>
 			</div>
 

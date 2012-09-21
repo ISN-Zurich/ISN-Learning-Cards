@@ -16,6 +16,8 @@ function StatisticsView() {
 		self.clickToAchievements();
 	});
     $(document).bind("statisticcalculationsdone", function() {self.loadData();});
+    
+    
 } 
 
 StatisticsView.prototype.handlePinch = doNothing;
@@ -51,8 +53,8 @@ StatisticsView.prototype.loadData = function() {
 	}
 	
 	var avgSpeed = statistics['averageSpeed'];
-	if (avgSpeed < 0) {
-		avgSpeed =  0;
+	if (avgSpeed <= 0) {
+		avgSpeed =  "-";
 	}
 	
 	var handledCards = statistics['handledCards'];
@@ -66,9 +68,12 @@ StatisticsView.prototype.loadData = function() {
 	}
 	
 	var bestDay = statistics['bestDay'];
-	if (!bestDay) {
-		bestDay = "";
+	if (!bestDay)
+		// if our database does not know better, today is the best day!
+		bestDay = new Date().getTime();
+
 	}
+	var oBestDay = new Date(bestDay);
 	
 	var bestScore = statistics['bestScore'];
 	if (bestScore < 0) {
@@ -76,7 +81,8 @@ StatisticsView.prototype.loadData = function() {
 	}
 
 	//$("#statisticsBody").empty();
-	$("#statBestDayValue").text(bestDay);
+	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
+	$("#statBestDayInfo").text(oBestDay.getFullYear());
 	$("#statBestScoreValue").text(bestScore+"%");
 	$("#statHandledCardsValue").text(handledCards);
 	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvement['handledCards']));
@@ -85,16 +91,18 @@ StatisticsView.prototype.loadData = function() {
 	$("#statProgressValue").text(progress+"%");
 	$("#statsProgressIconchange").addClass(checkImprovement(improvement['progress']));
 	$("#statSpeedValue").text(avgSpeed);
-	$("#statsSpeedIconchange").addClass(checkImprovement(improvement['averageSpeed']));
-	
-	function  checkImprovement(improvementValue) {
-		if (improvementValue > 0){
+	$("#statsSpeedIconchange").addClass(checkImprovement(improvement['averageSpeed']));	
+
+	function checkImprovement(improvementValue) {
+		if (improvementValue > 0) {
 			return msg_positiveImprovement_icon + " green";
-		}else if (improvementValue < 0){
+		} else if (improvementValue < 0) {
 			return msg_negativeImprovement_icon + " red";
+
 		}else{
-			return msg_neutralImprovement_icon;
+			return msg_neutralImprovement_icon + " green";
 		} }
+
 
 };	
 	
