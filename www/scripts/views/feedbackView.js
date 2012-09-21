@@ -20,6 +20,9 @@ function FeedbackView(question) {
     function setOrientation() {
         $(".cardBody").css('height', window.innerHeight - 70);
         $(".cardBody").css('width', window.innerWidth - 100);
+        if (self.widget) {
+        	self.widget.setCorrectAnswerTickHeight();
+        }
         
     }
     setOrientation();
@@ -82,6 +85,7 @@ FeedbackView.prototype.open = function() {
 	this.showFeedbackBody();
 	this.showFeedbackTitle();
 	this.openDiv();
+	this.widget.setCorrectAnswerTickHeight();
 };
 
 /**
