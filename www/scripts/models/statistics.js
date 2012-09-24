@@ -60,7 +60,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 		}
 	}
 
-	this.calculateValues();
+	//this.calculateValues();
 };
 
 StatisticsModel.prototype.getStatistics = function() {
@@ -169,6 +169,7 @@ StatisticsModel.prototype.calculateValues = function() {
 	var self = this;
 	self.initQueryValues();
 
+	self.boolAllDone = 0;
 	// calculate handled cards
 	self.queryDB(self.queries['handledCards'].query,
 			self.queries['handledCards'].values, self.calculateHandledCards);
@@ -192,6 +193,15 @@ StatisticsModel.prototype.calculateValues = function() {
 	// calculate stack handler
 	self.queryDB(self.queries['stackHandler'].query,
 			self.queries['stackHandler'].values, self.calculateStackHandler);
+	
+	
+};
+
+StatisticsModel.prototype.allCalculationsDone = function() {
+	console.log(" finished n="+this.boolAllDone +" calculations");
+	if ( this.boolAllDone == 6) {
+		$(document).trigger("allstatisticcalculationsdone");
+	}
 };
 
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
@@ -222,6 +232,10 @@ StatisticsModel.prototype.calculateHandledCards = function(statisticsModel,
 				self.queries['handledCards'].values24hBefore,
 				self.calculateImprovementHandledCards);
 	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
+	}
 };
 
 StatisticsModel.prototype.calculateAverageScore = function(statisticsModel,
@@ -243,6 +257,10 @@ StatisticsModel.prototype.calculateAverageScore = function(statisticsModel,
 		self.queryDB(self.queries['avgScore'].query,
 				self.queries['avgScore'].values24hBefore,
 				self.calculateImprovementAverageScore);
+	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
 	}
 };
 
@@ -266,6 +284,10 @@ StatisticsModel.prototype.calculateAverageSpeed = function(statisticsModel,
 				self.queries['avgSpeed'].values24hBefore,
 				self.calculateImprovementAverageSpeed);
 	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
+	}
 };
 
 StatisticsModel.prototype.calculateProgress = function(statisticsModel,
@@ -288,6 +310,10 @@ StatisticsModel.prototype.calculateProgress = function(statisticsModel,
 		self.queryDB(self.queries['progress'].query,
 				self.queries['progress'].values24hBefore,
 				self.calculateImprovementProgress);
+	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
 	}
 };
 
@@ -314,6 +340,8 @@ StatisticsModel.prototype.calculateBestDayAndScore = function(statisticsModel,
 	console.log("best score: " + bestScore);
 	self.statistics['bestScore'] = Math.round(bestScore * 100);
 	$(document).trigger("statisticcalculationsdone");
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementHandledCards = function(
@@ -330,6 +358,7 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(
 		console.log("improvement handled cards: "
 				+ self.improvement['handledCards']);
 		$(document).trigger("statisticcalculationsdone");
+		
 	} else {
 		if (self.statistics['handledCards'] > 0) {
 			self.improvement['handledCards'] = self.statistics['handledCards'];
@@ -337,6 +366,8 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(
 			self.improvement['handledCards'] = 0;
 		}
 	}
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementAverageScore = function(
@@ -356,6 +387,7 @@ StatisticsModel.prototype.calculateImprovementAverageScore = function(
 		console.log("improvement average score: "
 				+ self.improvement['averageScore']);
 		$(document).trigger("statisticcalculationsdone");
+		
 	} else {
 		if (self.statistics['averageScore'] > 0) {
 			self.improvement['averageScore'] = self.statistics['averageScore'];
@@ -363,6 +395,8 @@ StatisticsModel.prototype.calculateImprovementAverageScore = function(
 			self.improvement['averageScore'] = 0;
 		}
 	}
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementAverageSpeed = function(
@@ -378,11 +412,11 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(
 			oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
 		}
 		newAverageSpeed = self.statistics['averageSpeed'];
-		self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed)
-				* (-1);
+		self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed);
 		console.log("improvement average speed: "
 				+ self.improvement['averageSpeed']);
 		$(document).trigger("statisticcalculationsdone");
+		
 	} else {
 		if (self.statistics['averageSpeed'] > 0) {
 			self.improvement['averageSpeed'] = self.statistics['averageSpeed'];
@@ -390,6 +424,8 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(
 			self.improvement['averageSpeed'] = 0;
 		}
 	}
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementProgress = function(
@@ -414,6 +450,7 @@ StatisticsModel.prototype.calculateImprovementProgress = function(
 			self.improvement['progress'] = 0;
 		}
 	}
+	
 };
 
 StatisticsModel.prototype.calculateImprovementProgressHelperFunction = function(
@@ -431,6 +468,7 @@ StatisticsModel.prototype.calculateImprovementProgressHelperFunction = function(
 		self.improvement['progress'] = newProgress - oldProgress;
 		console.log("improvement progress: " + self.improvement['progress']);
 		$(document).trigger("statisticcalculationsdone");
+		
 	} else {
 		if (self.statistics['progress'] > 0) {
 			self.improvement['progress'] = self.statistics['progress'];
@@ -438,6 +476,8 @@ StatisticsModel.prototype.calculateImprovementProgressHelperFunction = function(
 			self.improvement['progress'] = 0;
 		}
 	}
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateStackHandler = function(statisticsModel,
@@ -464,6 +504,8 @@ StatisticsModel.prototype.calculateStackHandler = function(statisticsModel,
 	}
 	console.log("stackHandler: " + self.statistics['stackHandler']
 			+ " handled: " + numHandledCards + " all: " + numAllCards);
+	self.boolAllDone++;
+	self.allCalculationsDone();
 }
 
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {

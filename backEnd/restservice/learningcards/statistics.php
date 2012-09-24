@@ -119,7 +119,7 @@ function getStatistics($userId) {
 	$statistics = array();
 	$result = $ilDB->query("SELECT * FROM isnlc_statistics WHERE user_id = " . $ilDB->quote($userId, "text"));
 	while ($record = $ilDB->fetchAssoc($result)){
-		logging(json_encode($record));
+// 		logging(json_encode($record));
 		array_push($statistics, array(
 				"course_id" => $record['course_id'],
 				"question_id" => $record['question_id'],
@@ -181,9 +181,9 @@ function generateTable() {
 		$ilDB->createSequence("isnlc_statistics");
 
 		logging("after creating the table");
-
-
 	}
+	
+// 	$ilDB->manipulate("DELETE FROM isnlc_statistics WHERE user_id = '12979'");
 }
 
 ?>
