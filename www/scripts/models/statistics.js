@@ -173,25 +173,27 @@ StatisticsModel.prototype.calculateValues = function() {
 	self.queryDB(self.queries['handledCards'].query,
 			self.queries['handledCards'].values, self.calculateHandledCards);
 
-	// calculate average score
-	self.queryDB(self.queries['avgScore'].query,
-			self.queries['avgScore'].values, self.calculateAverageScore);
+	$(document).bind("handledcardscalculationdone", function() {
+		// calculate average score
+		self.queryDB(self.queries['avgScore'].query,
+				self.queries['avgScore'].values, self.calculateAverageScore);
 
-	// calculate average speed
-	self.queryDB(self.queries['avgSpeed'].query,
-			self.queries['avgSpeed'].values, self.calculateAverageSpeed);
+		// calculate average speed
+		self.queryDB(self.queries['avgSpeed'].query,
+				self.queries['avgSpeed'].values, self.calculateAverageSpeed);
 
-	// calculate progress
-	self.queryDB(self.queries['progress'].query,
-			self.queries['progress'].values, self.calculateProgress);
+		// calculate progress
+		self.queryDB(self.queries['progress'].query,
+				self.queries['progress'].values, self.calculateProgress);
 
-	// calculate best day and score
-	self.queryDB(self.queries['best'].query, self.queries['best'].values,
-			self.calculateBestDayAndScore);
+		// calculate best day and score
+		self.queryDB(self.queries['best'].query, self.queries['best'].values,
+				self.calculateBestDayAndScore);
 
-	// calculate stack handler
-	self.queryDB(self.queries['stackHandler'].query,
-			self.queries['stackHandler'].values, self.calculateStackHandler);
+		// calculate stack handler
+		self.queryDB(self.queries['stackHandler'].query,
+				self.queries['stackHandler'].values, self.calculateStackHandler);
+	});
 };
 
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
@@ -337,6 +339,7 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(
 			self.improvement['handledCards'] = 0;
 		}
 	}
+	$(document).trigger("handledcardscalculationdone");
 };
 
 StatisticsModel.prototype.calculateImprovementAverageScore = function(
@@ -378,8 +381,7 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(
 			oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
 		}
 		newAverageSpeed = self.statistics['averageSpeed'];
-		self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed)
-				* (-1);
+		self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed);
 		console.log("improvement average speed: "
 				+ self.improvement['averageSpeed']);
 		$(document).trigger("statisticcalculationsdone");
@@ -487,82 +489,19 @@ StatisticsModel.prototype.loadFromServer = function() {
 						var statisticsObject;
 						try {
 							statisticsObject = data;
-							console.log("statistics data from server");
+							console.log("statistics data from server: " + JSON.stringify(statisticsObject));
 						} catch (err) {
 							console
-									.log("Error: Couldn't parse JSON for statistics");
+							.log("Error: Couldn't parse JSON for statistics");
 						}
 
 						if (!statisticsObject) {
 							statisticsObject = [];
 						}
-
-						// self.queryDB(
-						// "SELECT max(id) as last_id FROM statistics",
-						// [], lastIdCb);
-
-						// function lastIdCb(statisticsModel, transaction,
-						// results) {
-						// var self = statisticsModel;
-						// if (results.rows.length > 0) {
-						// var row = results.rows.item(0);
-						// lastId =
-						// row['last_id'];
-						//
-						// if (!lastId)
-						// {
-						// lastId = -1;
-						// }
-
-						// console
-						// .log("last id
-						// from client
-						// db: "
-						// + lastId);
-						// console.log("count statistics: "+
-						// statisticsObject.length);
-
-						// for ( var i =
-						// (lastId + 1);
-						// i <
-						// statisticsObject.length;
-						// i++) {
-						for ( var i = 0; i < statisticsObject.length; i++) {
-							statisticItem = statisticsObject[i];
-
-							console.log(JSON.stringify(statisticItem));
-
-							self
-									.queryDB(
-											"SELECT id FROM statistics WHERE day = ?",
-											[ statisticItem['day'] ],
-											checkIfItemExists);
-
-							function checkIfItemExists(statisticsModel,
-									transaction, results) {
-								if (results.rows.length == 0) {
-									query = "INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?,?,?,?,?)";
-									values = [ statisticItem['course_id'],
-											statisticItem['question_id'],
-											statisticItem['day'],
-											statisticItem['score'],
-											statisticItem['duration'] ];
-									self.queryDB(query, values, function(
-											statisticsModel, transaction,
-											results) {
-										console.log("after inserting");
-									});
-								}
-							}
-
+						
+						for ( var i = 0; i < statisticsObject.length; i++) {						
+							self.insertStatisticItem(statisticsObject[i]);
 						}
-						// },
-						// function() {
-						// console.log("error: statistics table not cleared");
-						// });
-
-						// }
-						// }
 
 					},
 					error : function() {
@@ -577,6 +516,35 @@ StatisticsModel.prototype.loadFromServer = function() {
 					self.controller.models['authentication'].getSessionKey());
 		}
 
+	}
+};
+
+StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
+	var self = this;
+	console.log("day: " + statisticItem['day']);
+	
+	self
+	.queryDB(
+			"SELECT id FROM statistics WHERE day = ?",
+			[ statisticItem['day'] ], checkIfItemExists);
+
+	function checkIfItemExists(statisticsModel,
+			transaction, results) {
+		var item = statisticItem;
+		if (results.rows.length == 0) {
+			console.log("No entry for day: " + item['day']);
+			query = "INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?,?,?,?,?)";
+			values = [ item['course_id'],
+			           item['question_id'],
+			           item['day'],
+			           item['score'],
+			           item['duration'] ];
+			self.queryDB(query, values, function(
+					statisticsModel, transaction,
+					results) {
+				console.log("after inserting");
+			});
+		}
 	}
 };
 
@@ -609,7 +577,7 @@ StatisticsModel.prototype.sendToServer = function() {
 			for ( var i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
 				statistics.push(row);
-				console.log("sending " + i + ": " + JSON.stringify(row));
+//				console.log("sending " + i + ": " + JSON.stringify(row));
 			}
 			sessionkey = self.controller.models['authentication'].getSessionKey();
 			uuid = device.uuid;

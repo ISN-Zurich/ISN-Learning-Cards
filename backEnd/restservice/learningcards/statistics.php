@@ -91,10 +91,13 @@ function setStatistics($userId, $uuid, $statistics) {
 		logging(json_encode($statisticItem));
 
 		$result = $ilDB->query("SELECT id FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text") .
-				" AND day = " . $ilDB->quote($statistics['day'], "integer"));
+				" AND day = " . $ilDB->quote($statisticItem['day'], "integer"));
 		$record = $ilDB->fetchAssoc($result);
 		$id = $record['id'];
 
+		logging("day: " + $statisticItem['day']);
+		logging("id: " + $id);
+		
 		if (!$id) {
 			$myID = $ilDB->nextID("isnlc_statistics");
 			logging("new ID: " . $myID);
@@ -119,7 +122,7 @@ function getStatistics($userId) {
 	$statistics = array();
 	$result = $ilDB->query("SELECT * FROM isnlc_statistics WHERE user_id = " . $ilDB->quote($userId, "text"));
 	while ($record = $ilDB->fetchAssoc($result)){
-		logging(json_encode($record));
+// 		logging(json_encode($record));
 		array_push($statistics, array(
 				"course_id" => $record['course_id'],
 				"question_id" => $record['question_id'],
@@ -181,9 +184,9 @@ function generateTable() {
 		$ilDB->createSequence("isnlc_statistics");
 
 		logging("after creating the table");
-
-
 	}
+	
+// 	$ilDB->manipulate("DELETE FROM isnlc_statistics WHERE user_id = '12979'");
 }
 
 ?>

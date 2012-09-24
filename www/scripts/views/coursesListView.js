@@ -140,7 +140,6 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 
 CoursesListView.prototype.setIconSize = function() {
 	$("#coursesList li").each(function() {
-		console.log("height: " + $(this).height());
 		height = $(this).height();
 		$(this).find(".courseListIcon").height(height);
 		$(this).find(".courseListIcon").css("line-height", height + "px");

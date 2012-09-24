@@ -73,11 +73,12 @@ QuestionView.prototype.openDiv = openView;
 QuestionView.prototype.open = function() {
 	this.showQuestionBody();
 	this.showQuestionTitle();
-	this.openDiv();
-
+	
 	if (!controller.models["answers"].hasStarted()) {
 		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
 	}
+	
+	this.openDiv();	
 };
 
 /**
