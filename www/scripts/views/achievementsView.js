@@ -38,17 +38,18 @@ AchievementsView.prototype.showAchievementsBody = function() {
 
 	var statisticsModel = controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
+	$("#stackHandlerIcon").removeClass("blue");
+	$("#cardBurnerIcon").removeClass("blue");
 
 	$("#valueStackHandler").text(statistics['stackHandler']+"%");
 //checkMaxEfficiency(statistics['stackHandler']);
-	if (statistics['stackHandler'] = "100"){
+	if (statistics['stackHandler'] == 100){
 			$("#stackHandlerIcon").addClass("blue");			
-	}
+	};
 	$("#valueCardBurner").text(statistics['cardBurner']+"%");
-
-	if (statistics['cardBurner'] == "100"){
+	if (statistics['cardBurner'] == 100){
 			$("#cardBurnerIcon").addClass("blue");			
-	}
+	};
 	
 //	function checkMaxEfficiency(efficiencyValue){
 //

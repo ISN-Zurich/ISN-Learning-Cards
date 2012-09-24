@@ -18,7 +18,7 @@ function StatisticsView(controller) {
 	});
     
     console.log('bind the application events');
-    $(document).bind("statisticcalculationsdone", function() {self.loadData();});
+    
     
     console.log('done');
 }
@@ -26,10 +26,11 @@ function StatisticsView(controller) {
 StatisticsView.prototype.handlePinch = doNothing;
 StatisticsView.prototype.handleTap   = doNothing;
 StatisticsView.prototype.handleSwipe = doNothing;
-StatisticsView.prototype.close       = closeView;
-StatisticsView.prototype.openDiv     = openView;
+StatisticsView.prototype.close = closeView;
 
-StatisticsView.prototype.open        = function() {
+StatisticsView.prototype.openDiv = openView;
+
+StatisticsView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();	
 };
@@ -49,7 +50,7 @@ StatisticsView.prototype.loadData = function() {
 	var statisticsModel = this.controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
 	var improvement = statisticsModel.getImprovement();
-	
+	console.log("init values for statistics");
 	var avgScore = statistics['averageScore'];
 	if (avgScore < 0) {
 		avgScore =  0;
@@ -81,7 +82,8 @@ StatisticsView.prototype.loadData = function() {
 	if (bestScore < 0) {
 		bestScore =  0;
 	}
-
+console.log("initialization of data done");
+	
 	//$("#statisticsBody").empty();
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
@@ -93,7 +95,7 @@ StatisticsView.prototype.loadData = function() {
 	$("#statProgressValue").text(progress+"%");
 	$("#statsProgressIconchange").addClass(checkImprovement(improvement['progress']));
 	$("#statSpeedValue").text(avgSpeed);
-	$("#statsSpeedIconchange").addClass(checkImprovement(improvement['averageSpeed']));	
+	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvement['averageSpeed']));	
 
 	function checkImprovement(improvementValue) {
 		if (improvementValue > 0) {
@@ -106,30 +108,20 @@ StatisticsView.prototype.loadData = function() {
 		}
     }
 
-};	
-	
-// ******isabella refactoring*********
-//	$("#statisticsData").empty();
-//	$("<li/>", {
-//		  text: "Best Day: " + bestDay
-//		}).appendTo("#statisticsData");
-//	$("<li/>", {
-//	  text: "Best Score: " + bestScore + "%"
-//	}).appendTo("#statisticsData");
-//	$("<li/>", {
-//		  text: "Average Score: " + avgScore + "% " + improvement['averageScore']
-//		}).appendTo("#statisticsData");
-//	$("<li/>", {
-//	  text: "Average Speed: " + avgSpeed + " sec " + improvement['averageSpeed']
-//	}).appendTo("#statisticsData");	
-//	$("<li/>", {
-//		  text: "Handled Cards: " + handledCards + " " + improvement['handledCards']
-//		}).appendTo("#statisticsData");
-//	
-//	$("<li/>", {
-//		  text: "Progress: " + progress +"% correct answers " + improvement['progress']
-//		}).appendTo("#statisticsData");
+	function checkSpeedImprovement(improvementValue){
+		if (improvementValue > 0) {
+			return msg_positiveImprovement_icon + " red";
+		} else if (improvementValue < 0) {
+			return msg_negativeImprovement_icon + " green";
 
+		}else{
+			return msg_neutralImprovement_icon + " green";
+		}
+		
+	}
+	
+	console.log("end load data");
+};	
 
 	
 

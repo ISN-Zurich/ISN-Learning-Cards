@@ -68,7 +68,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 
 	this.controller.models['questionpool'].loadData(courseId);
 	
-	this.calculateValues();
+//	this.calculateValues();
 };
 
 StatisticsModel.prototype.getStatistics = function() {
@@ -212,6 +212,7 @@ StatisticsModel.prototype.calculateValues = function() {
 	var self = this;
 	self.initQueryValues();
 
+	self.boolAllDone = 0;
 	// calculate handled cards
 	self.queryDB(self.queries['handledCards'].query,
 			self.queries['handledCards'].values, function cbHC(t,r) {self.calculateHandledCards(t,r);});
@@ -234,7 +235,14 @@ StatisticsModel.prototype.calculateValues = function() {
 
 	// calculate stack handler
 	self.queryDB(self.queries['stackHandler'].query,
-			self.queries['stackHandler'].values, function cbSH(t,r) {self.calculateStackHandler(t,r);});
+			self.queries['stackHandler'].values, function cbSH(t,r) {self.calculateStackHandler(t,r);});	
+};
+
+StatisticsModel.prototype.allCalculationsDone = function() {
+	console.log(" finished n="+this.boolAllDone +" calculations");
+	if ( this.boolAllDone == 6) {
+		$(document).trigger("allstatisticcalculationsdone");
+	}
 };
 
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
@@ -264,6 +272,10 @@ StatisticsModel.prototype.calculateHandledCards = function(transaction, results)
 			self.calculateImprovementHandledCards(t,r);
 		});
 	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
+	}
 };
 
 StatisticsModel.prototype.calculateAverageScore = function(transaction, results) {
@@ -285,6 +297,10 @@ StatisticsModel.prototype.calculateAverageScore = function(transaction, results)
 				self.queries['avgScore'].valuesLastActivity,
 				function cbCalculateImprovements(t,r) {self.calculateImprovementAverageScore(t,r);});
 	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
+	}
 };
 
 StatisticsModel.prototype.calculateAverageSpeed = function(transaction, results) {
@@ -305,6 +321,10 @@ StatisticsModel.prototype.calculateAverageSpeed = function(transaction, results)
 		self.queryDB(self.queries['avgSpeed'].query,
 				self.queries['avgSpeed'].valuesLastActivity,
 				function cbCalculateImprovements(t,r) {self.calculateImprovementAverageSpeed(t,r);});
+	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
 	}
 };
 
@@ -328,6 +348,10 @@ StatisticsModel.prototype.calculateProgress = function(transaction, results) {
 		self.queryDB(self.queries['progress'].query,
 				self.queries['progress'].valuesLastActivity,
 				function cbCalculateImprovements(t,r) {self.calculateImprovementProgress(t,r);});
+	}
+	else {
+		self.boolAllDone++;
+		self.allCalculationsDone();
 	}
 };
 
@@ -353,6 +377,8 @@ StatisticsModel.prototype.calculateBestDayAndScore = function(transaction, resul
 	console.log("best score: " + bestScore);
 	self.statistics['bestScore'] = Math.round(bestScore * 100);
 	$(document).trigger("statisticcalculationsdone");
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementHandledCards = function(transaction, results) {
@@ -368,6 +394,7 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(transactio
 		console.log("improvement handled cards: "
 				+ self.improvement['handledCards']);
 		$(document).trigger("statisticcalculationsdone");
+		
 	} else {
 		if (self.statistics['handledCards'] > 0) {
 			self.improvement['handledCards'] = self.statistics['handledCards'];
@@ -375,6 +402,8 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(transactio
 			self.improvement['handledCards'] = 0;
 		}
 	}
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementAverageScore = function(transaction, results) {
@@ -393,6 +422,7 @@ StatisticsModel.prototype.calculateImprovementAverageScore = function(transactio
 		console.log("improvement average score: "
 				+ self.improvement['averageScore']);
 		$(document).trigger("statisticcalculationsdone");
+		
 	} else {
 		if (self.statistics['averageScore'] > 0) {
 			self.improvement['averageScore'] = self.statistics['averageScore'];
@@ -400,6 +430,8 @@ StatisticsModel.prototype.calculateImprovementAverageScore = function(transactio
 			self.improvement['averageScore'] = 0;
 		}
 	}
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementAverageSpeed = function(transaction, results) {
@@ -418,6 +450,7 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(transactio
 		console.log("improvement average speed: "
 				+ self.improvement['averageSpeed']);
 		$(document).trigger("statisticcalculationsdone");
+		
 	} else {
 		if (self.statistics['averageSpeed'] > 0) {
 			self.improvement['averageSpeed'] = self.statistics['averageSpeed'];
@@ -425,6 +458,8 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(transactio
 			self.improvement['averageSpeed'] = 0;
 		}
 	}
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateImprovementProgress = function(transaction, results) {
@@ -451,7 +486,8 @@ StatisticsModel.prototype.calculateImprovementProgress = function(transaction, r
 			self.improvement['progress'] = 0;
 		}
 	}
-	$(document).trigger("statisticcalculationsdone");
+	self.boolAllDone++;
+	self.allCalculationsDone();
 };
 
 StatisticsModel.prototype.calculateStackHandler = function(transaction, results) {
@@ -477,6 +513,8 @@ StatisticsModel.prototype.calculateStackHandler = function(transaction, results)
 	}
 	console.log("stackHandler: " + self.statistics['stackHandler']
 			+ " handled: " + numHandledCards + " all: " + numAllCards);
+	self.boolAllDone++;
+	self.allCalculationsDone();
 }
 
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
