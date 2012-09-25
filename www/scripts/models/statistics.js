@@ -5,7 +5,8 @@ var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
  */
 function StatisticsModel(controller) {
 	this.controller = controller;
-
+	this.lastSendToServer;
+	
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 
@@ -720,6 +721,7 @@ StatisticsModel.prototype.sendToServer = function() {
 				console
 				.log("statistics data successfully send to the server");
 				localStorage.removeItem("pendingStatistics");
+				self.lastSendToServer = (new Date()).getTime();
 				$(document).trigger("statisticssenttoserver");
 			},
 			error : function() {

@@ -82,11 +82,20 @@ ConnectionState.prototype.goOnline = function() {
         }
     }
 
+    var statisticsModel = this.controller.models["statistics"];
+    
     console.log('check synchronization - statistics');
 	// if pending statistics exist, send them to the server
 	var pendingStatistics = localStorage.getItem("pendingStatistics");
 	if (pendingStatistics) {
-		this.controller.models["statistics"].sendToServer();
+		statisticsModel.sendToServer();
+	}
+	// if statistics data wasn't sent to the server for more than 24 hours
+	// send the data to the server
+	if ( this.controller && this.controller.models && this.controller.models["statistics"]) {
+		if (!statisticsModel.lastSendToServer || statisticsModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+			statisticsModel.sendToServer();
+		}
 	}
     
     console.log('check synchronization DONE');
