@@ -385,14 +385,7 @@ li {
 	100% {-webkit-transform:rotate(-360deg);}
 }
 
-#logos {
-	vertical-align: bottom;
-	margin-top: 10px;
-	clear: both;
-	width:100%;
-	height:15%;
-	content: url(../resources/logos_small.png);
-}
+
 
 /*********************** Login ***********************/
 #loginForm {
@@ -545,6 +538,30 @@ li {
 
 #logOut {
 	
+}
+
+#logos {
+	vertical-align: bottom;
+	margin-top: 10px;
+	clear: both;
+	width: 100%;
+	/*height: 15%;*/
+	height:53px;
+
+	/*content: url(../resources/logos_small.png);*/}
+
+#ISNlogo {
+	float: left;
+	content: url(../resources/isn_css.png);
+	width: 142px;
+	height: 53px;
+}
+
+#ETHZlogo {
+	float: right;
+	content: url(../resources/ethz.png);
+	width: 142px;
+	height: 53px;
 }
 
 .sortable {
