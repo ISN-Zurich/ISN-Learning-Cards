@@ -242,7 +242,10 @@ StatisticsModel.prototype.allCalculationsDone = function() {
 	console.log(" finished n="+this.boolAllDone +" calculations");
 	if ( this.boolAllDone == 6) {
 		$(document).trigger("allstatisticcalculationsdone");
-	}
+	
+	} 
+	
+	
 };
 
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
