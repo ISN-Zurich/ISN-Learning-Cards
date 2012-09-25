@@ -29,7 +29,6 @@ switch($request_method) {
 			logging("has valid user");
 			$statistics = file_get_contents("php://input");
 			logging(" statistics data" . $statistics);
-			// 			$statistics = get_statistics_from_headers();
 			$uuid = get_uuid_from_headers();
 			setStatistics($userId, $uuid, json_decode($statistics, true));
 			logging("end of PUT");
@@ -52,21 +51,7 @@ switch($request_method) {
 }
 
 /**
- * reads statistics data from the header
- */
-function get_statistics_from_headers() {
-	logging("in get statistics from headers");
-
-
-	$myheaders = getallheaders();
-	$statistics = $myheaders["statistics"];
-	logging("statistics from header: " . json_decode($statistics, true));
-
-	return json_decode($statistics, true);
-}
-
-/**
- * reads statistics data from the header
+ * reads uuid data from the header
  */
 function get_uuid_from_headers() {
 	logging("in get uuid from headers");

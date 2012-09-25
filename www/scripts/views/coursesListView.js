@@ -103,8 +103,12 @@ CoursesListView.prototype.update = function() {
 	if (courseModel.courseList.length == 0) {
 		
 		var li = $("<li/>", {
-			text : (self.firstLoad ? "Courses are being loaded" : "No Courses")
-		}).appendTo("#coursesList");	
+		}).appendTo("#coursesList");
+		
+		$("<div/>", {
+			"class": "text",
+			text : (self.firstLoad ? "Courses are being loaded" : "No Courses"),
+		}).appendTo(li);
 		
 	} else {
 		do {
