@@ -12,6 +12,7 @@ function doNothing() {
  * opens a view
  */
 function openView() {
+	$(document).trigger("trackingEventDetected",[this.tagID]);
 	$("#" + this.tagID).show();
 }
 
@@ -55,6 +56,7 @@ function Controller() {
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel(this);
 	this.models.statistics = new StatisticsModel(this);
+	this.models.tracking = new TrackingModel(this);
     
     // add synchronization triggers at the end of the model initialization just to be careful 
     this.models.connection = new ConnectionState(this);

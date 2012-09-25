@@ -21,6 +21,68 @@ $class_for_logging = "tracking.php";
 
 generateTable();
 
+$request_method = $_SERVER['REQUEST_METHOD'];
+
+logging("request method: '" . $request_method . "'");
+
+
+switch($request_method) {
+	case "POST":
+	case "PUT":
+		//when the user logs out the app sends the data to the server
+		logging("post/put request");
+		$userId = get_session_user_from_headers();
+		if ($userId > 0) {
+			logging("has valid user");
+			$tracking = file_get_contents("php://input");
+			logging(" tracking data" . $tracking);
+			$uuid = get_uuid_from_headers();
+			setTracking($userId, $uuid, json_decode($tracking, true));
+			logging("end of PUT");
+		}
+		break;
+	case "DELETE":
+	default:
+		logging("request method not supported");
+		break;
+}
+
+
+
+function setTracking($userId, $uuid, $tracking) {
+	global $ilDB;
+
+	logging("in tracking");
+
+	logging("count tracking: " . count($tracking));
+
+	for ($i = 0; $i < count($tracking); $i++) {
+		$trackingItem = $tracking[$i];
+		logging(json_encode($trackingItem));
+
+		$result = $ilDB->query("SELECT id FROM isnlc_tracking WHERE user_id =" . $ilDB->quote($userId, "text"));
+		$record = $ilDB->fetchAssoc($result);
+		$id = $record['id'];
+
+		//logging("day: " + $statisticItem['day']);
+		//logging("id: " + $id);
+
+		if (!$id) {
+			$myID = $ilDB->nextID("isnlc_tracking");
+			logging("new ID: " . $myID);
+
+			$ilDB->manipulateF("INSERT INTO isnlc_tracking(id, user_id, uuid, timeStamp,event_type) VALUES (%s,%s,%s,%s,%s)",
+					array("integer", "text", "text", "integer", "text"),
+					array ($myID, $userId, $uuid, $trackingItem['timeStamp'], $trackingItem['event_type']));
+
+			logging("after insert");
+		}
+	}
+
+	logging("after inserting");
+}
+
+
 function generateTable() {
 	global $ilDB;
 
@@ -42,17 +104,13 @@ function generateTable() {
 						'type' => 'text',
 						'length'=> 255
 				),
-				"view_id" => array(
-						'type' => 'text',
-						'length'=> 255
-				),
 				"timeStamp" => array(
 						'type' => 'integer',
-						'length'=> 4
+						'length'=> 8
 				),
 				"event_type" => array(
-						'type' => 'integer',
-						'length'=> 8
+						'type' => 'text',
+						'length'=> 255
 				)
 				
 		);

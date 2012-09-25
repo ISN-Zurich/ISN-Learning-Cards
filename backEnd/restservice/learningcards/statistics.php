@@ -23,19 +23,20 @@ logging("request method: '" . $request_method . "'");
 switch($request_method) {
 	case "POST":
 	case "PUT":
+		//when the user logs out the app sends the data to the server
 		logging("post/put request");
 		$userId = get_session_user_from_headers();
 		if ($userId > 0) {
 			logging("has valid user");
 			$statistics = file_get_contents("php://input");
 			logging(" statistics data" . $statistics);
-			// 			$statistics = get_statistics_from_headers();
 			$uuid = get_uuid_from_headers();
 			setStatistics($userId, $uuid, json_decode($statistics, true));
 			logging("end of PUT");
 		}
 		break;
 	case "GET":
+		//when the user logs into the app the data is sychnronized
 		logging("get request");
 		$userId = get_session_user_from_headers();
 		if ($userId > 0) {
@@ -49,34 +50,6 @@ switch($request_method) {
 	default:
 		logging("request method not supported");
 		break;
-}
-
-/**
- * reads statistics data from the header
- */
-function get_statistics_from_headers() {
-	logging("in get statistics from headers");
-
-
-	$myheaders = getallheaders();
-	$statistics = $myheaders["statistics"];
-	logging("statistics from header: " . json_decode($statistics, true));
-
-	return json_decode($statistics, true);
-}
-
-/**
- * reads statistics data from the header
- */
-function get_uuid_from_headers() {
-	logging("in get uuid from headers");
-
-	$myheaders = getallheaders();
-	$uuid = $myheaders["uuid"];
-
-	logging("uuid from header: " . $uuid);
-
-	return $uuid;
 }
 
 

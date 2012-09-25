@@ -91,10 +91,11 @@ LoginView.prototype.clickLoginButton = function() {
 	function cbLoginSuccess() {
 		if (self.active) {
 			console.log("is logIn");
+			$(document).trigger("trackingEventDetected",["Login"]);
 			controller.transitionToCourses();
 		}
 	}
-
+	
 	function cbLoginFailure(e, errormessage) {
 		console.log("authentication failed, reason: " + errormessage);
 		switch (errormessage) {

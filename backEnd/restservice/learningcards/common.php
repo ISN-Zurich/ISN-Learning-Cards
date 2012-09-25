@@ -83,4 +83,20 @@ function isValidQuestionPool($questionpool) {
 	return $validQuestionPool;
 }
 
+/**
+ * reads statistics data from the header
+ */
+
+function get_uuid_from_headers() {
+	logging("in get uuid from headers");
+
+	$myheaders = getallheaders();
+	$uuid = $myheaders["uuid"];
+
+	logging("uuid from header: " . $uuid);
+
+	return $uuid;
+}
+
+
 ?>

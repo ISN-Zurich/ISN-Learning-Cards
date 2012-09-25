@@ -26,7 +26,7 @@ function StatisticsModel(controller) {
 	this.improvement['progress'] = 0;
 	this.improvement['averageScore'] = 0;
 	this.improvement['averageSpeed'] = 0;
-
+	
 	this.queries = [];
 	this.initQueries();
 	
@@ -34,7 +34,7 @@ function StatisticsModel(controller) {
 	this.lastActiveDay;
 
 	// setInterval(function() {console.log("interval is active");}, 5000);
-
+	
 };
 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
