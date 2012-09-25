@@ -81,11 +81,13 @@ CoursesListView.prototype.clickSettingsButton = function() {
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 	
-	$("#courseListIcon"+courseID).addClass("icon-loading").removeClass("icon-bars");
+	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
+		$("#courseListIcon"+courseID).addClass("icon-loading").removeClass("icon-bars");
 	
-	//all calculations are done based on the course id and are triggered
-	//within setCurrentCourseId
-	this.controller.models['statistics'].setCurrentCourseId(courseID);
+		//all calculations are done based on the course id and are triggered
+		//within setCurrentCourseId
+		this.controller.models['statistics'].setCurrentCourseId(courseID);
+	}
 };
 
 CoursesListView.prototype.update = function() {
