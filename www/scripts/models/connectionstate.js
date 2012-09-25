@@ -39,6 +39,7 @@ ConnectionState.prototype.goOnline = function() {
 
 	// trigger event
 	$(document).trigger("switchtoonline");
+	$(document).trigger("trackingEventDetected","online");
 
 	// if a pending logout exists, send the logout to the server
 	sessionKey = localStorage.getItem("pendingLogout");
@@ -98,6 +99,22 @@ ConnectionState.prototype.goOnline = function() {
 		}
 	}
     
+	
+var trackingModel = this.controller.models["tracking"];
+    
+    console.log('check synchronization - tracking');
+	// if pending statistics exist, send them to the server
+	var pendingTracking = localStorage.getItem("pendingTracking");
+	if (pendingTracking) {
+		trackingModel.sendToServer();
+	}
+	// if tracking data wasn't sent to the server for more than 24 hours
+	// send the data to the server
+	if ( this.controller && this.controller.models && this.controller.models["tracking"]) {
+		if (!trackingModel.lastSendToServer || trackingModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+			trackingModel.sendToServer();
+		}
+	}
     console.log('check synchronization DONE');
 
 };
@@ -108,7 +125,7 @@ ConnectionState.prototype.goOnline = function() {
 ConnectionState.prototype.goOffline = function() {
 	console.log("**offline**");
 	this.state = false;
-
+	$(document).trigger("trackingEventDetected","offline");
 	// show no connection error message in login view
 	this.controller.views["login"]
 			.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
