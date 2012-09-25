@@ -5,7 +5,8 @@ var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
  */
 function StatisticsModel(controller) {
 	this.controller = controller;
-
+	this.lastSendToServer;
+	
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 
@@ -35,6 +36,13 @@ function StatisticsModel(controller) {
 
 	// setInterval(function() {console.log("interval is active");}, 5000);
 	
+
+	var self = this;
+	$(document).bind("checkachievements", function(p, courseId) {
+		self.checkAchievements(courseId);
+	});
+
+
 };
 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
@@ -67,12 +75,8 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 
 	this.controller.models['questionpool'].loadData(courseId);
 	
-	if (!this.firstActiveDay) {
-		this.getFirstActiveDay();
-	} else {
-		this.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
-	}
-//	this.calculateValues();
+	this.checkCardBurner();
+	
 };
 
 StatisticsModel.prototype.getStatistics = function() {
@@ -83,9 +87,25 @@ StatisticsModel.prototype.getImprovement = function() {
 	return this.improvement;
 };
 
+StatisticsModel.prototype.checkCardBurner = function() {
+	var self = this;
+	var query = "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?";
+	var values = [this.currentCourseId, 'cardburner'];
+	this.queryDB(query, values, function(transaction, results) {
+		if (results.rows && results.rows.length > 0) {
+			self.statistics['cardBurner'] = 100;
+		}
+		if (!self.firstActiveDay) {
+			self.getFirstActiveDay();
+		} else {
+			self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
+		}
+	});
+};
+
 StatisticsModel.prototype.getFirstActiveDay = function() {
 	var self = this;
-	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=?',
+	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND question_id != "cardburner"',
 						[ self.currentCourseId ], 
 						function dataSelectHandler(transaction, results) {
 							if (results.rows.length > 0) {
@@ -106,7 +126,7 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 StatisticsModel.prototype.checkActivity = function(day) {
 	var self = this;
 	if (day > self.firstActiveDay) {
-		this.queryDB('SELECT count(id) as counter FROM statistics WHERE course_id=? AND day>=? AND day<=?',
+		this.queryDB('SELECT count(id) as counter FROM statistics WHERE course_id=? AND question_id != "cardburner" AND day>=? AND day<=?',
 							[ self.currentCourseId, (day - TWENTY_FOUR_HOURS), day ], 
 							function dataSelectHandler( transaction, results) {
 								if (results.rows.length > 0 && results.rows.item(0)['counter'] != 0) {
@@ -157,27 +177,27 @@ StatisticsModel.prototype.initQueries = function() {
 	};
 
 	// average score
-	this.queries['avgScore'].query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=?'
+	this.queries['avgScore'].query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
 			+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
 
 	// average speed
-	this.queries['avgSpeed'].query = 'SELECT sum(duration) as duration, count(id) as num FROM statistics WHERE course_id=?'
+	this.queries['avgSpeed'].query = 'SELECT sum(duration) as duration, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
 			+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
 
 	// handled cards
-	this.queries['handledCards'].query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND day>=? AND day<=?';
+	this.queries['handledCards'].query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND question_id != "cardburner" AND day>=? AND day<=?';
 
 	// progress
-	this.queries['progress'].query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND score=?'
+	this.queries['progress'].query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND question_id != "cardburner" AND score=?'
 			+ ' AND day>=? AND day<=?';
 
 	// best day and score
-	this.queries['best'].query = "SELECT min(day) as day, sum(score) as score, count(id) as num"
-			+ " FROM statistics WHERE course_id=?"
-			+ " GROUP BY DATE(day/1000, 'unixepoch')";
+	this.queries['best'].query = 'SELECT min(day) as day, sum(score) as score, count(id) as num'
+			+ ' FROM statistics WHERE course_id=? AND question_id != "cardburner"'
+			+ ' GROUP BY DATE(day/1000, "unixepoch")';
 
 	// stack handler
-	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=?';
+	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=? AND question_id != "cardburner"';
 };
 
 StatisticsModel.prototype.initQueryValues = function() {		
@@ -257,9 +277,7 @@ StatisticsModel.prototype.allCalculationsDone = function() {
 	if ( this.boolAllDone == 6) {
 		$(document).trigger("allstatisticcalculationsdone");
 	
-	} 
-	
-	
+	} 	
 };
 
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
@@ -275,10 +293,12 @@ StatisticsModel.prototype.calculateHandledCards = function(transaction, results)
 		var row = results.rows.item(0);
 		console.log("number of handled cards:" + row['c']);
 		self.statistics['handledCards'] = row['c'];
-		if (row['c'] > 100) {
-			self.statistics['cardBurner'] = 100;
-		} else {
-			self.statistics['cardBurner'] = row['c'];
+		if (self.statistics['cardBurner'] != 100) {
+			if (row['c'] > 100) {
+				self.statistics['cardBurner'] = 100;
+			} else {
+				self.statistics['cardBurner'] = row['c'];
+			}
 		}
 		console.log("card burner: " + self.statistics['cardBurner']);
 	} else {
@@ -531,7 +551,52 @@ StatisticsModel.prototype.calculateStackHandler = function(transaction, results)
 			+ " handled: " + numHandledCards + " all: " + numAllCards);
 	self.boolAllDone++;
 	self.allCalculationsDone();
-}
+};
+
+StatisticsModel.prototype.checkAchievements = function(courseId) {
+	//check if cardburner was already achieved
+	this.checkCardBurnerAchievement(courseId);
+};
+
+StatisticsModel.prototype.checkCardBurnerAchievement = function(courseId) {
+	//check if we have already achieved card burner
+	console.log("check card burner achievement");
+	var self = this;
+	var query = "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?";
+	var values = [courseId, 'cardburner'];
+	this.queryDB(query, values, function(transaction, results) {
+		
+		//if we have not achieved the card burner yet,
+		//count number of answered questions in the last 24 hours
+		if (results.rows.length == 0) {
+			console.log("card burner not achieved yet")
+			var query2 = "SELECT count(*) as c FROM statistics WHERE course_id=? AND question_id != 'cardburner' AND day>=? AND day<=?";
+			var day = (new Date()).getTime();
+			var values2 = [courseId, (day - TWENTY_FOUR_HOURS), day];
+			self.queryDB(query2, values2, function(transaction, results) {
+				console.log("second check if card burner was achieved");
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					
+					//if card burner was achieved (100 handled cards within 24 hours), insert a marker into the database
+					if (row['c'] == 100) {
+						console.log("cardburner was achieved");
+						var insert = 'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)';
+						var insertValues = [ courseId, "cardburner", day, 100, 0];
+						self.queryDB(insert, insertValues, function() {
+									console.log("successfully inserted card burner");
+								}, function(tx, e) {
+									console.log("error: "
+											+ e.message);
+								});
+					} else {
+						console.log("cardburner still not achieved yet");
+					}
+				}
+			});
+		}
+	});
+};
 
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
 	console.log("DB Error: " + e.message);
@@ -636,7 +701,6 @@ StatisticsModel.prototype.sendToServer = function() {
 			statistics = pendingStatistics.statistics;
 		}else {
 			console.log("results length: " + results.rows.length);
-			console.log(JSON.stringify(results.rows.item(0)));
 			for ( var i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
 				statistics.push(row);
@@ -659,6 +723,7 @@ StatisticsModel.prototype.sendToServer = function() {
 				console
 				.log("statistics data successfully send to the server");
 				localStorage.removeItem("pendingStatistics");
+				self.lastSendToServer = (new Date()).getTime();
 				$(document).trigger("statisticssenttoserver");
 			},
 			error : function() {

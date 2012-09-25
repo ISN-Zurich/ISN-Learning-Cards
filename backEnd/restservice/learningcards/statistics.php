@@ -42,7 +42,8 @@ switch($request_method) {
 		if ($userId > 0) {
 			logging("has valid user");
 			$response = json_encode(getStatistics($userId));
-			logging("GET response: " . $response);
+// 			logging("GET response: " . $response);
+			logging("Get response size: " . strlen($response));
 			echo($response);
 		}
 		break;
@@ -51,7 +52,6 @@ switch($request_method) {
 		logging("request method not supported");
 		break;
 }
-
 
 function setStatistics($userId, $uuid, $statistics) {
 	global $ilDB;

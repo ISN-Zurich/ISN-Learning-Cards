@@ -81,11 +81,13 @@ CoursesListView.prototype.clickSettingsButton = function() {
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 	
-	$("#courseListIcon"+courseID).addClass("icon-loading").removeClass("icon-bars");
+	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
+		$("#courseListIcon"+courseID).addClass("icon-loading").removeClass("icon-bars");
 	
-	//all calculations are done based on the course id and are triggered
-	//within setCurrentCourseId
-	this.controller.models['statistics'].setCurrentCourseId(courseID);
+		//all calculations are done based on the course id and are triggered
+		//within setCurrentCourseId
+		this.controller.models['statistics'].setCurrentCourseId(courseID);
+	}
 };
 
 CoursesListView.prototype.update = function() {
@@ -101,8 +103,12 @@ CoursesListView.prototype.update = function() {
 	if (courseModel.courseList.length == 0) {
 		
 		var li = $("<li/>", {
-			text : (self.firstLoad ? "Courses are being loaded" : "No Courses")
-		}).appendTo("#coursesList");	
+		}).appendTo("#coursesList");
+		
+		$("<div/>", {
+			"class": "text",
+			text : (self.firstLoad ? "Courses are being loaded" : "No Courses"),
+		}).appendTo(li);
 		
 	} else {
 		do {

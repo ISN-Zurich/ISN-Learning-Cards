@@ -265,6 +265,7 @@ AnswerModel.prototype.storeScoreInDB = function() {
 										day.getTime(), self.answerScore, duration ],
 								function() {
 									console.log("successfully inserted");
+									$(document).trigger("checkachievements", self.currentCourseId);
 								}, function(tx, e) {
 									console.log("error! NOT inserted: "
 											+ e.message);
@@ -272,6 +273,8 @@ AnswerModel.prototype.storeScoreInDB = function() {
 			});
 
 	this.resetTimer();
+	
+	
 };
 
 AnswerModel.prototype.deleteDB = function() {

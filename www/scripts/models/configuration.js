@@ -185,8 +185,6 @@ ConfigurationModel.prototype.logout = function() {
 		self.controller.models['answers'].deleteDB();
 	});
 
-	
-	
 	// remove all question pools and all pending question pool requests
 	var courseList = this.controller.models["course"].courseList;
 	if (courseList) {
@@ -200,7 +198,6 @@ ConfigurationModel.prototype.logout = function() {
 	localStorage.removeItem("pendingCourseList");
 	localStorage.removeItem("courses");
 	this.controller.models['course'].resetCourseList();
-	
 	
 
 };
