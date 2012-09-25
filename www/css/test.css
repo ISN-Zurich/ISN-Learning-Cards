@@ -590,6 +590,11 @@ li {
 #correctNumericFeedback {
 	width: 100%;
 }
+
+#typedAnswer, #correctNumericFeedback {
+	text-align: left;
+}
+
 #dataErrorMessage {
 	display: none;
 }
@@ -771,3 +776,17 @@ color:green;
 	margin-right: 56px;
 }
 
+/*********************** Settings View ***********************/
+.settingsLi {
+/* 	padding-top: 0px; */
+	padding-bottom: 5px;
+	padding-left:7px;
+}
+
+.settingsLabel {
+	font-size: 14px;
+	color: #999;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 3px;
+}

@@ -167,7 +167,6 @@ MultipleChoiceWidget.prototype.calculateAnswerScore = function() {
 
 MultipleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
-		console.log("height: " + $(this).height());
 		height = $(this).height();
 		$(this).find(".correctAnswer").height(height);
 		$(this).find(".correctAnswer").css("line-height", height + "px");

@@ -38,6 +38,10 @@ function CoursesListView(controller) {
     //send an oritentationchange even
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
+    
+    $(document).bind("allstatisticcalculationsdone", function() {
+    	self.controller.transitionToStatistics();
+    });
 }
 
 CoursesListView.prototype.handleTap = doNothing;
@@ -77,7 +81,7 @@ CoursesListView.prototype.clickSettingsButton = function() {
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 	this.controller.models['statistics'].setCurrentCourseId(courseID);
-	this.controller.transitionToStatistics();
+	this.controller.models["statistics"].calculateValues();
 };
 
 CoursesListView.prototype.update = function() {
@@ -104,24 +108,29 @@ CoursesListView.prototype.update = function() {
 				
 			}).appendTo("#coursesList");
 
-			jester(li[0]).tap(function() {
-				self.clickCourseItem($(this).attr('id').substring(6));
-			});
-
+			
 			span = $("<div/>", {
 				"class" : "courseListIcon right" + (courseModel.isSynchronized(courseID) ? " icon-bars" : " icon-loading")
 			}).appendTo(li);
 
 			
-			$("<div/>", {
+			var mydiv = $("<div/>", {
+				
 				"class" : "text marginForCourseList",
 				text : courseModel.getTitle()
 			}).appendTo(li);
+			
+			jester(mydiv[0]).tap(function() {
+				self.clickCourseItem($(this).parent().attr('id').substring(6));
+				
+			});
+
 
 			jester(span[0]).tap(
-					function() {
+					function(e) {
 						self.clickStatisticsIcon($(this).parent().attr('id')
 								.substring(6));
+						e.stopPropagation();
 					});
 
 			
@@ -140,7 +149,6 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 
 CoursesListView.prototype.setIconSize = function() {
 	$("#coursesList li").each(function() {
-		console.log("height: " + $(this).height());
 		height = $(this).height();
 		$(this).find(".courseListIcon").height(height);
 		$(this).find(".courseListIcon").css("line-height", height + "px");
