@@ -32,7 +32,6 @@ function StatisticsModel(controller) {
 	
 	this.firstActiveDay;
 	this.lastActiveDay;
-	this.getFirstActiveDay();
 
 	// setInterval(function() {console.log("interval is active");}, 5000);
 
@@ -68,6 +67,11 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 
 	this.controller.models['questionpool'].loadData(courseId);
 	
+	if (!this.firstActiveDay) {
+		this.getFirstActiveDay();
+	} else {
+		this.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
+	}
 //	this.calculateValues();
 };
 
@@ -80,13 +84,18 @@ StatisticsModel.prototype.getImprovement = function() {
 };
 
 StatisticsModel.prototype.getFirstActiveDay = function() {
+	var self = this;
 	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=?',
-						[ this.currentCourseId ], 
+						[ self.currentCourseId ], 
 						function dataSelectHandler(transaction, results) {
 							if (results.rows.length > 0) {
 								row = results.rows.item(0);
 								console.log("first active day: " + JSON.stringify(row));
-								self.firstActiveDay = row['firstActivity'];
+								if (row['firstActivity']) {
+									self.firstActiveDay = row['firstActivity'];
+								} else {
+									self.firstActiveDay = (new Date()).getTime(); 
+								}
 							} else {
 								self.firstActiveDay = (new Date()).getTime(); 
 							}
@@ -98,11 +107,12 @@ StatisticsModel.prototype.checkActivity = function(day) {
 	var self = this;
 	if (day > self.firstActiveDay) {
 		this.queryDB('SELECT count(id) as counter FROM statistics WHERE course_id=? AND day>=? AND day<=?',
-							[ this.currentCourseId, (day - TWENTY_FOUR_HOURS), day ], 
+							[ self.currentCourseId, (day - TWENTY_FOUR_HOURS), day ], 
 							function dataSelectHandler( transaction, results) {
 								if (results.rows.length > 0 && results.rows.item(0)['counter'] != 0) {
 										console.log("active day: " + day);
 										self.lastActiveDay = day;
+										self.calculateValues();
 								}
 								else {
 										self.checkActivity(day - TWENTY_FOUR_HOURS);
@@ -110,6 +120,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 		});
 	} else {
 		self.lastActiveDay = day;
+		self.calculateValues();
 	}
 };
 
@@ -157,7 +168,7 @@ StatisticsModel.prototype.initQueries = function() {
 	this.queries['handledCards'].query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND day>=? AND day<=?';
 
 	// progress
-	this.queries['progress'].query = 'SELECT  COUNT(DISTINCT question_id) as numCorrect FROM statistics  WHERE course_id=? AND score=?'
+	this.queries['progress'].query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND score=?'
 			+ ' AND day>=? AND day<=?';
 
 	// best day and score
@@ -169,37 +180,40 @@ StatisticsModel.prototype.initQueries = function() {
 	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=?';
 };
 
-StatisticsModel.prototype.initQueryValues = function() {
+StatisticsModel.prototype.initQueryValues = function() {		
 	var timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
-	
+
+	console.log("first active day: " + this.firstActiveDay);
+	console.log("last active day: " + this.lastActiveDay);
+
 	var lastActiveDay24hBefore = this.lastActiveDay - TWENTY_FOUR_HOURS;
-	
+
 	console.log("now: " + timeNow);
 	console.log("24 hours ago: " + time24hAgo);
 	// average score
 	this.queries['avgScore'].values = [ this.currentCourseId, time24hAgo,
-			timeNow ];
+	                                    timeNow ];
 	this.queries['avgScore'].valuesLastActivity = [ this.currentCourseId,
-	                                             lastActiveDay24hBefore, this.lastActiveDay ];
+	                                                lastActiveDay24hBefore, this.lastActiveDay ];
 
 	// average speed
 	this.queries['avgSpeed'].values = [ this.currentCourseId, time24hAgo,
-			timeNow ];
+	                                    timeNow ];
 	this.queries['avgSpeed'].valuesLastActivity = [ this.currentCourseId,
-	                                             lastActiveDay24hBefore, this.lastActiveDay ];
+	                                                lastActiveDay24hBefore, this.lastActiveDay ];
 
 	// handled cards
 	this.queries['handledCards'].values = [ this.currentCourseId, time24hAgo,
-			timeNow ];
+	                                        timeNow ];
 	this.queries['handledCards'].valuesLastActivity = [ this.currentCourseId,
-	                                                 lastActiveDay24hBefore, this.lastActiveDay ];
+	                                                    lastActiveDay24hBefore, this.lastActiveDay ];
 
 	// progress
 	this.queries['progress'].values = [ this.currentCourseId, 1, time24hAgo,
-			timeNow ];
+	                                    timeNow ];
 	this.queries['progress'].valuesLastActivity = [ this.currentCourseId, 1,
-	                                             lastActiveDay24hBefore, this.lastActiveDay ];
+	                                                lastActiveDay24hBefore, this.lastActiveDay ];
 
 	// best day and score
 	this.queries['best'].values = [ this.currentCourseId ];
@@ -242,7 +256,10 @@ StatisticsModel.prototype.allCalculationsDone = function() {
 	console.log(" finished n="+this.boolAllDone +" calculations");
 	if ( this.boolAllDone == 6) {
 		$(document).trigger("allstatisticcalculationsdone");
-	}
+	
+	} 
+	
+	
 };
 
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
@@ -264,18 +281,20 @@ StatisticsModel.prototype.calculateHandledCards = function(transaction, results)
 			self.statistics['cardBurner'] = row['c'];
 		}
 		console.log("card burner: " + self.statistics['cardBurner']);
-
-		// calculate improvement
-		self.queryDB(self.queries['handledCards'].query,
-				self.queries['handledCards'].valuesLastActivity,
-		function cbCalculateImprovements(t,r) {
-			self.calculateImprovementHandledCards(t,r);
-		});
+	} else {
+		self.statistics['handledCards'] = 0;
+		self.statistics['cardBurner'] = 0;
 	}
-	else {
-		self.boolAllDone++;
-		self.allCalculationsDone();
-	}
+//	else {
+//		self.boolAllDone++;
+//		self.allCalculationsDone();
+//	}
+	// calculate improvement
+	self.queryDB(self.queries['handledCards'].query,
+			self.queries['handledCards'].valuesLastActivity,
+	function cbCalculateImprovements(t,r) {
+		self.calculateImprovementHandledCards(t,r);
+	});
 };
 
 StatisticsModel.prototype.calculateAverageScore = function(transaction, results) {
@@ -291,16 +310,17 @@ StatisticsModel.prototype.calculateAverageScore = function(transaction, results)
 				.round((row['score'] / row['num']) * 100);
 		}
 		console.log("AVERAGE SCORE: " + self.statistics['averageScore']);
-
-		// calculate improvement
-		self.queryDB(self.queries['avgScore'].query,
-				self.queries['avgScore'].valuesLastActivity,
-				function cbCalculateImprovements(t,r) {self.calculateImprovementAverageScore(t,r);});
+	} else {
+		self.statistics['averageScore'] = 0;
 	}
-	else {
-		self.boolAllDone++;
-		self.allCalculationsDone();
-	}
+//	else {
+//		self.boolAllDone++;
+//		self.allCalculationsDone();
+//	}
+	// calculate improvement
+	self.queryDB(self.queries['avgScore'].query,
+			self.queries['avgScore'].valuesLastActivity,
+			function cbCalculateImprovements(t,r) {self.calculateImprovementAverageScore(t,r);});
 };
 
 StatisticsModel.prototype.calculateAverageSpeed = function(transaction, results) {
@@ -316,16 +336,17 @@ StatisticsModel.prototype.calculateAverageSpeed = function(transaction, results)
 				.round((row['duration'] / row['num']) / 1000);
 		}
 		console.log("AVERAGE SPEED: " + self.statistics['averageSpeed']);
-
-		// calculate improvement
-		self.queryDB(self.queries['avgSpeed'].query,
-				self.queries['avgSpeed'].valuesLastActivity,
-				function cbCalculateImprovements(t,r) {self.calculateImprovementAverageSpeed(t,r);});
+	} else {
+		self.statistics['averageSpeed'] = 0;
 	}
-	else {
-		self.boolAllDone++;
-		self.allCalculationsDone();
-	}
+//	else {
+//		self.boolAllDone++;
+//		self.allCalculationsDone();
+//	}
+	// calculate improvement
+	self.queryDB(self.queries['avgSpeed'].query,
+			self.queries['avgSpeed'].valuesLastActivity,
+			function cbCalculateImprovements(t,r) {self.calculateImprovementAverageSpeed(t,r);});
 };
 
 StatisticsModel.prototype.calculateProgress = function(transaction, results) {
@@ -343,16 +364,17 @@ StatisticsModel.prototype.calculateProgress = function(transaction, results) {
 				.round(((row['numCorrect']) / cards) * 100);
 		}
 		console.log("progress: " + self.statistics['progress']);
-
-		// calculate improvement
-		self.queryDB(self.queries['progress'].query,
-				self.queries['progress'].valuesLastActivity,
-				function cbCalculateImprovements(t,r) {self.calculateImprovementProgress(t,r);});
+	} else {
+		self.statistics['progress'] = 0;
 	}
-	else {
-		self.boolAllDone++;
-		self.allCalculationsDone();
-	}
+//	else {
+//		self.boolAllDone++;
+//		self.allCalculationsDone();
+//	}
+	// calculate improvement
+	self.queryDB(self.queries['progress'].query,
+			self.queries['progress'].valuesLastActivity,
+			function cbCalculateImprovements(t,r) {self.calculateImprovementProgress(t,r);});
 };
 
 StatisticsModel.prototype.calculateBestDayAndScore = function(transaction, results) {
@@ -396,11 +418,7 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(transactio
 		$(document).trigger("statisticcalculationsdone");
 		
 	} else {
-		if (self.statistics['handledCards'] > 0) {
-			self.improvement['handledCards'] = self.statistics['handledCards'];
-		} else {
-			self.improvement['handledCards'] = 0;
-		}
+		self.improvement['handledCards'] = self.statistics['handledCards'];
 	}
 	self.boolAllDone++;
 	self.allCalculationsDone();
@@ -419,17 +437,13 @@ StatisticsModel.prototype.calculateImprovementAverageScore = function(transactio
 		}
 		newAverageScore = self.statistics['averageScore'];
 		self.improvement['averageScore'] = newAverageScore - oldAverageScore;
-		console.log("improvement average score: "
-				+ self.improvement['averageScore']);
 		$(document).trigger("statisticcalculationsdone");
 		
 	} else {
-		if (self.statistics['averageScore'] > 0) {
-			self.improvement['averageScore'] = self.statistics['averageScore'];
-		} else {
-			self.improvement['averageScore'] = 0;
-		}
+		self.improvement['averageScore'] = self.statistics['averageScore'];
 	}
+	console.log("improvement average score: "
+			+ self.improvement['averageScore']);
 	self.boolAllDone++;
 	self.allCalculationsDone();
 };
@@ -446,17 +460,21 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(transactio
 			oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
 		}
 		newAverageSpeed = self.statistics['averageSpeed'];
-		self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed);
+		if (oldAverageSpeed == 0 && newAverageSpeed != 0) {
+			self.improvement['averageSpeed'] = -1;
+		} else	if (newAverageSpeed != 0) {
+			self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed);
+		} else if (oldAverageSpeed == 0) {
+			self.improvement['averageSpeed'] = 0;
+		} else {
+			self.improvement['averageSpeed'] = 1;
+		}
 		console.log("improvement average speed: "
 				+ self.improvement['averageSpeed']);
 		$(document).trigger("statisticcalculationsdone");
 		
 	} else {
-		if (self.statistics['averageSpeed'] > 0) {
-			self.improvement['averageSpeed'] = self.statistics['averageSpeed'];
-		} else {
-			self.improvement['averageSpeed'] = 0;
-		}
+		self.improvement['averageSpeed'] = (- self.statistics['averageSpeed']);
 	}
 	self.boolAllDone++;
 	self.allCalculationsDone();
@@ -468,11 +486,13 @@ StatisticsModel.prototype.calculateImprovementProgress = function(transaction, r
 			+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
+		console.log("progress row" + JSON.stringify(row));
 		// get the number of handled cards
 		cards = self.controller.models['questionpool'].questionList.length;
 		if (cards == 0) {
 			self.improvement['progress'] = 0;
 		} else {
+			console.log("Progress Num Correct: " + row['numCorrect']);
 			oldProgress = Math
 				.round(((row['numCorrect']) / cards) * 100);
 			newProgress = self.statistics['progress'];
@@ -480,11 +500,7 @@ StatisticsModel.prototype.calculateImprovementProgress = function(transaction, r
 			console.log("improvement progress: " + self.improvement['progress']);
 		}
 	} else {
-		if (self.statistics['progress'] > 0) {
-			self.improvement['progress'] = self.statistics['progress'];
-		} else {
-			self.improvement['progress'] = 0;
-		}
+		self.improvement['progress'] = self.statistics['progress'];
 	}
 	self.boolAllDone++;
 	self.allCalculationsDone();
@@ -619,7 +635,8 @@ StatisticsModel.prototype.sendToServer = function() {
 			uuid = pendingStatistics.uuid;
 			statistics = pendingStatistics.statistics;
 		}else {
-			
+			console.log("results length: " + results.rows.length);
+			console.log(JSON.stringify(results.rows.item(0)));
 			for ( var i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
 				statistics.push(row);
@@ -629,23 +646,26 @@ StatisticsModel.prototype.sendToServer = function() {
 			uuid = device.uuid;
 		}
 		
-		statistics = JSON.stringify(statistics);
+		console.log("count statistics=" + statistics.length);
+		var statisticsString = JSON.stringify(statistics);
 		
+		//processData has to be set to false!
 		$.ajax({
 			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
 			type : 'PUT',
-			data : statistics,
+			data : statisticsString,
+			processData: false,
 			success : function() {
 				console
 				.log("statistics data successfully send to the server");
-				
+				localStorage.removeItem("pendingStatistics");
 				$(document).trigger("statisticssenttoserver");
 			},
 			error : function() {
 				console
 				.log("Error while sending statistics data to server");
 				var statisticsToStore = {
-					sessionkey : self.controller.models['authentication'].getSessionKey(),
+					sessionkey : sessionkey,
 					uuid : device.uuid,
 					statistics : statistics
 				};
@@ -656,7 +676,7 @@ StatisticsModel.prototype.sendToServer = function() {
 		});
 
 		function setHeader(xhr) {
-			xhr.setRequestHeader('sessionkey', self.controller.models['authentication'].getSessionKey());
+			xhr.setRequestHeader('sessionkey', sessionkey);
 			xhr.setRequestHeader('uuid', device.uuid);
 		}
 	}

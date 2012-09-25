@@ -21,12 +21,14 @@ $request_method = $_SERVER['REQUEST_METHOD'];
 logging("request method: '" . $request_method . "'");
 
 switch($request_method) {
+	case "POST":
 	case "PUT":
 		logging("post/put request");
 		$userId = get_session_user_from_headers();
 		if ($userId > 0) {
 			logging("has valid user");
 			$statistics = file_get_contents("php://input");
+			logging(" statistics data" . $statistics);
 			// 			$statistics = get_statistics_from_headers();
 			$uuid = get_uuid_from_headers();
 			setStatistics($userId, $uuid, json_decode($statistics, true));
@@ -43,7 +45,6 @@ switch($request_method) {
 			echo($response);
 		}
 		break;
-	case "POST":
 	case "DELETE":
 	default:
 		logging("request method not supported");
@@ -187,6 +188,27 @@ function generateTable() {
 	}
 	
 // 	$ilDB->manipulate("DELETE FROM isnlc_statistics WHERE user_id = '12979'");
+
+	//first active day 5 days ago
+// 	$myID = $ilDB->nextID("isnlc_statistics");
+// 	$ilDB->manipulateF("INSERT INTO isnlc_statistics(id, user_id, uuid, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+// 			array("integer", "text", "text", "text", "text", "integer", "float", "integer"),
+// 			array ($myID, "12979", "3c1875c18a7402de", "12968", "3600",
+// 					1348048800000, "1", "10000"));
+	
+	//last active day 2 days ago
+// 	$myID = $ilDB->nextID("isnlc_statistics");
+// 	$ilDB->manipulateF("INSERT INTO isnlc_statistics(id, user_id, uuid, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+// 			array("integer", "text", "text", "text", "text", "integer", "float", "integer"),
+// 			array ($myID, "12979", "3c1875c18a7402de", "12968", "3600",
+// 					1348376400000, "1", "1000"));
+	
+	//last active day yesterday
+// 	$myID = $ilDB->nextID("isnlc_statistics");
+// 	$ilDB->manipulateF("INSERT INTO isnlc_statistics(id, user_id, uuid, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+// 			array("integer", "text", "text", "text", "text", "integer", "float", "integer"),
+// 			array ($myID, "12979", "3c1875c18a7402de", "12968", "3600",
+// 					1348462800000, "1", "2000"));
 }
 
 ?>
