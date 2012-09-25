@@ -50,6 +50,7 @@ StatisticsView.prototype.loadData = function() {
 	var statisticsModel = this.controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
 	var improvement = statisticsModel.getImprovement();
+	
 	console.log("init values for statistics");
 	var avgScore = statistics['averageScore'];
 	if (avgScore < 0) {
@@ -82,19 +83,26 @@ StatisticsView.prototype.loadData = function() {
 	if (bestScore < 0) {
 		bestScore =  0;
 	}
-console.log("initialization of data done");
+	console.log("initialization of data done");
+	
+	var removeClasses = msg_positiveImprovement_icon + " " + msg_negativeImprovement_icon + " " + msg_neutralImprovement_icon + 
+			" red green";
 	
 	//$("#statisticsBody").empty();
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
 	$("#statBestScoreValue").text(bestScore+"%");
 	$("#statHandledCardsValue").text(handledCards);
+	$("#statsHandledCardsIconchange").removeClass(removeClasses);
 	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvement['handledCards']));
 	$("#statAverageScoreValue").text(avgScore+"%");
+	$("#statsAverageScoreIconchange").removeClass(removeClasses);
 	$("#statsAverageScoreIconchange").addClass(checkImprovement(improvement['averageScore']));
 	$("#statProgressValue").text(progress+"%");
+	$("#statsProgressIconchange").removeClass(removeClasses);
 	$("#statsProgressIconchange").addClass(checkImprovement(improvement['progress']));
 	$("#statSpeedValue").text(avgSpeed);
+	$("#statsSpeedIconchange").removeClass(removeClasses);
 	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvement['averageSpeed']));	
 
 	function checkImprovement(improvementValue) {
@@ -102,7 +110,6 @@ console.log("initialization of data done");
 			return msg_positiveImprovement_icon + " green";
 		} else if (improvementValue < 0) {
 			return msg_negativeImprovement_icon + " red";
-
 		}else{
 			return msg_neutralImprovement_icon + " green";
 		}

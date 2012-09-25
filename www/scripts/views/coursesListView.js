@@ -80,8 +80,10 @@ CoursesListView.prototype.clickSettingsButton = function() {
 
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
+	
+	//all calculations are done based on the course id and are triggered
+	//within setCurrentCourseId
 	this.controller.models['statistics'].setCurrentCourseId(courseID);
-	this.controller.models["statistics"].calculateValues();
 };
 
 CoursesListView.prototype.update = function() {
