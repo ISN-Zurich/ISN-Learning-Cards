@@ -33,7 +33,7 @@ function ConfigurationModel(controller) {
 	this.controller = controller;
 
 	this.loadData();
-
+    this.configuration.urlToLMS = URLS_TO_LMS[DEFAULT_SERVER].url;
 	var clientKey = this.configuration.appAuthenticationKey;
 	// this.clientKey = localStorage.getItem("ClientKey");
 	if (!clientKey || clientKey.length == 0) {
