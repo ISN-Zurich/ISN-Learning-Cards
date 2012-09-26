@@ -51,7 +51,7 @@ function generateAppKey($appId, $uuid){
 	if (!in_array("isnlc_reg_info",$ilDB->listTables())) {
 		logging("create a new table");
 		//create table that will store the app keys and any such info in the database
-		// FIXME: ONLY CREATE IF THE TABLE DOES NOT EXIST
+		//ONLY CREATE IF THE TABLE DOES NOT EXIST
 
 
 		$fields= array(

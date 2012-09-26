@@ -55,23 +55,23 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	console.log("course-id: " + courseId);
 
 	// Display all entries of the database
-	this.db.transaction(function(transaction) {
-		transaction
-				.executeSql('SELECT * FROM statistics WHERE course_id=?',
-						[ courseId ], dataSelectHandler, function(tx, e) {
-							console.log("Error for select average score: "
-									+ e.message);
-						});
-	});
-
-	function dataSelectHandler(transaction, results) {
-		console.log("ALL ROWS: " + results.rows.length);
-		for ( var i = 0; i < results.rows.length; i++) {
-			row = results.rows.item(i);
-
-			console.log(i + ": " + JSON.stringify(row));
-		}
-	}
+//	this.db.transaction(function(transaction) {
+//		transaction
+//				.executeSql('SELECT * FROM statistics WHERE course_id=?',
+//						[ courseId ], dataSelectHandler, function(tx, e) {
+//							console.log("Error for select average score: "
+//									+ e.message);
+//						});
+//	});
+//
+//	function dataSelectHandler(transaction, results) {
+//		console.log("ALL ROWS: " + results.rows.length);
+//		for ( var i = 0; i < results.rows.length; i++) {
+//			row = results.rows.item(i);
+//
+//			console.log(i + ": " + JSON.stringify(row));
+//		}
+//	}
 
 	this.controller.models['questionpool'].loadData(courseId);
 	
@@ -610,16 +610,16 @@ StatisticsModel.prototype.loadFromServer = function() {
 	if (self.controller.models['authentication'].isLoggedIn()) {
 		$
 				.ajax({
-					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
+					url : self.controller.models['authentication'].configuration.urlToLMS + '/statistics.php',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
 						console.log("success");
-						console.log("JSON: " + data);
+//						console.log("JSON: " + data);
 						var statisticsObject;
 						try {
 							statisticsObject = data;
-							console.log("statistics data from server: " + JSON.stringify(statisticsObject));
+//							console.log("statistics data from server: " + JSON.stringify(statisticsObject));
 						} catch (err) {
 							console
 							.log("Error: Couldn't parse JSON for statistics");
@@ -632,7 +632,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 						for ( var i = 0; i < statisticsObject.length; i++) {						
 							self.insertStatisticItem(statisticsObject[i]);
 						}
-
+						console.log("after inserting statistics from server");
 					},
 					error : function() {
 						console
@@ -651,7 +651,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 
 StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	var self = this;
-	console.log("day: " + statisticItem['day']);
+//	console.log("day: " + statisticItem['day']);
 	
 	self
 	.queryDB(
@@ -670,7 +670,7 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 			           item['duration'] ];
 			self.queryDB(query, values, function cbInsert(transaction,
 					results) {
-				console.log("after inserting");
+//				console.log("after inserting");
 			});
 		}
 	}
@@ -681,6 +681,8 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  */
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
+	var url = self.controller.models['authentication'].configuration.urlToLMS + '/statistics.php';
+	console.log("url statistics: " + url);
 
 	self.queryDB('SELECT * FROM statistics', [], function(t,r) {sendStatistics(t,r);});
 
@@ -715,7 +717,7 @@ StatisticsModel.prototype.sendToServer = function() {
 		
 		//processData has to be set to false!
 		$.ajax({
-			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/statistics.php',
+			url : url,
 			type : 'PUT',
 			data : statisticsString,
 			processData: false,

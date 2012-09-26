@@ -107,7 +107,7 @@ CourseModel.prototype.loadFromServer = function() {
 
 		$
 				.ajax({
-					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/courses.php',
+					url : self.controller.models['authentication'].configuration.urlToLMS + '/courses.php',
 					type : 'GET',
 					dataType : 'json',
 					success : createCourseList,
@@ -143,7 +143,7 @@ CourseModel.prototype.loadFromServer = function() {
 			// // new ones are created
 			// courseObject = self.createCourses();
 			// }
-			console.log(courseObject);
+//			console.log(courseObject);
 			self.courseList = courseObject.courses || [];
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;

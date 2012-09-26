@@ -1,11 +1,28 @@
 var APP_ID = "ch.ethz.isn.learningcards";
+var DEFAULT_SERVER = "yellowjacket";
+var URLS_TO_LMS = {"yellowjacket":  
+					{
+						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
+						clientKey: ""
+					},
+					"hornet":  
+					{
+						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
+						clientKey: ""
+					},
+					"PFP LMS":  
+					{
+						url: "https://pfp.ethz.ch/restservice/learningcards",
+						clientKey: ""
+					}
+};
 
 /**
  * This model holds the data about the current configuration
  */
 function ConfigurationModel(controller) {
 	this.configuration = {};
-
+ 
 	// this.configuration.appAuthenticationKey = "";
 	// this.configuration.userAuthenticationKey = "";
 	// this.storeData();
@@ -21,7 +38,7 @@ function ConfigurationModel(controller) {
 	// this.clientKey = localStorage.getItem("ClientKey");
 	if (!clientKey || clientKey.length == 0) {
 		console.log("registration is done");
-		this.register();
+		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 	} else {
 		this.loadFromServer();
 	}
@@ -88,12 +105,12 @@ ConfigurationModel.prototype.loadFromServer = function() {
 			&& this.configuration.userAuthenicationKey != "") {
 		$
 				.ajax({
-					url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php',
+					url : self.configuration.urlToLMS + '/authentication.php',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
 						console.log("success");
-						console.log("JSON: " + data);
+//						console.log("JSON: " + data);
 						var authenticationObject;
 						try {
 							authenticationObject = data;
@@ -110,7 +127,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 						// questionPoolObject = self.createPool(data.courseID);
 						// }
 
-						console.log("Object: " + authenticationObject);
+//						console.log("Object: " + authenticationObject);
 						// authenticationObject.loginState =
 						// self.configuration.loginState;
 						// check if configuration in local storage is the same
@@ -145,6 +162,8 @@ ConfigurationModel.prototype.loadFromServer = function() {
 ConfigurationModel.prototype.login = function(username, password) {
 	console.log("client key: " + this.configuration.appAuthenticationKey);
 
+	this.configuration.urlToLMS = URLS_TO_LMS[DEFAULT_SERVER].url;
+	
 	username = username.trim(); //remove leading and trailling white spaces
 	
 	passwordHash = faultylabs.MD5(password);
@@ -177,7 +196,8 @@ ConfigurationModel.prototype.logout = function() {
 				"userAuthenticationKey" : "",
 				"learnerInformation" : {
 					"userId" : 0
-				}
+				},
+				"urlToLMS" : ""
 		};
 		self.storeData();
 		
@@ -209,7 +229,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
 	$
 			.ajax({
-				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php',
+				url : self.configuration.urlToLMS + '/authentication.php',
 				type : 'POST',
 				dataType : 'json',
 				success : function(data) {
@@ -269,7 +289,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 	}
 	$
 			.ajax({
-				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/authentication.php',
+				url : self.configuration.urlToLMS + '/authentication.php',
 				type : 'DELETE',
 				dataType : 'json',
 				success : function() {
@@ -366,7 +386,7 @@ ConfigurationModel.prototype.register = function() {
 
 	$
 			.ajax({
-				url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/registration.php',
+				url : self.configuration.urlToLMS + '/registration.php',
 				type : 'GET',
 				dataType : 'json',
 				success : appRegistration,

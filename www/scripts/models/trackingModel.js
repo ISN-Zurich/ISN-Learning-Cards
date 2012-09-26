@@ -60,6 +60,8 @@ TrackingModel.prototype.sendToServer = function(){
 	var self = this;
 
 	var sessionkey = self.controller.models['authentication'].getSessionKey();
+	var url = self.controller.models['authentication'].configuration.urlToLMS + '/tracking.php';
+	console.log("url tracking: " + url);
 	
 	this.db
 	.transaction(function(transaction) {
@@ -81,7 +83,7 @@ TrackingModel.prototype.sendToServer = function(){
 			
 			sessionkey = pendingTracking.sessionkey;
 			uuid = pendingTracking.uuid;
-			tracking = pendingTracking.statistics;
+			tracking = pendingTracking.tracking;
 		}else {
 			console.log("results length: " + results.rows.length);
 			for ( var i = 0; i < results.rows.length; i++) {
@@ -97,7 +99,7 @@ TrackingModel.prototype.sendToServer = function(){
 		
 		//processData has to be set to false!
 		$.ajax({
-			url : 'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/tracking.php',
+			url : url,
 			type : 'PUT',
 			data : trackingString,
 			processData: false,
