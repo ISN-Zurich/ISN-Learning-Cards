@@ -23,7 +23,9 @@ function StatisticsView(controller) {
     console.log('done');
 }
 
-StatisticsView.prototype.handlePinch = doNothing;
+StatisticsView.prototype.handlePinch = function() {
+    this.controller.transitionToCourses();  
+};
 StatisticsView.prototype.handleTap   = doNothing;
 StatisticsView.prototype.handleSwipe = doNothing;
 StatisticsView.prototype.close = closeView;

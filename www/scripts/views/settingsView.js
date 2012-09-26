@@ -15,7 +15,9 @@ function SettingsView() {
 	});
 } 
 
-SettingsView.prototype.handlePinch = doNothing;
+SettingsView.prototype.handlePinch = function() {
+    controller.transitionToCourses();
+};
 SettingsView.prototype.handleTap = doNothing;
 SettingsView.prototype.handleSwipe = doNothing;
 SettingsView.prototype.openDiv = openView;

@@ -14,7 +14,9 @@ function AchievementsView(){
 	
 }; 
 
-AchievementsView.prototype.handlePinch = doNothing;
+AchievementsView.prototype.handlePinch = function(){
+    controller.transitionToStatistics();
+};
 AchievementsView.prototype.handleTap = doNothing;
 AchievementsView.prototype.handleSwipe = function() {
 	controller.transitionToStatistics();

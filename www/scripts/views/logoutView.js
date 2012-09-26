@@ -15,7 +15,9 @@ function LogoutView() {
  */
 LogoutView.prototype.handleTap = doNothing;
 LogoutView.prototype.handleSwipe = doNothing;
-LogoutView.prototype.handlePinch = doNothing;
+LogoutView.prototype.handlePinch = function(){
+    controller.transitionToSettings();
+};
 
 /**
  * opens the view
