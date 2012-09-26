@@ -1,0 +1,21 @@
+{
+"APP_ID":"ch.ethz.isn.learningcards",
+"DEFAULT_SERVER":"yellowjacket",
+"URLS_TO_LMS":[{
+	"yellowjacket": {
+		"url": "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
+		"clientKey": ""
+	} ,
+	"hornet": {
+		"url": "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
+		"clientKey": ""
+	},
+	"PFP LMS": {
+		"url": "https://pfp.ethz.ch/restservice/learningcards",
+		"clientKey": ""
+	}
+	}],
+"DEFAULT_SYNC_TIMEOUT":"60000",
+"TWENTY_FOUR_HOURS":"86400000",
+"B_VERSION": "1"
+}

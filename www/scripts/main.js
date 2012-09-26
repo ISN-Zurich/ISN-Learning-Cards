@@ -6,5 +6,3 @@ function init() {
     controller = new Controller();
     $(document).trigger("trackingEventDetected",["appStart"]);
 }
-
-
