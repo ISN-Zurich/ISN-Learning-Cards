@@ -29,7 +29,7 @@ switch($request_method) {
 		if ($userId > 0) {
 			logging("has valid user");
 			$statistics = file_get_contents("php://input");
-			logging(" statistics data" . $statistics);
+// 			logging(" statistics data" . $statistics);
 			$uuid = get_uuid_from_headers();
 			setStatistics($userId, $uuid, json_decode($statistics, true));
 			logging("end of PUT");
@@ -62,15 +62,15 @@ function setStatistics($userId, $uuid, $statistics) {
 
 	for ($i = 0; $i < count($statistics); $i++) {
 		$statisticItem = $statistics[$i];
-		logging(json_encode($statisticItem));
+// 		logging(json_encode($statisticItem));
 
 		$result = $ilDB->query("SELECT id FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text") .
 				" AND day = " . $ilDB->quote($statisticItem['day'], "integer"));
 		$record = $ilDB->fetchAssoc($result);
 		$id = $record['id'];
 
-		logging("day: " + $statisticItem['day']);
-		logging("id: " + $id);
+// 		logging("day: " + $statisticItem['day']);
+// 		logging("id: " + $id);
 		
 		if (!$id) {
 			$myID = $ilDB->nextID("isnlc_statistics");
@@ -81,7 +81,7 @@ function setStatistics($userId, $uuid, $statistics) {
 					array ($myID, $userId, $uuid, $statisticItem['course_id'], $statisticItem['question_id'],
 							$statisticItem['day'], $statisticItem['score'], $statisticItem['duration']));
 
-			logging("after insert");
+// 			logging("after insert");
 		}
 	}
 
