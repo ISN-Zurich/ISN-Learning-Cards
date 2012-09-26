@@ -98,9 +98,8 @@ ConnectionState.prototype.goOnline = function() {
 			statisticsModel.sendToServer();
 		}
 	}
-    
 	
-var trackingModel = this.controller.models["tracking"];
+	var trackingModel = this.controller.models["tracking"];
     
     console.log('check synchronization - tracking');
 	// if pending statistics exist, send them to the server

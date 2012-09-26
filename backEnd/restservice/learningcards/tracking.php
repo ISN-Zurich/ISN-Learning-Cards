@@ -71,9 +71,9 @@ function setTracking($userId, $uuid, $tracking) {
 			$myID = $ilDB->nextID("isnlc_tracking");
 			logging("new ID: " . $myID);
 
-			$ilDB->manipulateF("INSERT INTO isnlc_tracking(id, user_id, uuid, timeStamp,event_type) VALUES (%s,%s,%s,%s,%s)",
+			$ilDB->manipulateF("INSERT INTO isnlc_tracking(id, user_id, uuid, timestamp,event_type) VALUES (%s,%s,%s,%s,%s)",
 					array("integer", "text", "text", "integer", "text"),
-					array ($myID, $userId, $uuid, $trackingItem['timeStamp'], $trackingItem['event_type']));
+					array ($myID, $userId, $uuid, $trackingItem['timestamp'], $trackingItem['event_type']));
 
 			logging("after insert");
 		}
@@ -104,7 +104,7 @@ function generateTable() {
 						'type' => 'text',
 						'length'=> 255
 				),
-				"timeStamp" => array(
+				"timestamp" => array(
 						'type' => 'integer',
 						'length'=> 8
 				),
