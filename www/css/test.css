@@ -802,7 +802,8 @@ color:green;
 }
 
 .loadingRotation {
-	-webkit-animation: spin 4s infinite linear;
+	-webkit-animation: spin 3s infinite linear;
+	font-size: 25px;
 }
 
 /*********************** Settings View ***********************/
