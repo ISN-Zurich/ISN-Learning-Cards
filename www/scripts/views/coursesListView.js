@@ -86,7 +86,7 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 	
 	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
-		$("#courseListIcon"+courseID).addClass("icon-loading").removeClass("icon-bars");
+		$("#courseListIcon"+courseID).addClass("icon-loading loadingRotation").removeClass("icon-bars");
 	
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
@@ -124,11 +124,14 @@ CoursesListView.prototype.update = function() {
 			}).appendTo("#coursesList");
 
 			
+			div = $("<div/>", {
+				"class" : "courseListIcon right"
+			}).appendTo(li);
+			
 			span = $("<div/>", {
 				"id":"courseListIcon"+ courseID,
-				"class" : "courseListIcon right " + (courseModel.isSynchronized(courseID) ? "icon-bars" : "icon-loading")
-			}).appendTo(li);
-
+				"class" : (courseModel.isSynchronized(courseID) ? "icon-bars" : "icon-loading loadingRotation")
+			}).appendTo(div);
 			
 			var mydiv = $("<div/>", {
 				
@@ -144,7 +147,7 @@ CoursesListView.prototype.update = function() {
 
 			jester(span[0]).tap(
 					function(e) {
-						self.clickStatisticsIcon($(this).parent().attr('id')
+						self.clickStatisticsIcon($(this).parent().parent().attr('id')
 								.substring(6));
 						e.stopPropagation();
 					});
@@ -160,7 +163,7 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 	console.log("selector length: "
 			+ $("#course" + courseId + " .icon-loading").length);
 	$("#course" + courseId + " .icon-loading").addClass("icon-bars")
-			.removeClass("icon-loading");
+			.removeClass("icon-loading loadingRotation");
 };
 
 CoursesListView.prototype.setIconSize = function() {

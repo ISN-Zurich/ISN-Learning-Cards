@@ -9,9 +9,9 @@ function get_userid_from_headers() {
 	$myheaders = getallheaders();
 	$userId = $myheaders["userid"];
 
-	if (!($userId > 0)) {
-		$userId = "12979"; //for debugging
-	}
+	//if (!($userId > 0)) {
+		//$userId = "12979"; //for debugging
+	//}
 
 	logging("userid from header: " . $userId);
 
@@ -19,7 +19,6 @@ function get_userid_from_headers() {
 	$ilUser->setId($userId);
 	$ilUser->read();
 	//FIXME: test if users exists
-	//method $ilUser->checkUserId() does not to work in the way as expected!
 
 	return $userId;
 }

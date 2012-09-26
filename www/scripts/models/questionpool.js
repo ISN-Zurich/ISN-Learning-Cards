@@ -70,7 +70,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 	$
 			.ajax({
-				url : "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/questions.php/"
+				url : self.controller.models['authentication'].configuration.urlToLMS + "/questions.php/"
 						+ courseId,
 				type : 'GET',
 				dataType : 'json',
@@ -82,7 +82,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 					
 					
 					if (data) {
-						console.log("JSON: " + data);
+//						console.log("JSON: " + data);
 						var questionPoolObject;
 						
 						questionPoolObject = data.questions;
@@ -97,7 +97,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						if (!questionPoolObject) {
 							questionPoolObject = [];
 						}
-						console.log("Object: " + questionPoolObject);
+//						console.log("Object: " + questionPoolObject);
 						
 						var questionPoolString;
 						try {
