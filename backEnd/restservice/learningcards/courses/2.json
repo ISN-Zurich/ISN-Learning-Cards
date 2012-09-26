@@ -1,8 +1,0 @@
-{ "courses" : [ {
-		"id" : "1",
-		"title" : "Math",
-		"syncDateTime" : "",
-		"syncState" : "",
-		"isLoaded" : true
-	}
-}
