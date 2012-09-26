@@ -356,7 +356,7 @@ li {
 	margin-left: auto;
 	margin-right: auto;
 	/* 	margin: 100px; */
-	-webkit-animation: spin 4s 2 linear;
+	-webkit-animation: spin 4s infinite linear;
 	margin-left: auto;
 	/* padding-top: 40px; */
 	/* 	border: 1px solid black; */
@@ -739,15 +739,19 @@ color:green;
 .achievementContainer{
 	clear:both;
 	border-bottom: 1px solid white; 
+	background-color:#ddd;
+	width: 100%;
 	
 }
 .achievementResults{
-	display:block;
+/* 	display:inline-block; */
+	display: table-cell;
+	vertical-align: middle;
 	padding-top:10px;
 	/*width:auto;
 	height:auto;*/
-	background-color:#ddd;
 	padding-bottom:5px;
+	width: 220px;
 
 }
 
@@ -757,18 +761,20 @@ color:green;
 .achievementsResutlsTitle{
 	font-size:25px;
 	font-weight:bold;
-	padding-left:15px;
+/* 	padding-left:15px; */
 	
 }
 
 
 .achievementResutlsIcon {
-	display:block;
+/* 	display:inline-block; */
+	display: table-cell;
+	vertical-align: middle;
 	font-size:65px;
-	margin-left:20px;
-	padding-top:8px;
+	padding-left:10px;
+/* 	padding-top:8px; */
 	padding-right:10px;
-	float:left;
+/* 	float:left; */
 	
 }
 
@@ -778,6 +784,8 @@ color:green;
 	
 	color:#4169E1;
 }
+
+/****************** Course List View ************************/
 
 .courseListIcon {
 	border-left: 1px solid white;
@@ -791,6 +799,10 @@ color:green;
 
 .marginForCourseList {
 	margin-right: 56px;
+}
+
+.loadingRotation {
+	-webkit-animation: spin 4s infinite linear;
 }
 
 /*********************** Settings View ***********************/
