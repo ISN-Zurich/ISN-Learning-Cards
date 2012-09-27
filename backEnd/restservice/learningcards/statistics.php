@@ -30,8 +30,9 @@ switch($request_method) {
 			$statistics = file_get_contents("php://input");
 // 			logging(" statistics data" . $statistics);
 			$uuid = get_uuid_from_headers();
-			setStatistics($userId, $uuid, json_decode($statistics, true));
+			$number_of_items = setStatistics($userId, $uuid, json_decode($statistics, true));
 			logging("end of PUT");
+			echo($number_of_items);
 		}
 		break;
 	case "GET":
@@ -73,7 +74,7 @@ function setStatistics($userId, $uuid, $statistics) {
 		
 		if (!$id) {
 			$myID = $ilDB->nextID("isnlc_statistics");
-			logging("new ID: " . $myID);
+// 			logging("new ID: " . $myID);
 
 			$ilDB->manipulateF("INSERT INTO isnlc_statistics(id, user_id, uuid, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
 					array("integer", "text", "text", "text", "text", "integer", "float", "integer"),
@@ -85,6 +86,14 @@ function setStatistics($userId, $uuid, $statistics) {
 	}
 
 	logging("after inserting");
+	
+	$result = $ilDB->query("SELECT count(id) as number FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text"));
+	$record = $ilDB->fetchAssoc($result);
+	$number_of_items = $record['number'];
+	
+	logging("number of items: " . $number_of_items);
+	return $number_of_items;
+	
 }
 
 function getStatistics($userId) {

@@ -610,7 +610,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 	if (self.controller.models['authentication'].isLoggedIn()) {
 		$
 				.ajax({
-					url : self.controller.models['authentication'].configuration.urlToLMS + '/statistics.php',
+					url : self.controller.models['authentication'].urlToLMS + '/statistics.php',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -681,13 +681,14 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  */
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
-	var url = self.controller.models['authentication'].configuration.urlToLMS + '/statistics.php';
+	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	console.log("url statistics: " + url);
 
 	self.queryDB('SELECT * FROM statistics', [], function(t,r) {sendStatistics(t,r);});
 
 	function sendStatistics(transaction, results) {
 		statistics = [];
+		numberOfStatisticsItems = 0;
 		uuid = "";
 		sessionkey = "";
 		if (localStorage.getItem("pendingStatistics")) {
@@ -701,7 +702,9 @@ StatisticsModel.prototype.sendToServer = function() {
 			sessionkey = pendingStatistics.sessionkey;
 			uuid = pendingStatistics.uuid;
 			statistics = pendingStatistics.statistics;
+			numberOfStatisticsItems = statistics.length; 
 		}else {
+			numberOfStatisticsItems = results.rows.length;
 			console.log("results length: " + results.rows.length);
 			for ( var i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
@@ -721,10 +724,18 @@ StatisticsModel.prototype.sendToServer = function() {
 			type : 'PUT',
 			data : statisticsString,
 			processData: false,
-			success : function() {
+			success : function(data) {
 				console
 				.log("statistics data successfully send to the server");
 				localStorage.removeItem("pendingStatistics");
+				
+				if (data) {
+					if (numberOfStatisticsItems < data) {
+						console.log("server has more items than local database -> fetch statistics from server");
+						self.loadFromServer();
+					}
+				}
+				
 				self.lastSendToServer = (new Date()).getTime();
 				$(document).trigger("statisticssenttoserver");
 			},
