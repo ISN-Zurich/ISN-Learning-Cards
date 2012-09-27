@@ -107,7 +107,7 @@ CourseModel.prototype.loadFromServer = function() {
 
 		$
 				.ajax({
-					url : self.controller.models['authentication'].configuration.urlToLMS + '/courses.php',
+					url : self.controller.models['authentication'].urlToLMS + '/courses.php',
 					type : 'GET',
 					dataType : 'json',
 					success : createCourseList,

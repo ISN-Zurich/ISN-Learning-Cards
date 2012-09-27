@@ -60,7 +60,7 @@ TrackingModel.prototype.sendToServer = function(){
 	var self = this;
 
 	var sessionkey = self.controller.models['authentication'].getSessionKey();
-	var url = self.controller.models['authentication'].configuration.urlToLMS + '/tracking.php';
+	var url = self.controller.models['authentication'].urlToLMS + '/tracking.php';
 	console.log("url tracking: " + url);
 	
 	this.db

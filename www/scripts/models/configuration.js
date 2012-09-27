@@ -1,5 +1,5 @@
 var APP_ID = "ch.ethz.isn.learningcards";
-var DEFAULT_SERVER = "hornet";
+var DEFAULT_SERVER = "yellowjacket";
 var URLS_TO_LMS = {"yellowjacket":  
 					{
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
@@ -22,6 +22,7 @@ var URLS_TO_LMS = {"yellowjacket":
  */
 function ConfigurationModel(controller) {
 	this.configuration = {};
+	this.urlToLMS = "";
 	
 	// this.configuration.appAuthenticationKey = "";
 	// this.configuration.userAuthenticationKey = "";
@@ -99,7 +100,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 			&& this.configuration.userAuthenicationKey != "") {
 		$
 				.ajax({
-					url : self.configuration.urlToLMS + '/authentication.php',
+					url : self.urlToLMS + '/authentication.php',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -188,8 +189,7 @@ ConfigurationModel.prototype.logout = function() {
 				"userAuthenticationKey" : "",
 				"learnerInformation" : {
 					"userId" : 0
-				},
-				"urlToLMS" : ""
+				}
 		};
 		self.storeData();
 		
@@ -219,9 +219,10 @@ ConfigurationModel.prototype.logout = function() {
  */
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
+	console.log("url: " + self.urlToLMS + '/authentication.php');
 	$
 			.ajax({
-				url : self.configuration.urlToLMS + '/authentication.php',
+				url : self.urlToLMS + '/authentication.php',
 				type : 'POST',
 				dataType : 'json',
 				success : function(data) {
@@ -253,12 +254,12 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						//get statistics data from server
 						self.controller.models['statistics'].loadFromServer();
 					} else {
-						console.log("Wrong username or password!")
-						$(document).trigger("authenticationfailed", "nouser");
+						console.log("no error message from server and no session key received");
+						$(document).trigger("authenticationfailed", "connectionerror");
 					}
 				},
-				error : function() {
-					console.log("Error while authentication to server");
+				error : function(jqXHR, textStatus, errorThrown) {
+					console.log("Error while authentication to server: status:" + jqXHR.status + ", " + jqXHR.responseText);
 					$(document).trigger("authenticationfailed",
 							"connectionerror");
 				},
@@ -288,7 +289,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 	}
 	$
 			.ajax({
-				url : self.configuration.urlToLMS + '/authentication.php',
+				url : self.urlToLMS + '/authentication.php',
 				type : 'DELETE',
 				dataType : 'json',
 				success : function() {
@@ -385,7 +386,7 @@ ConfigurationModel.prototype.register = function() {
 
 	$
 			.ajax({
-				url : self.configuration.urlToLMS + '/registration.php',
+				url : self.urlToLMS + '/registration.php',
 				type : 'GET',
 				dataType : 'json',
 				success : appRegistration,
@@ -444,7 +445,7 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 		urlsToLMS = URLS_TO_LMS;
 	}
 	
-	this.configuration.urlToLMS = urlsToLMS[servername].url;
+	this.urlToLMS = urlsToLMS[servername].url;
 	
 	var clientKey = urlsToLMS[servername].clientKey;
 	//var clientKey = this.configuration.appAuthenticationKey;

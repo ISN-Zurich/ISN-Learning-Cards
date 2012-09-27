@@ -70,7 +70,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 	$
 			.ajax({
-				url : self.controller.models['authentication'].configuration.urlToLMS + "/questions.php/"
+				url : self.controller.models['authentication'].urlToLMS + "/questions.php/"
 						+ courseId,
 				type : 'GET',
 				dataType : 'json',
