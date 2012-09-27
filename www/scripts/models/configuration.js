@@ -22,7 +22,7 @@ var URLS_TO_LMS = {"yellowjacket":
  */
 function ConfigurationModel(controller) {
 	this.configuration = {};
- 
+	
 	// this.configuration.appAuthenticationKey = "";
 	// this.configuration.userAuthenticationKey = "";
 	// this.storeData();
@@ -224,19 +224,26 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 				type : 'POST',
 				dataType : 'json',
 				success : function(data) {
-					if (data && data.userAuthenticationKey != "") {
-						try {
-							console.log("userAuthenticationKey: "
-									+ data.userAuthenticationKey);
-							self.configuration.userAuthenticationKey = data.userAuthenticationKey;
-							self.configuration.learnerInformation = data.learnerInformation;
-							self.storeData();
-						} catch (err) {
-							console.log("Couldn't authenticate to server "
-									+ err);
-							$(document).trigger("authenticationfailed",
-									"wrong data structure");
+					if (data && data['message']) {
+						switch (data['message']) {
+						case "invalid client key":
+							console.log("invalid client key - reregister")
+							self.register();
+							$(document).trigger("authenticationfailed", "invalidclientkey");
+							break;
+						case "wrong user data":
+							console.log("Wrong username or password!")
+							$(document).trigger("authenticationfailed", "nouser");
+							break;
+						default:
+							break;
 						}
+					} else if (data && data.userAuthenticationKey != "") {
+						console.log("userAuthenticationKey: "
+									+ data.userAuthenticationKey);
+						self.configuration.userAuthenticationKey = data.userAuthenticationKey;
+						self.configuration.learnerInformation = data.learnerInformation;
+						self.storeData();
 
 						$(document).trigger("authenticationready",
 								self.configuration.userAuthenticationKey);
