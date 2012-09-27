@@ -11,6 +11,9 @@ require_once 'Services/Database/classes/class.ilDB.php';
 
 global $ilUser, $class_for_logging;
 
+//global $DEBUG;
+//$DEBUG = 1;
+
 $class_for_logging = "authentication.php";
 
 //global $ilDB;

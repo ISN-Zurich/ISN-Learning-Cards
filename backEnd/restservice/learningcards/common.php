@@ -5,7 +5,7 @@ function logging($message) {
 
 	//if DEBUG is set to 1 logging messages are displayed, otherwise not
 	if (!$DEBUG) {
-		$DEBUG = 1;
+		$DEBUG = 0;
 	}
 	
 	$log_prefix = $class_for_logging . ": ";
