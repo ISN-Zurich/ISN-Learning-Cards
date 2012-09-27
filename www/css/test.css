@@ -140,7 +140,7 @@ body {
 	font-size: 22px;
 	font-weight: 900;
 	padding: 0px 0px 0px 0px;
-	color: #4169E1;
+	color: #008CC7;
     line-height: 55px;
     /* 	vertical-align: bottom; */
 	margin-right: 50px;
@@ -289,7 +289,7 @@ li {
 }
 
 #cardsTitle {
-	color: #4169E1;
+	color: #008CC7;
 	font-weight: bold;
 }
 
@@ -307,7 +307,7 @@ li {
 	left: 15px;
 	top: 12px;
 	z-index: -1;
-	background-color: #4169E1;
+	background-color: #008CC7;
 	transform: rotate(15deg);
 	-webkit-transform: rotate(15deg); /* Safari and Chrome */
 	height: 40px;
@@ -319,7 +319,7 @@ li {
 #card2 {
 	position: absolute;
 	z-index: -2;
-	background-color: #1E90FF;
+	background-color: #29ABE2;
 	height: 50px;
 	width: 60px;
 	padding-left: 3px;
@@ -331,7 +331,7 @@ li {
 	left: -15px;
 	top: -10px;
 	z-index: -3;
-	background-color: #B0E0E6;
+	background-color: #7FCBDD;
 	transform: rotate(-15deg);
 	-webkit-transform: rotate(-15deg); /* Safari and Chrome */
 	height: 60px;
@@ -461,7 +461,7 @@ li {
 #warningmessage {
 	display: none;
 	border: 1px solid white;
-	background-color: #4169E1;
+	background-color: #008CC7;
 	color:white;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -500,7 +500,7 @@ li {
 .ticked {
     padding:0px;
 	margin:0px;
-	background-color: #88AAFF;
+	background-color: #29ABE2;
 	color: white;
 }
 
@@ -636,7 +636,7 @@ li {
 
 .statitem1{
 	display: table-cell;
-	background-color: #4169E1;
+	background-color: #008CC7;
 	color:white;
 	border-right: 1px solid white;
 	border-left: 1px solid white;
@@ -753,7 +753,7 @@ color:green;
 
 .blue{
 	
-	color:#4169E1;
+	color:#008CC7;
 }
 
 /****************** Course List View ************************/
