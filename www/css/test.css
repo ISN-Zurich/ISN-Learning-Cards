@@ -629,40 +629,35 @@ li {
 	
 }
 
-
+.statrow {
+    display:table;
+    width: 100%;
+}
 
 .statitem1{
-	display:inline-block;
+	display: table-cell;
 	background-color: #4169E1;
 	color:white;
 	border-right: 1px solid white;
 	border-left: 1px solid white;
 	border-bottom: 1px solid white; 
 	margin-right:0px;
-	/*padding:10px;
-	margin-left:0px;
-	/*float:left;*/
-	font-weight:bold;
-	width:49%;
+		font-weight:bold;
+	width:50%;
 	height:100px;
-	
 }
 
 
 .statitem2{
-	display:inline-block;
+	display: table-cell;
 	border-right: 1px solid white; 
 	border-left: 1px solid white;
 	border-bottom: 1px solid white; 
 	background-color: #ddd;
 	color: #696969;
 	margin-right:0px;
-	/*padding:10px;
-	margin-left:-1px;
-	/*float:left;*/
-	font-weight:bold;
-	width:49%;
-	
+    font-weight:bold;
+	width:50%;
 }
 
 .stattitle1{
