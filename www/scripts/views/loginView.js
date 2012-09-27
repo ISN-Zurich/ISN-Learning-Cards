@@ -100,13 +100,14 @@ LoginView.prototype.clickLoginButton = function() {
 		console.log("authentication failed, reason: " + errormessage);
 		switch (errormessage) {
 		case "connectionerror":
-			if (self.controller.models["connection"].isOffline()) {
-				self.showErrorMessage(jQuery.i18n.prop('msg_connection_message'));
-			}
+			self.showErrorMessage(jQuery.i18n.prop('msg_connection_message'));
 			break;
 		case "nouser":
 			console.log("no user error");
 			self.showErrorMessage(jQuery.i18n.prop('msg_authenticationFail_message'));
+			break;
+		case "invalidclientkey":
+			self.showErrorMessage(jQuery.i18n.prop('msg_connection_message'));
 			break;
 		default:
 			break;

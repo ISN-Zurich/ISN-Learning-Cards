@@ -182,6 +182,12 @@ function generateTable() {
 // 			array("integer", "text", "text", "text", "text", "integer", "float", "integer"),
 // 			array ($myID, "12979", "3c1875c18a7402de", "12968", "3600",
 // 					1348462800000, "1", "2000"));
+
+// 	$result = $ilDB->query("SELECT * FROM isnlc_statistics WHERE user_id = 12979");
+// 	while ($record = $ilDB->fetchAssoc($result)){
+// 		logging(json_encode($record));
+// 	}
+	
 }
 
 ?>

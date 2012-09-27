@@ -14,6 +14,10 @@ global $ilUser, $class_for_logging;
 
 $class_for_logging = "authentication.php";
 
+//global $ilDB;
+
+//$ilDB->manipulate("DELETE FROM isnlc_reg_info WHERE uuid = '3c1875c18a7402de'");
+
 //$path = $_SERVER['PATH_INFO'];
 //$path = preg_replace("/\//", "", $path); //remove leading backslash
 
@@ -89,35 +93,43 @@ function authenticate() {
 		logging("read user data");
 
 		$clientKey = getClientKeyForUUID($authData["uuid"], $authData["appid"]);
-		logging("clientKey: " . $clientKey);
-		$passwordHash = $ilUser->getPasswd(); //returns md5-hashed password
-		logging("password from ilias: " . $passwordHash);
-		$challengeCheck = md5($authData["username"] . strtoupper($passwordHash) . $clientKey);
-
-		logging("hash1: " . $challengeCheck);
-		logging("hash2: " . $authData["challenge"]);
-
-		if(strtoupper($authData["challenge"]) == strtoupper($challengeCheck)) {
-			logging("password correct");
-			$randomSeed = rand();
-			$sessionKey = md5($userId .$clientKey . $randomSeed);
-			logging("Session Key: " . $sessionKey);
-			storeAuthDataInDB($userId, $clientKey, $sessionKey);
-			logging("after authentication stored in db");
-
-			return array(
-					"userAuthenticationKey" => $sessionKey,
-					"learnerInformation" => array(
-							"userId" => $ilUser->getId(),
-							"userName" =>  $ilUser->getLogin(),
-							"displayName" => $ilUser->getFullName(),
-							"emailAddress" => $ilUser->getEmail(),
-							"language" => $ilUser->getLanguage()
-					));
+		
+		logging("CLIENT KEY " . $clientKey);
+		
+		if ($clientKey && strlen($clientKey) > 0) {
+			logging("clientKey: " . $clientKey);
+			$passwordHash = $ilUser->getPasswd(); //returns md5-hashed password
+			logging("password from ilias: " . $passwordHash);
+			$challengeCheck = md5($authData["username"] . strtoupper($passwordHash) . $clientKey);
+	
+			logging("hash1: " . $challengeCheck);
+			logging("hash2: " . $authData["challenge"]);
+	
+			if (strtoupper($authData["challenge"]) == strtoupper($challengeCheck)) {
+				logging("password correct");
+				$randomSeed = rand();
+				$sessionKey = md5($userId .$clientKey . $randomSeed);
+				logging("Session Key: " . $sessionKey);
+				storeAuthDataInDB($userId, $clientKey, $sessionKey);
+				logging("after authentication stored in db");
+	
+				return array(
+						"userAuthenticationKey" => $sessionKey,
+						"learnerInformation" => array(
+								"userId" => $ilUser->getId(),
+								"userName" =>  $ilUser->getLogin(),
+								"displayName" => $ilUser->getFullName(),
+								"emailAddress" => $ilUser->getEmail(),
+								"language" => $ilUser->getLanguage()
+						));
+			}
+		} else {
+			return array("message" => "invalid client key");
 		}
 			
 	}
 	return array(
+			"message" => "wrong user data",
 			"userAuthenticationKey" => "",
 			"learnerInformation" => array(
 					"userId" => 0
