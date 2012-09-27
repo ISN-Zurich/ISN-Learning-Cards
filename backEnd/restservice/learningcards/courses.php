@@ -8,7 +8,6 @@
 //syncTimeOut provides a way for the server to tell the clients how often they are allowed to synchronize
 $SYNC_TIMEOUT = 60000;
 
-require_once '../logging/logger.php';
 require_once './common.php';
 
 chdir("../..");

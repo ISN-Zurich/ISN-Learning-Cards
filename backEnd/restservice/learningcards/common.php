@@ -1,5 +1,20 @@
 <?php
 
+function logging($message) {
+	global $DEBUG, $class_for_logging;
+
+	//if DEBUG is set to 1 logging messages are displayed, otherwise not
+	if (!$DEBUG) {
+		$DEBUG = 1;
+	}
+	
+	$log_prefix = $class_for_logging . ": ";
+	
+	if ($DEBUG == 1) {
+		error_log($log_prefix . $message, 0);
+	}
+}
+
 /**
  * Reads header variable to get userId
  *

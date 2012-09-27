@@ -1,6 +1,5 @@
 <?php
 
-require_once '../logging/logger.php';
 require_once './common.php';
 
 chdir("../..");
