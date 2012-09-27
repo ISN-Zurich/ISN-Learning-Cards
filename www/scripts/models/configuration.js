@@ -351,8 +351,13 @@ ConfigurationModel.prototype.getLanguage = function() {
 	//return "el"; // JUST for testing
 	if (this.configuration.learnerInformation && this.configuration.learnerInformation.language && this.configuration.learnerInformation.language.length){
 		return this.configuration.learnerInformation.language;
-	} 
-	return this.configuration.defaultLanguage ? this.configuration.defaultLanguage : "en";
+	}
+    
+    // if we don't know a user's language we try to use the phone's language.
+    language = navigator.language.split("-");
+    language_root = (language[0]);
+    
+	return this.configuration.defaultLanguage ? this.configuration.defaultLanguage : language_root;
 };
 
 /**
@@ -406,6 +411,11 @@ ConfigurationModel.prototype.register = function() {
 	}
 
 	function appRegistration(data) {
+		// localStorage.setItem(data.ClientKey);
+        // if we don't know a user's language we try to use the phone's language.
+        language = navigator.language.split("-");
+        language_root = (language[0]);
+
 		console.log("in app registration");
 		// load server data from local storage
 		var urlsToLMS;
@@ -423,7 +433,7 @@ ConfigurationModel.prototype.register = function() {
 		localStorage.setItem("urlsToLMS", JSON.stringify(URLS_TO_LMS));
 		
 		self.configuration.appAuthenticationKey = data.ClientKey;
-		self.configuration.defaultLanguage = data.defaultLanguage || "en";
+		self.configuration.defaultLanguage = data.defaultLanguage || language_root;
 		self.storeData();
 		// we can now savely load the user data
 		self.loadFromServer();
