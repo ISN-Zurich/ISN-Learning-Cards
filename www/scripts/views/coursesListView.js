@@ -45,8 +45,12 @@ function CoursesListView(controller) {
 }
 
 CoursesListView.prototype.handleTap = doNothing;
-CoursesListView.prototype.handlePinch = doNothing;
 CoursesListView.prototype.handleSwipe = doNothing;
+
+CoursesListView.prototype.handlePinch = function(){
+    this.controller.transitionToSettings();
+};
+
 CoursesListView.prototype.openDiv = openView;
 CoursesListView.prototype.open = function() {
 	console.log("open course list view");

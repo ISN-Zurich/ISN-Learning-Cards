@@ -35,6 +35,7 @@ function ConfigurationModel(controller) {
 	this.loadData();
 
 	this.selectServerData(DEFAULT_SERVER);
+	
 	// initialize the configuration if it does not exist
 	// this.createConfiguration();
 

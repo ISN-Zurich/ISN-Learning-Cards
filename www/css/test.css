@@ -629,88 +629,60 @@ li {
 	
 }
 
-
+.statrow {
+    display:table;
+    width: 100%;
+}
 
 .statitem1{
-	display:inline-block;
+	display: table-cell;
 	background-color: #4169E1;
 	color:white;
 	border-right: 1px solid white;
 	border-left: 1px solid white;
 	border-bottom: 1px solid white; 
 	margin-right:0px;
-	/*padding:10px;
-	margin-left:0px;
-	/*float:left;*/
-	font-weight:bold;
-	width:49%;
+    font-weight:bold;
+	width:50%;
 	height:100px;
-	
 }
 
 
 .statitem2{
-	display:inline-block;
+	display: table-cell;
 	border-right: 1px solid white; 
 	border-left: 1px solid white;
 	border-bottom: 1px solid white; 
 	background-color: #ddd;
 	color: #696969;
 	margin-right:0px;
-	/*padding:10px;
-	margin-left:-1px;
-	/*float:left;*/
-	font-weight:bold;
-	width:49%;
-	
+    font-weight:bold;
+	width:50%;
 }
 
-.stattitle1{
-	/*float:left;*/
+.stattitle{
 	font-size: 18px;
-	color:white;
-	/*font-weight:bold;*/
-	padding-top:10px;
-	padding-left:15px;
-	padding-bottom:5px;
-}
-.stattitle2{
-	/*float:left;*/
-	font-size: 18px;
-	color:#4169E1;
-	/*font-weight:bold;*/
+	
 	padding-top:10px;
 	padding-left:15px;
 	padding-bottom:5px;
 	
 }
 
-.statvalue1{
-	float:left;
-	font-size: 28px;
-	font-weight:bold;
-	padding-left:15px;
-	
-	
-	/*margin-right:15px;*/
-}
-
-
-.statvalue2{
+.statvalue{
 	float:left;
 	font-size: 28px;
 	font-weight:bold;
 	padding-left:15px;
 	/*margin-right:15px;*/
 }
+
 .statsiconchange{
 	/*float:right;*/
 	font-size: 28px;
 	padding-top:-13px;
 	margin-left:-50px;
 	padding-bottom:5px;
-	
-
 }
 
 .statsinfo{
@@ -718,7 +690,6 @@ li {
 	font-size: 16px;
 	padding-left:15px;
 	padding-bottom:5px;
-	
 }
 
 .red{

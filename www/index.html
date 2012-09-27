@@ -6,7 +6,6 @@
 <meta name="viewport"
 	content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
 
-
 <script type="text/javascript" charset="utf-8"
 	src="libs/cordova-2.0.0.js"></script>
 
@@ -14,7 +13,6 @@
  <script type="text/javascript" charset="utf-8"
 	src="libs/cordova-2.1.0-ios.js"></script>
 -->
-    
 
 <script type="text/javascript" src="libs/jquery.js"></script>
 <script type="text/javascript" src="libs/jquery-ui.js"></script>
@@ -255,42 +253,51 @@
 		</div>
 		<div class="content">
 			<div id="statisticsBody" class="content">
-				<div id="statsSlot1" class="statitem1">
-					<div class="stattitle1" id="statBestDayTitle">Best Day</div>
-					<div class="statvalue1" id="statBestDayValue"></div>
-					<div class="statsiconchange" id="statsBestDayIconchange"></div>
-					<div class="statsinfo" id="statBestDayInfo">xx</div>
-				</div><div id="statsSlot2" class="statitem1">
-					<div class="stattitle1" id="statBestScoreTitle">BestScore</div>
-					<div class="statvalue1" id="statBestScoreValue"></div>
-					<div class="statsiconchange" id="statsBestScoreIconchange"></div>
-					<div class="statsinfo" id="statsBestScoreInfo">xx</div>
-				</div>
-				<div id="statsSlot3" class="statitem2">
-					<div class="stattitle2" id="statHandledCardsTitle">HandledCards</div>
-					<div class="statvalue2" id="statHandledCardsValue"></div>
-					<div class="statsiconchange" id="statsHandledCardsIconchange">
-					</div>
-					<!--<div class="statsinfo" id="statsHandledCardsInfo"></div>  -->
-				</div><div id="statsSlot4" class="statitem2">
-					<div class="stattitle2" id="statAverageScoreTitle">Average
-						Score</div>
-					<div class="statvalue2" id="statAverageScoreValue"></div>
-					<div class="statsiconchange" id="statsAverageScoreIconchange">
-					</div>
-					<!--<div class="statsinfo" id="statsAverageScoreInfo"></div>-->
-				</div>
-				<div id="statsSlot5" class="statitem2">
-					<div class="stattitle2" id="statProgressTitle">Progress</div>
-					<div class="statvalue2" id="statProgressValue"></div>
-					<div class="statsiconchange" id="statsProgressIconchange"></div>
-					<div class="statsinfo" id="statsProgressInfo"></div>
-				</div><div id="statsSlot6" class="statitem2">
-					<div class="stattitle2" id="statSpeedTitle">Speed</div>
-					<div class="statvalue2" id="statSpeedValue"></div>
-					<div class="statsiconchange" id="statsSpeedIconchange"></div>
-					<div class="statsinfo" id="statsSpeedinfo"></div>
-				</div>
+                <div class="statrow">
+                    <div id="statsSlot1" class="statitem1">
+                        <div class="stattitle" id="statBestDayTitle">Best Day</div>
+                        <div class="statvalue" id="statBestDayValue"></div>
+                        <div class="statsiconchange" id="statsBestDayIconchange"></div>
+                        <div class="statsinfo" id="statBestDayInfo">xx</div>
+                    </div>
+                    <div id="statsSlot2" class="statitem1">
+                        <div class="stattitle" id="statBestScoreTitle">BestScore</div>
+                        <div class="statvalue" id="statBestScoreValue"></div>
+                        <div class="statsiconchange" id="statsBestScoreIconchange"></div>
+                        <div class="statsinfo" id="statsBestScoreInfo">xx</div>
+                    </div>
+                </div>
+                <div class="statrow">
+                    <div id="statsSlot3" class="statitem2">
+                        <div class="stattitle" id="statHandledCardsTitle">HandledCards</div>
+                        <div class="statvalue" id="statHandledCardsValue"></div>
+                        <div class="statsiconchange" id="statsHandledCardsIconchange">
+                        </div>
+                        <!--<div class="statsinfo" id="statsHandledCardsInfo"></div>  -->
+                    </div>
+                    <div id="statsSlot4" class="statitem2">
+                        <div class="stattitle" id="statAverageScoreTitle">Average
+                            Score</div>
+                        <div class="statvalue" id="statAverageScoreValue"></div>
+                        <div class="statsiconchange" id="statsAverageScoreIconchange">
+                        </div>
+                        <!--<div class="statsinfo" id="statsAverageScoreInfo"></div>-->
+                    </div>
+                </div>
+                <div class="statrow">
+                    <div id="statsSlot5" class="statitem2">
+                        <div class="stattitle" id="statProgressTitle">Progress</div>
+                        <div class="statvalue" id="statProgressValue"></div>
+                        <div class="statsiconchange" id="statsProgressIconchange"></div>
+                        <div class="statsinfo" id="statsProgressInfo"></div>
+                    </div>
+                    <div id="statsSlot6" class="statitem2">
+                        <div class="stattitle" id="statSpeedTitle">Speed</div>
+                        <div class="statvalue" id="statSpeedValue"></div>
+                        <div class="statsiconchange" id="statsSpeedIconchange"></div>
+                        <div class="statsinfo" id="statsSpeedinfo"></div>
+                    </div>
+                </div>
 			</div>
 			<!-- <div class="content">
 			<ul id="statisticsData" class="marginForButtons">
