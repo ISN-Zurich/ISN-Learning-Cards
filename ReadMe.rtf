@@ -1,0 +1,136 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf470
+{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red40\green43\blue30;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww22840\viewh12900\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs26 \cf0 INTRODUCTION\
+============\
+\
+The name of this product is Mobler Cards ILIAS Backend. This backend service is a REST Service of Mobler Cards mobile app,  which is a mobile web app that runs on iOS and Android operating systems. More information about the app can be found at: https://github.com/ISN-Zurich/ISN-Learning-Cards. The service is developed to run on ILIAS compliant Learning Management Systems(LMS). \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+
+\fs24 \
+COPYRIGHT\
+\pard\pardeftab720
+
+\fs26 \cf0 ==========
+\fs24 \
+\
+
+\fs26 Mobler Cards ILIAS Backend \cf2 is free software: you can redistribute it and/or modify\
+it under the terms of the GNU General Public License as published by\
+the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\
+\
+\cf0 Mobler Cards ILIAS Backend\cf2  is distributed in the hope that it will be useful,\
+but WITHOUT ANY WARRANTY; without even the implied warranty of\
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\
+GNU General Public License for more details.\
+\
+You should have received a copy of the GNU General Public License\
+along with \cf0 Mobler Cards ILIAS Backend\cf2 . If not, see <http://www.gnu.org/licenses/>.\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 	\
+
+\fs24 \
+VERSION\
+\pard\pardeftab720
+
+\fs26 \cf0 ==========\
+\
+The current version was released on 28.09.2012\
+
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+INSTALLATION\
+\pard\pardeftab720
+
+\fs26 \cf0 ===========\
+
+\fs24 \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0\cf0 {\listtext	\'95	}
+\fs26 Logging into the server\
+{\listtext	\'95	}Copy the rest service directory into your ILIAS installation directory.
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+SUPPORTED FUNCTIONALITIES\
+\pard\pardeftab720
+
+\fs26 \cf0 ========================\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 I.   REGISTRATION\
+II.  AUTHENTICATION\
+III. COURSES\
+IV.  QUESTIONS\
+V.   STATISTICS
+\fs24 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+
+\fs26 I. REGISTRATION\
+-----------------\
+\
+This script registers the app with the backend. It returns the client key for the app which is based on the device id (uuid) and the app ID. Mobler Cards ID is "ch.ethz.isn.learningcards". A md5 hash is used to generate the client key based on the appID, uuid along with a random seed.  \
+\
+NOTE: The client Key is unique for every device. 
+\fs24 \
+\
+
+\fs26 II. AUTHENTICATION\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 -------------------\
+\
+This script authenticates a user to the backend.  There are 4 types of request methods that are passed on here via the client. The PUT and POST are sent when the login process takes place. The DELETE is passed when a logout is sent to the server. The GET request is passed when data are being loaded from the server. NOTE: The latter is feasible only after logged into the system.\
+ 
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\fs26 \cf0 \
+III. COURSES\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 -------------\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+This script handles the loading of courses from the server.\
+\
+\
+IV. QUESTIONS\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 --------------\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 This script handles the loading of the questions from the server.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+\
+V. STATISTICS\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 --------------
+\fs24 \
+\
+This script loads handles the loading of statistics data from the server.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\pard\pardeftab720
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+}
