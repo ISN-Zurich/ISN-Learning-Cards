@@ -160,10 +160,17 @@ QuestionPoolModel.prototype.getAnswer = function() {
 	return this.activeQuestion.answer;
 };
 
+/**
+ * @return the array that contains the mixed answers
+ */
 QuestionPoolModel.prototype.getMixedAnswersArray = function() {
 	return this.mixedAnswers;
 };
 
+/**
+ * @return true if the current answers are mixed,
+ * otherwise false
+ */
 QuestionPoolModel.prototype.currAnswersMixed = function() {
 	return this.currentAnswersAreMixed;
 }

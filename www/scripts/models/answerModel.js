@@ -3,7 +3,6 @@ var DB_VERSION = 1;
 /**
  * The answer model holds/handles the answers of a question of every type
  */
-// Constructor. It
 function AnswerModel() {
 	this.answerList = [];
 	this.answerScoreList = [];
@@ -16,48 +15,14 @@ function AnswerModel() {
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 	if (!localStorage.getItem("db_version")) {
-		// this.deleteDB();
 		this.initDB();
 	}
 
-	// alter the date structure
-//	this.db.transaction(function(tx) {
-		// tx.executeSql("ALTER TABLE statistics CHANGE day timestamp
-		// DATETIME");
-		// tx.executeSql("ALTER TABLE statistics ADD day DATE");
-
-		// get all wrong timestamps
-		// generate proper timestamp
-		// update table with correct data for timestamp
-//		var update = "";
-//		tx
-//				.executeSql('SELECT id, day FROM statistics WHERE course_id="12968"',
-//						[], function dataSelectHandler(transaction,
-//								results) {
-//							console.log("ALL ROWS: " + results.rows.length);
-//							for ( var i = 0; i < results.rows.length; i++) {
-//								row = results.rows.item(i);
-//								console.log(i + ": " + JSON.stringify(row));
-//								var timestamp = Date.parse(row['day']);
-//								console.log("NEW DAY: " + timestamp);
-//								tx
-//								.executeSql("UPDATE statistics SET day=" + timestamp + " WHERE id=" + row['id'] + ";", [], function() {
-//									console.log("successfully updated");
-//								}, function(tx, e) {
-//									console.log("error! NOT updated: "
-//											+ e.message);
-//								});
-//							}
-//						}, function(tx, e) {
-//							console.log("Error for select average score: "
-//									+ e.message);
-//						});
-////		
-////
-//	});
-
 };
 
+/**
+ * sets the answer list
+ */
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
 };
@@ -69,16 +34,26 @@ AnswerModel.prototype.getAnswers = function() {
 	return this.answerList;
 };
 
+/**
+ * @return the score list
+ */
 AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
+/**
+ * deletes the data
+ */
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 };
 
+/**
+ * @return if answer score is 1 Execellent, if answer score is 0 Wrong
+ * and otherwise PariallyCorrect
+ */
 AnswerModel.prototype.getAnswerResults = function() {
 	console.log("answer score: " + this.answerScore);
 	if (this.answerScore == 1) {
@@ -91,6 +66,9 @@ AnswerModel.prototype.getAnswerResults = function() {
 	}
 };
 
+/**
+ * calculate the score for single choice questions
+ */
 AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	var clickedAnswerIndex = this.answerList[0];
 
@@ -101,6 +79,9 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	}
 };
 
+/**
+ * calculate the score for multiple choice questions
+ */
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
 	var questionpool = controller.models["questionpool"];
@@ -150,7 +131,7 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 };
 
 /**
- * Calculate the scoring for text sorting questions
+ * Calculate the score for text sorting questions
  */
 AnswerModel.prototype.calculateTextSortScore = function() {
 
@@ -199,7 +180,7 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 };
 
 /**
- * Calculate the answer results (excellent, wrong) for numeric questions
+ * Calculate the answer score for numeric questions
  */
 AnswerModel.prototype.calculateNumericScore = function() {
 
@@ -213,27 +194,41 @@ AnswerModel.prototype.calculateNumericScore = function() {
 	} else {
 		this.answerScore = 0;
 	}
-
 };
 
+/**
+ * sets the course id
+ */
 AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 };
 
+/**
+ * starts the timer for the specified question
+ */
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
 	this.currentQuestionId = questionId;
 	console.log("currentQuestionId: " + this.currentQuestionId);
 };
 
+/**
+ * @return true, if timer has started, otherwise false
+ */
 AnswerModel.prototype.hasStarted = function() {
 	return this.start != -1;
 };
 
+/**
+ * resets the timer
+ */
 AnswerModel.prototype.resetTimer = function() {
 	this.start = -1;
 };
 
+/**
+ * creates a statistics table in the database if it doesn't exist yet
+ */
 AnswerModel.prototype.initDB = function() {
 	this.db
 			.transaction(function(transaction) {
@@ -251,6 +246,9 @@ AnswerModel.prototype.initDB = function() {
 	localStorage.setItem("db_version", DB_VERSION);
 };
 
+/**
+ * inserts the score into the database
+ */
 AnswerModel.prototype.storeScoreInDB = function() {
 	var self = this;
 	var day = new Date();
@@ -277,6 +275,9 @@ AnswerModel.prototype.storeScoreInDB = function() {
 	
 };
 
+/**
+ * deletes everything from the statistics table
+ */
 AnswerModel.prototype.deleteDB = function() {
 	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {

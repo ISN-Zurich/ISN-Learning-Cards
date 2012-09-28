@@ -213,6 +213,9 @@ SingleChoiceWidget.prototype.clickDoneButton = function() {
 
 };
 
+/**
+ * sets the height property of the list items that contain correct answers
+ */
 SingleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
 		height = $(this).height();

@@ -1,9 +1,6 @@
-/* Achievements View 
- * 
- * Stackhandler
- * Card burner
- * */
-
+/**
+ * View for displaying the achievements
+ */
 function AchievementsView(){
 	
 	 var self = this;
@@ -14,30 +11,55 @@ function AchievementsView(){
 	
 }; 
 
+/**
+ * pinch leads to statistics view
+ */
 AchievementsView.prototype.handlePinch = function(){
     controller.transitionToStatistics();
 };
+
+/**
+ * tap does nothing
+ */
 AchievementsView.prototype.handleTap = doNothing;
+
+/**
+ * swipe leads to statistics view
+ */
 AchievementsView.prototype.handleSwipe = function() {
 	controller.transitionToStatistics();
 };
 
+/**
+ * opens the view
+ */
 AchievementsView.prototype.openDiv = openView;
+
+/**
+ * shows the achievements body
+ */
 AchievementsView.prototype.open = function() {
 	this.showAchievementsBody();
 	this.openDiv();	
 };
 
+/**
+ * closes the view
+ */
 AchievementsView.prototype.close = closeView;
 
+/**
+ * leads to statistics view
+ */
 AchievementsView.prototype.closeAchievements = function() {
 	console.log("close Achievements button clicked");
 	controller.transitionToStatistics();
 };
 
+/**
+ * shows the achievements
+ */
 AchievementsView.prototype.showAchievementsBody = function() {
-
-
 	var statisticsModel = controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
 	$("#stackHandlerIcon").removeClass("blue");

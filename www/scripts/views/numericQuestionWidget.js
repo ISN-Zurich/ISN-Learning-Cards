@@ -139,7 +139,6 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 };
 
 //Storing the typed number
-
 NumericQuestionWidget.prototype.storeAnswers = function() {
 
 	var questionpoolModel = controller.models["questionpool"];
@@ -149,10 +148,16 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(numericAnswer);
 };
 
+/**
+ * calculates the answer score
+ */
 NumericQuestionWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateNumericScore();
 }
 
+/**
+ * this method does nothing for the numeric widget
+ */
 NumericQuestionWidget.prototype.setCorrectAnswerTickHeight = doNothing;
 
 console.log("end of numeric choice widget");

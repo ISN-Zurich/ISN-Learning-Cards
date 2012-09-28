@@ -161,10 +161,16 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
+/**
+ * caculates the answer score
+ */
 MultipleChoiceWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateMultipleChoiceScore();
 };
 
+/**
+ * sets the height property of the list items that contain correct answers
+ */
 MultipleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
 		height = $(this).height();

@@ -1,3 +1,6 @@
+/**
+ * View for displaying the settings
+ */
 function SettingsView() {
     var self = this;
     
@@ -15,55 +18,63 @@ function SettingsView() {
 	});
 } 
 
+/**
+ * pinch leads to course list
+ */
 SettingsView.prototype.handlePinch = function() {
     controller.transitionToCourses();
 };
+
+/**
+ * tap does nothing
+ */
 SettingsView.prototype.handleTap = doNothing;
+
+/**
+ * swipe does nothing
+ */
 SettingsView.prototype.handleSwipe = doNothing;
+
+/**
+ * opens the view
+ */
 SettingsView.prototype.openDiv = openView;
+
+/**
+ * shows the settings data
+ */
 SettingsView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();
 	
-	controller.models['authentication'].loadFromServer();
-	
+	controller.models['authentication'].loadFromServer();	
 };
+
+/**
+ * closes the view
+ */
 SettingsView.prototype.close = closeView;
 
+/**
+ * leads to course list
+ */
 SettingsView.prototype.closeSettings = function() {
 	console.log("close settings button clicked");
 	controller.transitionToCourses();
 };
 
+/**
+ * leads to logout confirmation view
+ */
 SettingsView.prototype.logout = function() {
 	controller.transitionToLogout();
 };
 
+/**
+ * loads the statistics data
+ */
 SettingsView.prototype.loadData = function() {
-	
 	var config = controller.models['authentication'];
-	
-//	$("#settingsData").empty();
-//	liName = $("<li/>", {}).appendTo("#settingsData");
-//	$("<div/>", {
-//		text: config.getDisplayName(),
-//		"class": "text"
-//	}).appendTo(liName);
-//	liUserName = $("<li/>", {}).appendTo("#settingsData");
-//	$("<div/>", {
-//		text: config.getUserName(),
-//		"class": "text"
-//	}).appendTo(liUserName);
-//	liEmail = $("<li/>", {}).appendTo("#settingsData");
-//	$("<div/>", {
-//		text: config.getEmailAddress(),
-//		"class": "text"
-//	}).appendTo(liEmail);
-//	liLang = $("<li/>", {}).appendTo("#settingsData");
-//	$("<div/>", {
-//		text: jQuery.i18n.prop('msg_' + config.getLanguage() + '_title'),
-//		"class": "text"
-//	}).appendTo(liLang);
 	
 	$("#nameLabelSet").text(jQuery.i18n.prop('msg_fullname'));
 	$("#nameItemSet").text(config.getDisplayName());
@@ -72,6 +83,5 @@ SettingsView.prototype.loadData = function() {
 	$("#emailLabelSet").text(jQuery.i18n.prop('msg_email'));
 	$("#emailItemSet").text(config.getEmailAddress());
 	$("#languageLabelSet").text(jQuery.i18n.prop('msg_language'));
-	$("#languageItemSet").text(jQuery.i18n.prop('msg_' + config.getLanguage() + '_title'));
-	
+	$("#languageItemSet").text(jQuery.i18n.prop('msg_' + config.getLanguage() + '_title'));	
 };
