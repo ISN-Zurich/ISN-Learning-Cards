@@ -123,7 +123,7 @@ CourseModel.prototype.loadFromServer = function() {
 	self.checkForTimeOut();
 	if (self.controller.models['authentication'].isLoggedIn()
 			&& !self.syncState) {
-
+		var sessionKey = self.controller.models['authentication']
 				.getSessionKey();
 
 		// save current syncStates for this course
