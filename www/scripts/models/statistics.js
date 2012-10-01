@@ -194,7 +194,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 };
 
 
-//set a new metric type in the metrics table in the db, this function will be used by
+//set a new metric type in the metrics table in the db, this function will be used by us to manually update the metrics table with new types
 Statistics.prototype.storeMetricsType = function() {
 	
 	
@@ -244,7 +244,8 @@ StatisticsModel.prototype.initQueries = function() {
 		values : [],
 		valuesLastActivity : []
 	};
-
+	
+	
 	// average score
 	this.queries['avgScore'].query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
 			+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
