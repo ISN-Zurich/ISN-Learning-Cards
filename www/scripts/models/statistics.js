@@ -1,8 +1,36 @@
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+
+*/
+
+
 var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24; 
 
-/**
- * This model holds the statistics for a course
- */
+//This model holds the statistics for a course
+
 function StatisticsModel(controller) {
 	this.controller = controller;
 	this.lastSendToServer;
@@ -45,9 +73,9 @@ function StatisticsModel(controller) {
 
 };
 
-/**
- * sets the current course id and starts the calculations
- */
+
+//sets the current course id and starts the calculations
+ 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 
@@ -84,16 +112,14 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	
 };
 
-/**
- * @return statistics
- */
+// @return statistics
+ 
 StatisticsModel.prototype.getStatistics = function() {
 	return this.statistics;
 };
 
-/**
- * @return improvement
- */
+// @return improvement
+ 
 StatisticsModel.prototype.getImprovement = function() {
 	return this.improvement;
 };
@@ -119,9 +145,8 @@ StatisticsModel.prototype.checkCardBurner = function() {
 	});
 };
 
-/**
- * gets the timestamp of the first activity
- */
+// gets the timestamp of the first activity
+ 
 StatisticsModel.prototype.getFirstActiveDay = function() {
 	var self = this;
 	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND question_id != "cardburner"',
@@ -168,9 +193,9 @@ StatisticsModel.prototype.checkActivity = function(day) {
 	}
 };
 
-/**
- * initializes all queries that are needed for the calculations
- */
+
+//initializes all queries that are needed for the calculations
+ 
 StatisticsModel.prototype.initQueries = function() {
 	this.queries['avgScore'] = {
 		query : "",
@@ -227,9 +252,8 @@ StatisticsModel.prototype.initQueries = function() {
 	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=? AND question_id != "cardburner"';
 };
 
-/**
- * initializes all values that are needed for the calculations
- */
+//initializes all values that are needed for the calculations
+ 
 StatisticsModel.prototype.initQueryValues = function() {		
 	var timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
@@ -272,9 +296,9 @@ StatisticsModel.prototype.initQueryValues = function() {
 	this.queries['stackHandler'].values = [ this.currentCourseId ];
 };
 
-/**
- * queries the database and calculates the statistics and improvements
- */
+
+//queries the database and calculates the statistics and improvements
+
 StatisticsModel.prototype.calculateValues = function() {
 	var self = this;
 	self.initQueryValues();
@@ -318,9 +342,8 @@ StatisticsModel.prototype.allCalculationsDone = function() {
 	} 	
 };
 
-/**
- * class for querying the database
- */
+// class for querying the database
+
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	var self = this;
 	self.db.transaction(function(transaction) {
@@ -328,9 +351,8 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	});
 };
 
-/**
- * calculates how many cards have been handled
- */
+//calculates how many cards have been handled
+ 
 StatisticsModel.prototype.calculateHandledCards = function(transaction, results) {
 	var self = this;
 	if (results.rows.length > 0) {
@@ -358,9 +380,8 @@ StatisticsModel.prototype.calculateHandledCards = function(transaction, results)
 	});
 };
 
-/**
- * calculates the average score the was achieved
- */
+// calculates the average score the was achieved
+ 
 StatisticsModel.prototype.calculateAverageScore = function(transaction, results) {
 	var self = this;
 	console.log("rows: " + results.rows.length);
@@ -384,9 +405,8 @@ StatisticsModel.prototype.calculateAverageScore = function(transaction, results)
 			function cbCalculateImprovements(t,r) {self.calculateImprovementAverageScore(t,r);});
 };
 
-/**
- * calculates the average time that was needed to handle the cards
- */
+//calculates the average time that was needed to handle the cards
+
 StatisticsModel.prototype.calculateAverageSpeed = function(transaction, results) {
 	var self = this;
 	console.log("rows: " + results.rows.length);
@@ -410,9 +430,8 @@ StatisticsModel.prototype.calculateAverageSpeed = function(transaction, results)
 			function cbCalculateImprovements(t,r) {self.calculateImprovementAverageSpeed(t,r);});
 };
 
-/**
- * calculates the progress
- */
+//calculates the progress
+
 StatisticsModel.prototype.calculateProgress = function(transaction, results) {
 	var self = this;
 	if (results.rows.length > 0) {
@@ -438,9 +457,9 @@ StatisticsModel.prototype.calculateProgress = function(transaction, results) {
 			function cbCalculateImprovements(t,r) {self.calculateImprovementProgress(t,r);});
 };
 
-/**
- * calculates the best day and score
- */
+
+//calculates the best day and score
+
 StatisticsModel.prototype.calculateBestDayAndScore = function(transaction, results) {
 	console.log("rows: " + results.rows.length);
 	var self = this;
@@ -467,9 +486,8 @@ StatisticsModel.prototype.calculateBestDayAndScore = function(transaction, resul
 	self.allCalculationsDone();
 };
 
-/**
- * calculates the improvement of number of the handled cards in comparison to the last active day
- */
+//calculates the improvement of number of the handled cards in comparison to the last active day
+
 StatisticsModel.prototype.calculateImprovementHandledCards = function(transaction, results) {
 	var self = this;
 	console.log("rows in calculate improvement handled cards: "
@@ -491,9 +509,8 @@ StatisticsModel.prototype.calculateImprovementHandledCards = function(transactio
 	self.allCalculationsDone();
 };
 
-/**
- * calculates the improvement of the average score in comparison to the last active day
- */
+//calculates the improvement of the average score in comparison to the last active day
+ 
 StatisticsModel.prototype.calculateImprovementAverageScore = function(transaction, results) {
 	var self = this;
 	console.log("rows in calculate improvement average score: "
@@ -518,9 +535,9 @@ StatisticsModel.prototype.calculateImprovementAverageScore = function(transactio
 	self.allCalculationsDone();
 };
 
-/**
- * calculates the improvement of the average speed in comparison to the last active day
- */
+
+//calculates the improvement of the average speed in comparison to the last active day
+ 
 StatisticsModel.prototype.calculateImprovementAverageSpeed = function(transaction, results) {
 	var self = this;
 	console.log("rows in calculate improvement average speed: "
@@ -553,9 +570,9 @@ StatisticsModel.prototype.calculateImprovementAverageSpeed = function(transactio
 	self.allCalculationsDone();
 };
 
-/**
- * calculates the improvement of the progress in comparison to the last active day
- */
+
+//calculates the improvement of the progress in comparison to the last active day
+
 StatisticsModel.prototype.calculateImprovementProgress = function(transaction, results) {
 	var self = this;
 	console.log("rows in calculate improvement progress: "
@@ -614,9 +631,9 @@ StatisticsModel.prototype.calculateStackHandler = function(transaction, results)
 	self.allCalculationsDone();
 };
 
-/**
- * checks if any achievements have been achieved
- */
+
+// checks if any achievements have been achieved
+
 StatisticsModel.prototype.checkAchievements = function(courseId) {
 	//check if cardburner was already achieved
 	this.checkCardBurnerAchievement(courseId);
@@ -666,16 +683,15 @@ StatisticsModel.prototype.checkCardBurnerAchievement = function(courseId) {
 	});
 };
 
-/**
- * function that is called if an error occurs while querying the database
- */
+//function that is called if an error occurs while querying the database
+ 
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
 	console.log("DB Error: " + e.message);
 };
 
-/**
- * loads the statistics data from the server and stores it in the local database
- */
+
+// loads the statistics data from the server and stores it in the local database
+
 StatisticsModel.prototype.loadFromServer = function() {
 	var self = this;
 	if (self.controller.models['authentication'].isLoggedIn()) {
@@ -720,9 +736,9 @@ StatisticsModel.prototype.loadFromServer = function() {
 	}
 };
 
-/**
- * inserts the statistic item into the database if it doesn't exist there yet
- */
+
+//inserts the statistic item into the database if it doesn't exist there yet
+
 StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	var self = this;
 //	console.log("day: " + statisticItem['day']);
@@ -750,9 +766,9 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	}
 };
 
-/**
- * sends statistics data to the server
- */
+
+//sends statistics data to the server
+
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
 	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';

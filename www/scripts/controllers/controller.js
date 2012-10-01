@@ -1,31 +1,51 @@
-/** ***********************************************************
- * VIEW HELPERS
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+*/
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
  */
 
-/**
- * does nothing
- */
+
+//****VIEW HELPERS******
+
+// does nothing
+
 function doNothing() {
 }
 
-/**
- * opens a view
- */
+//opens a view
+ 
 function openView() {
 	$(document).trigger("trackingEventDetected",[this.tagID]);
 	$("#" + this.tagID).show();
 }
 
-/**
- * closes a view
- */
+// closes a view
+ 
 function closeView() {
 	$("#" + this.tagID).hide();
 }
 
-/**
- * shows apologize message if not question data is loaded
- */
+// shows apologize message if not question data is loaded
+
 function doApologize() {
 	$("#feedbackBody").empty();
 	$("<span/>", {
@@ -34,9 +54,7 @@ function doApologize() {
 	$("#dataErrorMessage").show();
 }
 
-/*******************************************************************************
- * Controller
- */
+
 function Controller() {
 	var self = this;
 
@@ -123,14 +141,20 @@ function Controller() {
 
 	setButtonHeight();
 
+	$(document).bind("allstatisticcalculationsdone", function() {
+    	self.transition('statisticsView');
+    });
+	
 	this.activeView.open();
 
+	
+	
 	console.log("End of Controller");
 } // end of Controller
 
-/**
- * sets the correct strings depending on the language
- */
+
+//sets the correct strings depending on the language
+
 Controller.prototype.setupLanguage = function() {
 	jQuery.i18n.properties({
 	    name:'textualStrings', 
@@ -170,9 +194,9 @@ Controller.prototype.setupLanguage = function() {
 	})
 }
 
-/**
- * closes the current view and opens the specified one
- */
+
+//closes the current view and opens the specified one
+ 
 Controller.prototype.transition = function(viewname) {
 	if (this.views[viewname]) {
 		this.activeView.close();
@@ -181,10 +205,9 @@ Controller.prototype.transition = function(viewname) {
 	}
 };
 
-/**
- * if user is already login, the course list is shown otherwise the login form
- * is shown
- */
+/* if user is already login, the course list is shown otherwise the login form
+  is shown */
+
 Controller.prototype.transitionToEndpoint = function() {
 	console.log('initialize endpoint');
 
@@ -197,9 +220,9 @@ Controller.prototype.transitionToEndpoint = function() {
 	}
 };
 
-/**
- * transition to the specified view
- */
+
+//transition to the specified view
+ 
 Controller.prototype.transitionToLogin = function() {
 	this.transition('login');
 };
@@ -233,16 +256,16 @@ Controller.prototype.transitionToFeedbackMore = function() {
 };
 
 Controller.prototype.transitionToStatistics = function() {
-	this.transition('statisticsView');
+	this.models['statistics'].setCurrentCourseId(courseID);
 };
 
 Controller.prototype.transitionToAchievements = function() {
 	this.transition('achievements');
 };
 
-/**
- * sets the current height for icon buttons
- */
+
+//sets the current height for icon buttons
+
 function setButtonHeight() {
 	console.log("setButtonHeight");
 	var windowheight = $(window).height();

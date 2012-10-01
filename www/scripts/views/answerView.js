@@ -1,12 +1,33 @@
+/**
+ * .0	THIS COMMENT MUST NOT BE REMOVED
 
-//***********************************************************ANSWER VIEW**********************************************************************************
-// The answer View displays the possible solutions of a question. The user can interact with the view by selecting/typing/sorting the possible solutions/answers.
-//The possible solutions can have different formats. This is handled by widgets that are acting as subviews of the Answer View.
-// The answer View is a general template that loades in its main body a different widget based on the type of the question.
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+*/
 
 
-
-//********************************************************** CONSTRUCTOR *******************************************************
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+ * 
+ * The answer View displays the possible solutions of a question. 
+ * The user can interact with the view by selecting/typing/sorting the possible solutions/answers.
+ * The possible solutions can have different formats. This is handled by widgets that are acting as subviews of the Answer View.
+ * The answer View is a general template that loades in its main body a different widget based on the type of the question.
+*/
 
 function AnswerView() {
 	var self = this;
@@ -14,6 +35,7 @@ function AnswerView() {
 	self.tagID = 'cardAnswerView';
 
 	self.widget = null; 
+	
 
 	//Handler when taping on the forward/done grey button on the right of the answer view
 	jester($('#doneButton')[0]).tap(function() {
@@ -129,26 +151,7 @@ AnswerView.prototype.showAnswerTitle = function() {
 	$("#answerIcon").addClass(jQuery.i18n.prop('msg_' + currentAnswerTitle + '_icon'));
 	$("#cardAnswerTitle").text(jQuery.i18n.prop('msg_' +currentAnswerTitle + '_title'));
 	
-	//	switch (currentAnswerTitle) {
-//	case 'assSingleChoice':
-//		$("#answerIcon").addClass("icon-checkmark");
-//		$("#cardAnswerTitle").text("Single Choice Question");
-//		break;
-//	case 'assMultipleChoice':
-//		$("#answerIcon").addClass("icon-checkmark");
-//		$("#cardAnswerTitle").text("Multiple Choice Question");
-//		break;
-//	case 'assOrderingQuestion':
-//		$("#answerIcon").addClass("icon-move-vertical");
-//		$("#cardAnswerTitle").text("Text Order Question");
-//		break;
-//	case 'assNumeric':
-//		$("#answerIcon").addClass("icon-pencil");
-//		$("#cardAnswerTitle").text("Numeric Question");
-//		break;
-//	default:
-//		break;
-//	}
+
 };
 
 // Handling the behavior of the "forward-done" button on the answer view

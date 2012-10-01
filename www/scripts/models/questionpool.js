@@ -1,3 +1,32 @@
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+
+*/
+
+
 /**
  * This model holds the question of an question pool and a queue for the last
  * answered questions
@@ -132,37 +161,32 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 };
 
-/**
- * removes the data for the specified course id from the local storage
- */
+ //removes the data for the specified course id from the local storage
+
 QuestionPoolModel.prototype.removeData = function(course_id) {
 	localStorage.removeItem("questionpool_" + course_id);
 };
 
-/**
- * @return the question type of the current question
- */
+// @return the question type of the current question
+
 QuestionPoolModel.prototype.getQuestionType = function() {
 	return this.activeQuestion.type;
 };
 
-/**
- * @return the question text of the current question
- */
+//@return the question text of the current question
+
 QuestionPoolModel.prototype.getQuestionBody = function() {
 	return this.activeQuestion.question;
 };
 
-/**
- * @return the answer of the current question
- */
+// @return the answer of the current question
+
 QuestionPoolModel.prototype.getAnswer = function() {
 	return this.activeQuestion.answer;
 };
 
-/**
- * @return the array that contains the mixed answers
- */
+ // @return the array that contains the mixed answers
+
 QuestionPoolModel.prototype.getMixedAnswersArray = function() {
 	return this.mixedAnswers;
 };
@@ -236,32 +260,27 @@ QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 	}
 }
 
-/**
- * increases the index of the current answer
- */
+//increases the index of the current answer
+
 QuestionPoolModel.prototype.nextAnswerChoice = function() {
 	this.indexAnswer = (this.indexAnswer + 1);
 	return this.indexAnswer < this.activeQuestion.answer.length;
 };
 
-/**
- * @return the answertext of the current answer of the current question
- */
+//@return the answertext of the current answer of the current question
+ 
 QuestionPoolModel.prototype.getAnswerChoice = function() {
 	return this.activeQuestion.answer[this.indexAnswer].answertext;
 };
 
-/**
- * @return the score of the current answer of the current question
- */
+// @return the score of the current answer of the current question
+ 
 QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
 	return this.activeQuestion.answer[this.indexAnswer].points;
 };
 
-/**
- * @return the score of the answer with the specified index of the current
- *         question
- */
+//@return the score of the answer with the specified index of the current question
+ 
 QuestionPoolModel.prototype.getScore = function(index) {
 	if (index >= 0 && index < this.activeQuestion.answer.length) { //index && 
 		return this.activeQuestion.answer[index].points;
@@ -270,30 +289,28 @@ QuestionPoolModel.prototype.getScore = function(index) {
 	}
 };
 
-/**
- * @return the correct feedback of the current question
- */
+// @return the correct feedback of the current question
+
 QuestionPoolModel.prototype.getCorrectFeedback = function() {
 	return this.activeQuestion.correctFeedback;
 };
 
-/**
- * @return the error feedback of the current question
- */
+
+// @return the error feedback of the current question
+
 QuestionPoolModel.prototype.getWrongFeedback = function() {
 	return this.activeQuestion.errorFeedback;
 };
 
-/**
- * @return the id of the current question
- */
+//@return the id of the current question
+ 
 QuestionPoolModel.prototype.getId = function() {
 	return this.activeQuestion.id;
 };
 
-/**
- * resets the queue and the question id
- */
+
+//resets the queue and the question id
+ 
 QuestionPoolModel.prototype.reset = function() {
 	this.queue = [ "-1", "-1", "-1" ];
 	this.id = 0;
@@ -304,16 +321,14 @@ QuestionPoolModel.prototype.reset = function() {
 	}
 };
 
-/**
- * resets the answer index
- */
+//resets the answer index
+ 
 QuestionPoolModel.prototype.resetAnswer = function() {
 	this.indexAnswer = 0;
 };
 
-/**
- * creates 2 questionpools with index 1 and 2
- */
+// creates 2 questionpools with index 1 and 2
+
 QuestionPoolModel.prototype.createQuestionPools = function() {
 	this.createPool(1);
 	this.createPool(2);

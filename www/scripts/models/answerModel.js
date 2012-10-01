@@ -1,8 +1,36 @@
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+
+*/
+
 var DB_VERSION = 1;
 
-/**
- * The answer model holds/handles the answers of a question of every type
- */
+
+//The answer model holds/handles the answers of a question of every type
+
 function AnswerModel() {
 	this.answerList = [];
 	this.answerScoreList = [];
@@ -20,40 +48,38 @@ function AnswerModel() {
 
 };
 
-/**
- * sets the answer list
- */
+//sets the answer list
+ 
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
 };
 
-/**
- * Get the selected answers of the learner
- */
+
+//Get the selected answers of the learner
+
 AnswerModel.prototype.getAnswers = function() {
 	return this.answerList;
 };
 
-/**
- * @return the score list
- */
+
+// @return the score list
+
 AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
-/**
- * deletes the data
- */
+//deletes the data
+
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = 0;
 };
 
-/**
- * @return if answer score is 1 Execellent, if answer score is 0 Wrong
- * and otherwise PariallyCorrect
- */
+ // @return if answer score is 1 Execellent  
+ // @return if answer score is 0 Wrong
+ // otherwise PariallyCorrect
+ 
 AnswerModel.prototype.getAnswerResults = function() {
 	console.log("answer score: " + this.answerScore);
 	if (this.answerScore == 1) {
@@ -66,9 +92,8 @@ AnswerModel.prototype.getAnswerResults = function() {
 	}
 };
 
-/**
- * calculate the score for single choice questions
- */
+//calculate the score for single choice questions
+ 
 AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	var clickedAnswerIndex = this.answerList[0];
 
@@ -79,9 +104,8 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	}
 };
 
-/**
- * calculate the score for multiple choice questions
- */
+//calculate the score for multiple choice questions
+
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
 	var questionpool = controller.models["questionpool"];
@@ -130,9 +154,8 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	}
 };
 
-/**
- * Calculate the score for text sorting questions
- */
+//Calculate the score for text sorting questions
+
 AnswerModel.prototype.calculateTextSortScore = function() {
 
 	var scores = [];
@@ -179,9 +202,8 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 	this.answerScoreList = scores;
 };
 
-/**
- * Calculate the answer score for numeric questions
- */
+//Calculate the answer score for numeric questions
+
 AnswerModel.prototype.calculateNumericScore = function() {
 
 	var answerModel = controller.models["answers"];
@@ -196,39 +218,36 @@ AnswerModel.prototype.calculateNumericScore = function() {
 	}
 };
 
-/**
- * sets the course id
- */
+
+//sets the course id
+ 
 AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 };
 
-/**
- * starts the timer for the specified question
- */
+//starts the timer for the specified question
+
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
 	this.currentQuestionId = questionId;
 	console.log("currentQuestionId: " + this.currentQuestionId);
 };
 
-/**
- * @return true, if timer has started, otherwise false
- */
+
+//@return true, if timer has started, otherwise false
+ 
 AnswerModel.prototype.hasStarted = function() {
 	return this.start != -1;
 };
 
-/**
- * resets the timer
- */
+//resets the timer
+ 
 AnswerModel.prototype.resetTimer = function() {
 	this.start = -1;
 };
 
-/**
- * creates a statistics table in the database if it doesn't exist yet
- */
+//creates a statistics table in the database if it doesn't exist yet
+ 
 AnswerModel.prototype.initDB = function() {
 	this.db
 			.transaction(function(transaction) {
@@ -236,19 +255,12 @@ AnswerModel.prototype.initDB = function() {
 						.executeSql(
 								'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT, day INTEGER, score NUMERIC, duration INTEGER);',
 								[]);
-				// transaction.executeSql(
-				// 'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL
-				// PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT,
-				// timestamp DATETIME, day DATE, score INTEGER, duration
-				// INTEGER);',
-				// []);
-			});
+							});
 	localStorage.setItem("db_version", DB_VERSION);
 };
 
-/**
- * inserts the score into the database
- */
+//inserts the score into the database
+
 AnswerModel.prototype.storeScoreInDB = function() {
 	var self = this;
 	var day = new Date();
@@ -275,9 +287,7 @@ AnswerModel.prototype.storeScoreInDB = function() {
 	
 };
 
-/**
- * deletes everything from the statistics table
- */
+//deletes everything from the statistics table
 AnswerModel.prototype.deleteDB = function() {
 	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {

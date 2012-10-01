@@ -1,6 +1,33 @@
-/**
- * View for displaying questions
- */
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+   
+*/
+
+//View for displaying questions
+ 
 function QuestionView() {
 	var self = this;
 
@@ -30,23 +57,22 @@ function QuestionView() {
 	window.addEventListener("resize", setOrientation, false);
 }
 
-/**
- * pinch leads to the course list
- */
+
+//pinch leads to the course list
+ 
 QuestionView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
 
-/**
- * tap leads to the answer view
- */
+ //tap leads to the answer view
+
 QuestionView.prototype.handleTap = function() {
 	controller.transitionToAnswer();
 };
 
-/**
- * swipe shows a new question updates question body and title
- */
+
+//swipe shows a new question updates question body and title
+
 QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view
@@ -56,19 +82,17 @@ QuestionView.prototype.handleSwipe = function() {
 	this.showQuestionTitle();
 };
 
-/**
- * closes the view
- */
+
+//closes the view
+
 QuestionView.prototype.close = closeView;
 
-/**
- * opens the view
- */
+ //opens the view
+
 QuestionView.prototype.openDiv = openView;
 
-/**
- * shows the question body and title
- */
+//shows the question body and title
+
 QuestionView.prototype.open = function() {
 	this.showQuestionBody();
 	this.showQuestionTitle();
@@ -80,9 +104,8 @@ QuestionView.prototype.open = function() {
 	this.openDiv();	
 };
 
-/**
- * shows the current question text
- */
+//shows the current question text
+
 QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
@@ -92,9 +115,8 @@ QuestionView.prototype.showQuestionBody = function() {
 
 };
 
-/**
- * shows the current question title and the corresponding icon
- */
+//shows the current question title and the corresponding icon
+
 QuestionView.prototype.showQuestionTitle = function() {
 	var currentQuestionTitle = controller.models["questionpool"]
 			.getQuestionType();
@@ -105,9 +127,8 @@ QuestionView.prototype.showQuestionTitle = function() {
 	$("#cardQuestionTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
 };
 
-/**
- * click on the course list button leads to course list
- */
+//click on the course list button leads to course list
+
 QuestionView.prototype.clickCourseListButton = function() {
 	controller.models["answers"].resetTimer();
 	controller.transitionToCourses();

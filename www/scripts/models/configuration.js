@@ -1,3 +1,31 @@
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+
+*/
+
 var APP_ID = "ch.ethz.isn.learningcards";
 var DEFAULT_SERVER = "yellowjacket";
 var URLS_TO_LMS = {"yellowjacket":  
@@ -116,20 +144,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 							authenticationObject = {};
 						}
 
-						// if (!questionPoolObject[0]) { // if no courses are
-						// available, new ones are created
-						// console.log("no questionpool loaded");
-						// questionPoolObject = self.createPool(data.courseID);
-						// }
-
-//						console.log("Object: " + authenticationObject);
-						// authenticationObject.loginState =
-						// self.configuration.loginState;
-						// check if configuration in local storage is the same
-						// as the one from the server
-						// change local data only if there are contradictions
-						// with the backend
-						self.configuration.learnerInformation = authenticationObject.learnerInformation;
+					    self.configuration.learnerInformation = authenticationObject.learnerInformation;
 						self.configuration.globalSynchronizationState = authenticationObject.globalSynchronizationState;
 						self.storeData();
 
@@ -151,9 +166,9 @@ ConfigurationModel.prototype.loadFromServer = function() {
 	}
 };
 
-/**
- * logs in user
- */
+
+//logs in user
+ 
 ConfigurationModel.prototype.login = function(username, password) {
 	console.log("client key: " + this.configuration.appAuthenticationKey);
 
@@ -172,9 +187,8 @@ ConfigurationModel.prototype.login = function(username, password) {
 	
 };
 
-/**
- * logs out user
- */
+//logs out user
+
 ConfigurationModel.prototype.logout = function() {
 	//send statistics data to server
 	this.controller.models['statistics'].sendToServer();
@@ -214,9 +228,9 @@ ConfigurationModel.prototype.logout = function() {
 
 };
 
-/**
- * sends authentication data to the server
- */
+
+//sends authentication data to the server
+
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
 	console.log("url: " + self.urlToLMS + '/authentication.php');
@@ -308,45 +322,41 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 	}
 }
 
-/**
- * @return true if user is logged in, otherwise false
+
+//@return true if user is logged in, otherwise false
  */
 ConfigurationModel.prototype.isLoggedIn = function() {
 	return (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey != "") ? true
 			: false;
 };
 
-/**
- * @return the full name of the user
- */
+//@return the full name of the user
+
 ConfigurationModel.prototype.getDisplayName = function() {
 	return this.configuration.learnerInformation.displayName;
 };
 
-/**
- * @return the username
- */
+//@return the username
+
 ConfigurationModel.prototype.getUserName = function() {
 	return this.configuration.learnerInformation.userName;
 };
 
-/**
- * @return the user id
- */
+//@return the user id
+
 ConfigurationModel.prototype.getUserId = function() {
 	return this.configuration.learnerInformation.userId;
 };
 
-/**
- * @return the email address of the user
- */
+
+//@return the email address of the user
+
 ConfigurationModel.prototype.getEmailAddress = function() {
 	return this.configuration.learnerInformation.emailAddress;
 };
 
-/**
- * @return the language of the user
- */
+//@return the language of the user
+
 ConfigurationModel.prototype.getLanguage = function() {
 	//return "el"; // JUST for testing
 	if (this.configuration.learnerInformation && this.configuration.learnerInformation.language && this.configuration.learnerInformation.language.length){
@@ -360,16 +370,14 @@ ConfigurationModel.prototype.getLanguage = function() {
 	return this.configuration.defaultLanguage ? this.configuration.defaultLanguage : language_root;
 };
 
-/**
- * @return the session key of the user
- */
+// @return the session key of the user
+
 ConfigurationModel.prototype.getSessionKey = function() {
 	return this.configuration.userAuthenticationKey;
 };
 
-/**
- * if no configuration is stored in the local storage, a new one is created
- */
+//if no configuration is stored in the local storage, a new one is created
+
 ConfigurationModel.prototype.createConfiguration = function() {
 	console.log("create configuration");
 
@@ -384,10 +392,8 @@ ConfigurationModel.prototype.createConfiguration = function() {
 	}
 };
 
-/**
- * sends the registration request to the server
- */
-// it is called whenever my client(app) key is empty
+
+//sends the registration request to the server, it is called whenever my client(app) key is empty
 ConfigurationModel.prototype.register = function() {
 	var self = this;
 	var deviceID = device.uuid;
@@ -414,8 +420,7 @@ ConfigurationModel.prototype.register = function() {
 	}
 
 	function appRegistration(data) {
-		// localStorage.setItem(data.ClientKey);
-        // if we don't know a user's language we try to use the phone's language.
+		// if we don't know a user's language we try to use the phone's language.
         language = navigator.language.split("-");
         language_root = (language[0]);
 

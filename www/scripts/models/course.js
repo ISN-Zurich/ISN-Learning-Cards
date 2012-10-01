@@ -1,3 +1,32 @@
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+
+*/
+
+
 var DEFAULT_SYNC_TIMEOUT = 60000;
 
 /**
@@ -95,7 +124,6 @@ CourseModel.prototype.loadFromServer = function() {
 	if (self.controller.models['authentication'].isLoggedIn()
 			&& !self.syncState) {
 
-		var sessionKey = self.controller.models['authentication']
 				.getSessionKey();
 
 		// save current syncStates for this course
@@ -171,25 +199,22 @@ CourseModel.prototype.loadFromServer = function() {
 	}
 };
 
-/**
- * @return the id of the current course
- */
+// @return the id of the current course
+
 CourseModel.prototype.getId = function() {
 	return (this.index > this.courseList.length - 1) ? false
 			: this.courseList[this.index].id;
 };
 
-/**
- * @return the title of the current course
- */
+// @return the title of the current course
+
 CourseModel.prototype.getTitle = function() {
 	return (this.index > this.courseList.length - 1) ? false
 			: this.courseList[this.index].title;
 };
 
-/**
- * @return the synchronization state of the current course
- */
+// @return the synchronization state of the current course
+ 
 CourseModel.prototype.getSyncState = function() {
 	return (this.index > this.courseList.length - 1) ? false
 			: this.courseList[this.index].syncState;
@@ -205,9 +230,8 @@ CourseModel.prototype.nextCourse = function() {
 	return this.index < this.courseList.length;
 };
 
-/**
- * sets index to 0
- */
+// sets index to 0
+
 CourseModel.prototype.reset = function() {
 	this.index = 0;
 };
@@ -300,9 +324,8 @@ CourseModel.prototype.switchToOnline = function() {
 	}
 };
 
-/**
- * if no course list is stored in the local storage, a new one is created
- */
+// if no course list is stored in the local storage, a new one is created
+ 
 CourseModel.prototype.createCourses = function() {
 	console.log("create courses");
 	if (!localStorage.courses) {
@@ -315,9 +338,8 @@ CourseModel.prototype.createCourses = function() {
 	}
 };
 
-/**
- * resets the course list
- */
+//resets the course list
+ 
 CourseModel.prototype.resetCourseList = function() {
 	this.courseList = [];
 	this.index = 0; // index of the current course

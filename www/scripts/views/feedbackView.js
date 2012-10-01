@@ -1,6 +1,31 @@
-/**
- * View for displaying the feedback
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+*/
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
  */
+
+// View for displaying the feedback
+
 function FeedbackView(question) {
 	var self = this;
 
@@ -33,14 +58,14 @@ function FeedbackView(question) {
     window.addEventListener("resize", setOrientation, false);
 }
 
-/**
- * tap does nothing
- */
+
+// tap does nothing
+
 FeedbackView.prototype.handleTap = doNothing;
 
-/**
- * swipe leads to new question
- */
+
+//swipe leads to new question
+
 FeedbackView.prototype.handleSwipe = function handleSwipe() {
 	$("#feedbackBody").show();
 	$("#feedbackTip").hide();
@@ -48,21 +73,19 @@ FeedbackView.prototype.handleSwipe = function handleSwipe() {
 	controller.transitionToQuestion();
 };
 
-/**
- * pinch leads to course list
- */
+
+// pinch leads to course list
+
 FeedbackView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
 
-/**
- * closes the view
- */
+ //closes the view
 FeedbackView.prototype.closeDiv = closeView;
 
-/**
- * deletes data from answer model
- */
+
+//deletes data from answer model
+ 
 FeedbackView.prototype.close = function() {
 	controller.models["answers"].deleteData();
 	$("#feedbackTip").empty();
@@ -72,14 +95,13 @@ FeedbackView.prototype.close = function() {
 
 };
 
-/**
- * opens the view
- */
+
+//opens the view
+
 FeedbackView.prototype.openDiv = openView;
 
-/**
- * shows feedback title and body
- */
+// hows feedback title and body
+
 FeedbackView.prototype.open = function() {
 	this.showFeedbackBody();
 	this.showFeedbackTitle();
@@ -87,63 +109,44 @@ FeedbackView.prototype.open = function() {
 	this.widget.setCorrectAnswerTickHeight();
 };
 
-/**
- * click on feedback done button leads to new question
- */
+//click on feedback done button leads to new question
+
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
 
 };
 
-/**
- * click on feedback more button toggles the feedback body and the tip
- */
+//click on feedback more button toggles the feedback body and the tip
+
 FeedbackView.prototype.clickFeedbackMore = function() {
 	$("#feedbackBody").toggle();
 	$("#feedbackTip").toggle();
 };
 
-/**
- * click on the course list button leads to course list
- */
+
+// click on the course list button leads to course list
+
 FeedbackView.prototype.clickCourseListButton = function() {
 	controller.transitionToCourses();
 };
 
 
-/**
- * shows feedback title and corresponding icon
- */
+ //shows feedback title and corresponding icon
+ 
 FeedbackView.prototype.showFeedbackTitle = function() {
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 	
 	$("#cardFeedbackTitle").text(jQuery.i18n.prop('msg_' +currentFeedbackTitle + 'Results_title'));
-
-//	if (currentFeedbackTitle == "Wrong") {
-//		$("#feedbackIcon").removeClass("icon-happy");
-//		$("#feedbackIcon").removeClass("icon-smiley");
-//		$("#feedbackIcon").addClass("icon-neutral");
-//	} else if (currentFeedbackTitle == "Partially Correct") {
-//		$("#feedbackIcon").removeClass("icon-happy");
-//		$("#feedbackIcon").removeClass("icon-neutral");
-//		$("#feedbackIcon").addClass("icon-smiley");
-//	} else {
-//		$("#feedbackIcon").removeClass("icon-neutral");
-//		$("#feedbackIcon").removeClass("icon-smiley");
-//		$("#feedbackIcon").addClass("icon-happy");
-//	}
-
-
 
 	$("#feedbackIcon").attr('class',jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
 	
 	
 };
 
-/**
- * calls the appropriate widget to show the feedback body
- */
+
+//calls the appropriate widget to show the feedback body
+
 FeedbackView.prototype.showFeedbackBody = function() {
 
 	var questionpoolModel = controller.models['questionpool'];

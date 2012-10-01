@@ -1,10 +1,36 @@
-//*******************************************SINGLE CHOICE WIDGET*************************************
-//The Single choice widget has two views, an answer and a feedback view.
-//The anwer view contains a list with possible solutions and the selected answer by the user is highlighted.
-//The feedback view contains the list with the possible solutions highlighted by both the correct answer and learner's ticked answer.
-//Sometimes when available, the feedback view provides extra feedback information, both for correct and wrong feedback.
+/**	THIS COMMENT MUST NOT BE REMOVED
 
-//*************************************** CONSTRUCTOR **************************
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+   
+The Single choice widget has two views, an answer and a feedback view.
+The anwer view contains a list with possible solutions and the selected answer by the user is highlighted.
+The feedback view contains the list with the possible solutions highlighted by both the correct answer and learner's ticked answer.
+Sometimes when available, the feedback view provides extra feedback information, both for correct and wrong feedback.
+
+*/
+
 
 function SingleChoiceWidget(interactive) {
 	var self = this;

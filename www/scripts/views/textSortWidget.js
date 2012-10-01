@@ -1,9 +1,36 @@
-/**
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+
+
  * Widget for displaying text sort questions
- * 
  * @param interactive
- *            if true answerview is shown, otherwise feedback view
+ * if true answerview is shown, otherwise feedback view
  */
+
+
 function TextSortWidget(interactive) {
 	var self = this;
 
@@ -51,21 +78,7 @@ TextSortWidget.prototype.showAnswer = function() {
 			do {
 				tmp_answerModel.deleteData();
 				questionpoolModel.mixAnswers();
-				mixedAnswers = questionpoolModel.getMixedAnswersArray();
-//				while (mixedAnswers.length < answers.length) {
-//					var random = Math.floor((Math.random() * answers.length));
-//
-//					// if the current random number is already in the mixed
-//					// answers
-//					// array
-//					// the the next element as random number
-//					while (mixedAnswers.indexOf(random) != -1) {
-//						random = (++random) % answers.length;
-//					}
-//
-//					mixedAnswers.push(random);
-//				}
-				
+				mixedAnswers = questionpoolModel.getMixedAnswersArray();				
 				//if the order of mixed answers is correct or partially correct, 
 				//generate a new order
 				tmp_answerModel.setAnswers(mixedAnswers);
@@ -110,9 +123,8 @@ TextSortWidget.prototype.showAnswer = function() {
 
 };
 
-/**
- * displays the feedback for text sort questions
- */
+//displays the feedback for text sort questions
+
 TextSortWidget.prototype.showFeedback = function() {
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
@@ -168,9 +180,8 @@ TextSortWidget.prototype.showFeedback = function() {
 	}
 };
 
-/**
- * stores the current sorting order in the answer model
- */
+//stores the current sorting order in the answer model
+
 TextSortWidget.prototype.storeAnswers = function() {
 	var answers = new Array();
 
@@ -182,9 +193,8 @@ TextSortWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
-/**
- * calculates the answer score
- */
+//calculates the answer score
+
 TextSortWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateTextSortScore();
 }
@@ -193,6 +203,7 @@ TextSortWidget.prototype.calculateAnswerScore = function() {
  * catches touch events and creates correspoding mouse events this has to be
  * done because JQuery UI's sortable function listens for mouse events
  */
+
 TextSortWidget.prototype.enableSorting = function() {
 
 	jester($(".sortable")[0]).start(function(touches, event) {
@@ -222,9 +233,9 @@ TextSortWidget.prototype.enableSorting = function() {
 	});
 };
 
-/**
- * creates a new mouse event of the specified type
- */
+
+//creates a new mouse event of the specified type
+ 
 function createEvent(type, event) {
 	var first = event.changedTouches[0];
 	var simulatedEvent = document.createEvent("MouseEvent");
@@ -236,9 +247,8 @@ function createEvent(type, event) {
 	event.preventDefault();
 }
 
-/**
- * sets the height property of the list items that contain correct answers
- */
+//sets the height property of the list items that contain correct answers
+
 TextSortWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
 		height = $(this).height();

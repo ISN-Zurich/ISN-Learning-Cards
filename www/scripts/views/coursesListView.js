@@ -1,6 +1,32 @@
-/**
- * View for displaying the course list
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
  */
+
+ // View for displaying the course list
+ 
 function CoursesListView(controller) {
 
 	var self = this;
@@ -40,38 +66,30 @@ function CoursesListView(controller) {
     //resize event should be caught, too, because not all devices
     //send an oritentationchange even
     window.addEventListener("orientationchange", setOrientation, false);
-    window.addEventListener("resize", setOrientation, false);
     
-    $(document).bind("allstatisticcalculationsdone", function() {
-    	self.controller.transitionToStatistics();
-    });
+    
 }
 
-/**
- * tap does nothing
- */
+// tap does nothing
+ 
 CoursesListView.prototype.handleTap = doNothing;
 
-/**
- * swipe does nothing
- */
+// swipe does nothing
+ 
 CoursesListView.prototype.handleSwipe = doNothing;
 
-/**
- * pinch leads to settings
- */
+//pinch leads to settings
+
 CoursesListView.prototype.handlePinch = function(){
     this.controller.transitionToSettings();
 };
 
-/**
- * opens the view
- */
+//opens the view
+
 CoursesListView.prototype.openDiv = openView;
 
-/**
- * updates the course list and shows it
- */
+//updates the course list and shows it
+
 CoursesListView.prototype.open = function() {
 	console.log("open course list view");
 	this.active = true;
@@ -81,14 +99,10 @@ CoursesListView.prototype.open = function() {
 	this.setIconSize();
 };
 
-/**
- * closes the view
- */
+ //closes the view
 CoursesListView.prototype.closeDiv = closeView;
 
-/**
- * empties the course list
- */
+ //empties the course list
 CoursesListView.prototype.close = function() {
 	console.log("close course list view");
 	this.active = false;
@@ -96,9 +110,8 @@ CoursesListView.prototype.close = function() {
 	$("#coursesList").empty();
 };
 
-/**
- * click on course item loads the appropriate question pool
- */
+//click on course item loads the appropriate question pool
+ 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
 	if (this.controller.models['course'].isSynchronized(course_id)) {
 		this.controller.models['questionpool'].reset();
@@ -116,9 +129,8 @@ CoursesListView.prototype.clickSettingsButton = function() {
 	this.controller.transitionToSettings();
 };
 
-/**
- * click on statistic icon calculates the appropriate statistics and shows them
- */
+//click on statistic icon calculates the appropriate statistics and shows them
+ 
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 	
@@ -127,13 +139,12 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
-		this.controller.models['statistics'].setCurrentCourseId(courseID);
+		this.controller.transitionToStatistics();
 	}
 };
 
-/**
- * updates the course list
- */
+//updates the course list
+
 CoursesListView.prototype.update = function() {
 	var self = this;
 
@@ -198,9 +209,8 @@ CoursesListView.prototype.update = function() {
 	}
 };
 
-/**
- * changes the loading icon to the statistics icon for the specified course id
- */
+//changes the loading icon to the statistics icon for the specified course id
+ 
 CoursesListView.prototype.courseIsLoaded = function(courseId) {
 	console.log("courseIsLoaded: " + courseId);
 	console.log("selector length: "
@@ -209,9 +219,8 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 			.removeClass("icon-loading loadingRotation");
 };
 
-/**
- * sets the height property of the course list icon
- */
+//sets the height property of the course list icon
+
 CoursesListView.prototype.setIconSize = function() {
 	$("#coursesList li").each(function() {
 		height = $(this).height();

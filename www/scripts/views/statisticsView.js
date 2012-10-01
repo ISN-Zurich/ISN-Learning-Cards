@@ -1,6 +1,36 @@
-/**
- * View for displaying the statistics
- */
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+
+*/
+ 
+
+
+//View for displaying the statistics
+ 
+ 
 function StatisticsView(controller) {
     var self = this;
     
@@ -26,60 +56,52 @@ function StatisticsView(controller) {
     console.log('done');
 }
 
-/**
- * pinch leads to course list
- */
+//pinch leads to course list
+
 StatisticsView.prototype.handlePinch = function() {
     this.controller.transitionToCourses();  
 };
 
-/**
- * tap does nothing
- */
+//tap does nothing
+
 StatisticsView.prototype.handleTap   = doNothing;
 
-/**
- * swipe does nothing
- */
+//swipe does nothing
+
 StatisticsView.prototype.handleSwipe = doNothing;
 
-/**
- * closes the view
- */
+//closes the view
+
 StatisticsView.prototype.close = closeView;
 
-/**
- * opens the view
- */
+//opens the view
+
 StatisticsView.prototype.openDiv = openView;
 
-/**
- * shows the statistics data
- */
+//shows the statistics data
+
 StatisticsView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();	
 };
 
-/**
- * leads to course list
- */
+ //leads to course list
+ 
 StatisticsView.prototype.closeStatistics = function() {
 	console.log("close Statistics button clicked");
 	this.controller.transitionToCourses();
 };
 
-/**
- * leads to achievements view
- */
+//leads to achievements view
+
 StatisticsView.prototype.clickToAchievements = function() {
 	console.log("slot 1 or slot 2 clicked");
 	this.controller.transitionToAchievements();
 };
 
-/**
- * loads the statistics data
- */
+
+//loads the statistics data
+
 StatisticsView.prototype.loadData = function() {
 	var statisticsModel = this.controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
@@ -122,7 +144,6 @@ StatisticsView.prototype.loadData = function() {
 	var removeClasses = msg_positiveImprovement_icon + " " + msg_negativeImprovement_icon + " " + msg_neutralImprovement_icon + 
 			" red green";
 	
-	//$("#statisticsBody").empty();
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
 	$("#statBestScoreValue").text(bestScore+"%");

@@ -1,6 +1,32 @@
-/**
- * View for displaying the login form
+/**	THIS COMMENT MUST NOT BE REMOVED
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file 
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.	
+
+
+*/
+
+
+/** @author Isabella Nake
+ * @author Evangelia Mitsopoulou
  */
+
+//View for displaying the login form
+
 function LoginView(controller) {
 	var self = this;
 
@@ -40,21 +66,20 @@ function LoginView(controller) {
 
 }
 
-/**
- * tap, swipe and pinch do nothing
- */
+//tap, swipe and pinch do nothing
+
 LoginView.prototype.handleTap = doNothing;
 LoginView.prototype.handlePinch = doNothing;
 LoginView.prototype.handleSwipe = doNothing;
 
-/**
- * opens the view
- */
+
+//opens the view
+
 LoginView.prototype.openDiv = openView;
 
-/**
- * shows the login form
- */
+
+//shows the login form
+
 LoginView.prototype.open = function() {
     // hide unnecessary errors and warnings 
     this.hideErrorMessage();
@@ -65,9 +90,9 @@ LoginView.prototype.open = function() {
 
 	this.active = true;
 };
-/**
- * closes the view
- */
+
+//loses the view
+ 
 LoginView.prototype.closeDiv = closeView;
 LoginView.prototype.close = function() {
 	$("#password").val("");
@@ -132,9 +157,9 @@ LoginView.prototype.clickLoginButton = function() {
 	}
 };
 
-/**
- * displays the login form
- */
+
+//displays the login form
+
 LoginView.prototype.showForm = function() {
 	$("#loginForm").show();
 	this.hideErrorMessage();
@@ -144,36 +169,32 @@ LoginView.prototype.showForm = function() {
 	}
 };
 
-/**
- * shows the specified error message
- */
+//shows the specified error message
+ 
 LoginView.prototype.showErrorMessage = function(message) {
 	$("#warningmessage").hide();
 	$("#errormessage").text(message);
 	$("#errormessage").show();
 }
 
-/**
- * shows the specified warning message
- */
+//shows the specified warning message
+
 LoginView.prototype.showWarningMessage = function(message) {
 	$("#errormessage").hide();
 	$("#warningmessage").text(message);
 	$("#warningmessage").show();
 }
 
-/**
- * hides the specified error message
- */
+// hides the specified error message
+
 LoginView.prototype.hideErrorMessage = function() {
 	
 	$("#errormessage").text("");
 	$("#errormessage").hide();
 }
 
-/**
- * hides the specified warning message
- */
+//hides the specified warning message
+
 LoginView.prototype.hideWarningMessage = function() {
 	$("#warningmessage").text("");
 	$("#warningmessage").hide();
