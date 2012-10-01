@@ -324,7 +324,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 
 
 //@return true if user is logged in, otherwise false
- */
+
 ConfigurationModel.prototype.isLoggedIn = function() {
 	return (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey != "") ? true
 			: false;
