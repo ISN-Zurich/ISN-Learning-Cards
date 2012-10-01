@@ -1,29 +1,34 @@
 <?php
-/* 	
-	Copyright (c) 2012 ILIAS open source, Extended GPL, see backend/LICENSE
- 	if you don't have a license file, then you can obtain it from the project
-	hompage on github <https://github.com/ISN-Zurich/ISN-Learning-Cards>
+/* 	THIS COMMENT MUST NOT BE REMOVED
 	
+ 
+	Copyright (c) 2012 ETH Zürich, Affero GPL, see backend/ILIAS/AGPL_LICENSE.txt
+   	if you don't have a license file, then you can obtain it from the project΄s page 
+   	 on github <https://github.com/ISN-Zurich/ISN-Learning-Cards/blob/master/backEnd/ILIAS/LICENSE.txt> 
+   
 	
-	This file is part of Mobler Cards.
-	
-	Mobler Cards is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	
-	Mobler Cards is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+	This file is part of Mobler Cards ILIAS Backend.
 
-	You should have received a copy of the GNU General Public License
-	along with Mobler Cards. If not, see <http://www.gnu.org/licenses/>.
+    Mobler Cards Ilias Backend is free software: you can redistribute this code and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Mobler Cards Ilias Backend  is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with Ilias Backend. If not, see <http://www.gnu.org/licenses/>.
 */
+
 
 
 /**
  * This class stores/reads the statistics for the in the header specified user id in/out of the ILIAS database
+ * @author Isabella Nake
+ * @author Evangelia Mitsopoulou
  */
 
 

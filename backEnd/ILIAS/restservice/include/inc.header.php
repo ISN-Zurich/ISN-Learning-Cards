@@ -3,7 +3,8 @@
 	+-----------------------------------------------------------------------------+
 	| ILIAS open source                                                           |
 	+-----------------------------------------------------------------------------+
-	| Copyright (c) 1998-2005 ILIAS open source, University of Cologne            |
+	| Copyright (c) 1998-2005 ILIAS open source, University of Cologne, 
+	  2012 ETH Zürich, see backend/ILIAS/GPL_LICENSE.txt           |
 	|                                                                             |
 	| This program is free software; you can redistribute it and/or               |
 	| modify it under the terms of the GNU General Public License                 |
@@ -27,6 +28,8 @@
 *
 * @author Stefan Meyer <meyer@leifos.com>
 * @author Sascha Hofmann <saschahofmann@gmx.de>
+* @author Isabella Nake
+* @author Evangelia Mitsopoulou 
 * @version $Id: inc.header.php 23424 2010-03-29 09:33:30Z bheyser $
 *
 * @package ilias-core
