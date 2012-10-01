@@ -1,3 +1,6 @@
+/**
+ * This model holds the tracking data
+ */
 function TrackingModel(controller){
 	var self = this;
 	this.controller = controller;
@@ -19,7 +22,9 @@ function TrackingModel(controller){
 	
 }
 
-
+/**
+ * inserts a new tracking item into the database
+ */
 TrackingModel.prototype.storeTrackData = function(time, type){
 	
 	this.db.transaction(function(transaction) {
@@ -35,6 +40,9 @@ TrackingModel.prototype.storeTrackData = function(time, type){
 
 };
 
+/**
+ * creates the database table if it doesn't exist yet
+ */
 TrackingModel.prototype.initDB = function() {
 	var self = this;
 	this.db
@@ -56,6 +64,9 @@ TrackingModel.prototype.initDB = function() {
 	//localStorage.setItem("db_version", DB_VERSION);
 };
 
+/**
+ * sends the tracking data to the server
+ */
 TrackingModel.prototype.sendToServer = function(){
 	var self = this;
 

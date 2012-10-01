@@ -1,4 +1,32 @@
 <?php
+/* 	
+	Copyright (c) 2012 ILIAS open source, Extended GPL, see backend/LICENSE
+   	if you don't have a license file, then you can obtain it from the project 
+   	hompage on github <https://github.com/ISN-Zurich/ISN-Learning-Cards> 
+ 
+	
+	This file is part of Mobler Cards.
+
+    Mobler Cards is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Mobler Cards is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+	along with Mobler Cards. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+/**
+ * This class is responsible for the authentication (login and logout) of the user and
+ * returns general information about the user 
+ */
+
 
 require_once './common.php';
 
@@ -16,34 +44,30 @@ global $ilUser, $class_for_logging;
 
 $class_for_logging = "authentication.php";
 
-//global $ilDB;
-
-//$ilDB->manipulate("DELETE FROM isnlc_reg_info WHERE uuid = '3c1875c18a7402de'");
-
-//$path = $_SERVER['PATH_INFO'];
-//$path = preg_replace("/\//", "", $path); //remove leading backslash
-
 $request_method = $_SERVER['REQUEST_METHOD'];
-
 logging("request method: '" . $request_method . "'");
 
 switch($request_method) {
 	case "PUT":
 	case "POST":
 		logging("in log in");
+		//authenticates the user and returns the session key for the
+		//in the header specified user
 		$response = json_encode(authenticate());
 		logging("login response: " . $response);
 		echo($response);
 		break;
 	case "DELETE":
+		//deletes the session key for the in the header specified user
 		logout();
 		break;
 	case "GET":
+		//returns general information about the in the header specified user
 		$userId = get_session_user_from_headers();
 
 		if ($userId > 0) {
+			//data structure for frontend models
 			$authenticationData = array(
-
 					"learnerInformation" => array(
 							"userId" => $userId,
 							"userName" =>  $ilUser->getLogin(),
@@ -68,6 +92,7 @@ switch($request_method) {
 
 /**
  * authenticates the user and creates a new session key
+ * 
  * @return the session key for the user
  */
 function authenticate() {
@@ -98,6 +123,7 @@ function authenticate() {
 		
 		logging("CLIENT KEY " . $clientKey);
 		
+		//check if user has a valid client key
 		if ($clientKey && strlen($clientKey) > 0) {
 			logging("clientKey: " . $clientKey);
 			$passwordHash = $ilUser->getPasswd(); //returns md5-hashed password
@@ -107,14 +133,17 @@ function authenticate() {
 			logging("hash1: " . $challengeCheck);
 			logging("hash2: " . $authData["challenge"]);
 	
+			//check if both challenges are the same (case insensitive)
 			if (strtoupper($authData["challenge"]) == strtoupper($challengeCheck)) {
 				logging("password correct");
+				//generate a new session key and store it in the database
 				$randomSeed = rand();
-				$sessionKey = md5($userId .$clientKey . $randomSeed);
+				$sessionKey = md5($userId . $clientKey . $randomSeed);
 				logging("Session Key: " . $sessionKey);
 				storeAuthDataInDB($userId, $clientKey, $sessionKey);
 				logging("after authentication stored in db");
 	
+				//data structure for frontend models
 				return array(
 						"userAuthenticationKey" => $sessionKey,
 						"learnerInformation" => array(
@@ -172,11 +201,12 @@ function getClientKeyForUUID($UUID, $APPID) {
 
 	logging("uuid is " . $UUID);
 
-	$testresult = $ilDB->query("SELECT * FROM isnlc_reg_info");
-	while ($record = $ilDB->fetchAssoc($testresult))
-	{
-		logging("***" . json_encode($record));
-	}
+	//shows all entries of the registratoin dataabase
+//	$testresult = $ilDB->query("SELECT * FROM isnlc_reg_info");
+//	while ($record = $ilDB->fetchAssoc($testresult))
+//	{
+//		logging("***" . json_encode($record));
+//	}
 
 	$result = $ilDB->query("SELECT client_key FROM isnlc_reg_info WHERE uuid = " .$ilDB->quote($UUID, "text") . " AND app_id =" .$ilDB->quote($APPID, "text"));
 	$fetch = $ilDB->fetchAssoc($result);
@@ -222,6 +252,8 @@ function storeAuthDataInDB($userid, $clientKey, $sessionKey) {
 	$old_session_key_result = $ilDB->query("SELECT session_key FROM isnlc_auth_info WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
 	$old_session_key =  $ilDB->fetchAssoc($old_session_key_result);
 
+	//if an old sessionkey for the user exists already, overwrite the old one with the new one
+	//if no sessionkey exists, insert the new one
 	if ($old_session_key) {
 		$ilDB->manipulate("UPDATE isnlc_auth_info SET session_key = " . $ilDB->quote($sessionKey, "text") . " WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
 	} else {

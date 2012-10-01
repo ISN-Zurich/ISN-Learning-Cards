@@ -1,9 +1,46 @@
 <?php
+/* 	
+ 	Copyright (c) 2012 ILIAS open source, Extended GPL, see backend/LICENSE
+ 	if you don't have a license file, then you can obtain it from the project
+	hompage on github <https://github.com/ISN-Zurich/ISN-Learning-Cards>
+	
+	
+	This file is part of Mobler Cards.
+	
+	Mobler Cards is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	Mobler Cards is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
+	You should have received a copy of the GNU General Public License
+	along with Mobler Cards. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+/**
+ * This are common functions used by all other classes
+ */
+
+
+/**
+ * function for log messages
+ * 
+ * if the global variable DEBUG is set to 1, the messages are sent to 
+ * PHP's system logger, otherwise they are not displayed
+ * 
+ * the global variable class_for_logging should be set to have a prefix
+ * in front of the logging message, depending on of which class the function
+ * was called
+ */
 function logging($message) {
 	global $DEBUG, $class_for_logging;
 
-	//if DEBUG is set to 1 logging messages are displayed, otherwise not
+	//if DEBUG is not defined, use 0 (do not display messages)
 	if (!$DEBUG) {
 		$DEBUG = 0;
 	}
@@ -27,11 +64,6 @@ function get_session_user_from_headers() {
 	$sessionKey = $myheaders["sessionkey"];
 
 	$userId = getUserIdForSessionKey($sessionKey);
-
-	//if (!($userId > 0)) {
-		//$userId = "12979"; //for debugging
-	//}
-
 	logging("userid from header: " . $userId);
 
 	if ($userId > 0) {
@@ -45,6 +77,23 @@ function get_session_user_from_headers() {
 	}
 	return $userId;
 }
+
+/**
+ * Reads header variable to get uuid
+ * 
+ * @return uuid
+ */
+function get_uuid_from_headers() {
+	logging("in get uuid from headers");
+
+	$myheaders = getallheaders();
+	$uuid = $myheaders["uuid"];
+
+	logging("uuid from header: " . $uuid);
+
+	return $uuid;
+}
+
 
 /**
  * @return the user id for the specified session key
@@ -97,20 +146,5 @@ function isValidQuestionPool($questionpool) {
 
 	return $validQuestionPool;
 }
-
-/**
- * reads statistics data from the header
- */
-function get_uuid_from_headers() {
-	logging("in get uuid from headers");
-
-	$myheaders = getallheaders();
-	$uuid = $myheaders["uuid"];
-
-	logging("uuid from header: " . $uuid);
-
-	return $uuid;
-}
-
 
 ?>

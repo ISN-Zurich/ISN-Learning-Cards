@@ -1,3 +1,6 @@
+/**
+ * View for displaying the statistics
+ */
 function StatisticsView(controller) {
     var self = this;
     
@@ -23,31 +26,60 @@ function StatisticsView(controller) {
     console.log('done');
 }
 
+/**
+ * pinch leads to course list
+ */
 StatisticsView.prototype.handlePinch = function() {
     this.controller.transitionToCourses();  
 };
+
+/**
+ * tap does nothing
+ */
 StatisticsView.prototype.handleTap   = doNothing;
+
+/**
+ * swipe does nothing
+ */
 StatisticsView.prototype.handleSwipe = doNothing;
+
+/**
+ * closes the view
+ */
 StatisticsView.prototype.close = closeView;
 
+/**
+ * opens the view
+ */
 StatisticsView.prototype.openDiv = openView;
 
+/**
+ * shows the statistics data
+ */
 StatisticsView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();	
 };
 
+/**
+ * leads to course list
+ */
 StatisticsView.prototype.closeStatistics = function() {
 	console.log("close Statistics button clicked");
 	this.controller.transitionToCourses();
 };
 
-
+/**
+ * leads to achievements view
+ */
 StatisticsView.prototype.clickToAchievements = function() {
 	console.log("slot 1 or slot 2 clicked");
 	this.controller.transitionToAchievements();
 };
 
+/**
+ * loads the statistics data
+ */
 StatisticsView.prototype.loadData = function() {
 	var statisticsModel = this.controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();

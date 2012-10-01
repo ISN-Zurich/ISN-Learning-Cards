@@ -1,3 +1,6 @@
+/**
+ * View for displaying the course list
+ */
 function CoursesListView(controller) {
 
 	var self = this;
@@ -44,14 +47,31 @@ function CoursesListView(controller) {
     });
 }
 
+/**
+ * tap does nothing
+ */
 CoursesListView.prototype.handleTap = doNothing;
+
+/**
+ * swipe does nothing
+ */
 CoursesListView.prototype.handleSwipe = doNothing;
 
+/**
+ * pinch leads to settings
+ */
 CoursesListView.prototype.handlePinch = function(){
     this.controller.transitionToSettings();
 };
 
+/**
+ * opens the view
+ */
 CoursesListView.prototype.openDiv = openView;
+
+/**
+ * updates the course list and shows it
+ */
 CoursesListView.prototype.open = function() {
 	console.log("open course list view");
 	this.active = true;
@@ -60,7 +80,15 @@ CoursesListView.prototype.open = function() {
 	this.openDiv();
 	this.setIconSize();
 };
+
+/**
+ * closes the view
+ */
 CoursesListView.prototype.closeDiv = closeView;
+
+/**
+ * empties the course list
+ */
 CoursesListView.prototype.close = function() {
 	console.log("close course list view");
 	this.active = false;
@@ -68,6 +96,9 @@ CoursesListView.prototype.close = function() {
 	$("#coursesList").empty();
 };
 
+/**
+ * click on course item loads the appropriate question pool
+ */
 CoursesListView.prototype.clickCourseItem = function(course_id) {
 	if (this.controller.models['course'].isSynchronized(course_id)) {
 		this.controller.models['questionpool'].reset();
@@ -78,10 +109,16 @@ CoursesListView.prototype.clickCourseItem = function(course_id) {
 	}
 };
 
+/**
+ * leads to settings
+ */
 CoursesListView.prototype.clickSettingsButton = function() {
 	this.controller.transitionToSettings();
 };
 
+/**
+ * click on statistic icon calculates the appropriate statistics and shows them
+ */
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	console.log("statistics button clicked");
 	
@@ -94,6 +131,9 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	}
 };
 
+/**
+ * updates the course list
+ */
 CoursesListView.prototype.update = function() {
 	var self = this;
 
@@ -158,6 +198,9 @@ CoursesListView.prototype.update = function() {
 	}
 };
 
+/**
+ * changes the loading icon to the statistics icon for the specified course id
+ */
 CoursesListView.prototype.courseIsLoaded = function(courseId) {
 	console.log("courseIsLoaded: " + courseId);
 	console.log("selector length: "
@@ -166,6 +209,9 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 			.removeClass("icon-loading loadingRotation");
 };
 
+/**
+ * sets the height property of the course list icon
+ */
 CoursesListView.prototype.setIconSize = function() {
 	$("#coursesList li").each(function() {
 		height = $(this).height();

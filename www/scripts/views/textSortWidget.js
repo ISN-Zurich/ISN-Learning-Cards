@@ -182,6 +182,9 @@ TextSortWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
+/**
+ * calculates the answer score
+ */
 TextSortWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateTextSortScore();
 }
@@ -233,6 +236,9 @@ function createEvent(type, event) {
 	event.preventDefault();
 }
 
+/**
+ * sets the height property of the list items that contain correct answers
+ */
 TextSortWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
 		height = $(this).height();

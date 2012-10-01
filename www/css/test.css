@@ -9,31 +9,7 @@ body {
 	padding: 0px;
 }
 
-/* button { */
-/* 	
- */
-/* 	background-color: #666; */
-/* 	color: white; */
-/* 	padding: 5px 5px 5px 5px; */
-/* 	text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3); */
-/* 	font-weight: none; */
-/* 	text-align: center; */
-/* 	font-size: 34pt; */
-/* } */
-
 .returnButton {
-    /* 	float: right; */
-	/* 	width: 46px; */
-	/* 	height: 46px; */
-	/* 	font-size: 14pt; */
-	/* 	padding: 2px; */
-	/* 	border: 1px solid white; */
-	/* 	background-color: #999999; */
-	/* 	color: white; */
-	/* 	vertical-align: middle; */
-	/* 	text-align: center; */
-/* 	border-right: 1px solid white; */
-	/* margin: 0px 4px 0px 0px; */
 	height: 49px;
 	line-height: 49px;
 	border-right: 1px solid white;
@@ -45,17 +21,12 @@ body {
 }
 
 .generalButton {
-    /* 	float: right; */
 	width: 49px;
-/* 	height: auto; */
-	/* 	margin-bottom: 20px; */
 	font-size: 40px;
 	padding: 2px;
 	background-color: #999999;
 	color: white;
-/* 	vertical-align: middle; */
 	text-align: center;
-/* 	margin-right:5px; */
 }
 
 .iconButton {
@@ -63,7 +34,6 @@ body {
 	margin: 0px 0px 0px 0px;
 	border-bottom: 1px solid white;
 	border-right: 1px solid white;
-/* 	height: auto; */
 	position: fixed;
 	right: 0px;
 	top: 55px;
@@ -75,19 +45,7 @@ body {
 	margin-bottom: auto;
 }
 
-#FeedbackDoneButon {
-/* 	width:100%; */
-/* 	height: 100%; */
-/* 	border-right: 1px solid white; */
-/* 	margin: 0px 3px 0px 0px; */
-/* 	padding: 0px 0px 0px 0px; */
-/* 	margin: 0px; */
-/* 	margin-left:0px; */
-/* 	margin-right: 1px; */
-}
-
 #FeedbackMore {
-/* 	width: 100%; */
 	height: 49px;
 	line-height:49px;
 	position: fixed;
@@ -95,39 +53,25 @@ body {
 	right: 1px;
 	z-index: 1;
 	border-top: 1px solid white;
-/* 	margin: 0px 3px 0px 0px; */
-	margin: 0px;
-/* 	margin-left:0px; */
-/* 	border-bottom: none; */
-/* 	border-left: none; */
-/* 	border-right: none; */
-/* 	padding: 0px; */
+ 	margin: 0px;
 }
 
 .left {
 	float: left;
-	/* 	padding-right: 10px; */
-	/* 	margin-right: 5px; */
-	/* 	margin-left: 0px; */
 }
 
 .right {
 	float: right;
-	/* 	padding-left: 10px; */
-	/* 	margin-left: 15px; */
-	/* 	margin-right: 0px; */
 }
 
 .top {
 	position: fixed;
 	top: 0px;
-	/* width: 100%; */
 }
 
 .bottom {
 	position: fixed;
 	bottom: 5px;
-	/* width: 100%;*/
 }
 
 .static {
@@ -135,14 +79,12 @@ body {
 }
 
 .title {
-    /* 	display: table-cell; */
-	height: 50px;
+    height: 50px;
 	font-size: 22px;
 	font-weight: 900;
 	padding: 0px 0px 0px 0px;
 	color: #008CC7;
     line-height: 55px;
-    /* 	vertical-align: bottom; */
 	margin-right: 50px;
     margin-left: 12px;
 	margin-top: auto;
@@ -157,17 +99,12 @@ body {
 	font-size: 30px;
 	margin-left: 5px;
 	margin-right: 5px;
-/* 	border: 1px solid black; */
 }
 
 .container {
-    /* padding-left: 10px;*/
-	/*padding-right: 10px;*/
 	height: 55px;
 	width: 100%;
 	margin: 0px;
-	/* margin-top: auto;*/
-	/* margin-bottom: auto;*/
 }
 
 .headerbg {
@@ -177,11 +114,7 @@ body {
 }
 
 .content {
-    /*     margin-left: 5px; */
-	/*     margin-right: 5px; */
-    /* 	margin-bottom: 60px; */
 	margin-top: 55px;
-/* 	border-top:1px solid white; */
 }
 
 .cardBody {
@@ -192,19 +125,12 @@ body {
 }
 
 ul {
-/*     clear:both; */
 	border-top: solid white 1px;
 	border-left: solid white 1px;
 	border-right: solid white 1px;
 	border-bottom: solid white 1px;
 	background-color: #ddd;
 	color:#696969;;
-	/* 	-moz-border-radius: 6px; */
-	/* 	-webkit-border-radius: 6px; */
-	/* 	border-radius: 6px; */
-	/* 	-webkit-box-shadow: 0 1px 1px #ccc; */
-	/* 	-moz-box-shadow: 0 1px 1px #ccc; */
-	/* 	box-shadow: 0 1px 1px #ccc; */
 	list-style-type: none;
 	font-size: 14pt;
 	font-style: normal;
@@ -217,15 +143,9 @@ ul {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 	-webkit-padding-start: 0px;
-	/* 	position: relative; */
 }
 
 li {
-    /* 	-o-transition: all 0.1s ease-in-out; */
-	/* 	-webkit-transition: all 0.1s ease-in-out; */
-	/* 	-moz-transition: all 0.1s ease-in-out; */
-	/* 	-ms-transition: all 0.1s ease-in-out; */
-	/* 	transition: all 0.1s ease-in-out; */
 	list-style-type: none;
 	list-style-position: inside;
 	font-size: 20px;
@@ -235,12 +155,6 @@ li {
 	text-align: left;
 	padding: 0px;
 	margin:0px;
-	/* 	border-radius: 0 0 0 0; */
-/* 	padding: 15px; */
-/* 	margin-left: -40px; */
-	/* 	border-top: none; */
-	/* 	border-right: none; */
-	/* 	border-left: none; */
 }
 
 /*********************** Views ***********************/
@@ -347,7 +261,6 @@ li {
 }
 
 #loading {
-    /* 	font-family: Helvetica, sans-serif; */
 	font-size: 100px;
 	height: 200px;
 	width: 200px;
@@ -355,24 +268,14 @@ li {
 	vertical-align: middle;
 	margin-left: auto;
 	margin-right: auto;
-	/* 	margin: 100px; */
 	-webkit-animation: spin 4s infinite linear;
 	margin-left: auto;
-	/* padding-top: 40px; */
-	/* 	border: 1px solid black; */
 }
 
 .centered {
 	display: inline-block;
 	text-align: center;
-	/* 	vertical-align: middle; */
 	line-height: 200px;
-	/* 	height: 100%; */
-	/* 	width: 100%; */
-}
-
-#rotation {
-	
 }
 
 @-webkit-keyframes spin { 
@@ -384,8 +287,6 @@ li {
 	0% {-webkit-transform: rotate(0deg);}
 	100% {-webkit-transform:rotate(-360deg);}
 }
-
-
 
 /*********************** Login ***********************/
 #loginForm {
@@ -414,7 +315,6 @@ li {
 	border-left: 3px solid white;
 	color:#696969;
 	background-color: #ddd;
-	/* 	width:89%; */
 }
 
 *[placeholder] {
@@ -437,7 +337,6 @@ li {
 	line-height: 98px;
 	width: 45px;
 	font-size: 39px;
-	/*vertical-align: middle;*/
 	padding-right:4px;
 	text-align:center;
 	border: 1px solid white;
@@ -478,16 +377,12 @@ li {
 	height: 20px;
 	padding-left: 0px;
 	margin-left: 0px;
-	/*    border: 1px solid #fffff;  */
 }
 
 .correctAnswer {
-/* 	display: inline-block; */
 	background-color: #33CC33;
 	border-left: 1px solid white;
 	color: white;
-/* 	height: 100%; */
-/* 	line-height: 100%; */
 	width: 30px;
 	text-align: center;
 	margin:0px;
@@ -505,8 +400,7 @@ li {
 }
 
 .control {
-    /* 	border: 1px solid black; */
-	font-size: 28pt;
+    font-size: 28pt;
 	border-radius: 3px;
 	padding-left: 5px;
 	padding-right: 5px;
@@ -514,30 +408,11 @@ li {
 	margin-right: 5px;
 	margin-top: 5px;
 	margin-bottom: 5px;
-	/* 	background-color: white; */
 }
 
-/* .titleicon { */
-/* 	border: none; */
-/* 	margin-left: 10px; */
-/* 	margin-top: 7px; */
-/* 	margin-bottom: 5px; */
-/* 	font-size: 28pt; */
-/* } */
-
-.questiontext {
-    /* 	display: table-cell; */
-	/* 	width: 100%; */
-	/* 	vertical-align: middle;*/
-	
-}
 
 #feedbackTip,#FeedbackMore {
 	display: none;
-}
-
-#logOut {
-	
 }
 
 #logos {
@@ -545,10 +420,9 @@ li {
 	margin-top: 10px;
 	clear: both;
 	width: 100%;
-	/*height: 15%;*/
 	height:53px;
-
-	/*content: url(../resources/logos_small.png);*/}
+	/*content: url(../resources/logos_small.png);*/
+}
 
 #ISNlogo {
 	float: left;
@@ -564,9 +438,6 @@ li {
 	height: 53px;
 }
 
-.sortable {
-	
-}
 
 .currentSortedItem {
 	border: 1px solid white;
@@ -581,12 +452,6 @@ li {
 }
 
 /*********************** Answer View ***********************/
-#answerContainer {
-    /* 	margin: 0px; */
-	/* 	padding: 0px; */
-	
-}
-
 .marginForButtons {
 	margin-right: 54px;
 }
@@ -616,15 +481,8 @@ li {
 	display: none;
 }
 
-
 /*********************** Statistics View ***********************/
-
-
 #statisticsBody {
-	
-	/*padding:0px;
-	margin-top:60px;
-	width:100%;*/
 	font-size:0px; /*set the font size to 0, in order the children elements that are displayed as inline blocks, not to have any space between them. The space is applied by default when you use inline block*/
 	
 }
@@ -678,7 +536,6 @@ li {
 }
 
 .statsiconchange{
-	/*float:right;*/
 	font-size: 28px;
 	padding-top:-13px;
 	margin-left:-50px;
@@ -692,15 +549,14 @@ li {
 	padding-bottom:5px;
 }
 
-.red{
-	
-color:red;
+.red{	
+	color:red;
 }
 
 .green{
-	
-color:green;
+	color:green;
 }
+
 /*********************** Achievements View ***********************/
 
 #achievementsView {
@@ -715,57 +571,39 @@ color:green;
 	
 }
 .achievementResults{
-/* 	display:inline-block; */
 	display: table-cell;
 	vertical-align: middle;
 	padding-top:10px;
-	/*width:auto;
-	height:auto;*/
 	padding-bottom:5px;
 	width: 220px;
 
 }
 
-
-
-
 .achievementsResutlsTitle{
 	font-size:25px;
 	font-weight:bold;
-/* 	padding-left:15px; */
-	
 }
 
 
 .achievementResutlsIcon {
-/* 	display:inline-block; */
 	display: table-cell;
 	vertical-align: middle;
 	font-size:65px;
 	padding-left:10px;
-/* 	padding-top:8px; */
-	padding-right:10px;
-/* 	float:left; */
-	
+	padding-right:10px;	
 }
 
-
-
-.blue{
-	
+.blue{	
 	color:#008CC7;
 }
 
 /****************** Course List View ************************/
-
 .courseListIcon {
 	border-left: 1px solid white;
 	width: 53px;
 	font-size: 40px;
 	text-align: center;
 	vertical-align: middle;
-/* 	padding: 0px; */
-/* 	maring: 0px; */
 }
 
 .marginForCourseList {
@@ -779,7 +617,6 @@ color:green;
 
 /*********************** Settings View ***********************/
 .settingsLi {
-/* 	padding-top: 0px; */
 	padding-bottom: 5px;
 	padding-left:7px;
 }

@@ -28,7 +28,6 @@ function QuestionView() {
 	// send an oritentationchange event
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
-
 }
 
 /**
@@ -104,28 +103,6 @@ QuestionView.prototype.showQuestionTitle = function() {
 	
 	$("#questionIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_icon'));
 	$("#cardQuestionTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
-	
-//	switch (currentQuestionTitle) {
-//	case 'assSingleChoice':
-//		$("#questionIcon").addClass(jQuery.i18n.prop('msg_singleChoice_icon'));
-//		$("#cardQuestionTitle").text("Single Choice Question");
-//		break;
-//	case 'assMultipleChoice':
-//		$("#questionIcon").addClass("icon-checkmark");
-//		$("#cardQuestionTitle").text("Multiple Choice Question");
-//		break;
-//	case 'assOrderingQuestion':
-//		$("#questionIcon").addClass("icon-move-vertical");
-//		$("#cardQuestionTitle").text("Text Order Question");
-//		break;
-//	case 'assNumeric':
-//		$("#questionIcon").addClass("icon-pencil");
-//		$("#cardQuestionTitle").text("Numeric Question");
-//		break;
-//	default:
-//		break;
-//	}
-
 };
 
 /**

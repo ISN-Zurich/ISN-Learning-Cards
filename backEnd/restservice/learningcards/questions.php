@@ -1,9 +1,32 @@
 <?php
+/* 	
+	Copyright (c) 2012 ILIAS open source, Extended GPL, see backend/LICENSE
+	if you don't have a license file, then you can obtain it from the project
+	hompage on github <https://github.com/ISN-Zurich/ISN-Learning-Cards>
+	
+	
+	This file is part of Mobler Cards.
+	
+	Mobler Cards is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	Mobler Cards is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with Mobler Cards. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 
 /**
  * This class loads the questions for the in the path specified course id from ILIAS and
- * returns an json-object with the question list
+ * returns a json-object with the question list
  */
+
 
 require_once './common.php';
 
@@ -27,7 +50,6 @@ logging(" my userid is ". $userID);
 if ($userID != 0) {
 	$courseID = $_SERVER['PATH_INFO'];
 	$courseID = preg_replace("/\//", "", $courseID); //remove leading backslash
-	// $courseID = preg_replace("/\.json/",	"", $courseID);
 	logging($courseID);
 
 	$return_data = getQuestions($courseID);

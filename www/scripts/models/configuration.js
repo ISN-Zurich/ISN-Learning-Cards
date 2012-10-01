@@ -384,6 +384,9 @@ ConfigurationModel.prototype.createConfiguration = function() {
 	}
 };
 
+/**
+ * sends the registration request to the server
+ */
 // it is called whenever my client(app) key is empty
 ConfigurationModel.prototype.register = function() {
 	var self = this;
@@ -441,6 +444,10 @@ ConfigurationModel.prototype.register = function() {
 
 };
 
+/**
+ * selects the url to the lms and the client key depending on the 
+ * specified server name
+ */
 ConfigurationModel.prototype.selectServerData = function(servername) {
 	var urlsToLMSString = localStorage.getItem("urlsToLMS");
 	var urlsToLMS;

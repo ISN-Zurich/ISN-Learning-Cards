@@ -36,7 +36,6 @@ function FeedbackView(question) {
 /**
  * tap does nothing
  */
-
 FeedbackView.prototype.handleTap = doNothing;
 
 /**

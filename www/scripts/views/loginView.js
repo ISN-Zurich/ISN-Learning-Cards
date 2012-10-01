@@ -153,7 +153,6 @@ LoginView.prototype.showErrorMessage = function(message) {
 	$("#errormessage").show();
 }
 
-
 /**
  * shows the specified warning message
  */
@@ -163,7 +162,6 @@ LoginView.prototype.showWarningMessage = function(message) {
 	$("#warningmessage").show();
 }
 
-
 /**
  * hides the specified error message
  */
@@ -172,7 +170,6 @@ LoginView.prototype.hideErrorMessage = function() {
 	$("#errormessage").text("");
 	$("#errormessage").hide();
 }
-
 
 /**
  * hides the specified warning message

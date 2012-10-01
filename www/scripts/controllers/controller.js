@@ -128,6 +128,9 @@ function Controller() {
 	console.log("End of Controller");
 } // end of Controller
 
+/**
+ * sets the correct strings depending on the language
+ */
 Controller.prototype.setupLanguage = function() {
 	jQuery.i18n.properties({
 	    name:'textualStrings', 

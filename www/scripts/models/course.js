@@ -315,6 +315,9 @@ CourseModel.prototype.createCourses = function() {
 	}
 };
 
+/**
+ * resets the course list
+ */
 CourseModel.prototype.resetCourseList = function() {
 	this.courseList = [];
 	this.index = 0; // index of the current course

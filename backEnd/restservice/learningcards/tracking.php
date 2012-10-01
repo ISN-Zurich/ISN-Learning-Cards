@@ -1,9 +1,32 @@
 <?php
+/* 	
+	Copyright (c) 2012 ILIAS open source, Extended GPL, see backend/LICENSE
+	if you don't have a license file, then you can obtain it from the project
+	hompage on github <https://github.com/ISN-Zurich/ISN-Learning-Cards>
+	
+	
+	This file is part of Mobler Cards.
+	
+	Mobler Cards is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	Mobler Cards is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with Mobler Cards. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 
 /**
- * This class loads the questions for the in the path specified course id from ILIAS and
- * returns an json-object with the question list
+ * This class stores the tracking data for the in the header specified user id in the ILIAS database
  */
+
+
 require_once './common.php';
 
 chdir("../..");
@@ -13,22 +36,21 @@ require_once ('restservice/include/inc.header.php');
 require_once 'Services/User/classes/class.ilObjUser.php';
 require_once 'Services/Database/classes/class.ilDB.php';
 
+global $DEBUG, $class_for_logging;
 
-global $class_for_logging;
-
+//$DEBUG = 1;
 $class_for_logging = "tracking.php";
 
+// creates a new database table for the tracking data if no one exists yet
 generateTable();
 
 $request_method = $_SERVER['REQUEST_METHOD'];
-
 logging("request method: '" . $request_method . "'");
-
 
 switch($request_method) {
 	case "POST":
 	case "PUT":
-		//when the user logs out the app sends the data to the server
+		//store the tracking data of the user in the database
 		logging("post/put request");
 		$userId = get_session_user_from_headers();
 		if ($userId > 0) {
@@ -40,6 +62,7 @@ switch($request_method) {
 			logging("end of PUT");
 		}
 		break;
+	case "GET":
 	case "DELETE":
 	default:
 		logging("request method not supported");
@@ -47,7 +70,10 @@ switch($request_method) {
 }
 
 
-
+/**
+ * stores all tracking data that are not yet in the database (of which the timestamp
+ * for the specified uuid doesn't exist in the database yet) into the database
+ */
 function setTracking($userId, $uuid, $tracking) {
 	global $ilDB;
 
@@ -59,7 +85,9 @@ function setTracking($userId, $uuid, $tracking) {
 		$trackingItem = $tracking[$i];
 		logging(json_encode($trackingItem));
 
-		$result = $ilDB->query("SELECT id FROM isnlc_tracking WHERE user_id =" . $ilDB->quote($userId, "text"));
+		$result = $ilDB->query("SELECT id FROM isnlc_tracking WHERE user_id =" . $ilDB->quote($userId, "text") . 
+				" AND timestamp = " . $ilDB->quote($trackingItem['time_stamp'], "integer") .
+				" AND uuid = " . $ilDB->quote($uuid, "text"));
 		$record = $ilDB->fetchAssoc($result);
 		$id = $record['id'];
 
@@ -81,11 +109,11 @@ function setTracking($userId, $uuid, $tracking) {
 	logging("after inserting");
 }
 
-
+/**
+ * generates a new tracking table in the ILIAS database if no one exists yet
+ */
 function generateTable() {
 	global $ilDB;
-
-	// 	$ilDB->dropTable("isnlc_statistics");
 
 	logging("check if our table is present already");
 	if (!in_array("isnlc_tracking",$ilDB->listTables())) {
@@ -122,10 +150,6 @@ function generateTable() {
 		logging("after creating the table");
 	}
 
-	// 	$ilDB->manipulate("DELETE FROM isnlc_statistics WHERE user_id = '12979'");
 }
-
-
-
 
 ?>
