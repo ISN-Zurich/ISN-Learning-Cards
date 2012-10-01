@@ -194,9 +194,26 @@ StatisticsModel.prototype.checkActivity = function(day) {
 };
 
 
+//set a new metric type in the metrics table in the db, this function will be used by
+Statistics.prototype.storeMetricsType = function() {
+	
+	
+}
+
+// get the type of metrics
+Statistics.prototype.getMetricsType = function(){
+	
+	
+}
+
 //initializes all queries that are needed for the calculations
  
 StatisticsModel.prototype.initQueries = function() {
+	
+	//get the metric type --> create a new table in the DB, that will store the metric type, this table can be enriched in the future with new statistics metrics
+	//use switch that will take as a parameter the metric type 
+	//store in a function the common code below and call it in each case of the switch
+	
 	this.queries['avgScore'] = {
 		query : "",
 		values : [],
