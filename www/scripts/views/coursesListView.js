@@ -139,7 +139,8 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
-		this.controller.transitionToStatistics();
+		//this.controller.models['statistics'].setCurrentCourseId(courseID);
+		this.controller.transitionToStatistics(courseID);
 	}
 };
 

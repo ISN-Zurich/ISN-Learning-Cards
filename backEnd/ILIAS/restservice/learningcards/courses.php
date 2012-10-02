@@ -80,7 +80,6 @@ function getCourseList($userId) {
 		//references are needed to get course items (= questionpools, tests, ...)
 		$item_references = ilObject::_getAllReferences($obj_id);
 
-
 		//check if valid questionpool for the course exists
 		$validQuestionPool = false;
 		if(is_array($item_references) && count($item_references)) {

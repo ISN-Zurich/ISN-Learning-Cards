@@ -142,7 +142,7 @@ function Controller() {
 	setButtonHeight();
 
 	$(document).bind("allstatisticcalculationsdone", function() {
-    	self.transition('statisticsView');
+    self.transition('statisticsView');
     });
 	
 	this.activeView.open();
@@ -255,9 +255,10 @@ Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
 };
 
-Controller.prototype.transitionToStatistics = function() {
+Controller.prototype.transitionToStatistics = function(courseID) {
+
 	this.models['statistics'].setCurrentCourseId(courseID);
-};
+	};
 
 Controller.prototype.transitionToAchievements = function() {
 	this.transition('achievements');

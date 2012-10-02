@@ -31,6 +31,13 @@ var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
 
 //This model holds the statistics for a course
 
+function queryDatabase(cbResult){
+	var self = this;
+	self.db.transaction(function(transaction) {
+		transaction.executeSql(self.query, self.values, cbResult, self.dbErrorFunction);
+	});
+}
+
 function StatisticsModel(controller) {
 	this.controller = controller;
 	this.lastSendToServer;
@@ -85,24 +92,11 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	
 	console.log("course-id: " + courseId);
 
-	// Display all entries of the database
-//	this.db.transaction(function(transaction) {
-//		transaction
-//				.executeSql('SELECT * FROM statistics WHERE course_id=?',
-//						[ courseId ], dataSelectHandler, function(tx, e) {
-//							console.log("Error for select average score: "
-//									+ e.message);
-//						});
-//	});
-//
-//	function dataSelectHandler(transaction, results) {
-//		console.log("ALL ROWS: " + results.rows.length);
-//		for ( var i = 0; i < results.rows.length; i++) {
-//			row = results.rows.item(i);
-//
-//			console.log(i + ": " + JSON.stringify(row));
-//		}
-//	}
+	// load the appropriate models for our course
+	// this.initCourseStatistics();
+	
+	
+	//this.getAllDBEntries();//useful for debugging, defined in the of the file
 
 	this.controller.models['questionpool'].loadData(courseId);
 	
@@ -194,25 +188,11 @@ StatisticsModel.prototype.checkActivity = function(day) {
 };
 
 
-//set a new metric type in the metrics table in the db, this function will be used by us to manually update the metrics table with new types
-Statistics.prototype.storeMetricsType = function() {
-	
-	
-}
-
-// get the type of metrics
-Statistics.prototype.getMetricsType = function(){
-	
-	
-}
-
 //initializes all queries that are needed for the calculations
  
 StatisticsModel.prototype.initQueries = function() {
 	
-	//get the metric type --> create a new table in the DB, that will store the metric type, this table can be enriched in the future with new statistics metrics
-	//use switch that will take as a parameter the metric type 
-	//store in a function the common code below and call it in each case of the switch
+	this.initCourseStatistics();
 	
 	this.queries['avgScore'] = {
 		query : "",
@@ -234,11 +214,11 @@ StatisticsModel.prototype.initQueries = function() {
 		values : [],
 		valuesLastActivity : []
 	};
-	this.queries['best'] = {
-		query : "",
-		values : [],
-		valuesLastActivity : []
-	};
+//	this.queries['best'] = {
+//		query : "",
+//		values : [],
+//		valuesLastActivity : []
+//	};
 	this.queries['stackHandler'] = {
 		query : "",
 		values : [],
@@ -260,20 +240,30 @@ StatisticsModel.prototype.initQueries = function() {
 	// progress
 	this.queries['progress'].query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND question_id != "cardburner" AND score=?'
 			+ ' AND day>=? AND day<=?';
-
-	// best day and score
-	this.queries['best'].query = 'SELECT min(day) as day, sum(score) as score, count(id) as num'
-			+ ' FROM statistics WHERE course_id=? AND question_id != "cardburner"'
-			+ ' GROUP BY DATE(day/1000, "unixepoch")';
+//
+//	// best day and score
+//	this.queries['best'].query = 'SELECT min(day) as day, sum(score) as score, count(id) as num'
+//			+ ' FROM statistics WHERE course_id=? AND question_id != "cardburner"'
+//			+ ' GROUP BY DATE(day/1000, "unixepoch")';
 
 	// stack handler
 	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=? AND question_id != "cardburner"';
 };
 
 //initializes all values that are needed for the calculations
- 
-StatisticsModel.prototype.initQueryValues = function() {		
+StatisticsModel.prototype.getCurrentValues = function() {
 	var timeNow = new Date().getTime();
+	var time24hAgo = this.timeNow - TWENTY_FOUR_HOURS;
+	return [this.currentCourseId,time24hAgo, this.timeNow ];
+};
+
+StatisticsModel.prototype.getLastActiveValues = function() {
+	var lastActiveDay24hBefore = this.lastActiveDay - TWENTY_FOUR_HOURS;
+	return [this.currentCourseId,lastActiveDay24hBefore, this.lastActiveDay ];
+};
+
+StatisticsModel.prototype.initQueryValues = function() {	
+	this.timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
 
 	console.log("first active day: " + this.firstActiveDay);
@@ -283,6 +273,7 @@ StatisticsModel.prototype.initQueryValues = function() {
 
 	console.log("now: " + timeNow);
 	console.log("24 hours ago: " + time24hAgo);
+	
 	// average score
 	this.queries['avgScore'].values = [ this.currentCourseId, time24hAgo,
 	                                    timeNow ];
@@ -296,22 +287,33 @@ StatisticsModel.prototype.initQueryValues = function() {
 	                                                lastActiveDay24hBefore, this.lastActiveDay ];
 
 	// handled cards
-	this.queries['handledCards'].values = [ this.currentCourseId, time24hAgo,
+this.queries['handledCards'].values = [ this.currentCourseId, time24hAgo,
 	                                        timeNow ];
 	this.queries['handledCards'].valuesLastActivity = [ this.currentCourseId,
-	                                                    lastActiveDay24hBefore, this.lastActiveDay ];
-
+                                                 lastActiveDay24hBefore, this.lastActiveDay ];
+//	self.HandledCardsModel.initQueryValue();
+//	self.HandledCardsModel.initQueryValueLastActivity();
+	
+	
 	// progress
 	this.queries['progress'].values = [ this.currentCourseId, 1, time24hAgo,
 	                                    timeNow ];
 	this.queries['progress'].valuesLastActivity = [ this.currentCourseId, 1,
 	                                                lastActiveDay24hBefore, this.lastActiveDay ];
+	
 
 	// best day and score
-	this.queries['best'].values = [ this.currentCourseId ];
-
+	//this.queries['best'].values = [ this.currentCourseId ];
+	var self = this;
+	self.BestDayScoreModel.initQueryValues();
+	
+	
 	// stack handler
 	this.queries['stackHandler'].values = [ this.currentCourseId ];
+	//self.stackHandler.initQueryValues();
+	
+	
+	
 };
 
 
@@ -324,27 +326,36 @@ StatisticsModel.prototype.calculateValues = function() {
 	self.boolAllDone = 0;
 	// calculate handled cards
 	self.queryDB(self.queries['handledCards'].query,
-			self.queries['handledCards'].values, function cbHC(t,r) {self.calculateHandledCards(t,r);});
+	self.queries['handledCards'].values, function cbHC(t,r) {self.calculateHandledCards(t,r);});
+	// self.handledCardsModel.calculateValue();
+
 
 	// calculate average score
-	self.queryDB(self.queries['avgScore'].query,
-			self.queries['avgScore'].values, function cbASc(t,r) {self.calculateAverageScore(t,r);});
+ self.queryDB(self.queries['avgScore'].query,
+self.queries['avgScore'].values, function cbASc(t,r) {self.calculateAverageScore(t,r);});
+//	self.AverageScore.calculateValue();
 
-	// calculate average speed
-	self.queryDB(self.queries['avgSpeed'].query,
-			self.queries['avgSpeed'].values, function cbASp(t,r) {self.calculateAverageSpeed(t,r);});
+// calculate average speed
+self.queryDB(self.queries['avgSpeed'].query,
+self.queries['avgSpeed'].values, function cbASp(t,r) {self.calculateAverageSpeed(t,r);});
+//	self.AverageSpeedModel.calculateValue();
 
 	// calculate progress
 	self.queryDB(self.queries['progress'].query,
-			self.queries['progress'].values, function cbP(t,r) {self.calculateProgress(t,r);});
+	self.queries['progress'].values, function cbP(t,r) {self.calculateProgress(t,r);});
+//	self.ProgressModel.calculateValue();
 
-	// calculate best day and score
-	self.queryDB(self.queries['best'].query, self.queries['best'].values,
-		function cbBDS(t,r) {self.calculateBestDayAndScore(t,r);});
+
+// calculate best day and score
+//	self.queryDB(self.queries['best'].query, self.queries['best'].values,
+//		function cbBDS(t,r) {self.calculateBestDayAndScore(t,r);});
+	self.BestDayScoreModel.calculateValue();
 
 	// calculate stack handler
 	self.queryDB(self.queries['stackHandler'].query,
-			self.queries['stackHandler'].values, function cbSH(t,r) {self.calculateStackHandler(t,r);});	
+		self.queries['stackHandler'].values, function cbSH(t,r) {self.calculateStackHandler(t,r);});	
+//	self.stackHandler.calculateValue();
+	
 };
 
 /**
@@ -366,8 +377,9 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	var self = this;
 	self.db.transaction(function(transaction) {
 		transaction.executeSql(query, values, cbResult, self.dbErrorFunction);
-	});
-};
+});
+	};
+
 
 //calculates how many cards have been handled
  
@@ -391,6 +403,7 @@ StatisticsModel.prototype.calculateHandledCards = function(transaction, results)
 	}
 	
 	// calculate improvement
+	// self.values = self.superModel.getLastActiveValues()ö;
 	self.queryDB(self.queries['handledCards'].query,
 			self.queries['handledCards'].valuesLastActivity,
 	function cbCalculateImprovements(t,r) {
@@ -868,3 +881,45 @@ StatisticsModel.prototype.sendToServer = function() {
 	}
 
 };
+
+
+StatisticsModel.prototype.initCourseStatistics = function(){
+	
+	this.bestDay = new BestDayScoreModel(this);
+//	this.bestScore = new BestScoreModel(this);
+//	this.handledCards = new HandledCardsModel(this);
+//	this.averageScore = new AverageScoreModel(this);
+//	this.progress = new ProgressModel(this);
+//	this.averageSpeed = new AverageSpeed(this);
+		
+};
+
+
+
+
+
+
+StatisticsModel.prototype.getAllDBEntries = function(){
+	
+	// Display all entries of the database
+//	this.db.transaction(function(transaction) {
+//		transaction
+//				.executeSql('SELECT * FROM statistics WHERE course_id=?',
+//						[ courseId ], dataSelectHandler, function(tx, e) {
+//							console.log("Error for select average score: "
+//									+ e.message);
+//						});
+//	});
+//
+//	function dataSelectHandler(transaction, results) {
+//		console.log("ALL ROWS: " + results.rows.length);
+//		for ( var i = 0; i < results.rows.length; i++) {
+//			row = results.rows.item(i);
+//
+//			console.log(i + ": " + JSON.stringify(row));
+//		}
+//	}
+	
+	
+}
+

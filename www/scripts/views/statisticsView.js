@@ -104,6 +104,7 @@ StatisticsView.prototype.clickToAchievements = function() {
 
 StatisticsView.prototype.loadData = function() {
 	var statisticsModel = this.controller.models['statistics'];
+	var bestDayScoreModel = new BestDayScoreModel(this);
 	var statistics = statisticsModel.getStatistics();
 	var improvement = statisticsModel.getImprovement();
 	
@@ -127,8 +128,9 @@ StatisticsView.prototype.loadData = function() {
 	if (progress < 0) {
 		progress =  0;
 	}
-	
-	var bestDay = statistics['bestDay'];
+	var bestday = BestDayScoreModel.calculateBestDayAndScore.bestDay;
+	var bestscore = BestDayScoreModel.calculateBestDayAndScore.bestScore;
+	//var bestDay = statistics['bestDay'];
 	if (!bestDay) {
 		// if the database does not know better, today is the best day!
 		bestDay = new Date().getTime();
