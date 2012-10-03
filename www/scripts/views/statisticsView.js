@@ -108,40 +108,45 @@ StatisticsView.prototype.loadData = function() {
 	var improvement = statisticsModel.getImprovement();
 	
 	console.log("init values for statistics");
-	var avgScore = statistics['averageScore'];
+	//var avgScore = statistics['averageScore'];
+	var avgScore = statisticsModel.averageScore.averageScore;
+	var improvementAvgScore = statisticsModel.averageScore.improvementAverageScore;
 	if (avgScore < 0) {
 		avgScore =  0;
 	}
 	
-	var avgSpeed = statistics['averageSpeed'];
+//	var avgSpeed = statistics['averageSpeed'];
+	var avgSpeed = statisticsModel.averageSpeed.averageSpeed;
+	var improvementSpeed = statisticsModel.averageSpeed.improvementSpeed;
 	if (avgSpeed <= 0) {
 		avgSpeed =  "-";
 	}
 	
-var handledCards = statistics['handledCards'];
+//var handledCards = statistics['handledCards'];
 
-	//var handledCards = statisticsModel.handledCards.handledCards;
+	var handledCards = statisticsModel.handledCards.handledCards;
+	var improvementhandledCards = statisticsModel.handledCards.improvementHandledCards;
 	 if (handledCards < 0) {
 		 	handledCards =  0;
 	 }
 	  
-	var progress = statistics['progress'];
+	//var progress = statistics['progress'];
+	 var progress = statisticsModel.progress.progress;
+	 var improvementProgress = statisticsModel.progress.improvementProgress;
 	if (progress < 0) {
 		progress =  0;
 	}
-//	var bestDayScoreModel = new BestDayScoreModel(this);
-//	var bestday = bestDayScore.calculateBestDayAndScore.bestDay;
-//	var bestscore = BestDayScoreModel.calculateBestDayAndScore.bestScore;
-	//var bestDay = statisticsModel.bestDay.bestDay;
-	var bestDay = statistics['bestDay'];
+
+	var bestDay = statisticsModel.bestDay.bestDay;
+	//var bestDay = statistics['bestDay'];
 	if (!bestDay) {
 		// if the database does not know better, today is the best day!
 		bestDay = new Date().getTime();
 	}
 	var oBestDay = new Date(bestDay);
 	
-	//var bestScore = statisticsModel.bestDay.bestScore;
-	var bestScore = statistics['bestScore'];
+	var bestScore = statisticsModel.bestDay.bestScore;
+	//var bestScore = statistics['bestScore'];
 	if (bestScore < 0) {
 		bestScore =  0;
 	}
@@ -155,16 +160,16 @@ var handledCards = statistics['handledCards'];
 	$("#statBestScoreValue").text(bestScore+"%");
 	$("#statHandledCardsValue").text(handledCards);
 	$("#statsHandledCardsIconchange").removeClass(removeClasses);
-	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvement['handledCards']));
+	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvementhandledCards));
 	$("#statAverageScoreValue").text(avgScore+"%");
 	$("#statsAverageScoreIconchange").removeClass(removeClasses);
-	$("#statsAverageScoreIconchange").addClass(checkImprovement(improvement['averageScore']));
+	$("#statsAverageScoreIconchange").addClass(checkImprovement(improvementAvgScore));
 	$("#statProgressValue").text(progress+"%");
 	$("#statsProgressIconchange").removeClass(removeClasses);
-	$("#statsProgressIconchange").addClass(checkImprovement(improvement['progress']));
+	$("#statsProgressIconchange").addClass(checkImprovement(improvementProgress));
 	$("#statSpeedValue").text(avgSpeed);
 	$("#statsSpeedIconchange").removeClass(removeClasses);
-	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvement['averageSpeed']));	
+	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));	
 
 	function checkImprovement(improvementValue) {
 		if (improvementValue > 0) {

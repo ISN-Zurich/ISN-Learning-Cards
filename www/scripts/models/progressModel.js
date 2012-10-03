@@ -1,5 +1,6 @@
-function ProgressModel(statisticsModel){
+function ProgressModel(statisticsModel, controller){
 
+this.controller = controller;
 this.superModel = statisticsModel;
 this.progress = -1;
 this.improvementProgress = 0;
@@ -13,85 +14,82 @@ ProgressModel.prototype.initQuery = function(){
 	this.values = [];
 	this.valuesLastActivity = [];
 	   
-	this.query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
-		+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
+	this.query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND question_id != "cardburner" AND score=?'
+		+ ' AND day>=? AND day<=?';
 
 };
 
 ProgressModel.prototype.queryDB = queryDatabase;
 
 
-AverageScoreModel.prototype.calculateValue = function(){
+ProgressModel.prototype.calculateValue = function(){
 	var self = this;
-	self.values= self.superModel.getCurrentValues(); 
+	var progressVal = true;
+	self.values= self.superModel.getCurrentValues(progressVal); 
+	console.log ("current values progess model" +self.values);
 	self.queryDB( 
-		function cbAS(t,r) {self.calculateAverageScore(t,r);});
+		function cbP(t,r) {self.calculateProgress(t,r);});
 
 };
 
 
 
-
-ProgressModel.prototype.calculateAverageScore = function(transaction, results) {
+//calculates the progress
+ProgressModel.prototype.calculateProgress = function(transaction, results) {
 	
 	var self = this;
-	console.log("rows: " + results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
-		if (row['num'] == 0) {
-			//self.statistics['averageScore'] = 0;
-			this.averageScore = 0;
+		console.log("number of correct questions:" + row['numCorrect']);
+		console.log("number of answered questions:"
+		 + self.superModel.handledCards.handledCards);
+		cards = self.controller.models['questionpool'].questionList.length;
+		if (cards == 0) {
+			this.progress = 0;
 		} else {
-//			self.statistics['averageScore'] = Math
-//				.round((row['score'] / row['num']) * 100);
-			this.averageScore =  Math.round((row['score'] / row['num']) * 100);
+		this.progress = Math.round(((row['numCorrect']) / cards) * 100);
 		}
-		console.log("AVERAGE SCORE: " + self.statistics['averageScore']);
+		console.log("progress: " +this.progress);
 	} else {
-		// self.statistics['averageScore'] = 0;
-		this.averageScore = 0;
+		this.progress = 0;
 	}
-	
+
 	// calculate improvement
-		function cbCalculateImprovements(t,r) {self.calculateImprovementAverageScore(t,r);});	
-	
-	self.values = self.superModel.getLastActiveValues();
+	var progressVal = true;
+	self.values = self.superModel.getLastActiveValues(progressVal);
 	self.queryDB(function cbCalculateImprovements(t,r) {
-		self.calculateImprovementAverageScore(t,r);
+		self.calculateImprovementProgress(t,r);
 	});
-	
 };
 
 
-ProgressModel.prototype.calculateImprovementAverageScore = function (transaction,results){
-	
+//calculates the improvement of the progress in comparison to the last active day
+
+ProgressModel.prototype.calculateImprovementProgress= function (transaction,results){
 	var self = this;
-	console.log("rows in calculate improvement average score: "
+	console.log("rows in calculate improvement progress: "
 			+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
-		var oldAverageScore = 0;
-		if (row['num'] != 0) {
-			oldAverageScore = Math.round((row['score'] / row['num']) * 100);
+		console.log("progress row" + JSON.stringify(row));
+		cards = self.controller.models['questionpool'].questionList.length;
+		if (cards == 0) {
+			this.improvementProgress = 0;
+		} else {
+			console.log("Progress Num Correct: " + row['numCorrect']);
+			oldProgress = Math
+				.round(((row['numCorrect']) / cards) * 100);
+			newProgress = this.progress;
+			this.improvementProgress = newProgress - oldProgress;
+			console.log("improvement progress: " + this.improvementProgress);
 		}
-		//newAverageScore = self.statistics['averageScore'];
-		newAverageScore = this.averageScore;
-		//self.improvement['averageScore'] = newAverageScore - oldAverageScore;
-		this.improvementAverageScore = newAverageScore - oldAverageScore;
-		$(document).trigger("statisticcalculationsdone");
-		
 	} else {
-		//self.improvement['averageScore'] = self.statistics['averageScore'];
-	  this.improvementAverageScore = this.averageScore;
+		this.improvementProgress = this.progress;
 	}
-	//console.log("improvement average score: "
-	//		+ self.improvement['averageScore']);
-	console.log("improvement average score: "
-			+ improvementAverageScore);
 	this.superModel.boolAllDone++;
-	this.superModel.allCalculationsDone();
+	this.superModel.allCalculationsDone();	
+	
+	
 		
 };
 

@@ -84,6 +84,7 @@ AchievementsView.prototype.closeAchievements = function() {
 AchievementsView.prototype.showAchievementsBody = function() {
 	var statisticsModel = controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
+
 	$("#stackHandlerIcon").removeClass("blue");
 	$("#cardBurnerIcon").removeClass("blue");
 
@@ -92,8 +93,10 @@ AchievementsView.prototype.showAchievementsBody = function() {
 	if (statistics['stackHandler'] == 100){
 			$("#stackHandlerIcon").addClass("blue");			
 	};
-	$("#valueCardBurner").text(statistics['cardBurner']+"%");
-	if (statistics['cardBurner'] == 100){
+	//$("#valueCardBurner").text(statistics['cardBurner']+"%");
+	$("#valueCardBurner").text(statisticsModel.handledCards.cardBurner+"%");
+	//if (statistics['cardBurner'] == 100){
+	if (statisticsModel.handledCards.cardBurner == 100){
 			$("#cardBurnerIcon").addClass("blue");			
 	};
 	

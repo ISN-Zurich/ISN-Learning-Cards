@@ -32,12 +32,9 @@ BestDayScoreModel.prototype.calculateValue = function(){
 
 BestDayScoreModel.prototype.queryDB = queryDatabase;
 
-//BestDayScoreModel.prototype.queryDB = function(){
-//	
-//	this.superModel.queryDatabase();
-//};
 
 
+//calculates the best day and score
 BestDayScoreModel.prototype.calculateBestDayAndScore = function(transaction, results) {
 	
 	console.log("best day rows: " + results.rows.length);

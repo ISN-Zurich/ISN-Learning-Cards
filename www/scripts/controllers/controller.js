@@ -255,10 +255,12 @@ Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
 };
 
-Controller.prototype.transitionToStatistics = function() {
-    this.models['statistics'].setCurrentCourseId(courseId);
-	
-	
+Controller.prototype.transitionToStatistics = function(courseID) {
+    if (courseID && courseID > 0) {
+    	this.models['statistics'].setCurrentCourseId(courseID);
+    } else {
+    	this.transition('statisticsView');
+    }
 };
 
 Controller.prototype.transitionToAchievements = function() {

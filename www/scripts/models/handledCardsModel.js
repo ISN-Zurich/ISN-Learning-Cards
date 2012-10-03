@@ -23,6 +23,7 @@ HandledCardsModel.prototype.queryDB = queryDatabase;
 HandledCardsModel.prototype.calculateValue = function(){
 	var self = this;
 	self.values= self.superModel.getCurrentValues(); 
+	console.log("current values for handled cards"+self.values);
 	self.queryDB( 
 		function cbHC(t,r) {self.calculateHandledCards(t,r);});
 
@@ -30,7 +31,7 @@ HandledCardsModel.prototype.calculateValue = function(){
 
 
 
-
+//calculates how many cards have been handled
 HandledCardsModel.prototype.calculateHandledCards = function(transaction, results) {
 	
 	
@@ -38,23 +39,16 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 	if (results.rows.length > 0) {
 		var row = results.rows.item(0);
 		console.log("number of handled cards:" + row['c']);
-		//self.statistics['handledCards'] = row['c'];
 		this.handledCards = row['c'];
 		console.log("handledCards:"+this.handledCards);
-		//if (self.statistics['cardBurner'] != 100) {
 			if (self.cardBurner != 100) {
 			if (row['c'] > 100) {
-				//self.statistics['cardBurner'] = 100;
 				self.cardBurner = 100;
 			} else {
-				//self.statistics['cardBurner'] = row['c'];
 				self.cardBurner =row['c'];
 			}
 		}
-		//console.log("card burner: " + self.statistics['cardBurner']);
 	} else {
-		//		self.statistics['handledCards'] = 0;
-		//		self.statistics['cardBurner'] = 0;
 		self.handledCards = 0;
 		self.cardBurner = 0;
 	}
@@ -68,6 +62,7 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 
 };
 
+//calculates the improvement of number of the handled cards in comparison to the last active day
 
 HandledCardsModel.prototype.calculateImprovementHandledCards = function (transaction,results){
 	
@@ -78,12 +73,8 @@ HandledCardsModel.prototype.calculateImprovementHandledCards = function (transac
 		var row = results.rows.item(0);
 		console.log("number of handled cards:" + row['c']);
 		oldHandledCards = row['c'];
-		//newHandledCards = self.statistics['handledCards'];
 		newHandledCards = this.handledCards;
-		//self.improvement['handledCards'] = newHandledCards - oldHandledCards;
 		this.improvementHandledCards  = newHandledCards - oldHandledCards;
-//		console.log("improvement handled cards: "
-//				+ self.improvement['handledCards']);
 		console.log("improvement handled cards: "
 			+ this.improvementHandledCards);
 		

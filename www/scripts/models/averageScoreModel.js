@@ -31,6 +31,7 @@ AverageScoreModel.prototype.calculateValue = function(){
 
 
 
+//calculates the average score the was achieved
 
 AverageScoreModel.prototype.calculateAverageScore = function(transaction, results) {
 	
@@ -40,21 +41,17 @@ AverageScoreModel.prototype.calculateAverageScore = function(transaction, result
 		row = results.rows.item(0);
 		console.log("row: " + JSON.stringify(row));
 		if (row['num'] == 0) {
-			//self.statistics['averageScore'] = 0;
 			this.averageScore = 0;
 		} else {
-//			self.statistics['averageScore'] = Math
-//				.round((row['score'] / row['num']) * 100);
 			this.averageScore =  Math.round((row['score'] / row['num']) * 100);
 		}
-		console.log("AVERAGE SCORE: " + self.statistics['averageScore']);
+		console.log("AVERAGE SCORE: " + this.averageScore);
 	} else {
-		// self.statistics['averageScore'] = 0;
 		this.averageScore = 0;
 	}
 	
 	// calculate improvement
-		function cbCalculateImprovements(t,r) {self.calculateImprovementAverageScore(t,r);});	
+		
 	
 	self.values = self.superModel.getLastActiveValues();
 	self.queryDB(function cbCalculateImprovements(t,r) {
@@ -63,6 +60,7 @@ AverageScoreModel.prototype.calculateAverageScore = function(transaction, result
 	
 };
 
+//calculates the improvement of the average score in comparison to the last active day
 
 AverageScoreModel.prototype.calculateImprovementAverageScore = function (transaction,results){
 	
@@ -76,20 +74,15 @@ AverageScoreModel.prototype.calculateImprovementAverageScore = function (transac
 		if (row['num'] != 0) {
 			oldAverageScore = Math.round((row['score'] / row['num']) * 100);
 		}
-		//newAverageScore = self.statistics['averageScore'];
 		newAverageScore = this.averageScore;
-		//self.improvement['averageScore'] = newAverageScore - oldAverageScore;
 		this.improvementAverageScore = newAverageScore - oldAverageScore;
 		$(document).trigger("statisticcalculationsdone");
 		
 	} else {
-		//self.improvement['averageScore'] = self.statistics['averageScore'];
 	  this.improvementAverageScore = this.averageScore;
 	}
-	//console.log("improvement average score: "
-	//		+ self.improvement['averageScore']);
 	console.log("improvement average score: "
-			+ improvementAverageScore);
+			+ this.improvementAverageScore);
 	this.superModel.boolAllDone++;
 	this.superModel.allCalculationsDone();
 		
