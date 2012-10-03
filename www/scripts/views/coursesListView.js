@@ -131,7 +131,7 @@ CoursesListView.prototype.clickSettingsButton = function() {
 
 //click on statistic icon calculates the appropriate statistics and shows them
  
-CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
+CoursesListView.prototype.clickStatisticsIcon = function() {
 	console.log("statistics button clicked");
 	
 	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
@@ -140,7 +140,7 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
 		//this.controller.models['statistics'].setCurrentCourseId(courseID);
-		this.controller.transitionToStatistics(courseID);
+		this.controller.transitionToStatistics(courseId);
 	}
 };
 

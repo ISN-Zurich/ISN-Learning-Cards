@@ -255,10 +255,11 @@ Controller.prototype.transitionToFeedbackMore = function() {
 	this.transition('feedbackMore');
 };
 
-Controller.prototype.transitionToStatistics = function(courseID) {
-
-	this.models['statistics'].setCurrentCourseId(courseID);
-	};
+Controller.prototype.transitionToStatistics = function() {
+    this.models['statistics'].setCurrentCourseId(courseId);
+	
+	
+};
 
 Controller.prototype.transitionToAchievements = function() {
 	this.transition('achievements');

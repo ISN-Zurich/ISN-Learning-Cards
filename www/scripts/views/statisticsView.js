@@ -104,7 +104,6 @@ StatisticsView.prototype.clickToAchievements = function() {
 
 StatisticsView.prototype.loadData = function() {
 	var statisticsModel = this.controller.models['statistics'];
-	var bestDayScoreModel = new BestDayScoreModel(this);
 	var statistics = statisticsModel.getStatistics();
 	var improvement = statisticsModel.getImprovement();
 	
@@ -119,24 +118,29 @@ StatisticsView.prototype.loadData = function() {
 		avgSpeed =  "-";
 	}
 	
-	var handledCards = statistics['handledCards'];
-	if (handledCards < 0) {
-		handledCards =  0;
-	}
-	
+var handledCards = statistics['handledCards'];
+
+	//var handledCards = statisticsModel.handledCards.handledCards;
+	 if (handledCards < 0) {
+		 	handledCards =  0;
+	 }
+	  
 	var progress = statistics['progress'];
 	if (progress < 0) {
 		progress =  0;
 	}
-	var bestday = BestDayScoreModel.calculateBestDayAndScore.bestDay;
-	var bestscore = BestDayScoreModel.calculateBestDayAndScore.bestScore;
-	//var bestDay = statistics['bestDay'];
+//	var bestDayScoreModel = new BestDayScoreModel(this);
+//	var bestday = bestDayScore.calculateBestDayAndScore.bestDay;
+//	var bestscore = BestDayScoreModel.calculateBestDayAndScore.bestScore;
+	//var bestDay = statisticsModel.bestDay.bestDay;
+	var bestDay = statistics['bestDay'];
 	if (!bestDay) {
 		// if the database does not know better, today is the best day!
 		bestDay = new Date().getTime();
 	}
 	var oBestDay = new Date(bestDay);
 	
+	//var bestScore = statisticsModel.bestDay.bestScore;
 	var bestScore = statistics['bestScore'];
 	if (bestScore < 0) {
 		bestScore =  0;

@@ -19,26 +19,28 @@ BestDayScoreModel.prototype.initQuery = function(){
 
 };
 
-BestDayScoreModel.prototype.initQueryValue = function () {
-	
-	this.values = this.superModel.currentCourseId;
+BestDayScoreModel.prototype.initQueryValues = function () {
+	this.values = [this.superModel.currentCourseId];
 };
 
 
 BestDayScoreModel.prototype.calculateValue = function(){
 	var self = this;
-	self.queryDB( 
-		function cbBDS(t,r) {self.calculateBestDayAndScore(t,r);});
-
-
+	self.initQueryValues();
+	self.queryDB( function cbBDS(t,r) {self.calculateBestDayAndScore(t,r);});
 };
 
 BestDayScoreModel.prototype.queryDB = queryDatabase;
 
+//BestDayScoreModel.prototype.queryDB = function(){
+//	
+//	this.superModel.queryDatabase();
+//};
+
 
 BestDayScoreModel.prototype.calculateBestDayAndScore = function(transaction, results) {
 	
-	console.log("rows: " + results.rows.length);
+	console.log("best day rows: " + results.rows.length);
 	var self = this;
 	var bestDay;
 	var bestScore = -1;
@@ -59,7 +61,8 @@ BestDayScoreModel.prototype.calculateBestDayAndScore = function(transaction, res
 	this.bestScore = Math.round(bestScore * 100);
 	console.log("best score:"+bestScore);
 	$(document).trigger("statisticcalculationsdone");
-	self.boolAllDone++;
+	this.superModel.boolAllDone++;
+	console.log("best day calculation done");
 	this.superModel.allCalculationsDone();	
 };
 
