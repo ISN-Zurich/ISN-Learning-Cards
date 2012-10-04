@@ -132,12 +132,8 @@ function Controller() {
 	}
 
 	// set correct height of icon button
-	window.addEventListener("resize", function() {
-		setButtonHeight();
-	}, false);
-	window.addEventListener("orientationchange", function() {
-		setButtonHeight();
-	}, false);
+	window.addEventListener("resize", setButtonHeight, false);
+	window.addEventListener("orientationchange", setButtonHeight, false);
 
 	setButtonHeight();
 
