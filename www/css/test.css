@@ -451,6 +451,12 @@ li {
 	background: #ccc;
 }
 
+/*********************** Question View ***********************/
+#cardQuestionBody {
+    font-size: 24px;
+    fontweight: bold;
+}
+
 /*********************** Answer View ***********************/
 .marginForButtons {
 	margin-right: 54px;
