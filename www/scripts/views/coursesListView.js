@@ -66,6 +66,7 @@ function CoursesListView(controller) {
     //resize event should be caught, too, because not all devices
     //send an oritentationchange even
     window.addEventListener("orientationchange", setOrientation, false);
+    window.addEventListener("resize", setOrientation, false);
     
     
 }
@@ -223,8 +224,13 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 //sets the height property of the course list icon
 
 CoursesListView.prototype.setIconSize = function() {
+	// $(".courseListIcon").each(function() { 
+//	var height = $(this).parent().height();
+//	$(this).height(height);
+//	$(this).css("line-height", height + "px");
+//	});
 	$("#coursesList li").each(function() {
-		height = $(this).height();
+		var height = $(this).height();
 		$(this).find(".courseListIcon").height(height);
 		$(this).find(".courseListIcon").css("line-height", height + "px");
 	});
