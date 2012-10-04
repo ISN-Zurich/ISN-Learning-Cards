@@ -34,6 +34,34 @@ function queryDatabase(cbResult){
 	});
 }
 
+
+
+
+function checkAchievement() {
+	var self = this;
+	self.superModel.db.transaction(function(transaction) {
+		transaction.executeSql( "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?", [this.courseId, this.achievementName], 
+				function cbSuccess(t,r) { 
+					if ( r.rows.length > 0 ) {
+						self.achievementValue = 100; 
+						self.superModel.allDone();
+					} else self.calculateAchievementValues();
+				},
+				self.superModel.dbErrorFunction);
+	});
+}
+
+function insertAchievement() {
+	var self = this;
+	var insert = 'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)';
+	var insertValues = [ self.courseId, this.achievementName, (new Date()).getTime(), 100, -100];
+	self.superModel.queryDB(insert, insertValues, function() {
+				console.log("successfully inserted achievement");
+			});
+}
+
+ 
+
 var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24; 
 
 //This model holds the statistics for a course
@@ -49,37 +77,13 @@ function StatisticsModel(controller) {
 
 	this.currentCourseId = -1;
 
-this.statistics = [];
-//	this.statistics['handledCards'] = -1;
-//	this.statistics['progress'] = -1;
-//	this.statistics['averageScore'] = -1;
-//	this.statistics['averageSpeed'] = -1;
-//	this.statistics['bestDay'] = -1;
-//	this.statistics['bestScore'] = -1;
-	this.statistics['stackHandler'] = -1;
-//	this.statistics['cardBurner'] = -1;
-
-//	this.improvement = [];
-//	this.improvement['handledCards'] = 0;
-//	this.improvement['progress'] = 0;
-//	this.improvement['averageScore'] = 0;
-//	this.improvement['averageSpeed'] = 0;
-//	
-	this.queries = [];
-	this.initQueries();
-	
 	this.firstActiveDay;
 	this.lastActiveDay;
-
-	// setInterval(function() {console.log("interval is active");}, 5000);
-	
 
 	var self = this;
 	$(document).bind("checkachievements", function(p, courseId) {
 		self.checkAchievements(courseId);
 	});
-
-
 };
 
 
@@ -190,32 +194,20 @@ StatisticsModel.prototype.checkActivity = function(day) {
 };
 
 
-//initializes all queries that are needed for the calculations
  
-StatisticsModel.prototype.initQueries = function() {
-	
-	this.initSubModels();
-	
-	this.queries['stackHandler'] = {
-		query : "",
-		values : [],
-		valuesLastActivity : []
-	};
-	
-	
-	// stack handler
-	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=? AND question_id != "cardburner"';
-};
 
 //initializes all values that are needed for the calculations
-StatisticsModel.prototype.getCurrentValues = function(progressVal) {
+StatisticsModel.prototype.getCurrentValues = function(val) {
 	var timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
-	if (!progressVal) {
+	if (val== 0) {
+		return [this.currentCourseId];
+	} else if (val== 1) {
 	return [this.currentCourseId,time24hAgo,timeNow ];
-	}else{
+	}else if (val== 2){
 		return [this.currentCourseId,1,time24hAgo,timeNow ];
 	}
+	else return [];
 };
 
 StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
@@ -227,47 +219,25 @@ StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
 	}
 };
 
-StatisticsModel.prototype.initQueryValues = function() {	
-	var timeNow = new Date().getTime();
-	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
 
-	console.log("first active day: " + this.firstActiveDay);
-	console.log("last active day: " + this.lastActiveDay);
-
-	var lastActiveDay24hBefore = this.lastActiveDay - TWENTY_FOUR_HOURS;
-
-	console.log("now: " + timeNow);
-	console.log("24 hours ago: " + time24hAgo);
-	
-	
-	// stack handler
-	this.queries['stackHandler'].values = [ this.currentCourseId ];
-	
-	
-	
-	
-};
 
 
 //queries the database and calculates the statistics and improvements
 
 StatisticsModel.prototype.calculateValues = function() {
 	var self = this;
-	self.initQueryValues();
 
 	self.boolAllDone = 0;
 
+	self.bestDay.calculateValue();
 	self.handledCards.calculateValue();
 	self.averageScore.calculateValue();
 	self.averageSpeed.calculateValue();
 	self.progress.calculateValue();
-	self.bestDay.calculateValue();
 
-	// calculate stack handler
-	self.queryDB(self.queries['stackHandler'].query,
-		self.queries['stackHandler'].values, function cbSH(t,r) {self.calculateStackHandler(t,r);});	
-//	self.stackHandler.calculateValue();
-	
+	// calculate the achievements
+	self.stackHandler.calculateValue();
+	self.checkAchievements(this.currentCourseId);
 };
 
 /**
@@ -293,90 +263,13 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	};
 
 
-
-/**
- * calculates the stack handler achievement
- * you get the stack handler if you have handled each card of a course
- * at least once
- */
-StatisticsModel.prototype.calculateStackHandler = function(transaction, results) {
-	var self = this;
-	allCards = controller.models["questionpool"].questionList;
-	handledCards = [];
-	numHandledCards = 0;
-	for ( var i = 0; i < results.rows.length; i++) {
-		row = results.rows.item(i);
-		handledCards.push(row['question_id']);
-	}
-	for ( var a in allCards) {
-		if (handledCards.indexOf(allCards[a].id) != -1) {
-			numHandledCards++;
-		}
-	}
-	numAllCards = allCards.length;
-	if (numAllCards == 0) {
-		self.statistics['stackHandler'] = 0;
-	} else {
-		self.statistics['stackHandler'] = Math
-				.round((numHandledCards / numAllCards) * 100);
-	}
-	console.log("stackHandler: " + self.statistics['stackHandler']
-			+ " handled: " + numHandledCards + " all: " + numAllCards);
-	self.boolAllDone++;
-	self.allCalculationsDone();
-};
-
-
 // checks if any achievements have been achieved
 
 StatisticsModel.prototype.checkAchievements = function(courseId) {
 	//check if cardburner was already achieved
-	this.checkCardBurnerAchievement(courseId);
+	this.cardBurner.calculateValue(courseId);
 };
 
-/**
- * checks if the card burner achievement was achieved
- * you get the card burner achievement if you handle 100 cards within 24 hours
- */
-StatisticsModel.prototype.checkCardBurnerAchievement = function(courseId) {
-	//check if we have already achieved card burner
-	console.log("check card burner achievement");
-	var self = this;
-	var query = "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?";
-	var values = [courseId, 'cardburner'];
-	this.queryDB(query, values, function(transaction, results) {
-		
-		//if we have not achieved the card burner yet,
-		//count number of answered questions in the last 24 hours
-		if (results.rows.length == 0) {
-			console.log("card burner not achieved yet")
-			var query2 = "SELECT count(*) as c FROM statistics WHERE course_id=? AND question_id != 'cardburner' AND day>=? AND day<=?";
-			var day = (new Date()).getTime();
-			var values2 = [courseId, (day - TWENTY_FOUR_HOURS), day];
-			self.queryDB(query2, values2, function(transaction, results) {
-				console.log("second check if card burner was achieved");
-				if (results.rows.length > 0) {
-					var row = results.rows.item(0);
-					
-					//if card burner was achieved (100 handled cards within 24 hours), insert a marker into the database
-					if (row['c'] == 100) {
-						console.log("cardburner was achieved");
-						var insert = 'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)';
-						var insertValues = [ courseId, "cardburner", day, 100, 0];
-						self.queryDB(insert, insertValues, function() {
-									console.log("successfully inserted card burner");
-								}, function(tx, e) {
-									console.log("error: "
-											+ e.message);
-								});
-					} else {
-						console.log("cardburner still not achieved yet");
-					}
-				}
-			});
-		}
-	});
-};
 
 //function that is called if an error occurs while querying the database
  
@@ -552,38 +445,38 @@ StatisticsModel.prototype.initSubModels = function(){
 	this.bestDay = new BestDayScoreModel(this);
 	this.handledCards = new HandledCardsModel(this);
 	this.averageScore = new AverageScoreModel(this);
-	this.progress = new ProgressModel(this,this.controller);
+	this.progress = new ProgressModel(this);
 	this.averageSpeed = new AverageSpeedModel(this);
-//	this.stackHanlder = new StackHandlerModel(this);
+	this.stackHandler = new StackHandlerModel(this);
+	this.cardBurner = new CardBurnerModel(this);
 		
 };
 
 
 
 
-
+//Display all entries of the database
 
 StatisticsModel.prototype.getAllDBEntries = function(){
-	
-	// Display all entries of the database
-//	this.db.transaction(function(transaction) {
-//		transaction
-//				.executeSql('SELECT * FROM statistics WHERE course_id=?',
-//						[ courseId ], dataSelectHandler, function(tx, e) {
-//							console.log("Error for select average score: "
-//									+ e.message);
-//						});
-//	});
-//
-//	function dataSelectHandler(transaction, results) {
-//		console.log("ALL ROWS: " + results.rows.length);
-//		for ( var i = 0; i < results.rows.length; i++) {
-//			row = results.rows.item(i);
-//
-//			console.log(i + ": " + JSON.stringify(row));
-//		}
-//	}
-	
-	
+
+	this.db.transaction(function(transaction) {
+		transaction
+		.executeSql('SELECT * FROM statistics WHERE course_id=?',
+				[ courseId ], dataSelectHandler, function(tx, e) {
+			console.log("Error for select average score: "
+					+ e.message);
+		});
+	});
+
+	function dataSelectHandler(transaction, results) {
+		console.log("ALL ROWS: " + results.rows.length);
+		for ( var i = 0; i < results.rows.length; i++) {
+			row = results.rows.item(i);
+
+			console.log(i + ": " + JSON.stringify(row));
+		}
+	}
+
+
 }
 
