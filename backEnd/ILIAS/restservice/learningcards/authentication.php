@@ -47,6 +47,13 @@ global $ilUser, $class_for_logging;
 //global $DEBUG;
 //$DEBUG = 1;
 
+
+$class_for_logging = "authentication.php";
+
+//global $ilDB;
+
+//$ilDB->manipulate("DELETE FROM isnlc_reg_info WHERE uuid = '3c1875c18a7402de'");
+
 $class_for_logging = "authentication.php";
 
 $request_method = $_SERVER['REQUEST_METHOD'];
