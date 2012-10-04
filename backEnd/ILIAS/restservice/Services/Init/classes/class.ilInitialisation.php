@@ -20,7 +20,7 @@
 | along with this program; if not, write to the Free Software                 |
 | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. |
 +-----------------------------------------------------------------------------+
-see docs/LICENSE ---this should be taken out, the second line above is replacing this
+
 */
 
 

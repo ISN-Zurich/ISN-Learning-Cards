@@ -26,10 +26,19 @@ under the License.
 
 */
 
+function queryDatabase(cbResult){
+	console.log("enter queryDatabase");
+	var self = this;
+	self.superModel.db.transaction(function(transaction) {
+		transaction.executeSql(self.query, self.values, cbResult, self.superModel.dbErrorFunction);
+	});
+}
 
 var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24; 
 
 //This model holds the statistics for a course
+
+
 
 function StatisticsModel(controller) {
 	this.controller = controller;
@@ -38,24 +47,24 @@ function StatisticsModel(controller) {
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 
-	this.currentCourseId = -1
+	this.currentCourseId = -1;
 
-	this.statistics = [];
-	this.statistics['handledCards'] = -1;
-	this.statistics['progress'] = -1;
-	this.statistics['averageScore'] = -1;
-	this.statistics['averageSpeed'] = -1;
-	this.statistics['bestDay'] = -1;
-	this.statistics['bestScore'] = -1;
+this.statistics = [];
+//	this.statistics['handledCards'] = -1;
+//	this.statistics['progress'] = -1;
+//	this.statistics['averageScore'] = -1;
+//	this.statistics['averageSpeed'] = -1;
+//	this.statistics['bestDay'] = -1;
+//	this.statistics['bestScore'] = -1;
 	this.statistics['stackHandler'] = -1;
-	this.statistics['cardBurner'] = -1;
+//	this.statistics['cardBurner'] = -1;
 
-	this.improvement = [];
-	this.improvement['handledCards'] = 0;
-	this.improvement['progress'] = 0;
-	this.improvement['averageScore'] = 0;
-	this.improvement['averageSpeed'] = 0;
-	
+//	this.improvement = [];
+//	this.improvement['handledCards'] = 0;
+//	this.improvement['progress'] = 0;
+//	this.improvement['averageScore'] = 0;
+//	this.improvement['averageSpeed'] = 0;
+//	
 	this.queries = [];
 	this.initQueries();
 	
@@ -85,24 +94,11 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	
 	console.log("course-id: " + courseId);
 
-	// Display all entries of the database
-//	this.db.transaction(function(transaction) {
-//		transaction
-//				.executeSql('SELECT * FROM statistics WHERE course_id=?',
-//						[ courseId ], dataSelectHandler, function(tx, e) {
-//							console.log("Error for select average score: "
-//									+ e.message);
-//						});
-//	});
-//
-//	function dataSelectHandler(transaction, results) {
-//		console.log("ALL ROWS: " + results.rows.length);
-//		for ( var i = 0; i < results.rows.length; i++) {
-//			row = results.rows.item(i);
-//
-//			console.log(i + ": " + JSON.stringify(row));
-//		}
-//	}
+	// load the appropriate models for our course
+	this.initSubModels();
+	
+	
+	//this.getAllDBEntries();//useful for debugging, defined in the of the file
 
 	this.controller.models['questionpool'].loadData(courseId);
 	
@@ -197,64 +193,41 @@ StatisticsModel.prototype.checkActivity = function(day) {
 //initializes all queries that are needed for the calculations
  
 StatisticsModel.prototype.initQueries = function() {
-	this.queries['avgScore'] = {
-		query : "",
-		values : [],
-		valuesLastActivity : []
-	};
-	this.queries['avgSpeed'] = {
-		query : "",
-		values : [],
-		valuesLastActivity : []
-	};
-	this.queries['handledCards'] = {
-		query : "",
-		values : [],
-		valuesLastActivity : []
-	};
-	this.queries['progress'] = {
-		query : "",
-		values : [],
-		valuesLastActivity : []
-	};
-	this.queries['best'] = {
-		query : "",
-		values : [],
-		valuesLastActivity : []
-	};
+	
+	this.initSubModels();
+	
 	this.queries['stackHandler'] = {
 		query : "",
 		values : [],
 		valuesLastActivity : []
 	};
-
-	// average score
-	this.queries['avgScore'].query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
-			+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
-
-	// average speed
-	this.queries['avgSpeed'].query = 'SELECT sum(duration) as duration, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
-			+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
-
-	// handled cards
-	this.queries['handledCards'].query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND question_id != "cardburner" AND day>=? AND day<=?';
-
-	// progress
-	this.queries['progress'].query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND question_id != "cardburner" AND score=?'
-			+ ' AND day>=? AND day<=?';
-
-	// best day and score
-	this.queries['best'].query = 'SELECT min(day) as day, sum(score) as score, count(id) as num'
-			+ ' FROM statistics WHERE course_id=? AND question_id != "cardburner"'
-			+ ' GROUP BY DATE(day/1000, "unixepoch")';
-
+	
+	
 	// stack handler
 	this.queries['stackHandler'].query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=? AND question_id != "cardburner"';
 };
 
 //initializes all values that are needed for the calculations
- 
-StatisticsModel.prototype.initQueryValues = function() {		
+StatisticsModel.prototype.getCurrentValues = function(progressVal) {
+	var timeNow = new Date().getTime();
+	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
+	if (!progressVal) {
+	return [this.currentCourseId,time24hAgo,timeNow ];
+	}else{
+		return [this.currentCourseId,1,time24hAgo,timeNow ];
+	}
+};
+
+StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
+	var lastActiveDay24hBefore = this.lastActiveDay - TWENTY_FOUR_HOURS;
+	if (!progressVal){
+	return [this.currentCourseId,lastActiveDay24hBefore, this.lastActiveDay ];
+	}else {
+	return [this.currentCourseId,1,lastActiveDay24hBefore, this.lastActiveDay ];		
+	}
+};
+
+StatisticsModel.prototype.initQueryValues = function() {	
 	var timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
 
@@ -265,35 +238,14 @@ StatisticsModel.prototype.initQueryValues = function() {
 
 	console.log("now: " + timeNow);
 	console.log("24 hours ago: " + time24hAgo);
-	// average score
-	this.queries['avgScore'].values = [ this.currentCourseId, time24hAgo,
-	                                    timeNow ];
-	this.queries['avgScore'].valuesLastActivity = [ this.currentCourseId,
-	                                                lastActiveDay24hBefore, this.lastActiveDay ];
-
-	// average speed
-	this.queries['avgSpeed'].values = [ this.currentCourseId, time24hAgo,
-	                                    timeNow ];
-	this.queries['avgSpeed'].valuesLastActivity = [ this.currentCourseId,
-	                                                lastActiveDay24hBefore, this.lastActiveDay ];
-
-	// handled cards
-	this.queries['handledCards'].values = [ this.currentCourseId, time24hAgo,
-	                                        timeNow ];
-	this.queries['handledCards'].valuesLastActivity = [ this.currentCourseId,
-	                                                    lastActiveDay24hBefore, this.lastActiveDay ];
-
-	// progress
-	this.queries['progress'].values = [ this.currentCourseId, 1, time24hAgo,
-	                                    timeNow ];
-	this.queries['progress'].valuesLastActivity = [ this.currentCourseId, 1,
-	                                                lastActiveDay24hBefore, this.lastActiveDay ];
-
-	// best day and score
-	this.queries['best'].values = [ this.currentCourseId ];
-
+	
+	
 	// stack handler
 	this.queries['stackHandler'].values = [ this.currentCourseId ];
+	
+	
+	
+	
 };
 
 
@@ -304,29 +256,18 @@ StatisticsModel.prototype.calculateValues = function() {
 	self.initQueryValues();
 
 	self.boolAllDone = 0;
-	// calculate handled cards
-	self.queryDB(self.queries['handledCards'].query,
-			self.queries['handledCards'].values, function cbHC(t,r) {self.calculateHandledCards(t,r);});
 
-	// calculate average score
-	self.queryDB(self.queries['avgScore'].query,
-			self.queries['avgScore'].values, function cbASc(t,r) {self.calculateAverageScore(t,r);});
-
-	// calculate average speed
-	self.queryDB(self.queries['avgSpeed'].query,
-			self.queries['avgSpeed'].values, function cbASp(t,r) {self.calculateAverageSpeed(t,r);});
-
-	// calculate progress
-	self.queryDB(self.queries['progress'].query,
-			self.queries['progress'].values, function cbP(t,r) {self.calculateProgress(t,r);});
-
-	// calculate best day and score
-	self.queryDB(self.queries['best'].query, self.queries['best'].values,
-		function cbBDS(t,r) {self.calculateBestDayAndScore(t,r);});
+	self.handledCards.calculateValue();
+	self.averageScore.calculateValue();
+	self.averageSpeed.calculateValue();
+	self.progress.calculateValue();
+	self.bestDay.calculateValue();
 
 	// calculate stack handler
 	self.queryDB(self.queries['stackHandler'].query,
-			self.queries['stackHandler'].values, function cbSH(t,r) {self.calculateStackHandler(t,r);});	
+		self.queries['stackHandler'].values, function cbSH(t,r) {self.calculateStackHandler(t,r);});	
+//	self.stackHandler.calculateValue();
+	
 };
 
 /**
@@ -348,256 +289,10 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	var self = this;
 	self.db.transaction(function(transaction) {
 		transaction.executeSql(query, values, cbResult, self.dbErrorFunction);
-	});
-};
-
-//calculates how many cards have been handled
- 
-StatisticsModel.prototype.calculateHandledCards = function(transaction, results) {
-	var self = this;
-	if (results.rows.length > 0) {
-		var row = results.rows.item(0);
-		console.log("number of handled cards:" + row['c']);
-		self.statistics['handledCards'] = row['c'];
-		if (self.statistics['cardBurner'] != 100) {
-			if (row['c'] > 100) {
-				self.statistics['cardBurner'] = 100;
-			} else {
-				self.statistics['cardBurner'] = row['c'];
-			}
-		}
-		console.log("card burner: " + self.statistics['cardBurner']);
-	} else {
-		self.statistics['handledCards'] = 0;
-		self.statistics['cardBurner'] = 0;
-	}
-	
-	// calculate improvement
-	self.queryDB(self.queries['handledCards'].query,
-			self.queries['handledCards'].valuesLastActivity,
-	function cbCalculateImprovements(t,r) {
-		self.calculateImprovementHandledCards(t,r);
-	});
-};
-
-// calculates the average score the was achieved
- 
-StatisticsModel.prototype.calculateAverageScore = function(transaction, results) {
-	var self = this;
-	console.log("rows: " + results.rows.length);
-	if (results.rows.length > 0) {
-		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
-		if (row['num'] == 0) {
-			self.statistics['averageScore'] = 0;
-		} else {
-			self.statistics['averageScore'] = Math
-				.round((row['score'] / row['num']) * 100);
-		}
-		console.log("AVERAGE SCORE: " + self.statistics['averageScore']);
-	} else {
-		self.statistics['averageScore'] = 0;
-	}
-	
-	// calculate improvement
-	self.queryDB(self.queries['avgScore'].query,
-			self.queries['avgScore'].valuesLastActivity,
-			function cbCalculateImprovements(t,r) {self.calculateImprovementAverageScore(t,r);});
-};
-
-//calculates the average time that was needed to handle the cards
-
-StatisticsModel.prototype.calculateAverageSpeed = function(transaction, results) {
-	var self = this;
-	console.log("rows: " + results.rows.length);
-	if (results.rows.length > 0) {
-		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
-		if (row['num'] == 0) {
-			self.statistics['averageSpeed'] = 0;
-		} else {
-			self.statistics['averageSpeed'] = Math
-				.round((row['duration'] / row['num']) / 1000);
-		}
-		console.log("AVERAGE SPEED: " + self.statistics['averageSpeed']);
-	} else {
-		self.statistics['averageSpeed'] = 0;
-	}
-	
-	// calculate improvement
-	self.queryDB(self.queries['avgSpeed'].query,
-			self.queries['avgSpeed'].valuesLastActivity,
-			function cbCalculateImprovements(t,r) {self.calculateImprovementAverageSpeed(t,r);});
-};
-
-//calculates the progress
-
-StatisticsModel.prototype.calculateProgress = function(transaction, results) {
-	var self = this;
-	if (results.rows.length > 0) {
-		row = results.rows.item(0);
-		console.log("number of correct questions:" + row['numCorrect']);
-		console.log("number of answered questions:"
-				+ self.statistics['handledCards']);
-		cards = self.controller.models['questionpool'].questionList.length;
-		if (cards == 0) {
-			self.statistics['progress'] = 0;
-		} else {
-			self.statistics['progress'] = Math
-				.round(((row['numCorrect']) / cards) * 100);
-		}
-		console.log("progress: " + self.statistics['progress']);
-	} else {
-		self.statistics['progress'] = 0;
-	}
-
-	// calculate improvement
-	self.queryDB(self.queries['progress'].query,
-			self.queries['progress'].valuesLastActivity,
-			function cbCalculateImprovements(t,r) {self.calculateImprovementProgress(t,r);});
-};
+});
+	};
 
 
-//calculates the best day and score
-
-StatisticsModel.prototype.calculateBestDayAndScore = function(transaction, results) {
-	console.log("rows: " + results.rows.length);
-	var self = this;
-	var bestDay;
-	var bestScore = -1;
-	for ( var i = 0; i < results.rows.length; i++) {
-		row = results.rows.item(i);
-		console.log(JSON.stringify(row));
-		score = 0;
-		if (row['num'] != 0) {
-			score = row['score'] / row['num'];
-		}
-		if (score >= bestScore) {
-			bestDay = row['day'];
-			bestScore = score;
-		}
-	}
-	console.log("best day: " + bestDay);
-	self.statistics['bestDay'] = bestDay;
-	console.log("best score: " + bestScore);
-	self.statistics['bestScore'] = Math.round(bestScore * 100);
-	$(document).trigger("statisticcalculationsdone");
-	self.boolAllDone++;
-	self.allCalculationsDone();
-};
-
-//calculates the improvement of number of the handled cards in comparison to the last active day
-
-StatisticsModel.prototype.calculateImprovementHandledCards = function(transaction, results) {
-	var self = this;
-	console.log("rows in calculate improvement handled cards: "
-			+ results.rows.length);
-	if (results.rows.length > 0) {
-		var row = results.rows.item(0);
-		console.log("number of handled cards:" + row['c']);
-		oldHandledCards = row['c'];
-		newHandledCards = self.statistics['handledCards'];
-		self.improvement['handledCards'] = newHandledCards - oldHandledCards;
-		console.log("improvement handled cards: "
-				+ self.improvement['handledCards']);
-		$(document).trigger("statisticcalculationsdone");
-		
-	} else {
-		self.improvement['handledCards'] = self.statistics['handledCards'];
-	}
-	self.boolAllDone++;
-	self.allCalculationsDone();
-};
-
-//calculates the improvement of the average score in comparison to the last active day
- 
-StatisticsModel.prototype.calculateImprovementAverageScore = function(transaction, results) {
-	var self = this;
-	console.log("rows in calculate improvement average score: "
-			+ results.rows.length);
-	if (results.rows.length > 0) {
-		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
-		var oldAverageScore = 0;
-		if (row['num'] != 0) {
-			oldAverageScore = Math.round((row['score'] / row['num']) * 100);
-		}
-		newAverageScore = self.statistics['averageScore'];
-		self.improvement['averageScore'] = newAverageScore - oldAverageScore;
-		$(document).trigger("statisticcalculationsdone");
-		
-	} else {
-		self.improvement['averageScore'] = self.statistics['averageScore'];
-	}
-	console.log("improvement average score: "
-			+ self.improvement['averageScore']);
-	self.boolAllDone++;
-	self.allCalculationsDone();
-};
-
-
-//calculates the improvement of the average speed in comparison to the last active day
- 
-StatisticsModel.prototype.calculateImprovementAverageSpeed = function(transaction, results) {
-	var self = this;
-	console.log("rows in calculate improvement average speed: "
-			+ results.rows.length);
-	if (results.rows.length > 0) {
-		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
-		var oldAverageSpeed = 0;
-		if (row['num'] != 0) {
-			oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
-		}
-		newAverageSpeed = self.statistics['averageSpeed'];
-		if (oldAverageSpeed == 0 && newAverageSpeed != 0) {
-			self.improvement['averageSpeed'] = -1;
-		} else	if (newAverageSpeed != 0) {
-			self.improvement['averageSpeed'] = (newAverageSpeed - oldAverageSpeed);
-		} else if (oldAverageSpeed == 0) {
-			self.improvement['averageSpeed'] = 0;
-		} else {
-			self.improvement['averageSpeed'] = 1;
-		}
-		console.log("improvement average speed: "
-				+ self.improvement['averageSpeed']);
-		$(document).trigger("statisticcalculationsdone");
-		
-	} else {
-		self.improvement['averageSpeed'] = (- self.statistics['averageSpeed']);
-	}
-	self.boolAllDone++;
-	self.allCalculationsDone();
-};
-
-
-//calculates the improvement of the progress in comparison to the last active day
-
-StatisticsModel.prototype.calculateImprovementProgress = function(transaction, results) {
-	var self = this;
-	console.log("rows in calculate improvement progress: "
-			+ results.rows.length);
-	if (results.rows.length > 0) {
-		row = results.rows.item(0);
-		console.log("progress row" + JSON.stringify(row));
-		// get the number of handled cards
-		cards = self.controller.models['questionpool'].questionList.length;
-		if (cards == 0) {
-			self.improvement['progress'] = 0;
-		} else {
-			console.log("Progress Num Correct: " + row['numCorrect']);
-			oldProgress = Math
-				.round(((row['numCorrect']) / cards) * 100);
-			newProgress = self.statistics['progress'];
-			self.improvement['progress'] = newProgress - oldProgress;
-			console.log("improvement progress: " + self.improvement['progress']);
-		}
-	} else {
-		self.improvement['progress'] = self.statistics['progress'];
-	}
-	self.boolAllDone++;
-	self.allCalculationsDone();
-};
 
 /**
  * calculates the stack handler achievement
@@ -850,3 +545,45 @@ StatisticsModel.prototype.sendToServer = function() {
 	}
 
 };
+
+
+StatisticsModel.prototype.initSubModels = function(){
+	
+	this.bestDay = new BestDayScoreModel(this);
+	this.handledCards = new HandledCardsModel(this);
+	this.averageScore = new AverageScoreModel(this);
+	this.progress = new ProgressModel(this,this.controller);
+	this.averageSpeed = new AverageSpeedModel(this);
+//	this.stackHanlder = new StackHandlerModel(this);
+		
+};
+
+
+
+
+
+
+StatisticsModel.prototype.getAllDBEntries = function(){
+	
+	// Display all entries of the database
+//	this.db.transaction(function(transaction) {
+//		transaction
+//				.executeSql('SELECT * FROM statistics WHERE course_id=?',
+//						[ courseId ], dataSelectHandler, function(tx, e) {
+//							console.log("Error for select average score: "
+//									+ e.message);
+//						});
+//	});
+//
+//	function dataSelectHandler(transaction, results) {
+//		console.log("ALL ROWS: " + results.rows.length);
+//		for ( var i = 0; i < results.rows.length; i++) {
+//			row = results.rows.item(i);
+//
+//			console.log(i + ": " + JSON.stringify(row));
+//		}
+//	}
+	
+	
+}
+
