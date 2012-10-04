@@ -88,15 +88,16 @@ AchievementsView.prototype.showAchievementsBody = function() {
 	$("#stackHandlerIcon").removeClass("blue");
 	$("#cardBurnerIcon").removeClass("blue");
 
-	$("#valueStackHandler").text(statistics['stackHandler']+"%");
+	$("#valueStackHandler").text(statisticsModel.stackHandler.achievementValue+"%");
 //checkMaxEfficiency(statistics['stackHandler']);
-	if (statistics['stackHandler'] == 100){
-			$("#stackHandlerIcon").addClass("blue");			
-	};
-	//$("#valueCardBurner").text(statistics['cardBurner']+"%");
-	$("#valueCardBurner").text(statisticsModel.handledCards.cardBurner+"%");
-	//if (statistics['cardBurner'] == 100){
-	if (statisticsModel.handledCards.cardBurner == 100){
+
+	if (statisticsModel.stackHandler.achievementValue == 100){
+		$("#stackHandlerIcon").addClass("blue");			
+};
+	
+	$("#valueCardBurner").text(statisticsModel.cardBurner.achievementValue+"%");
+
+	if (statisticsModel.cardBurner.achievementValue == 100){
 			$("#cardBurnerIcon").addClass("blue");			
 	};
 	
