@@ -1,6 +1,5 @@
-function ProgressModel(statisticsModel, controller){
+function ProgressModel(statisticsModel){
 
-this.controller = controller;
 this.superModel = statisticsModel;
 this.progress = -1;
 this.improvementProgress = 0;
@@ -14,7 +13,7 @@ ProgressModel.prototype.initQuery = function(){
 	this.values = [];
 	this.valuesLastActivity = [];
 	   
-	this.query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND question_id != "cardburner" AND score=?'
+	this.query = 'SELECT count(DISTINCT question_id) as numCorrect FROM statistics WHERE course_id=? AND duration!=-100 AND score=?'
 		+ ' AND day>=? AND day<=?';
 
 };
@@ -24,7 +23,7 @@ ProgressModel.prototype.queryDB = queryDatabase;
 
 ProgressModel.prototype.calculateValue = function(){
 	var self = this;
-	var progressVal = true;
+	var progressVal = 2;
 	self.values= self.superModel.getCurrentValues(progressVal); 
 	console.log ("current values progess model" +self.values);
 	self.queryDB( 
@@ -43,7 +42,7 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 		console.log("number of correct questions:" + row['numCorrect']);
 		console.log("number of answered questions:"
 		 + self.superModel.handledCards.handledCards);
-		cards = self.controller.models['questionpool'].questionList.length;
+		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards == 0) {
 			this.progress = 0;
 		} else {
@@ -72,7 +71,7 @@ ProgressModel.prototype.calculateImprovementProgress= function (transaction,resu
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
 		console.log("progress row" + JSON.stringify(row));
-		cards = self.controller.models['questionpool'].questionList.length;
+		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards == 0) {
 			this.improvementProgress = 0;
 		} else {

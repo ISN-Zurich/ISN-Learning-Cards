@@ -10,23 +10,25 @@ this.initQuery();
 
 BestDayScoreModel.prototype.initQuery = function(){
 	
-	this.values = [];
-	this.valuesLastActivity = [];
+//	this.values = [];
+//	this.valuesLastActivity = [];
 	   
 	this.query = 'SELECT min(day) as day, sum(score) as score, count(id) as num'
-		+ ' FROM statistics WHERE course_id=? AND question_id != "cardburner"'
+		+ ' FROM statistics WHERE course_id=? AND duration!=-100'
 		+ ' GROUP BY DATE(day/1000, "unixepoch")';
 
 };
 
-BestDayScoreModel.prototype.initQueryValues = function () {
-	this.values = [this.superModel.currentCourseId];
-};
+//BestDayScoreModel.prototype.initQueryValues = function () {
+//	this.values = [this.superModel.currentCourseId];
+//};
 
 
 BestDayScoreModel.prototype.calculateValue = function(){
 	var self = this;
-	self.initQueryValues();
+	var val = 0;
+	self.values= self.superModel.getCurrentValues(val); 
+	//self.initQueryValues();
 	self.queryDB( function cbBDS(t,r) {self.calculateBestDayAndScore(t,r);});
 };
 

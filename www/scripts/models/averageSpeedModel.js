@@ -10,10 +10,10 @@ this.initQuery();
 
 AverageSpeedModel.prototype.initQuery = function(){
 	
-	this.values = [];
-	this.valuesLastActivity = [];
-	   
-	this.query = 'SELECT sum(duration) as duration, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
+//	this.values = [];
+//	this.valuesLastActivity = [];
+//	   
+	this.query = 'SELECT sum(duration) as duration, count(id) as num FROM statistics WHERE course_id=? AND duration!=-100'
 		+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
 
 };
@@ -23,7 +23,8 @@ AverageSpeedModel.prototype.queryDB = queryDatabase;
 
 AverageSpeedModel.prototype.calculateValue = function(){
 	var self = this;
-	self.values= self.superModel.getCurrentValues(); 
+	var val = 1;
+	self.values= self.superModel.getCurrentValues(val); 
 	self.queryDB( 
 		function cbASp(t,r) {self.calculateAverageSpeed(t,r);});
 

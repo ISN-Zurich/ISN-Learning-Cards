@@ -11,10 +11,10 @@ this.initQuery();
 
 HandledCardsModel.prototype.initQuery = function(){
 	
-	this.values = [];
-	this.valuesLastActivity = [];
+//	this.values = [];
+//	this.valuesLastActivity = [];
 	   
-	this.query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND question_id != "cardburner" AND day>=? AND day<=?';
+	this.query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND duration!=-100 AND day>=? AND day<=?';
 };
 
 HandledCardsModel.prototype.queryDB = queryDatabase;
@@ -22,7 +22,8 @@ HandledCardsModel.prototype.queryDB = queryDatabase;
 
 HandledCardsModel.prototype.calculateValue = function(){
 	var self = this;
-	self.values= self.superModel.getCurrentValues(); 
+	var val = 1;
+	self.values= self.superModel.getCurrentValues(val); 
 	console.log("current values for handled cards"+self.values);
 	self.queryDB( 
 		function cbHC(t,r) {self.calculateHandledCards(t,r);});
@@ -30,7 +31,9 @@ HandledCardsModel.prototype.calculateValue = function(){
 };
 
 
-
+/* TODO: MORE COMMENTS PLEASE (Christian)
+ * 
+ */
 //calculates how many cards have been handled
 HandledCardsModel.prototype.calculateHandledCards = function(transaction, results) {
 	
@@ -41,16 +44,16 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 		console.log("number of handled cards:" + row['c']);
 		this.handledCards = row['c'];
 		console.log("handledCards:"+this.handledCards);
-			if (self.cardBurner != 100) {
-			if (row['c'] > 100) {
-				self.cardBurner = 100;
-			} else {
-				self.cardBurner =row['c'];
-			}
-		}
+//			if (self.cardBurner != 100) {
+//			if (row['c'] > 100) {
+//				self.cardBurner = 100;
+//			} else {
+//				self.cardBurner =row['c'];
+//			}
+//		}
 	} else {
 		self.handledCards = 0;
-		self.cardBurner = 0;
+//		self.cardBurner = 0;
 	}
 	
 	// calculate improvement

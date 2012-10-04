@@ -9,11 +9,11 @@ this.initQuery();
 };
 
 AverageScoreModel.prototype.initQuery = function(){
-	
-	this.values = [];
-	this.valuesLastActivity = [];
+//	
+//	this.values = [];
+//	this.valuesLastActivity = [];
 	   
-	this.query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=? AND question_id != "cardburner"'
+	this.query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=? AND duration!=-100'
 		+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
 
 };
@@ -23,12 +23,12 @@ AverageScoreModel.prototype.queryDB = queryDatabase;
 
 AverageScoreModel.prototype.calculateValue = function(){
 	var self = this;
-	self.values= self.superModel.getCurrentValues(); 
+	var val = 1;
+	self.values= self.superModel.getCurrentValues(val); 
 	self.queryDB( 
-		function cbAS(t,r) {self.calculateAverageScore(t,r);});
+			function cbAS(t,r) {self.calculateAverageScore(t,r);});
 
 };
-
 
 
 //calculates the average score the was achieved
