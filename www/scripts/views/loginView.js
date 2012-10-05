@@ -150,7 +150,8 @@ LoginView.prototype.clickLoginButton = function() {
 			self.showWarningMessage(jQuery.i18n.prop('msg_warning_message'));
 			controller.models['authentication'].login(
 					$("#usernameInput").val(), $("#password").val());
-		}
+		}//use else to display an error message that the internet connectivity is lost, or remove the if sanity check (offline)
+		// the isOffline seems to work not properly
 	} else {
 		self.showErrorMessage(jQuery.i18n.prop('msg_authentication_message'));
 		//self.showErrorMessage("Please enter your username and password!");

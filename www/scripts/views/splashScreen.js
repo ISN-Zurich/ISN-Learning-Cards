@@ -56,7 +56,9 @@ SplashScreen.prototype.handleSwipe = doNothing;
 //leads to the next view
 
 SplashScreen.prototype.open = function() {
-	this.controller.transitionToEndpoint();
+	//this.controller.transitionToEndpoint();
+	var self = this;
+	setTimeout(function() { self.controller.transitionToEndpoint(); }, 3000);
 };
 
 

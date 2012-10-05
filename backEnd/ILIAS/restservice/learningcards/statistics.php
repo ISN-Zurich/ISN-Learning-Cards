@@ -214,6 +214,9 @@ function generateTable() {
 
 		logging("after creating the table");
 	}	
+	
+	
+	$ilDB->manipulate("UPDATE isnlc_statistics SET duration=-100 WHERE question_id IN ('cardburner','stackhandler')");
 }
 
 ?>

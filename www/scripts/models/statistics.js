@@ -84,6 +84,10 @@ function StatisticsModel(controller) {
 	$(document).bind("checkachievements", function(p, courseId) {
 		self.checkAchievements(courseId);
 	});
+	
+//	this.db.transaction(function(transaction) {
+//		transaction.executeSql( "DELETE FROM statistics WHERE question_id = ?", ["stackhandler"]);
+//	});
 };
 
 
@@ -98,17 +102,22 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	
 	console.log("course-id: " + courseId);
 
-	// load the appropriate models for our course
-	this.initSubModels();
+	
+	
 	
 	
 	//this.getAllDBEntries();//useful for debugging, defined in the of the file
 
 	this.controller.models['questionpool'].loadData(courseId);
 	
+	// load the appropriate models for our course
+	this.initSubModels();
+	
 	//checks if card burner achievement was already achieved
 	//and starts the calculations
-	this.checkCardBurner();
+//	this.checkCardBurner();
+	
+	this.getFirstActiveDay();
 	
 };
 
@@ -129,21 +138,21 @@ StatisticsModel.prototype.getImprovement = function() {
  * if first active day wasn't set yet, it gets the first active day
  * sets the last activity
  */
-StatisticsModel.prototype.checkCardBurner = function() {
-	var self = this;
-	var query = "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?";
-	var values = [this.currentCourseId, 'cardburner'];
-	this.queryDB(query, values, function(transaction, results) {
-		if (results.rows && results.rows.length > 0) {
-			self.statistics['cardBurner'] = 100;
-		}
-		if (!self.firstActiveDay) {
-			self.getFirstActiveDay();
-		} else {
-			self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
-		}
-	});
-};
+//StatisticsModel.prototype.checkCardBurner = function() {
+//	var self = this;
+//	var query = "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?";
+//	var values = [this.currentCourseId, 'cardburner'];
+//	this.queryDB(query, values, function(transaction, results) {
+//		if (results.rows && results.rows.length > 0) {
+//			self.statistics['cardBurner'] = 100;
+//		}
+//		if (!self.firstActiveDay) {
+//			self.getFirstActiveDay();
+//		} else {
+//			self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
+//		}
+//	});
+//};
 
 // gets the timestamp of the first activity
  
