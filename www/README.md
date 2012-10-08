@@ -1,7 +1,7 @@
 I. INTRODUCTION 
 ===============
 
-The name of this software module is ISN Mobler Cards. It is an ISN Mobile Application to run Learning Cards for Courses on an Ilias LMS. 
+The name of this software module is ISN Mobler Cards. It is an ISN Mobile Web Application to run Learning Cards for Courses on an Ilias LMS. 
 
 
 
@@ -19,7 +19,8 @@ Controller
 ----------
 
 Main role of the controller is to bridge the communication between the views and the models.  More specifically, the controller is responsible to handle the navigation between  
-the views. Additionally, in the controller except from the initialization of models and views is being set up the language of the interface.
+the views. Additionally, in the controller except from the initialization of models and views is being set up the language of the interface. 
+All static text (layout interface's text), is initialized
 
 
 
@@ -31,7 +32,7 @@ Models
 * Answer Model
 * Statistics Model
 
-	- Best day and best score Model: the day on which i answered  the most correct answerds. 
+	- Best day and best score Model: the day on which i answered  the most correct answers. 
 	                                 The score achieved on this day is the best score.
 	
 	
@@ -39,7 +40,7 @@ Models
 	
 	- Average score Model: the last 24 hours. it is the number of correct and partially correct answers
 						   out of the total number of questions that i answered.
-	- Progress Model : the last 24 hours : how many of the answered cards were asnwered correctly.
+	- Progress Model : the last 24 hours : how many of the answered cards were answered correctly.
 	 
 	- Average Speed Model: the last 24 hours (speed counts the time that is spent from the time we enter the question view
 						until the time we leave the answer view
@@ -86,7 +87,7 @@ icon moon font  size,
 II.INSTALLATION
 ===============
 
-- Install Phonegap n various IDE's (to provide cordova link for various OS) 
+- Install Phonegap n various IDE's (to provide Cordova link for various OS) 
 - Download any external libraries
 
 
