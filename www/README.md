@@ -1,14 +1,14 @@
 I. INTRODUCTION 
 ===============
 
-The name of this software module is ISN Mobler Cards. It is an ISN Mobile Web Application to run Learning Cards for Courses on an Ilias LMS. 
+The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in InternationalISN Zürich, and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
 
 
 
 II.FEATURES
 ============
 
-This module composes the front-end part of ISN Mobile Application, which is structured according to an MVC arhcitecture as following:
+This module composes the front-end part of ISN Mobile Application, which is structured according to an MVC architecture as following:
 
 - Controller
 - Models

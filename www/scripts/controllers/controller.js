@@ -201,7 +201,10 @@ Controller.prototype.setupLanguage = function() {
 	        $("#doneCardBurner").text(msg_achievements_text2);
 	        $("#aboutTitle").text(msg_about_title);
 	        $(".cardBody").text(msg_logout_body);
-	        
+	        $("#nameLabelSet").text(jQuery.i18n.prop('msg_fullname'));
+	        $("#usernameLabelSet").text(jQuery.i18n.prop('msg_username'));
+	        $("#emailLabelSet").text(jQuery.i18n.prop('msg_email'));
+	        $("#languageLabelSet").text(jQuery.i18n.prop('msg_language'));
 	    }
 	})
 }

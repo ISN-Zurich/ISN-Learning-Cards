@@ -45,16 +45,6 @@ body {
 	margin-bottom: auto;
 }
 
-#FeedbackMore {
-	height: 49px;
-	line-height:49px;
-	position: fixed;
-	bottom: 1px;
-	right: 1px;
-	z-index: 1;
-	border-top: 1px solid white;
- 	margin: 0px;
-}
 
 .left {
 	float: left;
@@ -628,3 +618,80 @@ li {
 	width: 100%;
 	margin-bottom: 3px;
 }
+
+.More {
+	height: 49px;
+	line-height:49px;
+	position: fixed;
+	bottom: 1px;
+	right: 1px;
+	z-index: 1;
+	border-top: 1px solid white;
+ 	margin: 0px;
+}
+
+
+/*********************** About View ***********************/
+
+#aboutView {
+	display: none;
+}
+
+#cardsAbout {
+	color: white;
+	position: absolute;
+	top: 75px;
+	right: 90px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+#aboutMainTitle {
+	font-size: 20pt;
+	margin: 90px auto 10px 10px;
+}
+
+
+#card1About {
+	position: absolute;
+	left: 15px;
+	top: 12px;
+	z-index: -1;
+	background-color: #008CC7;
+	transform: rotate(15deg);
+	-webkit-transform: rotate(15deg); /* Safari and Chrome */
+	height: 40px;
+	width: 60px;
+	padding-left: 3px;
+	padding-top: 3px;
+}
+
+#card2About {
+	position: absolute;
+	z-index: -2;
+	background-color: #29ABE2;
+	height: 50px;
+	width: 60px;
+	padding-left: 3px;
+	padding-top: 3px;
+}
+
+#card3About {
+	position: absolute;
+	left: -15px;
+	top: -10px;
+	z-index: -3;
+	background-color: #7FCBDD;
+	transform: rotate(-15deg);
+	-webkit-transform: rotate(-15deg); /* Safari and Chrome */
+	height: 60px;
+	width: 60px;
+	padding-left: 5px;
+	padding-top: 3px;
+	
+	
+/*ul#aboutData {
+
+padding-top
+
+}*/

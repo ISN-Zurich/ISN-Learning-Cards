@@ -41,6 +41,13 @@ function FeedbackView(question) {
 		self.clickCourseListButton();
 	});
 	
+	//Handler when taping on the title of the feedbackView area of the answer view
+	jester($('#cardFeedbackTitle')[0]).tap(function() {
+		self.clickTitleArea();
+		console.log("feedback title clicked");
+	});
+	
+	
 	 // center the feedback body to the middle of the screen
     function setOrientation() {
         $(".cardBody").css('height', window.innerHeight - 70);
@@ -53,9 +60,10 @@ function FeedbackView(question) {
     setOrientation();
     //when orientation changes, set the new width and height
     //resize event should be caught, too, because not all devices
-    //send an oritentationchange even
+    //send an orientation change even
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
+    
 }
 
 
@@ -171,3 +179,11 @@ FeedbackView.prototype.showFeedbackBody = function() {
 
 };
 
+
+//Transition back to question view when click on the title area
+FeedbackView.prototype.clickTitleArea = function() {
+
+	this.widget.storeAnswers(); // When switching back and forth between question view  and answer view the currently selected answers are stored. These answers have not yet been finally answered.
+	controller.transitionToQuestion();
+
+};

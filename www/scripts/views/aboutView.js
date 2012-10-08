@@ -28,47 +28,42 @@ under the License.
 
 //View for displaying the settings
 
-function SettingsView() {
+function AboutView() {
     var self = this;
     
-    self.tagID = 'settingsView';
+    self.tagID = 'aboutView';
     
-    jester($('#closeSettingsIcon')[0]).tap(function(){ self.closeSettings(); } );
-    $('#logOutSettings').click(function() {
-    	self.logout();
-    });
+    jester($('#closeAboutIcon')[0]).tap(function(){ self.closeAbout(); } );
     
-    $(document).bind("authenticationready", function(e, userID) {
-		console.log("authentication ready called " + userID);
-		self.loadData();
-	});
-
-    jester($('#aboutMore')[0]).tap(function() {
-		self.clickAboutMore();
-	});
+   
+    
+//    $(document).bind("authenticationready", function(e, userID) {
+//		console.log("authentication ready called " + userID);
+//		self.loadData();
+//	});
 } 
 
 //pinch leads to course list
 
-SettingsView.prototype.handlePinch = function() {
+AboutView.prototype.handlePinch = function() {
     controller.transitionToCourses();
 };
 
 //tap does nothing
 
-SettingsView.prototype.handleTap = doNothing;
+AboutView.prototype.handleTap = doNothing;
 
 //swipe does nothing
 
-SettingsView.prototype.handleSwipe = doNothing;
+AboutView.prototype.handleSwipe = doNothing;
 
 //opens the view
  
-SettingsView.prototype.openDiv = openView;
+AboutView.prototype.openDiv = openView;
 
 //shows the settings data
  
-SettingsView.prototype.open = function() {
+AboutView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();
 	
@@ -77,37 +72,29 @@ SettingsView.prototype.open = function() {
 
 //closes the view
 
-SettingsView.prototype.close = closeView;
+AboutView.prototype.close = closeView;
 
 //leads to course list
  
-SettingsView.prototype.closeSettings = function() {
+AboutView.prototype.closeAbout = function() {
 	console.log("close settings button clicked");
-	controller.transitionToCourses();
+	controller.transitionToSettings();
 };
 
 
 //leads to logout confirmation view
 
-SettingsView.prototype.logout = function() {
+AboutView.prototype.logout = function() {
 	controller.transitionToLogout();
 };
 
 //loads the statistics data
 
-SettingsView.prototype.loadData = function() {
-	var config = controller.models['authentication'];
-	$("#aboutMore").show();
-	$("#nameItemSet").text(config.getDisplayName());
-	$("#usernameItemSet").text(config.getUserName());
-	$("#emailItemSet").text(config.getEmailAddress());
-	$("#languageItemSet").text(jQuery.i18n.prop('msg_' + config.getLanguage() + '_title'));	
+AboutView.prototype.loadData = function() {
+var config = controller.models['authentication'];
+	
+$("#logos").show();
+
+
+
 };
-
-
-SettingsView.prototype.clickAboutMore = function() {
-
-	controller.transitionToAbout();
-
-
-}
