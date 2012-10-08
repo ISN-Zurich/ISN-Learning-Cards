@@ -53,14 +53,9 @@ SplashScreen.prototype.handleTap = doNothing;
  
 SplashScreen.prototype.handleSwipe = doNothing;
 
-//leads to the next view
+//open the view does nothing, the controller handles the transition to login view
 
-SplashScreen.prototype.open = function() {
-	//this.controller.transitionToEndpoint();
-	var self = this;
-	setTimeout(function() { self.controller.transitionToEndpoint(); }, 3000);
-};
-
+SplashScreen.prototype.open = doNothing;
 
  //closes the view
 

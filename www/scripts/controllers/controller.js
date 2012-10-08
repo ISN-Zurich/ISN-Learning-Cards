@@ -59,6 +59,8 @@ function Controller() {
 	var self = this;
 
 	console.log("start controller");
+	
+	var startTime= new Date().getTime();
 
 	$.ajaxSetup({
 		cache : false
@@ -99,6 +101,7 @@ function Controller() {
     this.views.settings = new SettingsView();
     this.views.statisticsView = new StatisticsView(this);
     this.views.achievements = new AchievementsView();
+    this.views.about = new AboutView();
 
 	console.log('views initialized');
 
@@ -141,8 +144,20 @@ function Controller() {
     self.transition('statisticsView');
     });
 	
-	this.activeView.open();
-
+	
+	// check if 3000 ms have passed
+	// if not we wait until 3000 ms have passed
+	// then we do the transition to the login view
+	// the remaining waiting time is 3000 - deltatime
+	
+	var currentTime = new Date().getTime();
+	var deltaTime= currentTime - startTime;
+	if (deltaTime < 3000) {
+		setTimeout(function() { self.transitionToEndpoint(); }, 3000 - deltaTime);
+	}
+	else {
+	self.transitionToEndpoint();
+	}
 	
 	
 	console.log("End of Controller");
@@ -184,6 +199,7 @@ Controller.prototype.setupLanguage = function() {
 	        $("#cardBurnerExplanation").text(msg_achievementsBurner_explanation);
 	        $("#starterCardBurner").text(msg_achievements_text1);
 	        $("#doneCardBurner").text(msg_achievements_text2);
+	        $("#aboutTitle").text(msg_about_title);
 	        $(".cardBody").text(msg_logout_body);
 	        
 	    }
@@ -263,6 +279,9 @@ Controller.prototype.transitionToAchievements = function() {
 	this.transition('achievements');
 };
 
+Controller.prototype.transitionToAbout = function() {
+	this.transition('about');
+};
 
 //sets the current height for icon buttons
 
