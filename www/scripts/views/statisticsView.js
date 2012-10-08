@@ -68,7 +68,10 @@ StatisticsView.prototype.handleTap   = doNothing;
 
 //swipe does nothing
 
-StatisticsView.prototype.handleSwipe = doNothing;
+
+StatisticsView.prototype.handleSwipe = function() {
+	controller.transitionToAchievements();
+};
 
 //closes the view
 
