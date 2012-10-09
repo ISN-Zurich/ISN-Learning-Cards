@@ -183,7 +183,7 @@ FeedbackView.prototype.showFeedbackBody = function() {
 //Transition back to question view when click on the title area
 FeedbackView.prototype.clickTitleArea = function() {
 
-	this.widget.storeAnswers(); // When switching back and forth between question view  and answer view the currently selected answers are stored. These answers have not yet been finally answered.
+	this.widget.storeScore(); // When switching w the currently
 	controller.transitionToQuestion();
 
 };

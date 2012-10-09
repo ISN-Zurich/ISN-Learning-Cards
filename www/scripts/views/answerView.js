@@ -173,6 +173,7 @@ AnswerView.prototype.clickDoneButton = function() {
 		this.widget.storeAnswers();
 		this.widget.calculateAnswerScore();
 		answerModel.storeScoreInDB();
+		this.widget.storeScore();
 		controller.transitionToFeedback();
 	}
 };

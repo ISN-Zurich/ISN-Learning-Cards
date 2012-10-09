@@ -68,6 +68,12 @@ AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
+
+AnswerModel.prototype.setScoreList = function(scoreList) {
+	this.answerScoreList = scoreList;
+		
+};
+
 //deletes the data
 
 AnswerModel.prototype.deleteData = function() {

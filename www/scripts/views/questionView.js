@@ -67,7 +67,12 @@ QuestionView.prototype.handlePinch = function() {
  //tap leads to the answer view
 
 QuestionView.prototype.handleTap = function() {
-	controller.transitionToAnswer();
+
+	if (controller.models["answers"].getScoreList() && controller.models["answers"].getScoreList().length > 0 ){
+		controller.transitionToFeedback();
+	} else { 
+		controller.transitionToAnswer();
+		}
 };
 
 

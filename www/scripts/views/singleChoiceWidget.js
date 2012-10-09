@@ -217,6 +217,13 @@ SingleChoiceWidget.prototype.calculateAnswerScore = function() {
 	controller.models["answers"].calculateSingleChoiceScore();
 }
 
+SingleChoiceWidget.prototype.storeScore = function(){
+	var singleChoiceScore = this.calculateAnswerScore();
+	
+	controller.models["answers"].setScoreList(singleChoiceScore);
+	
+}
+
 
 // Handling behavior when click on the done-forward button on the right of the
 // screen
