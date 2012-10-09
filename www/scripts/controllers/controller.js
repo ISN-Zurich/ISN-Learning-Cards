@@ -205,6 +205,10 @@ Controller.prototype.setupLanguage = function() {
 	        $("#usernameLabelSet").text(jQuery.i18n.prop('msg_username'));
 	        $("#emailLabelSet").text(jQuery.i18n.prop('msg_email'));
 	        $("#languageLabelSet").text(jQuery.i18n.prop('msg_language'));
+	        $("#copyright").text(jQuery.i18n.prop('msg_copyright'));
+	        $("#openSource").text(jQuery.i18n.prop('msg_openSource'));
+	        $("#license").text(jQuery.i18n.prop('msg_license'));
+	        
 	    }
 	})
 }

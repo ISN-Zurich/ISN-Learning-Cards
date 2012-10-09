@@ -26,60 +26,63 @@
 	font-weight: normal;
 	-webkit-font-smoothing: antialiased;
 }
-.icon-loading:before {
-	content: "\21";
-}
-.icon-neutral:before {
-	content: "\22";
-}
-.icon-smiley:before {
-	content: "\23";
-}
 .icon-happy:before {
-	content: "\24";
-}
-.icon-move-vertical:before {
 	content: "\25";
 }
-.icon-bars:before {
+.icon-smiley:before {
 	content: "\26";
 }
-.icon-enter:before {
+.icon-neutral:before {
 	content: "\27";
 }
-.icon-cog:before {
-	content: "\28";
-}
-.icon-cross:before {
-	content: "\29";
-}
-.icon-checkmark:before {
-	content: "\2a";
-}
-.icon-question:before {
-	content: "\2b";
-}
-.icon-pencil:before {
-	content: "\2c";
-}
-.icon-exit:before {
-	content: "\2d";
-}
-.icon-equals:before {
-	content: "\2e";
-}
-.icon-arrow-right:before {
+.icon-fire:before {
 	content: "\2f";
 }
-.icon-arrow-up:before {
+.icon-diamond:before {
 	content: "\30";
 }
+.icon-loading:before {
+	content: "\23";
+}
+.icon-arrow-right:before {
+	content: "\e015";
+}
+.icon-cog:before {
+	content: "\e01f";
+}
+.icon-bars:before {
+	content: "\e021";
+}
+.icon-pencil:before {
+	content: "\e046";
+}
+.icon-enter:before {
+	content: "\e000";
+}
+.icon-cross:before {
+	content: "\e005";
+}
+.icon-checkmark:before {
+	content: "\e059";
+}
+.icon-equals:before {
+	content: "\e048";
+}
+.icon-move:before {
+	content: "\e03b";
+}
+.icon-question:before {
+	content: "\e04c";
+}
+.icon-info:before {
+	content: "\e04b";
+}
+.icon-arrow-up:before {
+	content: "\e016";
+}
 .icon-arrow-down:before {
-	content: "\31";
+	content: "\e017";
 }
-.icon-fire:before {
-	content: "\32";
-}
-.icon-diamond:before {
-	content: "\33";
+.icon-exit:before {
+	content: "\e001";
 }
