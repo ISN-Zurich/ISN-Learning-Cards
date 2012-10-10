@@ -27,7 +27,7 @@ Mobler Cards is using the following external libaries:
 
 
 II. INSTALLATION
-===============
+================
 
 - Install Phonegap n various IDE's. More info can be foudnd at : http://docs.phonegap.com/en/2.1.0/guide_getting-started_index.md.html#Getting%20Started%20Guides
 - Download any external libraries, described above
