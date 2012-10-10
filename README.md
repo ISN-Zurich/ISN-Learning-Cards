@@ -7,16 +7,17 @@ The name of this software module is ISN Mobler Cards. It is Mobile Web Applicati
 II. FEATURES
 ============
 
-ISN Mobler Cardsis consisted of a front end and a backend module. The front end 
+ISN Mobler Cards consists of a front end and a backend module. The front end module (client) provides the user interface that. It is structured according to an MVC architecture. 
+The backend module is responsible for the communication with the server. It actually loads and sends data to the server.
 
-This module composes the front-end part of ISN Mobile Application, which is structured according to an MVC architecture as following:
+III. INSTALLATION
+=================
 
-- Controller
-- Models
-- Views
+- Install Phonegap on various IDE's. More info can be found at : http://docs.phonegap.com/en/2.1.0/guide_getting-started_index.md.html#Getting%20Started%20Guides
+- Download any external libraries, described below.
 
 
-III. GENERAL NOTES
+IV. GENERAL NOTES
 =================
 
 Mobler Cards is using the following external libaries:
@@ -27,12 +28,6 @@ Mobler Cards is using the following external libaries:
 - icoMoon: An icon font app, that uses
 - jQuery.i18n.properties: A lightweight jquery plugin for localisation. There is list of .properties files in Mobler Cards
 
-
-IV. INSTALLATION
-================
-
-- Install Phonegap n various IDE's. More info can be foudnd at : http://docs.phonegap.com/en/2.1.0/guide_getting-started_index.md.html#Getting%20Started%20Guides
-- Download any external libraries, described above
 
 
 V. LICENSES
