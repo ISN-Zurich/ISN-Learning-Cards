@@ -1,20 +1,21 @@
 I. INTRODUCTION 
 ===============
 
-The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in ISN Zürich, ETH and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
+The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in ISN ETH Zurich and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
 
 
 II. FEATURES
 ============
 
-ISN Mobler Cards consists of a front end and a backend module. The front end module (client) provides the user interface that. It is structured according to an MVC architecture. 
-The backend module is responsible for the communication with the server. It actually loads and sends data to the server.
+ISN Mobler Cards consists of a front-end and a backend module. The front-end module (client) provides the user interface of the application and enables the interaction of the end user with it.
+The front end module's code and logic is structured according to an MVC architecture. The backend module is responsible for the communication between the mobile application and the server. 
+It loads and sends data to the server.
 
 III. INSTALLATION
 =================
 
 - Install Phonegap on various IDE's. More info can be found at : http://docs.phonegap.com/en/2.1.0/guide_getting-started_index.md.html#Getting%20Started%20Guides
-- Download any external libraries, described below.
+- Download any external libraries.
 
 
 IV. GENERAL NOTES
