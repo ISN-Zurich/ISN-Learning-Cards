@@ -38,5 +38,5 @@ II. INSTALLATION
 V. LICENSES
 ===========
 
-The front end is licensed under  Apache License V2. The liense is available at http://www.apache.org/licenses/LICENSE-2.0.html and in www/LICENSES.TXT
-The back end is licensed under an Aferro GPL License. The license is available at http://www.gnu.org/licenses/agpl-3.0.html
+- The front end is licensed under  Apache License V2. The liense is available at http://www.apache.org/licenses/LICENSE-2.0.html and in www/LICENSES.TXT
+- The back end is licensed under an Aferro GPL License. The license is available at http://www.gnu.org/licenses/agpl-3.0.html
