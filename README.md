@@ -1,102 +1,54 @@
 I. INTRODUCTION 
 ===============
 
-The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in InternationalISN Zürich, and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
+The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in ISN ETH Zurich and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
 
 
-
-II.FEATURES
+II. FEATURES
 ============
 
-This module composes the front-end part of ISN Mobile Application, which is structured according to an MVC architecture as following:
-
-- Controller
-- Models
-- Views
+ISN Mobler Cards consists of a front-end and a backend module. The front-end module (client) provides the user interface of the application and enables the interaction of the end user with it.
+The front end module's code and logic is structured according to an MVC architecture. The backend module is responsible for the communication between the mobile application and the server. 
+It loads and sends data to the server.
 
 
-Controller
-----------
+III. INSTALLATION
+=================
 
-Main role of the controller is to bridge the communication between the views and the models.  More specifically, the controller is responsible to handle the navigation between  
-the views. Additionally, in the controller except from the initialization of models and views is being set up the language of the interface. 
-All static text (layout interface's text), is initialized
-
-
-
-Models
-------
-* Configuration Model
-* Courses Model
-* Questionpool Model
-* Answer Model
-* Statistics Model
-
-	- Best day and best score Model: the day on which i answered  the most correct answers. 
-	                                 The score achieved on this day is the best score.
-	
-	
-	- Handled Cards Model :          the last 24 hours
-	
-	- Average score Model: the last 24 hours. it is the number of correct and partially correct answers
-						   out of the total number of questions that i answered.
-	- Progress Model : the last 24 hours : how many of the answered cards were answered correctly.
-	 
-	- Average Speed Model: the last 24 hours (speed counts the time that is spent from the time we enter the question view
-						until the time we leave the answer view
-	
-	- StackHandler Model : how many cards you have dealt with out of all the cards from the beginning?
-	
-	- CardBurner Model(if you went through 100 cards per day, if achieved, then it remains there)
-
-
-Views
-------
-
-SplashScreen View
-
-Login View
-
-Courses List View
-
-Question View
-
-Answer View
- - Single Choice Widget
- - Multiple Choice Widget
- - Text sorting Widget
- - Numeric Question Widget
-
-FeedbackView
-Settings View
-Statistics View
-Achievements View
-Logout View
-Logout Confirmation View
-
+- Install Phonegap on various IDE's. More info can be found at : http://docs.phonegap.com/en/2.1.0/guide_getting-started_index.md.html#Getting%20Started%20Guides
+- Download any external libraries.
 
 
 IV. GENERAL NOTES
 =================
 
-icon moon font  size,
+Mobler Cards is using the following external libaries:
 
- 
+- Phonegap/cordova.
+- Jester: It is a javascript library for capturing and describing mobile gestures such as swipe, pinch, tab. More infob about
+          this can be found on https://github.com/plainview/Jester REMARK: Mobler Cards uses a modified  and extended version of jester.
+- JQuery
+- JQuery- ui: It is built on top of jQuery and is used in mobler Cards to build mobile sorting gestures.
+- jQuery.i18n.properties: A lightweight jquery plugin for localisation. There is list of .properties files in Mobler Cards
+- icoMoon: An icon font app, that uses
+
+V. GETTING SUPPORT
+===================
 
 
-II.INSTALLATION
-===============
-
-- Install Phonegap n various IDE's (to provide Cordova link for various OS) 
-- Download any external libraries
-
-
-
-V.LICENSES
+V. LICENSES
 ===========
 
+- The front end is licensed under  Apache License V2. The liense is available at http://www.apache.org/licenses/LICENSE-2.0.html and in www/LICENSES.TXT
+- The back end is licensed under an Aferro GPL License. The license is available at http://www.gnu.org/licenses/agpl-3.0.html
 
+VI. COPYRIGHT
+=============
 
+Copyright 2012, ETH Zürich 
 
-VI.ACKNOWLEGEMENTS
+VII. CONTRIBUTORS
 =================
+
+
+
