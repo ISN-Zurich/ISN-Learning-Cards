@@ -1,11 +1,13 @@
 I. INTRODUCTION 
 ===============
 
-The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in InternationalISN Zürich, and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
+The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in ISN Zürich, ETH and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
 
 
 II. FEATURES
 ============
+
+ISN Mobler Cardsis consisted of a front end and a backend module. The front end 
 
 This module composes the front-end part of ISN Mobile Application, which is structured according to an MVC architecture as following:
 
@@ -36,4 +38,5 @@ II. INSTALLATION
 V. LICENSES
 ===========
 
-The front end is licensed under  Apache License V2.  See license.txt
+The front end is licensed under  Apache License V2. The liense is available at http://www.apache.org/licenses/LICENSE-2.0.html and in www/LICENSES.TXT
+The back end is licensed under an Aferro GPL License. The license is available at http://www.gnu.org/licenses/agpl-3.0.html
