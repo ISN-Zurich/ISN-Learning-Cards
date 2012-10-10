@@ -173,13 +173,6 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 };
 
 /**
- * calculates the answer score
- */
-NumericQuestionWidget.prototype.calculateAnswerScore = function() {
-	controller.models["answers"].calculateNumericScore();
-}
-
-/**
  * this method does nothing for the numeric widget
  */
 NumericQuestionWidget.prototype.setCorrectAnswerTickHeight = doNothing;

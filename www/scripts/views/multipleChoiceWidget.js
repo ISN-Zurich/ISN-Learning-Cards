@@ -184,12 +184,6 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 };
 
 
-//caculates the answer score
- 
-MultipleChoiceWidget.prototype.calculateAnswerScore = function() {
-	controller.models["answers"].calculateMultipleChoiceScore();
-};
-
 
 //sets the height property of the list items that contain correct answers
  

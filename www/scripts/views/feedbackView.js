@@ -95,10 +95,7 @@ FeedbackView.prototype.closeDiv = closeView;
 //deletes data from answer model
  
 FeedbackView.prototype.close = function() {
-	controller.models["answers"].deleteData();
-	$("#feedbackTip").empty();
-	$("#feedbackTip").hide();
-	$("#feedbackBody").show();
+	
 	this.closeDiv();
 
 };
@@ -111,8 +108,14 @@ FeedbackView.prototype.openDiv = openView;
 // hows feedback title and body
 
 FeedbackView.prototype.open = function() {
-	this.showFeedbackBody();
-	this.showFeedbackTitle();
+	// if (coming from answer view){
+	//self.widget.calculateAnswerScore();
+	if (controller.models["answers"].answerScore == -1){
+		controller.models["answers"].calculateScore();
+		this.showFeedbackBody();
+		this.showFeedbackTitle();	
+		}
+    //}
 	this.openDiv();
 	this.widget.setCorrectAnswerTickHeight();
 };
@@ -120,6 +123,10 @@ FeedbackView.prototype.open = function() {
 //click on feedback done button leads to new question
 
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
+	controller.models["answers"].deleteData();
+	$("#feedbackTip").empty();
+	$("#feedbackTip").hide();
+	$("#feedbackBody").show();
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
 
@@ -156,7 +163,7 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 //calls the appropriate widget to show the feedback body
 
 FeedbackView.prototype.showFeedbackBody = function() {
-
+	
 	var questionpoolModel = controller.models['questionpool'];
 	var questionType = questionpoolModel.getQuestionType();
 	var interactive = false;
@@ -183,7 +190,6 @@ FeedbackView.prototype.showFeedbackBody = function() {
 //Transition back to question view when click on the title area
 FeedbackView.prototype.clickTitleArea = function() {
 
-	this.widget.storeScore(); // When switching w the currently
 	controller.transitionToQuestion();
 
 };

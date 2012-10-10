@@ -67,10 +67,10 @@ QuestionView.prototype.handlePinch = function() {
  //tap leads to the answer view
 
 QuestionView.prototype.handleTap = function() {
-
-	if (controller.models["answers"].getScoreList() && controller.models["answers"].getScoreList().length > 0 ){
-		controller.transitionToFeedback();
-	} else { 
+//var self = this;
+ if (controller.models["answers"].answerScore > -1){
+	controller.transitionToFeedback();
+} else { 
 		controller.transitionToAnswer();
 		}
 };

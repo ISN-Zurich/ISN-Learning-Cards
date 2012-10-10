@@ -171,9 +171,7 @@ AnswerView.prototype.clickDoneButton = function() {
 		// learner.
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
-		this.widget.calculateAnswerScore();
 		answerModel.storeScoreInDB();
-		this.widget.storeScore();
 		controller.transitionToFeedback();
 	}
 };

@@ -193,11 +193,6 @@ TextSortWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
-//calculates the answer score
-
-TextSortWidget.prototype.calculateAnswerScore = function() {
-	controller.models["answers"].calculateTextSortScore();
-}
 
 /**
  * catches touch events and creates correspoding mouse events this has to be

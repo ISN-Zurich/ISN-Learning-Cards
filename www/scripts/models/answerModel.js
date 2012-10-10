@@ -34,7 +34,7 @@ var DB_VERSION = 1;
 function AnswerModel() {
 	this.answerList = [];
 	this.answerScoreList = [];
-	this.answerScore = 0;
+	this.answerScore = -1;
 
 	this.currentCourseId = -1;
 	this.currentQuestionId = -1;
@@ -61,7 +61,6 @@ AnswerModel.prototype.getAnswers = function() {
 	return this.answerList;
 };
 
-
 // @return the score list
 
 AnswerModel.prototype.getScoreList = function() {
@@ -69,17 +68,12 @@ AnswerModel.prototype.getScoreList = function() {
 };
 
 
-AnswerModel.prototype.setScoreList = function(scoreList) {
-	this.answerScoreList = scoreList;
-		
-};
-
 //deletes the data
 
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
-	this.answerScore = 0;
+	this.answerScore = -1;
 };
 
  // @return if answer score is 1 Execellent  
@@ -303,4 +297,27 @@ AnswerModel.prototype.deleteDB = function() {
 			console.log("error: statistics table not cleared");
 		});
 	});
+};
+
+
+AnswerModel.prototype.calculateScore = function () {
+	var questionpoolModel = controller.models['questionpool'];
+	var questionType = questionpoolModel.getQuestionType();
+	switch (questionType) {
+	case 'assSingleChoice':
+		this.calculateSingleChoiceScore();
+		break;
+	case 'assMultipleChoice':
+		this.calculateMultipleChoiceScore();
+		break;
+	case 'assOrderingQuestion':
+		this.calculateTextSortScore();
+		break;
+	case 'assNumeric':
+		this.calculateNumericScore();
+		break;
+	default:
+		break;
+	}
+	
 };

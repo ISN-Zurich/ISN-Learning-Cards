@@ -46,9 +46,10 @@ function SingleChoiceWidget(interactive) {
 																	// currently
 																	// selected
 																	// answers
-    console.log('ok');
+    
+	console.log('ok');
 
-	// Check the boolean value of intractive. This is set through the answer and
+	// Check the boolean value of interactive. This is set through the answer and
 	// feedback view.
 	if (self.interactive) {
 		// when answer view is active, then interactive variable is set to true.
@@ -131,6 +132,9 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	var clone = $("#cardAnswerBody ul").clone(); // clone the answerbody,
 	clone.appendTo("#feedbackBody");
 
+	console.log("enter feedback view after switching from question view");
+	
+	
 	var questionpoolModel = controller.models["questionpool"];
 	$("#feedbackBody ul li").each(function(index) {
 		if (questionpoolModel.getScore(parseInt($(this).attr('id').substring(6))) > 0) {
@@ -212,10 +216,21 @@ SingleChoiceWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
+//Storing the correct answres in an array
+SingleChoiceWidget.prototype.storeCorrectAnswers = function() {
+	
+	var correctAnswers = new Array();
+	$("#cardAnswerBody li").each(function(index) {
+		if ($(this).hasClass("correctAnswer")) {
+			var correctIndex = parseInt($(this).attr('id').substring(6));
+			answers.push(correctIndex);
+		}
+	});
+	
+	controller.models["answers"].setCorrectAnswers(correctAnswers);
+};
 
-SingleChoiceWidget.prototype.calculateAnswerScore = function() {
-	controller.models["answers"].calculateSingleChoiceScore();
-}
+
 
 SingleChoiceWidget.prototype.storeScore = function(){
 	var singleChoiceScore = this.calculateAnswerScore();
