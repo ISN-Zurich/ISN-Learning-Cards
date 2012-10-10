@@ -43,5 +43,5 @@ V. LICENSES
 VI. COPYRIGHT
 =============
 
-Copyright 2012 ETH Zürich 
+Copyright 2012, ETH Zürich 
 
