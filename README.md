@@ -32,6 +32,8 @@ Mobler Cards is using the following external libaries:
 - jQuery.i18n.properties: A lightweight jquery plugin for localisation. There is list of .properties files in Mobler Cards
 - icoMoon: An icon font app, that uses
 
+V. GETTING SUPPORT
+===================
 
 
 V. LICENSES
@@ -44,4 +46,9 @@ VI. COPYRIGHT
 =============
 
 Copyright 2012, ETH Zürich 
+
+VII. CONTRIBUTORS
+=================
+
+
 
