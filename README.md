@@ -4,7 +4,6 @@ I. INTRODUCTION
 The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in InternationalISN Zürich, and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
 
 
-
 II.FEATURES
 ============
 
@@ -27,9 +26,6 @@ Mobler Cards is using the following external libaries:
 - jQuery.i18n.properties: A lightweight jquery plugin for localisation. There is list of .properties files in Mobler Cards
 
 
- 
-
-
 II.INSTALLATION
 ===============
 
@@ -37,10 +33,7 @@ II.INSTALLATION
 - Download any external libraries, described above
 
 
-
 V.LICENSES
 ===========
 
 The front end is licensed under  Apache License V2.  See license.txt
-
-
