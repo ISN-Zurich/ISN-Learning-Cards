@@ -15,71 +15,17 @@ This module composes the front-end part of ISN Mobile Application, which is stru
 - Views
 
 
-Controller
-----------
-
-Main role of the controller is to bridge the communication between the views and the models.  More specifically, the controller is responsible to handle the navigation between  
-the views. Additionally, in the controller except from the initialization of models and views is being set up the language of the interface. 
-All static text (layout interface's text), is initialized
-
-
-
-Models
-------
-* Configuration Model
-* Courses Model
-* Questionpool Model
-* Answer Model
-* Statistics Model
-
-	- Best day and best score Model: the day on which i answered  the most correct answers. 
-	                                 The score achieved on this day is the best score.
-	
-	
-	- Handled Cards Model :          the last 24 hours
-	
-	- Average score Model: the last 24 hours. it is the number of correct and partially correct answers
-						   out of the total number of questions that i answered.
-	- Progress Model : the last 24 hours : how many of the answered cards were answered correctly.
-	 
-	- Average Speed Model: the last 24 hours (speed counts the time that is spent from the time we enter the question view
-						until the time we leave the answer view
-	
-	- StackHandler Model : how many cards you have dealt with out of all the cards from the beginning?
-	
-	- CardBurner Model(if you went through 100 cards per day, if achieved, then it remains there)
-
-
-Views
-------
-
-SplashScreen View
-
-Login View
-
-Courses List View
-
-Question View
-
-Answer View
- - Single Choice Widget
- - Multiple Choice Widget
- - Text sorting Widget
- - Numeric Question Widget
-
-FeedbackView
-Settings View
-Statistics View
-Achievements View
-Logout View
-Logout Confirmation View
-
-
-
 IV. GENERAL NOTES
 =================
 
-icon moon font  size,
+Mobler Cards is using the following external libaries:
+
+- Jester: It is a javascript library for capturing and describing mobile gestures such as swipe, pinch, tab. More infob about
+          this can be found on https://github.com/plainview/Jester
+- JQuery- ui: It is built on top of jQuery and is used in mobler Cards to build mobile sorting gestures.
+- icoMoon: An icon font app, that uses
+- jQuery.i18n.properties: A lightweight jquery plugin for localisation. There is list of .properties files in Mobler Cards
+
 
  
 
@@ -87,16 +33,14 @@ icon moon font  size,
 II.INSTALLATION
 ===============
 
-- Install Phonegap n various IDE's (to provide Cordova link for various OS) 
-- Download any external libraries
+- Install Phonegap n various IDE's. More info can be foudnd at : http://docs.phonegap.com/en/2.1.0/guide_getting-started_index.md.html#Getting%20Started%20Guides
+- Download any external libraries, described above
 
 
 
 V.LICENSES
 ===========
 
+The front end is licensed under  Apache License V2.  See license.txt
 
 
-
-VI.ACKNOWLEGEMENTS
-=================
