@@ -16,7 +16,7 @@ This module composes the front-end part of ISN Mobile Application, which is stru
 - Views
 
 
-IV. GENERAL NOTES
+III. GENERAL NOTES
 =================
 
 Mobler Cards is using the following external libaries:
@@ -28,7 +28,7 @@ Mobler Cards is using the following external libaries:
 - jQuery.i18n.properties: A lightweight jquery plugin for localisation. There is list of .properties files in Mobler Cards
 
 
-II. INSTALLATION
+IV. INSTALLATION
 ================
 
 - Install Phonegap n various IDE's. More info can be foudnd at : http://docs.phonegap.com/en/2.1.0/guide_getting-started_index.md.html#Getting%20Started%20Guides
@@ -40,3 +40,9 @@ V. LICENSES
 
 - The front end is licensed under  Apache License V2. The liense is available at http://www.apache.org/licenses/LICENSE-2.0.html and in www/LICENSES.TXT
 - The back end is licensed under an Aferro GPL License. The license is available at http://www.gnu.org/licenses/agpl-3.0.html
+
+VI. COPYRIGHT
+=============
+
+Copyright 2012 ETH Zürich 
+
