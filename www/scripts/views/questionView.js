@@ -123,13 +123,13 @@ QuestionView.prototype.showQuestionBody = function() {
 //shows the current question title and the corresponding icon
 
 QuestionView.prototype.showQuestionTitle = function() {
-	var currentQuestionTitle = controller.models["questionpool"]
+	var currentQuestionType = controller.models["questionpool"]
 			.getQuestionType();
 
 	$("#questionIcon").removeClass();
 	
-	$("#questionIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_icon'));
-	$("#cardQuestionTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
+	$("#questionIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionType + '_icon'));
+	//$("#cardQuestionTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
 };
 
 //click on the course list button leads to course list
