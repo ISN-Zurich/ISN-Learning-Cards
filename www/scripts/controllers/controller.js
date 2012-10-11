@@ -211,7 +211,7 @@ Controller.prototype.setupLanguage = function() {
 	        
 	    }
 	})
-}
+};
 
 
 //closes the current view and opens the specified one
