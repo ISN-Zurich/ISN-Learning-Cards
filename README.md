@@ -35,7 +35,7 @@ Mobler Cards is using the following external libaries:
 GETTING SUPPORT
 ===============
 
-For more information and support you can go to the wiki and issues.
+For more information and support you can go to the wiki and issues https://github.com/ISN-Zurich/ISN-Learning-Cards/issues?state=open
 
 
 LICENSES
