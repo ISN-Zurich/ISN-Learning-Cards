@@ -24,10 +24,10 @@ GENERAL NOTES
 
 Mobler Cards is using the following external libaries:
 
-- Phonegap/cordova.
+- Phonegap/cordova: PhoneGap is an open source framework for quickly building cross-platform mobile apps using HTML5, Javascript and CSS.More info on http://phonegap.comg
 - Jester: It is a javascript library for capturing and describing mobile gestures such as swipe, pinch, tab. More infob about
           this can be found on https://github.com/plainview/Jester REMARK: Mobler Cards uses a modified  and extended version of jester.
-- JQuery:
+- JQuery: A javascript library that simplifies the way of handling various javascript notions such as: event handling, document traversing etc. More info on http://jquery.com
 - JQuery- ui: It is built on top of jQuery and is used in mobler Cards to build mobile sorting gestures.
 - jQuery.i18n.properties: A lightweight jquery plugin for localisation. There is list of .properties files in Mobler Cards
 - icoMoon: An icon font app, that uses
@@ -35,7 +35,8 @@ Mobler Cards is using the following external libaries:
 GETTING SUPPORT
 ===============
 
-For more information and support you can go to the wiki and issues https://github.com/ISN-Zurich/ISN-Learning-Cards/issues?state=open
+For more information you can visit the wiki on https://github.com/ISN-Zurich/ISN-Learning-Cards/wiki 
+or the issues page on https://github.com/ISN-Zurich/ISN-Learning-Cards/issues?state=open.
 
 
 LICENSES
