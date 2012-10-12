@@ -77,6 +77,7 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 			"id" : "numberInput",
 			"class" : "loginInput",
 			"type" : "number",
+			"width" : "200px",
 			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : "",
 			"placeholder": "Enter number here"
 		}).appendTo(div);
