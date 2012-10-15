@@ -37,7 +37,24 @@ function LoginView(controller) {
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
 	});
+	
+	var prevent=false;
+	jester($('#usernameInput')[0]).tap(function(e,prevent) {
+//		var prevent=false;
+		//e.stopPropagation();
+		focusLogos();
+		//e.preventDefault();
+		var prevent=true;
+	
+	});
 		
+	jester($('#password')[0]).tap(function(e) {
+		//e.stopPropagation();
+		focusLogos();
+		//e.preventDefault();
+
+	});
+
    $(document).bind("errormessagehide", function() {
 			console.log(" hide error message loaded ");
 			self.hideErrorMessage();
@@ -68,7 +85,7 @@ function LoginView(controller) {
 
 //tap, swipe and pinch do nothing
 
-LoginView.prototype.handleTap = doNothing;
+//LoginView.prototype.handleTap = doNothing;
 LoginView.prototype.handlePinch = doNothing;
 LoginView.prototype.handleSwipe = doNothing;
 

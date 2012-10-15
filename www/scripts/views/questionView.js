@@ -32,6 +32,7 @@ function QuestionView() {
 	var self = this;
 
 	self.tagID = 'cardQuestionView';
+	
 
 	var returnButton = $('#CourseList_FromQuestion')[0];
 	if (returnButton) {
@@ -55,6 +56,9 @@ function QuestionView() {
 	// send an oritentationchange event
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
+	
+	
+	
 }
 
 
@@ -77,7 +81,6 @@ QuestionView.prototype.handleTap = function() {
 
 
 //swipe shows a new question updates question body and title
-
 QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view
@@ -105,7 +108,6 @@ QuestionView.prototype.open = function() {
 	if (!controller.models["answers"].hasStarted()) {
 		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
 	}
-	
 	this.openDiv();	
 };
 

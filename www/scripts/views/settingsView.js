@@ -34,10 +34,15 @@ function SettingsView() {
     self.tagID = 'settingsView';
     
     jester($('#closeSettingsIcon')[0]).tap(function(){ self.closeSettings(); } );
-    $('#logOutSettings').click(function() {
-    	self.logout();
-    });
+//    $('#logOutSettings').click(function() {
+//    	self.logout();
+//    });
     
+    
+    jester($('#logOutSettings')[0]).tap(function() {
+	self.logout();
+});
+
     $(document).bind("authenticationready", function(e, userID) {
 		console.log("authentication ready called " + userID);
 		self.loadData();

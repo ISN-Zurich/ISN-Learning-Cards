@@ -41,7 +41,7 @@
                 cache = Jester.cache,
                 gestures = "swipe flick tap twintap taplong twintaplong doubletap pinchnarrow pinchwiden pinchend pinched stretched";
 
-            if(!element || !element.nodeType) {
+            if(!element || (element != window && !element.nodeType)) {
                 throw new TypeError("Jester: no element given.");
             }
 
@@ -109,6 +109,7 @@
                     return this.bind(gesture, fn);
                 };
             }, that);
+          
 
             this.start = function(fn) {
                 return this.bind("start", fn);
@@ -282,8 +283,14 @@
             var previousTapTime = 0;
             var previousNumTouches = 0;
             var lastTouches = 0;
+            var prevent=true;
 
-            var touchStart = function(evt) {
+            var touchStart = function(evt,prevent) {
+            	
+            	        	
+            	if(prevent){evt.preventDefault();}
+            	
+            	console.log("touch start");
                 // avoid that multiple touchstart events on Android devices 
                 // confuse the gesture detection.
                 if ( lastTouches < evt.touches.length ) {
@@ -294,21 +301,23 @@
 
                     previousTapTime = (new Date()).getTime();
                 }
-                if(opts.preventDefault) evt.preventDefault();
-                if(opts.stopPropagation) evt.stopPropagation();
+//              if(opts.preventDefault) evt.preventDefault();
+//               if(opts.stopPropagation) evt.stopPropagation();
             };
 
-            var touchMove = function(evt) {
+            var touchMove = function(evt,prevent) {
+                if(prevent){evt.preventDefault();}
                 touches.update(evt);
-
+                console.log("touch move is hapenning");
                 eventSet.execute("during", touches, evt);
-
-                if(opts.preventDefault) evt.preventDefault();
-                if(opts.stopPropagation) evt.stopPropagation();
-
+                console.log("passed during");
+//                if(opts.preventDefault) evt.preventDefault();
+//                if(opts.stopPropagation) evt.stopPropagation();
+                console.log("still with me?");
                 if(touches.numTouches() == 2) {
                     // pinchnarrow
                     if(touches.delta.scale() < 0.0) {
+                    
                         eventSet.execute("pinchnarrow", touches);
                     }
 
@@ -317,9 +326,11 @@
                         eventSet.execute("pinchwiden", touches);
                     }
                 }
+                console.log("move done");
             };
 
             function detectTap() {
+            
                 var nTouch = touches.numTouches();
                 var eTouch = true;
                 for(var i = 0; i < nTouch; i++ ) {
@@ -330,9 +341,11 @@
                     }
                 }
                 if (eTouch) {
+                	
                     if (touches.touch(0).total.time() < opts.tapTime) {
                         switch (nTouch) {
                         case 1:
+                        	console.log("tap detected");
                             eventSet.execute("tap", touches);
                             break;
                         case 2:
@@ -389,13 +402,16 @@
 
             function detectSwipeFlick() {
                 var nTouch = touches.numTouches();
+            	console.log("test for swipes");
+
                 if (nTouch == 1) {
                     var totalX   = touches.touch(0).total.x();
                     var distance = Math.abs(totalX);
-                    var eventname;
+                    var eventname = "";
 
                     if (!opts.avoidSwipe &&
                         distance >= opts.swipeDistance) {
+                    	console.log("swipe detected");
                         eventname = "swipe";
                     }
                     if (!opts.avoidFlick &&
@@ -404,34 +420,45 @@
                         eventname = "flick";
                     }
 
-                    if (eventname) {
+                    if (eventname.length > 0) {
+                    	console.log("trigger event " + eventname);
+                    	// this is not executed for newer android devices ... why???
                         eventSet.execute(eventname, touches, totalX < 0 ? "left" : "right");
                     }
+                }
+                else {
+                	console.log("too many fingers for a swipe");
                 }
             }
 
             function detectPinch() {
-                if (touches.numTouches() == 2 &&
+            	   if (touches.numTouches() == 2 &&
                     touches.current.scale() !== 1.0){
                     var pinchDirection = touches.current.scale() < 1.0 ? "narrowed" : "widened";
                     eventSet.execute("pinchend", touches, pinchDirection);
                     if (pinchDirection == "narrowed") {
+                    	// this clause is relevant for Mobler Cards
+                    	console.log("pinch detected");
                         eventSet.execute("pinched", touches);
                     }
                     else {
+                    	console.log("stretch detected");
                         eventSet.execute("stretched", touches);
                     }
                 }
             }
 
             var touchEnd = function(evt) {
+            	console.log("touch end");
+            	
                 touches.update(evt);
                 eventSet.execute("end", touches, evt);
-
+                
                 if(opts.preventDefault) evt.preventDefault();
                 if(opts.stopPropagation) evt.stopPropagation();
 
-                if ( lastTouches > 0 ) {
+                if ( lastTouches > 0 ) { 
+                	console.log("detect gesture");
                     detectTap();        // tap || doubletap
                     detectSwipeFlick(); // swipe || flick         
                     detectPinch();     // pinch || stretch 
@@ -440,14 +467,20 @@
             };
 
             var stopListening = function() {
-                element.removeEventListener("touchstart", touchStart, opts.capture);
-                element.removeEventListener("touchmove", touchMove, opts.capture);
-                element.removeEventListener("touchend", touchEnd, opts.capture);
+              element.removeEventListener("touchstart", touchStart, opts.capture); 
+              element.removeEventListener("touchmove", touchMove, opts.capture);
+              element.removeEventListener("touchend", touchEnd, opts.capture);
+            	
+            	
             };
 
-            element.addEventListener("touchstart", touchStart, opts.capture);
-            element.addEventListener("touchmove", touchMove, opts.capture);
-            element.addEventListener("touchend", touchEnd, opts.capture);
+       element.addEventListener("touchstart", touchStart, opts.capture);
+       element.addEventListener("touchmove", touchMove, opts.capture);
+       element.addEventListener("touchend", touchEnd, opts.capture);
+            
+//            element.addEventListener("touchstart", touchStart, false);
+//            element.addEventListener("touchmove", touchMove,false);
+//            element.addEventListener("touchend", touchEnd, false);
 
             return {
                 stopListening: stopListening
@@ -531,7 +564,10 @@
             //
             // helper functions of calculating the missing scale on android devices
             function sizeCalc(touchList) {
+            	console.log("calculate nonexisting scale property");
+            	
                 var _size = 0;
+                // estimate the convex hull for our finger positions.
                 if ( touchList && touchList.length > 1 ) {
                     var minX = touchList[0].pageX, 
                     maxX = touchList[0].pageX, 

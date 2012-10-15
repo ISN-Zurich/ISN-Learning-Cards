@@ -113,15 +113,22 @@ function Controller() {
 	function tapCatcher(event) {
 		self.activeView.handleTap(event);
 	}
+	
+
 
 	self.jesteroptions = {
 		swipeDistance : 100,
 		avoidFlick : true
 	};
 
-	var gestureHandler = jester(document, self.jesteroptions).swipe(
+	
+//	var gestureHandler = jester(document, self.jesteroptions).swipe(
+//			swipeCatcher).tap(tapCatcher);
+	
+	var gestureHandler = jester(window, self.jesteroptions).swipe(
 			swipeCatcher).tap(tapCatcher);
 
+	
 	console.log('core gestures done');
 
 	// if device is an iPhone enable pinching

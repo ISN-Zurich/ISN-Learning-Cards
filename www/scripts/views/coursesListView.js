@@ -192,7 +192,9 @@ CoursesListView.prototype.update = function() {
 				text : courseModel.getTitle()
 			}).appendTo(li);
 			
-			jester(mydiv[0]).tap(function() {
+			jester(mydiv[0]).tap(function(e) {
+				e.stopPropagation();
+				//e.preventDefault();
 				self.clickCourseItem($(this).parent().attr('id').substring(6));
 				
 			});

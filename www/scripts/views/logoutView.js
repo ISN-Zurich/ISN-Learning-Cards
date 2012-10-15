@@ -32,7 +32,11 @@ function LogoutView() {
     self.tagID = 'logoutConfirmationView';
     
     jester($('#closeIcon')[0]).tap(function(){ self.cancel(); } );
-    $('#logOut').click(function(event){ self.logout(); event.stopPropagation(); } );
+   // $('#logOut').click(function(event){ self.logout(); event.stopPropagation(); } );
+    
+    jester($('#logOut')[0]).tap(function(event){ self.logout(); event.stopPropagation(); } );
+    
+    
 } 
 
 
