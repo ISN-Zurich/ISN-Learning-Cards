@@ -110,6 +110,7 @@ function Controller() {
 	function swipeCatcher(event) {
 		self.activeView.handleSwipe(event);
 	}
+	
 	function tapCatcher(event) {
 		self.activeView.handleTap(event);
 	}
@@ -133,13 +134,13 @@ function Controller() {
 
 	// if device is an iPhone enable pinching
 	console.log('platform' + device.platform);
-	if (device.platform == 'iPhone') {
+	//if (device.platform == 'iPhone') {
 
 		function pinchCatcher(event) {
 			self.activeView.handlePinch(event);
 		}
 		gestureHandler.pinched(pinchCatcher);
-	}
+	//}
 
 	// set correct height of icon button
 	window.addEventListener("resize", setButtonHeight, false);
