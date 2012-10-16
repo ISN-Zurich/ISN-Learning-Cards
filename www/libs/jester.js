@@ -305,7 +305,7 @@
 //               if(opts.stopPropagation) evt.stopPropagation();
             };
 
-            var touchMove = function(evt,prevent) {
+            var touchMove = function(evt) {
                 if(prevent){evt.preventDefault();}
                 touches.update(evt);
                 console.log("touch move is hapenning");
@@ -401,7 +401,7 @@
             }
 
             function detectSwipeFlick() {
-                var nTouch = touches.numTouches();
+            	var nTouch = touches.numTouches();
             	console.log("test for swipes");
 
                 if (nTouch == 1) {
