@@ -107,7 +107,7 @@ console.log("pinch works");
 
 QuestionView.prototype.handleTap = function(e) {
 //var self = this;
-	e.stopPropagation();
+	//e.stopPropagation();
 	e.preventDefault();
 	if (controller.models["answers"].answerScore > -1){
 		controller.transitionToFeedback();

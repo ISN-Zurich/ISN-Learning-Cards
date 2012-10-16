@@ -275,8 +275,9 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 // checks if any achievements have been achieved
 
 StatisticsModel.prototype.checkAchievements = function(courseId) {
+	var self = this;
 	//check if cardburner was already achieved
-	this.cardBurner.calculateValue(courseId);
+	self.cardBurner.calculateValue(courseId);
 };
 
 
