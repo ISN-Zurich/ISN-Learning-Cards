@@ -39,16 +39,16 @@ function LoginView(controller) {
 	});
 	
 	var prevent=false;
-	jester($('#usernameInput')[0]).tap(function(e,prevent) {
+	jester($('#usernameInput')[0]).tap(function(e,prevent){
 //		var prevent=false;
 		//e.stopPropagation();
 		focusLogos();
 		//e.preventDefault();
-		var prevent=true;
+		//var prevent=true;
 	
 	});
 		
-	jester($('#password')[0]).tap(function(e) {
+	jester($('#password')[0]).tap(function(e,prevent) {
 		//e.stopPropagation();
 		focusLogos();
 		//e.preventDefault();
@@ -85,7 +85,7 @@ function LoginView(controller) {
 
 //tap, swipe and pinch do nothing
 
-//LoginView.prototype.handleTap = doNothing;
+LoginView.prototype.handleTap = doNothing;
 LoginView.prototype.handlePinch = doNothing;
 LoginView.prototype.handleSwipe = doNothing;
 
