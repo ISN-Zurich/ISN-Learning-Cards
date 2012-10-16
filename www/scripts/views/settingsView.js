@@ -47,7 +47,7 @@ function SettingsView() {
 		console.log("authentication ready called " + userID);
 		self.loadData();
 	});
-
+  
     jester($('#aboutMore')[0]).tap(function() {
 		self.clickAboutMore();
 	});
@@ -111,7 +111,6 @@ SettingsView.prototype.loadData = function() {
 
 
 SettingsView.prototype.clickAboutMore = function() {
-
 	controller.transitionToAbout();
 
 
