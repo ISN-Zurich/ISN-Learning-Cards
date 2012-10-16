@@ -57,26 +57,63 @@ function QuestionView() {
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
 	
+	//var prevent= false;$
+	var prevent=false;
+	jester($('#ButtonAnswer')[0]).tap(function(e,prevent) {
+		self.handleTap();
+	});
 	
+	jester($('#cardQuestionBody')[0]).tap(function(e,prevent) {
+		self.handleTap();
+	});
 	
+	jester($('#cardQuestionHeader')[0]).tap(function(e,prevent) {
+		self.handleTap();
+	});
+	
+
+
+	jester($('#cardQuestionView')[0]).swipe(function() {
+		self.handleSwipe();
+	});
+
+
+	jester($('#cardQuestionView')[0]).pinchend(function() {
+		self.handlePinch();
+	});
+	
+	jester($('#cardQuestionView')[0]).pinched(function() {
+		self.handlePinch();
+	});
+	
+	jester($('#cardQuestionView')[0]).pinch(function() {
+		self.handlePinch();
+	});
+	
+
 }
 
 
 //pinch leads to the course list
  
 QuestionView.prototype.handlePinch = function() {
+console.log("pinch works");
 	controller.transitionToCourses();
 };
 
+
+
  //tap leads to the answer view
 
-QuestionView.prototype.handleTap = function() {
+QuestionView.prototype.handleTap = function(e) {
 //var self = this;
- if (controller.models["answers"].answerScore > -1){
-	controller.transitionToFeedback();
-} else { 
+	e.stopPropagation();
+	e.preventDefault();
+	if (controller.models["answers"].answerScore > -1){
+		controller.transitionToFeedback();
+	} else { 
 		controller.transitionToAnswer();
-		}
+	}
 };
 
 
@@ -86,8 +123,10 @@ QuestionView.prototype.handleSwipe = function() {
 	// update the display for the current view
 	console.log("swipe works");
 	controller.models['questionpool'].nextQuestion();
-	this.showQuestionBody();
-	this.showQuestionTitle();
+//	this.showQuestionTitle();
+//	this.showQuestionBody();
+	controller.transitionToQuestion();
+	
 };
 
 
@@ -102,8 +141,8 @@ QuestionView.prototype.openDiv = openView;
 //shows the question body and title
 
 QuestionView.prototype.open = function() {
-	this.showQuestionBody();
 	this.showQuestionTitle();
+	this.showQuestionBody();
 	
 	if (!controller.models["answers"].hasStarted()) {
 		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
