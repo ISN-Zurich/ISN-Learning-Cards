@@ -58,7 +58,7 @@ LogoutView.prototype.open = openView;
 
 LogoutView.prototype.close = closeView;
 
-//click on the cancle button leads to settings
+//click on the cancel button leads to settings
 
 LogoutView.prototype.cancel = function() {
 	controller.transitionToSettings();
