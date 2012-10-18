@@ -39,7 +39,7 @@
             var that = this,
                 cacheId = Jester.cacheId,
                 cache = Jester.cache,
-                gestures = "swipe flick tap twintap taplong twintaplong doubletap pinchnarrow pinchwiden pinchend pinched stretched";
+                gestures = "swipe flick tap twintap taplong twintaplong doubletap pinchnarrow pinchwiden pinchend pinched stretched scroll";
 
             if(!element || (element != window && !element.nodeType)) {
                 throw new TypeError("Jester: no element given.");
@@ -284,12 +284,18 @@
             var previousNumTouches = 0;
             var lastTouches = 0;
             var prevent=true;
+            var swipePrevent=true;
 
             var touchStart = function(evt,prevent) {
             	
-            	        	
-            	if(prevent){evt.preventDefault();}
-            	
+            	    	if(prevent){
+            			console.log("gets the prevent value when true");
+            			evt.preventDefault();}
+            	    	else{
+            	    		
+            	    		console.log("passed the preventd default");
+            	    	}
+          
             	console.log("touch start");
                 // avoid that multiple touchstart events on Android devices 
                 // confuse the gesture detection.
@@ -305,8 +311,38 @@
 //               if(opts.stopPropagation) evt.stopPropagation();
             };
 
-            var touchMove = function(evt) {
-                if(prevent){evt.preventDefault();}
+            var touchMove = function(evt,prevent) {
+            	           	
+//            	if(prevent){
+//         		if (eventsTable[eventName] =="scroll") {
+//           			console.log("get here");
+//          			!evt.preventDefault();	          	
+//            		} 
+            			   		
+//            		if (eventsTable[eventName] =="swipe") {
+//            			evt.preventDefault();	
+//            		} 
+            		
+//            		else {
+//            			console.log("gets the prevent value when true in the move");      
+//            			evt.preventDefault();}
+//            	}
+
+            	
+            	if(!prevent) {
+            		console.log ("passed prevent default in touchMove");
+            		!evt.preventDefault();
+            	
+            	}
+           	else {
+            		evt.preventDefault();}
+           	
+            	
+//        	if(prevent){
+//         		console.log("gets the prevent value when true");
+//         		evt.preventDefault();}
+
+            	
                 touches.update(evt);
                 console.log("touch move is hapenning");
                 eventSet.execute("during", touches, evt);
@@ -346,7 +382,8 @@
                         switch (nTouch) {
                         case 1:
                         	console.log("tap detected");
-                            eventSet.execute("tap", touches);
+                        	//if (!prevent) {e.preventDefault()}
+                        	 eventSet.execute("tap", touches);
                             break;
                         case 2:
                             eventSet.execute("twintap", touches);
@@ -431,6 +468,31 @@
                 }
             }
 
+            function detectScroll(evt){
+            //	!evt.preventDefault();
+            	var nTouch = touches.numTouches();
+            	console.log("test for scrolling");
+            	if (nTouch == 1) {
+            		var totalY   = touches.touch(0).total.y();
+            		var distance = Math.abs(totalY);
+            		var eventname = "scroll";
+            		if (eventname.length > 0) {
+            			console.log("trigger event " + eventname);
+            			//!evt.preventDefault();
+            			// this is not executed for newer android devices ... why???
+            			eventSet.execute(eventname, touches, totalY < 0 ? "down" : "up");
+            			
+            		}
+            	}
+
+            	else {
+            		console.log("too many fingers for a scroll");
+            	}
+            	
+            	
+            }
+
+                    
             function detectPinch() {
             	   if (touches.numTouches() == 2 &&
                     touches.current.scale() !== 1.0){
@@ -460,7 +522,8 @@
                 if ( lastTouches > 0 ) { 
                 	console.log("detect gesture");
                     detectTap();        // tap || doubletap
-                    detectSwipeFlick(); // swipe || flick         
+                    detectSwipeFlick(); // swipe || flick 
+                    detectScroll();
                     detectPinch();     // pinch || stretch 
                 }
                 lastTouches = 0; // for Android, can be always set to 0. 

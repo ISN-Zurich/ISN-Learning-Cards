@@ -70,6 +70,39 @@ function AnswerView() {
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
 
+	
+//	jester($('#cardAnswerBody')[0]).tap(function(e, prevent) {
+//		
+//	});
+
+	// Solve Scrolling 
+var prevent=!prevent;
+//jester($('#cardAnswerBody')[0]).scroll(function(e,prevent) {
+		console.log("scroll works");
+//		if(prevent)
+//			{e.preventDefault();}else{
+//		!e.preventDefault();}
+	//var prevent = !prevent;
+	//$(window).scrollTop();
+	
+//});
+//	
+//	
+	$('#cardAnswerBody').bind("touchMove",function(e) {
+	//!e.preventDefault();
+	window.scrollBy(0,50);	
+		
+	});
+//	var prevent= false;
+//	jester($('#cardAnswerTitle')[0]).tap(function(e, prevent) {
+//		//$('#cardAnswerBody').scroll();
+//		//jester($('#cardAnswerBody')[0]).scroll(function(e) {
+//		//!e.preventDefault();
+//		//})
+//	});
+//	
+	
+	
 } // end of Constructor
 
 
@@ -97,7 +130,6 @@ AnswerView.prototype.openDiv = openView;
 
 // Opening of answer view. The parts of the container div element that are loaded dynamically are explicitilly defined/created here
 AnswerView.prototype.open = function() {
-
 	this.showAnswerTitle();
 	this.showAnswerBody();
 	this.openDiv();

@@ -57,23 +57,36 @@ function QuestionView() {
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
 	
-	//var prevent= false;$
+	//var prevent= false;
+	//var prevent=false;
 	var prevent=false;
-	jester($('#ButtonAnswer')[0]).tap(function(e,prevent) {
-		self.handleTap();
-	});
-	
-	jester($('#cardQuestionBody')[0]).tap(function(e,prevent) {
-		self.handleTap();
-	});
-	
-	jester($('#cardQuestionHeader')[0]).tap(function(e,prevent) {
-		self.handleTap();
-	});
-	
+	jester($('#ButtonAnswer')[0]).tap(function(e) {
 
+		//e.preventDefault();
+		e.stopPropagation();
+		self.handleTap();
+	});
+	
+	jester($('#cardQuestionBody')[0]).tap(function(e) {
 
+		//e.preventDefault();
+		e.stopPropagation();
+		self.handleTap();
+	});
+	
+	jester($('#cardQuestionHeader')[0]).tap(function(e) {
+
+		//e.preventDefault();
+		e.stopPropagation();
+		self.handleTap();
+	});
+	
+	var prevent2 = true;
 	jester($('#cardQuestionView')[0]).swipe(function() {
+//		var prevent2 = true;
+//		if (prevent2)
+//		{console.log("gets the prevent value when true in the move");
+//		e.preventDefault();
 		self.handleSwipe();
 	});
 
@@ -107,8 +120,9 @@ console.log("pinch works");
 
 QuestionView.prototype.handleTap = function(e) {
 //var self = this;
-	//e.stopPropagation();
+	
 	e.preventDefault();
+	//e.stopPropagation();
 	if (controller.models["answers"].answerScore > -1){
 		controller.transitionToFeedback();
 	} else { 

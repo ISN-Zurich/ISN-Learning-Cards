@@ -39,7 +39,7 @@ function LoginView(controller) {
 	});
 	
 	var prevent=false;
-	jester($('#usernameInput')[0]).tap(function(e,prevent){
+	jester($('#usernameInput')[0]).tap(function(e, prevent){
 //		var prevent=false;
 		//e.stopPropagation();
 		focusLogos();
