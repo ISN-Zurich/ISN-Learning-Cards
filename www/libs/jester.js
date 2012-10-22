@@ -322,14 +322,13 @@
                 console.log("still with me?");
                 
                 if (touches.numTouches() == 1) {
+                
                 	console.log("totalY is " +Math.abs(touches.touch(0).total.y()));
                 	if (Math.abs(touches.touch(0).total.y()) > Math.abs(touches.touch(0).total.x())){
                 		console.log("trigger scrolling");
                 		eventSet.execute("scroll", touches, evt);
-                	} else 
-                		evt.preventDefault();
-
-                }
+                	} 
+              	else { evt.preventDefault();}}
 
                 if(touches.numTouches() == 2) {
                     // pinchnarrow
@@ -450,7 +449,6 @@
             }
 
             function detectScroll(evt){
-            //	!evt.preventDefault();
             	var nTouch = touches.numTouches();
             	console.log("test for scrolling");
             	if (nTouch == 1) {
@@ -459,18 +457,16 @@
             		var eventname = "scroll";
             		if (eventname.length > 0) {
             			console.log("trigger event " + eventname);
-            			//!evt.preventDefault();
             			// this is not executed for newer android devices ... why???
             			eventSet.execute(eventname, touches, totalY < 0 ? "down" : "up");
-            			
             		}
             	}
 
             	else {
             		console.log("too many fingers for a scroll");
             	}
-            	
-            	
+
+
             }
 
                     

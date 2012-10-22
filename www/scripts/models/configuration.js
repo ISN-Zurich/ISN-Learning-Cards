@@ -71,7 +71,7 @@ function ConfigurationModel(controller) {
 }
 
 /**
- * stores the data into the local storage (key = "configuration") therefor the
+ * stores the data into the local storage (key = "configuration") therefore the
  * json object is converted into a string
  */
 ConfigurationModel.prototype.storeData = function() {
