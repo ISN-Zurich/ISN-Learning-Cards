@@ -38,6 +38,8 @@ function FeedbackView(question) {
 		self.clickFeedbackMore();
 	});
 	jester($('#CourseList_FromFeedback')[0]).tap(function() {
+		controller.models["answers"].answerList = [];
+		controller.models["answers"].answerScore = -1;
 		self.clickCourseListButton();
 	});
 	
