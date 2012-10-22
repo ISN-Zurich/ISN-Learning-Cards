@@ -311,45 +311,26 @@
 //               if(opts.stopPropagation) evt.stopPropagation();
             };
 
-            var touchMove = function(evt,prevent) {
-            	           	
-//            	if(prevent){
-//         		if (eventsTable[eventName] =="scroll") {
-//           			console.log("get here");
-//          			!evt.preventDefault();	          	
-//            		} 
-            			   		
-//            		if (eventsTable[eventName] =="swipe") {
-//            			evt.preventDefault();	
-//            		} 
-            		
-//            		else {
-//            			console.log("gets the prevent value when true in the move");      
-//            			evt.preventDefault();}
-//            	}
-
-            	
-            	if(!prevent) {
-            		console.log ("passed prevent default in touchMove");
-            		!evt.preventDefault();
-            	
-            	}
-           	else {
-            		evt.preventDefault();}
-           	
-            	
-//        	if(prevent){
-//         		console.log("gets the prevent value when true");
-//         		evt.preventDefault();}
-
-            	
+            var touchMove = function(evt) {
+ 
                 touches.update(evt);
-                console.log("touch move is hapenning");
+               console.log("touch move is hapenning");
                 eventSet.execute("during", touches, evt);
                 console.log("passed during");
 //                if(opts.preventDefault) evt.preventDefault();
 //                if(opts.stopPropagation) evt.stopPropagation();
                 console.log("still with me?");
+                
+                if (touches.numTouches() == 1) {
+                	console.log("totalY is " +Math.abs(touches.touch(0).total.y()));
+                	if (Math.abs(touches.touch(0).total.y()) > Math.abs(touches.touch(0).total.x())){
+                		console.log("trigger scrolling");
+                		eventSet.execute("scroll", touches, evt);
+                	} else 
+                		evt.preventDefault();
+
+                }
+
                 if(touches.numTouches() == 2) {
                     // pinchnarrow
                     if(touches.delta.scale() < 0.0) {
