@@ -9,7 +9,7 @@ INSTALLATION
 
 	- Logging into the server
 	- Copy the rest service directory into your ILIAS installation directory.
-
+//Note if your database server doesnt allow to create tables then use the schema.sql file to create them manually 
 
 GENERAL NOTES
 ===============
