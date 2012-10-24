@@ -37,6 +37,8 @@ var URLS_TO_LMS = {"yellowjacket":
 					},
 					"hornet":  
 					{
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Partnership for Peace LMS at ISN Zurich",
 						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
 						clientKey: ""
 					},
@@ -45,6 +47,13 @@ var URLS_TO_LMS = {"yellowjacket":
 						logoImage: "resources/pfpLogo.png", 
 						logoLabel: "Partnership for Peace LMS at ISN Zurich",
 						url: "https://pfp.ethz.ch/restservice/learningcards",
+						clientKey: ""
+					},
+					"PFPTEST":  
+					{
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Partnership for Peace LMS at ISN Zurich",
+						url: "https://pfp-test.ethz.ch/restservice/learningcards",
 						clientKey: ""
 					}
 };
@@ -441,11 +450,14 @@ ConfigurationModel.prototype.register = function() {
 		} catch(err) {
 			console.log("Error while parsing urlsToLMS: " + err);
 		}
+	
+		urlsToLMS[DEFAULT_SERVER] = {};
+		
 		// add client key for current lms
 		console.log("Received client key: " + data.ClientKey);
 		urlsToLMS[DEFAULT_SERVER].clientKey = data.ClientKey;
 		// store server data in local storage
-		localStorage.setItem("urlsToLMS", JSON.stringify(URLS_TO_LMS));
+		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
 		
 		self.configuration.appAuthenticationKey = data.ClientKey;
 		self.configuration.defaultLanguage = data.defaultLanguage || language_root;
@@ -470,17 +482,21 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 			console.log("Error while parsing urlsToLMS: " + err);
 		}	
 	} else {
-		localStorage.setItem("urlsToLMS", JSON.stringify(URLS_TO_LMS));
-		urlsToLMS = URLS_TO_LMS;
+		// create an empty data structure for our clientKeys
+		urlsToLMS ={};
+		localStorage.setItem("urlsToLMS", urlsToLMS);
+//		localStorage.setItem("urlsToLMS", JSON.stringify(URLS_TO_LMS));
+//		urlsToLMS = URLS_TO_LMS;
 	}
 	
-	this.urlToLMS = urlsToLMS[servername].url;
+	this.urlToLMS  = URLS_TO_LMS[servername].url;
+	this.logoimage = URLS_TO_LMS[servername].logoImage;
+	this.logolabel = URLS_TO_LMS[servername].logoLabel;
 	
-	var clientKey = urlsToLMS[servername].clientKey;
-	//var clientKey = this.configuration.appAuthenticationKey;
-	// this.clientKey = localStorage.getItem("ClientKey");
-	this.logoimage = urlsToLMS[servername].logoImage;
-	this.logolabel = urlsToLMS[servername].logoLabel;
+	var clientKey;
+	if ( urlsToLMS[servername] ) {
+		clientKey = urlsToLMS[servername].clientKey;
+	}
 	
 	if (!clientKey || clientKey.length == 0) {
 		console.log("registration is done");

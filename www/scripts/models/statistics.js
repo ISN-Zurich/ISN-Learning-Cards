@@ -318,6 +318,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 							self.insertStatisticItem(statisticsObject[i]);
 						}
 						console.log("after inserting statistics from server");
+						// trigger event statistics are loaded from server
 					},
 					error : function() {
 						console

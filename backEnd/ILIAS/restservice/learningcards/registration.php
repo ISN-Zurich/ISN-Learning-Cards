@@ -97,27 +97,28 @@ function generateAppKey($appId, $uuid){
 
 		$ilDB->createTable("isnlc_reg_info",$fields);
 	}
+	if (in_array("isnlc_reg_info",$ilDB->listTables())) {
+		//if for the specified app id and uuid an client key (= app key) already exists, use this one instead of creating a new one
+		$result = $ilDB->query("SELECT client_key FROM isnlc_reg_info WHERE uuid = " .$ilDB->quote($uuid, "text") . " AND app_id =" .$ilDB->quote($appId, "text"));
+		$fetch = $ilDB->fetchAssoc($result);
+		logging("fetch: " . json_encode($fetch));
+		$appKey = $fetch["client_key"];
 
-	//if for the specified app id and uuid an client key (= app key) already exists, use this one instead of creating a new one
-	$result = $ilDB->query("SELECT client_key FROM isnlc_reg_info WHERE uuid = " .$ilDB->quote($uuid, "text") . " AND app_id =" .$ilDB->quote($appId, "text"));
-	$fetch = $ilDB->fetchAssoc($result);
-	logging("fetch: " . json_encode($fetch));
-	$appKey = $fetch["client_key"];
+		//if no client key (= app key) exists yet, generate a new one
+		if ($appKey == null) {
 
-	//if no client key (= app key) exists yet, generate a new one
-	if ($appKey == null) {
+			$randomSeed = rand();
+			$appKey = md5($uuid . $appId . $randomSeed);
+			//store the new client key (= app key) in the database
+			$affected_rows= $ilDB->manipulateF("INSERT INTO isnlc_reg_info (app_id, uuid, client_key) VALUES ".
+					" (%s,%s,%s)",
+					array("text", "text", "text"),
+					array($appId, $uuid, $appKey));
+			// if this fails we must not return the app key
 
-		$randomSeed = rand();
-		$appKey = md5($uuid . $appId . $randomSeed);
-		//store the new client key (= app key) in the database
-		$affected_rows= $ilDB->manipulateF("INSERT INTO isnlc_reg_info (app_id, uuid, client_key) VALUES ".
-				" (%s,%s,%s)",
-				array("text", "text", "text"),
-				array($appId, $uuid, $appKey));
-
-		logging("return appkey " . $appKey );
+			logging("return appkey " . $appKey );
+		}
 	}
-
 	//return the client key (= app key)
 	return $appKey;
 };
