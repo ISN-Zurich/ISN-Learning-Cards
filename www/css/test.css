@@ -408,32 +408,36 @@ li {
 }
 
 
-#pfp {
+.pfp {
 	vertical-align: bottom;
 	margin-top: 10px;
-	margin-left: 10px;
+	margin-left: 20px;
+	margin-right:10px;
 	clear: both;
 	/*width: 100%;*/
 	height:53px;
 	background-color:white;
-	content: url(../resources/pfpLogo.png);
+	border: 1px solid white;
 	float:left;
 }
 
-
-#pfpLabel1 {
-	margin-top: 15px;
-	margin-left: 20px;
-	font-size: 16pt;
+.pfpLabelContainer {
+	margin-top: 10px;
+	/*margin-left: 30px;*/
+	padding-right:10px;
+	font-size: 15pt;
+	border: 1px solid white;
 	
 	
 }
 
-#pfpLabel2 {
-	margin-top: 5px;
-	margin-left: 20px;
-	font-size: 16pt;
+
+#LMSContainer{
+	border: 1px solid white;
+	height:60px;
+	
 }
+
 
 #logos {
 	vertical-align: bottom;
@@ -475,7 +479,7 @@ li {
 /*********************** Question View ***********************/
 #cardQuestionBody {
     font-size: 24px;
-    fontweight: bold;
+    font-weight: bold;
 }
 
 /*********************** Answer View ***********************/
@@ -667,9 +671,29 @@ li {
  	margin: 0px;
 }
 
+#lmsLabelSet {
+	height:53px;
+	width:53px;
+	/*content: url(../resources/pfpLogo.png);*/
+	float:left;
+	/*margin-right:10px;*/
+	margin-top:7px;
+	margin: auto 10px auto 0px;
+	
+
+}
+
+.lms {
+	height: 65px;
+	margin-top:7px;
+}
+
+.pfpItemSet {
+	margin-top:20px;
+	padding-left: 5px;
+}
 
 /*********************** About View ***********************/
-
 #aboutView {
 	display: none;
 }

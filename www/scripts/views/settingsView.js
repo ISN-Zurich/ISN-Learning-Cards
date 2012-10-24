@@ -100,9 +100,11 @@ SettingsView.prototype.logout = function() {
 
 //loads the statistics data
 
-SettingsView.prototype.loadData = function() {
+SettingsView.prototype.loadData = function(){
 	var config = controller.models['authentication'];
 	$("#aboutMore").show();
+	$("#lmsLabelSet").attr("src",config.getServerLogoImage());
+	$("#pfpItemSet").text(config.getServerLogoLabel());
 	$("#nameItemSet").text(config.getDisplayName());
 	$("#usernameItemSet").text(config.getUserName());
 	$("#emailItemSet").text(config.getEmailAddress());

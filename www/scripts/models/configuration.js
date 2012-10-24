@@ -30,6 +30,8 @@ var APP_ID = "ch.ethz.isn.learningcards";
 var DEFAULT_SERVER = "yellowjacket";
 var URLS_TO_LMS = {"yellowjacket":  
 					{
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Partnership for Peace LMS at ISN Zurich",					
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
 						clientKey: ""
 					},
@@ -40,6 +42,8 @@ var URLS_TO_LMS = {"yellowjacket":
 					},
 					"PFP LMS":  
 					{
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Partnership for Peace LMS at ISN Zurich",
 						url: "https://pfp.ethz.ch/restservice/learningcards",
 						clientKey: ""
 					}
@@ -51,6 +55,9 @@ var URLS_TO_LMS = {"yellowjacket":
 function ConfigurationModel(controller) {
 	this.configuration = {};
 	this.urlToLMS = "";
+	this.logoimage;
+	this.logolabel;
+	
 	
 	// this.configuration.appAuthenticationKey = "";
 	// this.configuration.userAuthenticationKey = "";
@@ -87,7 +94,7 @@ ConfigurationModel.prototype.storeData = function() {
 
 	console.log("Configuration Storage after storeData: "
 			+ localStorage.getItem("configuration"));
-};
+	};
 
 /**
  * loads the data from the local storage (key = "configuration") therefor the
@@ -443,7 +450,7 @@ ConfigurationModel.prototype.register = function() {
 		self.configuration.appAuthenticationKey = data.ClientKey;
 		self.configuration.defaultLanguage = data.defaultLanguage || language_root;
 		self.storeData();
-		// we can now savely load the user data
+		// we can now safely load the user data
 		self.loadFromServer();
 	}
 
@@ -472,10 +479,38 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 	var clientKey = urlsToLMS[servername].clientKey;
 	//var clientKey = this.configuration.appAuthenticationKey;
 	// this.clientKey = localStorage.getItem("ClientKey");
+	this.logoimage = urlsToLMS[servername].logoImage;
+	this.logolabel = urlsToLMS[servername].logoLabel;
+	
 	if (!clientKey || clientKey.length == 0) {
 		console.log("registration is done");
 		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 	} else {
 		this.loadFromServer();
 	}
+	
+	
 };
+
+
+ConfigurationModel.prototype.getServerURL = function() {
+	
+	
+	return this.urlToLMS;
+	
+
+};
+
+
+ConfigurationModel.prototype.getServerLogoImage = function() {
+	
+		return this.logoimage;
+
+};
+
+ConfigurationModel.prototype.getServerLogoLabel = function() {
+
+	return this.logolabel;
+
+};
+

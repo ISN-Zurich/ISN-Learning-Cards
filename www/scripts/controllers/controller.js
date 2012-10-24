@@ -93,7 +93,7 @@ function Controller() {
 	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
 	this.views.login = new LoginView(this);
-    this.views.logout = new LogoutView();
+	this.views.logout = new LogoutView();
     this.views.coursesList = new CoursesListView(this);
     this.views.questionView = new QuestionView();
     this.views.answerView = new AnswerView();
@@ -164,7 +164,7 @@ function Controller() {
 		setTimeout(function() { self.transitionToEndpoint(); }, 3000 - deltaTime);
 	}
 	else {
-	self.transitionToEndpoint();
+		self.transitionToEndpoint();
 	}
 	
 	

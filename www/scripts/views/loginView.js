@@ -119,7 +119,7 @@ LoginView.prototype.close = function() {
 	this.active = false;
 
 	this.closeDiv();
-}
+};
 
 /**
  * click on the login button sends data to the authenication model data is only
@@ -181,10 +181,15 @@ LoginView.prototype.clickLoginButton = function() {
 LoginView.prototype.showForm = function() {
 	$("#loginForm").show();
 	this.hideErrorMessage();
-	if (this.controller.models["connection"].isOffline()) {
+	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
 		//this.showErrorMessage("Sorry, you need to be online to connect to your LMS");
 	}
+	
+	var config = this.controller.models['authentication'];
+	$("#lmsImage").attr("src",config.getServerLogoImage());
+	$("#pfpLabel1").text(config.getServerLogoLabel());
+	
 };
 
 //shows the specified error message
