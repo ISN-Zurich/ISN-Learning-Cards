@@ -81,6 +81,7 @@ function StatisticsModel(controller) {
 	this.lastActiveDay;
 
 	var self = this;
+	this.statisticsIsLoaded = false;
 	$(document).bind("checkachievements", function(p, courseId) {
 		self.checkAchievements(courseId);
 	});
@@ -319,6 +320,9 @@ StatisticsModel.prototype.loadFromServer = function() {
 						}
 						console.log("after inserting statistics from server");
 						// trigger event statistics are loaded from server
+						$(document).trigger("loadstatisticsfromserver");
+						this.statisticsIsLoaded = true;
+						
 					},
 					error : function() {
 						console
