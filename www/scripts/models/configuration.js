@@ -412,6 +412,7 @@ ConfigurationModel.prototype.createConfiguration = function() {
 //sends the registration request to the server, it is called whenever my client(app) key is empty
 ConfigurationModel.prototype.register = function() {
 	var self = this;
+	console.log("enters regsitration");
 	var deviceID = device.uuid;
 
 	$
@@ -444,6 +445,7 @@ ConfigurationModel.prototype.register = function() {
 		// load server data from local storage
 		var urlsToLMS;
 		var urlsToLMSString = localStorage.getItem("urlsToLMS");
+		console.log("urlToLMSString is"+urlsToLMSString);
 		try {
 			urlsToLMS = JSON.parse(urlsToLMSString);
 			console.log("urls to lms parsed");
@@ -484,7 +486,7 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 	} else {
 		// create an empty data structure for our clientKeys
 		urlsToLMS ={};
-		localStorage.setItem("urlsToLMS", urlsToLMS);
+		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
 //		localStorage.setItem("urlsToLMS", JSON.stringify(URLS_TO_LMS));
 //		urlsToLMS = URLS_TO_LMS;
 	}
@@ -494,7 +496,8 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 	this.logolabel = URLS_TO_LMS[servername].logoLabel;
 	
 	var clientKey;
-	if ( urlsToLMS[servername] ) {
+	if (urlsToLMS[servername] ) {
+		console.log("the current lms has already a client key");
 		clientKey = urlsToLMS[servername].clientKey;
 	}
 	
