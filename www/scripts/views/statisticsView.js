@@ -51,9 +51,30 @@ function StatisticsView(controller) {
 	});
     
     console.log('bind the application events');
+    $(document).bind("loadstatisticsfromserver", function() {
+    	var self=this;
+		 if (self.controller.activeView == self.controller.views[self.tagID])
+			 {
+
+			 self.controller.models['statistics'].calculateValues();
+			 }
+	  });
     
-    
+	$(document).bind("allstatisticcalculationsdone", function() { 
+		var self=this;
+		if (self.controller.activeView == self.controller.views[self.tagID])
+		{
+			self.loadData();
+		}
+	});
+     
     console.log('done');
+    
+//    $(document).bind("loadstatisticsfromserver", function() {
+//		  this.loadData();
+//	  });
+//    
+  
 }
 
 //pinch leads to course list
@@ -84,7 +105,14 @@ StatisticsView.prototype.openDiv = openView;
 //shows the statistics data
 
 StatisticsView.prototype.open = function() {
-	this.loadData();
+	var self=this;
+	if (this.controller.models['statistics'].statisticsIsLoaded) {
+		console.log("statistics have been loaded from server");
+		self.loadData();	
+	}
+	else {
+		self.showLoadingMessage();
+	}  
 	this.openDiv();	
 };
 
@@ -93,6 +121,13 @@ StatisticsView.prototype.open = function() {
 StatisticsView.prototype.closeStatistics = function() {
 	console.log("close Statistics button clicked");
 	this.controller.transitionToCourses();
+};
+
+//show loading message when statistics have not been fully loaded from the server
+StatisticsView.prototype.showLoadingMessage = function() {
+	$("#statisticsBody").hide();
+	$("#loadingMessage").show();	
+	
 };
 
 //leads to achievements view
@@ -158,6 +193,8 @@ StatisticsView.prototype.loadData = function() {
 	var removeClasses = msg_positiveImprovement_icon + " " + msg_negativeImprovement_icon + " " + msg_neutralImprovement_icon + 
 			" red green";
 	
+	$("#loadingMessage").hide();	
+	$("#statisticsBody").show();
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
 	$("#statBestScoreValue").text(bestScore+"%");
