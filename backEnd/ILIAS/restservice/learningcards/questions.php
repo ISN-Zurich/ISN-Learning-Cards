@@ -45,6 +45,9 @@ require_once 'Modules/Course/classes/class.ilCourseItems.php';
 require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 require_once 'Modules/TestQuestionPool/classes/class.assQuestion.php';
 
+global $DEBUG;
+$DEBUG = 1;
+
 global $class_for_logging;
 
 $class_for_logging = "questions.php";

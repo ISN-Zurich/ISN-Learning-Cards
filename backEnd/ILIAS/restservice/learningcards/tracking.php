@@ -44,6 +44,9 @@ require_once 'Services/Database/classes/class.ilDB.php';
 global $DEBUG, $class_for_logging;
 
 //$DEBUG = 1;
+
+global $DEBUG;
+$DEBUG = 1;
 $class_for_logging = "tracking.php";
 
 // creates a new database table for the tracking data if no one exists yet

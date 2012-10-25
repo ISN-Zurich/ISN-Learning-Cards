@@ -37,6 +37,9 @@ require_once './common.php';
 chdir("../..");
 require_once ('restservice/include/inc.header.php');
 
+global $DEBUG;
+$DEBUG = 1;
+
 $class_for_logging = "registration.php";
 
 //create client key (= app key)
