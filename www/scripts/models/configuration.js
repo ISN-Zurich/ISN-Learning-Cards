@@ -103,7 +103,7 @@ ConfigurationModel.prototype.storeData = function() {
 
 	console.log("Configuration Storage after storeData: "
 			+ localStorage.getItem("configuration"));
-	};
+};
 
 /**
  * loads the data from the local storage (key = "configuration") therefor the
@@ -219,7 +219,8 @@ ConfigurationModel.prototype.logout = function() {
 				"userAuthenticationKey" : "",
 				"learnerInformation" : {
 					"userId" : 0
-				}
+				},
+				"statisticsLoaded": false
 		};
 		self.storeData();
 		
