@@ -78,17 +78,17 @@ function QuestionView() {
 
 		//e.preventDefault();
 		e.stopPropagation();
-		self.handleTap();
+		self.handleTap(e);
 	});
 	
 	var prevent2 = true;
-	jester($('#cardQuestionView')[0]).swipe(function() {
+	//jester($('#cardQuestionView')[0]).swipe(function() {
 //		var prevent2 = true;
 //		if (prevent2)
 //		{console.log("gets the prevent value when true in the move");
 //		e.preventDefault();
-		self.handleSwipe();
-	});
+//		self.handleSwipe();
+//	});
 
 
 	jester($('#cardQuestionView')[0]).pinchend(function() {
@@ -139,7 +139,7 @@ QuestionView.prototype.handleSwipe = function() {
 	controller.models['questionpool'].nextQuestion();
 //	this.showQuestionTitle();
 //	this.showQuestionBody();
-	controller.transitionToQuestion();
+	this.open();
 	
 };
 
