@@ -42,7 +42,7 @@ function LoginView(controller) {
 	jester($('#usernameInput')[0]).tap(function(e, prevent){
 //		var prevent=false;
 		//e.stopPropagation();
-		focusLogos();
+		focusLogos(e);
 		//e.preventDefault();
 		//var prevent=true;
 	
@@ -50,9 +50,8 @@ function LoginView(controller) {
 		
 	jester($('#password')[0]).tap(function(e,prevent) {
 		//e.stopPropagation();
-		focusLogos();
+		focusLogos(e);
 		//e.preventDefault();
-
 	});
 
    $(document).bind("errormessagehide", function() {
@@ -76,7 +75,7 @@ function LoginView(controller) {
 	}
 
 	function unfocusLogos(e) {
-		console.log("unfocus logos " + e.currentTarget.id);
+		//console.log("unfocus logos " + e.currentTarget.id);
 		$("#logos").addClass("bottom");
 		$("#logos").removeClass("static");
 	}
