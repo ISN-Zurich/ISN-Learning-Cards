@@ -52,21 +52,25 @@ function StatisticsView(controller) {
     
     console.log('bind the application events');
     $(document).bind("loadstatisticsfromserver", function() {
-    	var self=this;
-		 if (self.controller.activeView == self.controller.views[self.tagID])
-			 {
-
-			 self.controller.models['statistics'].calculateValues();
-			 }
+		// if (self.controller.activeView == self.controller.views[self.tagID])
+    	if (self.tagID == self.controller.activeView.tagID)	
+    	{
+    		console.log("enters load statistics from server is done");
+			 self.controller.models['statistics'].getFirstActiveDay();
+    	}
 	  });
     
-	$(document).bind("allstatisticcalculationsdone", function() { 
-		var self=this;
-		if (self.controller.activeView == self.controller.views[self.tagID])
-		{
-			self.loadData();
-		}
-	});
+    $(document).bind("allstatisticcalculationsdone", function() { 
+    	console.log("enters in calculations done 1 ");
+    	//if (self.controller.activeView == self.controller.views[self.tagID])
+    	//if (self.controller.activeView == 'statisticsView')
+    
+    	if (self.tagID == self.controller.activeView.tagID)
+    	{
+    		console.log("enters in calculations done 2 ");
+    		self.loadData();
+    	}
+    });
      
     console.log('done');
     
@@ -141,9 +145,12 @@ StatisticsView.prototype.clickToAchievements = function() {
 //loads the statistics data
 
 StatisticsView.prototype.loadData = function() {
+	console.log("enters load data in statistics");
 	var statisticsModel = this.controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
 	var improvement = statisticsModel.getImprovement();
+	$("#loadingMessage").hide();
+	$("#statisticsBody").show();
 	
 	console.log("init values for statistics");
 	//var avgScore = statistics['averageScore'];

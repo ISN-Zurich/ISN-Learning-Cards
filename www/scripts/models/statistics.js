@@ -81,7 +81,14 @@ function StatisticsModel(controller) {
 	this.lastActiveDay;
 
 	var self = this;
-	this.statisticsIsLoaded = false;
+
+	// FIXME: check the localstorage if the the data is already loaded
+	// if the the data is not loaded but the user is logged in, then loadFromServer()
+	self.statisticsIsLoaded = self.controller.getConfigVariable("statisticsLoaded");
+	if (!self.statisticsIsLoaded && self.controller.getLoginState() ) {
+			self.loadFromServer();
+	}
+	
 	$(document).bind("checkachievements", function(p, courseId) {
 		self.checkAchievements(courseId);
 	});
@@ -102,24 +109,24 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	}
 	
 	console.log("course-id: " + courseId);
-
-	
-	
-	
 	
 	//this.getAllDBEntries();//useful for debugging, defined in the of the file
 
 	this.controller.models['questionpool'].loadData(courseId);
-	
-	// load the appropriate models for our course
-	this.initSubModels();
-	
-	//checks if card burner achievement was already achieved
-	//and starts the calculations
-//	this.checkCardBurner();
-	
-	this.getFirstActiveDay();
-	
+	console.log("statistics are loaded? " + (this.statisticsIsLoaded ? "yes" : "no"));
+	if ( this.statisticsIsLoaded ) {
+		// load the appropriate models for our course
+		this.initSubModels();
+
+		//checks if card burner achievement was already achieved
+		//and starts the calculations
+//		this.checkCardBurner();
+
+		this.getFirstActiveDay();
+	}
+	else {
+		$(document).trigger("allstatisticcalculationsdone");	
+	}
 };
 
 // @return statistics
@@ -158,6 +165,7 @@ StatisticsModel.prototype.getImprovement = function() {
 // gets the timestamp of the first activity
  
 StatisticsModel.prototype.getFirstActiveDay = function() {
+	console.log("enters first active day");
 	var self = this;
 	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND question_id != "cardburner"',
 						[ self.currentCourseId ], 
@@ -166,12 +174,14 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 								row = results.rows.item(0);
 								console.log("first active day: " + JSON.stringify(row));
 								if (row['firstActivity']) {
+									console.log("do we enter with null?");
 									self.firstActiveDay = row['firstActivity'];
 								} else {
 									self.firstActiveDay = (new Date()).getTime(); 
 								}
 							} else {
 								self.firstActiveDay = (new Date()).getTime(); 
+								console.log("get a new first active day");
 							}
 							self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
 	});
@@ -320,13 +330,20 @@ StatisticsModel.prototype.loadFromServer = function() {
 						}
 						console.log("after inserting statistics from server");
 						// trigger event statistics are loaded from server
-						$(document).trigger("loadstatisticsfromserver");
-						this.statisticsIsLoaded = true;
+						self.statisticsIsLoaded = true;
+						// FIXME: Store a flag into the local storage that the data is loaded.
 						
+//						var configObject = {
+//								statisticsLoaded= "true"	
+//						}
+						self.controller.setConfigVariable("statisticsLoaded", true);
+						
+						self.statisticsIsLoaded = true;
+						$(document).trigger("loadstatisticsfromserver");
 					},
-					error : function() {
+					error : function(xhr, err, errorString) {
 						console
-								.log("Error while getting statistics data from server");
+								.log("Error while getting statistics data from server: " + errorString);
 					},
 					beforeSend : setHeader
 				});

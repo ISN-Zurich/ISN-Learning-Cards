@@ -149,7 +149,7 @@ function Controller() {
 	setButtonHeight();
 
 	$(document).bind("allstatisticcalculationsdone", function() {
-    self.transition('statisticsView');
+		self.transition('statisticsView');
     });
 	
 	
@@ -227,7 +227,12 @@ Controller.prototype.setupLanguage = function() {
 //closes the current view and opens the specified one
  
 Controller.prototype.transition = function(viewname) {
-	if (this.views[viewname]) {
+	//if (this.views[viewname]) {
+	console.log("transition start" );
+	if (this.views[viewname] && 
+			( viewname == "login" ||
+			this.activeView.tagID != this.views[viewname].tagID)){
+		console.log("transition: yes we can!");
 		this.activeView.close();
 		this.activeView = this.views[viewname];
 		this.activeView.open();
@@ -244,7 +249,7 @@ Controller.prototype.transitionToEndpoint = function() {
 		console.log("is loggedIn");
 		this.transition('coursesList');
 	} else {
-		console.log("is not loggedIn");
+		console.log("transitionToEndpoint: is not loggedIn");
 		this.transition('login');
 	}
 };
@@ -287,8 +292,12 @@ Controller.prototype.transitionToFeedbackMore = function() {
 Controller.prototype.transitionToStatistics = function(courseID) {
     if (courseID && courseID > 0) {
     	this.models['statistics'].setCurrentCourseId(courseID);
-    } else {
-    	this.transition('statisticsView');
+    }
+    else {
+    	// when the achievements get closed we won't pass the course id
+    	// in order to avoid that the statistics are recalculated. Which makes no sense,
+    	// because the statistics model has already all the data in place.
+    	this.transition("statisticsView");
     }
 };
 
@@ -299,6 +308,23 @@ Controller.prototype.transitionToAchievements = function() {
 Controller.prototype.transitionToAbout = function() {
 	this.transition('about');
 };
+
+Controller.prototype.getLoginState = function() {
+	return this.models["authentication"].isLoggedIn();
+};
+
+Controller.prototype.getConfigVariable = function(varname) {
+	return this.models["authentication"].configuration[varname];
+};
+
+Controller.prototype.setConfigVariable = function(varname, varvalue) {
+	if ( !this.models["authentication"].configuration ) {
+		this.models["authentication"].configuration = {};
+	}
+	this.models["authentication"].configuration[varname] = varvalue;
+	this.models["authentication"].storeData();
+};
+
 
 //sets the current height for icon buttons
 
