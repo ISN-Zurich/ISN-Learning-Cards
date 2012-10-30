@@ -48,6 +48,9 @@ global $ilUser, $class_for_logging;
 
 $class_for_logging = "statistics.php";
 
+//ini_set("memory_limit","120M");
+//ini_set('memory_limit', '-1');
+
 // creates a new database table for the statistics if no one exists yet
 generateTable();
 
@@ -151,9 +154,11 @@ function getStatistics($userId) {
 	logging("in get statistics");
 
 	$statistics = array();
+
+	
 	$result = $ilDB->query("SELECT * FROM isnlc_statistics WHERE user_id = " . $ilDB->quote($userId, "text"));
 	while ($record = $ilDB->fetchAssoc($result)){
-// 		logging(json_encode($record));
+	logging(json_encode($record));
 		array_push($statistics, array(
 				"course_id" => $record['course_id'],
 				"question_id" => $record['question_id'],
