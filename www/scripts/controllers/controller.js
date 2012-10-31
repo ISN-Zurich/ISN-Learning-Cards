@@ -265,48 +265,62 @@ Controller.prototype.transitionToLogout = function() {
 	this.transition('logout');
 };
 
+Controller.prototype.transitionToAuthArea = function(viewname) {
+	if ( this.getLoginState() ) {
+		this.transition(viewname);
+	}
+	else {
+		this.transition("login");
+	}
+};
+
 Controller.prototype.transitionToCourses = function() {
-	this.transition('coursesList');
+	this.transitionToAuthArea('coursesList');
 };
 
 Controller.prototype.transitionToQuestion = function() {
-	this.transition('questionView');
+	this.transitionToAuthArea('questionView');
 };
 
 Controller.prototype.transitionToAnswer = function() {
-	this.transition('answerView');
+	this.transitionToAuthArea('answerView');
 };
 
 Controller.prototype.transitionToFeedback = function() {
-	this.transition('feedbackView');
+	this.transitionToAuthArea('feedbackView');
 };
 
 Controller.prototype.transitionToSettings = function() {
-	this.transition('settings');
+	this.transitionToAuthArea('settings');
 };
 
 Controller.prototype.transitionToFeedbackMore = function() {
-	this.transition('feedbackMore');
+	this.transitionToAuthArea('feedbackMore');
 };
 
 Controller.prototype.transitionToStatistics = function(courseID) {
-    if (courseID && courseID > 0) {
-    	this.models['statistics'].setCurrentCourseId(courseID);
-    }
-    else {
-    	// when the achievements get closed we won't pass the course id
-    	// in order to avoid that the statistics are recalculated. Which makes no sense,
-    	// because the statistics model has already all the data in place.
-    	this.transition("statisticsView");
-    }
+	if ( this.getLoginState() ) {
+		if (courseID && courseID > 0) {
+			this.models['statistics'].setCurrentCourseId(courseID);
+		}
+		else {
+			// when the achievements get closed we won't pass the course id
+			// in order to avoid that the statistics are recalculated. Which makes no sense,
+			// because the statistics model has already all the data in place.
+			this.transition("statisticsView");
+		}
+	}
+	else {
+		this.transition("login");
+	}
 };
 
 Controller.prototype.transitionToAchievements = function() {
-	this.transition('achievements');
+	this.transitionToAuthArea('achievements');
 };
 
 Controller.prototype.transitionToAbout = function() {
-	this.transition('about');
+	this.transitionToAuthArea('about');
 };
 
 Controller.prototype.getLoginState = function() {

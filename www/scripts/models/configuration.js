@@ -83,6 +83,25 @@ function ConfigurationModel(controller) {
 	
 	// initialize the configuration if it does not exist
 	// this.createConfiguration();
+	
+	$(document).bind("statisticssenttoserver", function() {
+		var self=this;
+		self.sendLogoutToServer();
+		console.log("user logged out");
+		
+		self.configuration = {
+				"appAuthenticationKey": self.configuration.appAuthenticationKey,
+				"userAuthenticationKey" : "",
+				"learnerInformation" : {
+					"userId" : 0
+				},
+				"statisticsLoaded": false
+		};
+		self.storeData();
+		
+		// drop statistics data table from local database
+		self.controller.models['answers'].deleteDB();
+	});
 
 }
 
@@ -210,23 +229,7 @@ ConfigurationModel.prototype.logout = function() {
 	this.controller.models['statistics'].sendToServer();
 	
 	var self = this;
-	$(document).bind("statisticssenttoserver", function() {
-		self.sendLogoutToServer();
-		console.log("user logged out");
-		
-		self.configuration = {
-				"appAuthenticationKey": self.configuration.appAuthenticationKey,
-				"userAuthenticationKey" : "",
-				"learnerInformation" : {
-					"userId" : 0
-				},
-				"statisticsLoaded": false
-		};
-		self.storeData();
-		
-		// drop statistics data table from local database
-		self.controller.models['answers'].deleteDB();
-	});
+
 
 	// remove all question pools and all pending question pool requests
 	var courseList = this.controller.models["course"].courseList;
