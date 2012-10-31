@@ -46,7 +46,7 @@ function AboutView() {
 //pinch leads to course list
 
 AboutView.prototype.handlePinch = function() {
-    controller.transitionToCourses();
+    controller.transitionToSettings();
 };
 
 //tap does nothing
