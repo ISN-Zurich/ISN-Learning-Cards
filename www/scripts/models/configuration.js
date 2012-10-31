@@ -67,6 +67,7 @@ function ConfigurationModel(controller) {
 	this.logoimage;
 	this.logolabel;
 	
+	var self=this;
 	
 	// this.configuration.appAuthenticationKey = "";
 	// this.configuration.userAuthenticationKey = "";
@@ -85,7 +86,7 @@ function ConfigurationModel(controller) {
 	// this.createConfiguration();
 	
 	$(document).bind("statisticssenttoserver", function() {
-		var self=this;
+		
 		self.sendLogoutToServer();
 		console.log("user logged out");
 		
