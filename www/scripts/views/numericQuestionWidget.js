@@ -39,9 +39,9 @@ function NumericQuestionWidget(interactive) {
 	//Check the boolean value of intractive. This is set through the answer and feedback view.
 	if (self.interactive) { 
 		self.showAnswer(); 
-		console.log("interactive true");
+		//console.log("interactive true");
 	} else {
-		console.log("interactive false");
+		//console.log("interactive false");
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 
 	}
@@ -66,7 +66,7 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 
 		// Check if there is a question pool and if there are answers for a specific question in order to display the answer body
 		if (questionpoolModel.questionList && questionpoolModel.getAnswer()) {
-		console.log("entered numeric answer body");
+		//console.log("entered numeric answer body");
 
 		var div = $("<div/>", {
 			"id": "numberInputContainer",
@@ -97,7 +97,7 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 //Creation of feedback body for numeric questions. It contains one or two input fields, based on the answer results
 
 NumericQuestionWidget.prototype.showFeedback = function() {
-	console.log("start show feedback in numeric choice");
+	//console.log("start show feedback in numeric choice");
 
 
 	$("#feedbackBody").empty();
@@ -132,7 +132,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		}
 	} else { 
 		// if the typed numeric answer is wrong
-		console.log('handle answer results');
+		//console.log('handle answer results');
      
 		// add the following message 
 		$("<div/>", {
@@ -149,7 +149,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		}).appendTo("#feedbackBody");
 
 		var wrongText = questionpoolModel.getWrongFeedback();
-		console.log("XX " + wrongText);
+		//console.log("XX " + wrongText);
 		if (wrongText && wrongText.length > 0) {
 			// if extra info is available when we have wrong feedback display it
 			$("#FeedbackMore").show();
@@ -178,4 +178,4 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
  */
 NumericQuestionWidget.prototype.setCorrectAnswerTickHeight = doNothing;
 
-console.log("end of numeric choice widget");
+//console.log("end of numeric choice widget");

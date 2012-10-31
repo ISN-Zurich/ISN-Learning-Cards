@@ -202,7 +202,7 @@ TextSortWidget.prototype.storeAnswers = function() {
 TextSortWidget.prototype.enableSorting = function() {
 
 	jester($(".sortable")[0]).start(function(touches, event) {
-		console.log("ScrollTop " + $("ul#cardAnswerBody").scrollTop());
+		//console.log("ScrollTop " + $("ul#cardAnswerBody").scrollTop());
 		createEvent("mousedown", event);
 	});
 

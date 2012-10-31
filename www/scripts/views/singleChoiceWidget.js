@@ -40,14 +40,14 @@ function SingleChoiceWidget(interactive) {
                                // are loaded and an error message is displayed
                                // on the screen
     
-    console.log('check for previous answers');
+    //console.log('check for previous answers');
 	self.tickedAnswers = controller.models["answers"].getAnswers();// a list
 																	// with the
 																	// currently
 																	// selected
 																	// answers
     
-	console.log('ok');
+	//console.log('ok');
 
 	// Check the boolean value of interactive. This is set through the answer and
 	// feedback view.
@@ -132,13 +132,13 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	var clone = $("#cardAnswerBody ul").clone(); // clone the answerbody,
 	clone.appendTo("#feedbackBody");
 
-	console.log("enter feedback view after switching from question view");
+	//console.log("enter feedback view after switching from question view");
 	
 	
 	var questionpoolModel = controller.models["questionpool"];
 	$("#feedbackBody ul li").each(function(index) {
 		if (questionpoolModel.getScore(parseInt($(this).attr('id').substring(6))) > 0) {
-			console.log("div text high: " + $(this).find("div").css("height"));
+			//console.log("div text high: " + $(this).find("div").css("height"));
 
 			var div = $("<div/>", {
 				"class" : "right correctAnswer icon-checkmark"
@@ -178,7 +178,7 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	} else { // if the answer results are wrong
 		var wrongText = questionpoolModel.getWrongFeedback();// gets wrong
                                                              // feedback text
-		console.log(wrongText);
+		//console.log(wrongText);
 		if (wrongText && wrongText.length > 0) {
 			// when extra feedback info is available then display it
 			$("#FeedbackMore").show();
@@ -273,4 +273,4 @@ SingleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	});
 };
 
-console.log("end of single choice widget");
+//console.log("end of single choice widget");

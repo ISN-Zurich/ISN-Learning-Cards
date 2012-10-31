@@ -77,7 +77,7 @@ AboutView.prototype.close = closeView;
 //leads to course list
  
 AboutView.prototype.closeAbout = function() {
-	console.log("close settings button clicked");
+	//console.log("close settings button clicked");
 	controller.transitionToSettings();
 };
 

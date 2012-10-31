@@ -46,7 +46,7 @@ function FeedbackView(question) {
 	//Handler when taping on the title of the feedbackView area of the answer view
 	jester($('#cardFeedbackTitle')[0]).tap(function() {
 		self.clickTitleArea();
-		console.log("feedback title clicked");
+		//console.log("feedback title clicked");
 	});
 	
 	

@@ -35,7 +35,7 @@ function AchievementsView(){
 	
 	 var prevent=false;
 	 jester($('#closeAchievementsIcon')[0]).tap(function(event){
-		 console.log("achievements: close tap");
+		 //console.log("achievements: close tap");
 		 self.closeAchievements();
 		 event.stopPropagation(); } );
 	
@@ -79,7 +79,7 @@ AchievementsView.prototype.close = closeView;
 //leads to statistics view
 
 AchievementsView.prototype.closeAchievements = function() {
-	console.log("close Achievements button clicked");
+	//console.log("close Achievements button clicked");
 	controller.transitionToStatistics();
 };
 

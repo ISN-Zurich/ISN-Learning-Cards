@@ -44,7 +44,7 @@ function SettingsView() {
 });
 
     $(document).bind("authenticationready", function(e, userID) {
-		console.log("authentication ready called " + userID);
+		//console.log("authentication ready called " + userID);
 		self.loadData();
 	});
   
@@ -87,7 +87,7 @@ SettingsView.prototype.close = closeView;
 //leads to course list
  
 SettingsView.prototype.closeSettings = function() {
-	console.log("close settings button clicked");
+	//console.log("close settings button clicked");
 	controller.transitionToCourses();
 };
 

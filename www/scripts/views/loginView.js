@@ -55,7 +55,7 @@ function LoginView(controller) {
 	});
 
    $(document).bind("errormessagehide", function() {
-			console.log(" hide error message loaded ");
+			//console.log(" hide error message loaded ");
 			self.hideErrorMessage();
 		});	
 		
@@ -69,7 +69,7 @@ function LoginView(controller) {
 	$("#password")[0].addEventListener("blur", unfocusLogos);
 
 	function focusLogos(e) {
-		console.log("focus logos " + e.currentTarget.id);
+		//console.log("focus logos " + e.currentTarget.id);
 		$("#logos").removeClass("bottom");
 		$("#logos").addClass("static");
 	}
@@ -131,20 +131,20 @@ LoginView.prototype.clickLoginButton = function() {
 
 	function cbLoginSuccess() {
 		if (self.active) {
-			console.log("is logIn");
+			//console.log("is logIn");
 			$(document).trigger("trackingEventDetected",["Login"]);
 			controller.transitionToCourses();
 		}
 	}
 	
 	function cbLoginFailure(e, errormessage) {
-		console.log("authentication failed, reason: " + errormessage);
+		//console.log("authentication failed, reason: " + errormessage);
 		switch (errormessage) {
 		case "connectionerror":
 			self.showErrorMessage(jQuery.i18n.prop('msg_connection_message'));
 			break;
 		case "nouser":
-			console.log("no user error");
+			//console.log("no user error");
 			self.showErrorMessage(jQuery.i18n.prop('msg_authenticationFail_message'));
 			break;
 		case "invalidclientkey":
@@ -155,10 +155,10 @@ LoginView.prototype.clickLoginButton = function() {
 		}
 	}
 
-	console.log("check logIn data");
+	//console.log("check logIn data");
 	if ($("#usernameInput").val() && $("#password").val()) {
 		if (!self.controller.models["connection"].isOffline()) {
-			console.log("has logIn data");
+			//console.log("has logIn data");
 
 			$(document).bind("authenticationready", cbLoginSuccess);
 			$(document).bind("authenticationfailed", cbLoginFailure);

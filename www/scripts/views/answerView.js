@@ -50,13 +50,13 @@ function AnswerView() {
 	//Handler when taping on the title of the answer area of the answer view
 	jester($('#cardAnswerTitle')[0]).tap(function() {
 		self.clickTitleArea();
-		console.log("answer title clicked");
+		//console.log("answer title clicked");
 	});
 	
 	//Handler when taping on the icon of the title area of the answer view
 	jester($('#cardAnswerIcon')[0]).tap(function() {
 		self.clickTitleArea();
-		console.log("answer title clicked");
+		//console.log("answer title clicked");
 	});
 
 	// center the answer body to the middle of the screen of the answer view
@@ -191,7 +191,7 @@ AnswerView.prototype.clickDoneButton = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
 	var answerModel = controller.models['answers'];
-	console.log('check apology ' + this.widget.didApologize);
+	//console.log('check apology ' + this.widget.didApologize);
 	if (this.widget.didApologize) {
 		// if there was a problem with the data, the widget knows
 		// in this case we proceed to the next question

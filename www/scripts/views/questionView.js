@@ -110,7 +110,7 @@ function QuestionView() {
 //pinch leads to the course list
  
 QuestionView.prototype.handlePinch = function() {
-console.log("pinch works");
+//console.log("pinch works");
 	controller.transitionToCourses();
 };
 
@@ -135,10 +135,10 @@ QuestionView.prototype.handleTap = function(e) {
 QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view
-	console.log("swipe works");
+	//console.log("swipe works");
 	controller.models['questionpool'].nextQuestion();
-//	this.showQuestionTitle();
-//	this.showQuestionBody();
+    //	this.showQuestionTitle();
+    //	this.showQuestionBody();
 	this.open();
 	
 };
