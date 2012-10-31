@@ -58,7 +58,7 @@ function doApologize() {
 function Controller() {
 	var self = this;
 
-	console.log("start controller");
+    //	console.log("start controller");
 	
 	var startTime= new Date().getTime();
 
@@ -83,12 +83,12 @@ function Controller() {
 	
 	this.models.authentication.loadFromServer();
 	
-	console.log("models initialized");
+    //	console.log("models initialized");
 	
 	//initialize user interface language
 	this.setupLanguage();
 
-    console.log('languages are set up');
+    //    console.log('languages are set up');
 
 	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
@@ -103,7 +103,7 @@ function Controller() {
     this.views.achievements = new AchievementsView();
     this.views.about = new AboutView();
 
-	console.log('views initialized');
+    //	console.log('views initialized');
 
 	this.activeView = this.views['splashScreen'];
 
@@ -130,11 +130,11 @@ function Controller() {
 			swipeCatcher).tap(tapCatcher);
 
 	
-	console.log('core gestures done');
+    //	console.log('core gestures done');
 
 	// if device is an iPhone enable pinching
-	console.log('platform' + device.platform);
-	//if (device.platform == 'iPhone') {
+    //console.log('platform' + device.platform);
+	if (device.platform == 'iPhone') {
 
 		function pinchCatcher(event) {
 			self.activeView.handlePinch(event);
@@ -168,7 +168,7 @@ function Controller() {
 	}
 	
 	
-	console.log("End of Controller");
+	//console.log("End of Controller");
 } // end of Controller
 
 
@@ -228,11 +228,11 @@ Controller.prototype.setupLanguage = function() {
  
 Controller.prototype.transition = function(viewname) {
 	//if (this.views[viewname]) {
-	console.log("transition start" );
+	//console.log("transition start" );
 	if (this.views[viewname] && 
 			( viewname == "login" ||
 			this.activeView.tagID != this.views[viewname].tagID)){
-		console.log("transition: yes we can!");
+		//console.log("transition: yes we can!");
 		this.activeView.close();
 		this.activeView = this.views[viewname];
 		this.activeView.open();
@@ -243,13 +243,13 @@ Controller.prototype.transition = function(viewname) {
   is shown */
 
 Controller.prototype.transitionToEndpoint = function() {
-	console.log('initialize endpoint');
+	//console.log('initialize endpoint');
 
 	if (this.models['authentication'].isLoggedIn()) {
-		console.log("is loggedIn");
+		//console.log("is loggedIn");
 		this.transition('coursesList');
 	} else {
-		console.log("transitionToEndpoint: is not loggedIn");
+		//console.log("transitionToEndpoint: is not loggedIn");
 		this.transition('login');
 	}
 };
@@ -343,7 +343,7 @@ Controller.prototype.setConfigVariable = function(varname, varvalue) {
 //sets the current height for icon buttons
 
 function setButtonHeight() {
-	console.log("setButtonHeight");
+	//console.log("setButtonHeight");
 	var windowheight = $(window).height();
 	var height;
 	if (windowheight > 61) {
