@@ -182,7 +182,10 @@ ConfigurationModel.prototype.loadFromServer = function() {
 
 					    self.configuration.learnerInformation = authenticationObject.learnerInformation;
 						self.configuration.globalSynchronizationState = authenticationObject.globalSynchronizationState;
+                      
+                      
 						self.storeData();
+                        self.controller.setupLanguage();
 
 						$(document).trigger("authenticationready",
 								authenticationObject.learnerInformation.userId);
