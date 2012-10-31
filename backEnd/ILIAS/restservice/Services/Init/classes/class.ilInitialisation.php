@@ -114,31 +114,6 @@ class ilInitialisation
 		//require_once "DB.php";
 		require_once "Auth/Auth.php";
 
-		// HTML_Template_IT support
-		// (location changed with 4.3.2 & higher)
-/*		@include_once "HTML/ITX.php";		// old implementation
-		if (!class_exists("IntegratedTemplateExtension"))
-		{
-			include_once "HTML/Template/ITX.php";
-			include_once "classes/class.ilTemplateHTMLITX.php";
-		}
-		else
-		{
-			include_once "classes/class.ilTemplateITX.php";
-		}*/
-		
-		@include_once "HTML/Template/ITX.php";		// new implementation
-		if (class_exists("HTML_Template_ITX"))
-		{
-			include_once "classes/class.ilTemplateHTMLITX.php";
-		}
-		else
-		{
-			include_once "HTML/ITX.php";		// old implementation
-			include_once "classes/class.ilTemplateITX.php";
-		}
-		
-		require_once "classes/class.ilTemplate.php";
 
 		//include classes and function libraries
 		require_once "include/inc.db_session_handler.php";
@@ -359,30 +334,10 @@ class ilInitialisation
 			die ("Fatal Error: ilInitialisation::determineClient called without initialisation of ILIAS ini file object.");
 		}
 
-		// set to default client if empty
-		if ($_GET["client_id"] != "")
-		{
-			if (!defined("IL_PHPUNIT_TEST"))
-			{
-				ilUtil::setCookie("ilClientId", $_GET["client_id"]);
-			}
-		}
-		else if (!$_COOKIE["ilClientId"])
-		{
-			// to do: ilias ini raus nehmen
-			$client_id = $ilIliasIniFile->readVariable("clients","default");
-			ilUtil::setCookie("ilClientId", $client_id);
-//echo "set cookie";
-		}
-//echo "-".$_COOKIE["ilClientId"]."-";
-		if (!defined("IL_PHPUNIT_TEST"))
-		{
-			define ("CLIENT_ID", $_COOKIE["ilClientId"]);
-		}
-		else
-		{
-			define ("CLIENT_ID", $_GET["client_id"]);
-		}
+                // CGL: there is some "client" information stored in the ini file.
+                // CGL: without this information the database initialization fails.
+		$client_id = $ilIliasIniFile->readVariable("clients","default");    
+                define ("CLIENT_ID", $client_id);    
 	}
 
 	/**
@@ -460,28 +415,6 @@ class ilInitialisation
 	}
 
 	/**
-	* handle maintenance mode
-	*/
-	function handleMaintenanceMode()
-	{
-		global $ilClientIniFile;
-
-		if (!$ilClientIniFile->readVariable("client","access"))
-		{
-			if (is_file("./maintenance.html"))
-			{
-				ilUtil::redirect("./maintenance.html");
-			}
-			else
-			{
-				// to do: include standard template here
-				die('<br /><p style="text-align:center;">The server is not '.
-					'available due to maintenance. We apologise for any inconvenience.</p>');
-			}
-		}
-	}
-
-	/**
 	* initialise database object $ilDB
 	*
 	*/
@@ -528,60 +461,6 @@ class ilInitialisation
 			die("Please turn off Safe mode OR set session.save_handler to \"user\" in your php.ini");
 		}
 
-	}
-	/**
-	* set session cookie params for path, domain, etc.
-	*/
-	function setCookieParams()
-	{
-		include_once 'Services/Authentication/classes/class.ilAuthFactory.php';
-		if(ilAuthFactory::getContext() == ilAuthFactory::CONTEXT_HTTP) 
-		{
-			$cookie_path = '/';
-		}
-		elseif ($GLOBALS['COOKIE_PATH'])
-		{
-			// use a predefined cookie path from WebAccessChecker
-	        $cookie_path = $GLOBALS['COOKIE_PATH'];
-	    }
-		else
-		{
-			$cookie_path = dirname( $_SERVER['PHP_SELF'] );
-		}
-		
-		/* if ilias is called directly within the docroot $cookie_path
-		is set to '/' expecting on servers running under windows..
-		here it is set to '\'.
-		in both cases a further '/' won't be appended due to the following regex
-		*/
-		$cookie_path .= (!preg_match("/[\/|\\\\]$/", $cookie_path)) ? "/" : "";
-		
-		if($cookie_path == "\\") $cookie_path = '/';
-		
-		$cookie_domain = $_SERVER['SERVER_NAME'];		
-
-		define('IL_COOKIE_EXPIRE',0);
-		define('IL_COOKIE_PATH',$cookie_path);
-		define('IL_COOKIE_DOMAIN','');
-		define('IL_COOKIE_SECURE',false); // Default Value
-
-		// session_set_cookie_params() supports 5th parameter
-		// only for php version 5.2.0 and above
-		if( version_compare(PHP_VERSION, '5.2.0', '>=') )
-		{
-			// PHP version >= 5.2.0
-			define('IL_COOKIE_HTTPONLY',false); // Default Value
-			session_set_cookie_params(
-					IL_COOKIE_EXPIRE, IL_COOKIE_PATH, IL_COOKIE_DOMAIN, IL_COOKIE_SECURE, IL_COOKIE_HTTPONLY
-			);
-		}
-		else
-		{
-			// PHP version < 5.2.0
-			session_set_cookie_params(
-					IL_COOKIE_EXPIRE, IL_COOKIE_PATH, IL_COOKIE_DOMAIN, IL_COOKIE_SECURE
-			);
-		}
 	}
 
 	/**
@@ -763,57 +642,6 @@ class ilInitialisation
 	}
 	
 
-	function checkUserClientIP()
-	{
-		global $ilUser, $ilLog, $ilAuth, $ilias;
-
-		// check client ip
-		$clientip = $ilUser->getClientIP();
-		if (trim($clientip) != "")
-		{
-			$clientip = preg_replace("/[^0-9.?*,:]+/","",$clientip);
-			$clientip = str_replace(".","\\.",$clientip);
-			$clientip = str_replace(Array("?","*",","), Array("[0-9]","[0-9]*","|"), $clientip);
-			if (!preg_match("/^".$clientip."$/", $_SERVER["REMOTE_ADDR"]))
-			{
-				$ilLog ->logError(1,
-				$ilias->account->getLogin().":".$_SERVER["REMOTE_ADDR"].":".$message);
-				$ilAuth->logout();
-				@session_destroy();
-				ilUtil::redirect("login.php?wrong_ip=true");
-			}
-		}
-	}
-
-	function checkUserAgreement()
-	{
-		global $ilUser, $ilAuth;
-
-		// are we currently in user agreement acceptance?
-		$in_user_agreement = false;
-		if (strtolower($_GET["cmdClass"]) == "ilstartupgui" &&
-			(strtolower($_GET["cmd"]) == "getacceptance" ||
-			(is_array($_POST["cmd"]) &&
-			key($_POST["cmd"]) == "getAcceptance")))
-		{
-			$in_user_agreement = true;
-		}
-
-		// check wether user has accepted the user agreement
-		//	echo "-".$script;
-		if (!$ilUser->hasAcceptedUserAgreement() &&
-			$ilAuth->getAuth() &&
-			!$in_user_agreement &&
-			$ilUser->getId() != ANONYMOUS_USER_ID &&
-			$ilUser->checkTimeLimit())
-		{
-			if($ilAuth->supportsRedirects())
-			{
-				ilUtil::redirect("ilias.php?baseClass=ilStartUpGUI&cmdClass=ilstartupgui&target=".$_GET["target"]."&cmd=getAcceptance");
-			}
-		}
-	}
-
 
 	/**
 	* go to public section
@@ -852,90 +680,9 @@ class ilInitialisation
 		}
 		
 		// stop immediately to avoid redirection madness.
-        return true;
-        
-		// if target given, try to go there
-		if ($_GET["target"] != "")
-		{
-			$this->initUserAccount();
-
-			// target is accessible -> goto target
-			include_once("Services/Init/classes/class.ilStartUpGUI.php");
-			if	(ilStartUpGUI::_checkGoto($_GET["target"]))
-			{
-				// Disabled: GET parameter is kept, since no redirect. smeyer
-				// additional parameter capturing for survey access codes
-				/*
-				$survey_parameter = "";
-				if (array_key_exists("accesscode", $_GET))
-				{
-					$survey_parameter = "&accesscode=" . $_GET["accesscode"];
-				}
-				*/
-				// Disabled redirect for public section
-				return true;
-				#ilUtil::redirect(ILIAS_HTTP_PATH.
-				#	"/goto.php?target=".$_GET["target"].$survey_parameter);
-			}
-			else	// target is not accessible -> login
-			{
-				$this->goToLogin($_GET['auth_stat']);
-			}
-		}
-
-		$_GET["ref_id"] = ROOT_FOLDER_ID;
-
-		$_GET["cmd"] = "frameset";
-		$jump_script = "repository.php";
-
-		$script = $this->updir.$jump_script."?reloadpublic=1&cmd=".$_GET["cmd"]."&ref_id=".$_GET["ref_id"];
-
-		// todo do it better, if JS disabled
-		//echo "<script language=\"Javascript\">\ntop.location.href = \"".$script."\";\n</script>\n";
-		echo "<script language=\"Javascript\">\ntop.location.href = \"".$script."\";\n</script>\n".
-			'Please click <a href="'.$script.'">here</a> if you are not redirected automatically.';
-		exit;
+                return true;
 	}
 
-
-	/**
-	* go to login
-	*/
-	function goToLogin($a_auth_stat = "")
-	{
-		global $PHP_SELF;
-
-		session_unset();
-		session_destroy();
-
-		$add = "";
-		if ($_GET["soap_pw"] != "")
-		{
-			$add = "&soap_pw=".$_GET["soap_pw"]."&ext_uid=".$_GET["ext_uid"];
-		}
-
-		$script = $this->updir."login.php?target=".$_GET["target"]."&client_id=".$_COOKIE["ilClientId"].
-			"&auth_stat=".$a_auth_stat.$add;
-
-		// todo do it better, if JS disabled
-		// + this is, when session "ends", so
-		// we should try to prevent some information about current
-		// location
-		//
-		// check whether we are currently doing a goto call
-		if (is_int(strpos($PHP_SELF, "goto.php")) && $_GET["soap_pw"] == "" &&
-			$_GET["reloadpublic"] != "1")
-		{
-			$script = $this->updir."goto.php?target=".$_GET["target"]."&client_id=".CLIENT_ID.
-				"&reloadpublic=1";
-		}
-
-		echo "<script language=\"Javascript\">\ntop.location.href = \"".$script."\";\n</script>\n".
-			'Please click <a href="'.$script.'">here</a> if you are not redirected automatically.';
-
-		exit;
-
-	}
 
 	/**
 	* $lng initialisation
@@ -1068,61 +815,17 @@ class ilInitialisation
 		// prepare file access to work with safe mode (has been done in class ilias before)
 		umask(0117);
 		
-		// set cookie params
-		$this->setCookieParams();
-
 		// $ilIliasIniFile initialisation
 		$this->initIliasIniFile();
 		
 		// CLIENT_ID determination
-		$this->determineClient();
+	        $this->determineClient();
 
 		// $ilAppEventHandler initialisation
 		$this->initEventHandling();
 
 		// $ilClientIniFile initialisation
-		if (!$this->initClientIniFile())
-		{
-			$c = $_COOKIE["ilClientId"];
-			ilUtil::setCookie("ilClientId", $ilIliasIniFile->readVariable("clients","default"));
-			if (CLIENT_ID != "" && CLIENT_ID != $ilIliasIniFile->readVariable("clients","default"))
-			{
-				ilUtil::redirect("index.php?client_id=".$ilIliasIniFile->readVariable("clients","default"));
-			}
-			else
-			{
-				echo ("Client $c does not exist. ".'Please <a href="./index.php">click here</a> to return to the default client.');
-			}
-			exit;
-			//ilUtil::redirect("./setup/setup.php");	// to do: this could fail in subdirectories
-													// this is also source of a bug (see mantis)
-		}
-
-		if (DEVMODE && SHOWNOTICES)
-		{
-			// remove notices from error reporting
-			if (version_compare(PHP_VERSION, '5.3.0', '>='))
-			{
-				error_reporting(E_ALL);
-			}
-			else
-			{
-				error_reporting(E_ALL);
-			}
-		}
-		
-		// allow login by submitting user data
-		// in query string when DEVMODE is enabled
-		if( DEVMODE
-		    && isset($_GET['username']) && strlen($_GET['username'])
-		    && isset($_GET['password']) && strlen($_GET['password'])
-		){
-			$_POST['username'] = $_GET['username'];
-			$_POST['password'] = $_GET['password'];
-		}
-
-		// maintenance mode
-		$this->handleMaintenanceMode();
+		$this->initClientIniFile();
 
 		// $ilDB initialisation
 		$this->initDatabase();
@@ -1306,14 +1009,7 @@ class ilInitialisation
 		//
 		// SUCCESSFUL AUTHENTICATION
 		//
-//if (!$ilAuth->getAuth() && $this->script != "login.php")
-//{
-//	var_dump($_SESSION);
-//	echo "<br>B-".$ilAuth->getAuth()."-".$ilAuth->_sessionName."-".$ilias->account->isCurrentUserActive()."-";
-//}
-//var_dump ($session[_authsession]);
-		#if (($ilAuth->getAuth() && $ilias->account->isCurrentUserActive()) ||
-		#	(defined("IL_PHPUNIT_TEST") && DEVMODE))
+
 			
 		if($ilAuth->getStatus() == '' &&
 			$ilias->account->isCurrentUserActive() ||
@@ -1326,31 +1022,8 @@ class ilInitialisation
 			$this->initUserAccount();
 			
 //var_dump($_SESSION);
-			// check client IP of user
-			$this->checkUserClientIP();
-
-			// check user agreement (went here due to bug 5634)
-			$this->checkUserAgreement();
+		
 			
-			// update last_login date once the user logged in
-			if ($this->script == "login.php" ||
-				$_GET["baseClass"] == "ilStartUpGUI")
-			{
-
-				// determine first login of user for setting an indicator
-				// which still is available in PersonalDesktop, Repository, ...
-				// (last login date is set to current date in next step)
-				require_once('Services/PrivacySecurity/classes/class.ilSecuritySettings.php');
-				$security_settings = ilSecuritySettings::_getInstance();
-				if( $security_settings->isPasswordChangeOnFirstLoginEnabled() &&
-					null == $ilUser->getLastLogin() )
-				{
-					$ilUser->resetLastPasswordChange();
-				}
-
-				$ilUser->refreshLogin();
-			}
-
 			// differentiate account security mode
 			require_once('./Services/PrivacySecurity/classes/class.ilSecuritySettings.php');
 			$security_settings = ilSecuritySettings::_getInstance();
@@ -1361,83 +1034,7 @@ class ilInitialisation
 				ilObjUser::_resetLoginAttempts( $ilUser->getId() );
 			}
 
-			// set hits per page for all lists using table module
-			$_GET['limit'] = $_SESSION['tbl_limit'] = (int) $ilUser->getPref('hits_per_page');
-
-			// the next line makes it impossible to save the offset somehow in a session for
-			// a specific table (I tried it for the user administration).
-			// its not posssible to distinguish whether it has been set to page 1 (=offset = 0)
-			// or not set at all (then we want the last offset, e.g. being used from a session var).
-			// So I added the wrapping if statement. Seems to work (hopefully).
-			// Alex April 14th 2006
-			if (isset($_GET['offset']) && $_GET['offset'] != "")							// added April 14th 2006
-			{
-				$_GET['offset'] = (int) $_GET['offset'];		// old code
-			}
-
 			$ilBench->stop("Core", "HeaderInclude_getCurrentUserAccountData");
-		}
-		elseif (
-					$this->script != "login.php"
-					and $this->script != "shib_login.php"
-					and $this->script != "shib_logout.php"
-					and $this->script != "error.php"
-					and $this->script != "index.php"
-					and $this->script != "view_usr_agreement.php"
-					and $this->script != "register.php"
-					and $this->script != "chat.php"
-					and $this->script != "pwassist.php"
-					and $this->script != "confirmReg.php"
-				)
-		{
-				
-			// authentication failed due to inactive user?
-			if ($ilAuth->getAuth() && !$ilUser->isCurrentUserActive())
-			{
-				$inactive = true;
-			}
-                        
-			// jump to public section (to do: is this always the indended
-			// behaviour, login could be another possibility (including
-			// message)
-//echo "-".$_GET["baseClass"]."-";
-			if ($_GET["baseClass"] != "ilStartUpGUI")
-			{
-				// $lng initialisation
-				$this->initLanguage();
-				
-				// Do not redirect for Auth_SOAP Auth_CRON Auth_HTTP
-				if(!$ilAuth->supportsRedirects())
-				{
-					return false;
-				}
-
-				if ($ilSetting->get("pub_section") &&
-					($ilAuth->getStatus() == "" || 
-						$ilAuth->getStatus() == AUTH_EXPIRED ||
-						$ilAuth->getStatus() == AUTH_IDLED) &&
-					$_GET["reloadpublic"] != "1")
-				{
-						$this->goToPublicSection();
-				}
-				else
-				{
-					if ($context == "web")
-					{
-						// normal access by webinterface
-						$this->goToLogin(($_GET['auth_stat'] && !$ilAuth->getStatus()) ? $_GET['auth_stat'] : $ilAuth->getStatus());
-						exit;
-					} 
-					else 
-					{
-						// called by soapAuthenticationLdap
-						return;
-					}
-
-				}
-				// we should not get here => public section needs no redirect smeyer
-				// exit;
-			}
 		}
 		else if(!$ilAuth->getAuth())
 		{
@@ -1479,9 +1076,6 @@ class ilInitialisation
 		// store user language in tree
 		$GLOBALS['tree']->initLangCode();
 
-		// instantiate main template
-		$tpl = new ilTemplate("tpl.main.html", true, true);
-		$GLOBALS['tpl'] =& $tpl;
 
 
 		// ### AA 03.10.29 added new LocatorGUI class ###
@@ -1492,54 +1086,7 @@ class ilInitialisation
 			$_SESSION["locator_level"] = -1;
 		}
 		// initialise global ilias_locator object
-		$ilias_locator = new ilLocatorGUI();			// deprecated
-		$ilLocator = new ilLocatorGUI();
-		$GLOBALS['ilias_locator'] =& $ilias_locator;	// deprecated
-		$GLOBALS['ilLocator'] =& $ilLocator;
-
-		// load style definitions
-		// use the init function with plugin hook here, too
-		$this->initStyle();
-
-		// load style sheet depending on user's settings
-		$location_stylesheet = ilUtil::getStyleSheetLocation();
-		$tpl->setVariable("LOCATION_STYLESHEET",$location_stylesheet);
-
-		// Init Navigation History
-		$ilNavigationHistory = new ilNavigationHistory();
-		$GLOBALS['ilNavigationHistory'] =& $ilNavigationHistory;
-
-		// init infopanel
-
-		// provide global browser information
-		$ilBrowser = new ilBrowser();
-		$GLOBALS['ilBrowser'] =& $ilBrowser;
-
-		// provide global help object
-		$ilHelp = new ilHelp();
-		$GLOBALS['ilHelp'] =& $ilHelp;
-
-		// main tabs gui
-		include_once 'classes/class.ilTabsGUI.php';
-		$ilTabs = new ilTabsGUI();
-		$GLOBALS['ilTabs'] =& $ilTabs;
-		
-		// main toolbar gui
-		include_once './Services/UIComponent/Toolbar/classes/class.ilToolbarGUI.php';
-		$ilToolbar = new ilToolbarGUI();
-		/**
-		 * @var object ilToolbarGUI
-		 */
-		$GLOBALS['ilToolbar'] =& $ilToolbar;
-
-		// main menu
-		include_once './Services/MainMenu/classes/class.ilMainMenuGUI.php';
-		$ilMainMenu = new ilMainMenuGUI("_top");
-		$GLOBALS['ilMainMenu'] =& $ilMainMenu;
-
-		// Store online time of user
-		ilOnlineTracking::_updateAccess($ilUser->getId());
-		
+				
 		// ECS Tasks
 	 	include_once('./Services/WebServices/ECS/classes/class.ilECSTaskScheduler.php');
 	 	$scheduler = ilECSTaskScheduler::start();
