@@ -29,7 +29,7 @@ StackHandlerModel.prototype.calculateAchievementValues = function(){
 	var self = this;
 	var val = 0;
 	self.values= self.superModel.getCurrentValues(val); 
-	console.log("current values for stack handler"+self.values);
+	//console.log("current values for stack handler"+self.values);
 	self.queryDB( 
 		function cbSH(t,r) {self.calculateStackHandler(t,r);});
 
@@ -73,8 +73,8 @@ StackHandlerModel.prototype.calculateStackHandler = function(transaction, result
 	}
 	//console.log("stackHandler: " + self.statistics['stackHandler']
 	//		+ " handled: " + numHandledCards + " all: " + numAllCards);
-	console.log("stackHandler: " + this.achievementValue
-			+ " handled: " + numHandledCards + " all: " + numAllCards);
+	//console.log("stackHandler: " + this.achievementValue
+	//		+ " handled: " + numHandledCards + " all: " + numAllCards);
 	self.superModel.boolAllDone++;
 	self.superModel.allCalculationsDone();
 

@@ -42,7 +42,7 @@ function ConnectionState(controller) {
 		self.state = true;
 	}
 
-	console.log("connection state: " + self.state);
+	//console.log("connection state: " + self.state);
 
 	window.addEventListener("offline", self.goOffline, true);
 	window.addEventListener("online", self.goOnline, true);
@@ -60,7 +60,7 @@ ConnectionState.prototype.isOffline = function() {
  * event is triggered
  */
 ConnectionState.prototype.goOnline = function() {
-	console.log("**online**");
+	//console.log("**online**");
 	this.state = true;
 
 	// trigger event
@@ -81,27 +81,27 @@ ConnectionState.prototype.goOnline = function() {
 	//this.controller.views["login"].hideErrorMessage();
 	
 	
-    console.log('check synchronization - course list');
+    //console.log('check synchronization - course list');
 	// if a pending course list exist, load the course list from the server
 	var pendingCourseList = localStorage.getItem("pendingCourseList");
 	if (pendingCourseList) {
 		this.controller.models["course"].loadFromServer();
 	}
     
-    console.log('check synchronization - question pools');
+    //console.log('check synchronization - question pools');
 	// if a pending question pool exist, load the question pool from the server
     if ( this.controller && this.controller.models && this.controller.models["course"] && this.controller.models["course"].courseList) {
-         console.log( 'got models ' );
+         //console.log( 'got models ' );
         var courseList = this.controller.models["course"].courseList;
         if (courseList) {
-            console.log( 'interate course list ' );
+            //console.log( 'interate course list ' );
             for ( var c in courseList) {
-                console.log( 'check course ' + c );
+                //console.log( 'check course ' + c );
                 
                 var pendingQuestionPools = localStorage
                 .getItem("pendingQuestionPool_" + courseList[c].id);
                 if (pendingQuestionPools) {
-                    console.log('check synchronization - question pool missing for course ' + c);
+                    //console.log('check synchronization - question pool missing for course ' + c);
                     this.controller.models["questionpool"]
                     .loadFromServer(courseList[c].id);
                 }
@@ -111,7 +111,7 @@ ConnectionState.prototype.goOnline = function() {
 
     var statisticsModel = this.controller.models["statistics"];
     
-    console.log('check synchronization - statistics');
+    //console.log('check synchronization - statistics');
 	// if pending statistics exist, send them to the server
 	var pendingStatistics = localStorage.getItem("pendingStatistics");
 	if (pendingStatistics) {
@@ -127,7 +127,7 @@ ConnectionState.prototype.goOnline = function() {
 	
 	var trackingModel = this.controller.models["tracking"];
     
-    console.log('check synchronization - tracking');
+    //console.log('check synchronization - tracking');
 	// if pending statistics exist, send them to the server
 	var pendingTracking = localStorage.getItem("pendingTracking");
 	if (pendingTracking) {
@@ -140,7 +140,7 @@ ConnectionState.prototype.goOnline = function() {
 			trackingModel.sendToServer();
 		}
 	}
-    console.log('check synchronization DONE');
+    //console.log('check synchronization DONE');
 
 };
 
@@ -148,7 +148,7 @@ ConnectionState.prototype.goOnline = function() {
 // sets the state of the connection state to false (offline)
  
 ConnectionState.prototype.goOffline = function() {
-	console.log("**offline**");
+	//console.log("**offline**");
 	this.state = false;
 	$(document).trigger("trackingEventDetected","offline");
 	// show no connection error message in login view

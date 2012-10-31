@@ -45,7 +45,7 @@ function TrackingModel(controller){
 		this.initDB();
 	//}
 	$(document).bind("trackingEventDetected", function(e,type) {
-		console.log(" tracking event loaded ");
+		//console.log(" tracking event loaded ");
 		self.storeTrackData((new Date()).getTime(),type);
 	});		
 	
@@ -60,10 +60,9 @@ TrackingModel.prototype.storeTrackData = function(time, type){
 		transaction
 		.executeSql('INSERT INTO tracking(time_stamp,event_type) VALUES(?,?)',
 				[ time, type ],function() {
-			console.log("successfully inserted");
+			//console.log("successfully inserted");
 		}, function(tx, e) {
-			console.log("error! NOT inserted: "
-					+ e.message);
+			//console.log("error! NOT inserted: "+ e.message);
 		});
 	});
 
@@ -100,7 +99,7 @@ TrackingModel.prototype.sendToServer = function(){
 
 	var sessionkey = self.controller.models['authentication'].getSessionKey();
 	var url = self.controller.models['authentication'].urlToLMS + '/tracking.php';
-	console.log("url tracking: " + url);
+	//console.log("url tracking: " + url);
 	
 	this.db
 	.transaction(function(transaction) {
@@ -117,23 +116,23 @@ TrackingModel.prototype.sendToServer = function(){
 			try {
 				pendingTracking = JSON.parse(localStorage.getItem("pendingTracking"));
 			} catch (err) {
-				console.log("error! while loading pending tracking");
+				//console.log("error! while loading pending tracking");
 			}
 			
 			sessionkey = pendingTracking.sessionkey;
 			uuid = pendingTracking.uuid;
 			tracking = pendingTracking.tracking;
 		}else {
-			console.log("results length: " + results.rows.length);
+			//console.log("results length: " + results.rows.length);
 			for ( var i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
 				tracking.push(row);
-//				console.log("sending " + i + ": " + JSON.stringify(row));
+                //console.log("sending " + i + ": " + JSON.stringify(row));
 			}
 			uuid = device.uuid;
 		}
 		
-		console.log("count tracking=" + tracking.length);
+		//console.log("count tracking=" + tracking.length);
 		var trackingString = JSON.stringify(tracking);
 		
 		//processData has to be set to false!

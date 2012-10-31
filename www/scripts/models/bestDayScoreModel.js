@@ -39,13 +39,13 @@ BestDayScoreModel.prototype.queryDB = queryDatabase;
 //calculates the best day and score
 BestDayScoreModel.prototype.calculateBestDayAndScore = function(transaction, results) {
 	
-	console.log("best day rows: " + results.rows.length);
+	//console.log("best day rows: " + results.rows.length);
 	var self = this;
 	var bestDay;
 	var bestScore = -1;
 	for ( var i = 0; i < results.rows.length; i++) {
 		row = results.rows.item(i);
-		console.log(JSON.stringify(row));
+		//console.log(JSON.stringify(row));
 		score = 0;
 		if (row['num'] != 0) {
 			score = row['score'] / row['num'];
@@ -55,13 +55,13 @@ BestDayScoreModel.prototype.calculateBestDayAndScore = function(transaction, res
 			bestScore = score;
 		}
 	}
-	console.log("best day: " + bestDay);
+	//console.log("best day: " + bestDay);
 	this.bestDay = bestDay;
 	this.bestScore = Math.round(bestScore * 100);
-	console.log("best score:"+bestScore);
+	//console.log("best score:"+bestScore);
 	$(document).trigger("statisticcalculationsdone");
 	this.superModel.boolAllDone++;
-	console.log("best day calculation done");
+	//console.log("best day calculation done");
 	this.superModel.allCalculationsDone();	
 };
 

@@ -37,17 +37,17 @@ AverageSpeedModel.prototype.calculateValue = function(){
 AverageSpeedModel.prototype.calculateAverageSpeed = function(transaction, results) {
 	
 	var self = this;
-	console.log("rows: " + results.rows.length);
+	//console.log("rows: " + results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
+		//console.log("row: " + JSON.stringify(row));
 		if (row['num'] == 0) {
 			this.averageSpeed = 0;
 		} else {
 			this.averageSpeed = Math
 			.round((row['duration'] / row['num']) / 1000);
 		}
-		console.log("AVERAGE SPEED: " +this.averageSpeed);
+		//console.log("AVERAGE SPEED: " +this.averageSpeed);
 
 	} else {
 		this.averageSpeed = 0;
@@ -64,11 +64,10 @@ AverageSpeedModel.prototype.calculateAverageSpeed = function(transaction, result
 AverageSpeedModel.prototype.calculateImprovementAverageSpeed = function (transaction,results){
 	
 	var self = this;
-	console.log("rows in calculate improvement average speed: "
-			+ results.rows.length);
+	//console.log("rows in calculate improvement average speed: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
+		//console.log("row: " + JSON.stringify(row));
 		var oldAverageSpeed = 0;
 		if (row['num'] != 0) {
 			oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
@@ -84,8 +83,7 @@ AverageSpeedModel.prototype.calculateImprovementAverageSpeed = function (transac
 		} else {
 			this.improvementSpeed = 1;
 		}
-		console.log("improvement average speed: "
-				+ this.improvementSpeed);
+		//console.log("improvement average speed: "+ this.improvementSpeed);
 		$(document).trigger("statisticcalculationsdone");
 		
 	} else {

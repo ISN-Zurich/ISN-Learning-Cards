@@ -24,7 +24,7 @@ HandledCardsModel.prototype.calculateValue = function(){
 	var self = this;
 	var val = 1;
 	self.values= self.superModel.getCurrentValues(val); 
-	console.log("current values for handled cards"+self.values);
+	//console.log("current values for handled cards"+self.values);
 	self.queryDB( 
 		function cbHC(t,r) {self.calculateHandledCards(t,r);});
 
@@ -41,9 +41,9 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 	var self = this;
 	if (results.rows.length > 0) {
 		var row = results.rows.item(0);
-		console.log("number of handled cards:" + row['c']);
+		//console.log("number of handled cards:" + row['c']);
 		this.handledCards = row['c'];
-		console.log("handledCards:"+this.handledCards);
+		//console.log("handledCards:"+this.handledCards);
 //			if (self.cardBurner != 100) {
 //			if (row['c'] > 100) {
 //				self.cardBurner = 100;
@@ -70,16 +70,14 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 HandledCardsModel.prototype.calculateImprovementHandledCards = function (transaction,results){
 	
 	var self = this;
-	console.log("rows in calculate improvement handled cards: "
-			+ results.rows.length);
+	//console.log("rows in calculate improvement handled cards: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		var row = results.rows.item(0);
-		console.log("number of handled cards:" + row['c']);
+		//console.log("number of handled cards:" + row['c']);
 		oldHandledCards = row['c'];
 		newHandledCards = this.handledCards;
 		this.improvementHandledCards  = newHandledCards - oldHandledCards;
-		console.log("improvement handled cards: "
-			+ this.improvementHandledCards);
+		//console.log("improvement handled cards: "+ this.improvementHandledCards);
 		
 		$(document).trigger("statisticcalculationsdone");
 		

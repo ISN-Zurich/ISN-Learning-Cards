@@ -104,14 +104,14 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
-					console.log("success");
+					//console.log("success");
 					
 					//if this was an pending question pool, remove it from the storage
 					localStorage.removeItem("pendingQuestionPool" + courseId);
 					
 					
 					if (data) {
-//						console.log("JSON: " + data);
+                    //console.log("JSON: " + data);
 						var questionPoolObject;
 						
 						questionPoolObject = data.questions;
@@ -126,7 +126,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						if (!questionPoolObject) {
 							questionPoolObject = [];
 						}
-//						console.log("Object: " + questionPoolObject);
+                        //console.log("Object: " + questionPoolObject);
 						
 						var questionPoolString;
 						try {
@@ -136,10 +136,9 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						}
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
-//						self.questionList = questionPoolObject || [];
-//
-//						self.reset();
-//						self.storeData(data.courseID);
+                    //self.questionList = questionPoolObject || [];
+                    //self.reset();
+                    //self.storeData(data.courseID);
 						$(document).trigger("questionpoolready", data.courseID);
 					}
 				},
@@ -231,7 +230,7 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 		// generates a random number between 0 and questionList.length - 1
 		random = Math.floor((Math.random() * this.questionList.length));
 		newId = this.questionList[random].id;
-		console.log("New ID: " + newId);
+		//console.log("New ID: " + newId);
 	} while (this.id == newId
 			|| (this.queue.length * 2 <= this.questionList.length && jQuery
 					.inArray(newId, this.queue) >= 0));

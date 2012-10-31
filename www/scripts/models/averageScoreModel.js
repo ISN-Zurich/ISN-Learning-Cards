@@ -36,16 +36,16 @@ AverageScoreModel.prototype.calculateValue = function(){
 AverageScoreModel.prototype.calculateAverageScore = function(transaction, results) {
 	
 	var self = this;
-	console.log("rows: " + results.rows.length);
+	//console.log("rows: " + results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
+		//console.log("row: " + JSON.stringify(row));
 		if (row['num'] == 0) {
 			this.averageScore = 0;
 		} else {
 			this.averageScore =  Math.round((row['score'] / row['num']) * 100);
 		}
-		console.log("AVERAGE SCORE: " + this.averageScore);
+		//console.log("AVERAGE SCORE: " + this.averageScore);
 	} else {
 		this.averageScore = 0;
 	}
@@ -65,11 +65,10 @@ AverageScoreModel.prototype.calculateAverageScore = function(transaction, result
 AverageScoreModel.prototype.calculateImprovementAverageScore = function (transaction,results){
 	
 	var self = this;
-	console.log("rows in calculate improvement average score: "
-			+ results.rows.length);
+	//console.log("rows in calculate improvement average score: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("row: " + JSON.stringify(row));
+		//console.log("row: " + JSON.stringify(row));
 		var oldAverageScore = 0;
 		if (row['num'] != 0) {
 			oldAverageScore = Math.round((row['score'] / row['num']) * 100);
@@ -81,8 +80,7 @@ AverageScoreModel.prototype.calculateImprovementAverageScore = function (transac
 	} else {
 	  this.improvementAverageScore = this.averageScore;
 	}
-	console.log("improvement average score: "
-			+ this.improvementAverageScore);
+	//console.log("improvement average score: "+ this.improvementAverageScore);
 	this.superModel.boolAllDone++;
 	this.superModel.allCalculationsDone();
 		

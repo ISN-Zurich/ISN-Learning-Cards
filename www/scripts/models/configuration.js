@@ -73,7 +73,7 @@ function ConfigurationModel(controller) {
 	// this.configuration.userAuthenticationKey = "";
 	// this.storeData();
 
-	console.log("Configuration Storage: "
+	//console.log("Configuration Storage: "
 			+ localStorage.getItem("configuration"));
 
 	this.controller = controller;
@@ -88,7 +88,7 @@ function ConfigurationModel(controller) {
 	$(document).bind("statisticssenttoserver", function() {
 		
 		self.sendLogoutToServer();
-		console.log("user logged out");
+		//console.log("user logged out");
 		
 		self.configuration = {
 				"appAuthenticationKey": self.configuration.appAuthenticationKey,
@@ -116,13 +116,13 @@ ConfigurationModel.prototype.storeData = function() {
 		configString = JSON.stringify(this.configuration);
 	} catch (err) {
 		configString = "";
-		console.log("error while storing");
+		//console.log("error while storing");
 	}
-	console.log(configString);
+	//console.log(configString);
 	localStorage.setItem("configuration", configString);
 
-	console.log("Configuration Storage after storeData: "
-			+ localStorage.getItem("configuration"));
+	//console.log("Configuration Storage after storeData: "
+		//	+ localStorage.getItem("configuration"));
 };
 
 /**
@@ -134,10 +134,10 @@ ConfigurationModel.prototype.loadData = function() {
 	try {
 		configObject = JSON.parse(localStorage.getItem("configuration"));
 	} catch (err) {
-		console.log("error! while loading");
+		//console.log("error! while loading");
 	}
 
-	console.log("configObject: " + JSON.stringify(configObject));
+	//console.log("configObject: " + JSON.stringify(configObject));
 
 	if (!configObject) {
 		configObject = {
@@ -168,15 +168,14 @@ ConfigurationModel.prototype.loadFromServer = function() {
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
-						console.log("success");
-//						console.log("JSON: " + data);
+						//console.log("success");
+                        //console.log("JSON: " + data);
 						var authenticationObject;
 						try {
 							authenticationObject = data;
-							console.log("authenticationData from server");
+							//console.log("authenticationData from server");
 						} catch (err) {
-							console
-									.log("Error: Couldn't parse JSON for authentication");
+							//console.log("Error: Couldn't parse JSON for authentication");
 							authenticationObject = {};
 						}
 
@@ -191,7 +190,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 								authenticationObject.learnerInformation.userId);
 					},
 					error : function() {
-						console.log("Error while authentication to server");
+						//console.log("Error while authentication to server");
 						$(document).trigger("authenticationfailed");
 					},
 					beforeSend : setHeader
@@ -209,12 +208,12 @@ ConfigurationModel.prototype.loadFromServer = function() {
 //logs in user
  
 ConfigurationModel.prototype.login = function(username, password) {
-	console.log("client key: " + this.configuration.appAuthenticationKey);
+	//console.log("client key: " + this.configuration.appAuthenticationKey);
 
 	username = username.trim(); //remove leading and trailling white spaces
 	
 	passwordHash = faultylabs.MD5(password);
-	console.log("md5 password: " + passwordHash);
+	//console.log("md5 password: " + passwordHash);
 	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()
 			+ this.configuration.appAuthenticationKey)
 	var auth = {
@@ -257,7 +256,7 @@ ConfigurationModel.prototype.logout = function() {
 
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
-	console.log("url: " + self.urlToLMS + '/authentication.php');
+	//console.log("url: " + self.urlToLMS + '/authentication.php');
 	$
 			.ajax({
 				url : self.urlToLMS + '/authentication.php',
@@ -267,20 +266,19 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 					if (data && data['message']) {
 						switch (data['message']) {
 						case "invalid client key":
-							console.log("invalid client key - reregister")
+							//console.log("invalid client key - reregister")
 							self.register();
 							$(document).trigger("authenticationfailed", "invalidclientkey");
 							break;
 						case "wrong user data":
-							console.log("Wrong username or password!")
+							//console.log("Wrong username or password!")
 							$(document).trigger("authenticationfailed", "nouser");
 							break;
 						default:
 							break;
 						}
 					} else if (data && data.userAuthenticationKey != "") {
-						console.log("userAuthenticationKey: "
-									+ data.userAuthenticationKey);
+						//console.log("userAuthenticationKey: "+ data.userAuthenticationKey);
 						self.configuration.userAuthenticationKey = data.userAuthenticationKey;
 						self.configuration.learnerInformation = data.learnerInformation;
 						self.storeData();
@@ -292,12 +290,12 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						//get statistics data from server
 						self.controller.models['statistics'].loadFromServer();
 					} else {
-						console.log("no error message from server and no session key received");
+						//console.log("no error message from server and no session key received");
 						$(document).trigger("authenticationfailed", "connectionerror");
 					}
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
-					console.log("Error while authentication to server: status:" + jqXHR.status + ", " + jqXHR.responseText);
+					//console.log("Error while authentication to server: status:" + jqXHR.status + ", " + jqXHR.responseText);
 					$(document).trigger("authenticationfailed",
 							"connectionerror");
 				},
@@ -334,14 +332,14 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 
 				},
 				error : function() {
-					console.log("Error while logging out from server");
+					//console.log("Error while logging out from server");
 					localStorage.setItem("pendingLogout", sessionKey);
 				},
 				beforeSend : setHeader
 			});
 
 	function setHeader(xhr) {
-		console.log("session key to be invalidated: " + sessionKey);
+		//console.log("session key to be invalidated: " + sessionKey);
 		xhr.setRequestHeader('sessionkey', sessionKey);
 	}
 }
@@ -403,7 +401,7 @@ ConfigurationModel.prototype.getSessionKey = function() {
 //if no configuration is stored in the local storage, a new one is created
 
 ConfigurationModel.prototype.createConfiguration = function() {
-	console.log("create configuration");
+	//console.log("create configuration");
 
 	if (!localStorage.configuration) {
 		initConfiguration();
@@ -420,7 +418,7 @@ ConfigurationModel.prototype.createConfiguration = function() {
 //sends the registration request to the server, it is called whenever my client(app) key is empty
 ConfigurationModel.prototype.register = function() {
 	var self = this;
-	console.log("enters regsitration");
+	//console.log("enters regsitration");
 	var deviceID = device.uuid;
 
 	$
@@ -430,10 +428,9 @@ ConfigurationModel.prototype.register = function() {
 				dataType : 'json',
 				success : appRegistration,
 				error : function(request) {
-                  console.log("ERROR status code is : " + request.status);
-                  console.log("ERROR returned data is: "+ request.responseText);
-					console
-							.log("Error while registering the app with the backend");
+                  //console.log("ERROR status code is : " + request.status);
+                  //console.log("ERROR returned data is: "+ request.responseText);
+                  //console.log("Error while registering the app with the backend");
 				},
 				beforeSend : setHeaders
 			});
@@ -441,7 +438,7 @@ ConfigurationModel.prototype.register = function() {
 	function setHeaders(xhr) {
 		xhr.setRequestHeader('AppID', APP_ID);
 		xhr.setRequestHeader('UUID', deviceID);
-		console.log("register uuid:" + deviceID);
+		//console.log("register uuid:" + deviceID);
 	}
 
 	function appRegistration(data) {
@@ -449,22 +446,22 @@ ConfigurationModel.prototype.register = function() {
         language = navigator.language.split("-");
         language_root = (language[0]);
 
-		console.log("in app registration");
+		// console.log("in app registration");
 		// load server data from local storage
 		var urlsToLMS;
 		var urlsToLMSString = localStorage.getItem("urlsToLMS");
-		console.log("urlToLMSString is"+urlsToLMSString);
+		//console.log("urlToLMSString is"+urlsToLMSString);
 		try {
 			urlsToLMS = JSON.parse(urlsToLMSString);
-			console.log("urls to lms parsed");
+			//console.log("urls to lms parsed");
 		} catch(err) {
-			console.log("Error while parsing urlsToLMS: " + err);
+			//console.log("Error while parsing urlsToLMS: " + err);
 		}
 	
 		urlsToLMS[DEFAULT_SERVER] = {};
 		
 		// add client key for current lms
-		console.log("Received client key: " + data.ClientKey);
+		//console.log("Received client key: " + data.ClientKey);
 		urlsToLMS[DEFAULT_SERVER].clientKey = data.ClientKey;
 		// store server data in local storage
 		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
@@ -489,7 +486,7 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 		try {
 			urlsToLMS = JSON.parse(urlsToLMSString);
 		} catch(err) {
-			console.log("Error while parsing urlsToLMS: " + err);
+			//console.log("Error while parsing urlsToLMS: " + err);
 		}	
 	} else {
 		// create an empty data structure for our clientKeys
@@ -505,12 +502,12 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 	
 	var clientKey;
 	if (urlsToLMS[servername] ) {
-		console.log("the current lms has already a client key");
+		//console.log("the current lms has already a client key");
 		clientKey = urlsToLMS[servername].clientKey;
 	}
 	
 	if (!clientKey || clientKey.length == 0) {
-		console.log("registration is done");
+		//console.log("registration is done");
 		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 	} else {
 		this.loadFromServer();

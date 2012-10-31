@@ -25,7 +25,7 @@ ProgressModel.prototype.calculateValue = function(){
 	var self = this;
 	var progressVal = 2;
 	self.values= self.superModel.getCurrentValues(progressVal); 
-	console.log ("current values progess model" +self.values);
+	//console.log ("current values progess model" +self.values);
 	self.queryDB( 
 		function cbP(t,r) {self.calculateProgress(t,r);});
 
@@ -39,16 +39,15 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 	var self = this;
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("number of correct questions:" + row['numCorrect']);
-		console.log("number of answered questions:"
-		 + self.superModel.handledCards.handledCards);
+		//console.log("number of correct questions:" + row['numCorrect']);
+		//console.log("number of answered questions:"+ self.superModel.handledCards.handledCards);
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards == 0) {
 			this.progress = 0;
 		} else {
 		this.progress = Math.round(((row['numCorrect']) / cards) * 100);
 		}
-		console.log("progress: " +this.progress);
+		//console.log("progress: " +this.progress);
 	} else {
 		this.progress = 0;
 	}
@@ -66,21 +65,20 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 
 ProgressModel.prototype.calculateImprovementProgress= function (transaction,results){
 	var self = this;
-	console.log("rows in calculate improvement progress: "
-			+ results.rows.length);
+	//console.log("rows in calculate improvement progress: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		console.log("progress row" + JSON.stringify(row));
+		//console.log("progress row" + JSON.stringify(row));
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards == 0) {
 			this.improvementProgress = 0;
 		} else {
-			console.log("Progress Num Correct: " + row['numCorrect']);
+			//console.log("Progress Num Correct: " + row['numCorrect']);
 			oldProgress = Math
 				.round(((row['numCorrect']) / cards) * 100);
 			newProgress = this.progress;
 			this.improvementProgress = newProgress - oldProgress;
-			console.log("improvement progress: " + this.improvementProgress);
+			//console.log("improvement progress: " + this.improvementProgress);
 		}
 	} else {
 		this.improvementProgress = this.progress;
