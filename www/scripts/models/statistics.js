@@ -167,7 +167,7 @@ StatisticsModel.prototype.getImprovement = function() {
 StatisticsModel.prototype.getFirstActiveDay = function() {
 	console.log("enters first active day");
 	var self = this;
-	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND question_id != "cardburner"',
+	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND duration != -100',
 						[ self.currentCourseId ], 
 						function dataSelectHandler(transaction, results) {
 							if (results.rows.length > 0) {
@@ -195,7 +195,7 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 StatisticsModel.prototype.checkActivity = function(day) {
 	var self = this;
 	if (day > self.firstActiveDay) {
-		this.queryDB('SELECT count(id) as counter FROM statistics WHERE course_id=? AND question_id != "cardburner" AND day>=? AND day<=?',
+		this.queryDB('SELECT count(id) as counter FROM statistics WHERE course_id=? AND duration != -100 AND day>=? AND day<=?',
 							[ self.currentCourseId, (day - TWENTY_FOUR_HOURS), day ], 
 							function dataSelectHandler( transaction, results) {
 								if (results.rows.length > 0 && results.rows.item(0)['counter'] != 0) {
