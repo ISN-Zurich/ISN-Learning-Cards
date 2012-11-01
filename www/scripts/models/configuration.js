@@ -27,11 +27,11 @@ under the License.
 */
 
 var APP_ID = "ch.ethz.isn.learningcards";
-var DEFAULT_SERVER = "yellowjacket";
+var DEFAULT_SERVER = "hornet";
 var URLS_TO_LMS = {"yellowjacket":  
 					{
 						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",					
+						logoLabel: "Test Server at ISN Zurich",					
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
 						clientKey: ""
 					},
@@ -52,7 +52,7 @@ var URLS_TO_LMS = {"yellowjacket":
 					"PFPTEST":  
 					{
 						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",
+						logoLabel: "Partnership for Peace LMS at ISN/ETH test",
 						url: "https://pfp-test.ethz.ch/restservice/learningcards",
 						clientKey: ""
 					}
