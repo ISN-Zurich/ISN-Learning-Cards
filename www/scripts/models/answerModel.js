@@ -110,8 +110,7 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
 	var i, questionpool = controller.models["questionpool"];
 
-	// var correctAnswers = questionpool.getAnswer();
-	var numberOfAnswers = correctAnswers.length;
+	var numberOfAnswers = questionpool.getAnswer().length;
 
     var correctAnswers = 0;
 	var corr_ticked = 0;
