@@ -289,14 +289,14 @@
             var touchStart = function(evt,prevent) {
             	
             	    	if(prevent){
-            			console.log("gets the prevent value when true");
+            			//console.log("gets the prevent value when true");
             			evt.preventDefault();}
             	    	else{
             	    		
-            	    		console.log("passed the preventd default");
+            	    		//console.log("passed the preventd default");
             	    	}
           
-            	console.log("touch start");
+            	//console.log("touch start");
                 // avoid that multiple touchstart events on Android devices 
                 // confuse the gesture detection.
                 if ( lastTouches < evt.touches.length ) {
@@ -314,18 +314,18 @@
             var touchMove = function(evt) {
  
                 touches.update(evt);
-               console.log("touch move is hapenning");
+               //console.log("touch move is hapenning");
                 eventSet.execute("during", touches, evt);
-                console.log("passed during");
+                //console.log("passed during");
 //                if(opts.preventDefault) evt.preventDefault();
 //                if(opts.stopPropagation) evt.stopPropagation();
-                console.log("still with me?");
+                //console.log("still with me?");
                 
                 if (touches.numTouches() == 1) {
                 
-                	console.log("totalY is " +Math.abs(touches.touch(0).total.y()));
+                	//console.log("totalY is " +Math.abs(touches.touch(0).total.y()));
                 	if (Math.abs(touches.touch(0).total.y()) > Math.abs(touches.touch(0).total.x())){
-                		console.log("trigger scrolling");
+                		//console.log("trigger scrolling");
                 		eventSet.execute("scroll", touches, evt);
                 	} 
               	else { evt.preventDefault();}}
@@ -342,7 +342,7 @@
                         eventSet.execute("pinchwiden", touches);
                     }
                 }
-                console.log("move done");
+                //console.log("move done");
             };
 
             function detectTap() {
@@ -361,7 +361,7 @@
                     if (touches.touch(0).total.time() < opts.tapTime) {
                         switch (nTouch) {
                         case 1:
-                        	console.log("tap detected");
+                        	//console.log("tap detected");
                         	//if (!prevent) {e.preventDefault()}
                         	 eventSet.execute("tap", touches);
                             break;
@@ -419,7 +419,7 @@
 
             function detectSwipeFlick() {
             	var nTouch = touches.numTouches();
-            	console.log("test for swipes");
+            	//console.log("test for swipes");
 
                 if (nTouch == 1) {
                     var totalX   = touches.touch(0).total.x();
@@ -428,7 +428,7 @@
 
                     if (!opts.avoidSwipe &&
                         distance >= opts.swipeDistance) {
-                    	console.log("swipe detected");
+                    	//console.log("swipe detected");
                         eventname = "swipe";
                     }
                     if (!opts.avoidFlick &&
@@ -438,32 +438,32 @@
                     }
 
                     if (eventname.length > 0) {
-                    	console.log("trigger event " + eventname);
+                    	//console.log("trigger event " + eventname);
                     	// this is not executed for newer android devices ... why???
                         eventSet.execute(eventname, touches, totalX < 0 ? "left" : "right");
                     }
                 }
                 else {
-                	console.log("too many fingers for a swipe");
+                	//console.log("too many fingers for a swipe");
                 }
             }
 
             function detectScroll(evt){
             	var nTouch = touches.numTouches();
-            	console.log("test for scrolling");
+            	//console.log("test for scrolling");
             	if (nTouch == 1) {
             		var totalY   = touches.touch(0).total.y();
             		var distance = Math.abs(totalY);
             		var eventname = "scroll";
             		if (eventname.length > 0) {
-            			console.log("trigger event " + eventname);
+            			//console.log("trigger event " + eventname);
             			// this is not executed for newer android devices ... why???
             			eventSet.execute(eventname, touches, totalY < 0 ? "down" : "up");
             		}
             	}
 
             	else {
-            		console.log("too many fingers for a scroll");
+            		//console.log("too many fingers for a scroll");
             	}
 
 
@@ -477,18 +477,18 @@
                     eventSet.execute("pinchend", touches, pinchDirection);
                     if (pinchDirection == "narrowed") {
                     	// this clause is relevant for Mobler Cards
-                    	console.log("pinch detected");
+                    	//console.log("pinch detected");
                         eventSet.execute("pinched", touches);
                     }
                     else {
-                    	console.log("stretch detected");
+                    	//console.log("stretch detected");
                         eventSet.execute("stretched", touches);
                     }
                 }
             }
 
             var touchEnd = function(evt) {
-            	console.log("touch end");
+            	//console.log("touch end");
             	
                 touches.update(evt);
                 eventSet.execute("end", touches, evt);
@@ -497,7 +497,7 @@
                 if(opts.stopPropagation) evt.stopPropagation();
 
                 if ( lastTouches > 0 ) { 
-                	console.log("detect gesture");
+                	//console.log("detect gesture");
                     detectTap();        // tap || doubletap
                     detectSwipeFlick(); // swipe || flick 
                     detectScroll();
@@ -604,7 +604,7 @@
             //
             // helper functions of calculating the missing scale on android devices
             function sizeCalc(touchList) {
-            	console.log("calculate nonexisting scale property");
+            	//console.log("calculate nonexisting scale property");
             	
                 var _size = 0;
                 // estimate the convex hull for our finger positions.
