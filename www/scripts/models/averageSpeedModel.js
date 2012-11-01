@@ -1,12 +1,12 @@
 function AverageSpeedModel(statisticsModel){
-
-this.superModel = statisticsModel;
-this.averageSpeed = -1;
-this.improvementSpeed = 0;
-this.initQuery();
+    this.modelName = " avg speed";
+    this.superModel = statisticsModel;
+    this.averageSpeed = -1;
+    this.improvementSpeed = 0;
+    this.initQuery();
 
 	
-};
+}
 
 AverageSpeedModel.prototype.initQuery = function(){
 	
@@ -23,8 +23,7 @@ AverageSpeedModel.prototype.queryDB = queryDatabase;
 
 AverageSpeedModel.prototype.calculateValue = function(){
 	var self = this;
-	var val = 1;
-	self.values= self.superModel.getCurrentValues(val); 
+	self.values= self.superModel.getCurrentValues(SUBMODEL_QUERY_THREE);
 	self.queryDB( 
 		function cbASp(t,r) {self.calculateAverageSpeed(t,r);});
 
@@ -37,17 +36,17 @@ AverageSpeedModel.prototype.calculateValue = function(){
 AverageSpeedModel.prototype.calculateAverageSpeed = function(transaction, results) {
 	
 	var self = this;
-	//console.log("rows: " + results.rows.length);
+	moblerlog("rows: " + results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		//console.log("row: " + JSON.stringify(row));
-		if (row['num'] == 0) {
+		moblerlog("row: " + JSON.stringify(row));
+		if (row['num'] === 0) {
 			this.averageSpeed = 0;
 		} else {
 			this.averageSpeed = Math
 			.round((row['duration'] / row['num']) / 1000);
 		}
-		//console.log("AVERAGE SPEED: " +this.averageSpeed);
+		moblerlog("AVERAGE SPEED: " +this.averageSpeed);
 
 	} else {
 		this.averageSpeed = 0;
@@ -64,26 +63,26 @@ AverageSpeedModel.prototype.calculateAverageSpeed = function(transaction, result
 AverageSpeedModel.prototype.calculateImprovementAverageSpeed = function (transaction,results){
 	
 	var self = this;
-	//console.log("rows in calculate improvement average speed: "+ results.rows.length);
+	moblerlog("rows in calculate improvement average speed: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		//console.log("row: " + JSON.stringify(row));
+		moblerlog("row: " + JSON.stringify(row));
 		var oldAverageSpeed = 0;
-		if (row['num'] != 0) {
+		if (row['num'] !== 0) {
 			oldAverageSpeed = Math.round((row['duration'] / row['num']) / 1000);
 		}
 		newAverageSpeed = this.averageSpeed;
-		if (oldAverageSpeed == 0 && newAverageSpeed != 0) {
+		if (oldAverageSpeed === 0 && newAverageSpeed !== 0) {
 			this.improvementSpeed = -1;
-		} else	if (newAverageSpeed != 0) {
+		} else	if (newAverageSpeed !== 0) {
 			this.improvementSpeed = (newAverageSpeed - oldAverageSpeed);
 		
-		} else if (oldAverageSpeed == 0) {
+		} else if (oldAverageSpeed === 0) {
 			this.improvementSpeed = 0;
 		} else {
 			this.improvementSpeed = 1;
 		}
-		//console.log("improvement average speed: "+ this.improvementSpeed);
+		moblerlog("improvement average speed: "+ this.improvementSpeed);
 		$(document).trigger("statisticcalculationsdone");
 		
 	} else {

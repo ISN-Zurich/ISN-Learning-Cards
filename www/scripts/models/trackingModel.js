@@ -109,8 +109,8 @@ TrackingModel.prototype.sendToServer = function(){
 
 	
 	function sendTracking(transaction, results) {
-		tracking = [];
-		uuid = "";
+		var tracking = [];
+		var i, uuid = "";
 		if (localStorage.getItem("pendingTracking")) {
 			var pendingTracking= {};
 			try {
@@ -124,7 +124,7 @@ TrackingModel.prototype.sendToServer = function(){
 			tracking = pendingTracking.tracking;
 		}else {
 			//console.log("results length: " + results.rows.length);
-			for ( var i = 0; i < results.rows.length; i++) {
+			for ( i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
 				tracking.push(row);
                 //console.log("sending " + i + ": " + JSON.stringify(row));

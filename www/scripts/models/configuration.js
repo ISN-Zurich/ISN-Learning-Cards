@@ -58,14 +58,22 @@ var URLS_TO_LMS = {"yellowjacket":
 					}
 };
 
+var MOBLERDEBUG = 1;
+
+function moblerlog(messagestring) {
+    if (MOBLERDEBUG === 1) {
+        console.log(messagestring);
+    }
+}
+
 /**
  * This model holds the data about the current configuration
  */
 function ConfigurationModel(controller) {
 	this.configuration = {};
 	this.urlToLMS = "";
-	this.logoimage;
-	this.logolabel;
+	this.logoimage = "";
+	this.logolabel = "";
 	
 	var self=this;
 	
@@ -74,7 +82,7 @@ function ConfigurationModel(controller) {
 	// this.storeData();
 
 	//console.log("Configuration Storage: "
-			+ localStorage.getItem("configuration"));
+    //			+ localStorage.getItem("configuration"));
 
 	this.controller = controller;
 
@@ -161,7 +169,7 @@ ConfigurationModel.prototype.loadData = function() {
 ConfigurationModel.prototype.loadFromServer = function() {
 	var self = this;
 	if (this.configuration.userAuthenticationKey
-			&& this.configuration.userAuthenicationKey != "") {
+			&& this.configuration.userAuthenicationKey !== "") {
 		$
 				.ajax({
 					url : self.urlToLMS + '/authentication.php',
@@ -193,15 +201,14 @@ ConfigurationModel.prototype.loadFromServer = function() {
 						//console.log("Error while authentication to server");
 						$(document).trigger("authenticationfailed");
 					},
-					beforeSend : setHeader
+                      beforeSend : function setHeader(xhr) {
+                      xhr.setRequestHeader('sessionkey',
+                                           self.configuration.userAuthenticationKey);
+                      }
+                      
 				});
 
-		function setHeader(xhr) {
-			xhr.setRequestHeader('sessionkey',
-					self.configuration.userAuthenticationKey);
-		}
-
-	}
+			}
 };
 
 
@@ -215,7 +222,7 @@ ConfigurationModel.prototype.login = function(username, password) {
 	passwordHash = faultylabs.MD5(password);
 	//console.log("md5 password: " + passwordHash);
 	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()
-			+ this.configuration.appAuthenticationKey)
+                               + this.configuration.appAuthenticationKey);
 	var auth = {
 		"username" : username,
 		"challenge" : challenge
@@ -235,9 +242,9 @@ ConfigurationModel.prototype.logout = function() {
 
 
 	// remove all question pools and all pending question pool requests
-	var courseList = this.controller.models["course"].courseList;
+	var c, courseList = this.controller.models["course"].courseList;
 	if (courseList) {
-		for ( var c in courseList) {
+		for ( c in courseList ) {
 			localStorage.removeItem("questionpool_" + courseList[c].id);
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
 		}
@@ -277,7 +284,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						default:
 							break;
 						}
-					} else if (data && data.userAuthenticationKey != "") {
+					} else if (data && data.userAuthenticationKey !== "") {
 						//console.log("userAuthenticationKey: "+ data.userAuthenticationKey);
 						self.configuration.userAuthenticationKey = data.userAuthenticationKey;
 						self.configuration.learnerInformation = data.learnerInformation;
@@ -299,16 +306,16 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 					$(document).trigger("authenticationfailed",
 							"connectionerror");
 				},
-				beforeSend : setHeader
+                  beforeSend :function setHeader(xhr) {
+                  xhr.setRequestHeader('uuid', device.uuid);
+                  xhr.setRequestHeader('appid', APP_ID);
+                  xhr.setRequestHeader('authdata', authData.username + ":"
+                                       + authData.challenge);
+                  }
 			});
 
-	function setHeader(xhr) {
-		xhr.setRequestHeader('uuid', device.uuid);
-		xhr.setRequestHeader('appid', APP_ID);
-		xhr.setRequestHeader('authdata', authData.username + ":"
-				+ authData.challenge);
-	}
-}
+	
+};
 
 /**
  * invalidates the specified session key or if no session key is specified the
@@ -316,8 +323,8 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
  */
 ConfigurationModel.prototype.sendLogoutToServer = function(
 		userAuthenticationKey) {
-	var self = this;
-	var sessionKey;
+	var sessionKey,self = this;
+
 	if (userAuthenticationKey) {
 		sessionKey = userAuthenticationKey;
 	} else {
@@ -342,13 +349,13 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 		//console.log("session key to be invalidated: " + sessionKey);
 		xhr.setRequestHeader('sessionkey', sessionKey);
 	}
-}
+};
 
 
 //@return true if user is logged in, otherwise false
 
 ConfigurationModel.prototype.isLoggedIn = function() {
-	return (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey != "") ? true
+	return (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") ? true
 			: false;
 };
 
@@ -506,7 +513,7 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 		clientKey = urlsToLMS[servername].clientKey;
 	}
 	
-	if (!clientKey || clientKey.length == 0) {
+	if (!clientKey || clientKey.length === 0) {
 		//console.log("registration is done");
 		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 	} else {

@@ -1,12 +1,10 @@
 function CardBurnerModel(statisticsModel){
-
-this.superModel = statisticsModel;
-this.achievementName = 'cardburner';
-this.achievementValue = -1;
-this.initQuery();
-
-	
-};
+    this.modelName = " card burner";
+    this.superModel = statisticsModel;
+    this.achievementName = 'cardburner';
+    this.achievementValue = -1;
+    this.initQuery();
+}
 
 CardBurnerModel.prototype.initQuery = function(){
 //	
@@ -28,9 +26,8 @@ CardBurnerModel.prototype.calculateValue = function(courseId){
 
 CardBurnerModel.prototype.calculateAchievementValues = function(){
 	var self = this;
-	var val = 1;
-	self.values= self.superModel.getCurrentValues(val); 
-	//console.log("current values for card burner"+self.values);
+    self.values= self.superModel.getCurrentValues(SUBMODEL_QUERY_THREE);
+	moblerlog("current values for card burner"+self.values);
 	self.queryDB( 
 		function cbSH(t,r) {self.calculateCardBurner(t,r);});
 
@@ -51,12 +48,12 @@ CardBurnerModel.prototype.calculateCardBurner = function(transaction, results) {
 		
 		//if card burner was achieved (100 handled cards within 24 hours), insert a marker into the database
 		if (row['c'] >= 100) {
-			//console.log("cardburner was achieved");
+			moblerlog("cardburner was achieved");
 			this.achievementValue = 100;
 			this.insertAchievementHelper();
 		} else {
 			this.achievementValue = row['c'];
-			//console.log("cardburner still not achieved yet");
+			moblerlog("cardburner still not achieved yet");
 		}
 	}
 	self.superModel.boolAllDone++;

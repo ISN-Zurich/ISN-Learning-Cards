@@ -1,12 +1,10 @@
 function ProgressModel(statisticsModel){
-
-this.superModel = statisticsModel;
-this.progress = -1;
-this.improvementProgress = 0;
-this.initQuery();
-
-	
-};
+    this.modelName = " progress";
+    this.superModel = statisticsModel;
+    this.progress = -1;
+    this.improvementProgress = 0;
+    this.initQuery();
+}
 
 ProgressModel.prototype.initQuery = function(){
 	
@@ -23,8 +21,7 @@ ProgressModel.prototype.queryDB = queryDatabase;
 
 ProgressModel.prototype.calculateValue = function(){
 	var self = this;
-	var progressVal = 2;
-	self.values= self.superModel.getCurrentValues(progressVal); 
+	self.values= self.superModel.getCurrentValues(SUBMODEL_QUERY_FOUR);
 	//console.log ("current values progess model" +self.values);
 	self.queryDB( 
 		function cbP(t,r) {self.calculateProgress(t,r);});
@@ -42,7 +39,7 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 		//console.log("number of correct questions:" + row['numCorrect']);
 		//console.log("number of answered questions:"+ self.superModel.handledCards.handledCards);
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
-		if (cards == 0) {
+		if (cards === 0) {
 			this.progress = 0;
 		} else {
 		this.progress = Math.round(((row['numCorrect']) / cards) * 100);
@@ -70,7 +67,7 @@ ProgressModel.prototype.calculateImprovementProgress= function (transaction,resu
 		row = results.rows.item(0);
 		//console.log("progress row" + JSON.stringify(row));
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
-		if (cards == 0) {
+		if (cards === 0) {
 			this.improvementProgress = 0;
 		} else {
 			//console.log("Progress Num Correct: " + row['numCorrect']);

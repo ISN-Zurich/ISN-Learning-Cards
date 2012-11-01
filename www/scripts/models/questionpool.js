@@ -50,7 +50,7 @@ function QuestionPoolModel(controller) {
 
 	// this.createQuestionPools();
 
-};
+}
 
 /**
  * stores the data into the local storage (key = "questionpool_[course_id]")
@@ -196,7 +196,7 @@ QuestionPoolModel.prototype.getMixedAnswersArray = function() {
  */
 QuestionPoolModel.prototype.currAnswersMixed = function() {
 	return this.currentAnswersAreMixed;
-}
+};
 
 QuestionPoolModel.prototype.mixAnswers = function() {
 	var answers = this.activeQuestion.answer;
@@ -208,14 +208,14 @@ QuestionPoolModel.prototype.mixAnswers = function() {
 		// answers
 		// array
 		// the the next element as random number
-		while (this.mixedAnswers.indexOf(random) != -1) {
+		while (this.mixedAnswers.indexOf(random) !== -1) {
 			random = (++random) % answers.length;
 		}
 
 		this.mixedAnswers.push(random);
 	}
 	this.currentAnswersAreMixed = true;
-}
+};
 
 /**
  * sets the id to the id of the next question a random number is created. if the
@@ -231,7 +231,7 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 		random = Math.floor((Math.random() * this.questionList.length));
 		newId = this.questionList[random].id;
 		//console.log("New ID: " + newId);
-	} while (this.id == newId
+	} while (this.id === newId
 			|| (this.queue.length * 2 <= this.questionList.length && jQuery
 					.inArray(newId, this.queue) >= 0));
 
@@ -257,7 +257,7 @@ QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 		this.queue.shift();
 		this.queue.push(this.id);
 	}
-}
+};
 
 //increases the index of the current answer
 
@@ -283,9 +283,8 @@ QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
 QuestionPoolModel.prototype.getScore = function(index) {
 	if (index >= 0 && index < this.activeQuestion.answer.length) { //index && 
 		return this.activeQuestion.answer[index].points;
-	} else {
-		return -1;
 	}
+    return -1;
 };
 
 // @return the correct feedback of the current question
@@ -338,7 +337,7 @@ QuestionPoolModel.prototype.createQuestionPools = function() {
  * stored in the local storage, new ones are created
  */
 QuestionPoolModel.prototype.createPool = function(course_id) {
-	if (course_id == 1) {
+	if (course_id === 1) {
 		if (!localStorage.questionpool_1) {
 			initQuPo1();
 		}
@@ -348,7 +347,7 @@ QuestionPoolModel.prototype.createPool = function(course_id) {
 			return [];
 		}
 
-	} else if (course_id == 2) {
+	} else if (course_id === 2) {
 		// if no questions are available, new ones are created
 		if (!localStorage.questionpool_2) {
 			initQuPo2();

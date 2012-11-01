@@ -46,7 +46,7 @@ function AnswerModel() {
 		this.initDB();
 	}
 
-};
+}
 
 //sets the answer list
  
@@ -82,10 +82,10 @@ AnswerModel.prototype.deleteData = function() {
  
 AnswerModel.prototype.getAnswerResults = function() {
 	//console.log("answer score: " + this.answerScore);
-	if (this.answerScore == 1) {
+	if (this.answerScore === 1) {
 		//console.log("Excellent");
 		return "Excellent";
-	} else if (this.answerScore == 0) {
+	} else if (this.answerScore === 0) {
 		return "Wrong";
 	} else {
 		return "PartiallyCorrect";
@@ -108,25 +108,25 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
-	var questionpool = controller.models["questionpool"];
+	var i, questionpool = controller.models["questionpool"];
 
-	var correctAnswers = questionpool.getAnswer();
+	// var correctAnswers = questionpool.getAnswer();
 	var numberOfAnswers = correctAnswers.length;
 
-	var correctAnswers = 0;
+    var correctAnswers = 0;
 	var corr_ticked = 0;
 	var wrong_ticked = 0;
 
-	for ( var i = 0; i < numberOfAnswers; i++) {
+	for ( i = 0; i < numberOfAnswers; i++) {
 		//console.log("answer " + i + ": " + questionpool.getScore(i));
 		if (questionpool.getScore(i) > 0) {
 			correctAnswers++;
-			if (this.answerList.indexOf(i) != -1) {
+			if (this.answerList.indexOf(i) !== -1) {
 				corr_ticked++;
 				//console.log("corr_ticked");
 			}
 		} else {
-			if (this.answerList.indexOf(i) != -1) {
+			if (this.answerList.indexOf(i) !== -1) {
 				wrong_ticked++;
 				//console.log("wrong_ticked");
 			}
@@ -137,17 +137,17 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	//console.log("Correct ticked: " + corr_ticked);
 	//console.log("Wrong ticked: " + wrong_ticked);
 
-	if ((corr_ticked + wrong_ticked) == numberOfAnswers || corr_ticked == 0) {
+	if ((corr_ticked + wrong_ticked) === numberOfAnswers || corr_ticked === 0) {
 		// if all answers are ticked or no correct answer is ticked, we assign 0
 		// to the answer score
 		this.answerScore = 0;
 	} else if ((corr_ticked > 0 && corr_ticked < correctAnswers)
-			|| (corr_ticked == correctAnswers && wrong_ticked > 0)) {
+			|| (corr_ticked === correctAnswers && wrong_ticked > 0)) {
 		// if some but not all correct answers are ticked or if all correct
 		// answers are ticked but also some wrong one,
 		// we assign 0.5 to the answer score
 		this.answerScore = 0.5;
-	} else if (corr_ticked == correctAnswers && wrong_ticked == 0) {
+	} else if (corr_ticked === correctAnswers && wrong_ticked === 0) {
 		// if all correct answers and no wrong ones, we assign 1 to the answer
 		// score
 		this.answerScore = 1;
@@ -158,10 +158,10 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
 AnswerModel.prototype.calculateTextSortScore = function() {
 
-	var scores = [];
+	var i, j, scores = [];
 	this.answerScore = 0;
 
-	for ( var i = 0; i < this.answerList.length; i++) {
+	for ( i = 0; i < this.answerList.length; i++) {
 
 		// 1. Check for correct sequences
 		var currAnswer = this.answerList[i];
@@ -170,7 +170,7 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 		// count the number of items in sequence and stop if we loose the
 		// sequence
 		while (followingIndex < this.answerList.length
-				&& this.answerList[followingIndex++] == (++currAnswer) + "") {
+				&& this.answerList[followingIndex++] === String(++currAnswer)) {
 			followingCorrAnswers++;
 			// followingIndex++;
 		}
@@ -178,7 +178,7 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 		// 2. calculate the score for all elements in a sequence
 		var itemScore = 0;
 		// if the item is in the correct position we assign a low score
-		if (this.answerList[i] == i) {
+		if (this.answerList[i] === i) {
 			itemScore += 0.5;
 		}
 		// if the item is in a sequence, we assign a higher score
@@ -186,12 +186,12 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 			itemScore += 1;
 			this.answerScore = 0.5;
 		}
-		if (followingCorrAnswers + 1 == this.answerList.length) {
+		if (followingCorrAnswers + 1 === this.answerList.length) {
 			this.answerScore = 1;
 		}
 
 		// 3. assign the score for all items in the sequence
-		for ( var j = i; j <= i + followingCorrAnswers; j++) {
+		for ( j = i; j <= i + followingCorrAnswers; j++) {
 			scores[this.answerList[j]] = itemScore;
 		}
 
@@ -209,7 +209,7 @@ AnswerModel.prototype.calculateNumericScore = function() {
 	var answerModel = controller.models["answers"];
 	var questionpoolModel = controller.models['questionpool'];
 
-	if (questionpoolModel.getAnswer()[0] == answerModel.getAnswers()) {
+	if (questionpoolModel.getAnswer()[0] === answerModel.getAnswers()) {
 		// if the answers provided in the question pool are the same with the
 		// ones the learner selected
 		this.answerScore = 1;
@@ -237,7 +237,7 @@ AnswerModel.prototype.startTimer = function(questionId) {
 //@return true, if timer has started, otherwise false
  
 AnswerModel.prototype.hasStarted = function() {
-	return this.start != -1;
+	return this.start !== -1;
 };
 
 //resets the timer

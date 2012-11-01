@@ -63,7 +63,7 @@ function CourseModel(controller) {
 
 	this.loadData();
 
-};
+}
 
 /**
  * stores the data into the local storage (key = "courses") therefor the data is
@@ -119,7 +119,7 @@ CourseModel.prototype.loadData = function() {
 CourseModel.prototype.loadFromServer = function() {
 	//console.log("loadFromServer-Course is called");
 	var self = this;
-	var syncStateCache = new Array();
+	var syncStateCache = [];
 	self.checkForTimeOut();
 	if (self.controller.models['authentication'].isLoggedIn()
 			&& !self.syncState) {
@@ -128,7 +128,8 @@ CourseModel.prototype.loadFromServer = function() {
 
 		// save current syncStates for this course
 		if (self.courseList && self.courseList.length > 0) {
-			for ( var c in self.courseList) {
+            var c;
+			for ( c in self.courseList) {
 				syncStateCache[self.courseList[c].id] = self.courseList[c].syncState;
 			}
 		}
@@ -181,14 +182,15 @@ CourseModel.prototype.loadFromServer = function() {
 			self.reset();
 
 			if (syncStateCache.length > 0) {
-				for ( var c in self.courseList) {
+                var c;
+				for ( c in self.courseList) {
 					self.courseList[c].syncState = syncStateCache[self.courseList[c].id];
 				}
 			}
 
 			$(document).trigger("courselistupdate");
-
-			for ( var c in self.courseList) {
+            var c;
+			for ( c in self.courseList) {
 				self.courseList[c].isLoaded = false;
 
 				self.controller.models["questionpool"]
@@ -259,8 +261,9 @@ CourseModel.prototype.checkForTimeOut = function() {
  */
 CourseModel.prototype.isLoaded = function(courseId) {
 	if (courseId > 0) {
-		for ( var c in this.courseList) {
-			if (this.courseList[c].id == courseId) {
+        var c;
+		for ( c in this.courseList) {
+			if (this.courseList[c].id === courseId) {
 				return this.courseList[c].isLoaded;
 			}
 		}
@@ -275,8 +278,9 @@ CourseModel.prototype.isLoaded = function(courseId) {
  * id to true
  */
 CourseModel.prototype.courseIsLoaded = function(courseId) {
-	for ( var c in this.courseList) {
-		if (this.courseList[c].id == courseId) {
+    var c;
+	for (c in this.courseList) {
+		if (this.courseList[c].id === courseId) {
 			this.courseList[c].isLoaded = true;
 			this.courseList[c].syncState = true;
 			this.storeData();
@@ -292,8 +296,9 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
  */
 CourseModel.prototype.isSynchronized = function(courseId) {
 	if (courseId > 0) {
-		for ( var c in this.courseList) {
-			if (this.courseList[c].id == courseId) {
+        var c;
+		for ( c in this.courseList) {
+			if (this.courseList[c].id === courseId) {
 				return this.courseList[c].syncState;
 			}
 		}
@@ -314,7 +319,8 @@ CourseModel.prototype.switchToOnline = function() {
 	if (this.syncState) {
 		this.loadFromServer();
 	} else {
-		for ( var c in this.courseList) {
+        var c;
+		for ( c in this.courseList) {
 			if (!this.courseList[c].isLoaded || !this.courseList[c].syncState) {
 				//console.log(this.courseList[c].id + " is not loaded yet");
 				this.controller.models["questionpool"]

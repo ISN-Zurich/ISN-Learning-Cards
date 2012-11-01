@@ -1,30 +1,22 @@
 function HandledCardsModel(statisticsModel){
-
-this.superModel = statisticsModel;
-this.handledCards = -1;
-this.cardBurner = -1;
-this.improvementHandledCards = 0;
-this.initQuery();
-
-	
-};
+    this.modelName = " handled cards";
+    this.superModel = statisticsModel;
+    this.handledCards = -1;
+    this.cardBurner = -1;
+    this.improvementHandledCards = 0;
+    this.initQuery();
+}
 
 HandledCardsModel.prototype.initQuery = function(){
-	
-//	this.values = [];
-//	this.valuesLastActivity = [];
-	   
 	this.query = 'SELECT count(*) as c FROM statistics WHERE course_id=? AND duration!=-100 AND day>=? AND day<=?';
 };
 
 HandledCardsModel.prototype.queryDB = queryDatabase;
 
-
 HandledCardsModel.prototype.calculateValue = function(){
 	var self = this;
-	var val = 1;
-	self.values= self.superModel.getCurrentValues(val); 
-	//console.log("current values for handled cards"+self.values);
+	self.values = self.superModel.getCurrentValues(SUBMODEL_QUERY_THREE);
+	moblerlog("current values for handled cards"+ self.values.join(", "));
 	self.queryDB( 
 		function cbHC(t,r) {self.calculateHandledCards(t,r);});
 
@@ -41,9 +33,9 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 	var self = this;
 	if (results.rows.length > 0) {
 		var row = results.rows.item(0);
-		//console.log("number of handled cards:" + row['c']);
+		moblerlog("number of handled cards:" + row['c']);
 		this.handledCards = row['c'];
-		//console.log("handledCards:"+this.handledCards);
+		moblerlog("handledCards:"+this.handledCards);
 //			if (self.cardBurner != 100) {
 //			if (row['c'] > 100) {
 //				self.cardBurner = 100;
@@ -70,14 +62,14 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 HandledCardsModel.prototype.calculateImprovementHandledCards = function (transaction,results){
 	
 	var self = this;
-	//console.log("rows in calculate improvement handled cards: "+ results.rows.length);
+	moblerlog("rows in calculate improvement handled cards: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		var row = results.rows.item(0);
-		//console.log("number of handled cards:" + row['c']);
+		moblerlog("number of handled cards:" + row['c']);
 		oldHandledCards = row['c'];
 		newHandledCards = this.handledCards;
 		this.improvementHandledCards  = newHandledCards - oldHandledCards;
-		//console.log("improvement handled cards: "+ this.improvementHandledCards);
+		moblerlog("improvement handled cards: "+ this.improvementHandledCards);
 		
 		$(document).trigger("statisticcalculationsdone");
 		

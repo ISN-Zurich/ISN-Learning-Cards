@@ -1,12 +1,12 @@
 function AverageScoreModel(statisticsModel){
-
-this.superModel = statisticsModel;
-this.averageScore = -1;
-this.improvementAverageScore = 0;
-this.initQuery();
-
+    this.modelName = " avg score";
+    this.superModel = statisticsModel;
+    this.averageScore = -1;
+    this.improvementAverageScore = 0;
+    this.initQuery();
+    
 	
-};
+}
 
 AverageScoreModel.prototype.initQuery = function(){
 //	
@@ -23,8 +23,7 @@ AverageScoreModel.prototype.queryDB = queryDatabase;
 
 AverageScoreModel.prototype.calculateValue = function(){
 	var self = this;
-	var val = 1;
-	self.values= self.superModel.getCurrentValues(val); 
+	self.values= self.superModel.getCurrentValues(SUBMODEL_QUERY_THREE);
 	self.queryDB( 
 			function cbAS(t,r) {self.calculateAverageScore(t,r);});
 
@@ -36,16 +35,16 @@ AverageScoreModel.prototype.calculateValue = function(){
 AverageScoreModel.prototype.calculateAverageScore = function(transaction, results) {
 	
 	var self = this;
-	//console.log("rows: " + results.rows.length);
+	moblerlog("rows: " + results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		//console.log("row: " + JSON.stringify(row));
-		if (row['num'] == 0) {
+		moblerlog("row: " + JSON.stringify(row));
+		if (row['num'] === 0) {
 			this.averageScore = 0;
 		} else {
 			this.averageScore =  Math.round((row['score'] / row['num']) * 100);
 		}
-		//console.log("AVERAGE SCORE: " + this.averageScore);
+		moblerlog("AVERAGE SCORE: " + this.averageScore);
 	} else {
 		this.averageScore = 0;
 	}
@@ -65,12 +64,12 @@ AverageScoreModel.prototype.calculateAverageScore = function(transaction, result
 AverageScoreModel.prototype.calculateImprovementAverageScore = function (transaction,results){
 	
 	var self = this;
-	//console.log("rows in calculate improvement average score: "+ results.rows.length);
+	moblerlog("rows in calculate improvement average score: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		//console.log("row: " + JSON.stringify(row));
+		moblerlog("row: " + JSON.stringify(row));
 		var oldAverageScore = 0;
-		if (row['num'] != 0) {
+		if (row['num'] !== 0) {
 			oldAverageScore = Math.round((row['score'] / row['num']) * 100);
 		}
 		newAverageScore = this.averageScore;
@@ -80,7 +79,7 @@ AverageScoreModel.prototype.calculateImprovementAverageScore = function (transac
 	} else {
 	  this.improvementAverageScore = this.averageScore;
 	}
-	//console.log("improvement average score: "+ this.improvementAverageScore);
+	moblerlog("improvement average score: "+ this.improvementAverageScore);
 	this.superModel.boolAllDone++;
 	this.superModel.allCalculationsDone();
 		

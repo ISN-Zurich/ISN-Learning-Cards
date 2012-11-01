@@ -21,33 +21,36 @@ under the License.
 */
 
 
+var SUBMODEL_QUERY_ONE = 0;
+var SUBMODEL_QUERY_THREE = 1;
+var SUBMODEL_QUERY_FOUR = 2;
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
 
 */
 
 function queryDatabase(cbResult){
-	//console.log("enter queryDatabase");
+	moblerlog("enter queryDatabase " + this.modelName);
 	var self = this;
 	self.superModel.db.transaction(function(transaction) {
-		transaction.executeSql(self.query, self.values, cbResult, self.superModel.dbErrorFunction);
+                                   transaction.executeSql(self.query, self.values, cbResult, function(tx,e) {moblerlog("DB Error cause: " + self.modelName); self.superModel.dbErrorFunction(tx,e);});
 	});
 }
-
-
-
 
 function checkAchievement() {
 	var self = this;
 	self.superModel.db.transaction(function(transaction) {
 		transaction.executeSql( "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?", [this.courseId, this.achievementName], 
-				function cbSuccess(t,r) { 
-					if ( r.rows.length > 0 ) {
-						self.achievementValue = 100; 
-						self.superModel.allDone();
-					} else self.calculateAchievementValues();
-				},
-				self.superModel.dbErrorFunction);
+                               function cbSuccess(t,r) {
+                               if ( r.rows.length > 0 ) {
+                                  self.achievementValue = 100;
+                                  self.superModel.allDone();
+                               } else {
+                                  self.calculateAchievementValues();
+                               }
+                               },
+                               self.superModel.dbErrorFunction);
 	});
 }
 
@@ -56,17 +59,13 @@ function insertAchievement() {
 	var insert = 'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)';
 	var insertValues = [ self.courseId, this.achievementName, (new Date()).getTime(), 100, -100];
 	self.superModel.queryDB(insert, insertValues, function() {
-				//console.log("successfully inserted achievement");
+				moblerlog("successfully inserted achievement");
 			});
 }
-
- 
 
 var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24; 
 
 //This model holds the statistics for a course
-
-
 
 function StatisticsModel(controller) {
 	this.controller = controller;
@@ -96,28 +95,29 @@ function StatisticsModel(controller) {
 //	this.db.transaction(function(transaction) {
 //		transaction.executeSql( "DELETE FROM statistics WHERE question_id = ?", ["stackhandler"]);
 //	});
-};
+}
 
 
 //sets the current course id and starts the calculations
  
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
-	this.currentCourseId = courseId;
+	var s;
+    this.currentCourseId = courseId;
 
-	for ( var s in this.statistics) {
+	for ( s in this.statistics) {
 		this.statistics[s] = -1;
 	}
 	
-	//console.log("course-id: " + courseId);
+	moblerlog("course-id: " + courseId);
 	
 	//this.getAllDBEntries();//useful for debugging, defined in the of the file
 
 	this.controller.models['questionpool'].loadData(courseId);
-	//console.log("statistics are loaded? " + (this.statisticsIsLoaded ? "yes" : "no"));
+	moblerlog("statistics are loaded? " + (this.statisticsIsLoaded ? "yes" : "no"));
 	if ( this.statisticsIsLoaded ) {
 		// load the appropriate models for our course
 		this.initSubModels();
-
+        moblerlog("sub models are initialized");
 		//checks if card burner achievement was already achieved
 		//and starts the calculations
 //		this.checkCardBurner();
@@ -125,6 +125,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 		this.getFirstActiveDay();
 	}
 	else {
+        
 		$(document).trigger("allstatisticcalculationsdone");	
 	}
 };
@@ -165,23 +166,23 @@ StatisticsModel.prototype.getImprovement = function() {
 // gets the timestamp of the first activity
  
 StatisticsModel.prototype.getFirstActiveDay = function() {
-	//console.log("enters first active day");
+	moblerlog("enters first active day");
 	var self = this;
 	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND duration != -100',
 						[ self.currentCourseId ], 
 						function dataSelectHandler(transaction, results) {
 							if (results.rows.length > 0) {
 								row = results.rows.item(0);
-								//console.log("first active day: " + JSON.stringify(row));
+								moblerlog("first active day: " + JSON.stringify(row));
 								if (row['firstActivity']) {
-									//console.log("do we enter with null?");
+									moblerlog("do we enter with null?");
 									self.firstActiveDay = row['firstActivity'];
 								} else {
 									self.firstActiveDay = (new Date()).getTime(); 
 								}
 							} else {
 								self.firstActiveDay = (new Date()).getTime(); 
-								//console.log("get a new first active day");
+								moblerlog("get a new first active day");
 							}
 							self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
 	});
@@ -198,8 +199,8 @@ StatisticsModel.prototype.checkActivity = function(day) {
 		this.queryDB('SELECT count(id) as counter FROM statistics WHERE course_id=? AND duration != -100 AND day>=? AND day<=?',
 							[ self.currentCourseId, (day - TWENTY_FOUR_HOURS), day ], 
 							function dataSelectHandler( transaction, results) {
-								if (results.rows.length > 0 && results.rows.item(0)['counter'] != 0) {
-										//console.log("active day: " + day);
+								if (results.rows.length > 0 && results.rows.item(0)['counter'] !== 0) {
+										moblerlog("active day: " + day);
 										self.lastActiveDay = day;
 										self.calculateValues();
 								}
@@ -220,26 +221,30 @@ StatisticsModel.prototype.checkActivity = function(day) {
 StatisticsModel.prototype.getCurrentValues = function(val) {
 	var timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
-	if (val== 0) {
-		return [this.currentCourseId];
-	} else if (val== 1) {
-	return [this.currentCourseId,time24hAgo,timeNow ];
-	}else if (val== 2){
-		return [this.currentCourseId,1,time24hAgo,timeNow ];
+    var retval = [];
+    switch (val){
+        case 0:
+            retval =  [this.currentCourseId];
+            break;
+        case 1:
+            retval = [this.currentCourseId,time24hAgo,timeNow ];
+            break;
+        case 2:
+        default:
+            retval = [this.currentCourseId,1,time24hAgo,timeNow ];
+            break;
 	}
-	else return [];
+    return retval;
 };
 
 StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
 	var lastActiveDay24hBefore = this.lastActiveDay - TWENTY_FOUR_HOURS;
 	if (!progressVal){
-	return [this.currentCourseId,lastActiveDay24hBefore, this.lastActiveDay ];
-	}else {
-	return [this.currentCourseId,1,lastActiveDay24hBefore, this.lastActiveDay ];		
-	}
+        return [this.currentCourseId,lastActiveDay24hBefore, this.lastActiveDay ];
+    }
+	return [this.currentCourseId,1,lastActiveDay24hBefore, this.lastActiveDay ];
+	
 };
-
-
 
 
 //queries the database and calculates the statistics and improvements
@@ -266,11 +271,10 @@ StatisticsModel.prototype.calculateValues = function() {
  * the allstatisticcalculationsdone event is triggered
  */
 StatisticsModel.prototype.allCalculationsDone = function() {
-	//console.log(" finished n="+this.boolAllDone +" calculations");
-	if ( this.boolAllDone == 6) {
+	moblerlog(" finished n="+this.boolAllDone +" calculations");
+	if ( this.boolAllDone === 6) {
 		$(document).trigger("allstatisticcalculationsdone");
-	
-	} 	
+    }
 };
 
 // class for querying the database
@@ -278,9 +282,9 @@ StatisticsModel.prototype.allCalculationsDone = function() {
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	var self = this;
 	self.db.transaction(function(transaction) {
-		transaction.executeSql(query, values, cbResult, self.dbErrorFunction);
-});
-	};
+                        transaction.executeSql(query, values, cbResult, function(tx,e) {self.dbErrorFunction(tx,e);});
+                        });
+};
 
 
 // checks if any achievements have been achieved
@@ -295,7 +299,7 @@ StatisticsModel.prototype.checkAchievements = function(courseId) {
 //function that is called if an error occurs while querying the database
  
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
-	//console.log("DB Error: " + e.message);
+	moblerlog("DB Error: " + e.message);
 };
 
 
@@ -310,12 +314,12 @@ StatisticsModel.prototype.loadFromServer = function() {
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
-						//console.log("success");
-                      //console.log("JSON: " + data);
-						var statisticsObject;
+						moblerlog("success");
+                      moblerlog("JSON: " + data);
+						var i, statisticsObject;
 						try {
 							statisticsObject = data;
-                      //console.log("statistics data from server: " + JSON.stringify(statisticsObject));
+                      moblerlog("statistics data from server: " + JSON.stringify(statisticsObject));
 						} catch (err) {
 							console
 							.log("Error: Couldn't parse JSON for statistics");
@@ -325,10 +329,10 @@ StatisticsModel.prototype.loadFromServer = function() {
 							statisticsObject = [];
 						}
 						
-						for ( var i = 0; i < statisticsObject.length; i++) {						
+						for ( i = 0; i < statisticsObject.length; i++) {
 							self.insertStatisticItem(statisticsObject[i]);
 						}
-						//console.log("after inserting statistics from server");
+						moblerlog("after inserting statistics from server");
 						// trigger event statistics are loaded from server
 						self.statisticsIsLoaded = true;
 						// FIXME: Store a flag into the local storage that the data is loaded.
@@ -345,13 +349,13 @@ StatisticsModel.prototype.loadFromServer = function() {
 						console
 								.log("Error while getting statistics data from server: " + errorString);
 					},
-					beforeSend : setHeader
+                      beforeSend : function setHeader(xhr) {
+                      xhr.setRequestHeader('sessionkey',
+                                           self.controller.models['authentication'].getSessionKey());
+                      }
 				});
 
-		function setHeader(xhr) {
-			xhr.setRequestHeader('sessionkey',
-					self.controller.models['authentication'].getSessionKey());
-		}
+		
 
 	}
 };
@@ -370,8 +374,8 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 
 	function checkIfItemExists(transaction, results) {
 		var item = statisticItem;
-		if (results.rows.length == 0) {
-			//console.log("No entry for day: " + item['day']);
+		if (results.rows.length === 0) {
+			moblerlog("No entry for day: " + item['day']);
 			query = "INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?,?,?,?,?)";
 			values = [ item['course_id'],
 			           item['question_id'],
@@ -392,7 +396,7 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
 	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
-	//console.log("url statistics: " + url);
+	moblerlog("url statistics: " + url);
 
 	self.queryDB('SELECT * FROM statistics', [], function(t,r) {sendStatistics(t,r);});
 
@@ -406,7 +410,7 @@ StatisticsModel.prototype.sendToServer = function() {
 			try {
 				pendingStatistics = JSON.parse(localStorage.getItem("pendingStatistics"));
 			} catch (err) {
-				//console.log("error! while loading pending statistics");
+				moblerlog("error! while loading pending statistics");
 			}
 			
 			sessionkey = pendingStatistics.sessionkey;
@@ -415,8 +419,9 @@ StatisticsModel.prototype.sendToServer = function() {
 			numberOfStatisticsItems = statistics.length; 
 		}else {
 			numberOfStatisticsItems = results.rows.length;
-			//console.log("results length: " + results.rows.length);
-			for ( var i = 0; i < results.rows.length; i++) {
+            var i;
+			moblerlog("results length: " + results.rows.length);
+			for ( i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
 				statistics.push(row);
 //				console.log("sending " + i + ": " + JSON.stringify(row));
@@ -425,7 +430,7 @@ StatisticsModel.prototype.sendToServer = function() {
 			uuid = device.uuid;
 		}
 		
-		//console.log("count statistics=" + statistics.length);
+		moblerlog("count statistics=" + statistics.length);
 		var statisticsString = JSON.stringify(statistics);
 		
 		//processData has to be set to false!
@@ -441,7 +446,7 @@ StatisticsModel.prototype.sendToServer = function() {
 				
 				if (data) {
 					if (numberOfStatisticsItems < data) {
-						//console.log("server has more items than local database -> fetch statistics from server");
+						moblerlog("server has more items than local database -> fetch statistics from server");
 						self.loadFromServer();
 					}
 				}
@@ -460,28 +465,38 @@ StatisticsModel.prototype.sendToServer = function() {
 				localStorage.setItem("pendingStatistics", JSON.stringify(statisticsToStore));
 				$(document).trigger("statisticssenttoserver");
 			},
-			beforeSend : setHeader
+               beforeSend : function setHeader(xhr) {
+               xhr.setRequestHeader('sessionkey', sessionkey);
+               xhr.setRequestHeader('uuid', device.uuid);
+               }
 		});
-
-		function setHeader(xhr) {
-			xhr.setRequestHeader('sessionkey', sessionkey);
-			xhr.setRequestHeader('uuid', device.uuid);
-		}
 	}
 
 };
 
 
 StatisticsModel.prototype.initSubModels = function(){
-	
+    moblerlog("start submodel initializion")
 	this.bestDay = new BestDayScoreModel(this);
+    moblerlog("finish submodel bestday");
+
 	this.handledCards = new HandledCardsModel(this);
+    moblerlog("finish submodel handled cards");
+
 	this.averageScore = new AverageScoreModel(this);
+    moblerlog("finish submodel avg score");
+
 	this.progress = new ProgressModel(this);
+    moblerlog("finish submodel progress");
+
 	this.averageSpeed = new AverageSpeedModel(this);
+    moblerlog("finish submodel avg speed");
+
 	this.stackHandler = new StackHandlerModel(this);
+    moblerlog("finish submodel stackhandler");
+
 	this.cardBurner = new CardBurnerModel(this);
-		
+    moblerlog("finish submodel initialization");
 };
 
 
@@ -495,19 +510,18 @@ StatisticsModel.prototype.getAllDBEntries = function(){
 		transaction
 		.executeSql('SELECT * FROM statistics WHERE course_id=?',
 				[ courseId ], dataSelectHandler, function(tx, e) {
-			//console.log("Error for select average score: "+ e.message);
+			moblerlog("Error for select average score: "+ e.message);
 		});
 	});
 
 	function dataSelectHandler(transaction, results) {
-		//console.log("ALL ROWS: " + results.rows.length);
-		for ( var i = 0; i < results.rows.length; i++) {
+        var i;
+		moblerlog("ALL ROWS: " + results.rows.length);
+		for ( i = 0; i < results.rows.length; i++) {
 			row = results.rows.item(i);
 
-			//console.log(i + ": " + JSON.stringify(row));
+			moblerlog(i + ": " + JSON.stringify(row));
 		}
 	}
-
-
-}
+};
 
