@@ -78,7 +78,7 @@ function AnswerView() {
 	// Solve Scrolling 
 var prevent=!prevent;
 //jester($('#cardAnswerBody')[0]).scroll(function(e,prevent) {
-		console.log("scroll works");
+		moblerlog("scroll works");
 //		if(prevent)
 //			{e.preventDefault();}else{
 //		!e.preventDefault();}

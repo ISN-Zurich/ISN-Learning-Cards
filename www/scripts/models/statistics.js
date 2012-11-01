@@ -321,8 +321,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 							statisticsObject = data;
                       moblerlog("statistics data from server: " + JSON.stringify(statisticsObject));
 						} catch (err) {
-							console
-							.log("Error: Couldn't parse JSON for statistics");
+							moblerlog("Error: Couldn't parse JSON for statistics");
 						}
 
 						if (!statisticsObject) {
@@ -346,8 +345,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 						$(document).trigger("loadstatisticsfromserver");
 					},
 					error : function(xhr, err, errorString) {
-						console
-								.log("Error while getting statistics data from server: " + errorString);
+						moblerlog("Error while getting statistics data from server: " + errorString);
 					},
                       beforeSend : function setHeader(xhr) {
                       xhr.setRequestHeader('sessionkey',
@@ -365,7 +363,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 
 StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	var self = this;
-//	console.log("day: " + statisticItem['day']);
+    moblerlog("day: " + statisticItem['day']);
 	
 	self
 	.queryDB(
@@ -384,7 +382,7 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 			           item['duration'] ];
 			self.queryDB(query, values, function cbInsert(transaction,
 					results) {
-                         //	console.log("after inserting");
+                         moblerlog("after inserting");
 			});
 		}
 	}
@@ -424,7 +422,7 @@ StatisticsModel.prototype.sendToServer = function() {
 			for ( i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
 				statistics.push(row);
-//				console.log("sending " + i + ": " + JSON.stringify(row));
+                moblerlog("sending " + i + ": " + JSON.stringify(row));
 			}
 			sessionkey = self.controller.models['authentication'].getSessionKey();
 			uuid = device.uuid;
@@ -440,8 +438,7 @@ StatisticsModel.prototype.sendToServer = function() {
 			data : statisticsString,
 			processData: false,
 			success : function(data) {
-				console
-				.log("statistics data successfully send to the server");
+				moblerlog("statistics data successfully send to the server");
 				localStorage.removeItem("pendingStatistics");
 				
 				if (data) {
@@ -455,8 +452,7 @@ StatisticsModel.prototype.sendToServer = function() {
 				$(document).trigger("statisticssenttoserver");
 			},
 			error : function() {
-				console
-				.log("Error while sending statistics data to server");
+				moblerlog("Error while sending statistics data to server");
 				var statisticsToStore = {
 					sessionkey : sessionkey,
 					uuid : device.uuid,
