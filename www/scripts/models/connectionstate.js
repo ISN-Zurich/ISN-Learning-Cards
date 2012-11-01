@@ -34,7 +34,7 @@ function ConnectionState(controller) {
 	var self = this;
 	self.controller = controller;
 
-	var networkState = navigator.network.connection.type;
+	var networkState = navigator.connection.type;
 
 	if (networkState == Connection.NONE) {
 		self.state = false;
