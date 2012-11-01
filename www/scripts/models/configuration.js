@@ -58,7 +58,7 @@ var URLS_TO_LMS = {"yellowjacket":
 					}
 };
 
-var MOBLERDEBUG = 1;
+var MOBLERDEBUG = 0;
 
 function moblerlog(messagestring) {
     if (MOBLERDEBUG === 1) {
