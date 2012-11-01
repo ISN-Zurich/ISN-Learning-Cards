@@ -25,7 +25,28 @@ under the License.
  * @author Evangelia Mitsopoulou
 
 */
- 
+
+// helper functions
+
+function checkImprovement(improvementValue) {
+    var retval = msg_neutralImprovement_icon + " green";
+    if (improvementValue > 0) {
+        retval = msg_positiveImprovement_icon + " green";
+    } else if (improvementValue < 0) {
+        retval = msg_negativeImprovement_icon + " red";
+    }
+    return retval;
+}
+
+function checkSpeedImprovement(improvementValue){
+    var retval = msg_neutralImprovement_icon + " green";
+    if (improvementValue > 0) {
+        retval = msg_positiveImprovement_icon + " red";
+    } else if (improvementValue < 0) {
+        retval = msg_negativeImprovement_icon + " green";
+    }
+    return retval;
+}
 
 
 //View for displaying the statistics
@@ -53,7 +74,7 @@ function StatisticsView(controller) {
     //console.log('bind the application events');
     $(document).bind("loadstatisticsfromserver", function() {
 		// if (self.controller.activeView == self.controller.views[self.tagID])
-    	if (self.tagID == self.controller.activeView.tagID)	
+    	if (self.tagID === self.controller.activeView.tagID)
     	{
     		//console.log("enters load statistics from server is done");
 			 self.controller.models['statistics'].getFirstActiveDay();
@@ -65,7 +86,7 @@ function StatisticsView(controller) {
     	//if (self.controller.activeView == self.controller.views[self.tagID])
     	//if (self.controller.activeView == 'statisticsView')
     
-    	if (self.tagID == self.controller.activeView.tagID)
+    	if (self.tagID === self.controller.activeView.tagID)
     	{
     		//console.log("enters in calculations done 2 ");
     		self.loadData();
@@ -159,28 +180,28 @@ StatisticsView.prototype.loadData = function() {
 		avgScore =  0;
 	}
 	
-//	var avgSpeed = statistics['averageSpeed'];
+    //	var avgSpeed = statistics['averageSpeed'];
 	var avgSpeed = statisticsModel.averageSpeed.averageSpeed;
 	var improvementSpeed = statisticsModel.averageSpeed.improvementSpeed;
 	if (avgSpeed <= 0) {
 		avgSpeed =  "-";
 	}
 	
-//var handledCards = statistics['handledCards'];
-
+    //var handledCards = statistics['handledCards'];
+    
 	var handledCards = statisticsModel.handledCards.handledCards;
 	var improvementhandledCards = statisticsModel.handledCards.improvementHandledCards;
-	 if (handledCards < 0) {
-		 	handledCards =  0;
-	 }
-	  
+    if (handledCards < 0) {
+        handledCards =  0;
+    }
+    
 	//var progress = statistics['progress'];
-	 var progress = statisticsModel.progress.progress;
-	 var improvementProgress = statisticsModel.progress.improvementProgress;
+    var progress = statisticsModel.progress.progress;
+    var improvementProgress = statisticsModel.progress.improvementProgress;
 	if (progress < 0) {
 		progress =  0;
 	}
-
+    
 	var bestDay = statisticsModel.bestDay.bestDay;
 	//var bestDay = statistics['bestDay'];
 	if (!bestDay) {
@@ -196,10 +217,10 @@ StatisticsView.prototype.loadData = function() {
 	}
 	//console.log("initialization of data done");
 	
-	var removeClasses = msg_positiveImprovement_icon + " " + msg_negativeImprovement_icon + " " + msg_neutralImprovement_icon + 
-			" red green";
+	var removeClasses = msg_positiveImprovement_icon + " " + msg_negativeImprovement_icon + " " + msg_neutralImprovement_icon +
+    " red green";
 	
-	$("#loadingMessage").hide();	
+	$("#loadingMessage").hide();
 	$("#statisticsBody").show();
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
@@ -215,31 +236,9 @@ StatisticsView.prototype.loadData = function() {
 	$("#statsProgressIconchange").addClass(checkImprovement(improvementProgress));
 	$("#statSpeedValue").text(avgSpeed);
 	$("#statsSpeedIconchange").removeClass(removeClasses);
-	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));	
-
-	function checkImprovement(improvementValue) {
-		if (improvementValue > 0) {
-			return msg_positiveImprovement_icon + " green";
-		} else if (improvementValue < 0) {
-			return msg_negativeImprovement_icon + " red";
-		}else{
-			return msg_neutralImprovement_icon + " green";
-		}
-    }
-
-	function checkSpeedImprovement(improvementValue){
-		if (improvementValue > 0) {
-			return msg_positiveImprovement_icon + " red";
-		} else if (improvementValue < 0) {
-			return msg_negativeImprovement_icon + " green";
-
-		}else{
-			return msg_neutralImprovement_icon + " green";
-		}
-		
-	}
-	
-	//console.log("end load data");
+	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));
+    
+    //console.log("end load data");
 };	
 
 	
