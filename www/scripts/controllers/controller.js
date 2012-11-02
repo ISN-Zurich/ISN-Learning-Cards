@@ -57,9 +57,7 @@ function doApologize() {
 
 function Controller() {
 	var self = this;
-
-    	moblerlog("start controller");
-	
+	moblerlog("start controller");
 	var startTime= new Date().getTime();
 
 	$.ajaxSetup({
@@ -180,8 +178,7 @@ Controller.prototype.setupLanguage = function() {
 	    path:'translations/', 
 	    mode:'both',
 	    language:this.models.authentication.getLanguage(), 
-	    callback: function() {
-	    	// initialize the static strings on all views.
+	    callback: function() { // initialize the static strings on all views
 	        $("#usernameInput").attr("placeholder", msg_placeholder_username);
 	        $("#password").attr("placeholder", msg_placeholder_password);
 	        $("#coursesListTitle").text(msg_courses_list_title);

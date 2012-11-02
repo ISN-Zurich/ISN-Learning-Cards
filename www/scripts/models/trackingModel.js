@@ -142,14 +142,12 @@ TrackingModel.prototype.sendToServer = function(){
 			data : trackingString,
 			processData: false,
 			success : function() {
-				console
-				.log("tracking data successfully send to the server");
+				//console.log("tracking data successfully send to the server");
 				localStorage.removeItem("pendingTracking");
 				self.lastSendToServer = (new Date()).getTime();
 			},
 			error : function(xhr, e, errorString) {
-				console
-				.log("Error while sending tracking data to server " + errorString);
+				//console.log("Error while sending tracking data to server " + errorString);
 				var trackingToStore = {
 					sessionkey : sessionkey,
 					uuid : device.uuid,

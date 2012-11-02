@@ -118,10 +118,10 @@ QuestionView.prototype.handlePinch = function() {
 
  //tap leads to the answer view
 
-QuestionView.prototype.handleTap = function(e) {
+QuestionView.prototype.handleTap = function() {
 //var self = this;
 	
-	e.preventDefault();
+	//e.preventDefault();
 	//e.stopPropagation();
 	if (controller.models["answers"].answerScore > -1){
 		controller.transitionToFeedback();
