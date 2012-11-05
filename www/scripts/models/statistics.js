@@ -84,12 +84,18 @@ function StatisticsModel(controller) {
 	// FIXME: check the localstorage if the the data is already loaded
 	// if the the data is not loaded but the user is logged in, then loadFromServer()
 	self.statisticsIsLoaded = self.controller.getConfigVariable("statisticsLoaded");
-	if (!self.statisticsIsLoaded && self.controller.getLoginState() ) {
+	//console.log("statistcsIsLoaded is" + self.controller.getConfigVariable("statisticsLoaded"));
+//	if (!self.statisticsIsLoaded && self.controller.getLoginState() ) {
+//			self.loadFromServer();
+//	}
+	if (this.controller.getConfigVariable("statisticsLoaded")== false && self.controller.getLoginState()){
+		console.log("enters heree");
 			self.loadFromServer();
 	}
 	
 	$(document).bind("checkachievements", function(p, courseId) {
-		self.checkAchievements(courseId);
+		//self.checkAchievements(courseId);
+		self.cardBurner.calculateValue(courseId);
 	});
 	
 //	this.db.transaction(function(transaction) {
@@ -113,11 +119,14 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	//this.getAllDBEntries();//useful for debugging, defined in the of the file
 
 	this.controller.models['questionpool'].loadData(courseId);
-	moblerlog("statistics are loaded? " + (this.statisticsIsLoaded ? "yes" : "no"));
-	if ( this.statisticsIsLoaded ) {
+	console.log("statistics are loaded? " + (this.statisticsIsLoaded ? "yes1" : "no1"));
+	console.log("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
+	//if ( this.statisticsIsLoaded ) {
+	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
 		// load the appropriate models for our course
 		this.initSubModels();
-        moblerlog("sub models are initialized");
+       // moblerlog("sub models are initialized");
+		console.log("sub models are initialized");
 		//checks if card burner achievement was already achieved
 		//and starts the calculations
 //		this.checkCardBurner();
@@ -290,7 +299,6 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 // checks if any achievements have been achieved
 
 StatisticsModel.prototype.checkAchievements = function(courseId) {
-	var self = this;
 	//check if cardburner was already achieved
 	self.cardBurner.calculateValue(courseId);
 };
