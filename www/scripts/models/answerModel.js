@@ -273,7 +273,7 @@ AnswerModel.prototype.storeScoreInDB = function() {
 								[ self.currentCourseId, self.currentQuestionId,
 										day.getTime(), self.answerScore, duration ],
 								function() {
-									//console.log("successfully inserted");
+									console.log("successfully inserted SCORE IN db");
 									$(document).trigger("checkachievements", self.currentCourseId);
 								}, function(tx, e) {
 									//console.log("error! NOT inserted: "+ e.message);
