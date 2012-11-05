@@ -150,6 +150,7 @@ ConfigurationModel.prototype.loadData = function() {
 	if (!configObject) {
 		configObject = {
 			loginState : "loggedOut"
+			//statisticsLoaded: "false"
 		};
 	}
 

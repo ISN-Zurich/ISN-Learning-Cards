@@ -297,6 +297,7 @@ Controller.prototype.transitionToFeedbackMore = function() {
 
 Controller.prototype.transitionToStatistics = function(courseID) {
 	if ( this.getLoginState() ) {
+			
 		if (courseID && courseID > 0) {
 			this.models['statistics'].setCurrentCourseId(courseID);
 		}

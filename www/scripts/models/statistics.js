@@ -333,7 +333,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 						}
 						moblerlog("after inserting statistics from server");
 						// trigger event statistics are loaded from server
-						self.statisticsIsLoaded = true;
+						//self.statisticsIsLoaded = true;
 						// FIXME: Store a flag into the local storage that the data is loaded.
 						
 //						var configObject = {
@@ -341,7 +341,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 //						}
 						self.controller.setConfigVariable("statisticsLoaded", true);
 						
-						self.statisticsIsLoaded = true;
+						//self.statisticsIsLoaded = true;
 						$(document).trigger("loadstatisticsfromserver");
 					},
 					error : function(xhr, err, errorString) {

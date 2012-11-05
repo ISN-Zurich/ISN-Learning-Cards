@@ -130,7 +130,8 @@ StatisticsView.prototype.openDiv = openView;
 
 StatisticsView.prototype.open = function() {
 	var self=this;
-	if (this.controller.models['statistics'].statisticsIsLoaded) {
+	//if (this.controller.models['statistics'].statisticsIsLoaded) {
+	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
 		//console.log("statistics have been loaded from server");
 		self.loadData();	
 	}
