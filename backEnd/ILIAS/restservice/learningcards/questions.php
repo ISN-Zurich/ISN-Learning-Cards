@@ -123,7 +123,13 @@ function getQuestions($courseId) {
 							} else {
 								$answerList = $assQuestion->getAnswers();
 							}
-
+							
+							if (strcmp($type, "assOrderingHorizontal") == 0) {
+								//numeric questions have no "getAnswers()" method!
+								//only lower and upper limit are returned
+								$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
+							}
+							
 							//get feedback
 							$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
 							$feedbackError = $assQuestion->getFeedbackGeneric(0);
