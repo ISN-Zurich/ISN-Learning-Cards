@@ -179,6 +179,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		case 'assNumeric':
 			this.widget = new NumericQuestionWidget(interactive);
 			break;
+		case 'assOrderingHorizontal':
+			this.widget = new HorizontalTextSortWidget(interactive);
+			break;
 		case 'assOrderingQuestion':
 			this.widget = new TextSortWidget(interactive);
 			break;

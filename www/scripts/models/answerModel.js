@@ -311,6 +311,9 @@ AnswerModel.prototype.calculateScore = function () {
 	case 'assOrderingQuestion':
 		this.calculateTextSortScore();
 		break;
+	case 'assOrderingHorizontal':
+		this.calculateTextSortScore();
+		break;
 	case 'assNumeric':
 		this.calculateNumericScore();
 		break;

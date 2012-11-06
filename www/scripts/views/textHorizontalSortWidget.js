@@ -150,7 +150,8 @@ HorizontalTextSortWidget.prototype.showFeedback = function() {
 
 		var div = $("<div/>", {
 			"class" : "text",
-			text : answers[i].answertext
+			//text : answers[i].answertext
+			text:answers[i]
 		}).appendTo(li);
 		
 		// if score is 0.5 or 1.5 show a checkmark
