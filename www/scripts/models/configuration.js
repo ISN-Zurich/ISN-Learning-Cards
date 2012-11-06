@@ -27,7 +27,7 @@ under the License.
 */
 
 var APP_ID = "ch.ethz.isn.learningcards";
-var DEFAULT_SERVER = "hornet";
+var DEFAULT_SERVER = "yellowjacket";
 var URLS_TO_LMS = {"yellowjacket":  
 					{
 						logoImage: "resources/pfpLogo.png", 
