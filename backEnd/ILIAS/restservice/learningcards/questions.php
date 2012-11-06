@@ -120,13 +120,18 @@ function getQuestions($courseId) {
 								//numeric questions have no "getAnswers()" method!
 								//only lower and upper limit are returned
 								$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
+								logging("answerList for Numeric Question".json_encode($answerList));
 							} else if (strcmp($type, "assOrderingHorizontal") == 0) {
 								//horizontal ordering questions have no "getAnswers()" method!
 								//they use the OrderText variable to store the answers and the getOrderText function to retrieve them 
-								$answerList = $assQuestion->getOrderText();
+								//$answerList = $assQuestion->getOrderText();
+								$answerList = $assQuestion->getOrderingElements();
+								logging("answerList for Horizontal Question".json_encode($answerList));
 							}	 
 							 else {
 								$answerList = $assQuestion->getAnswers();
+								//logging("answerList for other types of Question".json_encode($answerList));
+								
 							}
 
 							//get feedback
