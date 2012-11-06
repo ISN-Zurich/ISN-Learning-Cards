@@ -147,6 +147,11 @@ li {
 	margin:0px;
 }
 
+.horizontal { 
+	display:inline;
+}
+
+
 /*********************** Views ***********************/
 #coursesListView {
 	display: none;
