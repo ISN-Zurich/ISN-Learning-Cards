@@ -74,7 +74,7 @@ if ($userID != 0) {
 function getQuestions($courseId) {
 	//references are needed to get course items (= questionpools, tests, ...)
 	$item_references = ilObject::_getAllReferences($courseId);
-
+	logging("item references".json_encode($item_references));
 	$questions = array();
 
 	if(is_array($item_references) && count($item_references)) {
@@ -84,7 +84,7 @@ function getQuestions($courseId) {
 			$courseItems = new ilCourseItems($ref_id);
 			$courseItemsList = $courseItems->getAllItems();
 
-			//			logging("Questions: " . json_encode($courseItemsList));
+				logging("Questions: " . json_encode($courseItemsList));
 
 			foreach($courseItemsList as $courseItem) {
 
@@ -96,7 +96,7 @@ function getQuestions($courseId) {
 					//check if question pool is valid
 					if(isValidQuestionPool($questionPool)) {
 						$questionList = $questionPool->getQuestionList();
-						//						logging("Question list: " . json_encode($questionList));
+											logging("Question list: " . json_encode($questionList));
 
 						foreach ($questionList as $question) {
 
@@ -120,16 +120,15 @@ function getQuestions($courseId) {
 								//numeric questions have no "getAnswers()" method!
 								//only lower and upper limit are returned
 								$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
-							} else {
+							} else if (strcmp($type, "assOrderingHorizontal") == 0) {
+								//horizontal ordering questions have no "getAnswers()" method!
+								//they use the OrderText variable to store the answers and the getOrderText function to retrieve them 
+								$answerList = $assQuestion->getOrderText();
+							}	 
+							 else {
 								$answerList = $assQuestion->getAnswers();
 							}
-							
-							if (strcmp($type, "assOrderingHorizontal") == 0) {
-								//numeric questions have no "getAnswers()" method!
-								//only lower and upper limit are returned
-								$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
-							}
-							
+
 							//get feedback
 							$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
 							$feedbackError = $assQuestion->getFeedbackGeneric(0);
