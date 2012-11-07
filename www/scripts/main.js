@@ -29,6 +29,8 @@ under the License.
 
 //The starting point of the app
 
+/*jslint vars: true, sloppy: true */
+
 var controller;
 
 document.addEventListener("deviceready", init, false);

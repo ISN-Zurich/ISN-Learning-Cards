@@ -21,10 +21,15 @@ under the License.
 */
 
 
+
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
 
 */
+
+/*jslint vars: true, sloppy: true */
+var MOBLERDEBUG = 0;
 
 // helper functions
 
@@ -58,7 +63,7 @@ function StatisticsView(controller) {
     self.tagID = 'statisticsView';
     self.controller = controller;
     
-    //console.log( 'statistics view init touch events');
+    moblerlog( 'statistics view init touch events');
     
     jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); });
     
@@ -71,29 +76,29 @@ function StatisticsView(controller) {
 		self.clickToAchievements();
 	});
     
-    //console.log('bind the application events');
+    moblerlog('bind the application events');
     $(document).bind("loadstatisticsfromserver", function() {
 		// if (self.controller.activeView == self.controller.views[self.tagID])
     	if (self.tagID === self.controller.activeView.tagID)
     	{
-    		//console.log("enters load statistics from server is done");
+    		moblerlog("enters load statistics from server is done");
 			 self.controller.models['statistics'].getFirstActiveDay();
     	}
 	  });
     
     $(document).bind("allstatisticcalculationsdone", function() { 
-    	//console.log("enters in calculations done 1 ");
+    	moblerlog("enters in calculations done 1 ");
     	//if (self.controller.activeView == self.controller.views[self.tagID])
     	//if (self.controller.activeView == 'statisticsView')
     
     	if (self.tagID === self.controller.activeView.tagID)
     	{
-    		//console.log("enters in calculations done 2 ");
+    		moblerlog("enters in calculations done 2 ");
     		self.loadData();
     	}
     });
      
-        // console.log('done');
+        moblerlog('done');
     
         // $(document).bind("loadstatisticsfromserver", function() {
         //  this.loadData();
@@ -132,7 +137,7 @@ StatisticsView.prototype.open = function() {
 	var self=this;
 	//if (this.controller.models['statistics'].statisticsIsLoaded) {
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-		//console.log("statistics have been loaded from server");
+		moblerlog("statistics have been loaded from server");
 		self.loadData();	
 	}
 	else {
@@ -144,7 +149,7 @@ StatisticsView.prototype.open = function() {
  //leads to course list
  
 StatisticsView.prototype.closeStatistics = function() {
-	//console.log("close Statistics button clicked");
+	moblerlog("close Statistics button clicked");
 	this.controller.transitionToCourses();
 };
 
@@ -158,7 +163,7 @@ StatisticsView.prototype.showLoadingMessage = function() {
 //leads to achievements view
 
 StatisticsView.prototype.clickToAchievements = function() {
-	//console.log("slot 1 or slot 2 clicked");
+	moblerlog("slot 1 or slot 2 clicked");
 	this.controller.transitionToAchievements();
 };
 
@@ -166,14 +171,14 @@ StatisticsView.prototype.clickToAchievements = function() {
 //loads the statistics data
 
 StatisticsView.prototype.loadData = function() {
-	//console.log("enters load data in statistics");
+	moblerlog("enters load data in statistics");
 	var statisticsModel = this.controller.models['statistics'];
 	var statistics = statisticsModel.getStatistics();
 	var improvement = statisticsModel.getImprovement();
 	$("#loadingMessage").hide();
 	$("#statisticsBody").show();
 	
-	//console.log("init values for statistics");
+	moblerlog("init values for statistics");
 	//var avgScore = statistics['averageScore'];
 	var avgScore = statisticsModel.averageScore.averageScore;
 	var improvementAvgScore = statisticsModel.averageScore.improvementAverageScore;
@@ -216,7 +221,7 @@ StatisticsView.prototype.loadData = function() {
 	if (bestScore < 0) {
 		bestScore =  0;
 	}
-	//console.log("initialization of data done");
+	moblerlog("initialization of data done");
 	
 	var removeClasses = msg_positiveImprovement_icon + " " + msg_negativeImprovement_icon + " " + msg_neutralImprovement_icon +
     " red green";
@@ -239,7 +244,7 @@ StatisticsView.prototype.loadData = function() {
 	$("#statsSpeedIconchange").removeClass(removeClasses);
 	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));
     
-    //console.log("end load data");
+    moblerlog("end load data");
 };	
 
 	

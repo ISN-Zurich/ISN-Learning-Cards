@@ -20,6 +20,11 @@ under the License.
 
 */
 
+
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
+
 function AverageScoreModel(statisticsModel){
     this.modelName = " avg score";
     this.superModel = statisticsModel;

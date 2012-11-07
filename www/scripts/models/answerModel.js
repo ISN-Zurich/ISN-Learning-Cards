@@ -26,8 +26,10 @@ under the License.
 
 */
 
-var DB_VERSION = 1;
+/*jslint vars: true, sloppy: true */
 
+var DB_VERSION = 1;
+var MOBLERDEBUG = 0;
 
 //The answer model holds/handles the answers of a question of every type
 
@@ -81,9 +83,9 @@ AnswerModel.prototype.deleteData = function() {
  // otherwise PariallyCorrect
  
 AnswerModel.prototype.getAnswerResults = function() {
-	//console.log("answer score: " + this.answerScore);
+	moblerlog("answer score: " + this.answerScore);
 	if (this.answerScore === 1) {
-		//console.log("Excellent");
+		moblerlog("Excellent");
 		return "Excellent";
 	} else if (this.answerScore === 0) {
 		return "Wrong";
@@ -117,24 +119,24 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	var wrong_ticked = 0;
 
 	for ( i = 0; i < numberOfAnswers; i++) {
-		//console.log("answer " + i + ": " + questionpool.getScore(i));
+		moblerlog("answer " + i + ": " + questionpool.getScore(i));
 		if (questionpool.getScore(i) > 0) {
 			correctAnswers++;
 			if (this.answerList.indexOf(i) !== -1) {
 				corr_ticked++;
-				//console.log("corr_ticked");
+				moblerlog("corr_ticked");
 			}
 		} else {
 			if (this.answerList.indexOf(i) !== -1) {
 				wrong_ticked++;
-				//console.log("wrong_ticked");
+				moblerlog("wrong_ticked");
 			}
 		}
 	}
 
-	//console.log("Number of answers: " + numberOfAnswers);
-	//console.log("Correct ticked: " + corr_ticked);
-	//console.log("Wrong ticked: " + wrong_ticked);
+	moblerlog("Number of answers: " + numberOfAnswers);
+	moblerlog("Correct ticked: " + corr_ticked);
+	moblerlog("Wrong ticked: " + wrong_ticked);
 
 	if ((corr_ticked + wrong_ticked) === numberOfAnswers || corr_ticked === 0) {
 		// if all answers are ticked or no correct answer is ticked, we assign 0
@@ -229,7 +231,7 @@ AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
 	this.currentQuestionId = questionId;
-	//console.log("currentQuestionId: " + this.currentQuestionId);
+	moblerlog("currentQuestionId: " + this.currentQuestionId);
 };
 
 
@@ -273,10 +275,10 @@ AnswerModel.prototype.storeScoreInDB = function() {
 								[ self.currentCourseId, self.currentQuestionId,
 										day.getTime(), self.answerScore, duration ],
 								function() {
-									console.log("successfully inserted SCORE IN db");
+									moblerlog("successfully inserted SCORE IN db");
 									$(document).trigger("checkachievements", self.currentCourseId);
 								}, function(tx, e) {
-									//console.log("error! NOT inserted: "+ e.message);
+									moblerlog("error! NOT inserted: "+ e.message);
 								});
 			});
 
@@ -290,9 +292,9 @@ AnswerModel.prototype.deleteDB = function() {
 	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {
 		tx.executeSql("DELETE FROM statistics", [], function() {
-			//console.log("statistics table cleared");
+			moblerlog("statistics table cleared");
 		}, function() {
-			//console.log("error: statistics table not cleared");
+			moblerlog("error: statistics table not cleared");
 		});
 	});
 };

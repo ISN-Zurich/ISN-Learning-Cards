@@ -20,6 +20,11 @@ under the License.
 
 */
 
+
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
+
 function BestDayScoreModel(statisticsModel){
     this.modelName = " best day";
     this.superModel = statisticsModel;

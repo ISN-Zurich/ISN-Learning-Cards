@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -25,6 +26,9 @@ under the License.
    
 */
 
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
 
 //View for displaying the settings
 
@@ -44,7 +48,7 @@ function SettingsView() {
 });
 
     $(document).bind("authenticationready", function(e, userID) {
-		//console.log("authentication ready called " + userID);
+		moblerlog("authentication ready called " + userID);
 		self.loadData();
 	});
   
@@ -87,7 +91,7 @@ SettingsView.prototype.close = closeView;
 //leads to course list
  
 SettingsView.prototype.closeSettings = function() {
-	//console.log("close settings button clicked");
+	moblerlog("close settings button clicked");
 	controller.transitionToCourses();
 };
 

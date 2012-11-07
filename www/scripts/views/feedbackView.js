@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -20,11 +21,17 @@ under the License.
 
 */
 
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
  */
 
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
+
 // View for displaying the feedback
+
 
 function FeedbackView(question) {
 	var self = this;
@@ -46,7 +53,7 @@ function FeedbackView(question) {
 	//Handler when taping on the title of the feedbackView area of the answer view
 	jester($('#cardFeedbackTitle')[0]).tap(function() {
 		self.clickTitleArea();
-		//console.log("feedback title clicked");
+		moblerlog("feedback title clicked");
 	});
 	
 	

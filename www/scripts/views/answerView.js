@@ -1,6 +1,7 @@
 /**
  * .0	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -29,6 +30,9 @@ under the License.
  * The answer View is a general template that loades in its main body a different widget based on the type of the question.
 */
 
+/*jslint vars: true, sloppy: true */
+var MOBLERDEBUG = 0;
+
 function AnswerView() {
 	var self = this;
 
@@ -50,13 +54,13 @@ function AnswerView() {
 	//Handler when taping on the title of the answer area of the answer view
 	jester($('#cardAnswerTitle')[0]).tap(function() {
 		self.clickTitleArea();
-		//console.log("answer title clicked");
+		moblerlog("answer title clicked");
 	});
 	
 	//Handler when taping on the icon of the title area of the answer view
 	jester($('#cardAnswerIcon')[0]).tap(function() {
 		self.clickTitleArea();
-		//console.log("answer title clicked");
+		moblerlog("answer title clicked");
 	});
 
 	// center the answer body to the middle of the screen of the answer view
@@ -194,7 +198,7 @@ AnswerView.prototype.clickDoneButton = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
 	var answerModel = controller.models['answers'];
-	//console.log('check apology ' + this.widget.didApologize);
+	moblerlog('check apology ' + this.widget.didApologize);
 	if (this.widget.didApologize) {
 		// if there was a problem with the data, the widget knows
 		// in this case we proceed to the next question

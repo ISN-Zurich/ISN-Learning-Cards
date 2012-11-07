@@ -21,6 +21,10 @@ under the License.
 */
 
 
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
+
 var SUBMODEL_QUERY_ONE = 0;
 var SUBMODEL_QUERY_THREE = 1;
 var SUBMODEL_QUERY_FOUR = 2;
@@ -84,12 +88,12 @@ function StatisticsModel(controller) {
 	// FIXME: check the localstorage if the the data is already loaded
 	// if the the data is not loaded but the user is logged in, then loadFromServer()
 	self.statisticsIsLoaded = self.controller.getConfigVariable("statisticsLoaded");
-	//console.log("statistcsIsLoaded is" + self.controller.getConfigVariable("statisticsLoaded"));
+	moblerlog("statistcsIsLoaded is" + self.controller.getConfigVariable("statisticsLoaded"));
 //	if (!self.statisticsIsLoaded && self.controller.getLoginState() ) {
 //			self.loadFromServer();
 //	}
 	if (this.controller.getConfigVariable("statisticsLoaded")== false && self.controller.getLoginState()){
-		console.log("enters heree");
+		moblerlog("enters heree");
 			self.loadFromServer();
 	}
 	
@@ -119,14 +123,14 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	//this.getAllDBEntries();//useful for debugging, defined in the of the file
 
 	this.controller.models['questionpool'].loadData(courseId);
-	console.log("statistics are loaded? " + (this.statisticsIsLoaded ? "yes1" : "no1"));
-	console.log("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
+	moblerlog("statistics are loaded? " + (this.statisticsIsLoaded ? "yes1" : "no1"));
+	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
 	//if ( this.statisticsIsLoaded ) {
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
 		// load the appropriate models for our course
 		this.initSubModels();
        // moblerlog("sub models are initialized");
-		console.log("sub models are initialized");
+		moblerlog("sub models are initialized");
 		//checks if card burner achievement was already achieved
 		//and starts the calculations
 //		this.checkCardBurner();

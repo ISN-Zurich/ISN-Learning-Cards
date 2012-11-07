@@ -21,6 +21,8 @@ under the License.
 */
 
 
+
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
 
@@ -31,6 +33,10 @@ under the License.
  * This model holds the question of an question pool and a queue for the last
  * answered questions
  */
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
+
 function QuestionPoolModel(controller) {
 	this.controller = controller;
 
@@ -104,14 +110,14 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
-					//console.log("success");
+					moblerlog("success");
 					
 					//if this was an pending question pool, remove it from the storage
 					localStorage.removeItem("pendingQuestionPool" + courseId);
 					
 					
 					if (data) {
-                    //console.log("JSON: " + data);
+                    moblerlog("JSON: " + data);
 						var questionPoolObject;
 						
 						questionPoolObject = data.questions;
@@ -119,14 +125,14 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 						// if (!questionPoolObject[0]) { // if no courses are
 						// available, new ones are created
-						// console.log("no questionpool loaded");
+						moblerlog("no questionpool loaded");
 						// questionPoolObject = self.createPool(data.courseID);
 						// }
 						
 						if (!questionPoolObject) {
 							questionPoolObject = [];
 						}
-                        //console.log("Object: " + questionPoolObject);
+                        moblerlog("Object: " + questionPoolObject);
 						
 						var questionPoolString;
 						try {
@@ -230,7 +236,7 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 		// generates a random number between 0 and questionList.length - 1
 		random = Math.floor((Math.random() * this.questionList.length));
 		newId = this.questionList[random].id;
-		//console.log("New ID: " + newId);
+		moblerlog("New ID: " + newId);
 	} while (this.id === newId
 			|| (this.queue.length * 2 <= this.questionList.length && jQuery
 					.inArray(newId, this.queue) >= 0));

@@ -20,6 +20,11 @@ under the License.
 
 */
 
+
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
+
 function AverageSpeedModel(statisticsModel){
     this.modelName = " avg speed";
     this.superModel = statisticsModel;

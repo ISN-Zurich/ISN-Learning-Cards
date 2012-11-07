@@ -20,6 +20,11 @@ under the License.
 
 */
 
+
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
+
 function HandledCardsModel(statisticsModel){
     this.modelName = " handled cards";
     this.superModel = statisticsModel;

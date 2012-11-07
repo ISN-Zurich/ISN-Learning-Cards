@@ -24,36 +24,9 @@ under the License.
  * @author Evangelia Mitsopoulou
  */
 
+/*jslint vars: true, sloppy: true */
 
-//****VIEW HELPERS******
-
-// does nothing
-
-function doNothing() {}
-
-//opens a view
- 
-function openView() {
-	$(document).trigger("trackingEventDetected",[this.tagID]);
-	$("#" + this.tagID).show();
-}
-
-// closes a view
- 
-function closeView() {
-	$("#" + this.tagID).hide();
-}
-
-// shows apologize message if not question data is loaded
-
-function doApologize() {
-	$("#feedbackBody").empty();
-	$("<span/>", {
-		text : "Apologize, no data are loaded"
-	}).appendTo($("#dataErrorMessage"));
-	$("#dataErrorMessage").show();
-}
-
+var MOBLERDEBUG = 0;
 
 function Controller() {
 	var self = this;
@@ -86,7 +59,7 @@ function Controller() {
 	//initialize user interface language
 	this.setupLanguage();
 
-    //    moblerlog('languages are set up');
+    moblerlog('languages are set up');
 
 	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
@@ -128,7 +101,7 @@ function Controller() {
 			swipeCatcher).tap(tapCatcher);
 
 	
-    //	moblerlog('core gestures done');
+	moblerlog('core gestures done');
 
 	// if device is an iPhone enable pinching
     moblerlog('platform' + device.platform);
@@ -263,7 +236,7 @@ Controller.prototype.transitionToLogout = function() {
 };
 
 Controller.prototype.transitionToAuthArea = function(viewname) {
-	if ( this.getLoginState() ) {
+	if (this.getLoginState()) {
 		this.transition(viewname);
 	}
 	else {

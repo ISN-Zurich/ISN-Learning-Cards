@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -20,6 +21,7 @@ under the License.
 
 */
 
+/*jslint vars: true, sloppy: true */
 
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
@@ -31,6 +33,7 @@ under the License.
 */
 
 
+var MOBLERDEBUG = 0;
 
 function MultipleChoiceWidget(interactive) {
 	var self = this;
@@ -44,9 +47,9 @@ function MultipleChoiceWidget(interactive) {
 	//Check the boolean value of intractive. This is set through the answer and feedback view.
 	if (self.interactive) { 
 		self.showAnswer(); 
-		//console.log("interactive true");
+		moblerlog("interactive true");
 	} else {
-		//console.log("interactive false");
+		moblerlog("interactive false");
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 	}
 } // end of consructor
@@ -115,7 +118,7 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 
 
 MultipleChoiceWidget.prototype.showFeedback = function() {
-	//console.log("start show feedback in multiple choice");
+	moblerlog("start show feedback in multiple choice");
 	
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
@@ -146,9 +149,9 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 			$("#FeedbackMore").hide();
 		}
 	} else { //if the answer results are wrong
-		//console.log('handle answer results');
+		moblerlog('handle answer results');
 		var wrongText = questionpoolModel.getWrongFeedback(); //gets wrong feedback text 
-		//console.log("XX " + wrongText);
+		moblerlog("XX " + wrongText);
 		if (wrongText && wrongText.length > 0) {
 			// when extra feedback info is available 
 			$("#FeedbackMore").show();
@@ -195,4 +198,4 @@ MultipleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	});
 };
 
-//console.log("end of mulitple choice widget");
+moblerlog("end of mulitple choice widget");

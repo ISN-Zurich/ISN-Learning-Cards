@@ -1,5 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -30,6 +32,9 @@ under the License.
  * if true answerview is shown, otherwise feedback view
  */
 
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
 
 function HorizontalTextSortWidget(interactive) {
 	var self = this;
@@ -205,7 +210,7 @@ HorizontalTextSortWidget.prototype.storeAnswers = function() {
 HorizontalTextSortWidget.prototype.enableSorting = function() {
 
 	jester($(".sortable")[0]).start(function(touches, event) {
-		//console.log("ScrollTop " + $("ul#cardAnswerBody").scrollTop());
+		moblerlog("ScrollTop " + $("ul#cardAnswerBody").scrollTop());
 		createEvent("mousedown", event);
 	});
 

@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -27,6 +28,8 @@ under the License.
 */
 
 
+/*jslint vars: true, sloppy: true */
+
 var DEFAULT_SYNC_TIMEOUT = 60000;
 
 /**
@@ -47,7 +50,7 @@ function CourseModel(controller) {
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 
 	$(document).bind("questionpoolready", function(e, courseID) {
-		//console.log("model questionPool ready called " + courseID);
+		moblerlog("model questionPool ready called " + courseID);
 		self.courseIsLoaded(courseID);
 	});
 
@@ -117,7 +120,7 @@ CourseModel.prototype.loadData = function() {
  * told to load their data from the server
  */
 CourseModel.prototype.loadFromServer = function() {
-	//console.log("loadFromServer-Course is called");
+	moblerlog("loadFromServer-Course is called");
 	var self = this;
 	var syncStateCache = [];
 	self.checkForTimeOut();
@@ -153,7 +156,7 @@ CourseModel.prototype.loadFromServer = function() {
 		}
 
 		function createCourseList(data) {
-			//console.log("success");
+			moblerlog("success");
 
 			// if there was an pending course list, remove it from the storage
 			localStorage.removeItem("pendingCourseList");
@@ -164,21 +167,21 @@ CourseModel.prototype.loadFromServer = function() {
 
 			} catch (err) {
 				courseObject = {};
-				//console.log("Couldn't load courses from server " + err);
+				moblerlog("Couldn't load courses from server " + err);
 			}
-			//console.log("course data loaded from server");
+			moblerlog("course data loaded from server");
 
 			// if (!courseObject[0]) { // if no courses are available,
 			// // new ones are created
 			// courseObject = self.createCourses();
 			// }
-            //console.log(courseObject);
+            moblerlog(courseObject);
 			self.courseList = courseObject.courses || [];
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;
 			self.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 			self.storeData();
-			//console.log("JSON CourseList: " + self.courseList);
+			moblerlog("JSON CourseList: " + self.courseList);
 			self.reset();
 
 			if (syncStateCache.length > 0) {
@@ -244,11 +247,11 @@ CourseModel.prototype.reset = function() {
  */
 CourseModel.prototype.checkForTimeOut = function() {
 	var timeDelta = ((new Date()).getTime() - this.syncDateTime);
-	//console.log("timeDelta: " + timeDelta);
-	//console.log("syncTimeOut: " + this.syncTimeOut);
+	moblerlog("timeDelta: " + timeDelta);
+	moblerlog("syncTimeOut: " + this.syncTimeOut);
 	if (timeDelta > this.syncTimeOut) {
 		this.syncState = false;
-		//console.log("check for timeout is false");
+		moblerlog("check for timeout is false");
 	}
 };
 
@@ -284,7 +287,7 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 			this.courseList[c].isLoaded = true;
 			this.courseList[c].syncState = true;
 			this.storeData();
-			//console.log(this.courseList[c].id + " is loaded");
+			moblerlog(this.courseList[c].id + " is loaded");
 			break;
 		}
 	}
@@ -312,7 +315,7 @@ CourseModel.prototype.isSynchronized = function(courseId) {
  * pools from the server
  */
 CourseModel.prototype.switchToOnline = function() {
-	//console.log("switch to online - load all not yet loaded courses");
+	moblerlog("switch to online - load all not yet loaded courses");
 
 	this.checkForTimeOut();
 
@@ -322,7 +325,7 @@ CourseModel.prototype.switchToOnline = function() {
         var c;
 		for ( c in this.courseList) {
 			if (!this.courseList[c].isLoaded || !this.courseList[c].syncState) {
-				//console.log(this.courseList[c].id + " is not loaded yet");
+				moblerlog(this.courseList[c].id + " is not loaded yet");
 				this.controller.models["questionpool"]
 						.loadFromServer(this.courseList[c].id);
 			}
@@ -333,7 +336,7 @@ CourseModel.prototype.switchToOnline = function() {
 // if no course list is stored in the local storage, a new one is created
  
 CourseModel.prototype.createCourses = function() {
-	console.log("create courses");
+	moblerlog("create courses");
 	if (!localStorage.courses) {
 		initCourses();
 	}

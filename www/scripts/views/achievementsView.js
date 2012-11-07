@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -20,10 +21,13 @@ under the License.
 
 */
 
+/*jslint vars: true, sloppy: true */
 
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
  */
+
+var MOBLERDEBUG = 0;
 
 // View for displaying the achievements
  
@@ -35,7 +39,7 @@ function AchievementsView(){
 	
 	 var prevent=false;
 	 jester($('#closeAchievementsIcon')[0]).tap(function(event){
-		 //console.log("achievements: close tap");
+		 moblerlog("achievements: close tap");
 		 self.closeAchievements();
 		 event.stopPropagation(); } );
 	
@@ -79,7 +83,7 @@ AchievementsView.prototype.close = closeView;
 //leads to statistics view
 
 AchievementsView.prototype.closeAchievements = function() {
-	//console.log("close Achievements button clicked");
+	moblerlog("close Achievements button clicked");
 	controller.transitionToStatistics();
 };
 

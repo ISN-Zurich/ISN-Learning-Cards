@@ -21,10 +21,13 @@ under the License.
 */
 
 
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
 
 */
+
+/*jslint vars: true, sloppy: true */
 
 var APP_ID = "ch.ethz.isn.learningcards";
 var DEFAULT_SERVER = "yellowjacket";
@@ -60,11 +63,6 @@ var URLS_TO_LMS = {"yellowjacket":
 
 var MOBLERDEBUG = 0;
 
-function moblerlog(messagestring) {
-    if (MOBLERDEBUG === 1) {
-        console.log(messagestring);
-    }
-}
 
 /**
  * This model holds the data about the current configuration
@@ -81,8 +79,7 @@ function ConfigurationModel(controller) {
 	// this.configuration.userAuthenticationKey = "";
 	// this.storeData();
 
-	//console.log("Configuration Storage: "
-    //			+ localStorage.getItem("configuration"));
+	moblerlog("Configuration Storage: "+ localStorage.getItem("configuration"));
 
 	this.controller = controller;
 
@@ -96,7 +93,7 @@ function ConfigurationModel(controller) {
 	$(document).bind("statisticssenttoserver", function() {
 		
 		self.sendLogoutToServer();
-		//console.log("user logged out");
+		moblerlog("user logged out");
 		
 		self.configuration = {
 				"appAuthenticationKey": self.configuration.appAuthenticationKey,
@@ -124,13 +121,12 @@ ConfigurationModel.prototype.storeData = function() {
 		configString = JSON.stringify(this.configuration);
 	} catch (err) {
 		configString = "";
-		//console.log("error while storing");
+		moblerlog("error while storing");
 	}
-	//console.log(configString);
+	moblerlog(configString);
 	localStorage.setItem("configuration", configString);
 
-	//console.log("Configuration Storage after storeData: "
-		//	+ localStorage.getItem("configuration"));
+	moblerlog("Configuration Storage after storeData: "+ localStorage.getItem("configuration"));
 };
 
 /**
@@ -142,10 +138,10 @@ ConfigurationModel.prototype.loadData = function() {
 	try {
 		configObject = JSON.parse(localStorage.getItem("configuration"));
 	} catch (err) {
-		//console.log("error! while loading");
+		moblerlog("error! while loading");
 	}
 
-	//console.log("configObject: " + JSON.stringify(configObject));
+	moblerlog("configObject: " + JSON.stringify(configObject));
 
 	if (!configObject) {
 		configObject = {
@@ -177,14 +173,14 @@ ConfigurationModel.prototype.loadFromServer = function() {
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
-						//console.log("success");
-                        //console.log("JSON: " + data);
+						moblerlog("success");
+                        moblerlog("JSON: " + data);
 						var authenticationObject;
 						try {
 							authenticationObject = data;
-							//console.log("authenticationData from server");
+							moblerlog("authenticationData from server");
 						} catch (err) {
-							//console.log("Error: Couldn't parse JSON for authentication");
+							moblerlog("Error: Couldn't parse JSON for authentication");
 							authenticationObject = {};
 						}
 
@@ -199,7 +195,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 								authenticationObject.learnerInformation.userId);
 					},
 					error : function() {
-						//console.log("Error while authentication to server");
+						moblerlog("Error while authentication to server");
 						$(document).trigger("authenticationfailed");
 					},
                       beforeSend : function setHeader(xhr) {
@@ -216,12 +212,12 @@ ConfigurationModel.prototype.loadFromServer = function() {
 //logs in user
  
 ConfigurationModel.prototype.login = function(username, password) {
-	//console.log("client key: " + this.configuration.appAuthenticationKey);
+	moblerlog("client key: " + this.configuration.appAuthenticationKey);
 
 	username = username.trim(); //remove leading and trailling white spaces
 	
 	passwordHash = faultylabs.MD5(password);
-	//console.log("md5 password: " + passwordHash);
+	moblerlog("md5 password: " + passwordHash);
 	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()
                                + this.configuration.appAuthenticationKey);
 	var auth = {
@@ -242,6 +238,25 @@ ConfigurationModel.prototype.logout = function() {
 	var self = this;
 
 
+//	$(document).bind("statisticssenttoserver", function() {
+
+//	self.sendLogoutToServer();
+//	moblerlog("user logged out");
+
+//	self.configuration = {
+//	"appAuthenticationKey": self.configuration.appAuthenticationKey,
+//	"userAuthenticationKey" : "",
+//	"learnerInformation" : {
+//	"userId" : 0
+//	},
+//	"statisticsLoaded": false
+//	};
+//	self.storeData();
+
+//	// drop statistics data table from local database
+//	self.controller.models['answers'].deleteDB();
+//	});
+	
 	// remove all question pools and all pending question pool requests
 	var c, courseList = this.controller.models["course"].courseList;
 	if (courseList) {
@@ -264,7 +279,7 @@ ConfigurationModel.prototype.logout = function() {
 
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
-	//console.log("url: " + self.urlToLMS + '/authentication.php');
+	moblerlog("url: " + self.urlToLMS + '/authentication.php');
 	$
 			.ajax({
 				url : self.urlToLMS + '/authentication.php',
@@ -274,19 +289,19 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 					if (data && data['message']) {
 						switch (data['message']) {
 						case "invalid client key":
-							//console.log("invalid client key - reregister")
+							moblerlog("invalid client key - reregister")
 							self.register();
 							$(document).trigger("authenticationfailed", "invalidclientkey");
 							break;
 						case "wrong user data":
-							//console.log("Wrong username or password!")
+							moblerlog("Wrong username or password!")
 							$(document).trigger("authenticationfailed", "nouser");
 							break;
 						default:
 							break;
 						}
 					} else if (data && data.userAuthenticationKey !== "") {
-						//console.log("userAuthenticationKey: "+ data.userAuthenticationKey);
+						moblerlog("userAuthenticationKey: "+ data.userAuthenticationKey);
 						self.configuration.userAuthenticationKey = data.userAuthenticationKey;
 						self.configuration.learnerInformation = data.learnerInformation;
 						self.storeData();
@@ -298,12 +313,12 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						//get statistics data from server
 						self.controller.models['statistics'].loadFromServer();
 					} else {
-						//console.log("no error message from server and no session key received");
+						moblerlog("no error message from server and no session key received");
 						$(document).trigger("authenticationfailed", "connectionerror");
 					}
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
-					//console.log("Error while authentication to server: status:" + jqXHR.status + ", " + jqXHR.responseText);
+					moblerlog("Error while authentication to server: status:" + jqXHR.status + ", " + jqXHR.responseText);
 					$(document).trigger("authenticationfailed",
 							"connectionerror");
 				},
@@ -340,14 +355,14 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 
 				},
 				error : function() {
-					//console.log("Error while logging out from server");
+					moblerlog("Error while logging out from server");
 					localStorage.setItem("pendingLogout", sessionKey);
 				},
 				beforeSend : setHeader
 			});
 
 	function setHeader(xhr) {
-		//console.log("session key to be invalidated: " + sessionKey);
+		moblerlog("session key to be invalidated: " + sessionKey);
 		xhr.setRequestHeader('sessionkey', sessionKey);
 	}
 };
@@ -409,7 +424,7 @@ ConfigurationModel.prototype.getSessionKey = function() {
 //if no configuration is stored in the local storage, a new one is created
 
 ConfigurationModel.prototype.createConfiguration = function() {
-	//console.log("create configuration");
+	moblerlog("create configuration");
 
 	if (!localStorage.configuration) {
 		initConfiguration();
@@ -426,7 +441,7 @@ ConfigurationModel.prototype.createConfiguration = function() {
 //sends the registration request to the server, it is called whenever my client(app) key is empty
 ConfigurationModel.prototype.register = function() {
 	var self = this;
-	//console.log("enters regsitration");
+	moblerlog("enters regsitration");
 	var deviceID = device.uuid;
 
 	$
@@ -436,9 +451,9 @@ ConfigurationModel.prototype.register = function() {
 				dataType : 'json',
 				success : appRegistration,
 				error : function(request) {
-                  //console.log("ERROR status code is : " + request.status);
-                  //console.log("ERROR returned data is: "+ request.responseText);
-                  //console.log("Error while registering the app with the backend");
+                  moblerlog("ERROR status code is : " + request.status);
+                  moblerlog("ERROR returned data is: "+ request.responseText);
+                  moblerlog("Error while registering the app with the backend");
 				},
 				beforeSend : setHeaders
 			});
@@ -446,7 +461,7 @@ ConfigurationModel.prototype.register = function() {
 	function setHeaders(xhr) {
 		xhr.setRequestHeader('AppID', APP_ID);
 		xhr.setRequestHeader('UUID', deviceID);
-		//console.log("register uuid:" + deviceID);
+		moblerlog("register uuid:" + deviceID);
 	}
 
 	function appRegistration(data) {
@@ -454,22 +469,22 @@ ConfigurationModel.prototype.register = function() {
         language = navigator.language.split("-");
         language_root = (language[0]);
 
-		// console.log("in app registration");
+		moblerlog("in app registration");
 		// load server data from local storage
 		var urlsToLMS;
 		var urlsToLMSString = localStorage.getItem("urlsToLMS");
-		//console.log("urlToLMSString is"+urlsToLMSString);
+		moblerlog("urlToLMSString is"+urlsToLMSString);
 		try {
 			urlsToLMS = JSON.parse(urlsToLMSString);
-			//console.log("urls to lms parsed");
+			moblerlog("urls to lms parsed");
 		} catch(err) {
-			//console.log("Error while parsing urlsToLMS: " + err);
+			moblerlog("Error while parsing urlsToLMS: " + err);
 		}
 	
 		urlsToLMS[DEFAULT_SERVER] = {};
 		
 		// add client key for current lms
-		//console.log("Received client key: " + data.ClientKey);
+		moblerlog("Received client key: " + data.ClientKey);
 		urlsToLMS[DEFAULT_SERVER].clientKey = data.ClientKey;
 		// store server data in local storage
 		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
@@ -494,7 +509,7 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 		try {
 			urlsToLMS = JSON.parse(urlsToLMSString);
 		} catch(err) {
-			//console.log("Error while parsing urlsToLMS: " + err);
+			moblerlog("Error while parsing urlsToLMS: " + err);
 		}	
 	} else {
 		// create an empty data structure for our clientKeys
@@ -510,12 +525,12 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 	
 	var clientKey;
 	if (urlsToLMS[servername] ) {
-		//console.log("the current lms has already a client key");
+		moblerlog("the current lms has already a client key");
 		clientKey = urlsToLMS[servername].clientKey;
 	}
 	
 	if (!clientKey || clientKey.length === 0) {
-		//console.log("registration is done");
+		moblerlog("registration is done");
 		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 	} else {
 		this.loadFromServer();

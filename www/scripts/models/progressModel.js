@@ -1,5 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -20,6 +22,9 @@ under the License.
 
 */
 
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
 
 function ProgressModel(statisticsModel){
     this.modelName = " progress";
@@ -45,7 +50,7 @@ ProgressModel.prototype.queryDB = queryDatabase;
 ProgressModel.prototype.calculateValue = function(){
 	var self = this;
 	self.values= self.superModel.getCurrentValues(SUBMODEL_QUERY_FOUR);
-	//console.log ("current values progess model" +self.values);
+	moblerlog("current values progess model" +self.values);
 	self.queryDB( 
 		function cbP(t,r) {self.calculateProgress(t,r);});
 
@@ -59,15 +64,15 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 	var self = this;
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		//console.log("number of correct questions:" + row['numCorrect']);
-		//console.log("number of answered questions:"+ self.superModel.handledCards.handledCards);
+		moblerlog.log("number of correct questions:" + row['numCorrect']);
+		moblerlog.log("number of answered questions:"+ self.superModel.handledCards.handledCards);
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards === 0) {
 			this.progress = 0;
 		} else {
 		this.progress = Math.round(((row['numCorrect']) / cards) * 100);
 		}
-		//console.log("progress: " +this.progress);
+		moblerlog.log("progress: " +this.progress);
 	} else {
 		this.progress = 0;
 	}
@@ -85,20 +90,20 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 
 ProgressModel.prototype.calculateImprovementProgress= function (transaction,results){
 	var self = this;
-	//console.log("rows in calculate improvement progress: "+ results.rows.length);
+	moblerlog.log("rows in calculate improvement progress: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		//console.log("progress row" + JSON.stringify(row));
+		moblerlog.log("progress row" + JSON.stringify(row));
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards === 0) {
 			this.improvementProgress = 0;
 		} else {
-			//console.log("Progress Num Correct: " + row['numCorrect']);
+			moblerlog.log("Progress Num Correct: " + row['numCorrect']);
 			oldProgress = Math
 				.round(((row['numCorrect']) / cards) * 100);
 			newProgress = this.progress;
 			this.improvementProgress = newProgress - oldProgress;
-			//console.log("improvement progress: " + this.improvementProgress);
+			moblerlog.log("improvement progress: " + this.improvementProgress);
 		}
 	} else {
 		this.improvementProgress = this.progress;

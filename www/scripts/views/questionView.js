@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -21,10 +22,15 @@ under the License.
 */
 
 
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
    
 */
+
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
 
 //View for displaying questions
  
@@ -110,7 +116,7 @@ function QuestionView() {
 //pinch leads to the course list
  
 QuestionView.prototype.handlePinch = function() {
-//console.log("pinch works");
+moblerlog("pinch works");
 	controller.transitionToCourses();
 };
 
@@ -135,7 +141,7 @@ QuestionView.prototype.handleTap = function() {
 QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view
-	//console.log("swipe works");
+	moblerlog("swipe works");
 	controller.models['questionpool'].nextQuestion();
     //	this.showQuestionTitle();
     //	this.showQuestionBody();

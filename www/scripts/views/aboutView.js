@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -25,6 +26,9 @@ under the License.
    
 */
 
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
 
 //View for displaying the settings
 
@@ -77,7 +81,7 @@ AboutView.prototype.close = closeView;
 //leads to course list
  
 AboutView.prototype.closeAbout = function() {
-	//console.log("close settings button clicked");
+	moblerlog("close settings button clicked");
 	controller.transitionToSettings();
 };
 

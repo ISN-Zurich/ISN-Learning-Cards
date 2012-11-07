@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -21,9 +22,13 @@ under the License.
 
 */
 
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
  */
+/*jslint vars: true, sloppy: true */
+
+var MOBLERDEBUG = 0;
 
  // View for displaying the course list
  
@@ -45,15 +50,15 @@ function CoursesListView(controller) {
 	});
 
 	$(document).bind("questionpoolready", function(e, courseID) {
-		//console.log("view questionPool ready called " + courseID);
+		moblerlog("view questionPool ready called " + courseID);
 		self.courseIsLoaded(courseID);
 	});
 
 	$(document).bind("courselistupdate", function(e) {
-		//console.log("course list update called");
+		moblerlog("course list update called");
 		self.firstLoad = false;
 		if (self.active) {
-			//console.log("course list view is active");
+			moblerlog("course list view is active");
 			self.update();
 		}
 	});
@@ -92,7 +97,7 @@ CoursesListView.prototype.openDiv = openView;
 //updates the course list and shows it
 
 CoursesListView.prototype.open = function() {
-	//console.log("open course list view");
+	moblerlog("open course list view");
 	this.active = true;
 	this.update();
 	this.firstLoad = false;
@@ -105,7 +110,7 @@ CoursesListView.prototype.closeDiv = closeView;
 
  //empties the course list
 CoursesListView.prototype.close = function() {
-	//console.log("close course list view");
+	moblerlog("close course list view");
 	this.active = false;
 	this.closeDiv();
 	$("#coursesList").empty();
@@ -133,7 +138,7 @@ CoursesListView.prototype.clickSettingsButton = function() {
 //click on statistic icon calculates the appropriate statistics and shows them
  
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
-	//console.log("statistics button clicked");
+	moblerlog("statistics button clicked");
 	
 	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
 		$("#courseListIcon"+courseID).addClass("icon-loading loadingRotation").removeClass("icon-bars");
@@ -155,7 +160,7 @@ CoursesListView.prototype.update = function() {
 	courseModel.reset();
 	$("#coursesList").empty();
 
-	//console.log("First course id: " + courseModel.getId());
+	moblerlog("First course id: " + courseModel.getId());
 	
 	if (courseModel.courseList.length == 0) {
 		
@@ -216,8 +221,8 @@ CoursesListView.prototype.update = function() {
 //changes the loading icon to the statistics icon for the specified course id
  
 CoursesListView.prototype.courseIsLoaded = function(courseId) {
-	//console.log("courseIsLoaded: " + courseId);
-	//console.log("selector length: "+ $("#course" + courseId + " .icon-loading").length);
+	moblerlog("courseIsLoaded: " + courseId);
+	moblerlog("selector length: "+ $("#course" + courseId + " .icon-loading").length);
 	$("#course" + courseId + " .icon-loading").addClass("icon-bars")
 			.removeClass("icon-loading loadingRotation");
 };
