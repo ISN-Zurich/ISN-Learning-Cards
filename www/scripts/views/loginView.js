@@ -75,13 +75,13 @@ function LoginView(controller) {
 	$("#password")[0].addEventListener("blur", unfocusLogos);
 
 	function focusLogos(e) {
-		moblerlog("focus logos " + e.currentTarget.id);
+		moblerlog("focus logos " + e.currentTarget);
 		$("#logos").removeClass("bottom");
 		$("#logos").addClass("static");
 	}
 
 	function unfocusLogos(e) {
-		moblerlog("unfocus logos " + e.currentTarget.id);
+		moblerlog("unfocus logos " + e.currentTarget);
 		$("#logos").addClass("bottom");
 		$("#logos").removeClass("static");
 	}
