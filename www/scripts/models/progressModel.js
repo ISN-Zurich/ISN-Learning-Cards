@@ -64,15 +64,15 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 	var self = this;
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		moblerlog.log("number of correct questions:" + row['numCorrect']);
-		moblerlog.log("number of answered questions:"+ self.superModel.handledCards.handledCards);
+		moblerlog("number of correct questions:" + row['numCorrect']);
+		moblerlog("number of answered questions:"+ self.superModel.handledCards.handledCards);
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards === 0) {
 			this.progress = 0;
 		} else {
 		this.progress = Math.round(((row['numCorrect']) / cards) * 100);
 		}
-		moblerlog.log("progress: " +this.progress);
+		moblerlog("progress: " +this.progress);
 	} else {
 		this.progress = 0;
 	}
@@ -90,20 +90,20 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 
 ProgressModel.prototype.calculateImprovementProgress= function (transaction,results){
 	var self = this;
-	moblerlog.log("rows in calculate improvement progress: "+ results.rows.length);
+	moblerlog("rows in calculate improvement progress: "+ results.rows.length);
 	if (results.rows.length > 0) {
 		row = results.rows.item(0);
-		moblerlog.log("progress row" + JSON.stringify(row));
+		moblerlog("progress row" + JSON.stringify(row));
 		cards = self.superModel.controller.models['questionpool'].questionList.length;
 		if (cards === 0) {
 			this.improvementProgress = 0;
 		} else {
-			moblerlog.log("Progress Num Correct: " + row['numCorrect']);
+			moblerlog("Progress Num Correct: " + row['numCorrect']);
 			oldProgress = Math
 				.round(((row['numCorrect']) / cards) * 100);
 			newProgress = this.progress;
 			this.improvementProgress = newProgress - oldProgress;
-			moblerlog.log("improvement progress: " + this.improvementProgress);
+			moblerlog("improvement progress: " + this.improvementProgress);
 		}
 	} else {
 		this.improvementProgress = this.progress;
