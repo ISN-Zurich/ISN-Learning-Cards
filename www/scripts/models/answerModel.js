@@ -20,7 +20,6 @@ under the License.
 
 */
 
-
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
 
@@ -28,10 +27,43 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
+/**
+ *A global property/variable that is used during the creation of a new table in the database.
+ *It is the version number of the database.
+ *
+ *@property DB_VERSION
+ *@default 1
+ *
+ **/
+
 var DB_VERSION = 1;
+
+
+/**
+ *A global property/variable that activates and deactivates the display of console logs.
+ *It is passed as parameter in global function moblerlog in common.js.
+ *
+ *@property MOBLERDEBUG
+ *@default 0
+ *
+ **/
+
 var MOBLERDEBUG = 0;
 
-//The answer model holds/handles the answers of a question of every type
+
+/**
+ * @class Answer Model, 
+ * The answer model holds/handles the answers of a question of every type
+ * @constructor 
+ * It initializes basic properties such as:
+ *  - the answer list of a question, 
+ *  - the answer score of a question,
+ *  - the answer score list of all the answered questions, 
+ * 	- the id of the current course, the id of the current question
+ * -  the start time point that the user reached a question
+ * It opens the local html5-type database. If it doesn't exist yet it is initiated in the constructor.  
+ */
+
 
 function AnswerModel() {
 	this.answerList = [];
@@ -50,27 +82,48 @@ function AnswerModel() {
 
 }
 
-//sets the answer list
- 
+/**
+ * Sets the answer list
+ * @prototype
+ * @function setAnswers 
+ * @param {String} tickedAnswers, a string array containing the selected answers by the user
+ **/
+
+
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
 };
 
 
-//Get the selected answers of the learner
+/**
+ * Gets the selected answers of the user
+ * @prototype
+ * @function getAnswers 
+ * @return {String} answerList, a string array containing the selected answers by the user 
+ **/
+
 
 AnswerModel.prototype.getAnswers = function() {
 	return this.answerList;
 };
 
-// @return the score list
+/**
+ * @prototype
+ * @function getScoreList 
+ * @return {String} answerScoreList, a string array containing the score list 
+ **/
+
 
 AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
 
 
-//deletes the data
+/**
+ * Deletes the answer data of the user by emptying the answer list, the answer score list and by reseting the answer score to -1.
+ * @prototype
+ * @function deleteData 
+ **/
 
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
@@ -78,9 +131,14 @@ AnswerModel.prototype.deleteData = function() {
 	this.answerScore = -1;
 };
 
- // @return if answer score is 1 Execellent  
- // @return if answer score is 0 Wrong
- // otherwise PariallyCorrect
+
+/**
+ * @prototype
+ * @function getAnswerResults 
+ * @return {String}, "Excellent" if answer score is 1, "Wrong" if answer score is 0, otherwise "PariallyCorrect"
+ **/
+
+
  
 AnswerModel.prototype.getAnswerResults = function() {
 	moblerlog("answer score: " + this.answerScore);
@@ -94,8 +152,14 @@ AnswerModel.prototype.getAnswerResults = function() {
 	}
 };
 
-//calculate the score for single choice questions
- 
+
+/**
+ * Calculates the score for single choice questions. It can be either 1 or 0.
+ * @prototype
+ * @function calculateSingleChoiceScore 
+ **/
+
+
 AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	var clickedAnswerIndex = this.answerList[0];
 
@@ -106,7 +170,13 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	}
 };
 
-//calculate the score for multiple choice questions
+
+/**
+ * Calculates the score for multiple choice questions
+ * @prototype
+ * @function calculateMultipleChoiceScore 
+ **/
+
 
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
@@ -120,13 +190,16 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
 	for ( i = 0; i < numberOfAnswers; i++) {
 		moblerlog("answer " + i + ": " + questionpool.getScore(i));
+		//if the current answer item is correct, then its score value in the database is set to 1 (or at least greater than 1).
 		if (questionpool.getScore(i) > 0) {
 			correctAnswers++;
+			//check if the user has clicked on the correct answer item
 			if (this.answerList.indexOf(i) !== -1) {
 				corr_ticked++;
 				moblerlog("corr_ticked");
 			}
 		} else {
+			//the user has clicked on the wrong answer item
 			if (this.answerList.indexOf(i) !== -1) {
 				wrong_ticked++;
 				moblerlog("wrong_ticked");
@@ -155,7 +228,13 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	}
 };
 
-//Calculate the score for text sorting questions
+
+/**
+ * Calculate the score for text sorting questions (horizontal and vertical ones)
+ * @prototype
+ * @function calculateTextSortScore 
+ **/
+
 
 AnswerModel.prototype.calculateTextSortScore = function() {
 
@@ -200,10 +279,16 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 		i = i + followingCorrAnswers;
 
 	}
-	this.answerScoreList = scores;
+		this.answerScoreList = scores;
 };
 
-//Calculate the answer score for numeric questions
+
+/**
+ * Calculate the answer score for numeric questions
+ * @prototype
+ * @function calculateNumericScore 
+ **/
+
 
 AnswerModel.prototype.calculateNumericScore = function() {
 
@@ -212,7 +297,7 @@ AnswerModel.prototype.calculateNumericScore = function() {
 
 	if (questionpoolModel.getAnswer()[0] === answerModel.getAnswers()) {
 		// if the answers provided in the question pool are the same with the
-		// ones the learner selected
+		// ones the user selected
 		this.answerScore = 1;
 	} else {
 		this.answerScore = 0;
@@ -220,13 +305,24 @@ AnswerModel.prototype.calculateNumericScore = function() {
 };
 
 
-//sets the course id
+/**
+ * Sets the course id
+ * @prototype
+ * @function setCurrentCourseId 
+ **/
+
  
 AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 };
 
-//starts the timer for the specified question
+
+/**
+ * Starts the timer for the specified question. The timer begins when the user start reading the question. 
+ * @prototype
+ * @function startTimer 
+ **/
+
 
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
@@ -234,21 +330,38 @@ AnswerModel.prototype.startTimer = function(questionId) {
 	moblerlog("currentQuestionId: " + this.currentQuestionId);
 };
 
+/**
+ * Checks if the the timer for the specified question has started or not.
+ * @prototype
+ * @function hasStarted 
+ * @return {Boolean}, true if timer has started, otherwise false
+ **/
 
-//@return true, if timer has started, otherwise false
- 
+
 AnswerModel.prototype.hasStarted = function() {
 	return this.start !== -1;
 };
 
-//resets the timer
- 
+
+/**
+ * Resets the timer
+ * @prototype
+ * @function resetTimer
+ **/
+
+
 AnswerModel.prototype.resetTimer = function() {
 	this.start = -1;
 };
 
-//creates a statistics table in the database if it doesn't exist yet
- 
+
+/**
+ * Creates a statistics table in the database if it doesn't exist yet
+ * @prototype
+ * @function initDB 
+ **/
+
+
 AnswerModel.prototype.initDB = function() {
 	this.db
 			.transaction(function(transaction) {
@@ -260,7 +373,12 @@ AnswerModel.prototype.initDB = function() {
 	localStorage.setItem("db_version", DB_VERSION);
 };
 
-//inserts the score into the database
+/**
+ * Inserts the score into the local database. 
+ * @prototype
+ * @function storeScoreInDB 
+ ***/
+
 
 AnswerModel.prototype.storeScoreInDB = function() {
 	var self = this;
@@ -268,26 +386,35 @@ AnswerModel.prototype.storeScoreInDB = function() {
 	var duration = ((new Date()).getTime() - this.start);
 	// var day = timestamp.toISOString().substring(0,9);
 	this.db
-			.transaction(function(transaction) {
-				transaction
-						.executeSql(
-								'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)',
-								[ self.currentCourseId, self.currentQuestionId,
-										day.getTime(), self.answerScore, duration ],
-								function() {
-									moblerlog("successfully inserted SCORE IN db");
-									$(document).trigger("checkachievements", self.currentCourseId);
-								}, function(tx, e) {
-									moblerlog("error! NOT inserted: "+ e.message);
-								});
-			});
+	.transaction(function(transaction) {
+		transaction
+		.executeSql(
+				'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)',
+				[ self.currentCourseId, self.currentQuestionId,
+				  day.getTime(), self.answerScore, duration ],
+				  function() {
+					moblerlog("successfully inserted SCORE IN db");
 
-	this.resetTimer();
-	
-	
+					/**It is triggered after the successful insertion of the score in the local database
+					 * @event checkachievements
+					 * @param:a callback function that sets the id for the current course
+					 */
+					$(document).trigger("checkachievements", self.currentCourseId);
+				}, function(tx, e) {
+					moblerlog("error! NOT inserted: "+ e.message);
+				});
+	});
+
+	this.resetTimer();	
 };
 
-//deletes everything from the statistics table
+/**
+ *Deletes everything from the statistics table of the local database
+ * @prototype
+ * @function deleteDB 
+ **/
+
+
 AnswerModel.prototype.deleteDB = function() {
 	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {
@@ -299,6 +426,11 @@ AnswerModel.prototype.deleteDB = function() {
 	});
 };
 
+/**
+ *Calculate the score depending on the specific question type
+ * @prototype
+ * @function calculateScore 
+ **/
 
 AnswerModel.prototype.calculateScore = function () {
 	var questionpoolModel = controller.models['questionpool'];
@@ -322,5 +454,4 @@ AnswerModel.prototype.calculateScore = function () {
 	default:
 		break;
 	}
-	
 };
