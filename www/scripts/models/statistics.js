@@ -84,6 +84,13 @@ function StatisticsModel(controller) {
 	this.lastActiveDay;
 
 	var self = this;
+	this.bestDay;
+	this.handledCards;
+	this.averageSpeed;
+	this.averageScore;
+	this.progress;
+	this.cardBurner;
+	this.stackHandler;	
 
 	// FIXME: check the localstorage if the the data is already loaded
 	// if the the data is not loaded but the user is logged in, then loadFromServer()
@@ -102,9 +109,6 @@ function StatisticsModel(controller) {
 		self.cardBurner.calculateValue(courseId);
 	});
 	
-//	this.db.transaction(function(transaction) {
-//		transaction.executeSql( "DELETE FROM statistics WHERE question_id = ?", ["stackhandler"]);
-//	});
 }
 
 
@@ -129,11 +133,10 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
 		// load the appropriate models for our course
 		this.initSubModels();
-       // moblerlog("sub models are initialized");
-		moblerlog("sub models are initialized");
+      	moblerlog("sub models are initialized");
 		//checks if card burner achievement was already achieved
 		//and starts the calculations
-//		this.checkCardBurner();
+       //this.checkCardBurner();
 
 		this.getFirstActiveDay();
 	}
@@ -508,6 +511,12 @@ StatisticsModel.prototype.initSubModels = function(){
 };
 
 
+StatisticsModel.prototype.getCardBurner = function(){
+    moblerlog("get card burner")
+	
+	return this.cardBurner;
+   
+};
 
 
 //Display all entries of the database
