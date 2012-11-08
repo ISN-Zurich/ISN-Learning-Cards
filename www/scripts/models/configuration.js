@@ -22,15 +22,40 @@ under the License.
 
 
 
-/** @author Isabella Nake
+
+/**@author Isabella Nake
  * @author Evangelia Mitsopoulou
 
 */
 
 /*jslint vars: true, sloppy: true */
 
+
+/**
+ *A global property/variable that hosts the bundle id of the application
+ *@property APP_ID
+ *@default ch.ethz.isn.learningcards
+ **/
+
 var APP_ID = "ch.ethz.isn.learningcards";
+
+/**
+ *A global property/variable that is used to set the default server with which the application will be connected
+ *in order to exchange data.
+ *
+ *@property DEFAULT_SERVER
+ *@default hornet
+ **/
+
 var DEFAULT_SERVER = "yellowjacket";
+
+/**
+ *A global property/variable that is used to store info about the different servers to which the application can be connected.
+ *
+ *@property URLS_TO_LMS
+ *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
+ **/
+
 var URLS_TO_LMS = {"yellowjacket":  
 					{
 						logoImage: "resources/pfpLogo.png", 
@@ -61,12 +86,30 @@ var URLS_TO_LMS = {"yellowjacket":
 					}
 };
 
+/**
+ *A global property/variable that activates and deactivates the display of console logs.
+ *It is passed as parameter in global function moblerlog in common.js.
+ *
+ *@property MOBLERDEBUG
+ *@default 0
+ *
+ **/
+
 var MOBLERDEBUG = 0;
 
-
 /**
+ * @class ConfigurationModel 
  * This model holds the data about the current configuration
+ * @constructor 
+ * It initializes basic properties such as:
+ *  - the configuration object of the local storage  
+ *  - the url of the selected server,
+ *  - the image and the logo of the selected server, 
+ * It loads data from the local storage. In the first time there are no data in the local storage. 
+ * It specifies the data for the selected server.
+ * It listens to an event that is triggered when statistics are sent to the server.
  */
+
 function ConfigurationModel(controller) {
 	this.configuration = {};
 	this.urlToLMS = "";
