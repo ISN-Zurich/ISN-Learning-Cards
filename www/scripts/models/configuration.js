@@ -108,30 +108,31 @@ var MOBLERDEBUG = 0;
  * It loads data from the local storage. In the first time there are no data in the local storage. 
  * It specifies the data for the selected server.
  * It listens to an event that is triggered when statistics are sent to the server.
+ * @param {String} controller 
  */
 
 function ConfigurationModel(controller) {
+	var self=this;
+	//initialization of model's variables
 	this.configuration = {};
 	this.urlToLMS = "";
 	this.logoimage = "";
 	this.logolabel = "";
-	
-	var self=this;
-	
-	// this.configuration.appAuthenticationKey = "";
-	// this.configuration.userAuthenticationKey = "";
-	// this.storeData();
-
-	moblerlog("Configuration Storage: "+ localStorage.getItem("configuration"));
-
 	this.controller = controller;
-
-	this.loadData();
-
-	this.selectServerData(DEFAULT_SERVER);
 	
-	// initialize the configuration if it does not exist
-	// this.createConfiguration();
+	// load data from the local storage if any
+	this.loadData();
+	
+	//proceed by selecting the data of the default server such as url, image, logo, label
+	//store in its url in local storage item
+	//register if there is no client key otherwise load data from server
+	this.selectServerData(DEFAULT_SERVER);
+
+	/**It is triggered after the successful all statistics data are sent to the server. This happens when the user logsout.
+	 * @event statisticssenttoserver
+	 * @param:a callback function that sends pending data to the server and clears all information from the local storage.
+	 * Only the application key remains in the local storage, because it is unique for a specific device for a specific application.
+	*/
 	
 	$(document).bind("statisticssenttoserver", function() {
 		
@@ -146,6 +147,8 @@ function ConfigurationModel(controller) {
 				},
 				"statisticsLoaded": false
 		};
+		
+		//after clearing data from the local storage, save the changes to the local storage item
 		self.storeData();
 		
 		// drop statistics data table from local database
@@ -155,8 +158,10 @@ function ConfigurationModel(controller) {
 }
 
 /**
- * stores the data into the local storage (key = "configuration") therefore the
+ * Stores the data into the local storage (key = "configuration") therefore the
  * json object is converted into a string
+ * @prototype
+ * @function storeData
  */
 ConfigurationModel.prototype.storeData = function() {
 	var configString;
@@ -173,11 +178,16 @@ ConfigurationModel.prototype.storeData = function() {
 };
 
 /**
- * loads the data from the local storage (key = "configuration") therefor the
+ * Loads the data from the local storage (key = "configuration") therefore the
  * string is converted into a json object
+ * @prototype
+ * @function loadData
  */
+ 
 ConfigurationModel.prototype.loadData = function() {
 	var configObject;
+	//if there is an item in the local storage with the name "configuration"
+	//then get it by parsing the string and convert it into a json object
 	try {
 		configObject = JSON.parse(localStorage.getItem("configuration"));
 	} catch (err) {
@@ -185,7 +195,10 @@ ConfigurationModel.prototype.loadData = function() {
 	}
 
 	moblerlog("configObject: " + JSON.stringify(configObject));
-
+	
+	// when the app is launched and before the user logs in there is no local storage 
+	// in this case there is no configuration object and it is stated in one of its properties
+	// that its login status is set to "loggedOut".
 	if (!configObject) {
 		configObject = {
 			loginState : "loggedOut"
@@ -193,23 +206,24 @@ ConfigurationModel.prototype.loadData = function() {
 		};
 	}
 
-	// if (!configObject.loginState) { //if no configuration is available, a new
-	// one is created
-	// configObject = this.createConfiguration();
-	// }
-
 	this.configuration = configObject;
 
 };
 
 /**
- * loads the configuration data from the server and stores it in the local
+ * Loads the configuration data from the server and stores it in the local
  * storage when all data is loaded, the authenticationready event is triggered
+ * @prototype
+ * @function loadFromServer
  */
+
 ConfigurationModel.prototype.loadFromServer = function() {
 	var self = this;
+	
+	//if the user is not authenticated yet
 	if (this.configuration.userAuthenticationKey
 			&& this.configuration.userAuthenicationKey !== "") {
+		// authenticate the user by "GETing" his data/learner information from the server
 		$
 				.ajax({
 					url : self.urlToLMS + '/authentication.php',
@@ -220,27 +234,52 @@ ConfigurationModel.prototype.loadFromServer = function() {
                         moblerlog("JSON: " + data);
 						var authenticationObject;
 						try {
+							//the autentication data are successfully received 
+							//its object format is assigned to the authentication object variable
 							authenticationObject = data;
 							moblerlog("authenticationData from server");
 						} catch (err) {
+							//the authentication data couln't be parsed properly
 							moblerlog("Error: Couldn't parse JSON for authentication");
 							authenticationObject = {};
 						}
-
+						//assign as value to the learner information property of the configuration object 
+						//the user authentication data, which were received from server
 					    self.configuration.learnerInformation = authenticationObject.learnerInformation;
+					    //store in the local storage the synchronization state
 						self.configuration.globalSynchronizationState = authenticationObject.globalSynchronizationState;
                       
-                      
+						//store in the local storage the above received data
 						self.storeData();
+						
+						//sets the language interface for the authenticated user
+						//its language preferences were received during the authentication
+						//and  were stored in the local storage in the previous step
                         self.controller.setupLanguage();
 
+                        
+                        /**
+                         * When all authentication data are received and stored in the local storage
+                         * the authenticationready event is triggered
+                         * @event authenticationready
+                         * @param the user id 
+                         */
+                        
 						$(document).trigger("authenticationready",
 								authenticationObject.learnerInformation.userId);
 					},
+					// the receive of authenticated data was failed
 					error : function() {
 						moblerlog("Error while authentication to server");
+						/**
+                         * When authentication data are not received from the server
+                         * the authenticationfailed event is triggered
+                         * @event authenticationfailed
+                         */
 						$(document).trigger("authenticationfailed");
 					},
+						// we send the user authentication key as "sessionkey" via headers
+						// before the autentication takes plae and in order it to be validated or not
                       beforeSend : function setHeader(xhr) {
                       xhr.setRequestHeader('sessionkey',
                                            self.configuration.userAuthenticationKey);
@@ -251,28 +290,38 @@ ConfigurationModel.prototype.loadFromServer = function() {
 			}
 };
 
-
-//logs in user
+/**
+* Logs in user. The user types a username and a password. Therefore the username and a challenge are
+*sent to the server.
+* @prototype
+* @function login
+*/
  
 ConfigurationModel.prototype.login = function(username, password) {
 	moblerlog("client key: " + this.configuration.appAuthenticationKey);
-
-	username = username.trim(); //remove leading and trailling white spaces
-	
+	//remove leading and trailing white spaces
+	username = username.trim(); 
+	//password is encrypted by an MD5 hash
 	passwordHash = faultylabs.MD5(password);
 	moblerlog("md5 password: " + passwordHash);
+	//challenge is computed by applying an MD5 faulty labs function on username and hashed password
 	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()
                                + this.configuration.appAuthenticationKey);
 	var auth = {
 		"username" : username,
 		"challenge" : challenge
 	};
-
+	
+	//send username and challenge to the server
 	this.sendAuthToServer(auth);
 	
 };
 
-//logs out user
+/**
+* Logs out user. When logging out the statistics are sent to the server and the local storage is cleared
+* @prototype
+* @function logout
+*/
 
 ConfigurationModel.prototype.logout = function() {
 	//send statistics data to server
@@ -280,26 +329,6 @@ ConfigurationModel.prototype.logout = function() {
 	
 	var self = this;
 
-
-//	$(document).bind("statisticssenttoserver", function() {
-
-//	self.sendLogoutToServer();
-//	moblerlog("user logged out");
-
-//	self.configuration = {
-//	"appAuthenticationKey": self.configuration.appAuthenticationKey,
-//	"userAuthenticationKey" : "",
-//	"learnerInformation" : {
-//	"userId" : 0
-//	},
-//	"statisticsLoaded": false
-//	};
-//	self.storeData();
-
-//	// drop statistics data table from local database
-//	self.controller.models['answers'].deleteDB();
-//	});
-	
 	// remove all question pools and all pending question pool requests
 	var c, courseList = this.controller.models["course"].courseList;
 	if (courseList) {
@@ -318,7 +347,13 @@ ConfigurationModel.prototype.logout = function() {
 };
 
 
-//sends authentication data to the server
+
+
+/**
+* Sends authentication data (username, challenge) to the server
+* @prototype
+* @function sendAuthToServer
+*/
 
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
@@ -328,7 +363,9 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 				url : self.urlToLMS + '/authentication.php',
 				type : 'POST',
 				dataType : 'json',
+				//if data are sent during the authentication but they are wrong
 				success : function(data) {
+					//if data are sent during the authentication but they are wrong
 					if (data && data['message']) {
 						switch (data['message']) {
 						case "invalid client key":
@@ -377,9 +414,13 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 };
 
 /**
- * invalidates the specified session key or if no session key is specified the
- * current session key
- */
+* invalidates the specified session key or if no session key is specified the
+* current session key
+* @prototype
+* @function sendLogoutToServer
+*/
+
+
 ConfigurationModel.prototype.sendLogoutToServer = function(
 		userAuthenticationKey) {
 	var sessionKey,self = this;
@@ -411,12 +452,20 @@ ConfigurationModel.prototype.sendLogoutToServer = function(
 };
 
 
-//@return true if user is logged in, otherwise false
+
+/**
+* invalidates the specified session key or if no session key is specified the
+* current session key
+* @prototype
+* @function isLoggedIn
+* @return true if user is logged in, otherwise false
+*/
 
 ConfigurationModel.prototype.isLoggedIn = function() {
 	return (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") ? true
 			: false;
 };
+
 
 //@return the full name of the user
 
@@ -424,11 +473,14 @@ ConfigurationModel.prototype.getDisplayName = function() {
 	return this.configuration.learnerInformation.displayName;
 };
 
+
 //@return the username
 
 ConfigurationModel.prototype.getUserName = function() {
 	return this.configuration.learnerInformation.userName;
 };
+
+
 
 //@return the user id
 

@@ -60,7 +60,7 @@ var MOBLERDEBUG = 0;
  *  - the answer score of a question,
  *  - the answer score list of all the answered questions, 
  * 	- the id of the current course, the id of the current question
- * -  the start time point that the user reached a question
+ * 	- the start time point that the user reached a question
  * It opens the local html5-type database. If it doesn't exist yet it is initiated in the constructor.  
  */
 
@@ -101,7 +101,6 @@ AnswerModel.prototype.setAnswers = function(tickedAnswers) {
  * @function getAnswers 
  * @return {String} answerList, a string array containing the selected answers by the user 
  **/
-
 
 AnswerModel.prototype.getAnswers = function() {
 	return this.answerList;
@@ -172,7 +171,12 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 
 
 /**
- * Calculates the score for multiple choice questions
+ * Calculates the score for multiple choice questions, which can be 0, 0.5 or 1. 
+ * The score is calculated based on 3 helping variables:
+ * -number of correct answers
+ * -number of ticked correct answers
+ * -number of ticked wrong answers
+ * The exact value of the score is assigned based on specific agreed conditions.
  * @prototype
  * @function calculateMultipleChoiceScore 
  **/
@@ -230,7 +234,16 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
 
 /**
- * Calculate the score for text sorting questions (horizontal and vertical ones)
+ * Calculate the score for text sorting questions (horizontal and vertical ones) by creating an array
+ * that contains for each answer item an assigned score.
+ * It uses the following helping variables:
+ * - scores: a helping array that contains the scores of each item in the answer list 
+ * - followingCorrAnswers: the number of correct answers in a sequence
+ * - currAnswer: a variable that holds the current answered item
+ * - i: an index that traverses through the answer list
+ * - j: an index that traverses through a correct sequence of answered items
+ * - answerList[followingIndex++]: the next item in the answer list or in other words the next item that we answered
+ * - ++currAnswer: the next item after the current Answer item 
  * @prototype
  * @function calculateTextSortScore 
  **/
@@ -244,15 +257,17 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 	for ( i = 0; i < this.answerList.length; i++) {
 
 		// 1. Check for correct sequences
-		var currAnswer = this.answerList[i];
+		//The currAnswer is the index of the answered item in the answer view
+		var currAnswer = this.answerList[i]; 
 		var followingIndex = i + 1;
 		var followingCorrAnswers = 0;
-		// count the number of items in sequence and stop if we loose the
-		// sequence
+		// Count the number of items in sequence 
+		// and stop if we loose the sequence. 
+		// The sequence is detected when the next item in the answer list 
+		// is the same with the next item after the currAnswer. 
 		while (followingIndex < this.answerList.length
-				&& this.answerList[followingIndex++] === String(++currAnswer)) {
+				&& this.answerList[followingIndex++] === String(++currAnswer)) { 
 			followingCorrAnswers++;
-			// followingIndex++;
 		}
 
 		// 2. calculate the score for all elements in a sequence
@@ -266,6 +281,7 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 			itemScore += 1;
 			this.answerScore = 0.5;
 		}
+		//if all the answered items are in the correct sequence we assign the highest score 
 		if (followingCorrAnswers + 1 === this.answerList.length) {
 			this.answerScore = 1;
 		}
@@ -279,6 +295,7 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 		i = i + followingCorrAnswers;
 
 	}
+	//an array that contains for each item in the answer list an assigned score
 		this.answerScoreList = scores;
 };
 
@@ -370,6 +387,8 @@ AnswerModel.prototype.initDB = function() {
 								'CREATE TABLE IF NOT EXISTS statistics(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, course_id TEXT, question_id TEXT, day INTEGER, score NUMERIC, duration INTEGER);',
 								[]);
 							});
+	// add in the local storage the created table
+	//
 	localStorage.setItem("db_version", DB_VERSION);
 };
 
@@ -404,7 +423,7 @@ AnswerModel.prototype.storeScoreInDB = function() {
 					moblerlog("error! NOT inserted: "+ e.message);
 				});
 	});
-
+	// resets the time in order to start the time recording for the next question
 	this.resetTimer();	
 };
 

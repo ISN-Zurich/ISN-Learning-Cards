@@ -148,6 +148,7 @@ TextSortWidget.prototype.showFeedback = function() {
 	// iterate over all answers
 	for ( var i = 0; i < answers.length; i++) {
 		var li = $("<li/>", {
+			//if a ticked answer is in the correct place or in a sequence then use a blue background color
 			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "ticked" : ""
 		}).appendTo(ul);
 
