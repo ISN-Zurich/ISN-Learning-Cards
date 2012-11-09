@@ -401,6 +401,7 @@ Controller.prototype.transitionToStatistics = function(courseID) {
 	else {
 		this.transition("login");
 	}
+}
 
 /**
  * Transition to achievements view
