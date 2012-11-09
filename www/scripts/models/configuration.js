@@ -20,9 +20,6 @@ under the License.
 
 */
 
-
-
-
 /**@author Isabella Nake
  * @author Evangelia Mitsopoulou
 
@@ -113,13 +110,13 @@ var MOBLERDEBUG = 0;
 
 function ConfigurationModel(controller) {
 	var self=this;
+	this.controller = controller;
 	//initialization of model's variables
 	this.configuration = {};
 	this.urlToLMS = "";
 	this.logoimage = "";
 	this.logolabel = "";
-	this.controller = controller;
-	
+		
 	// load data from the local storage if any
 	this.loadData();
 	

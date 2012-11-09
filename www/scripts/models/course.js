@@ -22,6 +22,7 @@ under the License.
 */
 
 
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
 
@@ -30,7 +31,30 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
+/**
+ *A global property/variable that activates and deactivates the display of console logs.
+ *It is passed as parameter in global function moblerlog in common.js.
+ *
+ *@property DEFAULT_SYNC_TIMEOUT 
+ *@default 60000 
+ *
+ **/
+
 var DEFAULT_SYNC_TIMEOUT = 60000;
+
+
+/**
+ *A global property/variable that activates and deactivates the display of console logs.
+ *It is passed as parameter in global function moblerlog in common.js.
+ *
+ *@property MOBLERDEBUG
+ *@default 0
+ *
+ **/
+
+var MOBLERDEBUG = 0;
+
+
 
 /**
  * This model holds the course list and information about the current

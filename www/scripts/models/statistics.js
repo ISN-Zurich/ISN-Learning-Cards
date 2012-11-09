@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -20,19 +21,19 @@ under the License.
 
 */
 
+/**
+ * @author Isabella Nake
+ * @author Evangelia Mitsopoulou
+*/
 
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
 
-var SUBMODEL_QUERY_ONE = 0;
-var SUBMODEL_QUERY_THREE = 1;
-var SUBMODEL_QUERY_FOUR = 2;
+/**
+ * @function queryDatabase
+ * @param cbResult
+ * */
 
-/** @author Isabella Nake
- * @author Evangelia Mitsopoulou
-
-*/
 
 function queryDatabase(cbResult){
 	moblerlog("enter queryDatabase " + this.modelName);
@@ -41,6 +42,15 @@ function queryDatabase(cbResult){
                                    transaction.executeSql(self.query, self.values, cbResult, function(tx,e) {moblerlog("DB Error cause: " + self.modelName); self.superModel.dbErrorFunction(tx,e);});
 	});
 }
+
+
+/**
+ * Each achivement, either a stackhandler or a card burner should be reached and calculated only once.
+ * Check in this function if an achievement of any type (stackhandler or card burner) was already achieved
+ * If an achievement has not been reached done then calculation of the value of the achievement
+ * is performed as normal 
+ * @function checkAchievements
+ * */
 
 function checkAchievement() {
 	var self = this;
@@ -58,6 +68,13 @@ function checkAchievement() {
 	});
 }
 
+
+/**
+ * When an achievement is reached (score =100), it is inserted in the database of the server
+ * by assigning an -100 value to the duration property 
+ * * @function insertAchievement
+ * */
+
 function insertAchievement() {
 	var self = this;
 	var insert = 'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)';
@@ -67,42 +84,96 @@ function insertAchievement() {
 			});
 }
 
+
+
+/**
+ *A global property/variable that activates and deactivates the display of console logs.
+ *It is passed as parameter in global function moblerlog in common.js.
+ *
+ *@property MOBLERDEBUG
+ *@default 0
+ *
+ **/
+
+var MOBLERDEBUG = 1;
+
+/**
+ *Global properties/variables that show the number of values 
+ *that are passed and returned during the execution of the queries
+ *in the various statistics sub models
+ *
+ *@property SUBMODEL_QUERY_ONE
+ *@default 1, it applies to BestDayScore model
+ *
+ *@property SUBMODEL_QUERY_ONE
+ *@default 3, it applies to AverageScore, AverageSpeed, HandledCards, CardBurner models
+ *
+ *@property SUBMODEL_QUERY_ONE
+ *@default 4, it applies to Progress Model
+ **/
+
+var SUBMODEL_QUERY_ONE = 1;
+var SUBMODEL_QUERY_THREE = 3;
+var SUBMODEL_QUERY_FOUR = 4;
+
+
+/**
+ *Global property/variable that stores the
+ *duration of a day in miliseconds. It is used as a means
+ *of co
+ 
+ *@property TWENTY_FOUR_HOURS
+ *@default 1000 * 60 * 60 * 24
+ **/
+
 var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24; 
 
-//This model holds the statistics for a course
+
+
+
+
+/**
+ * @class StatisticsModel 
+ * This model holds the statistics for a course
+ * @constructor 
+ * It sets and initializes basic properties such as:
+ *  - the current course Id
+ *  - the first active and last active day
+ *  - the time that data were last sent to the server
+ *  - local database
+ * It loads data from the server if the user is logged in
+ * It listens to an event that is triggered when achievements are checked whether they have been reached or not 
+ * @param {String} controller 
+ */
+
 
 function StatisticsModel(controller) {
+	var self = this;
 	this.controller = controller;
+	//initialization of model's variables
 	this.lastSendToServer;
-	
-	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
-			100000);
-
+	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',	100000);
 	this.currentCourseId = -1;
-
 	this.firstActiveDay;
 	this.lastActiveDay;
-
-	var self = this;
-	this.bestDay;
-	this.handledCards;
-	this.averageSpeed;
-	this.averageScore;
-	this.progress;
-	this.cardBurner;
-	this.stackHandler;	
-
-	// FIXME: check the localstorage if the the data is already loaded
-	// if the the data is not loaded but the user is logged in, then loadFromServer()
+	
 	self.statisticsIsLoaded = self.controller.getConfigVariable("statisticsLoaded");
 	moblerlog("statistcsIsLoaded is" + self.controller.getConfigVariable("statisticsLoaded"));
-//	if (!self.statisticsIsLoaded && self.controller.getLoginState() ) {
-//			self.loadFromServer();
-//	}
+	
+	// check the localstorage if the the data is already loaded
+	// if the the data is not loaded but the user is logged in, then loadFromServer 
+	
 	if (this.controller.getConfigVariable("statisticsLoaded")== false && self.controller.getLoginState()){
 		moblerlog("enters heree");
 			self.loadFromServer();
 	}
+	
+	/**
+	 * It is triggered in Statistics Model when calculations are done in all statistics sub models.  
+	 * @event checkachievements
+	 * @param: a callback function that 
+	 * FIXME: the call back is undefined
+	 * */
 	
 	$(document).bind("checkachievements", function(p, courseId) {
 		//self.checkAchievements(courseId);
@@ -111,9 +182,12 @@ function StatisticsModel(controller) {
 	
 }
 
+/**
+ * Sets the current course id and starts the calculations
+ * @prototype
+ * @function setCurrentCourseId
+ */
 
-//sets the current course id and starts the calculations
- 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	var s;
     this.currentCourseId = courseId;
@@ -123,13 +197,11 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	}
 	
 	moblerlog("course-id: " + courseId);
-	
-	//this.getAllDBEntries();//useful for debugging, defined in the of the file
-
+	//this.getAllDBEntries(); //useful for debugging, defined in the end of the file
 	this.controller.models['questionpool'].loadData(courseId);
 	moblerlog("statistics are loaded? " + (this.statisticsIsLoaded ? "yes1" : "no1"));
 	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
-	//if ( this.statisticsIsLoaded ) {
+	//if (this.statisticsIsLoaded ) {
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
 		// load the appropriate models for our course
 		this.initSubModels();
@@ -137,7 +209,6 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 		//checks if card burner achievement was already achieved
 		//and starts the calculations
        //this.checkCardBurner();
-
 		this.getFirstActiveDay();
 	}
 	else {
@@ -146,11 +217,19 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	}
 };
 
-// @return statistics
+
+/**
+ * @prototype
+ * @function getStatistics
+ * @return statistics
+ */
+
  
 StatisticsModel.prototype.getStatistics = function() {
 	return this.statistics;
 };
+
+
 
 // @return improvement
  
@@ -163,21 +242,7 @@ StatisticsModel.prototype.getImprovement = function() {
  * if first active day wasn't set yet, it gets the first active day
  * sets the last activity
  */
-//StatisticsModel.prototype.checkCardBurner = function() {
-//	var self = this;
-//	var query = "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?";
-//	var values = [this.currentCourseId, 'cardburner'];
-//	this.queryDB(query, values, function(transaction, results) {
-//		if (results.rows && results.rows.length > 0) {
-//			self.statistics['cardBurner'] = 100;
-//		}
-//		if (!self.firstActiveDay) {
-//			self.getFirstActiveDay();
-//		} else {
-//			self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
-//		}
-//	});
-//};
+
 
 // gets the timestamp of the first activity
  
@@ -279,6 +344,7 @@ StatisticsModel.prototype.calculateValues = function() {
 	// calculate the achievements
 	self.stackHandler.calculateValue();
 	self.checkAchievements(this.currentCourseId);
+	
 };
 
 /**
@@ -367,9 +433,6 @@ StatisticsModel.prototype.loadFromServer = function() {
                                            self.controller.models['authentication'].getSessionKey());
                       }
 				});
-
-		
-
 	}
 };
 
@@ -404,7 +467,9 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 };
 
 
-//sends statistics data to the server
+/**Sends statistics data to the server
+ * @function sendToServer
+ * */
 
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
@@ -485,6 +550,9 @@ StatisticsModel.prototype.sendToServer = function() {
 
 };
 
+/**Initialization of sub models
+ * @function initSubModels
+ * */
 
 StatisticsModel.prototype.initSubModels = function(){
     moblerlog("start submodel initializion")
@@ -511,15 +579,10 @@ StatisticsModel.prototype.initSubModels = function(){
 };
 
 
-StatisticsModel.prototype.getCardBurner = function(){
-    moblerlog("get card burner")
-	
-	return this.cardBurner;
-   
-};
 
-
-//Display all entries of the database
+/**Display all entries of the database for a specific course
+ * @function getAllDBEntries
+ * */
 
 StatisticsModel.prototype.getAllDBEntries = function(){
 
@@ -531,6 +594,7 @@ StatisticsModel.prototype.getAllDBEntries = function(){
 		});
 	});
 
+	//handler of 
 	function dataSelectHandler(transaction, results) {
         var i;
 		moblerlog("ALL ROWS: " + results.rows.length);
@@ -541,4 +605,6 @@ StatisticsModel.prototype.getAllDBEntries = function(){
 		}
 	}
 };
+
+
 
