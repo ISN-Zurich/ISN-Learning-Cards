@@ -1,4 +1,6 @@
-/**	THIS COMMENT MUST NOT BE REMOVED
+/**	THIS COMMENT MUST NOT  REMOVED
+
+
 
 
 Licensed to the Apache Software Foundation (ASF) under one
@@ -29,72 +31,6 @@ under the License.
 /*jslint vars: true, sloppy: true */
 
 
-/**
- * @function queryDatabase
- * @param cbResult
- * */
-
-
-function queryDatabase(cbResult){
-	moblerlog("enter queryDatabase " + this.modelName);
-	var self = this;
-	self.superModel.db.transaction(function(transaction) {
-                                   transaction.executeSql(self.query, self.values, cbResult, function(tx,e) {moblerlog("DB Error cause: " + self.modelName); self.superModel.dbErrorFunction(tx,e);});
-	});
-}
-
-
-/**
- * Each achivement, either a stackhandler or a card burner, should be reached and calculated only once.
- * Check in this function if an achievement of any type (stackhandler or card burner) was already achieved
- * If an achievement has not been reached then the value of the achievement is calculated as normal 
- * @function checkAchievements
- * */
-
-function checkAchievement() {
-	var self = this;
-	self.superModel.db.transaction(function(transaction) {
-		transaction.executeSql( "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?", [this.courseId, this.achievementName], 
-                               function cbSuccess(t,r) {
-                               if ( r.rows.length > 0 ) {
-                                  self.achievementValue = 100;
-                                  self.superModel.allDone();
-                               } else {
-                                  self.calculateAchievementValues();
-                               }
-                               },
-                               self.superModel.dbErrorFunction);
-	});
-}
-
-
-/**
- * When an achievement is reached (score =100), it is inserted in the database of the server
- * by assigning an -100 value to the duration property 
- * * @function insertAchievement
- * */
-
-function insertAchievement() {
-	var self = this;
-	var insert = 'INSERT INTO statistics(course_id, question_id, day, score, duration) VALUES (?, ?, ?, ?, ?)';
-	var insertValues = [ self.courseId, this.achievementName, (new Date()).getTime(), 100, -100];
-	self.superModel.queryDB(insert, insertValues, function() {
-				moblerlog("successfully inserted achievement");
-			});
-}
-
-
-
-/**
- *A global property/variable that activates and deactivates the display of console logs.
- *It is passed as parameter in global function moblerlog in common.js.
- *
- *@property MOBLERDEBUG
- *@default 0
- *
- **/
-
-var MOBLERDEBUG = 1;
 
 /**
  *Global properties/variables that show the number of values 
@@ -110,25 +46,20 @@ var MOBLERDEBUG = 1;
  *@property SUBMODEL_QUERY_ONE
  *@default 4, it applies to Progress Model
  **/
-
 var SUBMODEL_QUERY_ONE = 1;
 var SUBMODEL_QUERY_THREE = 3;
 var SUBMODEL_QUERY_FOUR = 4;
 
 
 /**
- *Global property/variable that stores the
+ *Global variable that stores the
  *duration of a day in miliseconds. It is used as a means
  *of co
  
  *@property TWENTY_FOUR_HOURS
  *@default 1000 * 60 * 60 * 24
  **/
-
 var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24; 
-
-
-
 
 
 /**
@@ -144,8 +75,6 @@ var TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
  * It listens to an event that is triggered when achievements are checked whether they have been reached or not 
  * @param {String} controller 
  */
-
-
 function StatisticsModel(controller) {
 	var self = this;
 	this.controller = controller;
@@ -158,6 +87,9 @@ function StatisticsModel(controller) {
 	
 	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes1" : "no1"));
 	
+	// load the appropriate models for our course
+	this.initSubModels();
+  	moblerlog("sub models are initialized");
 	// check the localstorage if the the data is already loaded
 	// if the the data is not loaded but the user is logged in, then loadFromServer 
 	
@@ -167,25 +99,30 @@ function StatisticsModel(controller) {
 	}
 	
 	/**
-	 * It is triggered in Statistics Model when calculations are done in all statistics sub models.  
+	 * Check if time dependent achievements have been accomplished.
+	 * 
+	 * It is triggered after a new entry has been added to the local statistics table. We need immediately 
+	 * check the cardBurner Achievement because it is time dependent and we want to give the achievement 
+	 * when the learner has reached it. This also applies to all other time dependent achievements (which
+	 * do not exist yet).     
+	 * 
 	 * @event checkachievements
 	 * @param: a callback function that 
 	 * FIXME: the call back is undefined
-	 * */
-	
-	$(document).bind("checkachievements", function(p, courseId) {
-		//self.checkAchievements(courseId);
+	 **/
+		$(document).bind("checkachievements", function(p, courseId) {
 		self.cardBurner.calculateValue(courseId);
 	});
-	
 }
 
 /**
- * Sets the current course id and starts the calculations
+ * Sets the current course id and starts the calculations if the statistics are 
+ * already loaded locally.Otherwise it triggers the event that all calculations are done
+ * in order to navigate to the statistics view where a "loading statistics" message will be
+ * displayed to the user.
  * @prototype
  * @function setCurrentCourseId
  */
-
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 
     this.currentCourseId = courseId;
@@ -200,16 +137,12 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	
 	//if statistics are loaded
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-		// load the appropriate models for our course
-		this.initSubModels();
-      	moblerlog("sub models are initialized");
-		//checks if card burner achievement was already achieved
-		//and starts the calculations
-       //this.checkCardBurner();
 		this.getFirstActiveDay();
 	}
 	else {
-        
+        // this case is only used if the statistics are not yet loaded from the server
+		// so the controller can move to the statistics view that will then show a nice
+		// message to the user
 		$(document).trigger("allstatisticcalculationsdone");	
 	}
 };
@@ -217,10 +150,10 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 
 /**
  * Gets the timestamp of the first activity
+ * And then start checking the last activity
  * @prototype
  * @function getFirstActiveDay
  */
- 
 StatisticsModel.prototype.getFirstActiveDay = function() {
 	moblerlog("enters first active day");
 	var self = this;
@@ -262,7 +195,6 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
  * @function checkActivity
  * 
  */
-
 StatisticsModel.prototype.checkActivity = function(day) {
 	var self = this;
 	//if one day/24hours back from the current time
@@ -309,8 +241,6 @@ StatisticsModel.prototype.checkActivity = function(day) {
  * @function getCurrentValues
  * 
  */
-
-
  StatisticsModel.prototype.getCurrentValues = function(val) {
 	var timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
@@ -338,8 +268,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
  * @function getLastActiveValues
  * 
  */
-
-StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
+ StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
 	var lastActiveDay24hBefore = this.lastActiveDay - TWENTY_FOUR_HOURS;
 	if (!progressVal){
         return [this.currentCourseId,lastActiveDay24hBefore, this.lastActiveDay ];
@@ -349,8 +278,12 @@ StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
 };
 
 
-//queries the database and calculates the statistics and improvements
-
+/**
+ * calculates the statistics and improvements
+ * @prototype
+ * @function calculateValues
+ * 
+ */
 StatisticsModel.prototype.calculateValues = function() {
 	var self = this;
 
@@ -380,6 +313,8 @@ StatisticsModel.prototype.allCalculationsDone = function() {
     }
 };
 
+
+
 // class for querying the database
 
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
@@ -394,7 +329,7 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 
 StatisticsModel.prototype.checkAchievements = function(courseId) {
 	//check if cardburner was already achieved
-	self.cardBurner.calculateValue(courseId);
+	this.cardBurner.calculateValue(courseId);
 };
 
 
@@ -482,24 +417,20 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 };
 
 
-/**Sends statistics data to the server after checking firstly 
- * if there are any pending statistics data from previous time.
- * The statistics data are stored in the local 'statistics' database.
- * The pending statistics data are stored in the local storage in the
+/**Send statistics data to the server after checking firstly if there are any pending statistics data from previous time.
+ * The statistics data are stored in the local 'statistics' database. The pending statistics data are stored in the local storage in the
  * object with the label "pendingstatistics".  
  * The logic of sending data to the server is:
- * 1. Send any pending statistics to the server
- * 2. Send statistics from the local database to the server
- * 3. If step 2 was not successful, then move to step 1.
+ * 1. Check what statistics data will be sent (pending, new statistics data)
+ * 2. Send the data from step 1 to the server
+ * 2. If step 2 was not successful, then next time we send statistics to the server we do step 1.
  * 
  * @function sendToServer
  * */
-
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
 	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	moblerlog("url statistics: " + url);
-
 		// select all statistics data from the local table "statistics"
 		// and then execute the code in sendStatistics function
 	self.queryDB('SELECT * FROM statistics', [], function(t,r) {sendStatistics(t,r);});
@@ -510,8 +441,8 @@ StatisticsModel.prototype.sendToServer = function() {
 		uuid = "";
 		sessionkey = "";
 		//if there are any statistics data
-		// that were not sent succesfully to the server
-		// in previous 
+		//that were not sent last time succesfully
+		//to the server, they are stored in the local object "pendingStatistics" 
 		if (localStorage.getItem("pendingStatistics")) {
 			var pendingStatistics = {};
 			try {
@@ -519,7 +450,7 @@ StatisticsModel.prototype.sendToServer = function() {
 			} catch (err) {
 				moblerlog("error! while loading pending statistics");
 			}
-			
+			//
 			sessionkey = pendingStatistics.sessionkey;
 			uuid = pendingStatistics.uuid;
 			statistics = pendingStatistics.statistics;
@@ -549,7 +480,6 @@ StatisticsModel.prototype.sendToServer = function() {
 			success : function(data) {
 				moblerlog("statistics data successfully send to the server");
 				localStorage.removeItem("pendingStatistics");
-				
 				if (data) {
 					if (numberOfStatisticsItems < data) {
 						moblerlog("server has more items than local database -> fetch statistics from server");
@@ -563,11 +493,12 @@ StatisticsModel.prototype.sendToServer = function() {
 			error : function() {
 				moblerlog("Error while sending statistics data to server");
 				var statisticsToStore = {
-					sessionkey : sessionkey,
+					sessionkey :sessionkey ,
 					uuid : device.uuid,
 					statistics : statistics
 				};
 				localStorage.setItem("pendingStatistics", JSON.stringify(statisticsToStore));
+				//FIXME:to pass the session key as argument in the triggering of the event
 				$(document).trigger("statisticssenttoserver");
 			},
                beforeSend : function setHeader(xhr) {
@@ -582,7 +513,6 @@ StatisticsModel.prototype.sendToServer = function() {
 /**Initialization of sub models
  * @function initSubModels
  * */
-
 StatisticsModel.prototype.initSubModels = function(){
     moblerlog("start submodel initializion");
 	this.bestDay = new BestDayScoreModel(this);
@@ -613,7 +543,6 @@ StatisticsModel.prototype.initSubModels = function(){
  * Use this function for debugging purposes
  * @function getAllDBEntries
  * */
-
 StatisticsModel.prototype.getAllDBEntries = function(){
 
 	this.db.transaction(function(transaction) {
