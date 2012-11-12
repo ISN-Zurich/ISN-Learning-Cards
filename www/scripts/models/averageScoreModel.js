@@ -36,9 +36,6 @@ function AverageScoreModel(statisticsModel){
 }
 
 AverageScoreModel.prototype.initQuery = function(){
-//	
-//	this.values = [];
-//	this.valuesLastActivity = [];
 	   
 	this.query = 'SELECT sum(score) as score, count(id) as num FROM statistics WHERE course_id=? AND duration!=-100'
 		+ ' AND day>=? AND day<=?' + ' GROUP BY course_id';
