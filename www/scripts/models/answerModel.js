@@ -40,18 +40,6 @@ var DB_VERSION = 1;
 
 
 /**
- *A global property/variable that activates and deactivates the display of console logs.
- *It is passed as parameter in global function moblerlog in common.js.
- *
- *@property MOBLERDEBUG
- *@default 0
- *
- **/
-
-var MOBLERDEBUG = 0;
-
-
-/**
  * @class Answer Model, 
  * The answer model holds/handles the answers of a question of every type
  * @constructor 
@@ -63,8 +51,6 @@ var MOBLERDEBUG = 0;
  * 	- the start time point that the user reached a question
  * It opens the local html5-type database. If it doesn't exist yet it is initiated in the constructor.  
  */
-
-
 function AnswerModel() {
 	this.answerList = [];
 	this.answerScoreList = [];
@@ -88,8 +74,6 @@ function AnswerModel() {
  * @function setAnswers 
  * @param {String} tickedAnswers, a string array containing the selected answers by the user
  **/
-
-
 AnswerModel.prototype.setAnswers = function(tickedAnswers) {
 	this.answerList = tickedAnswers;
 };
@@ -101,7 +85,6 @@ AnswerModel.prototype.setAnswers = function(tickedAnswers) {
  * @function getAnswers 
  * @return {String} answerList, a string array containing the selected answers by the user 
  **/
-
 AnswerModel.prototype.getAnswers = function() {
 	return this.answerList;
 };
@@ -111,8 +94,6 @@ AnswerModel.prototype.getAnswers = function() {
  * @function getScoreList 
  * @return {String} answerScoreList, a string array containing the score list 
  **/
-
-
 AnswerModel.prototype.getScoreList = function() {
 	return this.answerScoreList;
 };
@@ -123,7 +104,6 @@ AnswerModel.prototype.getScoreList = function() {
  * @prototype
  * @function deleteData 
  **/
-
 AnswerModel.prototype.deleteData = function() {
 	this.answerList = [];
 	this.answerScoreList = [];
@@ -136,9 +116,6 @@ AnswerModel.prototype.deleteData = function() {
  * @function getAnswerResults 
  * @return {String}, "Excellent" if answer score is 1, "Wrong" if answer score is 0, otherwise "PariallyCorrect"
  **/
-
-
- 
 AnswerModel.prototype.getAnswerResults = function() {
 	moblerlog("answer score: " + this.answerScore);
 	if (this.answerScore === 1) {
@@ -152,13 +129,12 @@ AnswerModel.prototype.getAnswerResults = function() {
 };
 
 
+
 /**
  * Calculates the score for single choice questions. It can be either 1 or 0.
  * @prototype
  * @function calculateSingleChoiceScore 
  **/
-
-
 AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	var clickedAnswerIndex = this.answerList[0];
 
@@ -180,8 +156,6 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
  * @prototype
  * @function calculateMultipleChoiceScore 
  **/
-
-
 AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 
 	var i, questionpool = controller.models["questionpool"];
@@ -243,12 +217,10 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
  * - i: an index that traverses through the answer list
  * - j: an index that traverses through a correct sequence of answered items
  * - answerList[followingIndex++]: the next item in the answer list or in other words the next item that we answered
- * - ++currAnswer: the next item after the current Answer item 
+ * - ++currAnswer: the index of the next item after the current Answer item in the answer view.
  * @prototype
  * @function calculateTextSortScore 
  **/
-
-
 AnswerModel.prototype.calculateTextSortScore = function() {
 
 	var i, j, scores = [];
@@ -305,8 +277,6 @@ AnswerModel.prototype.calculateTextSortScore = function() {
  * @prototype
  * @function calculateNumericScore 
  **/
-
-
 AnswerModel.prototype.calculateNumericScore = function() {
 
 	var answerModel = controller.models["answers"];
@@ -326,9 +296,7 @@ AnswerModel.prototype.calculateNumericScore = function() {
  * Sets the course id
  * @prototype
  * @function setCurrentCourseId 
- **/
-
- 
+ **/ 
 AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 };
@@ -339,13 +307,12 @@ AnswerModel.prototype.setCurrentCourseId = function(courseId) {
  * @prototype
  * @function startTimer 
  **/
-
-
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
 	this.currentQuestionId = questionId;
 	moblerlog("currentQuestionId: " + this.currentQuestionId);
 };
+
 
 /**
  * Checks if the the timer for the specified question has started or not.
@@ -353,8 +320,6 @@ AnswerModel.prototype.startTimer = function(questionId) {
  * @function hasStarted 
  * @return {Boolean}, true if timer has started, otherwise false
  **/
-
-
 AnswerModel.prototype.hasStarted = function() {
 	return this.start !== -1;
 };
@@ -365,8 +330,6 @@ AnswerModel.prototype.hasStarted = function() {
  * @prototype
  * @function resetTimer
  **/
-
-
 AnswerModel.prototype.resetTimer = function() {
 	this.start = -1;
 };
@@ -377,8 +340,6 @@ AnswerModel.prototype.resetTimer = function() {
  * @prototype
  * @function initDB 
  **/
-
-
 AnswerModel.prototype.initDB = function() {
 	this.db
 			.transaction(function(transaction) {
@@ -388,7 +349,6 @@ AnswerModel.prototype.initDB = function() {
 								[]);
 							});
 	// add in the local storage the created table
-	//
 	localStorage.setItem("db_version", DB_VERSION);
 };
 
@@ -397,13 +357,10 @@ AnswerModel.prototype.initDB = function() {
  * @prototype
  * @function storeScoreInDB 
  ***/
-
-
 AnswerModel.prototype.storeScoreInDB = function() {
 	var self = this;
 	var day = new Date();
 	var duration = ((new Date()).getTime() - this.start);
-	// var day = timestamp.toISOString().substring(0,9);
 	this.db
 	.transaction(function(transaction) {
 		transaction
@@ -427,13 +384,12 @@ AnswerModel.prototype.storeScoreInDB = function() {
 	this.resetTimer();	
 };
 
+
 /**
  *Deletes everything from the statistics table of the local database
  * @prototype
  * @function deleteDB 
  **/
-
-
 AnswerModel.prototype.deleteDB = function() {
 	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {
@@ -450,7 +406,6 @@ AnswerModel.prototype.deleteDB = function() {
  * @prototype
  * @function calculateScore 
  **/
-
 AnswerModel.prototype.calculateScore = function () {
 	var questionpoolModel = controller.models['questionpool'];
 	var questionType = questionpoolModel.getQuestionType();
