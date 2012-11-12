@@ -2,6 +2,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -27,18 +28,6 @@ under the License.
 
 
 /*jslint vars: true, sloppy: true */
-
-
-/**
- *A global property/variable that activates and deactivates the display of console logs.
- *It is passed as parameter in global function moblerlog in common.js.
- *
- *@property MOBLERDEBUG
- *@default 0
- *
- **/
-
-var MOBLERDEBUG = 0;
 
 /**
  * @class Controller
@@ -296,7 +285,7 @@ Controller.prototype.transitionToLogin = function() {
  **/
 
 Controller.prototype.transitionToLogout = function() {
-	this.transition('logout');
+	this.transitionToAuthArea('logout');
 };
 
 
@@ -386,7 +375,7 @@ Controller.prototype.transitionToFeedbackMore = function() {
  **/
 
 Controller.prototype.transitionToStatistics = function(courseID) {
-	if (this.getLoginState() ) {
+	if (this.getLoginState()) {
 		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
 		moblerlog("enters get logic state in controller");
 		if (courseID && courseID > 0) {
