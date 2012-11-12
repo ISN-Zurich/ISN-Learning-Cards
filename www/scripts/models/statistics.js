@@ -45,10 +45,9 @@ function queryDatabase(cbResult){
 
 
 /**
- * Each achivement, either a stackhandler or a card burner should be reached and calculated only once.
+ * Each achivement, either a stackhandler or a card burner, should be reached and calculated only once.
  * Check in this function if an achievement of any type (stackhandler or card burner) was already achieved
- * If an achievement has not been reached done then calculation of the value of the achievement
- * is performed as normal 
+ * If an achievement has not been reached then the value of the achievement is calculated as normal 
  * @function checkAchievements
  * */
 
@@ -157,8 +156,7 @@ function StatisticsModel(controller) {
 	this.firstActiveDay;
 	this.lastActiveDay;
 	
-	self.statisticsIsLoaded = self.controller.getConfigVariable("statisticsLoaded");
-	moblerlog("statistcsIsLoaded is" + self.controller.getConfigVariable("statisticsLoaded"));
+	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes1" : "no1"));
 	
 	// check the localstorage if the the data is already loaded
 	// if the the data is not loaded but the user is logged in, then loadFromServer 
@@ -189,19 +187,18 @@ function StatisticsModel(controller) {
  */
 
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
-	var s;
-    this.currentCourseId = courseId;
 
-	for ( s in this.statistics) {
-		this.statistics[s] = -1;
-	}
-	
-	moblerlog("course-id: " + courseId);
-	//this.getAllDBEntries(); //useful for debugging, defined in the end of the file
+    this.currentCourseId = courseId;
+    moblerlog("course-id: " + courseId);
+    
+	// uncomment the following line for debugging purposes
+    // this.getAllDBEntries(); 
+    
 	this.controller.models['questionpool'].loadData(courseId);
-	moblerlog("statistics are loaded? " + (this.statisticsIsLoaded ? "yes1" : "no1"));
+	
 	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
-	//if (this.statisticsIsLoaded ) {
+	
+	//if statistics are loaded
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
 		// load the appropriate models for our course
 		this.initSubModels();
@@ -219,32 +216,10 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 
 
 /**
+ * Gets the timestamp of the first activity
  * @prototype
- * @function getStatistics
- * @return statistics
+ * @function getFirstActiveDay
  */
-
- 
-StatisticsModel.prototype.getStatistics = function() {
-	return this.statistics;
-};
-
-
-
-// @return improvement
- 
-StatisticsModel.prototype.getImprovement = function() {
-	return this.improvement;
-};
-
-/**
- * checks if card burner achievement was already achieved
- * if first active day wasn't set yet, it gets the first active day
- * sets the last activity
- */
-
-
-// gets the timestamp of the first activity
  
 StatisticsModel.prototype.getFirstActiveDay = function() {
 	moblerlog("enters first active day");
@@ -252,6 +227,8 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND duration != -100',
 						[ self.currentCourseId ], 
 						function dataSelectHandler(transaction, results) {
+							// if we retrieve statistics data for a specific course,
+							// for the earliest(min) day on which these data were tracked
 							if (results.rows.length > 0) {
 								row = results.rows.item(0);
 								moblerlog("first active day: " + JSON.stringify(row));
@@ -261,62 +238,106 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 								} else {
 									self.firstActiveDay = (new Date()).getTime(); 
 								}
-							} else {
+								
+							} 
+							// the first time we launch the app
+							// we dont get any min day, because we don't have
+							// any statistics data.
+							// so we set the current time to be the first active day	
+							else {
 								self.firstActiveDay = (new Date()).getTime(); 
 								moblerlog("get a new first active day");
 							}
+							//check if there was any activity until one day(=24hours) 
+							//before  the current time
 							self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
 	});
 };
 
 /**
- * sets the last active day
- * if no activity is found, the last activity is set to the 
+ * Sets the last active day
+ * If no activity is found, the last activity is set to the 
  * current timestamp
+ * @prototype
+ * @function checkActivity
+ * 
  */
+
 StatisticsModel.prototype.checkActivity = function(day) {
 	var self = this;
+	//if one day/24hours back from the current time
+	//is more recent than the first active day
 	if (day > self.firstActiveDay) {
+		// count the statistics data for the last 24 hours before this day
 		this.queryDB('SELECT count(id) as counter FROM statistics WHERE course_id=? AND duration != -100 AND day>=? AND day<=?',
 							[ self.currentCourseId, (day - TWENTY_FOUR_HOURS), day ], 
 							function dataSelectHandler( transaction, results) {
+							//if statistics data are retrieved from the last 24 hours before this day
 								if (results.rows.length > 0 && results.rows.item(0)['counter'] !== 0) {
 										moblerlog("active day: " + day);
+										// then set this day to be the last active day
 										self.lastActiveDay = day;
 										self.calculateValues();
 								}
+								//if there was no activity in the past 24 hours 
+								//and if the previous day is not the first active day
+								// check the activity of the pre-previous day 
 								else {
+									//continue checking the past activity 
+									//by going each time 24 hours back
+									//until to reach the last active day
 										self.checkActivity(day - TWENTY_FOUR_HOURS);
 								} 
-		});
-	} else {
+		});	
+	} 
+	//this is executed the first time we launch the app
+	//the current day (day= new Date()).getTime() - TWENTY_FOUR_HOURS)
+	//is not more recent than the first active day (day < first active day) 
+	else {
+		//the last active day is set to be the current active day
 		self.lastActiveDay = day;
+		//we proceed and calculate the values 
+		//for the statistics metrics
 		self.calculateValues();
 	}
 };
 
 
- 
+/**
+ * initializes all values that are needed for the calculations
+ * @prototype
+ * @function getCurrentValues
+ * 
+ */
 
-//initializes all values that are needed for the calculations
-StatisticsModel.prototype.getCurrentValues = function(val) {
+
+ StatisticsModel.prototype.getCurrentValues = function(val) {
 	var timeNow = new Date().getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
     var retval = [];
     switch (val){
-        case 0:
+        case 1:
             retval =  [this.currentCourseId];
             break;
-        case 1:
+        case 3:
             retval = [this.currentCourseId,time24hAgo,timeNow ];
             break;
-        case 2:
+        case 4:
         default:
             retval = [this.currentCourseId,1,time24hAgo,timeNow ];
             break;
 	}
     return retval;
 };
+
+
+
+/**
+ * Get the values from the last active day
+ * @prototype
+ * @function getLastActiveValues
+ * 
+ */
 
 StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
 	var lastActiveDay24hBefore = this.lastActiveDay - TWENTY_FOUR_HOURS;
@@ -414,15 +435,9 @@ StatisticsModel.prototype.loadFromServer = function() {
 						}
 						moblerlog("after inserting statistics from server");
 						// trigger event statistics are loaded from server
-						//self.statisticsIsLoaded = true;
-						// FIXME: Store a flag into the local storage that the data is loaded.
-						
-//						var configObject = {
-//								statisticsLoaded= "true"	
-//						}
+					
+						// Store a flag into the local storage that the data is loaded.
 						self.controller.setConfigVariable("statisticsLoaded", true);
-						
-						//self.statisticsIsLoaded = true;
 						$(document).trigger("loadstatisticsfromserver");
 					},
 					error : function(xhr, err, errorString) {
@@ -467,7 +482,16 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 };
 
 
-/**Sends statistics data to the server
+/**Sends statistics data to the server after checking firstly 
+ * if there are any pending statistics data from previous time.
+ * The statistics data are stored in the local 'statistics' database.
+ * The pending statistics data are stored in the local storage in the
+ * object with the label "pendingstatistics".  
+ * The logic of sending data to the server is:
+ * 1. Send any pending statistics to the server
+ * 2. Send statistics from the local database to the server
+ * 3. If step 2 was not successful, then move to step 1.
+ * 
  * @function sendToServer
  * */
 
@@ -476,6 +500,8 @@ StatisticsModel.prototype.sendToServer = function() {
 	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	moblerlog("url statistics: " + url);
 
+		// select all statistics data from the local table "statistics"
+		// and then execute the code in sendStatistics function
 	self.queryDB('SELECT * FROM statistics', [], function(t,r) {sendStatistics(t,r);});
 
 	function sendStatistics(transaction, results) {
@@ -483,6 +509,9 @@ StatisticsModel.prototype.sendToServer = function() {
 		numberOfStatisticsItems = 0;
 		uuid = "";
 		sessionkey = "";
+		//if there are any statistics data
+		// that were not sent succesfully to the server
+		// in previous 
 		if (localStorage.getItem("pendingStatistics")) {
 			var pendingStatistics = {};
 			try {
@@ -555,7 +584,7 @@ StatisticsModel.prototype.sendToServer = function() {
  * */
 
 StatisticsModel.prototype.initSubModels = function(){
-    moblerlog("start submodel initializion")
+    moblerlog("start submodel initializion");
 	this.bestDay = new BestDayScoreModel(this);
     moblerlog("finish submodel bestday");
 
@@ -580,27 +609,26 @@ StatisticsModel.prototype.initSubModels = function(){
 
 
 
-/**Display all entries of the database for a specific course
+/**Display all entries of the database (the local one) for a specific course
+ * Use this function for debugging purposes
  * @function getAllDBEntries
  * */
 
 StatisticsModel.prototype.getAllDBEntries = function(){
 
 	this.db.transaction(function(transaction) {
-		transaction
-		.executeSql('SELECT * FROM statistics WHERE course_id=?',
+		//select all the statistics data for a specific course
+		transaction.executeSql('SELECT * FROM statistics WHERE course_id=?',
 				[ courseId ], dataSelectHandler, function(tx, e) {
 			moblerlog("Error for select average score: "+ e.message);
 		});
 	});
 
-	//handler of 
 	function dataSelectHandler(transaction, results) {
         var i;
 		moblerlog("ALL ROWS: " + results.rows.length);
 		for ( i = 0; i < results.rows.length; i++) {
 			row = results.rows.item(i);
-
 			moblerlog(i + ": " + JSON.stringify(row));
 		}
 	}
