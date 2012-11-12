@@ -24,7 +24,7 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
+
 
 function ProgressModel(statisticsModel){
     this.modelName = " progress";
