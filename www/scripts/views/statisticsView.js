@@ -173,35 +173,28 @@ StatisticsView.prototype.clickToAchievements = function() {
 StatisticsView.prototype.loadData = function() {
 	moblerlog("enters load data in statistics");
 	var statisticsModel = this.controller.models['statistics'];
-	var statistics = statisticsModel.getStatistics();
-	var improvement = statisticsModel.getImprovement();
 	$("#loadingMessage").hide();
 	$("#statisticsBody").show();
 	
 	moblerlog("init values for statistics");
-	//var avgScore = statistics['averageScore'];
 	var avgScore = statisticsModel.averageScore.averageScore;
 	var improvementAvgScore = statisticsModel.averageScore.improvementAverageScore;
 	if (avgScore < 0) {
 		avgScore =  0;
 	}
 	
-    //	var avgSpeed = statistics['averageSpeed'];
 	var avgSpeed = statisticsModel.averageSpeed.averageSpeed;
 	var improvementSpeed = statisticsModel.averageSpeed.improvementSpeed;
 	if (avgSpeed <= 0) {
 		avgSpeed =  "-";
 	}
 	
-    //var handledCards = statistics['handledCards'];
-    
 	var handledCards = statisticsModel.handledCards.handledCards;
 	var improvementhandledCards = statisticsModel.handledCards.improvementHandledCards;
     if (handledCards < 0) {
         handledCards =  0;
     }
     
-	//var progress = statistics['progress'];
     var progress = statisticsModel.progress.progress;
     var improvementProgress = statisticsModel.progress.improvementProgress;
 	if (progress < 0) {
@@ -209,7 +202,6 @@ StatisticsView.prototype.loadData = function() {
 	}
     
 	var bestDay = statisticsModel.bestDay.bestDay;
-	//var bestDay = statistics['bestDay'];
 	if (!bestDay) {
 		// if the database does not know better, today is the best day!
 		bestDay = new Date().getTime();
