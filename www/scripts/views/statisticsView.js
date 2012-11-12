@@ -29,7 +29,7 @@ under the License.
 */
 
 /*jslint vars: true, sloppy: true */
-var MOBLERDEBUG = 0;
+
 
 // helper functions
 
