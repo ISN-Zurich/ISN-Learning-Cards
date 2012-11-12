@@ -198,8 +198,8 @@ ConfigurationModel.prototype.loadData = function() {
 	// that its login status is set to "loggedOut".
 	if (!configObject) {
 		configObject = {
-			loginState : "loggedOut"
-			//statisticsLoaded: "false"
+			loginState : "loggedOut",
+			statisticsLoaded: "false"
 		};
 	}
 
