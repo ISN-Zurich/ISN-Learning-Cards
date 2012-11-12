@@ -388,7 +388,9 @@ Controller.prototype.transitionToFeedbackMore = function() {
 Controller.prototype.transitionToStatistics = function(courseID) {
 	if (this.getLoginState() ) {
 		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
+		moblerlog("enters get logic state in controller");
 		if (courseID && courseID > 0) {
+			moblerlog ("enters course id in controller");
 			this.models['statistics'].setCurrentCourseId(courseID);
 		}
 		else {
@@ -401,7 +403,7 @@ Controller.prototype.transitionToStatistics = function(courseID) {
 	else {
 		this.transition("login");
 	}
-}
+};
 
 /**
  * Transition to achievements view
