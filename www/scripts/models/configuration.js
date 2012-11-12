@@ -83,16 +83,6 @@ var URLS_TO_LMS = {"yellowjacket":
 					}
 };
 
-/**
- *A global property/variable that activates and deactivates the display of console logs.
- *It is passed as parameter in global function moblerlog in common.js.
- *
- *@property MOBLERDEBUG
- *@default 0
- *
- **/
-
-var MOBLERDEBUG = 0;
 
 /**
  * @class ConfigurationModel 
@@ -129,27 +119,19 @@ function ConfigurationModel(controller) {
 	 * @event statisticssenttoserver
 	 * @param:a callback function that sends pending data to the server and clears all information from the local storage.
 	 * Only the application key remains in the local storage, because it is unique for a specific device for a specific application.
+	* 
+	* FIXME:
+	* Take care that the session key and the server are stored with the pending information so we can send the data 
+	* with the correct context to the backend i.e. if you have pening information and you login to a different server
+	* then the pending information should be sent to the original server for the original user and not
+	* to the new server and the new user. 
 	*/
-	
+
 	$(document).bind("statisticssenttoserver", function() {
-		
+		if ( self.configuration.loginState === "loggedOut") {
 		self.sendLogoutToServer();
 		moblerlog("user logged out");
-		
-		self.configuration = {
-				"appAuthenticationKey": self.configuration.appAuthenticationKey,
-				"userAuthenticationKey" : "",
-				"learnerInformation" : {
-					"userId" : 0
-				},
-				"statisticsLoaded": false
-		};
-		
-		//after clearing data from the local storage, save the changes to the local storage item
-		self.storeData();
-		
-		// drop statistics data table from local database
-		self.controller.models['answers'].deleteDB();
+		}
 	});
 
 }
@@ -180,7 +162,6 @@ ConfigurationModel.prototype.storeData = function() {
  * @prototype
  * @function loadData
  */
- 
 ConfigurationModel.prototype.loadData = function() {
 	var configObject;
 	//if there is an item in the local storage with the name "configuration"
@@ -202,18 +183,18 @@ ConfigurationModel.prototype.loadData = function() {
 			statisticsLoaded: "false"
 		};
 	}
-
-	this.configuration = configObject;
+	
+ 	this.configuration = configObject;
 
 };
 
 /**
  * Loads the configuration data from the server such as learner information and synchronization state
  * and stores it in the local storage. When all data is loaded, the authenticationready event is triggered
+ * If any error occurs during the authentication then an event will be triggered to notify this.
  * @prototype
  * @function loadFromServer
  */
-
 ConfigurationModel.prototype.loadFromServer = function() {
 	var self = this;
 	
@@ -287,11 +268,13 @@ ConfigurationModel.prototype.loadFromServer = function() {
 
 /**
 * Logs in user. The user types a username and a password. Therefore the username and a challenge are
-*sent to the server.
+*sent to the server. The algorithm that is executed to compute the challenge is based on:
+*1. the application key that is bound to a UUID
+*2. the user's password (its MD5 hashed value) 
+*3. the user's name
 * @prototype
 * @function login
-*/
- 
+*/ 
 ConfigurationModel.prototype.login = function(username, password) {
 	moblerlog("client key: " + this.configuration.appAuthenticationKey);
 	//remove leading and trailing white spaces
@@ -313,13 +296,14 @@ ConfigurationModel.prototype.login = function(username, password) {
 };
 
 /**
-* Logs out user. When logging out the statistics are sent to the server and the local storage is cleared
+* Logs out user. When logging out the statistics are sent to the server and the 
+* local storage (courses, questions) is cleared
 * @prototype
 * @function logout
 */
-
 ConfigurationModel.prototype.logout = function() {
 	//send statistics data to server
+	this.configuration.loginState = "loggedOut";
 	this.controller.models['statistics'].sendToServer();
 	
 	var self = this;
@@ -337,11 +321,8 @@ ConfigurationModel.prototype.logout = function() {
 	localStorage.removeItem("pendingCourseList");
 	localStorage.removeItem("courses");
 	this.controller.models['course'].resetCourseList();
-	
 
 };
-
-
 
 
 /**
@@ -349,7 +330,6 @@ ConfigurationModel.prototype.logout = function() {
 * @prototype
 * @function sendAuthToServer
 */
-
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
 	moblerlog("url: " + self.urlToLMS + '/authentication.php');
@@ -397,6 +377,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						//store the authenticated data (user authentication key, learner information) in the local storage
 						self.configuration.userAuthenticationKey = data.userAuthenticationKey;
 						self.configuration.learnerInformation = data.learnerInformation;
+						self.configuration.loginState = "loggedIn";
 						self.storeData();
 						/**
                          * When all authentication data are received and stored in the local storage
@@ -438,9 +419,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
                   xhr.setRequestHeader('authdata', authData.username + ":"
                                        + authData.challenge);
                   }
-			});
-
-	
+			});	
 };
 
 /**
@@ -450,8 +429,6 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 * @function sendLogoutToServer
 * @param userAuthenticationKey
 */
-
-
 ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey) {
 	var sessionKey,self = this;
   
@@ -460,6 +437,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 	} else {
 		sessionKey = self.configuration.userAuthenticationKey;
 	}
+	
 	$
 			.ajax({
 				url : self.urlToLMS + '/authentication.php',
@@ -467,27 +445,37 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 				dataType : 'json',
 				//the logout from the server was done successfully
 				success : function() {
-
+					
 				},
 				//there was an error while logging out
-				//it could be loss of internet connection or any other error that stoped the process
 				error : function() {
 					moblerlog("Error while logging out from server");
 					//adding in the local storage the session key of the pending
 					localStorage.setItem("pendingLogout", sessionKey);
 				},
 				//sends via header the session key in order it to be validated
-				beforeSend : setHeader
+				beforeSend : function setHeader(xhr) {
+					moblerlog("session key to be invalidated: " + sessionKey);
+					xhr.setRequestHeader('sessionkey', sessionKey);
+				}
 			});
 
-	function setHeader(xhr) {
-		moblerlog("session key to be invalidated: " + sessionKey);
-		xhr.setRequestHeader('sessionkey', sessionKey);
-	}
+	this.configuration = {
+			"appAuthenticationKey": self.configuration.appAuthenticationKey,
+			"userAuthenticationKey" : "",
+			"learnerInformation" : {
+				"userId" : 0
+			},
+			"loginState": "loggedOut",
+			"statisticsLoaded": false
+	};
+
+	//after clearing data from the local storage, save the changes to the local storage item
+	this.storeData();
+
+	// drop statistics data table from local database
+	this.controller.models['answers'].deleteDB();	
 };
-
-
-
 /**
 * Invalidates the specified session key or if no session key is specified the
 * current session key
@@ -495,10 +483,13 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 * @function isLoggedIn
 * @return true if user is logged in, otherwise false
 */
-
 ConfigurationModel.prototype.isLoggedIn = function() {
-	return (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") ? true
-			: false;
+	if (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") {
+		return true;
+	}
+	
+	moblerlog("configuration.js: is not logged in ... " + this.configuration.userAuthenticationKey); 
+	return false;
 };
 
 
@@ -507,7 +498,6 @@ ConfigurationModel.prototype.isLoggedIn = function() {
 * @function getDisplayName
 * @return {String} displayName, the full name of the user that is stored in the configuration object
 */
-
 ConfigurationModel.prototype.getDisplayName = function() {
 	return this.configuration.learnerInformation.displayName;
 };
@@ -518,7 +508,6 @@ ConfigurationModel.prototype.getDisplayName = function() {
 * @function getUserName
 *  @return {String} displayName, the username that is stored in the configuration object
 */
-
 ConfigurationModel.prototype.getUserName = function() {
 	return this.configuration.learnerInformation.userName;
 };
@@ -529,8 +518,6 @@ ConfigurationModel.prototype.getUserName = function() {
 * @function getUserId
 * @return {Number} userId, the user id that is stored in the configuration object
 */
-
-
 ConfigurationModel.prototype.getUserId = function() {
 	return this.configuration.learnerInformation.userId;
 };
@@ -541,8 +528,6 @@ ConfigurationModel.prototype.getUserId = function() {
 * @function getEmailAddress
 * @return {String} emailAddress, the email address of the user as it is stored in the configuration object
 */
-
-
 ConfigurationModel.prototype.getEmailAddress = function() {
 	return this.configuration.learnerInformation.emailAddress;
 };
@@ -553,8 +538,6 @@ ConfigurationModel.prototype.getEmailAddress = function() {
 * @function getLanguage
 * @return {String} language, the language of the user 
 */
-
-
 ConfigurationModel.prototype.getLanguage = function() {
 	//return "el"; // JUST for testing
 	if (this.configuration.learnerInformation && this.configuration.learnerInformation.language && this.configuration.learnerInformation.language.length){
@@ -574,8 +557,6 @@ ConfigurationModel.prototype.getLanguage = function() {
 * @function getSessionKey 
 * @return {String} userAuthenticationKey, the session key of the user 
 */
-
-
 ConfigurationModel.prototype.getSessionKey = function() {
 	return this.configuration.userAuthenticationKey;
 };
@@ -586,7 +567,6 @@ ConfigurationModel.prototype.getSessionKey = function() {
 * @prototype
 * @function getSessionKey 
 */
-
 ConfigurationModel.prototype.createConfiguration = function() {
 	moblerlog("create configuration");
 
@@ -602,12 +582,11 @@ ConfigurationModel.prototype.createConfiguration = function() {
 };
 
 /**
-* Sends the registration request to the server and waiting to get back the app key 
+* Sends the registration request (appId ,device id) to the server and waiting to get back the app key 
 * It is called whenever the client(app) key is empty
 * @prototype
 * @function register 
 */
-
 ConfigurationModel.prototype.register = function() {
 	var self = this;
 	moblerlog("enters regsitration");
@@ -646,7 +625,6 @@ ConfigurationModel.prototype.register = function() {
 	 * @function appRegistration
 	 * @param {String} data, the data exchanged with the server during the registration
 	 */
-	
 	function appRegistration(data) {
 		// if we don't know a user's language we try to use the phone's language.
         language = navigator.language.split("-");
@@ -686,13 +664,13 @@ ConfigurationModel.prototype.register = function() {
 };
 
 /**
- * Selects the url to the lms and the client key depending on the 
- * specified server name
+ * Selects the data (url, image, label, clientkey) of the selected lms that are stored in a global variable.
+ * It stores the image, label and url of the lms in the constructor's variables.
+ * It creates a data structure for storing the client keys of the lms's in local storage. 
  * @prototype
  * @function selectServerData
  * @param {String} servername, the name of the activated server
  */
-
 ConfigurationModel.prototype.selectServerData = function(servername) {
 	var urlsToLMSString = localStorage.getItem("urlsToLMS");
 	var urlsToLMS;
@@ -740,8 +718,6 @@ ConfigurationModel.prototype.selectServerData = function(servername) {
 * @function getServerURL 
 * @return {String} urlToLMS, the Url of the activated server 
 */
-
-
 ConfigurationModel.prototype.getServerURL = function() {
 	return this.urlToLMS;
 
@@ -752,7 +728,6 @@ ConfigurationModel.prototype.getServerURL = function() {
 * @function getServerLogoImage 
 * @return {String} logoimage, the Url of the logo image of the activated server 
 */
-
 ConfigurationModel.prototype.getServerLogoImage = function() {
 	return this.logoimage;
 };
@@ -763,7 +738,6 @@ ConfigurationModel.prototype.getServerLogoImage = function() {
 * @function getServerLogoLabel 
 * @return {String} logolabel, the info label of the activated server
 */
-
 ConfigurationModel.prototype.getServerLogoLabel = function() {
 	return this.logolabel;
 };
