@@ -74,7 +74,7 @@ if ($userID != 0) {
 function getQuestions($courseId) {
 	//references are needed to get course items (= questionpools, tests, ...)
 	$item_references = ilObject::_getAllReferences($courseId);
-	logging("item references".json_encode($item_references));
+	//logging("item references".json_encode($item_references));
 	$questions = array();
 
 	if(is_array($item_references) && count($item_references)) {
