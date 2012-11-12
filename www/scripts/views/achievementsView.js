@@ -91,8 +91,7 @@ AchievementsView.prototype.closeAchievements = function() {
 
 AchievementsView.prototype.showAchievementsBody = function() {
 	var statisticsModel = controller.models['statistics'];
-	var statistics = statisticsModel.getStatistics();
-
+	
 	$("#stackHandlerIcon").removeClass("blue");
 	$("#cardBurnerIcon").removeClass("blue");
 
