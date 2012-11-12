@@ -124,8 +124,11 @@ ConnectionState.prototype.goOnline = function() {
 	}
 	// if statistics data wasn't sent to the server for more than 24 hours
 	// send the data to the server
-	if ( this.controller && this.controller.models && this.controller.models["statistics"]) {
+	//FIXME: This results in triggering the event "sentstatisticstoserver" which in turn is bounded by configuration mobel constructor, 
+	//which in turn sendsLogout to the server
+	if (this.controller && this.controller.models && this.controller.models["statistics"]) {
 		if (!statisticsModel.lastSendToServer || statisticsModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+			moblerlog("statistics need to be synchronized in connection state model");
 			statisticsModel.sendToServer();
 		}
 	}
