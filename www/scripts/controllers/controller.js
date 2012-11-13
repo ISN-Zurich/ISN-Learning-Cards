@@ -3,6 +3,7 @@
 
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -83,7 +84,7 @@ function Controller() {
 	this.views.feedbackView = new FeedbackView();
 	this.views.settings = new SettingsView();
 	this.views.statisticsView = new StatisticsView(this);
-	this.views.achievements = new AchievementsView();
+	this.views.achievements = new AchievementsView(this);
 	this.views.about = new AboutView();
 
 	moblerlog('views initialized');
