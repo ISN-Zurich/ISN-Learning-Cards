@@ -52,7 +52,6 @@ var DEFAULT_SERVER = "yellowjacket";
  *@property URLS_TO_LMS
  *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
  **/
-
 var URLS_TO_LMS = {"yellowjacket":  
 					{
 						logoImage: "resources/pfpLogo.png", 
@@ -128,7 +127,7 @@ function ConfigurationModel(controller) {
 	*/
 
 	$(document).bind("statisticssenttoserver", function() {
-		if ( self.configuration.loginState === "loggedOut") {
+		if (self.configuration.loginState === "loggedOut") {
 		self.sendLogoutToServer();
 		moblerlog("user logged out");
 		}
@@ -326,7 +325,12 @@ ConfigurationModel.prototype.logout = function() {
 
 
 /**
-* Sends authentication data (username, challenge) to the server
+* Sends an authentication request (uuid, appid, username, challenge) to the server
+* In case of successful authentication, we store back to the local storage the following:
+* 1. user authentication key
+* 2. learner information such as userId, userName, displayName, emailAddress, langauge
+* 3. we set the login state to "logged in".
+* Both in successfull or failed authentication an appropriate event is triggered to notify about the status of it.
 * @prototype
 * @function sendAuthToServer
 */
@@ -423,8 +427,10 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 };
 
 /**
-* Invalidates the specified session key or if no session key is specified the
-* current session key
+ * Sends a delete request to the server in order to invalidates the specified session key 
+ * or if no session key is specified the current session key.
+ * We send via header the session key. After the delete request is sent to the server,
+ * we clear the local storage. We keep only the app key.
 * @prototype
 * @function sendLogoutToServer
 * @param userAuthenticationKey
@@ -443,11 +449,9 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 				url : self.urlToLMS + '/authentication.php',
 				type : 'DELETE',
 				dataType : 'json',
-				//the logout from the server was done successfully
 				success : function() {
 					
 				},
-				//there was an error while logging out
 				error : function() {
 					moblerlog("Error while logging out from server");
 					//adding in the local storage the session key of the pending
@@ -476,6 +480,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 	// drop statistics data table from local database
 	this.controller.models['answers'].deleteDB();	
 };
+
 /**
 * Invalidates the specified session key or if no session key is specified the
 * current session key
@@ -534,6 +539,8 @@ ConfigurationModel.prototype.getEmailAddress = function() {
 
 
 /**
+* Gets the language of the interface for the specific user. By default it is the selected language of
+* the user on the lms. If there is no specified language, then the language of the device is used.
 * @prototype
 * @function getLanguage
 * @return {String} language, the language of the user 
