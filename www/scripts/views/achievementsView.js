@@ -31,10 +31,10 @@ var MOBLERDEBUG = 0;
 
 // View for displaying the achievements
  
-function AchievementsView(){
+function AchievementsView(controller){
 	
 	 var self = this;
-	    
+	 self.controller = controller;  
 	 self.tagID = 'achievementsView';
 	
 	 var prevent=false;
@@ -42,6 +42,25 @@ function AchievementsView(){
 		 moblerlog("achievements: close tap");
 		 self.closeAchievements();
 		 event.stopPropagation(); } );
+	 
+	 
+	 
+	 $(document).bind("loadstatisticsfromserver", function() {
+		if (self.tagID === self.controller.activeView.tagID)
+	    	{
+	    		moblerlog("enters load statistics from server is done");
+				 self.controller.models['statistics'].getFirstActiveDay();
+	    	}
+		  });
+	    
+	    $(document).bind("allstatisticcalculationsdone", function() { 
+	    	moblerlog("enters in calculations done 1 ");
+	    if (self.tagID === self.controller.activeView.tagID)
+	    	{
+	    		moblerlog("enters in calculations done 2 ");
+	    		self.showAchievementsBody();
+	    	}
+	    });
 	
 }; 
 
@@ -72,7 +91,13 @@ AchievementsView.prototype.openDiv = openView;
 //shows the achievements body
 
 AchievementsView.prototype.open = function() {
+	var self=this;
+	if (this.controller.getConfigVariable("statisticsLoaded")== true){
 	this.showAchievementsBody();
+	}
+	else {
+		self.showLoadingMessage();
+	}  
 	this.openDiv();	
 };
 
@@ -91,7 +116,9 @@ AchievementsView.prototype.closeAchievements = function() {
 
 AchievementsView.prototype.showAchievementsBody = function() {
 	var statisticsModel = controller.models['statistics'];
-	
+	$("#loadingMessageAchievements").hide();
+	$("#StackHandlerContainer").show();
+	$("#CardBurnerContainer").show();
 	$("#stackHandlerIcon").removeClass("blue");
 	$("#cardBurnerIcon").removeClass("blue");
 
@@ -107,7 +134,11 @@ AchievementsView.prototype.showAchievementsBody = function() {
 	if (statisticsModel.cardBurner.achievementValue == 100){
 			$("#cardBurnerIcon").addClass("blue");			
 	};
+};
+
+
+AchievementsView.prototype.showLoadingMessage = function() {
+	$("#achievementsBody").hide();
+	$("#loadingMessageAchievements").show();	
 	
-
-
-}
+};
