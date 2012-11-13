@@ -49,17 +49,39 @@ function CoursesListView(controller) {
 		self.clickSettingsButton();
 	});
 
+	/*
+	 * In some rare cases an automated transition from login view to course list view takes place. 
+	 * This might have happened because a synchronization of questions ( pending questions exist in the local storage) took place.
+	 * So when the courseListView or the CourseModel bind/listen to that event (because it was triggered when pending questions were loaded), we should check 
+	 * IF WE ARE LOGGED IN in order to perform the callback function otherwise we should transite to login view.
+	 */
 	$(document).bind("questionpoolready", function(e, courseID) {
+		if (self.controller.models['authentication'].configuration.loginState === "loggedIn") {
 		moblerlog("view questionPool ready called " + courseID);
 		self.courseIsLoaded(courseID);
-	});
+		}else {
+			self.controller.transitionToLogin();
+		}
+		});
+	
+	
+	/*
+	 * In some rare cases an automated transition from login view to course list view takes place. 
+	 * This might have happened because a synchronization of courses pending questions took place and when the "courseListUpdate" event was triggered
+	 * then the the courses list view (which binds/listens to this event) was displayed by the execution of the update function below.
+	 * So we should check IF WE ARE LOGGED IN in order to perform the call back function otherwise we should transite to login view.
+	 */
 
 	$(document).bind("courselistupdate", function(e) {
+		if (self.controller.models['authentication'].configuration.loginState === "loggedIn") {
 		moblerlog("course list update called");
-		self.firstLoad = false;
-		if (self.active) {
-			moblerlog("course list view is active");
-			self.update();
+			self.firstLoad = false;
+			if (self.active) {
+				moblerlog("course list view is active");
+				self.update();
+			}
+		}else {
+			self.controller.transitionToLogin();
 		}
 	});
 	
