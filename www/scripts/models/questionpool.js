@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -27,12 +28,22 @@ under the License.
 */
 
 
-/**
- * This model holds the question of an question pool and a queue for the last
- * answered questions
- */
 /*jslint vars: true, sloppy: true */
 
+/**
+ * @class QuestionPoolModel
+ * This model holds the questions of a question pool and a queue for the last
+ * answered questions
+ * @constructor 
+ * It sets and initializes basic properties such as:
+ *  - the questionList
+ *  - the id of the active question
+ *  - the whole structure and content of the active question
+ *  - an array that contains in mixed/random order the answer items of a question
+ *  - a flag that specify if the current answer items are mixed or not
+ *  - a queue that holds the most recently answered questions
+ * It resets the current question pool by emptying the queue and setting the question id to zero 
+ */
 function QuestionPoolModel(controller) {
 	this.controller = controller;
 
@@ -54,9 +65,12 @@ function QuestionPoolModel(controller) {
 
 }
 
+
 /**
  * stores the data into the local storage (key = "questionpool_[course_id]")
- * therefor the questionlist is converted into a string
+ * therefore the questionlist is converted into a string
+ * @prototype
+ * @function storeData
  */
 QuestionPoolModel.prototype.storeData = function(course_id) {
 	var questionPoolString;
@@ -68,10 +82,13 @@ QuestionPoolModel.prototype.storeData = function(course_id) {
 	localStorage.setItem("questionpool_" + course_id, questionPoolString);
 };
 
+
 /**
  * loads the data from the local storage (key = "questionpool_[course_id]")
  * therefor the string is converted into an array
- */
+ * @prototype
+ * @function loadData
+ * */
 QuestionPoolModel.prototype.loadData = function(course_id) {
 	var questionPoolObject;
 	try {
@@ -82,18 +99,16 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 		questionPoolObject = [];
 	}
 
-	// if (!questionPoolObject[0]) { // if no questions are available, new ones
-	// are created
-	// questionPoolObject = this.createPool(course_id);
-	// }
-
 	this.questionList = questionPoolObject;
 	this.reset();
 };
 
+
 /**
  * loads the question pool from the server and stores it in the local storage
  * when all data is loaded, the questionpoolready event is triggered
+ * @prototype
+ * @function loadFromServer
  */
 QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
@@ -110,21 +125,11 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 					
 					//if this was an pending question pool, remove it from the storage
 					localStorage.removeItem("pendingQuestionPool" + courseId);
-					
-					
 					if (data) {
                     moblerlog("JSON: " + data);
 						var questionPoolObject;
 						
-						questionPoolObject = data.questions;
-						
-
-						// if (!questionPoolObject[0]) { // if no courses are
-						// available, new ones are created
-						moblerlog("no questionpool loaded");
-						// questionPoolObject = self.createPool(data.courseID);
-						// }
-						
+						questionPoolObject = data.questions;				
 						if (!questionPoolObject) {
 							questionPoolObject = [];
 						}
@@ -138,10 +143,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						}
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
-                    //self.questionList = questionPoolObject || [];
-                    //self.reset();
-                    //self.storeData(data.courseID);
-						$(document).trigger("questionpoolready", data.courseID);
+                  		$(document).trigger("questionpoolready", data.courseID);
 					}
 				},
 				error : function() {
@@ -162,44 +164,75 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 };
 
- //removes the data for the specified course id from the local storage
 
+
+/**
+ * removes the data for the specified course id from the local storage
+ * @prototype
+ * @function removeData
+ */
 QuestionPoolModel.prototype.removeData = function(course_id) {
 	localStorage.removeItem("questionpool_" + course_id);
 };
 
-// @return the question type of the current question
 
+/**
+ * @prototype
+ * @function getQuestionType
+ * @return activeQuestion.type, the question type of the current question
+ */
 QuestionPoolModel.prototype.getQuestionType = function() {
 	return this.activeQuestion.type;
 };
 
-//@return the question text of the current question
 
+/**
+ * @prototype
+ * @function getQuestionBody
+ * @return activeQuestion.question, the question text of the current question
+ */
 QuestionPoolModel.prototype.getQuestionBody = function() {
 	return this.activeQuestion.question;
 };
 
-// @return the answer of the current question
 
+/**
+ * @prototype
+ * @function getAnswer
+ * @return activeQuestion.answer, the answer of the current question
+ */
 QuestionPoolModel.prototype.getAnswer = function() {
 	return this.activeQuestion.answer;
 };
 
- // @return the array that contains the mixed answers
 
+/**
+ * @prototype
+ * @function getMixedAnswersArray
+ * @return mixedAnswers, the array that contains the mixed answers
+ */
 QuestionPoolModel.prototype.getMixedAnswersArray = function() {
 	return this.mixedAnswers;
 };
 
+
+
 /**
- * @return true if the current answers are mixed,
- * otherwise false
+ * @prototype
+ * @function currAnswersMixed
+ * @return{Boolean} true if the current answers are mixed, otherwise false
  */
 QuestionPoolModel.prototype.currAnswersMixed = function() {
 	return this.currentAnswersAreMixed;
 };
 
+
+/**
+ * Mixes the answer items of the current question and sets as true the flag (=currentAnsweredAreMixed)
+ * that tracks if the answers are mixed or not
+ * @prototype
+ * @function mixAnswers
+ */
 QuestionPoolModel.prototype.mixAnswers = function() {
 	var answers = this.activeQuestion.answer;
 	this.mixedAnswers = [];
@@ -207,9 +240,7 @@ QuestionPoolModel.prototype.mixAnswers = function() {
 		var random = Math.floor((Math.random() * answers.length));
 
 		// if the current random number is already in the mixed
-		// answers
-		// array
-		// the the next element as random number
+		// answers array the next element as random number
 		while (this.mixedAnswers.indexOf(random) !== -1) {
 			random = (++random) % answers.length;
 		}
@@ -223,6 +254,8 @@ QuestionPoolModel.prototype.mixAnswers = function() {
  * sets the id to the id of the next question a random number is created. if the
  * random number is not the same as the current id and is not an id that is
  * stored in the queue, the new id is the random number
+ * @prototype
+ * @function nextQuestion
  */
 QuestionPoolModel.prototype.nextQuestion = function() {
 	var random;
@@ -241,18 +274,14 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 
 	this.activeQuestion = this.questionList[random];
 	this.currentAnswersAreMixed = false;
-	// for (var q in this.questionList) {
-	// if (this.questionList[q].id == this.id) {
-	// this.activeQuestion = this.questionList[q];
-	// }
-	// }
-
 	return this.id < this.questionList.length;
 };
 
 /**
  * puts the current id into the queue, if the length of the question list is
  * greater than the queue constant
+ * @prototype
+ * @function queueCurrentQuestion
  */
 QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 	if (this.questionList.length >= this.queueConstant) {
@@ -261,56 +290,90 @@ QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 	}
 };
 
-//increases the index of the current answer
-
+/**
+ * increases the index of the current answer
+ * greater than the queue constant
+ * @prototype
+ * @function nextAnswerChoice
+ */
 QuestionPoolModel.prototype.nextAnswerChoice = function() {
 	this.indexAnswer = (this.indexAnswer + 1);
 	return this.indexAnswer < this.activeQuestion.answer.length;
 };
 
-//@return the answertext of the current answer of the current question
- 
+
+/**
+ * @prototype
+ * @function getAnswerChoice
+ * @return answertext of the current answer of the current question
+ */
+
 QuestionPoolModel.prototype.getAnswerChoice = function() {
 	return this.activeQuestion.answer[this.indexAnswer].answertext;
 };
 
-// @return the score of the current answer of the current question
- 
+
+/**
+ * @prototype
+ * @function getAnswerChoiceScore
+ * @return {Number} points, the score of the current answer of the current question
+ */
 QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
 	return this.activeQuestion.answer[this.indexAnswer].points;
 };
 
-//@return the score of the answer with the specified index of the current question
- 
+/**
+ * @prototype
+ * @function getScore
+ * @return {Number} points,  the score of the answer with the specified index of the current question
+ * @return -1 if anything goes wrong and no index is specified for the answer
+ * */
 QuestionPoolModel.prototype.getScore = function(index) {
-	if (index >= 0 && index < this.activeQuestion.answer.length) { //index && 
+	if (index >= 0 && index < this.activeQuestion.answer.length) { 
 		return this.activeQuestion.answer[index].points;
 	}
     return -1;
 };
 
-// @return the correct feedback of the current question
 
+/**
+ * @prototype
+ * @function getCorrectFeedback
+ * @return {String} correctFeedback, the correct feedback of the current question
+ */
 QuestionPoolModel.prototype.getCorrectFeedback = function() {
 	return this.activeQuestion.correctFeedback;
 };
 
 
-// @return the error feedback of the current question
-
+ 
+/**
+ * @prototype
+ * @function getWrongFeedback
+ * @return {String} erroFeedback, the wrong feedback of the current question
+ */
 QuestionPoolModel.prototype.getWrongFeedback = function() {
 	return this.activeQuestion.errorFeedback;
 };
 
-//@return the id of the current question
- 
+
+/**
+ * @prototype
+ * @function getId
+ * @return {Number} id, the id of the current active question
+ */ 
 QuestionPoolModel.prototype.getId = function() {
 	return this.activeQuestion.id;
 };
 
 
-//resets the queue and the question id
- 
+
+/**
+ * Resets the queue, the question id and the active question.
+ * It sets the flag for the mixing of answers to be false. 
+ * @prototype
+ * @function reset
+ */ 
 QuestionPoolModel.prototype.reset = function() {
 	this.queue = [ "-1", "-1", "-1" ];
 	this.id = 0;
@@ -321,44 +384,14 @@ QuestionPoolModel.prototype.reset = function() {
 	}
 };
 
-//resets the answer index
- 
-QuestionPoolModel.prototype.resetAnswer = function() {
+
+/**
+ * Resets the answer index
+ * @prototype
+ * @function resetAnswer
+ */ 
+ QuestionPoolModel.prototype.resetAnswer = function() {
 	this.indexAnswer = 0;
 };
 
-// creates 2 questionpools with index 1 and 2
 
-QuestionPoolModel.prototype.createQuestionPools = function() {
-	this.createPool(1);
-	this.createPool(2);
-};
-
-/**
- * if course_id is 1 or 2 and no questionpools with those indices are already
- * stored in the local storage, new ones are created
- */
-QuestionPoolModel.prototype.createPool = function(course_id) {
-	if (course_id === 1) {
-		if (!localStorage.questionpool_1) {
-			initQuPo1();
-		}
-		try {
-			return JSON.parse(localStorage.getItem("questionpool_1"));
-		} catch (err) {
-			return [];
-		}
-
-	} else if (course_id === 2) {
-		// if no questions are available, new ones are created
-		if (!localStorage.questionpool_2) {
-			initQuPo2();
-		}
-
-		try {
-			return JSON.parse(localStorage.getItem("questionpool_2"));
-		} catch (err) {
-			return [];
-		}
-	}
-};
