@@ -236,10 +236,14 @@ StatisticsModel.prototype.checkActivity = function(day) {
 
 
 /**
- * initializes all values that are needed for the calculations
+ * Initializes all values that are needed for the calculations (executions of the queries) 
+ * of statistics metrics (statistiscs submodels)
  * @prototype
  * @function getCurrentValues
- * 
+ * @param {Number} val, a variable that states the number of arguments that are passed in the query
+ * 		   that is used for the calculation of the value for the specific statistics metric.
+ * @return:{Array} retval, an array consisting of n=val items and contains the actual values that 
+ * 			are passed to the specific query 
  */
  StatisticsModel.prototype.getCurrentValues = function(val) {
 	var timeNow = new Date().getTime();
@@ -247,25 +251,31 @@ StatisticsModel.prototype.checkActivity = function(day) {
     var retval = [];
     switch (val){
         case 1:
-            retval =  [this.currentCourseId];
+            retval = [this.currentCourseId];
             break;
         case 3:
-            retval = [this.currentCourseId,time24hAgo,timeNow ];
+            retval = [this.currentCourseId,time24hAgo,timeNow];
             break;
         case 4:
         default:
-            retval = [this.currentCourseId,1,time24hAgo,timeNow ];
+            retval = [this.currentCourseId,1,time24hAgo,timeNow];
             break;
 	}
     return retval;
 };
 
 
-
 /**
- * Get the values from the last active day
+ * Get the values from the last active day. It is needed for the calculation of improvement
+ * for some of the statistics metrics/models: 
+ * - Progress
+ * - AverageScore
+ * - AverageSpeed
+ * - HandledCards
  * @prototype
  * @function getLastActiveValues
+ * @param {Boolean} progressVal, it is passed as true to these statistics metrics that calculate improvement 
+ * @return {Array}, containing the values of the parameteres of the query for the last active day 
  * 
  */
  StatisticsModel.prototype.getLastActiveValues = function(progressVal) {
@@ -279,10 +289,11 @@ StatisticsModel.prototype.checkActivity = function(day) {
 
 
 /**
- * calculates the statistics and improvements
+ * Calculates the statistics values for the various statistics metrics.
+ * For some of them like: Progress, AverageScore, AverageSpeed HandledCardsimprovements it calculates also their improvement. 
+ * Additionally it calculates the achievements. 
  * @prototype
  * @function calculateValues
- * 
  */
 StatisticsModel.prototype.calculateValues = function() {
 	var self = this;
@@ -301,10 +312,16 @@ StatisticsModel.prototype.calculateValues = function() {
 	
 };
 
+
+
 /**
- * after each finished calculation, this function is called
- * if the function is called by all of the calculations,
- * the allstatisticcalculationsdone event is triggered
+ * It triggeres an event when all stastistics caluclations is done. The logic is
+ * the following: After each statistics calculation is finished the boolAllDone variable
+ * increases at one. When all  statistics calculations have been done, this
+ * variable has counted 6 times. In this case, the event allstatisticcalculationsdone is triggered
+ * @prototype
+ * @function allCalculationsDone
+ * 
  */
 StatisticsModel.prototype.allCalculationsDone = function() {
 	moblerlog(" finished n="+this.boolAllDone +" calculations");
@@ -314,9 +331,12 @@ StatisticsModel.prototype.allCalculationsDone = function() {
 };
 
 
-
-// class for querying the database
-
+/**
+ *Function for querying the database
+ * @prototype
+ * @function queryDB
+ * @param query, values, cbResutls
+ */
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	var self = this;
 	self.db.transaction(function(transaction) {
@@ -325,23 +345,35 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 };
 
 
-// checks if any achievements have been achieved
 
+/**
+ *Checks if any achievements have been achievedn for the specific course
+ * @prototype
+ * @function checkAchievements
+ * @param {Number}, courseId
+ */
 StatisticsModel.prototype.checkAchievements = function(courseId) {
 	//check if cardburner was already achieved
 	this.cardBurner.calculateValue(courseId);
 };
 
 
-//function that is called if an error occurs while querying the database
- 
+/**
+ *Function that is called if an error occurs while querying the database
+ * @prototype
+ * @function dbErrorFunction
+ * @param tx,e
+ */
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
 	moblerlog("DB Error: " + e.message);
 };
 
 
-// loads the statistics data from the server and stores it in the local database
-
+/**
+ * Loads the statistics data from the server and stores it in the local database
+ * @prototype
+ * @function dbErrorFunction
+ */
 StatisticsModel.prototype.loadFromServer = function() {
 	var self = this;
 	if (self.controller.models['authentication'].isLoggedIn()) {
@@ -386,9 +418,11 @@ StatisticsModel.prototype.loadFromServer = function() {
 	}
 };
 
-
-//inserts the statistic item into the database if it doesn't exist there yet
-
+/**
+ * inserts the statistic item into the database if it doesn't exist there yet
+ * @prototype
+ * @function insertStatisticItem 
+ */
 StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	var self = this;
     moblerlog("day: " + statisticItem['day']);
