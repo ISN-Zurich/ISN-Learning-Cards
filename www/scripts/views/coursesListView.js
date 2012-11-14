@@ -56,13 +56,10 @@ function CoursesListView(controller) {
 	 * IF WE ARE LOGGED IN in order to perform the callback function otherwise we should transite to login view.
 	 */
 	$(document).bind("questionpoolready", function(e, courseID) {
-		if (self.controller.models['authentication'].configuration.loginState === "loggedIn") {
+		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn")){
 		moblerlog("view questionPool ready called " + courseID);
 		self.courseIsLoaded(courseID);
-		}else {
-			self.controller.transitionToLogin();
-		}
-		});
+		}});
 	
 	
 	/*
@@ -73,18 +70,16 @@ function CoursesListView(controller) {
 	 */
 
 	$(document).bind("courselistupdate", function(e) {
-		if (self.controller.models['authentication'].configuration.loginState === "loggedIn") {
+		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn")) {
 		moblerlog("course list update called");
 			self.firstLoad = false;
 			if (self.active) {
 				moblerlog("course list view is active");
 				self.update();
-			}
-		}else {
-			self.controller.transitionToLogin();
-		}
-	});
+			}}});
 	
+	
+		
 	function setOrientation() {
        	self.setIconSize(); 
     }
