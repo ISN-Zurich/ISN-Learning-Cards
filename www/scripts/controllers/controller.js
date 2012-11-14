@@ -79,10 +79,10 @@ function Controller() {
 	this.views.login = new LoginView(this);
 	this.views.logout = new LogoutView();
 	this.views.coursesList = new CoursesListView(this);
-	this.views.questionView = new QuestionView();
-	this.views.answerView = new AnswerView();
-	this.views.feedbackView = new FeedbackView();
-	this.views.settings = new SettingsView();
+	this.views.questionView = new QuestionView(this);
+	this.views.answerView = new AnswerView(this);
+	this.views.feedbackView = new FeedbackView(this);
+	this.views.settings = new SettingsView(this);
 	this.views.statisticsView = new StatisticsView(this);
 	this.views.achievements = new AchievementsView(this);
 	this.views.about = new AboutView();
@@ -205,6 +205,8 @@ Controller.prototype.setupLanguage = function() {
 			$("#stackHandlerTitle").text(msg_achievementsHandler_title);
 			$("#stackHandlerExplanation").text(msg_achievementsHandler_explanation);
 			$("#starterStackHandler").text(msg_achievements_text1);
+			$("#loadingMessage").text(msg_loading_message);
+			$("#loadingMessageAchievements").text(msg_achievementsLoading_message);
 			$("#doneStackHandler").text(msg_achievements_text2);
 			$("#cardBurnerIcon").addClass(msg_achievements_Burner_icon);
 			$("#cardBurnerTitle").text(msg_achievementsBurner_title);
