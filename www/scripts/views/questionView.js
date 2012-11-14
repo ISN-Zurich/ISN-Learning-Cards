@@ -34,9 +34,9 @@ var MOBLERDEBUG = 0;
 
 //View for displaying questions
  
-function QuestionView() {
+function QuestionView(controller) {
 	var self = this;
-
+	self.controller = controller;
 	self.tagID = 'cardQuestionView';
 	
 
@@ -109,8 +109,28 @@ function QuestionView() {
 		self.handlePinch();
 	});
 	
-
-}
+	
+	$(document).bind("loadstatisticsfromserver", function() {
+    	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
+    	{
+    		moblerlog("enters load statistics from server is done in question view");
+    		self.showQuestionBody();
+    	}
+    	
+	  });
+	
+	$(document).bind("allstatisticcalculationsdone", function() { 
+    	moblerlog("enters in calculations done in question view1 ");
+    	    
+    	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
+    	{
+    		moblerlog("enters in calculations done in question view 2 ");
+    		self.showQuestionBody();
+    	}
+    });
+	
+	
+	}
 
 
 //pinch leads to the course list
