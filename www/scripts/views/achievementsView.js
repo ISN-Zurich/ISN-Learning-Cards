@@ -46,7 +46,7 @@ function AchievementsView(controller){
 	 
 	 
 	 $(document).bind("loadstatisticsfromserver", function() {
-		if (self.tagID === self.controller.activeView.tagID)
+		if ((self.tagID === self.controller.activeView.tagID)&& (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
 	    	{
 	    		moblerlog("enters load statistics from server is done");
 				 self.controller.models['statistics'].getFirstActiveDay();
@@ -55,7 +55,7 @@ function AchievementsView(controller){
 	    
 	    $(document).bind("allstatisticcalculationsdone", function() { 
 	    	moblerlog("enters in calculations done 1 ");
-	    if (self.tagID === self.controller.activeView.tagID)
+	    if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
 	    	{
 	    		moblerlog("enters in calculations done 2 ");
 	    		self.showAchievementsBody();
@@ -138,7 +138,8 @@ AchievementsView.prototype.showAchievementsBody = function() {
 
 
 AchievementsView.prototype.showLoadingMessage = function() {
-	$("#achievementsBody").hide();
+	$("#StackHandlerContainer").hide();
+	$("#CardBurnerContainer").hide();
 	$("#loadingMessageAchievements").show();	
 	
 };
