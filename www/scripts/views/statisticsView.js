@@ -79,11 +79,12 @@ function StatisticsView(controller) {
     moblerlog('bind the application events');
     $(document).bind("loadstatisticsfromserver", function() {
 		// if (self.controller.activeView == self.controller.views[self.tagID])
-    	if (self.tagID === self.controller.activeView.tagID)
+    	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
     	{
     		moblerlog("enters load statistics from server is done");
 			 self.controller.models['statistics'].getFirstActiveDay();
     	}
+    	
 	  });
     
     $(document).bind("allstatisticcalculationsdone", function() { 
