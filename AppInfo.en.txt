@@ -25,6 +25,3 @@ Features
 * Number questions
 * Achievement trophies
 * Automatic language selection depending on your learning environment
-
-
-
