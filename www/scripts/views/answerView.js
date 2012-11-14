@@ -33,8 +33,9 @@ under the License.
 /*jslint vars: true, sloppy: true */
 var MOBLERDEBUG = 0;
 
-function AnswerView() {
+function AnswerView(controller) {
 	var self = this;
+	 self.controller = controller;
 
 	self.tagID = 'cardAnswerView';
 
@@ -75,36 +76,36 @@ function AnswerView() {
 	window.addEventListener("resize", setOrientation, false);
 
 	
-//	jester($('#cardAnswerBody')[0]).tap(function(e, prevent) {
-//		
-//	});
 
 	// Solve Scrolling 
 var prevent=!prevent;
-//jester($('#cardAnswerBody')[0]).scroll(function(e,prevent) {
-		moblerlog("scroll works");
-//		if(prevent)
-//			{e.preventDefault();}else{
-//		!e.preventDefault();}
-	//var prevent = !prevent;
-	//$(window).scrollTop();
-	
-//});
-//	
+
 //	
 	$('#cardAnswerBody').bind("touchMove",function(e) {
 	//!e.preventDefault();
 	window.scrollBy(0,50);	
 		
 	});
-//	var prevent= false;
-//	jester($('#cardAnswerTitle')[0]).tap(function(e, prevent) {
-//		//$('#cardAnswerBody').scroll();
-//		//jester($('#cardAnswerBody')[0]).scroll(function(e) {
-//		//!e.preventDefault();
-//		//})
-//	});
-//	
+
+	
+	$(document).bind("loadstatisticsfromserver", function() {
+    	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
+    	{
+    		moblerlog("enters load statistics from server is done in answer view 1");
+    		self.showAnswerBody();
+    	}
+    	
+	  });
+	
+	$(document).bind("allstatisticcalculationsdone", function() { 
+    	moblerlog("enters in calculations done in question view1 ");
+    	    
+    	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
+    	{
+    		moblerlog("enters in calculations done in  answer view 2 ");
+    		self.showAnswerBody();
+    	}
+    });
 	
 	
 } // end of Constructor
@@ -180,7 +181,7 @@ AnswerView.prototype.showAnswerBody = function() {
 };
 
 
-//Displays the title area of the answer view, containg a title icon  the title text 
+//Displays the title area of the answer view, containing a title icon  the title text 
 AnswerView.prototype.showAnswerTitle = function() {
 	var currentAnswerTitle = controller.models["questionpool"]
 			.getQuestionType(); 
