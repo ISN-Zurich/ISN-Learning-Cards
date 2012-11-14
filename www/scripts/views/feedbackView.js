@@ -33,8 +33,9 @@ var MOBLERDEBUG = 0;
 // View for displaying the feedback
 
 
-function FeedbackView(question) {
+function FeedbackView(controller) {
 	var self = this;
+	 self.controller = controller;
 
 	self.tagID = 'cardFeedbackView';
 
@@ -73,6 +74,26 @@ function FeedbackView(question) {
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
     
+    
+    
+//
+    $(document).bind("loadstatisticsfromserver", function() {
+    	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
+    	{
+    		moblerlog("enters load statistics from server is done in feedback view 1");
+    		self.showFeedbackBody();
+    	}
+
+    });
+    $(document).bind("allstatisticcalculationsdone", function() { 
+    	moblerlog("enters in calculations done in question view1 ");
+    	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
+    	{
+    		moblerlog("enters in calculations done in feedback view 2 ");
+    		self.showFeedbackBody();
+    	}
+    });
+
 }
 
 
