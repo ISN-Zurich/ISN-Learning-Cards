@@ -44,7 +44,7 @@ var APP_ID = "ch.ethz.isn.learningcards";
  *@default hornet
  **/
 
-var DEFAULT_SERVER = "yellowjacket";
+var DEFAULT_SERVER = "hornet";
 
 /**
  *A global property/variable that is used to store info about the different servers to which the application can be connected.
