@@ -42,6 +42,37 @@ function LoginView(controller) {
 
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
+		
+		
+		$(document).bind("statisticssenttoserver", function() {
+			//	if (self.controller.activeView == self.controller.views[self.tagID])
+			if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
+			{
+				moblerlog("stays in login view, despite the synchronization updates");
+				self.showForm();
+			}
+		});
+		
+		
+		$(document).bind("questionpoolready", function() {
+			//	if (self.controller.activeView == self.controller.views[self.tagID])
+			if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
+			{
+				moblerlog("stays in login view, despite the synchronization updates");
+				self.showForm();
+			}
+		});
+		
+
+		$(document).bind("courselistupdate", function() {
+			//	if (self.controller.activeView == self.controller.views[self.tagID])
+			if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
+			{
+				moblerlog("stays in login view, despite the synchronization updates");
+				self.showForm();
+			}
+		});
+			
 	});
 	
 	var prevent=false;
