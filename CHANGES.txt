@@ -1,6 +1,6 @@
 # Latest Version is at the beginning of this file.
  
-Version 1.1; 14 Nov. 2012
+Version 1.1; 15 Nov. 2012
 * Fixed a problem when users were automatically logged out during background synchronization
 * Fixed a problem when users were automatically logged in while synchronizations were active during logout
 * Fixed statistics calculation after starting the app 
