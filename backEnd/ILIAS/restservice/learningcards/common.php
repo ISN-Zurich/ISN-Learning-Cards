@@ -121,7 +121,7 @@ function getUserIdForSessionKey($sessionKey) {
 
 
 /**
- * checks if the question pool is online, contains at least 4 questions and
+ * Checks if the question pool is online, contains at least 4 questions and
  * the question have only valid question types
  *
  * @return true if question pool is valid, otherwise false

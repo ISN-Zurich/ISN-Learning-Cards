@@ -1,7 +1,5 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -40,9 +38,8 @@ under the License.
  *  - the id of the active question
  *  - the whole structure and content of the active question
  *  - an array that contains in mixed/random order the answer items of a question
- *  - a flag that specify if the current answer items are mixed or not
- *  - a queue that holds the most recently answered questions
- * It resets the current question pool by emptying the queue and setting the question id to zero 
+ *  - a flag that specifies if the current answer items are mixed or not
+ *  - a queue that holds the most recently answered questions, whose lenght is specified to be 4 
  */
 function QuestionPoolModel(controller) {
 	this.controller = controller;
@@ -60,17 +57,15 @@ function QuestionPoolModel(controller) {
 	// if the question list length is less than this constant,
 	// the queue is not used
 	this.queueConstant = 4;
-
-	// this.createQuestionPools();
-
 }
 
 
 /**
- * stores the data into the local storage (key = "questionpool_[course_id]")
- * therefore the questionlist is converted into a string
+ * Stores the data of a question pool into the local storage (key = "questionpool_[course_id]")
+ * Therefore the questionlist is converted into a string
  * @prototype
  * @function storeData
+ * @param{Number}course_id, the if of the current course
  */
 QuestionPoolModel.prototype.storeData = function(course_id) {
 	var questionPoolString;
@@ -84,10 +79,11 @@ QuestionPoolModel.prototype.storeData = function(course_id) {
 
 
 /**
- * loads the data from the local storage (key = "questionpool_[course_id]")
- * therefor the string is converted into an array
+ * Loads the data from the local storage (key = "questionpool_[course_id]")
+ * Therefore the string is converted into an array
  * @prototype
  * @function loadData
+ * @param {Number}course_id, the id of the current course
  * */
 QuestionPoolModel.prototype.loadData = function(course_id) {
 	var questionPoolObject;
@@ -105,8 +101,10 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 
 
 /**
- * loads the question pool from the server and stores it in the local storage
- * when all data is loaded, the questionpoolready event is triggered
+ * Loads the question pool from the server and stores it in the local storage
+ * When all data is loaded, the questionpoolready event is triggered. 
+ * During the request to the server, the session key of the authenticated user is
+ * sent via headers
  * @prototype
  * @function loadFromServer
  */
@@ -122,8 +120,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 				dataType : 'json',
 				success : function(data) {
 					moblerlog("success");
-					
-					//if this was an pending question pool, remove it from the storage
+					//if this was a pending question pool, remove it from the storage
 					localStorage.removeItem("pendingQuestionPool" + courseId);
 					if (data) {
                     moblerlog("JSON: " + data);
@@ -143,6 +140,11 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						}
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
+						/**It is triggered after the successful loading of quesitons from the server 
+						 * @event questionpoolready
+						 * @param:courseID
+						 */
+						
                   		$(document).trigger("questionpoolready", data.courseID);
 					}
 				},
@@ -151,8 +153,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 					//if there was an error while sending the request,
 					//store the course id for the question pool in the local storage
 					localStorage.setItem("pendingQuestionPool_" + courseId, true);
-					console
-							.log("Error while loading question pool from server");
+					moblerlog("Error while loading question pool from server");
 				},
 				beforeSend : setHeader
 			});
@@ -167,7 +168,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 
 /**
- * removes the data for the specified course id from the local storage
+ * Removes the data for the specified course id from the local storage
  * @prototype
  * @function removeData
  */
@@ -177,9 +178,16 @@ QuestionPoolModel.prototype.removeData = function(course_id) {
 
 
 /**
+ * Returns the type of the current question
+ * There are currently supported the following question types, according to ILIAS naming conventions: 
+ * - "assMultipleChoice",
+ * - "assSingleChoice", 
+ * - "assOrderingQuestion",
+ * - "assNumeric", 
+ * - "assOrderingHorizontal"
  * @prototype
  * @function getQuestionType
- * @return activeQuestion.type, the question type of the current question
+ * @return type, the question type of the current question
  */
 QuestionPoolModel.prototype.getQuestionType = function() {
 	return this.activeQuestion.type;
@@ -199,7 +207,7 @@ QuestionPoolModel.prototype.getQuestionBody = function() {
 /**
  * @prototype
  * @function getAnswer
- * @return activeQuestion.answer, the answer of the current question
+ * @return {Array} answer, the answer of the current active question in an array format which consists of answer items
  */
 QuestionPoolModel.prototype.getAnswer = function() {
 	return this.activeQuestion.answer;
@@ -220,7 +228,7 @@ QuestionPoolModel.prototype.getMixedAnswersArray = function() {
 /**
  * @prototype
  * @function currAnswersMixed
- * @return{Boolean} true if the current answers are mixed, otherwise false
+ * @return{Boolean} true, if the answer items of the active questions are mixed it returns true, otherwise false
  */
 QuestionPoolModel.prototype.currAnswersMixed = function() {
 	return this.currentAnswersAreMixed;
@@ -228,7 +236,7 @@ QuestionPoolModel.prototype.currAnswersMixed = function() {
 
 
 /**
- * Mixes the answer items of the current question and sets as true the flag (=currentAnsweredAreMixed)
+ * Mixes the answer items of the current question and sets as true the flag 
  * that tracks if the answers are mixed or not
  * @prototype
  * @function mixAnswers
@@ -240,7 +248,7 @@ QuestionPoolModel.prototype.mixAnswers = function() {
 		var random = Math.floor((Math.random() * answers.length));
 
 		// if the current random number is already in the mixed
-		// answers array the next element as random number
+		// answers array , then get the next element as random number
 		while (this.mixedAnswers.indexOf(random) !== -1) {
 			random = (++random) % answers.length;
 		}
@@ -251,21 +259,26 @@ QuestionPoolModel.prototype.mixAnswers = function() {
 };
 
 /**
- * sets the id to the id of the next question a random number is created. if the
- * random number is not the same as the current id and is not an id that is
- * stored in the queue, the new id is the random number
+ * Sets the id to the id of the next question. A random number is created in order to get the id of the next question
+ * at the random position/index of the question list. If the random number is not the same as the current id and is not an id 
+ * that is stored in the queue, the new id is the random number
  * @prototype
  * @function nextQuestion
+ * @return {Number} id, the id of the next question 
  */
 QuestionPoolModel.prototype.nextQuestion = function() {
 	var random;
 	var newId;
 
 	do {
-		// generates a random number between 0 and questionList.length - 1
+		// generates a random number between 0 and questionList.length 
 		random = Math.floor((Math.random() * this.questionList.length));
+		moblerlog("random:" +random);
 		newId = this.questionList[random].id;
 		moblerlog("New ID: " + newId);
+		//keeps repeating the process of getting the id of the new random question of question list
+		//while the new random id is still the same with id of the current question or if this new random id is still 
+		//stored in the waiting queue 	
 	} while (this.id === newId
 			|| (this.queue.length * 2 <= this.questionList.length && jQuery
 					.inArray(newId, this.queue) >= 0));
@@ -277,8 +290,9 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 	return this.id < this.questionList.length;
 };
 
+
 /**
- * puts the current id into the queue, if the length of the question list is
+ * Puts the current id of the active question into the queue only if the length of the question list is
  * greater than the queue constant
  * @prototype
  * @function queueCurrentQuestion
@@ -290,43 +304,26 @@ QuestionPoolModel.prototype.queueCurrentQuestion = function() {
 	}
 };
 
-/**
- * increases the index of the current answer
- * greater than the queue constant
- * @prototype
- * @function nextAnswerChoice
- */
-QuestionPoolModel.prototype.nextAnswerChoice = function() {
-	this.indexAnswer = (this.indexAnswer + 1);
-	return this.indexAnswer < this.activeQuestion.answer.length;
-};
-
 
 /**
  * @prototype
  * @function getAnswerChoice
- * @return answertext of the current answer of the current question
+ * @return {String} answertext, the text of the current answer item of the current  active question
  */
-
 QuestionPoolModel.prototype.getAnswerChoice = function() {
 	return this.activeQuestion.answer[this.indexAnswer].answertext;
 };
 
 
 /**
- * @prototype
- * @function getAnswerChoiceScore
- * @return {Number} points, the score of the current answer of the current question
- */
-QuestionPoolModel.prototype.getAnswerChoiceScore = function() {
-	return this.activeQuestion.answer[this.indexAnswer].points;
-};
-
-/**
+ * This functions applies to multiple and single choice questions, whose
+ * answer body consists of a list of answer items. It returns the score of each answer item  
+ * that is assigned from the LMS. 
  * @prototype
  * @function getScore
- * @return {Number} points,  the score of the answer with the specified index of the current question
- * @return -1 if anything goes wrong and no index is specified for the answer
+ * @param {Number} index, the position/index of the answer item  of the active question
+ * @return {Number} points, the score in points of the current answer item of the active question
+ * @return -1 if no score is specified for the specific answer item
  * */
 QuestionPoolModel.prototype.getScore = function(index) {
 	if (index >= 0 && index < this.activeQuestion.answer.length) { 
@@ -337,6 +334,7 @@ QuestionPoolModel.prototype.getScore = function(index) {
 
 
 /**
+ * Gives more textual explanatory feedback to the user when he gets correct results
  * @prototype
  * @function getCorrectFeedback
  * @return {String} correctFeedback, the correct feedback of the current question
@@ -348,6 +346,7 @@ QuestionPoolModel.prototype.getCorrectFeedback = function() {
 
  
 /**
+ * Gives more textual explanatory feedback to the user when he gets wrong results
  * @prototype
  * @function getWrongFeedback
  * @return {String} erroFeedback, the wrong feedback of the current question
@@ -369,8 +368,12 @@ QuestionPoolModel.prototype.getId = function() {
 
 
 /**
- * Resets the queue, the question id and the active question.
- * It sets the flag for the mixing of answers to be false. 
+ * Resets a question pool by:
+ * 1. Emptying the queue that holds the recently answered questions
+ * 2. Initializing the question id
+ * 3. Clearing the current question body
+ * 4. Reseting the mixing of the answered items of each question
+ * After the reseting of the above elements has been done, we start again the question pool by moving to the next question
  * @prototype
  * @function reset
  */ 
@@ -393,5 +396,3 @@ QuestionPoolModel.prototype.reset = function() {
  QuestionPoolModel.prototype.resetAnswer = function() {
 	this.indexAnswer = 0;
 };
-
-

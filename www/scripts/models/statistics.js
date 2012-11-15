@@ -102,7 +102,7 @@ function StatisticsModel(controller) {
 	 * Check if time dependent achievements have been accomplished.
 	 * 
 	 * It is triggered after a new entry has been added to the local statistics table. We need immediately 
-	 * check the cardBurner Achievement because it is time dependent and we want to give the achievement 
+	 * to check the cardBurner Achievement because it is time dependent and we want to give the achievement 
 	 * when the learner has reached it. This also applies to all other time dependent achievements (which
 	 * do not exist yet).     
 	 * 

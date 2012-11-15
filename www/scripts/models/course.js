@@ -44,21 +44,18 @@ var DEFAULT_SYNC_TIMEOUT = 60000;
 
 
 /**
- *A global property/variable that activates and deactivates the display of console logs.
- *It is passed as parameter in global function moblerlog in common.js.
- *
- *@property MOBLERDEBUG
- *@default 0
- *
- **/
-
-var MOBLERDEBUG = 0;
-
-
-
-/**
+ * @class CourseModel  
  * This model holds the course list and information about the current
  * synchronization of the data with the server
+ * @constructor 
+ * It sets and initializes basic properties such as:
+ *  - index of the current course
+ *  - the courseList
+ *  - the state and date/time of the synchronization 
+ * It loads data from the local storage
+ * It listens to 3 events regarding the readiness of the system after the authentication and the loading of the data, which
+ * means it listens when the autentication is ready, when the questiopool is ready and when internet connection is found
+ * @param {String} controller 
  */
 function CourseModel(controller) {
 	var self = this;
@@ -67,34 +64,50 @@ function CourseModel(controller) {
 
 	this.courseList = [];
 	this.index = 0; // index of the current course
-
 	this.syncDateTime = 0;
 	this.syncState = false;
-	// this.syncTimeOut = 3600000;
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
-
-	$(document).bind("questionpoolready", function(e, courseID) {
+	
+	 /** 
+	  * It is binde when all the questions of a valid questionpol have been loaded from server
+	 * @event questionpoolready
+	 * @param: callback function in which are activated to true the flags that
+	 * keep track of the loading of the course and its synchronization state
+	 **/
+		$(document).bind("questionpoolready", function(e, courseID) {
 		moblerlog("model questionPool ready called " + courseID);
 		self.courseIsLoaded(courseID);
 	});
 
+	 /** 
+	  * It it binded when an online connection is detected
+	 * @event switchtoonline
+	 * @param:  a call back function in which the courses(and any pending questions) 
+	 *          are loaded from the server
+	 * **/
+	
 	$(document).bind("switchtoonline", function() {
 		self.switchToOnline();
 	});
-
+	
+	
+	 /**  
+	 * @event authenticationready 
+	 * @param call back function in which the courses list is loaded from the server
+	 * **/
 	$(document).bind("authenticationready", function() {
 		self.loadFromServer();
 	});
-
-	// this.createCourses();
 
 	this.loadData();
 
 }
 
 /**
- * stores the data into the local storage (key = "courses") therefor the data is
+ * Stores the data into the local storage (key = "courses"). Therefore the data is
  * combined into a json object which is converted into a string
+ * @prototype
+ * @function storeData
  */
 CourseModel.prototype.storeData = function() {
 	var courseString;
@@ -112,8 +125,10 @@ CourseModel.prototype.storeData = function() {
 };
 
 /**
- * loads the data from the local storage (key = "courses") therefor the string
- * is converted into a json object of which the data is taken
+ * Loads the data from the local storage (key = "courses"). Therefore the string
+ * is converted into a json object of which the data is taken. The very first time
+ * we launch the app, everything is initialized and set to false, empty and get the current time.
+ * @function loadData
  */
 CourseModel.prototype.loadData = function() {
 	var courseObject;
@@ -122,11 +137,6 @@ CourseModel.prototype.loadData = function() {
 	} catch (err) {
 		courseObject = {};
 	}
-
-	// if (!courseObject[0]) { // if no courses are available, new ones are
-	// created
-	// courseObject = this.createCourses();
-	// }
 
 	this.courseList = courseObject.courses || [];
 	this.syncDateTime = courseObject.syncDateTime || (new Date()).getTime();
@@ -138,11 +148,14 @@ CourseModel.prototype.loadData = function() {
 };
 
 /**
- * if the user is logged in and the syncState is set to false, it loads the
- * course list from the server and stores it in the local storage when all data
- * is loaded, the courselistupdate event is triggered and the question pools are
+ * If the user is logged in and the syncState is set to false, it loads the
+ * course list from the server and stores it in the local storage.
+ * When all data is loaded the courselistupdate event is triggered and the question pools are
  * told to load their data from the server
+ * @prototype
+ * @function loadFromServer
  */
+
 CourseModel.prototype.loadFromServer = function() {
 	moblerlog("loadFromServer-Course is called");
 	var self = this;
@@ -182,7 +195,7 @@ CourseModel.prototype.loadFromServer = function() {
 		function createCourseList(data) {
 			moblerlog("success");
 
-			// if there was an pending course list, remove it from the storage
+			// if there was a pending course list, remove it from the storage
 			localStorage.removeItem("pendingCourseList");
 
 			var courseObject;
@@ -194,11 +207,6 @@ CourseModel.prototype.loadFromServer = function() {
 				moblerlog("Couldn't load courses from server " + err);
 			}
 			moblerlog("course data loaded from server");
-
-			// if (!courseObject[0]) { // if no courses are available,
-			// // new ones are created
-			// courseObject = self.createCourses();
-			// }
             moblerlog(courseObject);
 			self.courseList = courseObject.courses || [];
 			self.syncDateTime = (new Date()).getTime();
@@ -207,15 +215,22 @@ CourseModel.prototype.loadFromServer = function() {
 			self.storeData();
 			moblerlog("JSON CourseList: " + self.courseList);
 			self.reset();
-
+			
+			//if there was any saved sync state then assign it to the sync state of the courses of the course list
 			if (syncStateCache.length > 0) {
                 var c;
 				for ( c in self.courseList) {
 					self.courseList[c].syncState = syncStateCache[self.courseList[c].id];
 				}
 			}
-
+			
+			 /**  
+			  * It is triggered when the loading of the course list from the server has been finished
+			 * @event courselistupdate 
+			 **/
 			$(document).trigger("courselistupdate");
+			
+			//download all the quesitons(questionlist) for each course
             var c;
 			for ( c in self.courseList) {
 				self.courseList[c].isLoaded = false;
@@ -228,30 +243,51 @@ CourseModel.prototype.loadFromServer = function() {
 	}
 };
 
-// @return the id of the current course
 
+
+/**
+ * @prototype
+ * @function getId
+ * @return the id of the current course
+ */
 CourseModel.prototype.getId = function() {
 	return (this.index > this.courseList.length - 1) ? false
 			: this.courseList[this.index].id;
 };
 
-// @return the title of the current course
 
+
+/**
+ * @prototype
+ * @function getTitle
+ * @return the title of the current course
+ */
 CourseModel.prototype.getTitle = function() {
 	return (this.index > this.courseList.length - 1) ? false
 			: this.courseList[this.index].title;
 };
 
-// @return the synchronization state of the current course
+
+/**
+ * It checks whether a course is synchronized the server.Synchronizations differences may exist because:
+ * - New questions have added to a specific courses or have been deleted from it
+ * - Due to lost of internet connectivity the loading of courses from server in the local storage might have been interrupted
+ * @prototype
+ * @function getSyncState
+ * @return the synchronization state of the current course
+ */
  
 CourseModel.prototype.getSyncState = function() {
 	return (this.index > this.courseList.length - 1) ? false
 			: this.courseList[this.index].syncState;
 };
 
+
+
 /**
- * increases index
- * 
+ * Increases the index in the course list, which means we move to the next course.
+ * @prototype
+ * @function nextCourse
  * @return true if a course with an appropriate index exists, otherwise false
  */
 CourseModel.prototype.nextCourse = function() {
@@ -259,15 +295,22 @@ CourseModel.prototype.nextCourse = function() {
 	return this.index < this.courseList.length;
 };
 
-// sets index to 0
 
+
+/**
+ * Sets index to 0
+ * @prototype
+ * @function reset
+ */
 CourseModel.prototype.reset = function() {
 	this.index = 0;
 };
 
 /**
- * sets syncState to false if the time that passed since the last
+ * Sets syncState to false if the time that passed since the last
  * synchronization is greater than the value of syncTimeOut
+ * @prototype
+ * @function checkForTimeOut
  */
 CourseModel.prototype.checkForTimeOut = function() {
 	var timeDelta = ((new Date()).getTime() - this.syncDateTime);
@@ -280,11 +323,12 @@ CourseModel.prototype.checkForTimeOut = function() {
 };
 
 /**
- * if a course id is passed to the method, it returns true, if the course with
- * the specified id is loaded, otherwise false
- * 
- * if no course id is passed, it returns true, if the current course is loaded,
- * otherwise false
+ * @prototype
+ * @function isLoaded
+ * @param {Number} courseId, the id of the current course
+ * @return {Boolean}, if a course id is passed to the method, it returns true, if the course with
+ * 						the specified id is loaded, otherwise false.  If no course id is passed, it returns true, 
+ * 						if the current course is loaded, otherwise false
  */
 CourseModel.prototype.isLoaded = function(courseId) {
 	if (courseId > 0) {
@@ -301,8 +345,10 @@ CourseModel.prototype.isLoaded = function(courseId) {
 };
 
 /**
- * sets the isLoaded and the synchState of the course with the specified course
- * id to true
+ * Sets the isLoaded and the synchState of the course with the specified course id to true
+ * @prototype
+ * @function courseIsLoaded
+ * @param {Number} courseId, the id of the current course
  */
 CourseModel.prototype.courseIsLoaded = function(courseId) {
     var c;
@@ -318,7 +364,12 @@ CourseModel.prototype.courseIsLoaded = function(courseId) {
 };
 
 /**
- * @return true, if the course with the specified id is synchronized,otherwise
+ * Returns the synchronization state of a specific course, which means if the locally stored course is
+ * in synchornization (has the same data, questions) with the one line.
+ * @prototype
+ * @function isSynchronized
+ * @param {Number} courseId, the id of the current course
+ * @return {Boolean} true if the course with the specified id is synchronized, otherwise
  *         false
  */
 CourseModel.prototype.isSynchronized = function(courseId) {
@@ -333,10 +384,12 @@ CourseModel.prototype.isSynchronized = function(courseId) {
 	return false;
 };
 
-/**
- * if syncState is false, it loads the data for the course list from the server
- * if syncState is true, it loaded the data for all not yet loaded question
- * pools from the server
+/**When internet connectivity is detected the loading of courses is taking place.
+ * If syncState is true, it loads the data for the course list from the server
+ * If syncState is false, is loads the data for these questionpools, which are not
+ * yet loaded from the server
+ * @prototype
+ * @function switchToOnline
  */
 CourseModel.prototype.switchToOnline = function() {
 	moblerlog("switch to online - load all not yet loaded courses");
@@ -357,28 +410,21 @@ CourseModel.prototype.switchToOnline = function() {
 	}
 };
 
-// if no course list is stored in the local storage, a new one is created
- 
-CourseModel.prototype.createCourses = function() {
-	moblerlog("create courses");
-	if (!localStorage.courses) {
-		initCourses();
-	}
-	try {
-		return JSON.parse(localStorage.getItem("courses"));
-	} catch (err) {
-		return [];
-	}
-};
 
-//resets the course list
- 
-CourseModel.prototype.resetCourseList = function() {
+
+/** Resets the course list by:
+ * - emptying the course list
+ * - intializing the index of the current course
+ * - initializing the date and time of synchronization
+ * - sets the synchronozation state to false
+ * - sets the default synchronization time out time
+ * @prototype
+ * @function resetCourseList
+ * */
+ CourseModel.prototype.resetCourseList = function() {
 	this.courseList = [];
 	this.index = 0; // index of the current course
-
 	this.syncDateTime = 0;
 	this.syncState = false;
-	// this.syncTimeOut = 3600000;
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 };

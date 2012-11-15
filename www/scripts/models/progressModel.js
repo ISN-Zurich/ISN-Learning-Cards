@@ -24,8 +24,6 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-
-
 function ProgressModel(statisticsModel){
     this.modelName = " progress";
     this.superModel = statisticsModel;
@@ -58,7 +56,11 @@ ProgressModel.prototype.calculateValue = function(){
 
 
 
-//calculates the progress
+/**
+ * calculates the progress
+ * @prototype
+ * @function calculateProgress
+ */
 ProgressModel.prototype.calculateProgress = function(transaction, results) {
 	
 	var self = this;
@@ -86,8 +88,11 @@ ProgressModel.prototype.calculateProgress = function(transaction, results) {
 };
 
 
-//calculates the improvement of the progress in comparison to the last active day
-
+/**
+ * calculates the improvement of the progress in comparison to the last active day
+ * @prototype
+ * @function calculateImprovementProgress
+ */
 ProgressModel.prototype.calculateImprovementProgress= function (transaction,results){
 	var self = this;
 	moblerlog("rows in calculate improvement progress: "+ results.rows.length);

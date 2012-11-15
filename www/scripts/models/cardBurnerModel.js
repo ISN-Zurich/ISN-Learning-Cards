@@ -31,24 +31,56 @@ function CardBurnerModel(statisticsModel){
     this.initQuery();
 }
 
+
+/**
+ * Create the Query "how many questions the learner has handled for the specific course?"
+ * From the counting of questions are excluded the cases when an achievement has been reached. 
+ * This is identified in the database (the existence of an achievement) if the duration for a specific record as a 100 value.
+ * @prototype
+ * @function initQuery
+ */
+
 CardBurnerModel.prototype.initQuery = function(){
-//	
-//	this.values = [];
-//	this.valuesLastActivity = [];
 	   
 	this.query = "SELECT count(*) as c FROM statistics WHERE course_id=? AND duration!=-100 AND day>=? AND day<=?";
 };
 
+
+/**
+ * Execute the query by using the global function  queryDatabase.
+ * * @prototype
+ * @function queryDB
+ */
 CardBurnerModel.prototype.queryDB = queryDatabase;
 
-CardBurnerModel.prototype.calculateValueHelper = checkAchievement;
 
+/**
+ * Before calculating the card burner it checks whether it has been achieved or not
+ * @prototype
+ * @function calculateValue
+ */
 CardBurnerModel.prototype.calculateValue = function(courseId){
 	this.courseId = courseId;
 	this.calculateValueHelper();
 	
 };
 
+
+/**
+ * Check if the achievement has been reached or not by using the 
+ * global function checkAchievemnt
+ * @prototype
+ * @function calculateValueHelper
+ */
+CardBurnerModel.prototype.calculateValueHelper = checkAchievement;
+
+
+/**
+ * Execute the query by assigning its current values 
+ * in order to calculate the handled cards in the results handler (=calculateHandledCards)
+ * @prototype
+ * @function calculateAchievementValues
+ */
 CardBurnerModel.prototype.calculateAchievementValues = function(){
 	var self = this;
     self.values= self.superModel.getCurrentValues(SUBMODEL_QUERY_THREE);
@@ -60,12 +92,13 @@ CardBurnerModel.prototype.calculateAchievementValues = function(){
 
 
 /**
- * calculates the stack handler achievement
+ * calculates the card burner achievement
  * you get the stack handler if you have handled each card of a course
  * at least once
+ * @prototype
+ * @function calculateCardBurner
  */
 CardBurnerModel.prototype.calculateCardBurner = function(transaction, results) {
-	
 	
 	var self = this;
 	if (results.rows.length > 0) {

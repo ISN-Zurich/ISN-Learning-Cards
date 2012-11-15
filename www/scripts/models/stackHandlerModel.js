@@ -22,7 +22,7 @@ under the License.
 
 
 /*jslint vars: true, sloppy: true */
-var MOBLERDEBUG = 0;
+
 
 function StackHandlerModel(statisticsModel){
     this.modelName = " stack handler";
@@ -32,10 +32,23 @@ function StackHandlerModel(statisticsModel){
     this.initQuery();
 }
 
+/**
+ * Create the Query "how many distinct questions the learner has handled for the specific course?"
+ * From the counting of questions are excluded the cases when an achievement has been reached. 
+ * This is identified in the database (the existence of an achievement) if the duration for a specific record as a 100 value.
+ * @prototype
+ * @function initQuery
+ */
+
 StackHandlerModel.prototype.initQuery = function(){
 	this.query = 'SELECT DISTINCT question_id FROM statistics WHERE course_id=? AND duration!=-100';
 };
 
+/**
+ * Execute the query by using the global function  queryDatabase.
+ * * @prototype
+ * @function queryDB
+ */
 StackHandlerModel.prototype.queryDB = queryDatabase;
 
 StackHandlerModel.prototype.calculateValueHelper = checkAchievement;
@@ -45,6 +58,13 @@ StackHandlerModel.prototype.calculateValue = function() {
 	this.calculateValueHelper();
 };
 
+/**
+ * calculates the stack handler achievement
+ * you get the stack handler if you have handled each card of a course
+ * at least once
+ * @prototype
+ * @function calculateAchievementValues
+ */
 StackHandlerModel.prototype.calculateAchievementValues = function(){
 	var self = this;
 	var val = 0;
@@ -60,6 +80,8 @@ StackHandlerModel.prototype.calculateAchievementValues = function(){
  * calculates the stack handler achievement
  * you get the stack handler if you have handled each card of a course
  * at least once
+ * @prototype
+ * @function calculateStackHandler
  */
 StackHandlerModel.prototype.calculateStackHandler = function(transaction, results) {
 	var row, a, i, self = this;
@@ -77,11 +99,8 @@ StackHandlerModel.prototype.calculateStackHandler = function(transaction, result
 	}
 	numAllCards = allCards.length;
 	if (numAllCards === 0) {
-		//self.statistics['stackHandler'] = 0;
 		this.achievementValue = 0;
 	} else {
-		//self.statistics['stackHandler'] = Math
-		//		.round((numHandledCards / numAllCards) * 100);
 		this.achievementValue = Math.round((numHandledCards / numAllCards) * 100);
 	}
 	

@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -24,18 +25,22 @@ under the License.
 
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
-
-
- * This model holds the current connection state (online = true, offline =
- * false). Every time an online or offline event is triggered, it updates its
- * connection state
  */
 
 /*jslint vars: true, sloppy: true */
 
-
-var MOBLERDEBUG = 0;
-
+/**
+ ** @class ConnectionState
+ *  This model holds the current connection state (online = true, offline =
+ * false). Every time an online or offline event is triggered, it updates its
+ * connection state
+ * @constructor 
+ * It gets the connection state by using the connection.type property of phone gap/corodva documentation.
+ * It  shows the device's cellular and wifi connection information.
+ * Two event listeners are added that detect the offline and online event respectivey. And the goOffline and
+ * goOnline handlers are executed respectively.
+ *  @param {String} controller 
+ */
 function ConnectionState(controller) {
 
 	var self = this;
@@ -56,20 +61,36 @@ function ConnectionState(controller) {
 }
 
 
-//@return true if the connection state is offline, otherwise false
- 
+
+/**
+ * @prototype
+ * @function isOffline
+ * @return {Boolean} true if the connection state is offline, otherwise false
+ */
 ConnectionState.prototype.isOffline = function() {
 	return !this.state;
 };
 
 /**
- * sets the state of the connection state to true (online) the switchtoonline
- * event is triggered
+ * When online connection is detected any locally stored pending logout information is sent to the server.
+ * Addittionally, any pending courses and questions information are loaded from the server.
+ * Any pending statistics and tracking data are sent to the server as well. 
+ * When online connection state is detected the error messages about the lost of connectivity are hiden
+ * The switchtoonline event is triggered
+ * @prototype
+ * @function goOnline
  */
 ConnectionState.prototype.goOnline = function() {
 	moblerlog("**online**");
 	this.state = true;
-
+	
+	 /** 
+	  * It it triggered when the connection state is online 
+	  * Additionally for statistics purposes we trigger the tracking event in order
+	  * to track the connectivity behavior
+	 * @event trackingEventDetected
+	 * @event online
+	 * **/
 	$(document).trigger("trackingEventDetected","online");
 
 	// if a pending logout exists, send the logout to the server
@@ -81,10 +102,12 @@ ConnectionState.prototype.goOnline = function() {
 
 	//hide no connection error message in login view
 	
+	 /** 
+	  * It is triggered when an online connection is detected and consequently
+	  * the error message is hided
+	 * @event errormessagehide
+	 * **/
 	$(document).trigger("errormessagehide");
-	
-	//this.controller.views["login"].hideErrorMessage();
-	
 	
     moblerlog('check synchronization - course list');
 	// if a pending course list exist, load the course list from the server
@@ -124,8 +147,6 @@ ConnectionState.prototype.goOnline = function() {
 	}
 	// if statistics data wasn't sent to the server for more than 24 hours
 	// send the data to the server
-	//FIXME: This results in triggering the event "sentstatisticstoserver" which in turn is bounded by configuration mobel constructor, 
-	//which in turn sendsLogout to the server
 	if (this.controller && this.controller.models && this.controller.models["statistics"]) {
 		if (!statisticsModel.lastSendToServer || statisticsModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
 			moblerlog("statistics need to be synchronized in connection state model");
@@ -153,8 +174,11 @@ ConnectionState.prototype.goOnline = function() {
 };
 
 
-// sets the state of the connection state to false (offline)
- 
+/**
+ * When an internet connectivity is lost then show the error message
+ * @prototype
+ * @function goOffline
+ */ 
 ConnectionState.prototype.goOffline = function() {
 	moblerlog("**offline**");
 	this.state = false;
