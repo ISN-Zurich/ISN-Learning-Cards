@@ -1,6 +1,8 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -18,7 +20,6 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.	
 
-
 */
 
 
@@ -31,8 +32,13 @@ under the License.
 /*jslint vars: true, sloppy: true */
 
 
-//View for displaying thes splash screen
-
+/**
+ * @class SplashScreen
+ * View for displaying the splash screen
+ * @constructor 
+ * it sets the tag ID for the splash screen view
+ * @param {String} controller
+ */
 function SplashScreen(controller) {
 
     var self = this;
@@ -41,33 +47,56 @@ function SplashScreen(controller) {
 
 }
 
-
-//pinch does nothing
-
+/**
+ * Nothing is executed if the user pinches on the splash screen
+ * @prototype
+ * @function handlePinch.
+ **/
 SplashScreen.prototype.handlePinch = doNothing;
 
-
-//tap does nothing
  
+/**
+ * Nothing is executed if the user taps on the splash screen
+ * @prototype
+ * @function handleTap.
+ **/
 SplashScreen.prototype.handleTap = doNothing;
 
 
-//swipe does nothing
- 
- 
+/**
+ * Nothing is executed if the user swipes on the splash screen
+ * @prototype
+ * @function handleSwipe
+ **/
 SplashScreen.prototype.handleSwipe = doNothing;
 
-//open the view does nothing, the controller handles the transition to login view
 
+
+
+/**
+ *Open the view does nothing, the controller handles the transition to login view
+ * @prototype
+ * @function open
+ **/
 SplashScreen.prototype.open = doNothing;
 
- //closes the view
 
+
+/**
+ * Closes the view
+ * @prototype
+ * @function closeDiv
+ **/
 SplashScreen.prototype.closeDiv = closeView;
 
-//hides the loading icon
-//closes the view if the user is already logged in
+
  
+/**
+ * hides the loading icon
+ * closes the view if the user is already logged in
+ * @prototype
+ * @function close
+ **/
 SplashScreen.prototype.close = function() {
      $("#loading").remove();
     if( this.controller.models["authentication"].isLoggedIn() ) {
@@ -75,8 +104,12 @@ SplashScreen.prototype.close = function() {
     }
 };
 
-//shows the user that he/she has no internet connection
- 
+
+/**
+ * shows the user that he/she has no internet connection
+ * @prototype
+ * @function showNoConnectionMessage
+ **/ 
 SplashScreen.prototype.showNoConnectionMessage = function() {
 	$("#loginForm").text("Sorry, you need to be online to connect to your LMS");
 }

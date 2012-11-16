@@ -1,25 +1,31 @@
-//****VIEW HELPERS******
 
-// does nothing
-
-
+/** Does nothing
+ * @function doNothing
+ * */
 function doNothing() {}
 
-//opens a view
- 
+
+
+/**opens a view
+ * @function openView 
+ * */ 
 function openView() {
 	$(document).trigger("trackingEventDetected",[this.tagID]);
 	$("#" + this.tagID).show();
 }
 
-// closes a view
  
+
+/**closes  a view
+ * @function closeView  
+ * */
 function closeView() {
 	$("#" + this.tagID).hide();
 }
 
-// shows apologize message if not question data is loaded
-
+/**shows apologize message if not question data is loaded 
+ * @function doApologize   
+ * */
 function doApologize() {
 	$("#feedbackBody").empty();
 	$("<span/>", {

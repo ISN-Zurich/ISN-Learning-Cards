@@ -1,6 +1,5 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -28,52 +27,84 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
 
-//View for displaying the settings
-
+/**
+ *
+ * @Class SettingsView
+ *  View for displaying the settings
+ *  @constructor
+ *  - it sets the tag ID for the settings view
+ *  - assigns various event handlers when taping on various elements of the view
+ *  - it binds the event that is triggered when the autentication is ready 
+ *  
+ **/
 function SettingsView() {
     var self = this;
     
     self.tagID = 'settingsView';
     
+    // assigning gesture handlers on the views elements
     jester($('#closeSettingsIcon')[0]).tap(function(){ self.closeSettings(); } );
-
-    
     jester($('#logOutSettings')[0]).tap(function() {
-	self.logout();
-});
-
+    	self.logout();
+    });
+    jester($('#aboutMore')[0]).tap(function() {
+		self.clickAboutMore();
+	});
+    
+    /**
+     * When all authentication data are received and stored in the local storage
+     * the authenticationready event is triggered and binded here
+     * @event authenticationready
+     * @param e, userID, the user id 
+     */  
     $(document).bind("authenticationready", function(e, userID) {
 		moblerlog("authentication ready called " + userID);
 		self.loadData();
 	});
   
-    jester($('#aboutMore')[0]).tap(function() {
-		self.clickAboutMore();
-	});
+    
 } 
 
-//pinch leads to course list
 
+/**
+ * pinch leads to course list
+ * @prototype
+ * @function handlePinch
+ **/
 SettingsView.prototype.handlePinch = function() {
     controller.transitionToCourses();
 };
 
-//tap does nothing
-
+/**
+ * tap does nothing
+ * @prototype
+ * @function handleTap
+ **/
 SettingsView.prototype.handleTap = doNothing;
 
-//swipe does nothing
 
+/**
+ * swipe does nothing
+ * @prototype
+ * @function handleSwipe
+ **/
 SettingsView.prototype.handleSwipe = doNothing;
 
-//opens the view
- 
+
+/**
+ * opens the view
+ * @prototype
+ * @function openDiv
+ **/
 SettingsView.prototype.openDiv = openView;
 
-//shows the settings data
- 
+
+/**
+ * shows the settings data
+ * @prototype
+ * @function open
+ **/
 SettingsView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();
@@ -81,26 +112,42 @@ SettingsView.prototype.open = function() {
 	controller.models['authentication'].loadFromServer();	
 };
 
-//closes the view
 
+/**
+ * closes the view
+ * @prototype
+ * @function close
+ **/
 SettingsView.prototype.close = closeView;
 
-//leads to course list
  
+/**
+ * Leads to course list
+ * @prototype
+ * @function closeSettings
+ **/
 SettingsView.prototype.closeSettings = function() {
 	moblerlog("close settings button clicked");
 	controller.transitionToCourses();
 };
 
 
-//leads to logout confirmation view
 
+/**
+ *leads to logout confirmation view
+ * @prototype
+ * @function logout
+ **/
 SettingsView.prototype.logout = function() {
 	controller.transitionToLogout();
 };
 
-//loads the statistics data
 
+/**
+ * loads the statistics data
+ * @prototype
+ * @function loadData
+ **/
 SettingsView.prototype.loadData = function(){
 	var config = controller.models['authentication'];
 	$("#aboutMore").show();
@@ -113,8 +160,12 @@ SettingsView.prototype.loadData = function(){
 };
 
 
+/**
+ * This function is executed when the user clicks on the "info" button on the statistics view.
+ * Leads to about view
+ * @prototype
+ * @function clickAboutMore
+ **/
 SettingsView.prototype.clickAboutMore = function() {
 	controller.transitionToAbout();
-
-
 }

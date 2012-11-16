@@ -4,6 +4,7 @@
 
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -177,8 +178,6 @@ function Controller() {
  * Make use of i18n jQuery plugin and apply its syntax for localization. 
  * @prototype setupLanguage 
  * */
- 
-
 Controller.prototype.setupLanguage = function() {
 	jQuery.i18n.properties({
 		name:'textualStrings', 
@@ -237,8 +236,6 @@ Controller.prototype.setupLanguage = function() {
  * @function transition 
  * @param {String} viewname, the name of the specified target view
  **/
-
-
 Controller.prototype.transition = function(viewname) {
 	moblerlog("transition start" );
 	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
@@ -257,7 +254,6 @@ Controller.prototype.transition = function(viewname) {
  * @prototype
  * @function transitionToEndpoint 
  **/
-
 Controller.prototype.transitionToEndpoint = function() {
 	moblerlog('initialize endpoint');
 	if (this.models['authentication'].isLoggedIn()) {
@@ -276,7 +272,6 @@ Controller.prototype.transitionToEndpoint = function() {
  * @prototype
  * @function transitionToLogin 
  **/
-
 Controller.prototype.transitionToLogin = function() {
 	this.transition('login');
 };
@@ -286,7 +281,6 @@ Controller.prototype.transitionToLogin = function() {
  * @prototype
  * @function transitionToLogout 
  **/
-
 Controller.prototype.transitionToLogout = function() {
 	this.transitionToAuthArea('logout');
 };
@@ -299,7 +293,6 @@ Controller.prototype.transitionToLogout = function() {
  * @function transitionToAuthArea 
  * @param {String} viewname, the name of the targeted view
  **/
-
 Controller.prototype.transitionToAuthArea = function(viewname) {
 	if (this.getLoginState()) {
 		this.transition(viewname);
@@ -314,8 +307,6 @@ Controller.prototype.transitionToAuthArea = function(viewname) {
  * @prototype
  * @function transitionToCourses 
  **/
-
-
 Controller.prototype.transitionToCourses = function() {
 	this.transitionToAuthArea('coursesList');
 };
@@ -325,8 +316,6 @@ Controller.prototype.transitionToCourses = function() {
  * @prototype
  * @function transitionToQuestion 
  **/
-
-
 Controller.prototype.transitionToQuestion = function() {
 	this.transitionToAuthArea('questionView');
 };
@@ -336,7 +325,6 @@ Controller.prototype.transitionToQuestion = function() {
  * @prototype
  * @function transitionToAnswer 
  **/
-
 Controller.prototype.transitionToAnswer = function() {
 	this.transitionToAuthArea('answerView');
 };
@@ -346,7 +334,6 @@ Controller.prototype.transitionToAnswer = function() {
  * @prototype
  * @function transitionToFeedback 
  **/
-
 Controller.prototype.transitionToFeedback = function() {
 	this.transitionToAuthArea('feedbackView');
 };
@@ -356,7 +343,6 @@ Controller.prototype.transitionToFeedback = function() {
  * @prototype
  * @function transitionToSettings 
  **/
-
 Controller.prototype.transitionToSettings = function() {
 	this.transitionToAuthArea('settings');
 };
@@ -366,7 +352,6 @@ Controller.prototype.transitionToSettings = function() {
  * @prototype
  * @function transitionToFeedbackMore 
  **/
-
 Controller.prototype.transitionToFeedbackMore = function() {
 	this.transitionToAuthArea('feedbackMore');
 };
@@ -376,7 +361,6 @@ Controller.prototype.transitionToFeedbackMore = function() {
  * @prototype
  * @function transitionToStatistics 
  **/
-
 Controller.prototype.transitionToStatistics = function(courseID) {
 	if (this.getLoginState()) {
 		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
@@ -402,7 +386,6 @@ Controller.prototype.transitionToStatistics = function(courseID) {
  * @prototype
  * @function transitionToAchievements 
  **/
-
 Controller.prototype.transitionToAchievements = function() {
 	this.transitionToAuthArea('achievements');
 };
@@ -412,7 +395,6 @@ Controller.prototype.transitionToAchievements = function() {
  * @prototype
  * @function transitionToAbout 
  **/
-
 Controller.prototype.transitionToAbout = function() {
 	this.transitionToAuthArea('about');
 };
@@ -422,7 +404,6 @@ Controller.prototype.transitionToAbout = function() {
  * @function getLoginState
  * @return {boolean} true if the user is logged in (he has an authentication key stored in the local storage) and false if not.
  **/
-
 Controller.prototype.getLoginState = function() {
 	return this.models["authentication"].isLoggedIn();
 };
@@ -434,7 +415,6 @@ Controller.prototype.getLoginState = function() {
  * @param {String} varname, the name of the 
  * @return {String} It returns the name of the added property of the configuration object. 
  **/
-
 Controller.prototype.getConfigVariable = function(varname) {
 	return this.models["authentication"].configuration[varname];
 };
@@ -445,7 +425,6 @@ Controller.prototype.getConfigVariable = function(varname) {
  * @function setConfigVariable
  * @param {String} varname, {Boolean, String} varvalue
  **/
-
 Controller.prototype.setConfigVariable = function(varname, varvalue) {
 	if ( !this.models["authentication"].configuration ) {
 		this.models["authentication"].configuration = {};
@@ -461,7 +440,6 @@ Controller.prototype.setConfigVariable = function(varname, varvalue) {
  * @prototype
  * @function setButtonHeight
  **/
-
 function setButtonHeight() {
 	moblerlog("setButtonHeight");
 	var height, windowheight = $(window).height();
