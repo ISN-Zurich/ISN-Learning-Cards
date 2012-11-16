@@ -82,7 +82,10 @@ function checkAchievement() {
 
 /**
  * When an achievement is reached (score =100), it is inserted in the database of the server
- * by assigning an -100 value to the duration property 
+ * by assigning the following values for a specific course.
+ * - an 100 value to the score
+ * - an -100 value to the duration
+ * - the achievements name as id for the question
  * * @function insertAchievement
  * */
 function insertAchievement() {

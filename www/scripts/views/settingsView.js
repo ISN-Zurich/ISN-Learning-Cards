@@ -38,10 +38,7 @@ function SettingsView() {
     self.tagID = 'settingsView';
     
     jester($('#closeSettingsIcon')[0]).tap(function(){ self.closeSettings(); } );
-//    $('#logOutSettings').click(function() {
-//    	self.logout();
-//    });
-    
+
     
     jester($('#logOutSettings')[0]).tap(function() {
 	self.logout();

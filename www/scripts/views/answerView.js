@@ -31,7 +31,7 @@ under the License.
 */
 
 /*jslint vars: true, sloppy: true */
-var MOBLERDEBUG = 0;
+
 
 function AnswerView(controller) {
 	var self = this;
@@ -111,9 +111,6 @@ var prevent=!prevent;
 } // end of Constructor
 
 
-
-//**********************************************************METHODS***************************************
-
 //No action is executed when taping on the Answer View
 AnswerView.prototype.handleTap = doNothing;
 
@@ -157,7 +154,10 @@ AnswerView.prototype.showAnswerBody = function() {
 	var questionpoolModel = controller.models['questionpool'];
 
 	var questionType = questionpoolModel.getQuestionType();
-	var interactive = true; // a flag used to distinguish between answer and feedback view. Iteractivity is true because the user can interact (answer questions) with the view on the answer view
+	// a flag used to distinguish between answer and feedback view. 
+	//Iteractivity is true because the user can interact (answer questions) with the view on the answer view
+	var interactive = true; 
+	
 	switch (questionType) {
 	case 'assSingleChoice':
 		this.widget = new SingleChoiceWidget(interactive);
@@ -226,7 +226,9 @@ AnswerView.prototype.clickCourseListButton = function() {
 // Transition back to question view when click on the title area
 AnswerView.prototype.clickTitleArea = function() {
 
-	this.widget.storeAnswers(); // When switching back and forth between question view  and answer view the currently selected answers are stored. These answers have not yet been finally answered.
+	this.widget.storeAnswers(); 
+	// When switching back and forth between question view  and answer view the currently selected answers are stored. 
+	// These answers have not yet been finally answered.
 	controller.transitionToQuestion();
 
 };

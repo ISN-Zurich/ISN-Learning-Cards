@@ -30,7 +30,6 @@ under the License.
  
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
 
 //View for displaying thes splash screen
 

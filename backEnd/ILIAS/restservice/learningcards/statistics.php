@@ -67,7 +67,7 @@ switch($request_method) {
 		if ($userId > 0) {
 			logging("has valid user");
 			$statistics = file_get_contents("php://input");
-// 			logging(" statistics data" . $statistics);
+		// logging(" statistics data" . $statistics);
 			$uuid = get_uuid_from_headers();
 			$number_of_items = setStatistics($userId, $uuid, json_decode($statistics, true));
 			logging("end of PUT");
