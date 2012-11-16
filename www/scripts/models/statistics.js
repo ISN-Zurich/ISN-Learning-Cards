@@ -1,8 +1,5 @@
 /**	THIS COMMENT MUST NOT  REMOVED
 
-
-
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -19,8 +16,6 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.	
-
-
 */
 
 /**
@@ -275,7 +270,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
  * @prototype
  * @function getLastActiveValues
  * @param {Boolean} progressVal, it is passed as true to these statistics metrics that calculate improvement 
- * @return {Array}, containing the values of the parameteres of the query for the last active day 
+ * @return {Array}, containing the values of the parameters of the query for the last active day 
  * 
  */
  StatisticsModel.prototype.getLastActiveValues = function(progressVal) {

@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -53,17 +54,11 @@ HandledCardsModel.prototype.initQuery = function(){
 };
 
 
-/**
- * Execute the query by using the global function  queryDatabase.
- * * @prototype
- * @function queryDB
- */
-HandledCardsModel.prototype.queryDB = queryDatabase;
-
 
 /**
- * Execute the query by assigning its current values 
- * in order to calculate the handled cards in the results handler (=calculateHandledCards)
+ * Pass the current variables to the above query that will be
+ * used in the execution of the transaction.
+ * The execution of the transacion is done in queryDB
  * @prototype
  * @function calculateValue
  */
@@ -78,9 +73,18 @@ HandledCardsModel.prototype.calculateValue = function(){
 
 
 /**
- * Calculates how many cards have been handled for the specific course
+ * Execute the query by using the global function  queryDatabase.
+ * * @prototype
+ * @function queryDB
+ */
+HandledCardsModel.prototype.queryDB = queryDatabase;
+
+
+/**
+ * Calculates how many cards have been handled for the specific course for the last 24 hours
  * from the first active day
- * Calculates the improvement of the number of handled cards during the last 24 hours
+ * Calculates if there was any improvement in the number of handled cards between the last active day
+ * and the current one.
  * @prototype
  * @function calculateHandledCards
  * @param transaction, resutls
@@ -97,7 +101,7 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
 		self.handledCards = 0;
 	}
 	
-	// calculate improvement
+	// calculate improvement for the last active day
 	
 	self.values = self.superModel.getLastActiveValues();
 	self.queryDB(function cbCalculateImprovements(t,r) {
@@ -136,7 +140,7 @@ HandledCardsModel.prototype.calculateImprovementHandledCards = function (transac
 	}
 	//When the calculation is done, this model notifies the statistics model by increasing the boolAllDone value 
 	//and calling then the allCalculationsDone() function, where the counting of the so far calculated statistis metrics
-	//will be taken into account
+	//will be done summative
 	this.superModel.boolAllDone++;
 	this.superModel.allCalculationsDone();		
 };

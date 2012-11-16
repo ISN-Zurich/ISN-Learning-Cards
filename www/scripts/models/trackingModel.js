@@ -30,7 +30,7 @@ under the License.
 
 //This model holds the tracking data
  
-var MOBLERDEBUG = 0;
+
 
 function TrackingModel(controller){
 	var self = this;
@@ -42,10 +42,8 @@ function TrackingModel(controller){
 	this.tracking = [];
 	this.tracking['timeStamp'] = -1;
 	this.tracking['eventType'] = -1;
-	//if (!localStorage.getItem("db_version")) {
-		// this.deleteDB();
-		this.initDB();
-	//}
+	this.initDB();
+
 	$(document).bind("trackingEventDetected", function(e,type) {
 		moblerlog(" tracking event loaded ");
 		self.storeTrackData((new Date()).getTime(),type);
@@ -54,8 +52,12 @@ function TrackingModel(controller){
 }
 
 
-//inserts a new tracking item into the database
-
+/**
+ * Inserts a new tracking item into the database
+ * @prototype
+ * @function storeTrackData 
+ * @param time, type
+ */
 TrackingModel.prototype.storeTrackData = function(time, type){
 	
 	this.db.transaction(function(transaction) {
@@ -71,8 +73,11 @@ TrackingModel.prototype.storeTrackData = function(time, type){
 };
 
 
-// creates the database table if it doesn't exist yet
- 
+/**
+ * creates the database table if it doesn't exist yet 
+ * @prototype
+ * @function initDB  
+ */
 TrackingModel.prototype.initDB = function() {
 	var self = this;
 	this.db
@@ -91,10 +96,15 @@ TrackingModel.prototype.initDB = function() {
 								});
 				
 			});
-	//localStorage.setItem("db_version", DB_VERSION);
 };
 
-//sends the tracking data to the server
+
+
+/**
+ * Sends the tracking data to the server 
+ * @prototype
+ * @function sendToServer   
+ */
  
 TrackingModel.prototype.sendToServer = function(){
 	var self = this;

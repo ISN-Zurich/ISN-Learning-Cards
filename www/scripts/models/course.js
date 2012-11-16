@@ -54,7 +54,7 @@ var DEFAULT_SYNC_TIMEOUT = 60000;
  *  - the state and date/time of the synchronization 
  * It loads data from the local storage
  * It listens to 3 events regarding the readiness of the system after the authentication and the loading of the data, which
- * means it listens when the autentication is ready, when the questiopool is ready and when internet connection is found
+ * means it listens when the authentication is ready, when the questiopool is ready and when internet connection is found
  * @param {String} controller 
  */
 function CourseModel(controller) {

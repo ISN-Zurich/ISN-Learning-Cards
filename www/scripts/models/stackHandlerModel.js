@@ -1,5 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -16,14 +18,22 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.	
-
-
 */
 
 
 /*jslint vars: true, sloppy: true */
 
-
+/**
+ * @class StackHandlerModel 
+ * This model caclulates the percentage of cards the user has handled for a specific course
+ * since the first active day. 
+ * @constructor 
+ * It assigns a name to the specific statistics model
+ * It assigns a name to the specific achievement
+ * It intializes the value of the specific achievement
+ * It initializes the query that will be executed for the calculation of the stack handler
+ * @param {String} statisticsModel 
+ */
 function StackHandlerModel(statisticsModel){
     this.modelName = " stack handler";
     this.superModel = statisticsModel;
@@ -33,7 +43,7 @@ function StackHandlerModel(statisticsModel){
 }
 
 /**
- * Create the Query "how many distinct questions the learner has handled for the specific course?"
+ * Create the Query "how many distinct questions the learner has handled for the specific course so far?"
  * From the counting of questions are excluded the cases when an achievement has been reached. 
  * This is identified in the database (the existence of an achievement) if the duration for a specific record as a 100 value.
  * @prototype
@@ -46,22 +56,36 @@ StackHandlerModel.prototype.initQuery = function(){
 
 /**
  * Execute the query by using the global function  queryDatabase.
- * * @prototype
+ * @prototype
  * @function queryDB
  */
 StackHandlerModel.prototype.queryDB = queryDatabase;
 
+
+/**
+ * Check if the achievement has been reached or not by using the 
+ * global function checkAchievemnt. 
+ * @prototype
+ * @function calculateValueHelper
+ */
 StackHandlerModel.prototype.calculateValueHelper = checkAchievement;
 
+
+/**
+ * Before calculating the stack Handler it checks whether 
+ * it has been achieved or not
+ * @prototype
+ * @function calculateValue
+ */
 StackHandlerModel.prototype.calculateValue = function() {
 	this.courseId = this.superModel.currentCourseId;
 	this.calculateValueHelper();
 };
 
 /**
- * calculates the stack handler achievement
- * you get the stack handler if you have handled each card of a course
- * at least once
+ * Pass the current variables to the above query that will be
+ * used in the execution of the transaction
+ * The execution of the transacion is done in queryDB
  * @prototype
  * @function calculateAchievementValues
  */
@@ -77,8 +101,8 @@ StackHandlerModel.prototype.calculateAchievementValues = function(){
 
 
 /**
- * calculates the stack handler achievement
- * you get the stack handler if you have handled each card of a course
+ * Calculates the stack handler achievement
+ * You get the stack handler if you have handled each card of a course
  * at least once
  * @prototype
  * @function calculateStackHandler
@@ -109,11 +133,20 @@ StackHandlerModel.prototype.calculateStackHandler = function(transaction, result
 	}
 	moblerlog("stackHandler: " + self.achievementName + " handled: " + numHandledCards + " all: " + numAllCards);
 	moblerlog("stackHandler: " + this.achievementValue + " handled: " + numHandledCards + " all: " + numAllCards);
+	//When the calculation is done, this model notifies the statistics model by increasing the boolAllDone value 
+	//and calling then the allCalculationsDone() function, where the counting of the so far calculated statistis metrics
+	//will be done summative 
 	self.superModel.boolAllDone++;
 	self.superModel.allCalculationsDone();
 
 };
 
+
+/**Inserting of markers in the database when the card burner has been reached
+ * This is executed in the globabal function insertAchievement
+ * @prototype
+ * @function insertAchievementHelper
+ */
 StackHandlerModel.prototype.insertAchievementHelper = insertAchievement;
 
 

@@ -23,6 +23,18 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
+/**
+ * @class CardBurnerModel 
+ * This model calculates how many cards the user has handled within 24 hours. If the user 
+ * has handled at least 100 then he has reached the achievement "Card Burner". 
+ * Once this achievement has been reached, it shouldn't be recaulculated.
+ * @constructor 
+ * It assigns a name to the specific statistics model
+ * It assigns a name to the specific achievement
+ * It intializes the value of the specific achievement
+ * It initializes the query that will be executed for the calculation of the card burner
+ * @param {String} statisticsModel 
+ */
 function CardBurnerModel(statisticsModel){
     this.modelName = " card burner";
     this.superModel = statisticsModel;
@@ -33,13 +45,12 @@ function CardBurnerModel(statisticsModel){
 
 
 /**
- * Create the Query "how many questions the learner has handled for the specific course?"
+ * Create the Query "how many questions the learner has handled for the specific course in 24 hours?"
  * From the counting of questions are excluded the cases when an achievement has been reached. 
  * This is identified in the database (the existence of an achievement) if the duration for a specific record as a 100 value.
  * @prototype
  * @function initQuery
  */
-
 CardBurnerModel.prototype.initQuery = function(){
 	   
 	this.query = "SELECT count(*) as c FROM statistics WHERE course_id=? AND duration!=-100 AND day>=? AND day<=?";
@@ -48,7 +59,7 @@ CardBurnerModel.prototype.initQuery = function(){
 
 /**
  * Execute the query by using the global function  queryDatabase.
- * * @prototype
+ * @prototype
  * @function queryDB
  */
 CardBurnerModel.prototype.queryDB = queryDatabase;
@@ -68,7 +79,7 @@ CardBurnerModel.prototype.calculateValue = function(courseId){
 
 /**
  * Check if the achievement has been reached or not by using the 
- * global function checkAchievemnt
+ * global function checkAchievemnt. 
  * @prototype
  * @function calculateValueHelper
  */
@@ -76,8 +87,9 @@ CardBurnerModel.prototype.calculateValueHelper = checkAchievement;
 
 
 /**
- * Execute the query by assigning its current values 
- * in order to calculate the handled cards in the results handler (=calculateHandledCards)
+ * Pass the current variables to the above query that will be
+ * used in the execution of the transaction
+ * The execution of the transacion is done in queryDB
  * @prototype
  * @function calculateAchievementValues
  */
@@ -92,11 +104,11 @@ CardBurnerModel.prototype.calculateAchievementValues = function(){
 
 
 /**
- * calculates the card burner achievement
- * you get the stack handler if you have handled each card of a course
- * at least once
+ * Calculates the card burner achievement
+ * You get the card burner if you have handled at least once 100 cards within 1 day
  * @prototype
  * @function calculateCardBurner
+ * @param transaction, results
  */
 CardBurnerModel.prototype.calculateCardBurner = function(transaction, results) {
 	
@@ -104,7 +116,8 @@ CardBurnerModel.prototype.calculateCardBurner = function(transaction, results) {
 	if (results.rows.length > 0) {
 		var row = results.rows.item(0);
 		
-		//if card burner was achieved (100 handled cards within 24 hours), insert a marker into the database
+		//if card burner was achieved (100 handled cards within 24 hours)
+		//some markers (via the achievement helper function) are inserted into the database 
 		if (row['c'] >= 100) {
 			moblerlog("cardburner was achieved");
 			this.achievementValue = 100;
@@ -114,12 +127,21 @@ CardBurnerModel.prototype.calculateCardBurner = function(transaction, results) {
 			moblerlog("cardburner still not achieved yet");
 		}
 	}
+	
+	//When the calculation is done, this model notifies the statistics model by increasing the boolAllDone value 
+	//and calling then the allCalculationsDone() function, where the counting of the so far calculated statistis metrics
+	//will be done summative 
 	self.superModel.boolAllDone++;
 	self.superModel.allCalculationsDone();
 
 };
 
 
+/**Inserting of markers in the database when the card burner has been reached
+ * This is executed in the globabal function insertAchievement
+ * @prototype
+ * @function insertAchievementHelper
+ */
 CardBurnerModel.prototype.insertAchievementHelper = insertAchievement;
 
 
