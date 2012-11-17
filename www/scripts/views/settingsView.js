@@ -29,21 +29,24 @@ under the License.
 
 
 /**
- *
  * @Class SettingsView
- *  View for displaying the settings
+ *  View for displaying the settings which are:
+ *  - name (first name and last name) of the user
+ *  - email address of user
+ *  - selected language
  *  @constructor
  *  - it sets the tag ID for the settings view
  *  - assigns various event handlers when taping on various elements of the view
- *  - it binds the event that is triggered when the autentication is ready 
- *  
+ *    such as the close button, the logout button and the "more info" icon.
+ *  - it binds the event that is triggered when the authentication is ready  
  **/
 function SettingsView() {
     var self = this;
     
     self.tagID = 'settingsView';
     
-    // assigning gesture handlers on the views elements
+    // assigning gesture handlers on the view elements (close, logout  and more info button)
+    // when they are tapped
     jester($('#closeSettingsIcon')[0]).tap(function(){ self.closeSettings(); } );
     jester($('#logOutSettings')[0]).tap(function() {
     	self.logout();
@@ -61,9 +64,7 @@ function SettingsView() {
     $(document).bind("authenticationready", function(e, userID) {
 		moblerlog("authentication ready called " + userID);
 		self.loadData();
-	});
-  
-    
+	});    
 } 
 
 

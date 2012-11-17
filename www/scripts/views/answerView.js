@@ -155,7 +155,7 @@ AnswerView.prototype.showAnswerBody = function() {
 
 	var questionType = questionpoolModel.getQuestionType();
 	// a flag used to distinguish between answer and feedback view. 
-	//Iteractivity is true because the user can interact (answer questions) with the view on the answer view
+	//Interactivity is true because the user can interact (answer questions) with the view on the answer view
 	var interactive = true; 
 	
 	switch (questionType) {
@@ -183,10 +183,7 @@ AnswerView.prototype.showAnswerBody = function() {
 
 //Displays the title area of the answer view, containing a title icon  the title text 
 AnswerView.prototype.showAnswerTitle = function() {
-	var currentAnswerTitle = controller.models["questionpool"]
-			.getQuestionType(); 
-	//$("#cardAnswerTitle").text(currentAnswerTitle); // display as title of the page the specific question type
-
+	var currentAnswerTitle = controller.models["questionpool"].getQuestionType(); 
 	$("#answerIcon").removeClass();
 	$("#answerIcon").addClass(jQuery.i18n.prop('msg_' + currentAnswerTitle + '_icon'));
 	$("#cardAnswerTitle").text(jQuery.i18n.prop('msg_' +currentAnswerTitle + '_title'));

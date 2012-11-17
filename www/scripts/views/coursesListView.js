@@ -38,13 +38,9 @@ function CoursesListView(controller) {
 
 	self.tagID = 'coursesListView';
 	self.controller = controller;
-
 	self.active = false;
-
 	self.firstLoad = true;
 	
-	// $('#coursesListSetIcon').click(function(){ self.clickSettingsButton(); }
-	// );
 	jester($('#coursesListSetIcon')[0]).tap(function() {
 		self.clickSettingsButton();
 	});
@@ -53,7 +49,7 @@ function CoursesListView(controller) {
 	 * In some rare cases an automated transition from login view to course list view takes place. 
 	 * This might have happened because a synchronization of questions ( pending questions exist in the local storage) took place.
 	 * So when the courseListView or the CourseModel bind/listen to that event (because it was triggered when pending questions were loaded), we should check 
-	 * IF WE ARE LOGGED IN in order to perform the callback function otherwise we should transite to login view.
+	 * IF WE ARE LOGGED IN in order to perform the callback function otherwise we should reach the login view.
 	 */
 	$(document).bind("questionpoolready", function(e, courseID) {
 		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn")){
@@ -162,7 +158,6 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
-		//this.controller.models['statistics'].setCurrentCourseId(courseID);
 		this.controller.transitionToStatistics(courseID);
 	}
 };
@@ -247,11 +242,6 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 //sets the height property of the course list icon
 
 CoursesListView.prototype.setIconSize = function() {
-	// $(".courseListIcon").each(function() { 
-//	var height = $(this).parent().height();
-//	$(this).height(height);
-//	$(this).css("line-height", height + "px");
-//	});
 	$("#coursesList li").each(function() {
 		var height = $(this).height();
 		$(this).find(".courseListIcon").height(height);

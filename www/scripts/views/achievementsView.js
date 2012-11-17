@@ -27,7 +27,7 @@ under the License.
  * @author Evangelia Mitsopoulou
  */
 
-var MOBLERDEBUG = 0;
+
 
 // View for displaying the achievements
  
