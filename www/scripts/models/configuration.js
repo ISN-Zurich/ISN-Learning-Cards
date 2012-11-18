@@ -114,7 +114,7 @@ function ConfigurationModel(controller) {
 	//register if there is no client key otherwise load data from server
 	this.selectServerData(DEFAULT_SERVER);
 
-	/**It is triggered after the successful all statistics data are sent to the server. This happens when the user logsout.
+	/**It is triggered after all statistics data are sent successful to the server. This happens when the user logsout.
 	 * @event statisticssenttoserver
 	 * @param:a callback function that sends pending data to the server and clears all information from the local storage.
 	 * Only the application key remains in the local storage, because it is unique for a specific device for a specific application.

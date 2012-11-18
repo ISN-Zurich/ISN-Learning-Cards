@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -27,23 +28,34 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-
-
-// View for displaying the feedback
-
-
+/**
+ * @Class FeedbackView
+ * View for displaying the feedback
+ * @constructor
+ * - it sets the tag ID for the settings view
+ * - assigns event handler when taping on various elements of the answer view
+ * - bind 2 events, that are related with the loading of statistics and
+ *   the calculation of all the statistics metrics. We want to prevent the loading of
+ *   statistics view in this case, and we load the feedback body
+ * - it resizes the button's height when it detects orientation change
+ * @param {String} controller
+*/ 
 function FeedbackView(controller) {
 	var self = this;
-	 self.controller = controller;
-
+	self.controller = controller;
 	self.tagID = 'cardFeedbackView';
 
+	//Handler when taping on the forward/done grey button on the right of the feedback view
 	jester($('#FeedbackDoneButon')[0]).tap(function() {
 		self.clickFeedbackDoneButton();
 	});
+	
+	//Handler when taping on more infor icon on the bottom right corner
 	jester($('#FeedbackMore')[0]).tap(function() {
 		self.clickFeedbackMore();
 	});
+	
+	//Handler when taping on close button of the feedback view
 	jester($('#CourseList_FromFeedback')[0]).tap(function() {
 		controller.models["answers"].answerList = [];
 		controller.models["answers"].answerScore = -1;
@@ -56,15 +68,13 @@ function FeedbackView(controller) {
 		moblerlog("feedback title clicked");
 	});
 	
-	
-	 // center the feedback body to the middle of the screen
+	// center the feedback body to the middle of the screen
     function setOrientation() {
         $(".cardBody").css('height', window.innerHeight - 70);
         $(".cardBody").css('width', window.innerWidth - 100);
         if (self.widget) {
         	self.widget.setCorrectAnswerTickHeight();
-        }
-        
+        }     
     }
     setOrientation();
     //when orientation changes, set the new width and height
@@ -73,17 +83,23 @@ function FeedbackView(controller) {
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
     
-    
-    
-//
+	/**It is triggered after statistics are loaded locally from the server. This can happen during the 
+	 * authentication or if we had clicked on the statistics icon and moved to the questions.
+	 * @event loadstatisticsfromserver
+	 * @param: a callback function that displays the feedback body and preventing the display of the statistics view
+	 */
     $(document).bind("loadstatisticsfromserver", function() {
     	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
     	{
     		moblerlog("enters load statistics from server is done in feedback view 1");
     		self.showFeedbackBody();
     	}
-
     });
+    
+    /**It is triggered when the calculation of all the statistics metrics is done
+	 * @event allstatisticcalculationsdone
+	 * @param: a callback function that displays the feeback body and preventing the display of the statistics view
+	 */	
     $(document).bind("allstatisticcalculationsdone", function() { 
     	moblerlog("enters in calculations done in question view1 ");
     	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
@@ -93,16 +109,22 @@ function FeedbackView(controller) {
     	}
     });
 
-}
+} //end of constructor
 
 
-// tap does nothing
-
+/**
+ * No action is executed when taping on the feedback view
+ * @prototype
+ * @function handleTap
+ **/
 FeedbackView.prototype.handleTap = doNothing;
 
 
-//swipe leads to new question
-
+/**
+ * swipe leads to new question
+ * @prototype
+ * @function handleSwipe
+ **/
 FeedbackView.prototype.handleSwipe = function handleSwipe() {
 	$("#feedbackBody").show();
 	$("#feedbackTip").hide();
@@ -111,46 +133,59 @@ FeedbackView.prototype.handleSwipe = function handleSwipe() {
 };
 
 
-// pinch leads to course list
-
+/**Transition to courses list view when pinching on the feedback view. 
+ * This  is executed only on the iPhone.
+ * @prototype
+ * @function handlePinch
+ **/
 FeedbackView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
 
- //closes the view
+/**Closing of the feedback view
+ * @prototype
+ * @function closeDiv
+ **/
 FeedbackView.prototype.closeDiv = closeView;
 
 
-//deletes data from answer model
- 
+/**Closing of the feedback view
+ * @prototype
+ * @function close
+ **/
 FeedbackView.prototype.close = function() {
-	
 	this.closeDiv();
-
 };
 
 
-//opens the view
 
+/**opens the view
+ * @prototype
+ * @function openDiv
+ **/
 FeedbackView.prototype.openDiv = openView;
 
-// hows feedback title and body
 
+/**hows feedback title and body
+ * @prototype
+ * @function open
+ **/
 FeedbackView.prototype.open = function() {
 	// if (coming from answer view){
-	//self.widget.calculateAnswerScore();
 	if (controller.models["answers"].answerScore == -1){
 		controller.models["answers"].calculateScore();
 		this.showFeedbackBody();
 		this.showFeedbackTitle();	
 		}
-    //}
 	this.openDiv();
 	this.widget.setCorrectAnswerTickHeight();
 };
 
-//click on feedback done button leads to new question
 
+/**click on feedback done button leads to new question
+ * @prototype
+ * @function clickFeedbackDoneButton
+ **/
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
 	controller.models["answers"].deleteData();
 	$("#feedbackTip").empty();
@@ -158,26 +193,34 @@ FeedbackView.prototype.clickFeedbackDoneButton = function() {
 	$("#feedbackBody").show();
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
-
 };
 
-//click on feedback more button toggles the feedback body and the tip
 
+/**click on feedback more button toggles the feedback body and the tip
+ * @prototype
+ * @function clickFeedbackMore
+ **/
 FeedbackView.prototype.clickFeedbackMore = function() {
 	$("#feedbackBody").toggle();
 	$("#feedbackTip").toggle();
 };
 
 
-// click on the course list button leads to course list
 
+/**click on the course list button leads to course list
+ * @prototype
+ * @function clickCourseListButton
+ **/
 FeedbackView.prototype.clickCourseListButton = function() {
 	controller.transitionToCourses();
 };
 
 
- //shows feedback title and corresponding icon
- 
+/**Shows the title area of the feedback view,
+ * containing title and corresponding icon
+ * @prototype
+ * @function showFeedbackTitle
+ **/
 FeedbackView.prototype.showFeedbackTitle = function() {
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults();
 	
@@ -189,8 +232,12 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 };
 
 
-//calls the appropriate widget to show the feedback body
-
+/**Calls the appropriate widget to show the feedback body
+ * based on the specific question type
+ * It is displayed within the main body area of the feedback view
+ * @prototype
+ * @function showFeedbackBody
+ **/
 FeedbackView.prototype.showFeedbackBody = function() {
 	
 	var questionpoolModel = controller.models['questionpool'];
@@ -218,10 +265,10 @@ FeedbackView.prototype.showFeedbackBody = function() {
 
 };
 
-
-//Transition back to question view when click on the title area
+/**Transition back to question view when click on the title area
+ * @prototype
+ * @function clickTitleArea
+ **/
 FeedbackView.prototype.clickTitleArea = function() {
-
 	controller.transitionToQuestion();
-
 };

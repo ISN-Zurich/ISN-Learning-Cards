@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -23,45 +24,61 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-/** @author Isabella Nake
+/**
+ * @author Isabella Nake
  * @author Evangelia Mitsopoulou
-   
-* The Multiple choice widget has two views, an answer and a feedback view. 
-* The anwer view contains a list with possible solutions and is highligted by selected answers of users.
-* The feedback view contains the list with the possible solutions highlighted by both the correct answers and learner's ticked answers./Sometimes when available, the feedback view provides extra feedback information, both for correct and wrong feedback.
-
 */
 
-
-var MOBLERDEBUG = 0;
-
+/**
+ * @Class MultipleChoiceWidget
+ * The Multiple choice widget has two views, an answer and a feedback view. 
+ * The answer view contains a list with possible solutions and is highlighted by the selected answers of users.
+ * The feedback view contains the list with the possible solutions highlighted by both the correct answers and learner's ticked answers.
+ * Sometimes when available, the feedback view provides extra feedback information, both for correct and wrong feedback.
+ * @constructor
+ * - it gets the selected answers of the users and assign them to a variable
+ * - it activates either answer or feedback view based on the passed value of
+ *   the parameter of the constructor (interactive)
+ * - it initializes the flag that keeps track when wrong data structure are received from the server
+ *   and an appropriate erros is displayed to the user. 
+ * 
+ * @param {Boolean} interactive
+*/ 
 function MultipleChoiceWidget(interactive) {
 	var self = this;
 
 	self.tickedAnswers = controller.models["answers"].getAnswers(); // a list with the currently selected answers
 	self.interactive = interactive;
 	
-	this.didApologize = false;  // a flag tracking when questions with no data are loaded and an error message is displayed on the screen
-	
-	
-	//Check the boolean value of intractive. This is set through the answer and feedback view.
+	// a flag tracking when questions with no data are loaded and an error message is displayed on the screen
+	this.didApologize = false;
+	//Check the boolean value of interactive. This is set through the answer and feedback view.
 	if (self.interactive) { 
 		self.showAnswer(); 
 		moblerlog("interactive true");
 	} else {
 		moblerlog("interactive false");
-		self.showFeedback(); //displays the feedback body of the multiple choice widget
+		//displays the feedback body of the multiple choice widget
+		self.showFeedback(); 
 	}
-} // end of consructor
+} // end of constructor
 
 
-//**********************************************************METHODS***************************************
-
+/**
+ * doNothing
+ * @prototype
+ * @function cleanup
+ **/ 
 MultipleChoiceWidget.prototype.cleanup = doNothing;
 
 
-// Creation of answer body for multiple choice questions. It contains a list with the possible solutions.
-
+/**
+ * Creation of answer body for multiple choice questions.
+ * It contains a list with the possible solutions which
+ * have been firstly mixed in a random order.
+ * @prototype
+ * @function showAnswer
+ **/ 
 MultipleChoiceWidget.prototype.showAnswer = function() {
 	var questionpoolModel = controller.models['questionpool'];
 
@@ -73,8 +90,8 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 
 		var questionpoolModel = controller.models["questionpool"];
 		var answers = questionpoolModel.getAnswer(); //returns an array containing the possible answers
-
 		var mixedAnswers;
+		//mix answer items in an random order
 		if (!questionpoolModel.currAnswersMixed()) {
 			questionpoolModel.mixAnswers();
 		}			
@@ -114,9 +131,13 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 };
 
 
-//Creation of feedback body for multiple choice questions. It contains the list with the possible solutions highlighted by both the correct answers and learner's ticked answers
-
-
+/**
+ * Creation of feedback body for multiple choice questions. 
+ * It contains the list with the possible solutions highlighted by both the correct answers
+ * and learner's ticked answers
+ * @prototype
+ * @function showFeedback
+ **/ 
 MultipleChoiceWidget.prototype.showFeedback = function() {
 	moblerlog("start show feedback in multiple choice");
 	
@@ -164,14 +185,24 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 	}
 };
 
-//Handling behavior when click on the an item of the multiple answers list
+
+/**
+ * Handling behavior when click on the an item of the multiple answers list
+ * @prototype
+ * @function clickMultipleAnswerItem
+ **/ 
 MultipleChoiceWidget.prototype.clickMultipleAnswerItem = function(
 		clickedElement) {
 	// the ticked item is highlighted with a background color or unhighlighted, depending its previous state
 	clickedElement.toggleClass("ticked"); 
 };
 
-//Storing the ticked answers in an array
+
+/**
+ * Storing the ticked answers in an array
+ * @prototype
+ * @function storeAnswers
+ **/ 
 MultipleChoiceWidget.prototype.storeAnswers = function() {
 	var answers = new Array();
 	var questionpoolModel = controller.models["questionpool"];
@@ -187,9 +218,11 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 };
 
 
-
-//sets the height property of the list items that contain correct answers
- 
+/**
+ * Sets the height property of the list items that contain correct answers
+ * @prototype
+ * @function storeAnswers
+ **/ 
 MultipleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
 		height = $(this).height();

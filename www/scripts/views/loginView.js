@@ -38,9 +38,12 @@ under the License.
  * In the bottom part of the view are displayed the logos of the organisation 
  *  @constructor
  *  - it sets the tag ID for the settings view
- *  - assigns various event handlers when taping on various elements of the view
- *    such as the close button, the logout button and the "more info" icon.
- *  - it binds the event that is triggered when the authentication is ready
+ *  - assigns various event handlers when taping on the elements of the
+ *    login form such as username, password, login button
+ *  - it binds synhronization events such as the sending of statistics to the server,
+ *    the update of courses and questions. It prevents the display of the appropriate
+ *    views that are also binded with the aforementioned events by displaying the
+ *    login form itself.
  *  @param {String} controller  
  **/
 function LoginView(controller) {
@@ -50,18 +53,29 @@ function LoginView(controller) {
 	this.controller = controller;
 	this.active = false;
 
+	//handler when taping on the login button
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
-		
+	
+		//handler when taping on the username field 
 	var prevent=false;
 	jester($('#usernameInput')[0]).tap(function(e, prevent){
 			focusLogos(e);
 		});	
+	//handler when taping on the pasword field
 	jester($('#password')[0]).tap(function(e,prevent) {
 			focusLogos(e);	
 		});	
 	
 	
+	/**
+	 * This event is triggered  when statistics are sent to the server during
+	 * a)loggout b)synchronization.  
+	 * When are not LOGGED IN (=logged out) and have open the login form and listen to this
+	 * event, we want to stay in the login form.
+	 * @event statisticssenttoserver
+	 * @param a callback function that loads the login form
+	 */
 	$(document).bind("statisticssenttoserver", function() {
 		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
 		{
@@ -70,6 +84,13 @@ function LoginView(controller) {
 		}
 		});
 	
+	/**
+	 * This event is triggered  when questions are loaded from the server. It is
+	 * binded also in courses list view and we want to avoid loading that view.
+	 * For that reason we check IF WE ARE  not LOGGED IN(=logged out) in order to show the login form.
+	 * @event questionpoolready
+	 * @param a callback function that loads the login form
+	 */
 	$(document).bind("questionpoolready", function() {
 		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
 		{
@@ -78,15 +99,20 @@ function LoginView(controller) {
 		}
 	});
 		
-
+	/**
+	 * This event is triggered  when courses are loaded from the server. It is
+	 * binded also in courses list view and we want to avoid loading of that view.
+	 * For that reason we check IF WE ARE  not LOGGED IN (=logged out)in order to show the login form.
+	 * @event courselistupdate
+	 * @param a callback function that loads the login form
+	 */
 	$(document).bind("courselistupdate", function() {
 		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
 		{
 			moblerlog("stays in login view, despite the synchronization updates");
 			self.showForm();
 		}
-	});
-			
+	});		
 	});
 	
 
@@ -117,28 +143,28 @@ function LoginView(controller) {
 
 } //end of constructor
 
-//tap, swipe and pinch do nothing
 
 /**
- * Pinch leads to course list
+ * tap does nothing
  * @prototype
- * @function handlePinch
+ * @function handleTap
  **/
 LoginView.prototype.handleTap = doNothing;
 
 /**
- * Pinch leads to course list
+ * pinch does nothing
  * @prototype
  * @function handlePinch
  **/
 LoginView.prototype.handlePinch = doNothing;
 
 /**
- * Pinch leads to course list
+ * swipe does nothing
  * @prototype
- * @function handlePinch
+ * @function handleSwipe
  **/
 LoginView.prototype.handleSwipe = doNothing;
+
 
 /**
  * opens the view
@@ -148,20 +174,19 @@ LoginView.prototype.handleSwipe = doNothing;
 LoginView.prototype.openDiv = openView;
 
 
-
 /**
- * shows the login form
+ * shows the login form after firstly hide the error messages 
+ * that might be displayed because of connection failure 
+ * due to various reasons (wrong data, no internet etc) 
  * @prototype
  * @function open
  **/
 LoginView.prototype.open = function() {
-    // hide unnecessary errors and warnings 
-    this.hideErrorMessage();
-    this.hideWarningMessage();
-    
+	// hide unnecessary errors and warnings 
+	this.hideErrorMessage();
+	this.hideWarningMessage();
 	this.showForm();
 	this.openDiv();
-
 	this.active = true;
 };
 
@@ -186,15 +211,14 @@ LoginView.prototype.close = function() {
 	$("#password").blur();
 	$("#usernameInput").blur();
 	this.active = false;
-
 	this.closeDiv();
 };
 
 
 /**
- * click on the login button sends data to the authentication model data is only
- * sent, if input fields contain some values after successful login, the course
- * list is displayed
+ * click on the login button sends data to the authentication model,
+ * data is only sent if input fields contain some values
+ * after successful login the course list is displayed
  * @prototype
  * @function clickLoginButton
  */
@@ -247,8 +271,11 @@ LoginView.prototype.clickLoginButton = function() {
 };
 
 
-//displays the login form
-
+/**
+ * displays the login form
+ * @prototype
+ * @function showForm
+ */ 
 LoginView.prototype.showForm = function() {
 	$("#loginForm").show();
 	this.hideErrorMessage();
@@ -289,7 +316,7 @@ LoginView.prototype.showWarningMessage = function(message) {
 /**
 * hides the specified error message
 * @prototype
-* @function showWarningMessage
+* @function hideErrorMessage
 **/ 
 LoginView.prototype.hideErrorMessage = function() {
 	

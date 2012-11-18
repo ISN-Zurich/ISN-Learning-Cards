@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -28,23 +29,39 @@ under the License.
  */
 
 
-
-// View for displaying the achievements
- 
+/**
+ * @Class AchievementsView
+ * View for displaying the achievements of a user, such as:
+ * - Stackhandler
+ * - CardBurner
+ *  @constructor
+ *  - it sets the tag ID for the settings view
+ *  - assigns event handler when taping on close button
+ *  - bind 2 events, similarly with statistics view that are related with 
+ *    the loading of statistics and the calculation of all the statistics metrics. 
+ *  @param {String} controller
+ **/ 
 function AchievementsView(controller){
 	
 	 var self = this;
 	 self.controller = controller;  
 	 self.tagID = 'achievementsView';
 	
+	 // set prevent to false, in order to enable taping
+	 // because the clicks don't work after the set of
+	 // prevent to true within jester (in order swipe to work)
 	 var prevent=false;
 	 jester($('#closeAchievementsIcon')[0]).tap(function(event){
 		 moblerlog("achievements: close tap");
 		 self.closeAchievements();
 		 event.stopPropagation(); } );
-	 
-	 
-	 
+
+		/**It is triggered after statistics loaded locally from the server. This happens during the
+		 * authentication
+		 * @event loadstatisticsfromserver
+		 * @param: a callback function that gets the first active day in order to start the calculation
+		 *         of all thedifferent statistics metrics.
+		 */	 
 	 $(document).bind("loadstatisticsfromserver", function() {
 		if ((self.tagID === self.controller.activeView.tagID)&& (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
 	    	{
@@ -52,8 +69,13 @@ function AchievementsView(controller){
 				 self.controller.models['statistics'].getFirstActiveDay();
 	    	}
 		  });
-	    
-	    $(document).bind("allstatisticcalculationsdone", function() { 
+	 
+	    /**It is triggered when the calculation of all the statistics metrics is done
+		 * @event allstatisticcalculationsdone
+		 * @param: a callback function that loads the body of the achievements view, which are
+		 *        the two achievement types (cardBurner, stackHandler) and their values.
+		 */	  
+	  $(document).bind("allstatisticcalculationsdone", function() { 
 	    	moblerlog("enters in calculations done 1 ");
 	    if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
 	    	{
@@ -65,31 +87,54 @@ function AchievementsView(controller){
 }; 
 
 
-// pinch leads to statistics view
 
+/**
+ * Pinch leads to statistics view. 
+ * It works currently only on iOS devices.
+ * @prototype
+ * @function handlePinch
+ **/
 AchievementsView.prototype.handlePinch = function(){
     controller.transitionToStatistics();
 };
 
 
-// tap does nothing
- 
+/**
+ * Tap does nothing
+ * @prototype
+ * @function handleTap
+ **/
 AchievementsView.prototype.handleTap = doNothing;
 
 
-// swipe leads to statistics view
 
+/**
+ * swipe leads to statistics view
+ * @prototype
+ * @function handleSwipe
+ **/
 AchievementsView.prototype.handleSwipe = function() {
 	controller.transitionToStatistics();
 };
 
 
-// opens the view
- 
+
+/**
+ * opens the view
+ * @prototype
+ * @function openDiv
+ **/
 AchievementsView.prototype.openDiv = openView;
 
-//shows the achievements body
 
+/**
+ * When the view opens it checks whether the statistics 
+ * have been loaded from the server to the local storage.
+ * If they do, then the vies is loaded normally otherwise
+ * a loading message is displayed that notifies the user.
+ * @prototype
+ * @function open
+ **/
 AchievementsView.prototype.open = function() {
 	var self=this;
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){
@@ -101,19 +146,34 @@ AchievementsView.prototype.open = function() {
 	this.openDiv();	
 };
 
-//closes the view
- 
+/**
+ * closes the view
+ * @prototype
+ * @function close
+ **/
 AchievementsView.prototype.close = closeView;
 
-//leads to statistics view
-
+/**
+ * leads to statistics view
+ * @prototype
+ * @function closeAchievements
+ **/
 AchievementsView.prototype.closeAchievements = function() {
 	moblerlog("close Achievements button clicked");
 	controller.transitionToStatistics();
 };
 
-//shows the achievements
 
+/**
+ * Shows the achievements body after firstly removing
+ * the loading message.
+ * For every achievement type it displays:
+ * -its name
+ * -its definition and value
+ * -its icon, which has blue font color if the achievement has been reached 
+ * @prototype
+ * @function showAchievementsBody
+ **/
 AchievementsView.prototype.showAchievementsBody = function() {
 	var statisticsModel = controller.models['statistics'];
 	$("#loadingMessageAchievements").hide();
@@ -121,13 +181,11 @@ AchievementsView.prototype.showAchievementsBody = function() {
 	$("#CardBurnerContainer").show();
 	$("#stackHandlerIcon").removeClass("blue");
 	$("#cardBurnerIcon").removeClass("blue");
-
 	$("#valueStackHandler").text(statisticsModel.stackHandler.achievementValue+"%");
-//checkMaxEfficiency(statistics['stackHandler']);
 
 	if (statisticsModel.stackHandler.achievementValue == 100){
 		$("#stackHandlerIcon").addClass("blue");			
-};
+	};
 	
 	$("#valueCardBurner").text(statisticsModel.cardBurner.achievementValue+"%");
 
@@ -136,7 +194,12 @@ AchievementsView.prototype.showAchievementsBody = function() {
 	};
 };
 
-
+/**
+ * shows loading message that achievements are being loaded
+ * from the server
+ * @prototype
+ * @function showLoadingMessage
+ **/
 AchievementsView.prototype.showLoadingMessage = function() {
 	$("#StackHandlerContainer").hide();
 	$("#CardBurnerContainer").hide();

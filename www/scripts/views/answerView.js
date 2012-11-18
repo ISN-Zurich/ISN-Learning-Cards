@@ -22,32 +22,38 @@ under the License.
 
 
 /** @author Isabella Nake
- * @author Evangelia Mitsopoulou
- * 
- * The answer View displays the possible solutions of a question. 
- * The user can interact with the view by selecting/typing/sorting the possible solutions/answers.
- * The possible solutions can have different formats. This is handled by widgets that are acting as subviews of the Answer View.
- * The answer View is a general template that loades in its main body a different widget based on the type of the question.
-*/
+ * @author Evangelia Mitsopoulou 
+ */
 
 /*jslint vars: true, sloppy: true */
 
-
+/**
+ * @Class AnswerView
+ * The answer View displays the possible solutions of a question. 
+ * The user can interact with the view by selecting/typing/sorting the possible solutions/answers.
+ * The possible solutions can have different formats. This is handled by widgets that are acting as subviews of the Answer View.
+ * The answer View is a general template that loads in its main body a different widget based on the type of the question.
+ * @constructor
+ * - it sets the tag ID for the settings view
+ * - assigns event handler when taping on various elements of the answer view
+ * - bind 2 events, that are related with the loading of statistics and
+ *   the calculation of all the statistics metrics. We want to prevent the loading of
+ *   statistics view in this case, and we load the answer body
+ * - it resizes the button's height when it detects orientation change
+ * @param {String} controller
+*/
 function AnswerView(controller) {
 	var self = this;
 	 self.controller = controller;
-
-	self.tagID = 'cardAnswerView';
-
-	self.widget = null; 
+	 self.tagID = 'cardAnswerView';
+	 self.widget = null; 
 	
-
 	//Handler when taping on the forward/done grey button on the right of the answer view
 	jester($('#doneButton')[0]).tap(function() {
 		self.clickDoneButton();
 	});
 	
-	//Handler when taping on the upper right button of the answer view
+	//Handler when taping on close button of the answer view
 	jester($('#CourseList_FromAnswer')[0]).tap(function() {
 		self.clickCourseListButton();
 	});
@@ -68,35 +74,29 @@ function AnswerView(controller) {
 	function setOrientation() {
 		$(".cardBody").css('height', window.innerHeight - 70);
 		$(".cardBody").css('width', window.innerWidth - 100);
-
 	}
-	
+
 	setOrientation();
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
 
-	
-
-	// Solve Scrolling 
-var prevent=!prevent;
-
-//	
-	$('#cardAnswerBody').bind("touchMove",function(e) {
-	//!e.preventDefault();
-	window.scrollBy(0,50);	
-		
-	});
-
-	
+	/**It is triggered after statistics are loaded locally from the server. This can happen during the 
+	 * authentication or if we had clicked on the statistics icon and moved to the questions.
+	 * @event loadstatisticsfromserver
+	 * @param: a callback function that displays the answer body and preventing the display of the statistics view
+	 */	
 	$(document).bind("loadstatisticsfromserver", function() {
     	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
     	{
     		moblerlog("enters load statistics from server is done in answer view 1");
     		self.showAnswerBody();
-    	}
-    	
+    	}  	
 	  });
 	
+	 /**It is triggered when the calculation of all the statistics metrics is done
+	 * @event allstatisticcalculationsdone
+	 * @param: a callback function that displays the answer body and preventing the display of the statistics view
+	 */	
 	$(document).bind("allstatisticcalculationsdone", function() { 
     	moblerlog("enters in calculations done in question view1 ");
     	    
@@ -111,26 +111,46 @@ var prevent=!prevent;
 } // end of Constructor
 
 
-//No action is executed when taping on the Answer View
+/**
+ * No action is executed when taping on the Answer View
+ * @prototype
+ * @function handleTap
+ **/
 AnswerView.prototype.handleTap = doNothing;
 
 
-// Transition to courses when pinching on the answer view. This  is executed only on the iphone.
+/**Transition to courses list view when pinching on the answer view. 
+ * This  is executed only on the iPhone.
+ * @prototype
+ * @function handlePinch
+ **/
 AnswerView.prototype.handlePinch = function() {
 	controller.transitionToCourses();
 };
 
-// No action is executed when swiping on the Answer View
+/**No action is executed when swiping on the Answer View
+ * @prototype
+ * @function handleSwipe
+ **/
 AnswerView.prototype.handleSwipe = doNothing;
 
-
-// Closing of the answer view
+/**Closing of the answer view
+ * @prototype
+ * @function closeDiv
+ **/
 AnswerView.prototype.closeDiv = closeView;
 
-//Shows the container div element of the current view 
+/**Shows the container div element of the current view 
+ * @prototype
+ * @function openDiv
+ **/
 AnswerView.prototype.openDiv = openView;
 
-// Opening of answer view. The parts of the container div element that are loaded dynamically are explicitilly defined/created here
+/**Opening of answer view. The parts of the container div element that are loaded dynamically 
+ * are explicitly defined/created here
+ * @prototype
+ * @function open
+ **/
 AnswerView.prototype.open = function() {
 	this.showAnswerTitle();
 	this.showAnswerBody();
@@ -138,13 +158,21 @@ AnswerView.prototype.open = function() {
 
 };
 
+/**Closes the view 
+ * @prototype
+ * @function close
+ **/
 AnswerView.prototype.close = function() {
     this.widget.cleanup();
     this.closeDiv();
 };
 
 
-//loads a subview-widget based on the specific question type. It is displayed within the main body area of the answer view
+/**Loads a subview-widget based on the specific question type
+ * It is displayed within the main body area of the answer view
+ * @prototype
+ * @function showAnswerBody
+ **/
 AnswerView.prototype.showAnswerBody = function() {
 
 	$("#dataErrorMessage").empty();
@@ -181,7 +209,11 @@ AnswerView.prototype.showAnswerBody = function() {
 };
 
 
-//Displays the title area of the answer view, containing a title icon  the title text 
+/**Displays the title area of the answer view,
+ * containing a title icon and the title text
+ * @prototype
+ * @function showAnswerTitle
+ **/
 AnswerView.prototype.showAnswerTitle = function() {
 	var currentAnswerTitle = controller.models["questionpool"].getQuestionType(); 
 	$("#answerIcon").removeClass();
@@ -191,7 +223,11 @@ AnswerView.prototype.showAnswerTitle = function() {
 
 };
 
-// Handling the behavior of the "forward-done" button on the answer view
+
+/**Handling the behavior of the "forward-done" button on the answer view
+ * @prototype
+ * @function clickDoneButton
+ **/
 AnswerView.prototype.clickDoneButton = function() {
 
 	var questionpoolModel = controller.models['questionpool'];
@@ -213,19 +249,25 @@ AnswerView.prototype.clickDoneButton = function() {
 	}
 };
 
-// Transition to list of Courses when click on the upper right button 
+
+/**Transition to list of Courses when click on the upper right button 
+ * @prototype
+ * @function clickCourseListButton
+ **/
 AnswerView.prototype.clickCourseListButton = function() {
 
 	controller.transitionToCourses();
 
 };
 
-// Transition back to question view when click on the title area
-AnswerView.prototype.clickTitleArea = function() {
 
+/**Transition back to question view when click on the title area
+ * @prototype
+ * @function clickTitleArea
+ **/
+AnswerView.prototype.clickTitleArea = function() {
 	this.widget.storeAnswers(); 
 	// When switching back and forth between question view  and answer view the currently selected answers are stored. 
 	// These answers have not yet been finally answered.
 	controller.transitionToQuestion();
-
 };

@@ -30,7 +30,7 @@ under the License.
 
 //The Multiple choice widget has two views, an answer and a feedback view.
 
-var MOBLERDEBUG = 0;
+
 
 function NumericQuestionWidget(interactive) {
 	var self = this;
@@ -39,7 +39,7 @@ function NumericQuestionWidget(interactive) {
 
 	self.interactive = interactive;
 	this.didApologize = false; // a flag tracking when questions with no data are loaded and an error message is displayed on the screen
-	//Check the boolean value of intractive. This is set through the answer and feedback view.
+	//Check the boolean value of interactive. This is set through the answer and feedback view.
 	if (self.interactive) { 
 		self.showAnswer(); 
 		moblerlog("interactive true");
@@ -51,7 +51,6 @@ function NumericQuestionWidget(interactive) {
 } // end of consructor
 
 
-//**********************************************************METHODS***************************************
 
 NumericQuestionWidget.prototype.cleanup = function() {
     $("#numberInput").blur();
@@ -85,9 +84,7 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 			"placeholder": "Enter number here"
 		}).appendTo(div);
 		
-		
 		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
-//		$("#numberInput")[0].focus();
 		
 	} else {
 		//if there are no data for a question or there is no questionpool then display the error message

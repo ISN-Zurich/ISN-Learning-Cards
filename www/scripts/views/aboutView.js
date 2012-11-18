@@ -1,6 +1,5 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -28,9 +27,6 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-
-
-
 /**
  * @Class AboutView
  * View for displaying general information about the app such as:
@@ -39,7 +35,7 @@ under the License.
  * - URL to project's site on Github, where the code is documented
  *  @constructor
  *  - it sets the tag ID for the settings view
- *  - assigns event handlers when taping on close button
+ *  - assigns event handler when taping on close button
  * 
  **/
 function AboutView() {
@@ -54,6 +50,7 @@ function AboutView() {
 
 /**
  * Pinch leads to course list
+ * It works currently only on iOS devices
  * @prototype
  * @function handlePinch
  **/

@@ -28,10 +28,20 @@ under the License.
  */
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
 
- // View for displaying the course list
- 
+
+/**
+ * @Class AnswerView
+ * View for displaying the course list
+ * 
+ * @constructor
+ * - it sets the tag ID for the settings view
+ * - assigns event handler when taping on the settings icon 
+ * - bind 2 events, that are related with loading of courses and questions
+ *   and they handle the  display of the list of courses as well as
+ *   the transformation of the loading icon to statistics icon 
+ * @param {String} controller
+*/ 
 function CoursesListView(controller) {
 
 	var self = this;
@@ -41,15 +51,19 @@ function CoursesListView(controller) {
 	self.active = false;
 	self.firstLoad = true;
 	
+	//handler when taping on the settings button
 	jester($('#coursesListSetIcon')[0]).tap(function() {
 		self.clickSettingsButton();
 	});
 
-	/*
+	/**
 	 * In some rare cases an automated transition from login view to course list view takes place. 
 	 * This might have happened because a synchronization of questions ( pending questions exist in the local storage) took place.
 	 * So when the courseListView or the CourseModel bind/listen to that event (because it was triggered when pending questions were loaded), we should check 
-	 * IF WE ARE LOGGED IN in order to perform the callback function otherwise we should reach the login view.
+	 * IF WE ARE LOGGED IN in order to perform the callback function
+	 * @event questionpoolready
+	 * @param a callback function that tranforms the loading icon next to a course item, to the statistics icon. this means
+	 *        that the specific course includin all its questions has been fully loaded
 	 */
 	$(document).bind("questionpoolready", function(e, courseID) {
 		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn")){
@@ -58,11 +72,13 @@ function CoursesListView(controller) {
 		}});
 	
 	
-	/*
+	/**
 	 * In some rare cases an automated transition from login view to course list view takes place. 
 	 * This might have happened because a synchronization of courses pending questions took place and when the "courseListUpdate" event was triggered
 	 * then the the courses list view (which binds/listens to this event) was displayed by the execution of the update function below.
-	 * So we should check IF WE ARE LOGGED IN in order to perform the call back function otherwise we should transite to login view.
+	 * So we should check IF WE ARE LOGGED IN in order to perform the call back function
+	 * @event courselistupdate
+	 * @param a callback function that loads the body of the courses list view, which is the list of courses
 	 */
 
 	$(document).bind("courselistupdate", function(e) {
@@ -85,30 +101,46 @@ function CoursesListView(controller) {
     //send an oritentationchange even
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
-    
-    
+       
 }
 
-// tap does nothing
- 
+
+/**
+ * tap does nothing
+ * @prototype
+ * @function handleTap
+ **/ 
 CoursesListView.prototype.handleTap = doNothing;
 
-// swipe does nothing
- 
+
+/**
+ * swipe does nothing
+ * @prototype
+ * @function handleSwipe
+ **/ 
 CoursesListView.prototype.handleSwipe = doNothing;
 
-//pinch leads to settings
-
+/**
+ * pinch leads to settings view
+ * @prototype
+ * @function handlePinch
+ **/ 
 CoursesListView.prototype.handlePinch = function(){
     this.controller.transitionToSettings();
 };
 
-//opens the view
-
+/**
+ * opens the view
+ * @prototype
+ * @function openDiv
+ **/ 
 CoursesListView.prototype.openDiv = openView;
 
-//updates the course list and shows it
-
+/**
+ * updates the course list and shows it
+ * @prototype
+ * @function open
+ **/ 
 CoursesListView.prototype.open = function() {
 	moblerlog("open course list view");
 	this.active = true;
@@ -118,7 +150,12 @@ CoursesListView.prototype.open = function() {
 	this.setIconSize();
 };
 
- //closes the view
+
+/**
+ * closes the view
+ * @prototype
+ * @function closeDiv
+ **/ 
 CoursesListView.prototype.closeDiv = closeView;
 
  //empties the course list
@@ -129,13 +166,15 @@ CoursesListView.prototype.close = function() {
 	$("#coursesList").empty();
 };
 
-//click on course item loads the appropriate question pool
- 
+/**
+ * click on course item loads the appropriate question pool
+ * @prototype
+ * @function clickCourseItem
+ **/ 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
 	if (this.controller.models['course'].isSynchronized(course_id)) {
 		this.controller.models['questionpool'].reset();
 		this.controller.models['questionpool'].loadData(course_id);
-		
 		this.controller.models['answers'].setCurrentCourseId(course_id);
 		this.controller.transitionToQuestion();
 	}
@@ -143,13 +182,19 @@ CoursesListView.prototype.clickCourseItem = function(course_id) {
 
 /**
  * leads to settings
+ * @prototype
+ * @function clickSettingsButton
  */
 CoursesListView.prototype.clickSettingsButton = function() {
 	this.controller.transitionToSettings();
 };
 
-//click on statistic icon calculates the appropriate statistics and shows them
- 
+
+/**
+ * click on statistic icon calculates the appropriate statistics and shows them
+ * @prototype
+ * @function clickStatisticsIcon
+ */ 
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	moblerlog("statistics button clicked");
 	
@@ -162,8 +207,12 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	}
 };
 
-//updates the course list
 
+/**
+ * updates the course list
+ * @prototype
+ * @function update
+ */ 
 CoursesListView.prototype.update = function() {
 	var self = this;
 
@@ -230,8 +279,12 @@ CoursesListView.prototype.update = function() {
 	}
 };
 
-//changes the loading icon to the statistics icon for the specified course id
- 
+
+/**
+ * changes the loading icon to the statistics icon for the specified course id
+ * @prototype
+ * @function courseIsLoaded
+ */ 
 CoursesListView.prototype.courseIsLoaded = function(courseId) {
 	moblerlog("courseIsLoaded: " + courseId);
 	moblerlog("selector length: "+ $("#course" + courseId + " .icon-loading").length);
@@ -239,8 +292,12 @@ CoursesListView.prototype.courseIsLoaded = function(courseId) {
 			.removeClass("icon-loading loadingRotation");
 };
 
-//sets the height property of the course list icon
 
+/**
+ * sets the height property of the course list icon
+ * @prototype
+ * @function setIconSize
+ */ 
 CoursesListView.prototype.setIconSize = function() {
 	$("#coursesList li").each(function() {
 		var height = $(this).height();

@@ -23,14 +23,13 @@ under the License.
 
 
 
-/** @author Isabella Nake
+/**@author Isabella Nake
  * @author Evangelia Mitsopoulou
-   
-*/
+ */
 
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
+
 
 //View for displaying questions
  
@@ -63,8 +62,7 @@ function QuestionView(controller) {
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
 	
-	//var prevent= false;
-	//var prevent=false;
+
 	var prevent=false;
 	jester($('#ButtonAnswer')[0]).tap(function(e) {
 
@@ -74,27 +72,17 @@ function QuestionView(controller) {
 	});
 	
 	jester($('#cardQuestionBody')[0]).tap(function(e) {
-
 		//e.preventDefault();
 		e.stopPropagation();
 		self.handleTap();
 	});
 	
 	jester($('#cardQuestionHeader')[0]).tap(function(e) {
-
 		//e.preventDefault();
 		e.stopPropagation();
 		self.handleTap(e);
 	});
 	
-	var prevent2 = true;
-	//jester($('#cardQuestionView')[0]).swipe(function() {
-//		var prevent2 = true;
-//		if (prevent2)
-//		{console.log("gets the prevent value when true in the move");
-//		e.preventDefault();
-//		self.handleSwipe();
-//	});
 
 
 	jester($('#cardQuestionView')[0]).pinchend(function() {
@@ -145,10 +133,6 @@ moblerlog("pinch works");
  //tap leads to the answer view
 
 QuestionView.prototype.handleTap = function() {
-//var self = this;
-	
-	//e.preventDefault();
-	//e.stopPropagation();
 	if (controller.models["answers"].answerScore > -1){
 		controller.transitionToFeedback();
 	} else { 
@@ -163,8 +147,6 @@ QuestionView.prototype.handleSwipe = function() {
 	// update the display for the current view
 	moblerlog("swipe works");
 	controller.models['questionpool'].nextQuestion();
-    //	this.showQuestionTitle();
-    //	this.showQuestionBody();
 	this.open();
 	
 };
@@ -210,7 +192,7 @@ QuestionView.prototype.showQuestionTitle = function() {
 	$("#questionIcon").removeClass();
 	
 	$("#questionIcon").addClass(jQuery.i18n.prop('msg_' + currentQuestionType + '_icon'));
-	//$("#cardQuestionTitle").text(jQuery.i18n.prop('msg_' + currentQuestionTitle + '_title'));
+	
 };
 
 //click on the course list button leads to course list
