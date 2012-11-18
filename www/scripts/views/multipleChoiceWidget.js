@@ -1,7 +1,5 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -40,8 +38,7 @@ under the License.
  * - it activates either answer or feedback view based on the passed value of
  *   the parameter of the constructor (interactive)
  * - it initializes the flag that keeps track when wrong data structure are received from the server
- *   and an appropriate erros is displayed to the user. 
- * 
+ *   and an appropriate message is displayed to the user. 
  * @param {Boolean} interactive
 */ 
 function MultipleChoiceWidget(interactive) {
@@ -143,8 +140,8 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 	
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
-
-	var clone = $("#cardAnswerBody ul").clone(); // clone the answerbody, 
+	// clone the answerbody, 
+	var clone = $("#cardAnswerBody ul").clone(); 
 	clone.appendTo("#feedbackBody"); 
 
 	var questionpoolModel = controller.models["questionpool"];
@@ -188,6 +185,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 
 /**
  * Handling behavior when click on the an item of the multiple answers list
+ * Adds or removes the blue background color depending on what was the previous state.
  * @prototype
  * @function clickMultipleAnswerItem
  **/ 
@@ -219,9 +217,9 @@ MultipleChoiceWidget.prototype.storeAnswers = function() {
 
 
 /**
- * Sets the height property of the list items that contain correct answers
+ * Sets the height of the list items that contain correct answers
  * @prototype
- * @function storeAnswers
+ * @function setCorrectAnswerTickHeight
  **/ 
 MultipleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {

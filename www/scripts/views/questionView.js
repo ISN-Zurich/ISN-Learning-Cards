@@ -30,15 +30,23 @@ under the License.
 /*jslint vars: true, sloppy: true */
 
 
-
-//View for displaying questions
- 
+/**
+ * @Class QuestionView
+ * View for displaying questions
+ * @constructor
+ * - it sets the tag ID for the settings view
+ * - assigns event handler when taping on various elements of the question view
+ *   such as title, body, done button
+ * - bind 2 events, that are related with the loading of statistics and
+ *   the calculation of all the statistics metrics. We want to prevent the loading of
+ *   statistics view in this case, and we load the question text
+ * - it resizes the button's height when it detects orientation change
+ * @param {String} controller
+*/
 function QuestionView(controller) {
 	var self = this;
 	self.controller = controller;
 	self.tagID = 'cardQuestionView';
-	
-
 	var returnButton = $('#CourseList_FromQuestion')[0];
 	if (returnButton) {
 		function cbReturnButtonTap(event) {
@@ -65,7 +73,6 @@ function QuestionView(controller) {
 
 	var prevent=false;
 	jester($('#ButtonAnswer')[0]).tap(function(e) {
-
 		//e.preventDefault();
 		e.stopPropagation();
 		self.handleTap();
@@ -97,7 +104,11 @@ function QuestionView(controller) {
 		self.handlePinch();
 	});
 	
-	
+	/**It is triggered after statistics are loaded locally from the server. This can happen during the 
+	 * authentication or if we had clicked on the statistics icon and moved to the questions.
+	 * @event loadstatisticsfromserver
+	 * @param: a callback function that displays the question text and preventing the display of the statistics view
+	 */	
 	$(document).bind("loadstatisticsfromserver", function() {
     	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
     	{
@@ -107,6 +118,10 @@ function QuestionView(controller) {
     	
 	  });
 	
+	 /**It is triggered when the calculation of all the statistics metrics is done
+	 * @event allstatisticcalculationsdone
+	 * @param: a callback function that displays the answer body and preventing the display of the statistics view
+	 */
 	$(document).bind("allstatisticcalculationsdone", function() { 
     	moblerlog("enters in calculations done in question view1 ");
     	    
@@ -115,23 +130,24 @@ function QuestionView(controller) {
     		moblerlog("enters in calculations done in question view 2 ");
     		self.showQuestionBody();
     	}
-    });
-	
-	
+    });	
 	}
 
 
-//pinch leads to the course list
- 
+/**pinch leads to the course list
+ * @prototype
+ * @function handlePinch
+ **/ 
 QuestionView.prototype.handlePinch = function() {
 moblerlog("pinch works");
 	controller.transitionToCourses();
 };
 
 
-
- //tap leads to the answer view
-
+/**tap leads to the answer view
+ * @prototype
+ * @function handleTap
+ **/
 QuestionView.prototype.handleTap = function() {
 	if (controller.models["answers"].answerScore > -1){
 		controller.transitionToFeedback();
@@ -141,7 +157,10 @@ QuestionView.prototype.handleTap = function() {
 };
 
 
-//swipe shows a new question updates question body and title
+/**swipe shows a new question updates question body and title
+ * @prototype
+ * @function handleSwipe
+ **/
 QuestionView.prototype.handleSwipe = function() {
 	// ask the model to select the next question
 	// update the display for the current view
@@ -152,16 +171,23 @@ QuestionView.prototype.handleSwipe = function() {
 };
 
 
-//closes the view
-
+/**closes the view
+ * @prototype
+ * @function close
+ **/
 QuestionView.prototype.close = closeView;
 
- //opens the view
 
+/**opens the view
+ * @prototype
+ * @function openDiv
+ **/
 QuestionView.prototype.openDiv = openView;
 
-//shows the question body and title
-
+/**shows the question body and title
+ * @prototype
+ * @function open
+ **/
 QuestionView.prototype.open = function() {
 	this.showQuestionTitle();
 	this.showQuestionBody();
@@ -172,8 +198,10 @@ QuestionView.prototype.open = function() {
 	this.openDiv();	
 };
 
-//shows the current question text
-
+/**shows the current question text
+ * @prototype
+ * @function showQuestionBody
+ **/
 QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
@@ -183,8 +211,11 @@ QuestionView.prototype.showQuestionBody = function() {
 
 };
 
-//shows the current question title and the corresponding icon
 
+/**shows the current question title and the corresponding icon
+ * @prototype
+ * @function showQuestionTitle
+ **/
 QuestionView.prototype.showQuestionTitle = function() {
 	var currentQuestionType = controller.models["questionpool"]
 			.getQuestionType();
@@ -195,8 +226,10 @@ QuestionView.prototype.showQuestionTitle = function() {
 	
 };
 
-//click on the course list button leads to course list
-
+/**click on the course list button leads to course list
+ * @prototype
+ * @function clickCourseListButton
+ **/
 QuestionView.prototype.clickCourseListButton = function() {
 	controller.models["answers"].resetTimer();
 	controller.transitionToCourses();

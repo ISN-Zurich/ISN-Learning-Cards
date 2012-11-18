@@ -1,7 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -34,8 +33,20 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
-
+/**
+ * @Class TextSortWidget
+ * The text sort widget has two views, an answer and a feedback view. 
+ * The answer view contains a randomly mixed list with the answer items that need to be sorted out.
+ * The feedback view contains the correct sorting order of the answer items. If more than half of
+ * the answer items were sorted correctly then a blue background color is assigned to the.
+ * @constructor
+ * - it gets the selected answers of the users and assign them to a variable
+ * - it activates either answer or feedback view based on the passed value of
+ *   the parameter of the constructor (interactive)
+ * - it initializes the flag that keeps track when wrong data structure are received from the server
+ *   and an appropriate message is displayed to the user. 
+ * @param {Boolean} interactive
+*/ 
 function TextSortWidget(interactive) {
 	var self = this;
 
@@ -54,11 +65,18 @@ function TextSortWidget(interactive) {
 	}
 }
 
+
+/**Does nothing
+ * @prototype
+ * @function cleanup
+ **/
 TextSortWidget.prototype.cleanup = doNothing;
 
-/**
- * displays the answer for text sort questions
- */
+
+/**displays the answer for text sort questions
+ * @prototype
+ * @function showAnswer
+ **/
 TextSortWidget.prototype.showAnswer = function() {
 	var self = this;
 
@@ -128,8 +146,11 @@ TextSortWidget.prototype.showAnswer = function() {
 
 };
 
-//displays the feedback for text sort questions
 
+/**displays the feedback for text sort questions
+ * @prototype
+ * @function showFeedback
+ **/
 TextSortWidget.prototype.showFeedback = function() {
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
@@ -186,8 +207,11 @@ TextSortWidget.prototype.showFeedback = function() {
 	}
 };
 
-//stores the current sorting order in the answer model
 
+/**stores the current sorting order in the answer model
+ * @prototype
+ * @function storeAnswers
+ **/
 TextSortWidget.prototype.storeAnswers = function() {
 	var answers = new Array();
 
@@ -195,16 +219,15 @@ TextSortWidget.prototype.storeAnswers = function() {
 		var id = $(this).attr("id").substring(6);
 		answers.push(id);
 	});
-
 	controller.models["answers"].setAnswers(answers);
 };
 
 
-/**
- * catches touch events and creates correspoding mouse events this has to be
+/**catches touch events and creates correspoding mouse events this has to be
  * done because JQuery UI's sortable function listens for mouse events
- */
-
+ * @prototype
+ * @function enableSorting
+ **/
 TextSortWidget.prototype.enableSorting = function() {
 
 	jester($(".sortable")[0]).start(function(touches, event) {
@@ -248,8 +271,11 @@ function createEvent(type, event) {
 	event.preventDefault();
 }
 
-//sets the height property of the list items that contain correct answers
 
+/**sets the height property of the list items that contain correct answers
+ * @prototype
+ * @function setCorrectAnswerTickHeight
+ **/
 TextSortWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
 		height = $(this).height();

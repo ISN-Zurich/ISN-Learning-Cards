@@ -104,3 +104,25 @@ function insertAchievement() {
 }
 
 
+//helper functions
+
+function checkImprovement(improvementValue) {
+    var retval = msg_neutralImprovement_icon + " green";
+    if (improvementValue > 0) {
+        retval = msg_positiveImprovement_icon + " green";
+    } else if (improvementValue < 0) {
+        retval = msg_negativeImprovement_icon + " red";
+    }
+    return retval;
+}
+
+function checkSpeedImprovement(improvementValue){
+    var retval = msg_neutralImprovement_icon + " green";
+    if (improvementValue > 0) {
+        retval = msg_positiveImprovement_icon + " red";
+    } else if (improvementValue < 0) {
+        retval = msg_negativeImprovement_icon + " green";
+    }
+    return retval;
+}
+

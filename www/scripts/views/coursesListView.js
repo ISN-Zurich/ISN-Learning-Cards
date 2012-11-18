@@ -98,7 +98,7 @@ function CoursesListView(controller) {
     
     //when orientation changes, set the new width and height
     //resize event should be caught, too, because not all devices
-    //send an oritentationchange even
+    //send an orientationchange even
     window.addEventListener("orientationchange", setOrientation, false);
     window.addEventListener("resize", setOrientation, false);
        

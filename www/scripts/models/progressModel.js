@@ -3,6 +3,7 @@
 
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -24,7 +25,7 @@ under the License.
 /*jslint vars: true, sloppy: true */
 /**
  * @class ProgressModel 
- * This model caclulates the number (in percentage) of questions of a specific course 
+ * This model calculates the number (in percentage) of questions of a specific course 
  * that were answered correctly. It shows the progress of a user.
  * It also checks if the progress is improved in time, by comparing the percentage value between
  * the current day and the last active day.

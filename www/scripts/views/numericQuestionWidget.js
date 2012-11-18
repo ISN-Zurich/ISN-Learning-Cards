@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -28,10 +29,22 @@ under the License.
    
 */
 
-//The Multiple choice widget has two views, an answer and a feedback view.
 
-
-
+/**
+ * @Class NumericQuestionWidget
+ * The Numeric Question Widget has two views, an answer and a feedback view. 
+ * The answer view contains a input field where the user can type a numeric value.
+ * The feedback view can vary depending on the correct or wron input of the user, which means
+ * that if the typed answer of the user is correct then a green background color is applied to the input field
+ * with an excellent acknolwedgement on the top otherwise a second input field is displayed with the correct answer.
+ * @constructor
+ * - it gets the selected answers of the users and assign them to a variable
+ * - it activates either answer or feedback view based on the passed value of
+ *   the parameter of the constructor (interactive)
+ * - it initializes the flag that keeps track when wrong data structure are received from the server
+ *   and an appropriate message is displayed to the user. 
+ * @param {Boolean} interactive
+*/ 
 function NumericQuestionWidget(interactive) {
 	var self = this;
 
@@ -51,14 +64,22 @@ function NumericQuestionWidget(interactive) {
 } // end of consructor
 
 
-
+/**
+ * It blurs the input field 
+ * @prototype
+ * @function cleanup
+ **/ 
 NumericQuestionWidget.prototype.cleanup = function() {
     $("#numberInput").blur();
 };
 
-//Creation of answer body for numeric questions. It contains a input field.
 
-
+/**
+ * Creation of answer body for numeric questions. 
+ * It contains a input field.
+ * @prototype
+ * @function showAnswer
+ **/ 
 NumericQuestionWidget.prototype.showAnswer = function() {
 
 	var self = this;
@@ -94,17 +115,17 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 
 };
 
-//Creation of feedback body for numeric questions. It contains one or two input fields, based on the answer results
 
+/**
+ * Creation of feedback body for numeric questions. 
+ * It contains one or two input fields, based on the answer results
+ * @prototype
+ * @function showFeedback
+ **/
 NumericQuestionWidget.prototype.showFeedback = function() {
 	moblerlog("start show feedback in numeric choice");
-
-
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
-	
-	
-	
 	var questionpoolModel = controller.models["questionpool"];
 	var answerModel = controller.models["answers"];
 	var typedAnswer = answerModel.getAnswers();
@@ -163,7 +184,12 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 
 };
 
-//Storing the typed number
+
+/**
+ * Storing the typed number
+ * @prototype
+ * @function storeAnswers
+ **/
 NumericQuestionWidget.prototype.storeAnswers = function() {
 
 	var questionpoolModel = controller.models["questionpool"];
@@ -173,9 +199,12 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(numericAnswer);
 };
 
+
 /**
- * this method does nothing for the numeric widget
- */
+ * This method does nothing for the numeric widget
+ * @prototype
+ * @function setCorrectAnswerTickHeight
+ **/ 
 NumericQuestionWidget.prototype.setCorrectAnswerTickHeight = doNothing;
 
 moblerlog("end of numeric choice widget");

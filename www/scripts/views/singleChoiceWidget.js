@@ -1,7 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -18,38 +17,42 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.	
-
-
 */
 
 
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
    
-The Single choice widget has two views, an answer and a feedback view.
-The anwer view contains a list with possible solutions and the selected answer by the user is highlighted.
-The feedback view contains the list with the possible solutions highlighted by both the correct answer and learner's ticked answer.
-Sometimes when available, the feedback view provides extra feedback information, both for correct and wrong feedback.
 
 */
 
 /*jslint vars: true, sloppy: true */
 
-var MOBLERDEBUG = 0;
 
+/**
+ * @Class MultipleChoiceWidget
+ * The Single choice widget has two views, an answer and a feedback view.
+ * The answer view contains a list with possible solutions and the selected answer by the user is highlighted.
+ * The feedback view contains the list with the possible solutions highlighted by both the correct answer and learner's ticked answer.
+ * Sometimes when available, the feedback view provides extra feedback information, both for correct and wrong feedback.
+ * @constructor
+ * - it gets the selected answers of the users and assign them to a variable
+ * - it activates either answer or feedback view based on the passed value of
+ *   the parameter of the constructor (interactive)
+ * - it initializes the flag that keeps track when wrong data structure are received from the server
+ *   and an appropriate message is displayed to the user. 
+ * @param {Boolean} interactive
+*/
 function SingleChoiceWidget(interactive) {
 	var self = this;
     self.interactive = interactive;
-	self.didApologize = false; // a flag tracking when questions with no data
-                               // are loaded and an error message is displayed
-                               // on the screen
+    // a flag tracking when questions with no data are loaded 
+    // and an error message is displayed on the screen
+    self.didApologize = false;
     
     moblerlog('check for previous answers');
-	self.tickedAnswers = controller.models["answers"].getAnswers();// a list
-																	// with the
-																	// currently
-																	// selected
-																	// answers
+    // a list  with the currently  selected answers
+	self.tickedAnswers = controller.models["answers"].getAnswers();
     
 	moblerlog('ok');
 
@@ -57,22 +60,30 @@ function SingleChoiceWidget(interactive) {
 	// feedback view.
 	if (self.interactive) {
 		// when answer view is active, then interactive variable is set to true.
-		self.showAnswer(); // displays the answer body of the multiple choice
+		self.showAnswer(); // displays the answer body of the single choice
 							// widget
 	} else {
 		// when feedback view is active, then interactive is set to false.
-		self.showFeedback(); // displays the feedback body of the multiple
-								// choice widget
+		// displays the feedback body of the single choice widget
+		self.showFeedback(); 
 	}
 }
 
-// **********************************************************METHODS***************************************
-
+/**
+ * doNothing
+ * @prototype
+ * @function cleanup
+ **/ 
 SingleChoiceWidget.prototype.cleanup = doNothing;
 
-// Creation of answer body for single choice questions. It contains a list with
-// the possible solutions. Only one of them can be ticked each time.
 
+/**
+ * Creation of answer body for single choice questions. It contains a list with
+ * the possible solutions which have been firstly mixed in a random order.
+ * Only one of them can be ticked each time.
+ * @prototype
+ * @function showAnswer
+ **/ 
 SingleChoiceWidget.prototype.showAnswer = function() {
 	var questionpoolModel = controller.models['questionpool'];
 
@@ -82,9 +93,9 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 			&& questionpoolModel.getAnswer()[0].answertext) {
 
 		var self = this;
-        var answers = questionpoolModel.getAnswer();// returns an array
-													// containing the possible
-													// answers
+        
+		// returns an array containing the possible answers
+		var answers = questionpoolModel.getAnswer();
 
 		var mixedAnswers;
 		if (!questionpoolModel.currAnswersMixed()) {
@@ -125,10 +136,15 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 	}
 };
 
-// Creation of feedback body for single choice questions. It contains the list
-// with the possible solutions highlighted by both the correct answer and
-// learner's ticked answer
 
+
+/**
+ * Creation of feedback body for single choice questions. It contains the list
+ * with the possible solutions highlighted by both the correct answer and
+ * learner's ticked answer
+ * @prototype
+ * @function showFeedback
+ **/ 
 SingleChoiceWidget.prototype.showFeedback = function() {
 	$("#feedbackBody").empty();
 	$("#feedbackTip").empty();
@@ -151,26 +167,15 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	});
 
 	// Handling the display of more tips/info about the feedback
-	var currentFeedbackTitle = controller.models["answers"].getAnswerResults(); // returns
-																				// excellent
-																				// or
-																				// wrong
-																				// based
-																				// on
-																				// the
-																				// answer
-																				// resutls
-																				// for
-																				// a
-																				// specific
-																				// question
-																				// type
+	// returns excellent or wrong based on the answer results
+	// for a specific question type
+	var currentFeedbackTitle = controller.models["answers"].getAnswerResults(); 
+																				
 	if (currentFeedbackTitle == "Excellent") {
-		var correctText = questionpoolModel.getCorrectFeedback();// gets
-																	// correct
-																	// feedback
-																	// text
+		
+		//gets correct feedback text
 		if (correctText.length > 0) {
+		var correctText = questionpoolModel.getCorrectFeedback();
 			// when extra feedback info is available
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(correctText);
@@ -196,17 +201,23 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	}
 };
 
-// Handling behavior when click on the an item of the single answers list
+/**
+ * Handling behavior when click on the an item of the single answers list
+ * @prototype
+ * @function clickSingleAnswerItem
+ **/
 SingleChoiceWidget.prototype.clickSingleAnswerItem = function(clickedElement) {
-
 	// to check if any other element is ticked and untick it
 	clickedElement.parent().find("li").removeClass("ticked");
 	// add a background color to the clicked element
 	clickedElement.addClass("ticked");
-
 };
 
-// Storing the ticked answers in an array
+/**
+ * Storing the ticked answer in an array
+ * @prototype
+ * @function storeAnswers
+ **/ 
 SingleChoiceWidget.prototype.storeAnswers = function() {
 	var answers = new Array();
 
@@ -220,55 +231,12 @@ SingleChoiceWidget.prototype.storeAnswers = function() {
 	controller.models["answers"].setAnswers(answers);
 };
 
-//Storing the correct answres in an array
-SingleChoiceWidget.prototype.storeCorrectAnswers = function() {
-	
-	var correctAnswers = new Array();
-	$("#cardAnswerBody li").each(function(index) {
-		if ($(this).hasClass("correctAnswer")) {
-			var correctIndex = parseInt($(this).attr('id').substring(6));
-			answers.push(correctIndex);
-		}
-	});
-	
-	controller.models["answers"].setCorrectAnswers(correctAnswers);
-};
-
-
-
-SingleChoiceWidget.prototype.storeScore = function(){
-	var singleChoiceScore = this.calculateAnswerScore();
-	
-	controller.models["answers"].setScoreList(singleChoiceScore);
-	
-}
-
-
-// Handling behavior when click on the done-forward button on the right of the
-// screen
-SingleChoiceWidget.prototype.clickDoneButton = function() {
-
-	var questionpoolModel = controller.models['questionpool'];
-
-	if (questionpoolModel.getAnswer()[0].text && questionpoolModel) {
-		// if the question has data and if there is a question pool move to the
-		// feedback view
-
-		this.widget.storeAnswers();
-		questionpoolModel.queueCurrentQuestion();
-		controller.transitionToFeedback();
-	} else {
-		// if the question has no data then move to the next question
-		questionpoolModel.nextQuestion();
-		controller.transitionToQuestion();
-
-	}
-
-};
 
 /**
- * sets the height property of the list items that contain correct answers
- */
+ * Sets the height of the list items that contain correct answers
+ * @prototype
+ * @function setCorrectAnswerTickHeight
+ **/ 
 SingleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 	$("#feedbackBody ul li").each(function() {
 		height = $(this).height();
