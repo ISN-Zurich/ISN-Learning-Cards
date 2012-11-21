@@ -194,11 +194,9 @@ AnswerView.prototype.showAnswerBody = function() {
 		this.widget = new MultipleChoiceWidget(interactive);
 		break;
 	case 'assOrderingQuestion':
-		this.widget = new TextSortWidget(interactive);
-		break;
 	case 'assOrderingHorizontal':
-		this.widget = new HorizontalTextSortWidget(interactive);
-		break;
+	this.widget = new TextSortWidget(interactive);
+	break;
 	case 'assNumeric':
 		this.widget = new NumericQuestionWidget(interactive);
 		break;

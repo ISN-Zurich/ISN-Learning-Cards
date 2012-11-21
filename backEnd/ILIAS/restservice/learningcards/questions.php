@@ -125,12 +125,25 @@ function getQuestions($courseId) {
 								//horizontal ordering questions have no "getAnswers()" method!
 								//they use the OrderText variable to store the answers and the getOrderText function to retrieve them 
 								//$answerList = $assQuestion->getOrderText();
-								$answerList = $assQuestion->getOrderingElements();
-								logging("answerList for Horizontal Question".json_encode($answerList));
+							$answers = $assQuestion->getOrderingElements();
+							
+							$arr = array();
+							foreach ($answers as $order => $answer)
+							{
+								array_push($arr, array(
+								"answertext" => (string) $answer,
+								"points"=> "0",
+								"order" => (int) $order+1,
+								"id" => "-1"
+								));
+							}
+							$answerList = $arr;
+							logging("answerList for Horizontal Question".json_encode($answerList));
+							 							
 							}	 
 							 else {
 								$answerList = $assQuestion->getAnswers();
-								//logging("answerList for other types of Question".json_encode($answerList));
+								logging("answerList for other types of Question".json_encode($answerList));
 								
 							}
 
