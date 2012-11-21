@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT  REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -48,8 +49,7 @@ var SUBMODEL_QUERY_FOUR = 4;
 
 /**
  *Global variable that stores the
- *duration of a day in miliseconds. It is used as a means
- *of co
+ *duration of a day in miliseconds. 
  
  *@property TWENTY_FOUR_HOURS
  *@default 1000 * 60 * 60 * 24

@@ -32,8 +32,9 @@ under the License.
 /*jslint vars: true, sloppy: true */
 
 /**
- *A global property/variable that activates and deactivates the display of console logs.
- *It is passed as parameter in global function moblerlog in common.js.
+ *A global property/variable that shows for how long the synchronization is valid.
+ *The following default value shows the time period after which a new synchromization 
+ *should take place.
  *
  *@property DEFAULT_SYNC_TIMEOUT 
  *@default 60000 

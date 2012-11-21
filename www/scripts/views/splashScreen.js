@@ -1,8 +1,5 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
-
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -23,7 +20,6 @@ under the License.
 */
 
 
-
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
 
@@ -40,7 +36,6 @@ under the License.
  * @param {String} controller
  */
 function SplashScreen(controller) {
-
     var self = this;
     self.controller = controller;
     self.tagID = 'splashScreen';

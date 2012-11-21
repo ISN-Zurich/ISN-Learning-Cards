@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -259,12 +260,14 @@ QuestionPoolModel.prototype.mixAnswers = function() {
 };
 
 /**
- * Sets the id to the id of the next question. A random number is created in order to get the id of the next question
- * at the random position/index of the question list. If the random number is not the same as the current id and is not an id 
+ * Increases the index. Sets the id to the id of the next question. 
+ * A random number is created in order to get the id of the next question
+ * at the random position/index of the question list. 
+ * If the random number is not the same as the current id and is not an id 
  * that is stored in the queue, the new id is the random number
  * @prototype
  * @function nextQuestion
- * @return {Number} id, the id of the next question 
+ * @return {Boolean} returns false if it has reached the end of the list
  */
 QuestionPoolModel.prototype.nextQuestion = function() {
 	var random;
@@ -294,6 +297,7 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 /**
  * Puts the current id of the active question into the queue only if the length of the question list is
  * greater than the queue constant
+ * Push in the queue the current question, only if questionpool is longer than the queue.
  * @prototype
  * @function queueCurrentQuestion
  */

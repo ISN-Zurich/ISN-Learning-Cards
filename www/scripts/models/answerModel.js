@@ -38,7 +38,6 @@ under the License.
 
 var DB_VERSION = 1;
 
-
 /**
  * @class Answer Model, 
  * The answer model holds/handles the answers of a question of every type
@@ -166,7 +165,7 @@ AnswerModel.prototype.calculateMultipleChoiceScore = function() {
 	var corr_ticked = 0;
 	var wrong_ticked = 0;
 
-	for ( i = 0; i < numberOfAnswers; i++) {
+	for (i = 0; i < numberOfAnswers; i++) {
 		moblerlog("answer " + i + ": " + questionpool.getScore(i));
 		//if the current answer item is correct, then its score value in the database is set to 1 (or at least greater than 1).
 		if (questionpool.getScore(i) > 0) {
@@ -273,7 +272,8 @@ AnswerModel.prototype.calculateTextSortScore = function() {
 
 
 /**
- * Calculate the answer score for numeric questions
+ * Calculates the answer score for numeric questions
+ * It can be either 1 or 0.
  * @prototype
  * @function calculateNumericScore 
  **/

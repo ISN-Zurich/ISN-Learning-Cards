@@ -28,10 +28,15 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
-//This model holds the tracking data
- 
 
-
+/**
+ * @class Tracking Model, 
+ * This model holds the tracking data 
+ * @constructor 
+ * It initializes some basic properties such as:
+ * - a time tracker variable that tracks when was the last time that data were sent to the server
+ * -the local database that stores the score after the users have answered a question
+ */
 function TrackingModel(controller){
 	var self = this;
 	this.controller = controller;

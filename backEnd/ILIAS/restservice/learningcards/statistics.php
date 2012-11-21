@@ -42,7 +42,7 @@ require_once 'Services/User/classes/class.ilObjUser.php';
 require_once 'Services/Database/classes/class.ilDB.php';
 
 global $DEBUG;
-$DEBUG = 1;
+$DEBUG = 0;
 
 global $ilUser, $class_for_logging;
 

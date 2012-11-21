@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -44,7 +45,7 @@ var APP_ID = "ch.ethz.isn.learningcards";
  *@default hornet
  **/
 
-var DEFAULT_SERVER = "hornet";
+var DEFAULT_SERVER = "yellowjacket";
 
 /**
  *A global property/variable that is used to store info about the different servers to which the application can be connected.
@@ -569,24 +570,6 @@ ConfigurationModel.prototype.getSessionKey = function() {
 };
 
 
-/**
- * if no configuration is stored in the local storage, a new one is created
-* @prototype
-* @function getSessionKey 
-*/
-ConfigurationModel.prototype.createConfiguration = function() {
-	moblerlog("create configuration");
-
-	if (!localStorage.configuration) {
-		initConfiguration();
-	}
-
-	try {
-		return JSON.parse(localStorage.getItem("configuration"));
-	} catch (err) {
-		return {};
-	}
-};
 
 /**
 * Sends the registration request (appId ,device id) to the server and waiting to get back the app key 
