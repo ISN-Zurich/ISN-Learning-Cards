@@ -1,0 +1,30 @@
+#appLogo {
+	content: url(../resources/website_logo.png);
+	padding: 5px 50px 5px 70px;
+}
+
+#appName{
+	font-size: 28px;
+	font-weight:bold;
+	padding: 5px 50px 5px 30px;
+}
+
+#appTeaser{
+	font-size: 20px;
+	font-weight:bold;
+	font-style:italic;
+	}
+
+
+#stores {
+	padding-top:10px;
+}
+
+#appleStore {
+	float:left;
+	padding-right:10px;
+}
+
+#googlePlay {
+	padding-right:0px;
+}
