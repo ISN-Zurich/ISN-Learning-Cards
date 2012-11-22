@@ -170,13 +170,12 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 	// returns excellent or wrong based on the answer results
 	// for a specific question type
 	var currentFeedbackTitle = controller.models["answers"].getAnswerResults(); 
-																				
+																			
 	if (currentFeedbackTitle == "Excellent") {
-		
 		//gets correct feedback text
-		if (correctText.length > 0) {
 		var correctText = questionpoolModel.getCorrectFeedback();
-			// when extra feedback info is available
+		if (correctText.length > 0) {
+					// when extra feedback info is available
 			$("#FeedbackMore").show();
 			$("#feedbackTip").text(correctText);
 		} else {
