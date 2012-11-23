@@ -62,14 +62,6 @@ StackHandlerModel.prototype.initQuery = function(){
 StackHandlerModel.prototype.queryDB = queryDatabase;
 
 
-/**
- * Check if the achievement has been reached or not by using the 
- * global function checkAchievemnt. 
- * @prototype
- * @function calculateValueHelper
- */
-StackHandlerModel.prototype.calculateValueHelper = checkAchievement;
-
 
 /**
  * Before calculating the stack Handler it checks whether 
@@ -81,6 +73,16 @@ StackHandlerModel.prototype.calculateValue = function() {
 	this.courseId = this.superModel.currentCourseId;
 	this.calculateValueHelper();
 };
+
+
+
+/**
+ * Check if the achievement has been reached or not by using the 
+ * global function checkAchievemnt. 
+ * @prototype
+ * @function calculateValueHelper
+ */
+StackHandlerModel.prototype.calculateValueHelper = checkAchievement;
 
 /**
  * Pass the current variables to the above query that will be
