@@ -118,19 +118,17 @@ ConnectionState.prototype.goOnline = function() {
     moblerlog('check synchronization - question pools');
 	// if a pending question pool exist, load the question pool from the server
     if ( this.controller && this.controller.models && this.controller.models["course"] && this.controller.models["course"].courseList) {
-         moblerlog( 'got models ' );
+         moblerlog( 'got models ');
         var courseList = this.controller.models["course"].courseList;
         if (courseList) {
             moblerlog( 'interate course list ' );
             for ( var c in courseList) {
                 moblerlog( 'check course ' + c );
                 
-                var pendingQuestionPools = localStorage
-                .getItem("pendingQuestionPool_" + courseList[c].id);
+                var pendingQuestionPools = localStorage.getItem("pendingQuestionPool_" + courseList[c].id);
                 if (pendingQuestionPools) {
                     moblerlog('check synchronization - question pool missing for course ' + c);
-                    this.controller.models["questionpool"]
-                    .loadFromServer(courseList[c].id);
+                    this.controller.models["questionpool"].loadFromServer(courseList[c].id);
                 }
             }
         }
@@ -183,6 +181,5 @@ ConnectionState.prototype.goOffline = function() {
 	this.state = false;
 	$(document).trigger("trackingEventDetected","offline");
 	// show no connection error message in login view
-	this.controller.views["login"]
-			.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
+	this.controller.views["login"].showErrorMessage(jQuery.i18n.prop('msg_network_message'));
 };
