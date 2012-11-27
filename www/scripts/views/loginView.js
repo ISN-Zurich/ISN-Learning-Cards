@@ -56,7 +56,7 @@ function LoginView(controller) {
 	//handler when taping on the login button
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
-	
+	});
 		//handler when taping on the username field 
 	var prevent=false;
 	jester($('#usernameInput')[0]).tap(function(e, prevent){
@@ -67,6 +67,12 @@ function LoginView(controller) {
 			focusLogos(e);	
 		});	
 	
+	//handler when taping on the select lms button
+	jester($('#selectLMS')[0]).tap(function() {
+		moblerlog("enters in tap of select lms");
+		//self.clickLoginButton();	
+		self.selectLMS();
+	});
 	
 	/**
 	 * This event is triggered  when statistics are sent to the server during
@@ -113,7 +119,7 @@ function LoginView(controller) {
 			self.showForm();
 		}
 	});		
-	});
+	
 	
 
 	$(document).bind("errormessagehide", function() {
@@ -278,6 +284,9 @@ LoginView.prototype.clickLoginButton = function() {
  */ 
 LoginView.prototype.showForm = function() {
 	$("#loginForm").show();
+	$("#loginButton").show();
+	$("#loginElements").show();
+	$("#cards").show();
 	this.hideErrorMessage();
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
@@ -334,3 +343,17 @@ LoginView.prototype.hideWarningMessage = function() {
 	$("#warningmessage").text("");
 	$("#warningmessage").hide();
 }
+
+
+/**
+* when user taps on the select lms button
+* it leads to lms list view
+* @prototype
+* @function selectLMS
+**/ 
+LoginView.prototype.selectLMS = function() {
+	var self=this;
+	moblerlog("select lms");
+	self.controller.transitionToLMS();
+}
+
