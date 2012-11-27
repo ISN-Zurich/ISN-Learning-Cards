@@ -78,6 +78,7 @@ function Controller() {
 	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
 	this.views.login = new LoginView(this);
+	this.views.lms = new LMSView(this);
 	this.views.logout = new LogoutView();
 	this.views.coursesList = new CoursesListView(this);
 	this.views.questionView = new QuestionView(this);
@@ -142,6 +143,11 @@ function Controller() {
 	window.addEventListener("orientationchange", setButtonHeight, false);
 
 	setButtonHeight();
+	
+	// set correct width of forward buttons
+	window.addEventListener("resize", setButtonWidth, false);
+	window.addEventListener("orientationchange", setButtonWidth, false);
+	setButtonWidth();
 
 	/**
 	 * It is triggered in Statistics Model when calculations are done in all statistics sub models.  
@@ -188,6 +194,7 @@ Controller.prototype.setupLanguage = function() {
 			$("#usernameInput").attr("placeholder", msg_placeholder_username);
 			$("#password").attr("placeholder", msg_placeholder_password);
 			$("#coursesListTitle").text(msg_courses_list_title);
+			$("#lmsListTitle").text(msg_lms_list_title);
 			$("#settingsTitle").text(msg_settings_title);
 			$("#logoutConfirmationTitle").text(msg_logout_title);
 			$("#statBestDayTitle").text(msg_bestDay_title);
@@ -237,7 +244,7 @@ Controller.prototype.setupLanguage = function() {
  * @param {String} viewname, the name of the specified target view
  **/
 Controller.prototype.transition = function(viewname) {
-	moblerlog("transition start" );
+	moblerlog("transition start to " + viewname );
 	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
 	if (this.views[viewname] && ( viewname === "login" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
@@ -274,6 +281,17 @@ Controller.prototype.transitionToEndpoint = function() {
  **/
 Controller.prototype.transitionToLogin = function() {
 	this.transition('login');
+};
+
+
+/**
+ * Transition to lms view.
+ * @prototype
+ * @function transitionToLogin 
+ **/
+Controller.prototype.transitionToLMS = function() {
+	moblerlog("enter controller transition to LMS");
+	this.transition('lms');
 };
 
 /**
@@ -454,4 +472,30 @@ function setButtonHeight() {
 	}
 	$(".iconButton").css("height", height + "px");
 	$(".iconButton").css("line-height", height + "px");
+}
+
+
+/**
+ * Sets the width of the forward buttons.
+ * The width should expand to the whole width of the screen. 
+ * These buttons exist in the following views:
+ * -login view,
+ * -question view,
+ * -answer view,
+ * -feedback view
+ * @prototype
+ * @function setButtonWidth
+ **/
+function setButtonWidth() {
+	moblerlog("setButtonWidth");
+	var width, window_width = $(window).width();
+	
+	//The main content area has a top margin of 55px. 
+	//The icon button can be extended below the title area if the window height is bigger than 61px (safe value, a bit bigger than 55). 
+	//In this case the button's height will be the difference between the height of the window and the 61 px.  
+
+		width = window_width-2;
+	
+	$(".forwardButton").css("width", width + "px");
+	//$(".iconButton").css("line-height", height + "px");
 }
