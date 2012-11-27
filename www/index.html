@@ -44,6 +44,7 @@
 <script type="text/javascript"
 	src="scripts/views/numericQuestionWidget.js"></script>
 <script type="text/javascript" src="scripts/views/answerView.js"></script>
+<script type="text/javascript" src="scripts/views/lmsView.js"></script>
 <script type="text/javascript" src="scripts/views/coursesListView.js"></script>
 <script type="text/javascript" src="scripts/views/feedbackView.js"></script>
 <script type="text/javascript" src="scripts/views/loginView.js"></script>
@@ -88,40 +89,67 @@
 				</div>
 			</div>
 			<div id="loginForm">
-				<form>
-					<div id="loginButton"  class="generalButton">
-						<span class="icon-enter"></span>
-					</div>
 
-					<div class="inputBorder">
-						<input class="loginInput" id="usernameInput" required="required"
-							type="text" placeholder="" />
-					</div>
-					<div class="inputBorder">
-						<input id="password" class="loginInput" name="password"
-							required="required" type="password" placeholder="" />
-					</div>
+				<ul id="loginElements">
+					<li>
+						<div class="inputBorder">
+							<input class="loginInput" id="usernameInput" required="required"
+								type="text" placeholder="" />
+						</div>
+					</li>
+					<li>
+						<div class="inputBorder">
+							<input id="password" class="loginInput" name="password"
+								required="required" type="password" placeholder="" />
+						</div>
+					</li>
+			
+					
+				</ul>
 
-				</form>
-				<div id="LMSContainer">
+		<div id="selectLMS" class="selectWidget"> <b><i> I </i> </b>select your LMS</div>
+				<!-- <div id="LMSContainer">
 					<img id="lmsImage" class="pfp" />
 					<div id="pfpLabel1" class="pfpLabelContainer"></div>
-				</div>
-
-
+				</div>-->
 				<div id="errormessage"></div>
 				<div id="warningmessage"></div>
+				
 
 			</div>
+			
+			
 		</div>
 
-		<div id="logos" class="bottom">
-		  <div id="ISNlogo"></div>
+		<!--<div id="logos" class="bottom">
+			<div id="ISNlogo"></div>
 			<div id="ETHZlogo"></div>
-			</div>
+		</div>-->
+		
+		<div id="loginButton"  class="forwardButton">
+						<span class="icon-enter"></span>
+					</div>
+			
 
 	</div>
 
+
+<div id="lmsView" class="viewblock">
+
+		<div id="lmsListHeader" class="container headerbg top">
+			<!-- <div class="left"></div> -->
+			<div id="lmsListTitle" class="title"></div>
+		</div>
+		<div id="closeLMSIcon" class="generalButton returnButton">
+			<span class="icon-cross"></span>
+		</div>
+
+		<div id="lmss" class="content">
+			<ul id="lmsList">
+			</ul>
+		</div>
+	</div>
+	
 	<div id="coursesListView" class="viewblock">
 
 		<div id="coursesListHeader" class="container headerbg top">
