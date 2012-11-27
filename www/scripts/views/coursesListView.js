@@ -1,7 +1,5 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -158,7 +156,12 @@ CoursesListView.prototype.open = function() {
  **/ 
 CoursesListView.prototype.closeDiv = closeView;
 
- //empties the course list
+
+/**
+ * empties the course list
+ * @prototype
+ * @function close
+ **/ 
 CoursesListView.prototype.close = function() {
 	moblerlog("close course list view");
 	this.active = false;
