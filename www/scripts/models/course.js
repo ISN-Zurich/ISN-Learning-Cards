@@ -41,7 +41,7 @@ under the License.
  *
  **/
 
-var DEFAULT_SYNC_TIMEOUT = 60000;
+var DEFAULT_SYNC_TIMEOUT = 6000;
 
 
 /**

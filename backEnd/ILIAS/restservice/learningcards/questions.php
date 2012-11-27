@@ -126,8 +126,8 @@ function getQuestions($courseId) {
 								//they use the OrderText variable to store the answers and the getOrderText function to retrieve them 
 								//$answerList = $assQuestion->getOrderText();
 							$answers = $assQuestion->getOrderingElements();
-							$points1 = $assQuestion->calculateReachedPoints();
-							//$points = $assQuestion->getPoints();
+							//$points1 = $assQuestion->calculateReachedPoints();
+							$points = $assQuestion->getPoints();
 							
 							$arr = array();
 							foreach ($answers as $order => $answer)
@@ -135,7 +135,7 @@ function getQuestions($courseId) {
 							{
 								array_push($arr, array(
 								"answertext" => (string) $answer,
-								"points"=> $points1,
+								"points"=> $points,
 								"order" => (int)$order+1,
 								"id" => "-1"
 								));
