@@ -291,10 +291,12 @@ li {
 
 .inputBorder {
 	padding: 10px;
-	border: 1px solid white;
+	/*border: 1px solid red;*/
+	border-right: 1px solid white;
+	border-left: 1px solid white;
 	background-color: #ddd;
 	height: 30px;
-	margin-right: 50px;
+	margin-right:0px;
 	
 }
 
@@ -328,16 +330,6 @@ li {
 
 }
 
-#loginButton {
-	float: right;
-	height: 98px;
-	line-height: 98px;
-	width: 45px;
-	font-size: 39px;
-	padding-right:4px;
-	text-align:center;
-	border: 1px solid white;
-}
 
 
 
@@ -744,4 +736,53 @@ ul#aboutData{
 	padding-bottom:10px;
 }
 
+/******NEW CLASSES********/
+.forwardButton {
+	/*width:device-width;*/
+	/*width:99%;*/
+	height: 49px;
+	vertical-align: bottom;
+	font-size: 35px;
+	background-color: #999999;
+	color: white;
+	/*margin-bottom:1px;*/
+	position: fixed;
+	bottom: 0px;
+	text-align:center;
+	line-height: 49px;
+	border: 1px solid white;
+	/*border-right:1px solid white;
+	border-left:1px solid white;*/
+	clear:both;
+	}
 
+
+#loginButton {
+	display: none;	
+}
+
+
+#loginElements {
+	display: none;	
+}
+
+.selectWidget {
+	padding: 10px;
+	/*border: 1px solid white;*/
+	border-right: 1px solid white;
+	border-left: 1px solid white;
+	background-color: #c6c6c6;
+	height: 30px;
+	margin-right:0px;	
+}
+
+ul#loginElements{
+	border:solid white 0px;
+	
+}
+
+
+#lmsView{
+	
+display:none;
+}
