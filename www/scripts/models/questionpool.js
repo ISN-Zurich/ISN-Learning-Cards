@@ -141,7 +141,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						}
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
-						/**It is triggered after the successful loading of quesitons from the server 
+						/**It is triggered after the successful loading of questions from the server 
 						 * @event questionpoolready
 						 * @param:courseID
 						 */
