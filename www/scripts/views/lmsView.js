@@ -48,6 +48,7 @@ function LMSView(controller) {
 	self.controller = controller;
 	self.active = false;
 	self.firstLoad = true;
+	this.didApologize = false;
 	
 	//handler when taping on the settings button
 	jester($('#closeLMSIcon')[0]).tap(function() {
@@ -108,7 +109,7 @@ LMSView.prototype.openDiv = openView;
 LMSView.prototype.open = function() {
 	moblerlog("open lms view");
 	this.active = true;
-	//this.showLMSList();
+	this.showLMSList();
 	this.firstLoad = false;
 	this.openDiv();
 	this.setIconSize();
@@ -161,75 +162,65 @@ LMSView.prototype.closeLMS = function() {
 
 
 /**
- * updates the course list
+ * shows the list with the available
+ * different lms's logo image and label
  * @prototype
  * @function showLMSList
  */ 
 LMSView.prototype.showLMSList = function() {
-	var self = this;
-
-//	var courseModel = self.controller.models['course'];
-//	var statisticsModel = self.controller.models['statistics'];
-	var lmsModel = self.controller.models['course'];
-	courseModel.reset();
-	$("#lmsList").empty();
-
-	moblerlog("First lms id: " + lmsModel.getId());
+	var lmsObj = this.controller.models['lms'];
+//	var length= lmsObj.getLMSData().length;
+	moblerlog("legth of lmsObj is"+length);
+//	moblerlog("lms obj is"+lmsObj.getLMSData());
 	
-	if (lmsModel.lmsList.length == 0) {
+	$("#lmsList").empty();
+	if (lmsObj.getLMSData() ){
+	var lmsData = lmsObj.getLMSData();
 		
-		var li = $("<li/>", {
-		}).appendTo("#lmsList");
+	//creation of lms list
+	var ul = $("<ul/>", {
+		"id": "lmsList"
+	}).appendTo("#lmsbody");
+	for ( var c in lmsData ) {
+		var li = $(
+				"<li/>",
+				{
+					"id" : "lms " +JSON.stringify(c)
+				}).appendTo(ul);
+		moblerlog("the first lms is" +JSON.stringify(c));
+		// create the div container within the li element
+		// that will host the image and logo of the lms's
+		var div = $("<div/>", {
+			"class" : "lmsListItem",
+		}).appendTo(li);	
 		
-		$("<div/>", {
-			"class": "text",
-			text : "there are no other lms available",
-		}).appendTo(li);
+		img = $("<img/>", {
+			"id":"lmsImage" +JSON.stringify(c),
+			"class" : "pfp left",
+			"src":lmsObj.getServerLogoImage(c)
+		}).appendTo(div);
+		span = $("<div/>", {
+			"id":"lmslabel"+JSON.stringify(c),
+			"class" : "lsmlabel",
+			"text":lmsObj.getServerLogoLabel(c)
+		}).appendTo(div);
 		
-	} else {
-		do {
-			var lmsID = lmsModel.getId();
-
-			var li = $("<li/>", {
-				"id" : "course" + courseID,
-				
-			}).appendTo("#coursesList");
-
-			
-			div = $("<div/>", {
-				"class" : "courseListIcon right"
-			}).appendTo(li);
-			
-			span = $("<div/>", {
-				"id":"courseListIcon"+ courseID,
-				"class" : (courseModel.isSynchronized(courseID) ? "icon-bars" : "icon-loading loadingRotation")
-			}).appendTo(div);
-			
-			var mydiv = $("<div/>", {
-				
-				"class" : "text marginForCourseList",
-				text : courseModel.getTitle()
-			}).appendTo(li);
-			
-			jester(mydiv[0]).tap(function(e) {
-				e.stopPropagation();
-				//e.preventDefault();
-				self.clickCourseItem($(this).parent().attr('id').substring(6));
-				
-			});
-
-
-			jester(span[0]).tap(
-					function(e) {
-						self.clickStatisticsIcon($(this).parent().parent().attr('id')
-								.substring(6));
-						e.stopPropagation();
-					});
-
-			
-		} while (courseModel.nextCourse());
-		self.setIconSize();
+	} //end of for
+	}//end of if
+	else {
+		this.didApologize = true; 
+		doApologize();
 	}
+	
+	//static list from index.html
+	
+//	$("#lms1Image").attr("src",lmsObj.getServerLogoImage());
+//	$("#lms1label").text(lmsObj.getServerLogoLabel());
+//	$("#lms2Image").attr("src",lmsObj.getServerLogoImage());
+//	$("#lms2label").text(lmsObj.getServerLogoLabel());
+//	$("#lms3Image").attr("src",lmsObj.getServerLogoImage());
+//	$("#lms3label").text(lmsObj.getServerLogoLabel());
+
 };
 
 
