@@ -292,10 +292,10 @@ LoginView.prototype.showForm = function() {
 		this.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
 	}
 	
-	var config = this.controller.models['authentication'];
-	$("#lmsImage").attr("src",config.getServerLogoImage());
-	$("#pfpLabel1").text(config.getServerLogoLabel());
-	
+//	var config = this.controller.models['authentication'];
+//	$("#lmsImage").attr("src",config.getServerLogoImage());
+//	$("#pfpLabel1").text(config.getServerLogoLabel());
+//	
 };
 
 /**
