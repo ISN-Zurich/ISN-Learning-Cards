@@ -1,6 +1,7 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -45,44 +46,44 @@ var APP_ID = "ch.ethz.isn.learningcards";
  *@default hornet
  **/
 
-var DEFAULT_SERVER = "yellowjacket";
-
-/**
- *A global property/variable that is used to store info about the different servers to which the application can be connected.
- *
- *@property URLS_TO_LMS
- *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
- **/
-var URLS_TO_LMS = {"yellowjacket":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Test Server at ISN Zurich",					
-						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
-						clientKey: ""
-					},
-					"hornet":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",
-						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
-						clientKey: ""
-					},
-					"PFP LMS":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",
-						url: "https://pfp.ethz.ch/restservice/learningcards",
-						clientKey: ""
-					},
-					"PFPTEST":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN/ETH test",
-						url: "https://pfp-test.ethz.ch/restservice/learningcards",
-						clientKey: ""
-					}
-};
-
+//var DEFAULT_SERVER = "yellowjacket";
+//
+///**
+// *A global property/variable that is used to store info about the different servers to which the application can be connected.
+// *
+// *@property URLS_TO_LMS
+// *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
+// **/
+//var URLS_TO_LMS = {"yellowjacket":  
+//					{
+//						logoImage: "resources/pfpLogo.png", 
+//						logoLabel: "Test Server at ISN Zurich",					
+//						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
+//						clientKey: ""
+//					},
+//					"hornet":  
+//					{
+//						logoImage: "resources/pfpLogo.png", 
+//						logoLabel: "Partnership for Peace LMS at ISN Zurich",
+//						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
+//						clientKey: ""
+//					},
+//					"PFP LMS":  
+//					{
+//						logoImage: "resources/pfpLogo.png", 
+//						logoLabel: "Partnership for Peace LMS at ISN Zurich",
+//						url: "https://pfp.ethz.ch/restservice/learningcards",
+//						clientKey: ""
+//					},
+//					"PFPTEST":  
+//					{
+//						logoImage: "resources/pfpLogo.png", 
+//						logoLabel: "Partnership for Peace LMS at ISN/ETH test",
+//						url: "https://pfp-test.ethz.ch/restservice/learningcards",
+//						clientKey: ""
+//					}
+//};
+//
 
 /**
  * @class ConfigurationModel 
@@ -113,7 +114,7 @@ function ConfigurationModel(controller) {
 	//proceed by selecting the data of the default server such as url, image, logo, label
 	//store in its url in local storage item
 	//register if there is no client key otherwise load data from server
-	this.selectServerData(DEFAULT_SERVER);
+	//this.selectServerData(DEFAULT_SERVER);
 
 	/**It is triggered after all statistics data are sent successful to the server. This happens when the user logsout.
 	 * @event statisticssenttoserver
@@ -653,82 +654,82 @@ ConfigurationModel.prototype.register = function() {
 
 };
 
-/**
- * Selects the data (url, image, label, clientkey) of the selected lms that are stored in a global variable.
- * It stores the image, label and url of the lms in the constructor's variables.
- * It creates a data structure for storing the client keys of the lms's in local storage. 
- * @prototype
- * @function selectServerData
- * @param {String} servername, the name of the activated server
- */
-ConfigurationModel.prototype.selectServerData = function(servername) {
-	var urlsToLMSString = localStorage.getItem("urlsToLMS");
-	var urlsToLMS;
-	//check if exists in the local storage an object with the name "urlToLMS"
-	//that stores the client keys for the various servers
-	if (urlsToLMSString && urlsToLMSString.length > 0) {
-		try {
-			urlsToLMS = JSON.parse(urlsToLMSString);
-		} catch(err) {
-			moblerlog("Error while parsing urlsToLMS: " + err);
-		}	
-	} else {
-		// create an empty data structure for our clientKeys
-		urlsToLMS ={};
-		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
-	}
-	//
-	this.urlToLMS  = URLS_TO_LMS[servername].url;
-	this.logoimage = URLS_TO_LMS[servername].logoImage;
-	this.logolabel = URLS_TO_LMS[servername].logoLabel;
-
-	var clientKey;
-	// a sanity check if the selected lms exists in the local storage
-	// in order to get its client key only in this case
-	if (urlsToLMS[servername] ) {
-		moblerlog("the current lms has already a client key");
-		// then get this client key from the local storage 
-		clientKey = urlsToLMS[servername].clientKey;
-	}
-
-	//if there is no client key for the selected server
-	if (!clientKey || clientKey.length === 0) {
-		moblerlog("registration is done");
-		//register the app with the server in order to get an app/client key
-		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-	} else {
-		//if there is an app/cliet key load data of the user from the server
-		this.loadFromServer();
-	}
-};
-
-
-/**
-* @prototype
-* @function getServerURL 
-* @return {String} urlToLMS, the Url of the activated server 
-*/
-ConfigurationModel.prototype.getServerURL = function() {
-	return this.urlToLMS;
-
-};
-
-/**
-* @prototype
-* @function getServerLogoImage 
-* @return {String} logoimage, the Url of the logo image of the activated server 
-*/
-ConfigurationModel.prototype.getServerLogoImage = function() {
-	return this.logoimage;
-};
-
-
-/**
-* @prototype
-* @function getServerLogoLabel 
-* @return {String} logolabel, the info label of the activated server
-*/
-ConfigurationModel.prototype.getServerLogoLabel = function() {
-	return this.logolabel;
-};
-
+///**
+// * Selects the data (url, image, label, clientkey) of the selected lms that are stored in a global variable.
+// * It stores the image, label and url of the lms in the constructor's variables.
+// * It creates a data structure for storing the client keys of the lms's in local storage. 
+// * @prototype
+// * @function selectServerData
+// * @param {String} servername, the name of the activated server
+// */
+//ConfigurationModel.prototype.selectServerData = function(servername) {
+//	var urlsToLMSString = localStorage.getItem("urlsToLMS");
+//	var urlsToLMS;
+//	//check if exists in the local storage an object with the name "urlToLMS"
+//	//that stores the client keys for the various servers
+//	if (urlsToLMSString && urlsToLMSString.length > 0) {
+//		try {
+//			urlsToLMS = JSON.parse(urlsToLMSString);
+//		} catch(err) {
+//			moblerlog("Error while parsing urlsToLMS: " + err);
+//		}	
+//	} else {
+//		// create an empty data structure for our clientKeys
+//		urlsToLMS ={};
+//		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
+//	}
+//	//
+//	this.urlToLMS  = URLS_TO_LMS[servername].url;
+//	this.logoimage = URLS_TO_LMS[servername].logoImage;
+//	this.logolabel = URLS_TO_LMS[servername].logoLabel;
+//
+//	var clientKey;
+//	// a sanity check if the selected lms exists in the local storage
+//	// in order to get its client key only in this case
+//	if (urlsToLMS[servername] ) {
+//		moblerlog("the current lms has already a client key");
+//		// then get this client key from the local storage 
+//		clientKey = urlsToLMS[servername].clientKey;
+//	}
+//
+//	//if there is no client key for the selected server
+//	if (!clientKey || clientKey.length === 0) {
+//		moblerlog("registration is done");
+//		//register the app with the server in order to get an app/client key
+//		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+//	} else {
+//		//if there is an app/cliet key load data of the user from the server
+//		this.loadFromServer();
+//	}
+//};
+//
+//
+///**
+//* @prototype
+//* @function getServerURL 
+//* @return {String} urlToLMS, the Url of the activated server 
+//*/
+//ConfigurationModel.prototype.getServerURL = function() {
+//	return this.urlToLMS;
+//
+//};
+//
+///**
+//* @prototype
+//* @function getServerLogoImage 
+//* @return {String} logoimage, the Url of the logo image of the activated server 
+//*/
+//ConfigurationModel.prototype.getServerLogoImage = function() {
+//	return this.logoimage;
+//};
+//
+//
+///**
+//* @prototype
+//* @function getServerLogoLabel 
+//* @return {String} logolabel, the info label of the activated server
+//*/
+//ConfigurationModel.prototype.getServerLogoLabel = function() {
+//	return this.logolabel;
+//};
+//
