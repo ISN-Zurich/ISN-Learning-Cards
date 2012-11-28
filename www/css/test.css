@@ -92,7 +92,7 @@ body {
 }
 
 .container {
-	height: 55px;
+	height: 52px;
 	width: 100%;
 	margin: 0px;
 }
@@ -101,6 +101,7 @@ body {
 	box-shadow: 0px 3px 5px -1px #ccc;
 	-webkit-box-shadow: 0px 3px 5px -1px #ccc;
 	background-color: white;
+	margin: 0px;
 }
 
 .content {
@@ -414,7 +415,7 @@ li {
 	/*width: 100%;*/
 	height:53px;
 	background-color:white;
-	border: 1px solid white;
+	border: 1px solid blue;
 	float:left;
 }
 
@@ -763,7 +764,7 @@ ul#aboutData{
 
 
 #loginElements {
-	display: none;	
+	display:none;	
 }
 
 .selectWidget {
@@ -785,4 +786,94 @@ ul#loginElements{
 #lmsView{
 	
 display:none;
+}
+
+ul#lmsList{
+	border:solid white 1px;
+	
+}
+
+
+.lmsListItem {
+	border-left: 1px solid white;
+	/*width: 53px;*/
+	height:65px;
+	/*font-size: 40px;*/
+	text-align: center;
+	vertical-align: middle;
+	clear:both;
+}
+
+.lmslabel {
+	padding-left:5px;
+	margint-top:20px;
+	border: 1px solid green;
+	/*vertical-align: center;*/
+	
+}
+
+.pfp {
+	vertical-align: middle;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 20px;
+	margin-right:10px;
+	clear: both;
+	/*width: 100%;
+	height:53px;*/
+	background-color:white;
+	border: 1px solid white;
+	float:left;
+}
+
+
+.headerbgNew {
+	box-shadow: 0px 3px 5px -1px #ccc;
+	-webkit-box-shadow: 0px 3px 5px -1px #ccc;
+	background-color: #007fb5;
+	  border: 1px solid white;
+	  border: 1px solid white;
+	  left:0px;
+}
+
+.titleNew {
+	height: 49px;
+	font-size: 22px;
+	font-weight: 900;
+	padding: 0px 0px 0px 10px;
+	color:white;
+    line-height: 58px;
+	margin-right: 52px;
+    margin-left: 0px;
+	margin-top: auto;
+    overflow: hidden;
+   /* border: 1px solid red;*/
+	
+}
+
+
+.generalButtonNew {
+	width: 49px;
+	font-size: 40px;
+	padding: 2px;
+	background-color: #007fb5;
+	color: white;
+	text-align: center;
+}
+
+.returnButtonNew {
+	height: 48px;
+	line-height: 48px;
+	border-right: 1px solid white;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	border-left: 1px solid white;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+}
+
+.topNew {
+	position: fixed;
+	top: 0px;
 }
