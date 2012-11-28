@@ -57,6 +57,7 @@ function Controller() {
 	// initialize models
 
 	this.models.authentication = new ConfigurationModel(this);
+	this.models.lms = new LMSModel(this);
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel(this);
