@@ -22,6 +22,7 @@
 	src="libs/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
 <script type="text/javascript" src="scripts/models/connectionstate.js"></script>
+<script type="text/javascript" src="scripts/models/lmsModel.js"></script>
 <script type="text/javascript" src="scripts/models/course.js"></script>
 <script type="text/javascript" src="scripts/models/questionpool.js"></script>
 <script type="text/javascript" src="scripts/models/answerModel.js"></script>
@@ -103,11 +104,14 @@
 								required="required" type="password" placeholder="" />
 						</div>
 					</li>
+			<li> 
+			<div id="selectLMS" class="selectWidget"> <b><i> I </i> </b>select your LMS</div>
 			
+			</li>
 					
 				</ul>
 
-		<div id="selectLMS" class="selectWidget"> <b><i> I </i> </b>select your LMS</div>
+		
 				<!-- <div id="LMSContainer">
 					<img id="lmsImage" class="pfp" />
 					<div id="pfpLabel1" class="pfpLabelContainer"></div>
@@ -136,17 +140,35 @@
 
 <div id="lmsView" class="viewblock">
 
-		<div id="lmsListHeader" class="container headerbg top">
+		<div id="lmsListHeader" class="container headerbgNew topNew">
 			<!-- <div class="left"></div> -->
-			<div id="lmsListTitle" class="title"></div>
+			<div id="lmsListTitle" class="titleNew"></div>
 		</div>
-		<div id="closeLMSIcon" class="generalButton returnButton">
+		<div id="closeLMSIcon" class="generalButtonNew returnButtonNew">
 			<span class="icon-cross"></span>
 		</div>
 
-		<div id="lmss" class="content">
-			<ul id="lmsList">
-			</ul>
+		<div id="lmsbody" class="content">
+		<!-- <ul id="lmsList">
+			<li id="lms1">
+			<div class="lmsListItem"> 
+			<img id="lms1Image" class="pfp left" />
+			<span id="lms1label" class="lsmlabel">   </span>
+			</div>		
+			</li>
+			<li id="lms2"> 
+			<div class="lmsListItem "> 
+			<img id="lms2Image" class="pfp left" />
+			<span id="lms2label" class="lsmlabel"> </span>
+			</div>
+			</li>
+			<li id="lms3"> 
+			<div class="lmsListItem"> 
+			<img id="lms3Image" class="pfp left" />
+			<span id="lms3label" class=""> </span>
+			</div>
+			</li>		
+			</ul> -->
 		</div>
 	</div>
 	
