@@ -738,8 +738,7 @@ ul#aboutData{
 }
 
 /******NEW CLASSES********/
-.forwardButton {
-	/*width:device-width;*/
+.forwardButton { /*width:device-width;*/
 	/*width:99%;*/
 	height: 49px;
 	vertical-align: bottom;
@@ -749,32 +748,33 @@ ul#aboutData{
 	/*margin-bottom:1px;*/
 	position: fixed;
 	bottom: 0px;
-	text-align:center;
+	text-align: center;
 	line-height: 49px;
 	border: 1px solid white;
 	/*border-right:1px solid white;
 	border-left:1px solid white;*/
-	clear:both;
-	}
-
+	clear: both;
+}
 
 #loginButton {
-	display: none;	
+	
 }
 
 
 #loginElements {
-	display:none;	
+	
+	
 }
 
 .selectWidget {
-	padding: 10px;
+	padding: 5px;
 	/*border: 1px solid white;*/
 	border-right: 1px solid white;
 	border-left: 1px solid white;
 	background-color: #c6c6c6;
 	height: 30px;
 	margin-right:0px;	
+	height:65px;
 }
 
 ul#loginElements{
@@ -805,11 +805,15 @@ ul#lmsList{
 }
 
 .lmslabel {
-	padding-left:5px;
-	margint-top:20px;
+	/*padding:5px;*/
+	/*margin-top:20px;*/
 	border: 1px solid green;
 	/*vertical-align: center;*/
-	
+	height:65px;
+	line-height:65px;
+	text-align:center;
+	/* try this temporarily */
+	vertical-align: bottom;
 }
 
 .pfp {

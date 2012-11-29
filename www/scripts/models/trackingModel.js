@@ -86,21 +86,21 @@ TrackingModel.prototype.storeTrackData = function(time, type){
 TrackingModel.prototype.initDB = function() {
 	var self = this;
 	this.db
-			.transaction(function(transaction) {
-				transaction
+	.transaction(function(transaction) {
+		transaction
+		.executeSql(
+				'CREATE TABLE IF NOT EXISTS tracking (time_stamp INTEGER NOT NULL PRIMARY KEY, event_type TEXT);',
+				[], function() {
+					self.db
+					.transaction(function(transaction) {
+						transaction
 						.executeSql(
-								'CREATE TABLE IF NOT EXISTS tracking (time_stamp INTEGER NOT NULL PRIMARY KEY, event_type TEXT);',
-								[], function() {
-									self.db
-									.transaction(function(transaction) {
-										transaction
-												.executeSql(
-														'DROP TABLE trackings',
-														[]);});
-									
-								});
-				
-			});
+								'DROP TABLE trackings',
+								[]);});
+
+				});
+
+	});
 };
 
 
@@ -113,71 +113,72 @@ TrackingModel.prototype.initDB = function() {
  
 TrackingModel.prototype.sendToServer = function(){
 	var self = this;
+	if (self.controller.getLoginState() ) {
+		var sessionkey = self.controller.models['authentication'].getSessionKey();
+		var url = self.controller.models['authentication'].urlToLMS + '/tracking.php';
+		moblerlog("url tracking: " + url);
 
-	var sessionkey = self.controller.models['authentication'].getSessionKey();
-	var url = self.controller.models['authentication'].urlToLMS + '/tracking.php';
-	moblerlog("url tracking: " + url);
-	
-	this.db
-	.transaction(function(transaction) {
-		transaction
-				.executeSql('SELECT * FROM tracking', [], function(t,r) {sendTracking(t,r);});
-	});
-
-	
-	function sendTracking(transaction, results) {
-		var tracking = [];
-		var i, uuid = "";
-		if (localStorage.getItem("pendingTracking")) {
-			var pendingTracking= {};
-			try {
-				pendingTracking = JSON.parse(localStorage.getItem("pendingTracking"));
-			} catch (err) {
-				moblerlog("error! while loading pending tracking");
-			}
-			
-			sessionkey = pendingTracking.sessionkey;
-			uuid = pendingTracking.uuid;
-			tracking = pendingTracking.tracking;
-		}else {
-			moblerlog("results length: " + results.rows.length);
-			for ( i = 0; i < results.rows.length; i++) {
-				row = results.rows.item(i);
-				tracking.push(row);
-                moblerlog("sending " + i + ": " + JSON.stringify(row));
-			}
-			uuid = device.uuid;
-		}
-		
-		moblerlog("count tracking=" + tracking.length);
-		var trackingString = JSON.stringify(tracking);
-		
-		//processData has to be set to false!
-		$.ajax({
-			url : url,
-			type : 'PUT',
-			data : trackingString,
-			processData: false,
-			success : function() {
-				moblerlog("tracking data successfully send to the server");
-				localStorage.removeItem("pendingTracking");
-				self.lastSendToServer = (new Date()).getTime();
-			},
-			error : function(xhr, e, errorString) {
-				moblerlog("Error while sending tracking data to server " + errorString);
-				var trackingToStore = {
-					sessionkey : sessionkey,
-					uuid : device.uuid,
-					tracking : tracking
-				};
-				localStorage.setItem("pendingTracking", JSON.stringify(trackingToStore));
-			},
-			beforeSend : setHeader
+		this.db
+		.transaction(function(transaction) {
+			transaction
+			.executeSql('SELECT * FROM tracking', [], function(t,r) {sendTracking(t,r);});
 		});
 
-		function setHeader(xhr) {
-			xhr.setRequestHeader('sessionkey', sessionkey);
-			xhr.setRequestHeader('uuid', device.uuid);
-		}
-	}	
+
+		function sendTracking(transaction, results) {
+			var tracking = [];
+			var i, uuid = "";
+			if (localStorage.getItem("pendingTracking")) {
+				var pendingTracking= {};
+				try {
+					pendingTracking = JSON.parse(localStorage.getItem("pendingTracking"));
+				} catch (err) {
+					moblerlog("error! while loading pending tracking");
+				}
+
+				sessionkey = pendingTracking.sessionkey;
+				uuid = pendingTracking.uuid;
+				tracking = pendingTracking.tracking;
+			}else {
+				moblerlog("results length: " + results.rows.length);
+				for ( i = 0; i < results.rows.length; i++) {
+					row = results.rows.item(i);
+					tracking.push(row);
+					moblerlog("sending " + i + ": " + JSON.stringify(row));
+				}
+				uuid = device.uuid;
+			}
+
+			moblerlog("count tracking=" + tracking.length);
+			var trackingString = JSON.stringify(tracking);
+
+			//processData has to be set to false!
+			$.ajax({
+				url : url,
+				type : 'PUT',
+				data : trackingString,
+				processData: false,
+				success : function() {
+					moblerlog("tracking data successfully send to the server");
+					localStorage.removeItem("pendingTracking");
+					self.lastSendToServer = (new Date()).getTime();
+				},
+				error : function(xhr, e, errorString) {
+					moblerlog("Error while sending tracking data to server " + errorString);
+					var trackingToStore = {
+							sessionkey : sessionkey,
+							uuid : device.uuid,
+							tracking : tracking
+					};
+					localStorage.setItem("pendingTracking", JSON.stringify(trackingToStore));
+				},
+				beforeSend : setHeader
+			});
+
+			function setHeader(xhr) {
+				xhr.setRequestHeader('sessionkey', sessionkey);
+				xhr.setRequestHeader('uuid', device.uuid);
+			}
+		}	
+	}
 };

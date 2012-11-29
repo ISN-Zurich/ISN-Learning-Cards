@@ -38,13 +38,7 @@ under the License.
 
 var APP_ID = "ch.ethz.isn.learningcards";
 
-/**
- *A global property/variable that is used to set the default server with which the application will be connected
- *in order to exchange data.
- *
- *@property DEFAULT_SERVER
- *@default hornet
- **/
+
 
 //var DEFAULT_SERVER = "yellowjacket";
 //
@@ -110,6 +104,13 @@ function ConfigurationModel(controller) {
 		
 	// load data from the local storage if any
 	this.loadData();
+	
+	
+	//proceed by selecting the data of the default server such as url, image, logo, label
+	//store in its url in local storage item
+	//register if there is no client key otherwise load data from server
+	//self.selectServerData(DEFAULT_SERVER);
+	
 	
 	//proceed by selecting the data of the default server such as url, image, logo, label
 	//store in its url in local storage item
@@ -572,87 +573,87 @@ ConfigurationModel.prototype.getSessionKey = function() {
 
 
 
-/**
-* Sends the registration request (appId ,device id) to the server and waiting to get back the app key 
-* It is called whenever the client(app) key is empty
-* @prototype
-* @function register 
-*/
-ConfigurationModel.prototype.register = function() {
-	var self = this;
-	moblerlog("enters regsitration");
-	//phone gap property to get the id of a device
-	var deviceID = device.uuid;
-
-	$
-			.ajax({
-				url : self.urlToLMS + '/registration.php',
-				type : 'GET',
-				dataType : 'json',
-				success : appRegistration,
-				// if no registration is done, then use the request parameter
-				// to display the error that created the problem in the console
-				error : function(request) {
-                  moblerlog("ERROR status code is : " + request.status);
-                  moblerlog("ERROR returned data is: "+ request.responseText);
-                  moblerlog("Error while registering the app with the backend");
-				},
-				//during the registration we send via headers the app id and the device id
-				beforeSend : setHeaders
-			});
-
-	function setHeaders(xhr) {
-		xhr.setRequestHeader('AppID', APP_ID);
-		xhr.setRequestHeader('UUID', deviceID);
-		moblerlog("register uuid:" + deviceID);
-	}
-
-	
-	/**
-	 * In case of a successful registration we store in the local storage the client/app key
-	 * that we received from the server. Additionally we store locally 
-	 * the language for the interface of the app.
-	 * @prototype
-	 * @function appRegistration
-	 * @param {String} data, the data exchanged with the server during the registration
-	 */
-	function appRegistration(data) {
-		// if we don't know a user's language we try to use the phone's language.
-        language = navigator.language.split("-");
-        language_root = (language[0]);
-
-		moblerlog("in app registration");
-		// load server data from local storage
-		var urlsToLMS;
-		var urlsToLMSString = localStorage.getItem("urlsToLMS");
-		moblerlog("urlToLMSString is"+urlsToLMSString);
-		try {
-			urlsToLMS = JSON.parse(urlsToLMSString);
-			moblerlog("urls to lms parsed");
-		} catch(err) {
-			moblerlog("Error while parsing urlsToLMS: " + err);
-		}
-	
-		//create an empty structure for the client keys of the different servers
-		urlsToLMS[DEFAULT_SERVER] = {};
-		
-		// add client key for current lms
-		moblerlog("Received client key: " + data.ClientKey);
-		urlsToLMS[DEFAULT_SERVER].clientKey = data.ClientKey;
-		// store server data in local storage
-		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
-		// store in local storage the app Key or else client key
-		// that we received during the registration from the server
-		self.configuration.appAuthenticationKey = data.ClientKey;
-		// store in local storage the default language for the interface logic of the app
-		// if no default language is set then use the mobile device's language
-		self.configuration.defaultLanguage = data.defaultLanguage || language_root;
-		self.storeData();
-		// we can now safely load the user data (learner information, synchronization state)
-		self.loadFromServer();
-	}
-
-};
+///**
+//* Sends the registration request (appId ,device id) to the server and waiting to get back the app key 
+//* It is called whenever the client(app) key is empty
+//* @prototype
+//* @function register 
+//*/
+//ConfigurationModel.prototype.register = function() {
+//	var self = this;
+//	moblerlog("enters regsitration");
+//	//phone gap property to get the id of a device
+//	var deviceID = device.uuid;
+//
+//	$
+//			.ajax({
+//				url : self.urlToLMS + '/registration.php',
+//				type : 'GET',
+//				dataType : 'json',
+//				success : appRegistration,
+//				// if no registration is done, then use the request parameter
+//				// to display the error that created the problem in the console
+//				error : function(request) {
+//                  moblerlog("ERROR status code is : " + request.status);
+//                  moblerlog("ERROR returned data is: "+ request.responseText);
+//                  moblerlog("Error while registering the app with the backend");
+//				},
+//				//during the registration we send via headers the app id and the device id
+//				beforeSend : setHeaders
+//			});
+//
+//	function setHeaders(xhr) {
+//		xhr.setRequestHeader('AppID', APP_ID);
+//		xhr.setRequestHeader('UUID', deviceID);
+//		moblerlog("register uuid:" + deviceID);
+//	}
+//
+//	
+//	/**
+//	 * In case of a successful registration we store in the local storage the client/app key
+//	 * that we received from the server. Additionally we store locally 
+//	 * the language for the interface of the app.
+//	 * @prototype
+//	 * @function appRegistration
+//	 * @param {String} data, the data exchanged with the server during the registration
+//	 */
+//	function appRegistration(data) {
+//		// if we don't know a user's language we try to use the phone's language.
+//        language = navigator.language.split("-");
+//        language_root = (language[0]);
+//
+//		moblerlog("in app registration");
+//		// load server data from local storage
+//		var urlsToLMS;
+//		var urlsToLMSString = localStorage.getItem("urlsToLMS");
+//		moblerlog("urlToLMSString is"+urlsToLMSString);
+//		try {
+//			urlsToLMS = JSON.parse(urlsToLMSString);
+//			moblerlog("urls to lms parsed");
+//		} catch(err) {
+//			moblerlog("Error while parsing urlsToLMS: " + err);
+//		}
+//	
+//		//create an empty structure for the client keys of the different servers
+//		urlsToLMS[DEFAULT_SERVER] = {};
+//		
+//		// add client key for current lms
+//		moblerlog("Received client key: " + data.ClientKey);
+//		urlsToLMS[DEFAULT_SERVER].clientKey = data.ClientKey;
+//		// store server data in local storage
+//		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
+//		// store in local storage the app Key or else client key
+//		// that we received during the registration from the server
+//		self.configuration.appAuthenticationKey = data.ClientKey;
+//		// store in local storage the default language for the interface logic of the app
+//		// if no default language is set then use the mobile device's language
+//		self.configuration.defaultLanguage = data.defaultLanguage || language_root;
+//		self.storeData();
+//		// we can now safely load the user data (learner information, synchronization state)
+//		self.loadFromServer();
+//	}
+//
+//};
 
 ///**
 // * Selects the data (url, image, label, clientkey) of the selected lms that are stored in a global variable.
@@ -679,9 +680,9 @@ ConfigurationModel.prototype.register = function() {
 //		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
 //	}
 //	//
-//	this.urlToLMS  = URLS_TO_LMS[servername].url;
-//	this.logoimage = URLS_TO_LMS[servername].logoImage;
-//	this.logolabel = URLS_TO_LMS[servername].logoLabel;
+//	this.urlToLMS  = findServerInfo(servername).url;
+//	this.logoimage = findServerInfo(servername).logoImage;
+//	this.logolabel = findServerInfo(servername).logoLabel;
 //
 //	var clientKey;
 //	// a sanity check if the selected lms exists in the local storage
@@ -702,34 +703,6 @@ ConfigurationModel.prototype.register = function() {
 //		this.loadFromServer();
 //	}
 //};
-//
-//
-///**
-//* @prototype
-//* @function getServerURL 
-//* @return {String} urlToLMS, the Url of the activated server 
-//*/
-//ConfigurationModel.prototype.getServerURL = function() {
-//	return this.urlToLMS;
-//
-//};
-//
-///**
-//* @prototype
-//* @function getServerLogoImage 
-//* @return {String} logoimage, the Url of the logo image of the activated server 
-//*/
-//ConfigurationModel.prototype.getServerLogoImage = function() {
-//	return this.logoimage;
-//};
-//
-//
-///**
-//* @prototype
-//* @function getServerLogoLabel 
-//* @return {String} logolabel, the info label of the activated server
-//*/
-//ConfigurationModel.prototype.getServerLogoLabel = function() {
-//	return this.logolabel;
-//};
-//
+
+
+

@@ -93,7 +93,8 @@ SplashScreen.prototype.closeDiv = closeView;
  * @function close
  **/
 SplashScreen.prototype.close = function() {
-     $("#loading").remove();
+	moblerlog("SplashScreen: close me!");
+    $("#loading").remove();
     if( this.controller.models["authentication"].isLoggedIn() ) {
         this.closeDiv();
     }

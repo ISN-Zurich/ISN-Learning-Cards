@@ -1,7 +1,5 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -29,56 +27,6 @@ under the License.
 /*jslint vars: true, sloppy: true */
 
 
-
-/**
- *A global property/variable that is used to set the default server with which the application will be connected
- *in order to exchange data.
- *
- *@property DEFAULT_SERVER
- *@default hornet
- **/
-
-var DEFAULT_SERVER = "yellowjacket";
-
-/**
- *A global property/variable that is used to store info about the different servers to which the application can be connected.
- *
- *@property URLS_TO_LMS
- *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
- **/
-var URLS_TO_LMS = {"yellowjacket":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Test Server at ISN Zurich",					
-						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
-						debug:"1",
-						clientKey: ""
-					},
-					"hornet":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",
-						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
-						debug:"0",
-						clientKey: ""
-					},
-					"PFP LMS":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",
-						url: "https://pfp.ethz.ch/restservice/learningcards",
-						debug:"0",
-						clientKey: ""
-					},
-					"PFPTEST":  
-					{
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN/ETH test",
-						url: "https://pfp-test.ethz.ch/restservice/learningcards",
-						debug:"1",
-						clientKey: ""
-					}
-};
 
 
 /**
@@ -111,11 +59,28 @@ function LMSModel(controller) {
 	//proceed by selecting the data of the default server such as url, image, logo, label
 	//store in its url in local storage item
 	//register if there is no client key otherwise load data from server
-	self.selectServerData(DEFAULT_SERVER);
+	//self.selectServerData(DEFAULT_SERVER);
 	
 	// load data from the local storage if any
 	//self.loadData();
+	self.setActiveLMS(DEFAULT_SERVER);
 }
+
+/**
+ * TODO: DOCUMENT findServerInfo
+ */
+LMSModel.prototype.findServerInfo = function(servername) {
+	var serverinfo = {}, i;
+	
+	for ( i=0; i < URLS_TO_LMS.length; i++ ) {
+		if (URLS_TO_LMS[i].servername === servername ){
+			serverinfo =  URLS_TO_LMS[i];
+		}	
+	}
+	
+	return serverinfo;
+};
+
 
 /**
  * Loads the data from the local storage (key = "configuration") therefore the
@@ -152,12 +117,7 @@ LMSModel.prototype.loadData = function() {
  * @return {Array} answer, the answer of the current active question in an array format which consists of answer items
  */
 LMSModel.prototype.setLMSData = function() {
-     var x = URLS_TO_LMS;
-     //var y=JSON.stringify(x);
-     //var y=JSON.parse(x);
-     this.lmsDataString=x;
-     moblerlog("set lms returns:"+this.lmsDataString);
-	
+   // this is history ;-)
 };
 
 
@@ -168,7 +128,7 @@ LMSModel.prototype.setLMSData = function() {
  * @return {Array} answer, the answer of the current active question in an array format which consists of answer items
  */
 LMSModel.prototype.getLMSData = function() {
-	return this.lmsDataString;
+	return URLS_TO_LMS;
 };
 
 
@@ -183,6 +143,8 @@ LMSModel.prototype.getLMSData = function() {
  */
 LMSModel.prototype.selectServerData = function(servername) {
 	var self=this;
+	var serverinfo = this.findServerInfo(servername);
+	
 	var urlsToLMSString = localStorage.getItem("urlsToLMS");
 	var urlsToLMS;
 	//check if exists in the local storage an object with the name "urlToLMS"
@@ -198,10 +160,10 @@ LMSModel.prototype.selectServerData = function(servername) {
 		urlsToLMS ={};
 		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
 	}
-	//
-	this.urlToLMS  = URLS_TO_LMS[servername].url;
-	this.logoimage = URLS_TO_LMS[servername].logoImage;
-	this.logolabel = URLS_TO_LMS[servername].logoLabel;
+	
+	this.urlToLMS  = serverinfo.url;
+	this.logoimage = serverinfo.logoImage;
+	this.logolabel = serverinfo.logoLabel;
 
 	var clientKey;
 	// a sanity check if the selected lms exists in the local storage
@@ -223,45 +185,14 @@ LMSModel.prototype.selectServerData = function(servername) {
 	}
 };
 
-
-
-
-
-/**
-* sets the url of the server to the 
-* models variable
-* @prototype
-* @function setServerURL 
-* @param {String} servername, the name of the selected lms 
-*/
-LMSModel.prototype.setServerURL = function(servername) {	
-this.urlLMS = URLS_TO_LMS[servername].url;	
-};
-
-
 /**
 * @prototype
 * @function getServerURL 
 * @return {String} urlToLMS, the Url of the activated server 
 */
-LMSModel.prototype.getServerURL = function() {
-	return this.urlToLMS;
+LMSModel.prototype.getServerURL = function(servername) {
+	return this.findServerInfo(servername).url;
 };
-
-
-
-/**
-* sets the url of the image of the selected server to the 
-* models variable
-* @prototype
-* @function setServerLogoImage 
-* @param {String} servername, the name of the selected lms 
-* 
-*/
-LMSModel.prototype.setServerLogoImage = function(servername) {
-this.logoimage = URLS_TO_LMS[servername].logoImage;
-};
-
 
 /**
 * @prototype
@@ -270,22 +201,8 @@ this.logoimage = URLS_TO_LMS[servername].logoImage;
 */
 LMSModel.prototype.getServerLogoImage = function(servername) {
 	//return this.logoimage;
-	return  URLS_TO_LMS[servername].logoImage;
+	return  this.findServerInfo(servername).logoImage;
 };
-
-
-
-
-/**sets the label of the selected server to the 
-* models variable
-* @prototype
-* @function setServerLogoLabel 
-* @param {String} servername, the name of the selected lms 
-*/
-LMSModel.prototype.setServerLogoLabel = function(servername) {
-this.logolabel = URLS_TO_LMS[servername].logoLabel;	
-};
-
 
 
 /**
@@ -295,9 +212,187 @@ this.logolabel = URLS_TO_LMS[servername].logoLabel;
 */
 LMSModel.prototype.getServerLogoLabel = function(servername) {
 	//return this.logolabel;
-	return URLS_TO_LMS[servername].logoLabel;	
+	return this.findServerInfo(servername).logoLabel;	
+};
+
+// TODO: Documentation
+LMSModel.prototype.getActiveServerInfo = function(servername) {
+	this.activeServerInfo = this.findServerInfo(servername);
+	//TODO:	 we need to register if we have no key yet
+	// this.activeClientKey = "";
+    if (!this.activeServerInfo.clientKey || this.activeServerInfo.clientKey.length === 0){
+		moblerlog("registration is should be done");
+		//register the app with the server in order to get an app/client key
+		this.register();  //we will get a client key
+		//this.activeServerInfo.clientKey =data.ClientKey;
+	}
+	
+	return this.activeServerInfo;
+};
+
+LMSModel.prototype.getActiveServerURL = function() {
+	return this.activeServerInfo.url;
+};
+
+LMSModel.prototype.getActiveServerClientKey = function(servername) {
+	
+	var urlsToLMSString = localStorage.getItem("urlsToLMS");
+	var urlsToLMS;
+	//check if exists in the local storage an object with the name "urlToLMS"
+	//that stores the client keys for the various servers
+	if (urlsToLMSString && urlsToLMSString.length > 0) {
+		try {
+			urlsToLMS = JSON.parse(urlsToLMSString);
+		} catch(err) {
+			moblerlog("Error while parsing urlsToLMS: " + err);
+		}	
+	} else {
+		// create an empty data structure for our clientKeys
+		urlsToLMS ={};
+		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
+	}
+	
+	var clientKey;
+	//a sanity check if the selected lms exists in the local storage
+	//in order to get its client key only in this case
+	if (urlsToLMS[servername] ) {
+		moblerlog("the current lms has already a client key");
+		//then get this client key from the local storage 
+		clientKey = urlsToLMS[servername].clientKey;
+	}
+	
+	return this.activeServerInfo.clientKey;
+	return this.activeClientKey;
 };
 
 
+/**
+* Sends the registration request (appId ,device id) to the server and waiting to get back the app key 
+* It is called whenever the client(app) key is empty
+* @prototype
+* @function register 
+*/
+LMSModel.prototype.register = function() {
+	var self = this;
+	moblerlog("enters regsitration");
+	//phone gap property to get the id of a device
+	var deviceID = device.uuid;
 
+	$
+			.ajax({
+				url : self.urlToLMS + '/registration.php',
+				type : 'GET',
+				dataType : 'json',
+				success : appRegistration,
+				// if no registration is done, then use the request parameter
+				// to display the error that created the problem in the console
+				error : function(request) {
+                  moblerlog("ERROR status code is : " + request.status);
+                  moblerlog("ERROR returned data is: "+ request.responseText);
+                  moblerlog("Error while registering the app with the backend");
+				},
+				//during the registration we send via headers the app id and the device id
+				beforeSend : setHeaders
+			});
 
+	function setHeaders(xhr) {
+		xhr.setRequestHeader('AppID', APP_ID);
+		xhr.setRequestHeader('UUID', deviceID);
+		moblerlog("register uuid:" + deviceID);
+	}
+
+	
+	/**
+	 * In case of a successful registration we store in the local storage the client/app key
+	 * that we received from the server. Additionally we store locally 
+	 * the language for the interface of the app.
+	 * @prototype
+	 * @function appRegistration
+	 * @param {String} data, the data exchanged with the server during the registration
+	 */
+	function appRegistration(data) {
+		// if we don't know a user's language we try to use the phone's language.
+        language = navigator.language.split("-");
+        language_root = (language[0]);
+
+		moblerlog("in app registration");
+		// load server data from local storage
+		var urlsToLMS;
+		var urlsToLMSString = localStorage.getItem("urlsToLMS");
+		moblerlog("urlToLMSString is"+urlsToLMSString);
+		try {
+			urlsToLMS = JSON.parse(urlsToLMSString);
+			moblerlog("urls to lms parsed");
+		} catch(err) {
+			moblerlog("Error while parsing urlsToLMS: " + err);
+		}
+	
+		//create an empty structure for the client keys of the different servers
+		urlsToLMS[DEFAULT_SERVER] = {};
+		
+		// add client key for current lms
+		moblerlog("Received client key: " + data.ClientKey);
+		urlsToLMS[DEFAULT_SERVER].clientKey = data.ClientKey;
+		// store server data in local storage
+		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
+		// store in local storage the app Key or else client key
+		// that we received during the registration from the server
+		self.configuration.appAuthenticationKey = data.ClientKey;
+		// store in local storage the default language for the interface logic of the app
+		// if no default language is set then use the mobile device's language
+		self.configuration.defaultLanguage = data.defaultLanguage || language_root;
+		self.storeData();
+		// we can now safely load the user data (learner information, synchronization state)
+		self.loadFromServer();
+	}
+
+};
+
+/**
+ * Selects the data (url, image, label, clientkey) of the selected lms that are stored in a global variable.
+ * It stores the image, label and url of the lms in the constructor's variables.
+ * It creates a data structure for storing the client keys of the lms's in local storage. 
+ * @prototype
+ * @function selectServerData
+ * @param {String} servername, the name of the activated server
+ */
+LMSModel.prototype.selectServerData = function(servername) {
+	var urlsToLMSString = localStorage.getItem("urlsToLMS");
+	var urlsToLMS;
+	//check if exists in the local storage an object with the name "urlToLMS"
+	//that stores the client keys for the various servers
+	if (urlsToLMSString && urlsToLMSString.length > 0) {
+		try {
+			urlsToLMS = JSON.parse(urlsToLMSString);
+		} catch(err) {
+			moblerlog("Error while parsing urlsToLMS: " + err);
+		}	
+	} else {
+		// create an empty data structure for our clientKeys
+		urlsToLMS ={};
+		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
+	}
+	//
+	this.urlToLMS  = findServerInfo(servername).url;
+	this.logoimage = findServerInfo(servername).logoImage;
+	this.logolabel = findServerInfo(servername).logoLabel;
+
+	var clientKey;
+	// a sanity check if the selected lms exists in the local storage
+	// in order to get its client key only in this case
+	if (urlsToLMS[servername] ) {
+		moblerlog("the current lms has already a client key");
+		// then get this client key from the local storage 
+		clientKey = urlsToLMS[servername].clientKey;
+	}
+
+	//if there is no client key for the selected server
+	if (!clientKey || clientKey.length === 0) {
+		moblerlog("registration is done");
+		//register the app with the server in order to get an app/client key
+		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+	} else {
+		//if there is an app/cliet key load data of the user from the server
+		this.loadFromServer();
+	}
+};

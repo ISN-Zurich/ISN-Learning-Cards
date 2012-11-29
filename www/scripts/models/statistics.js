@@ -458,6 +458,7 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  * */
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
+	if (self.controller.getLoginState() ) {
 	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	moblerlog("url statistics: " + url);
 		// select all statistics data from the local table "statistics"
@@ -536,7 +537,7 @@ StatisticsModel.prototype.sendToServer = function() {
                }
 		});
 	}
-
+	}
 };
 
 /**Initialization of sub models

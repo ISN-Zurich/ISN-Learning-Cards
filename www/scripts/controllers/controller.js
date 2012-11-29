@@ -45,6 +45,7 @@ under the License.
 function Controller() {
 	var self = this;
 	moblerlog("start controller");
+	self.appLoaded = false;
 	var startTime= new Date().getTime();
 
 	$.ajaxSetup({
@@ -160,6 +161,49 @@ function Controller() {
 		self.transition('statisticsView');
 	});
 
+	/**
+	 * This event is triggered  when statistics are sent to the server during
+	 * a)loggout b)synchronization.  
+	 * When are not LOGGED IN (=logged out) and have open the login form and listen to this
+	 * event, we want to stay in the login form.
+	 * @event statisticssenttoserver
+	 * @param a callback function that loads the login form
+	 */
+	$(document).bind("statisticssenttoserver", function() {
+		if ( !self.getLoginState() ){
+			moblerlog("stays in login view, despite the synchronization updates");
+			self.transitionToLogin();
+		}
+	});
+
+	/**
+	 * This event is triggered  when questions are loaded from the server. It is
+	 * binded also in courses list view and we want to avoid loading that view.
+	 * For that reason we check IF WE ARE  not LOGGED IN(=logged out) in order to show the login form.
+	 * @event questionpoolready
+	 * @param a callback function that loads the login form
+	 */
+	$(document).bind("questionpoolready", function() {
+		if ( !self.getLoginState() ){
+			moblerlog("stays in login view, despite the synchronization updates");
+			self.transitionToLogin();
+		}
+	});
+
+	/**
+	 * This event is triggered  when courses are loaded from the server. It is
+	 * binded also in courses list view and we want to avoid loading of that view.
+	 * For that reason we check IF WE ARE  not LOGGED IN (=logged out)in order to show the login form.
+	 * @event courselistupdate
+	 * @param a callback function that loads the login form
+	 */
+	$(document).bind("courselistupdate", function() {
+		if ( !self.getLoginState() ){
+			moblerlog("stays in login view, despite the synchronization updates");
+			self.transitionToLogin();
+		}
+	});		
+
 		
 	// check if 3000 ms have passed
 	// if not we wait until 3000 ms have passed
@@ -264,13 +308,15 @@ Controller.prototype.transition = function(viewname) {
  **/
 Controller.prototype.transitionToEndpoint = function() {
 	moblerlog('initialize endpoint');
-	if (this.models['authentication'].isLoggedIn()) {
-		moblerlog("is loggedIn");
-		this.transition('coursesList');
-	} else {
-		moblerlog("transitionToEndpoint: is not loggedIn");
-		this.transition('login');
-	}
+	this.appLoaded = true;
+	this.transitionToAuthArea("coursesList");
+//	if (this.models['authentication'].isLoggedIn()) {
+//		moblerlog("is loggedIn");
+//		this.transition('coursesList');
+//	} else {
+//		moblerlog("transitionToEndpoint: is not loggedIn");
+//		this.transition('login');
+//	}
 };
 
 
@@ -281,7 +327,9 @@ Controller.prototype.transitionToEndpoint = function() {
  * @function transitionToLogin 
  **/
 Controller.prototype.transitionToLogin = function() {
-	this.transition('login');
+	if ( this.appLoaded ) {
+		this.transition('login');
+	}
 };
 
 
@@ -317,7 +365,7 @@ Controller.prototype.transitionToAuthArea = function(viewname) {
 		this.transition(viewname);
 	}
 	else {
-		this.transition("login");
+		this.transitionToLogin();
 	}
 };
 
@@ -396,7 +444,7 @@ Controller.prototype.transitionToStatistics = function(courseID) {
 		}
 	}
 	else {
-		this.transition("login");
+		this.transitionToLogin();
 	}
 };
 
@@ -425,6 +473,16 @@ Controller.prototype.transitionToAbout = function() {
  **/
 Controller.prototype.getLoginState = function() {
 	return this.models["authentication"].isLoggedIn();
+};
+
+
+/**
+ * @prototype
+ * @function getLoginState
+ * @return {boolean} true if the user is logged in (he has an authentication key stored in the local storage) and false if not.
+ **/
+Controller.prototype.getActiveClientKey = function() {
+	return this.models["lms"].activeClientKey;
 };
 
 

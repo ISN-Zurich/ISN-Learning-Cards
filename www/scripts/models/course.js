@@ -162,8 +162,9 @@ CourseModel.prototype.loadFromServer = function() {
 	var self = this;
 	var syncStateCache = [];
 	self.checkForTimeOut();
-	if (self.controller.models['authentication'].isLoggedIn()
+	if (self.controller.getLoginState()
 			&& !self.syncState) {
+		// var sessionkey = self.controller.getSessionKey();
 		var sessionKey = self.controller.models['authentication']
 				.getSessionKey();
 
@@ -175,6 +176,9 @@ CourseModel.prototype.loadFromServer = function() {
 			}
 		}
 
+		var serverURL = self.controller.getServerURL();
+		
+		
 		$
 				.ajax({
 					url : self.controller.models['authentication'].urlToLMS + '/courses.php',

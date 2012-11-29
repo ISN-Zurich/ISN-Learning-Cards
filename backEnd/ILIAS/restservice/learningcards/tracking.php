@@ -43,7 +43,7 @@ require_once 'Services/Database/classes/class.ilDB.php';
 
 global $DEBUG, $class_for_logging;
 
-//$DEBUG = 1;
+$DEBUG = 1;
 
 //global $DEBUG;
 //$DEBUG = 1;
@@ -68,7 +68,8 @@ switch($request_method) {
 			$uuid = get_uuid_from_headers();
 			setTracking($userId, $uuid, json_decode($tracking, true));
 			logging("end of PUT");
-		}
+			//echo($trackingT);
+			}
 		break;
 	case "GET":
 	case "DELETE":

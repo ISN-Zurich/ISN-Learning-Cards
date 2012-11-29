@@ -74,51 +74,6 @@ function LoginView(controller) {
 		self.selectLMS();
 	});
 	
-	/**
-	 * This event is triggered  when statistics are sent to the server during
-	 * a)loggout b)synchronization.  
-	 * When are not LOGGED IN (=logged out) and have open the login form and listen to this
-	 * event, we want to stay in the login form.
-	 * @event statisticssenttoserver
-	 * @param a callback function that loads the login form
-	 */
-	$(document).bind("statisticssenttoserver", function() {
-		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
-		{
-			moblerlog("stays in login view, despite the synchronization updates");
-			self.showForm();
-		}
-		});
-	
-	/**
-	 * This event is triggered  when questions are loaded from the server. It is
-	 * binded also in courses list view and we want to avoid loading that view.
-	 * For that reason we check IF WE ARE  not LOGGED IN(=logged out) in order to show the login form.
-	 * @event questionpoolready
-	 * @param a callback function that loads the login form
-	 */
-	$(document).bind("questionpoolready", function() {
-		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
-		{
-			moblerlog("stays in login view, despite the synchronization updates");
-			self.showForm();
-		}
-	});
-		
-	/**
-	 * This event is triggered  when courses are loaded from the server. It is
-	 * binded also in courses list view and we want to avoid loading of that view.
-	 * For that reason we check IF WE ARE  not LOGGED IN (=logged out)in order to show the login form.
-	 * @event courselistupdate
-	 * @param a callback function that loads the login form
-	 */
-	$(document).bind("courselistupdate", function() {
-		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedOut"))
-		{
-			moblerlog("stays in login view, despite the synchronization updates");
-			self.showForm();
-		}
-	});		
 	
 	
 
@@ -189,6 +144,7 @@ LoginView.prototype.openDiv = openView;
  **/
 LoginView.prototype.open = function() {
 	// hide unnecessary errors and warnings 
+	moblerlog("loginView: open sesame");
 	this.hideErrorMessage();
 	this.hideWarningMessage();
 	this.showForm();
@@ -283,19 +239,19 @@ LoginView.prototype.clickLoginButton = function() {
  * @function showForm
  */ 
 LoginView.prototype.showForm = function() {
-	$("#loginForm").show();
-	$("#loginButton").show();
-	$("#loginElements").show();
-	$("#cards").show();
+	var lmsObj = this.controller.models['lms'];
+	$("#lmsImage").attr("src",lmsObj.getServerLogoImage(DEFAULT_SERVER));
+	$("#pfpLabel1").text(lmsObj.getServerLogoLabel(DEFAULT_SERVER));
+	
 	this.hideErrorMessage();
+	$("#loginForm").show();
+	// $("#loginButton").show();
+	//$("#loginElements").show();
+	$("#cards").show(); // ??
+	
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
 	}
-	
-//	var config = this.controller.models['authentication'];
-//	$("#lmsImage").attr("src",config.getServerLogoImage());
-//	$("#pfpLabel1").text(config.getServerLogoLabel());
-//	
 };
 
 /**

@@ -150,10 +150,11 @@ SettingsView.prototype.logout = function() {
  * @function loadData
  **/
 SettingsView.prototype.loadData = function(){
+	var lmsObj = controller.models['lms'];
 	var config = controller.models['authentication'];
 	$("#aboutMore").show();
-	$("#lmsLabelSet").attr("src",config.getServerLogoImage());
-	$("#pfpItemSet").text(config.getServerLogoLabel());
+	$("#lmsLabelSet").attr("src",findServerInfo(DEFAULT_SERVER).logoImage);
+	$("#pfpItemSet").text(findServerInfo(DEFAULT_SERVER).logoLabel);
 	$("#nameItemSet").text(config.getDisplayName());
 	$("#usernameItemSet").text(config.getUserName());
 	$("#emailItemSet").text(config.getEmailAddress());

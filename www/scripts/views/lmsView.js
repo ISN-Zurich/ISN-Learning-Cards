@@ -109,6 +109,7 @@ LMSView.prototype.openDiv = openView;
 LMSView.prototype.open = function() {
 	moblerlog("open lms view");
 	this.active = true;
+	$("#lmsList").empty();
 	this.showLMSList();
 	this.firstLoad = false;
 	this.openDiv();
@@ -131,7 +132,7 @@ LMSView.prototype.close = function() {
 	moblerlog("close lms view");
 	this.active = false;
 	this.closeDiv();
-	$("#lmsList").empty();
+	$("#lmsbody").empty();
 };
 
 
@@ -173,45 +174,47 @@ LMSView.prototype.showLMSList = function() {
 	moblerlog("legth of lmsObj is"+length);
 //	moblerlog("lms obj is"+lmsObj.getLMSData());
 	
-	$("#lmsList").empty();
+	$("#lmsbody").empty();
 	if (lmsObj.getLMSData() ){
-	var lmsData = lmsObj.getLMSData();
-		
-	//creation of lms list
-	var ul = $("<ul/>", {
-		"id": "lmsList"
-	}).appendTo("#lmsbody");
-	for ( var c in lmsData ) {
-		var li = $(
-				"<li/>",
-				{
-					"id" : "lms " +JSON.stringify(c)
-				}).appendTo(ul);
-		moblerlog("the first lms is" +JSON.stringify(c));
-		// create the div container within the li element
-		// that will host the image and logo of the lms's
-		var div = $("<div/>", {
-			"class" : "lmsListItem",
-		}).appendTo(li);	
-		
-		img = $("<img/>", {
-			"id":"lmsImage" +JSON.stringify(c),
-			"class" : "pfp left",
-			"src":lmsObj.getServerLogoImage(c)
-		}).appendTo(div);
-		span = $("<div/>", {
-			"id":"lmslabel"+JSON.stringify(c),
-			"class" : "lsmlabel",
-			"text":lmsObj.getServerLogoLabel(c)
-		}).appendTo(div);
-		
-	} //end of for
+		var lmsData = lmsObj.getLMSData(), i = 0;
+
+		//creation of lms list
+		var ul = $("<ul/>", {
+			"id": "lmsList"
+		}).appendTo("#lmsbody");
+		for (i=0; i< lmsData.length; i++) {
+			var sn = lmsData[i].servername;
+		// $.each( lmsData, function(c, val) {
+			var li = $(
+					"<li/>",
+					{
+						"id" : "lms " +sn
+					}).appendTo(ul);
+			moblerlog("the first lms is" + sn);
+			// create the div container within the li element
+			// that will host the image and logo of the lms's
+			var div = $("<div/>", {
+				"class" : "lmsListItem",
+			}).appendTo(li);	
+
+			img = $("<img/>", {
+				"id":"lmsImage" +sn,
+				"class" : "pfp left",
+				"src":lmsData[i].logoImage
+			}).appendTo(div);
+			span = $("<div/>", {
+				"id":"lmslabel"+sn,
+				"class" : "lsmlabel",
+				"text":lmsData[i].logoLabel
+			}).appendTo(div);
+
+		} //end of for
 	}//end of if
 	else {
 		this.didApologize = true; 
 		doApologize();
 	}
-	
+
 	//static list from index.html
 	
 //	$("#lms1Image").attr("src",lmsObj.getServerLogoImage());

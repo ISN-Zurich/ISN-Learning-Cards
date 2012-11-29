@@ -1,3 +1,67 @@
+/**
+ *A global property/variable that is used to set the default server with which the application will be connected
+ *in order to exchange data.
+ *
+ *@property DEFAULT_SERVER
+ *@default hornet
+ **/
+
+var DEFAULT_SERVER = "yellowjacket";
+/**
+ *A global property/variable that is used to store info about the different servers to which the application can be connected.
+ *
+ *@property URLS_TO_LMS
+ *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
+ **/
+var URLS_TO_LMS = [ 
+					{
+						servername: "yellowjacket",
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Test Server at ISN Zurich",					
+						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
+						debug:"1",
+						clientKey: ""
+					},
+					{
+						servername: "hornet",
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Partnership for Peace LMS at ISN Zurich",
+						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
+						debug:"0",
+						clientKey: ""
+					},
+					{
+						servername: "PFP LMS",
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Partnership for Peace LMS at ISN Zurich",
+						url: "https://pfp.ethz.ch/restservice/learningcards",
+						debug:"0",
+						clientKey: ""
+					},
+					{
+						servername: "PFPTEST",
+						logoImage: "resources/pfpLogo.png", 
+						logoLabel: "Partnership for Peace LMS at ISN/ETH test",
+						url: "https://pfp-test.ethz.ch/restservice/learningcards",
+						debug:"1",
+						clientKey: ""
+					}
+];
+
+/**
+ * TODO: DOCUMENT findServerInfo
+ */
+function findServerInfo(servername){
+	var serverinfo = {}, i;
+
+	for ( i=0; i < URLS_TO_LMS.length; i++ ) {
+		if (URLS_TO_LMS[i].servername === servername ){
+			serverinfo =  URLS_TO_LMS[i];
+		}	
+	}
+
+	return serverinfo;	
+}
 
 /** Does nothing
  * @function doNothing
