@@ -129,7 +129,7 @@ function ConfigurationModel(controller) {
 	*/
 
 	$(document).bind("statisticssenttoserver", function() {
-		if (self.configuration.loginState === "loggedOut") {
+		if (self.controller.appLoaded && self.configuration.loginState === "loggedOut") {
 		self.sendLogoutToServer();
 		moblerlog("user logged out");
 		}
