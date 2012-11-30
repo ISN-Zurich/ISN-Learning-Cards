@@ -1,10 +1,6 @@
 
 /**	THIS COMMENT MUST NOT BE REMOVED
 
-
-
-
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -478,12 +474,23 @@ Controller.prototype.getLoginState = function() {
 
 /**
  * @prototype
- * @function getLoginState
- * @return {boolean} true if the user is logged in (he has an authentication key stored in the local storage) and false if not.
+ * @function getActiveClientKey
+ * @return {String} activeClientKey, the client key of the activated server
  **/
 Controller.prototype.getActiveClientKey = function() {
-	return this.models["lms"].activeClientKey;
+	return this.models["lms"].getActiveServerClientKey();
 };
+
+
+/**
+ * @prototype
+ * @function getActiveURL
+ * @return {String} url, url of the active server
+ **/
+Controller.prototype.getActiveURL = function() {
+	return this.models["lms"].getActiveServerURL();
+};
+
 
 
 /**
