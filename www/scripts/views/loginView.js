@@ -240,8 +240,13 @@ LoginView.prototype.clickLoginButton = function() {
  */ 
 LoginView.prototype.showForm = function() {
 	var lmsObj = this.controller.models['lms'];
-	$("#lmsImage").attr("src",lmsObj.getServerLogoImage(DEFAULT_SERVER));
-	$("#pfpLabel1").text(lmsObj.getServerLogoLabel(DEFAULT_SERVER));
+	var activerServer = lmsObj.findActiveServer();
+//	$("#lmsImage").attr("src",lmsObj.getServerLogoImage(DEFAULT_SERVER));
+//	$("#pfpLabel1").text(lmsObj.getServerLogoLabel(DEFAULT_SERVER));
+	//login view will look like this
+	
+	$("#lmsImage").attr("src",lmsObj.getActiveServerImage());
+	$("#pfpLabel1").text(lmsObj.getActiveServerLabel());
 	
 	this.hideErrorMessage();
 	$("#loginForm").show();
