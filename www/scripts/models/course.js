@@ -176,12 +176,12 @@ CourseModel.prototype.loadFromServer = function() {
 			}
 		}
 
-		var serverURL = self.controller.getServerURL();
-		
+		var activeURL = self.controller.getActiveURL();
 		
 		$
 				.ajax({
 					url : self.controller.models['authentication'].urlToLMS + '/courses.php',
+					//url:  activeURL + '/courses.php'
 					type : 'GET',
 					dataType : 'json',
 					success : createCourseList,
