@@ -112,11 +112,13 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 	var self = this;
+	var activeURL = self.controller.getActiveURL();
 
 	$
 			.ajax({
 				url : self.controller.models['authentication'].urlToLMS + "/questions.php/"
 						+ courseId,
+				//url: activeURL + "/questions.php/"+ courseId,
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
