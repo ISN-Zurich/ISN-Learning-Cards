@@ -195,7 +195,16 @@ LMSView.prototype.showLMSList = function() {
 			// that will host the image and logo of the lms's
 			var div = $("<div/>", {
 				"class" : "lmsListItem",
-			}).appendTo(li);	
+			}).appendTo(li);
+			
+			jester(mydiv[0]).tap(function(e) {
+				e.stopPropagation();
+				//e.preventDefault();
+				// PAST CODE
+				//self.clickLMSItem($(this).parent().attr('id').substring(6));
+				self.clickLMSItem(sn);
+				
+			});
 
 			img = $("<img/>", {
 				"id":"lmsImage" +sn,
@@ -225,6 +234,49 @@ LMSView.prototype.showLMSList = function() {
 //	$("#lms3label").text(lmsObj.getServerLogoLabel());
 
 };
+
+
+/**
+ * click on an lms item 
+ * checks if the selected lms has been registered
+ * then it goes to login view
+ * @prototype
+ * @function 
+ * @param {String} servername, the name of the selected server
+ **/ 
+LMSView.prototype.clickLMSItem = function(servername) {
+
+	var self=this;
+	var lmsObj = self.controller.models['lms'];
+	
+// to change the image into an loading icon, similar with clickStatisticsIcon from course Model
+	
+	lmsObject.setActiveServer(servername); //this function creates a client key
+	                                    // for the lms that have not been registered before
+										// when the reigstration is done it sends 
+										// an event that the registration is ok
+									    
+		
+	// if we got a clientkey from the setActiveLMS and if we have set the specific server to the active one
+	// we do the transition to login 
+//	if (lmsObject.getActiveServerClientKey && lmsObject.getActiveServerClientKey.length > 0){
+//	self.controller.TransitionToLogin();
+//	};
+
+	//to bind the event when the setting of the active server is ready
+	 // and to do transition to loginView
+	
+	$(document).bind("activeServerIsSet", function() {
+		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
+		{
+			self.controller.TransitionToLogin();
+
+		}
+
+	});
+		
+};
+
 
 
 /**
