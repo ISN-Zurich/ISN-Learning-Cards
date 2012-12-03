@@ -169,6 +169,7 @@ LMSView.prototype.closeLMS = function() {
  * @function showLMSList
  */ 
 LMSView.prototype.showLMSList = function() {
+
 	var lmsObj = this.controller.models['lms'];
 //	var length= lmsObj.getLMSData().length;
 	moblerlog("legth of lmsObj is"+length);
@@ -183,40 +184,7 @@ LMSView.prototype.showLMSList = function() {
 			"id": "lmsList"
 		}).appendTo("#lmsbody");
 		for (i=0; i< lmsData.length; i++) {
-			var sn = lmsData[i].servername;
-		// $.each( lmsData, function(c, val) {
-			var li = $(
-					"<li/>",
-					{
-						"id" : "lms " +sn
-					}).appendTo(ul);
-			moblerlog("the first lms is" + sn);
-			// create the div container within the li element
-			// that will host the image and logo of the lms's
-			var div = $("<div/>", {
-				"class" : "lmsListItem",
-			}).appendTo(li);
-			
-			jester(mydiv[0]).tap(function(e) {
-				e.stopPropagation();
-				//e.preventDefault();
-				// PAST CODE
-				//self.clickLMSItem($(this).parent().attr('id').substring(6));
-				self.clickLMSItem(sn);
-				
-			});
-
-			img = $("<img/>", {
-				"id":"lmsImage" +sn,
-				"class" : "pfp left",
-				"src":lmsData[i].logoImage
-			}).appendTo(div);
-			span = $("<div/>", {
-				"id":"lmslabel"+sn,
-				"class" : "lsmlabel",
-				"text":lmsData[i].logoLabel
-			}).appendTo(div);
-
+			this.createLMSItem(ul, lmsData[i]);
 		} //end of for
 	}//end of if
 	else {
@@ -235,6 +203,38 @@ LMSView.prototype.showLMSList = function() {
 
 };
 
+LMSView.prototype.createLMSItem = function(ul, lmsData) {
+	var self = this;
+	var sn = lmsData.servername;
+	// $.each( lmsData, function(c, val) {
+	var li = $(
+			"<li/>",
+			{
+				"id" : "lms " +sn
+			}).appendTo(ul);
+	moblerlog("the first lms is" + sn);
+	// create the div container within the li element
+	// that will host the image and logo of the lms's
+	var div = $("<div/>", {
+		"class" : "lmsListItem",
+	}).appendTo(li);
+
+	jester(div[0]).tap(function(e) {
+		e.stopPropagation();
+		self.clickLMSItem(sn);
+	});
+
+	img = $("<img/>", {
+		"id":"lmsImage" +sn,
+		"class" : "pfp left",
+		"src":lmsData.logoImage
+	}).appendTo(div);
+	span = $("<div/>", {
+		"id":"lmslabel"+sn,
+		"class" : "lsmlabel",
+		"text":lmsData.logoLabel
+	}).appendTo(div);
+};
 
 /**
  * click on an lms item 
@@ -245,36 +245,7 @@ LMSView.prototype.showLMSList = function() {
  * @param {String} servername, the name of the selected server
  **/ 
 LMSView.prototype.clickLMSItem = function(servername) {
-
-	var self=this;
-	var lmsObj = self.controller.models['lms'];
-	
-// to change the image into an loading icon, similar with clickStatisticsIcon from course Model
-	
-	lmsObject.setActiveServer(servername); //this function creates a client key
-	                                    // for the lms that have not been registered before
-										// when the reigstration is done it sends 
-										// an event that the registration is ok
-									    
-		
-	// if we got a clientkey from the setActiveLMS and if we have set the specific server to the active one
-	// we do the transition to login 
-//	if (lmsObject.getActiveServerClientKey && lmsObject.getActiveServerClientKey.length > 0){
-//	self.controller.TransitionToLogin();
-//	};
-
-	//to bind the event when the setting of the active server is ready
-	 // and to do transition to loginView
-	
-	$(document).bind("activeServerIsSet", function() {
-		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
-		{
-			self.controller.TransitionToLogin();
-
-		}
-
-	});
-		
+	this.controller.models['lms'].setActiveServer(servername);	
 };
 
 

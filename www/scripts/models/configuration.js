@@ -162,7 +162,7 @@ ConfigurationModel.prototype.storeData = function() {
  * Loads the data from the local storage (key = "configuration") therefore the
  * string is converted into a json object
  * @prototype
- * @function loadData
+ * @function 
  */
 ConfigurationModel.prototype.loadData = function() {
 	var configObject;
@@ -287,6 +287,8 @@ ConfigurationModel.prototype.login = function(username, password) {
 	//challenge is computed by applying an MD5 faulty labs function on username and hashed password
 	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()
                                + this.configuration.appAuthenticationKey);
+	
+	
 	var auth = {
 		"username" : username,
 		"challenge" : challenge
@@ -469,6 +471,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 
 	this.configuration = {
 			"appAuthenticationKey": self.configuration.appAuthenticationKey,
+			//"appAuthenticationKey: self.controller.getActiveClientKey(),"
 			"userAuthenticationKey" : "",
 			"learnerInformation" : {
 				"userId" : 0

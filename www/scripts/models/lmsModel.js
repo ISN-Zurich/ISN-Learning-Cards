@@ -30,7 +30,7 @@ under the License.
 
 
 /**
- * @class ConfigurationModel 
+ * @class LMSModel 
  * This model holds the data about the current configuration
  * @constructor 
  * It initializes basic properties such as:
@@ -44,59 +44,15 @@ under the License.
  */
 
 function LMSModel(controller) {
-	var self=this;
 	this.controller = controller;
-	//1. initialization of model's variables
-	
-	//local storage item that will store the clientkey
-	// and default language for the LMS's
-	this.lmsData= {};
-	
-	this.activeClientKey = "";
+	// localStorage.removeItem("urlsToLMS"); // for debugging only
+	this.loadData();
+
+	this.activeRequestToken = "";
 	this.defaultLanguage = "";
-	this.logoimage ="";
-	this.logolabel = "";
-	this.servername ="";
-	this.serverURL="";
 	
-	// THIS LOADS THE USER'S LMS SELECTION AND PREVIOUS CLIENT KEYS
-	self.loadData();
-	
-	// CHECK IF THE USER SELECTED A DIFFERENT SERVER THAN THE DEFAULT_SERVER
-	var myServerName = DEFAULT_SERVER;
-	// if (!this.lmsData.DEFAULT_SERVER.active) {
-	   // IF WE HAVE A DIFFERENT ACTIVE SERVER WE USE IT
-	  //    myServerName = self.findActiveServer(); 
-   // }
-	 
-	// OTHERWISE WE USE THE DEFAULT SERVER
-	// THIS FUNCTION  SETS THE ACTIVE SERVER AND DO EVERYTHING THAT IS NEEDED TO WORK WITH IT
-	self.setActiveServer(myServerName); 
-	
+	this.setActiveServer(this.lmsData.activeServer);
 }
-
-
-
-/**
- * Finds the active server
- * In the local storage the active server has a
- * flag active = true
- * @prototype
- * @function findActiveServer
- */
-LMSModel.prototype.findActiveServer = function() {
-//	var activeServer, i;
-//	if (this.lmsData){
-//		for (i in this.lmsData) {
-//	if (this.lmsData[i].active === true ){
-//				activeServer = i;
-//			}	
-//		}
-//	}
-//	return activeServer;
-};
-
-
 
 /**
  * Finds information from the server
@@ -124,23 +80,29 @@ LMSModel.prototype.findServerInfo = function(servername) {
  */
 LMSModel.prototype.loadData = function() {
 	var lmsObject;
+	var lmsString=localStorage.getItem("urlsToLMS") ;
 	//if there is an item in the local storage with the name "configuration"
 	//then get it by parsing the string and convert it into a json object
-	try {
-		lmsObject = JSON.parse(localStorage.getItem("urlsToLMS"));
-	} catch (err) {
-		moblerlog("error! while loading");
+	if (lmsString && lmsString.length > 0){
+		try {
+			lmsObject = JSON.parse(lmsString);
+		} catch (err) {
+			moblerlog("error! while loading");
+		}
+	}
+	else {
+		//create a data structure for 
+		// client keys, lms language and active flag
+		lmsObject= {
+				"activeServer": DEFAULT_SERVER,
+				"ServerData"  : {} 
+				};
+		localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));
 	}
 
-	moblerlog("lmsObject: " + JSON.stringify(lmsObject));
+	moblerlog("lmsObject in localstorage: " + JSON.stringify(lmsObject));
 
-	// when the app is launched and before the user logs in there is no local storage 
-	// in this case there is no configuration object and it is stated in one of its properties
-	// that its login status is set to "loggedOut".
-	if (!lmsObject) {
-		lmsObject.DEFAULT_SERVER.active = true; 
-	}
-	this.lmsData = JSON.stringify(lmsObject);
+	this.lmsData = lmsObject;
 };
 
 
@@ -151,7 +113,7 @@ LMSModel.prototype.loadData = function() {
 * @prototype
 * @function storeData
 */
-ConfigurationModel.prototype.storeData = function() {
+LMSModel.prototype.storeData = function() {
 	var lmsString;
 	try {
 		lmsString = JSON.stringify(this.lmsData);
@@ -184,7 +146,6 @@ LMSModel.prototype.getLMSData = function() {
 */
 LMSModel.prototype.getActiveServerImage = function() {
 	return this.activeServerInfo.logoImage;
-	//return this.logoImage;
 };
 
 
@@ -195,7 +156,6 @@ LMSModel.prototype.getActiveServerImage = function() {
 */
 LMSModel.prototype.getActiveServerLabel = function() {
 	return this.activeServerInfo.logoLabel;
-	//return this.logoLabel;
 };
 
 /**
@@ -206,7 +166,6 @@ LMSModel.prototype.getActiveServerLabel = function() {
 
 LMSModel.prototype.getActiveServerURL = function() {
 	return this.activeServerInfo.url;
-	//return this.serverURL;
 };
 
 
@@ -217,8 +176,7 @@ LMSModel.prototype.getActiveServerURL = function() {
 */
 
 LMSModel.prototype.getActiveServerName = function() {
-	return this.activeServerInfo.servername;
-	// return this.lmsData.servername;
+	return this.activeServerInfo.servername;	
 };
 
 /**
@@ -226,10 +184,16 @@ LMSModel.prototype.getActiveServerName = function() {
 * @function getActiveServerClientKey  
 * @return {String} servername, the name of the activated server
 */
-LMSModel.prototype.getActiveServerClientKey = function() {
+LMSModel.prototype.getActiveRequestToken = function() {
 	
-	return this.activeClientKey;
+	return this.activeRequestToken;
 };
+
+// TODO: Documentation
+LMSModel.prototype.getDefaultLanguage = function() {
+	return this.defaultLanguage;
+};
+
 
 
 /**
@@ -241,43 +205,45 @@ LMSModel.prototype.getActiveServerClientKey = function() {
  */
 LMSModel.prototype.setActiveServer = function(servername) {
 	var self=this;
+	var urlsToLMS, lmsObject;
 	this.activeServerInfo = this.findServerInfo(servername);
+	
 	self.loadData();
-	 if (!this.lmsData.servername.appAuthenticationKey && this.lmsData.servername.appAuthenticationKey.length === 0){
+	
+	var requestToken, lmsObject = self.lmsData.ServerData;
+	moblerlog("setActiveServer: where is the serverdata? " + lmsObject );
+	// a sanity check if the selected lms exists in the local storage
+	// in order to get its client key only in this case
+	if (lmsObject[servername]) {
+		moblerlog("the current lms has already a client key");
+		// then get this client key from the local storage 
+		requestToken = lmsObject[servername].requestToken;
+	}
+	
+	 if (!requestToken || requestToken.length === 0){
 		moblerlog("registration  should be done");
 		//register the app with the server in order to get an app/client key
 		// CGL: this should only happen if the user select the LMS not when the LMSView draws the list. 
-		this.register(servername);  //we will get a client key
+		self.register(servername);  //we will get a client key
 	}
 	else {
-		//if the server was not the active one
+		//	if the server was not the active one
 		// we do this sanity check because in the case
 		// of the default server it has already the active = true in the constructor.
-		if (!this.lmsDadata.servername.active){
-			this.lmsDadata.servername.active = true;
+		if (this.lmsData.activeServer !== servername){
+			this.lmsData.activeServer = servername;
 		}
+		this.storeData();
+		
 		// Christian Notes: before we finish we need to store the new active server to the localStorage
 		// self.storeData(); or something like this ... 
 		// Evangelia: This is already done in the registration, the only thing that was added is that
 		// the active property for the specific servername was set to true
 		
-		this.logoimage = this.activeServerInfo.logoimage;
-		this.logolabel = this.activeServerInfo.logolabel;
-		this.servername = this.activeServerInfo.servername;
-		this.serverURL= this.activeServerInfo.url;
-		this.defaultLanguage = this.lmsData.defaultLanguage;
-		this.lmsData.servername = this.activeServerInfo.servername; // i am not sure if this one is needed
-
-		//a sanity check if the selected lms exists in the local storage
-		//in order to get its client key only in this case
-		if (this.lmsData.appAuthenticationKey) {
-			moblerlog("the current lms has already a client key");
-			//then get this client key from the local storage 
-			//this.activeClientKey = urlsToLMS[servername].clientKey;
-			this.activeClientKey = this.lmsData.appAuthenticationKey;
-		}
+		this.defaultLanguage = lmsObject[servername].defaultLanguage;
+		this.activeRequestToken = requestToken;
 		
-		$(document).trigger("activeServerIsSet");
+		$(document).trigger("activeServerReady");
 	}
 };
 
@@ -293,7 +259,7 @@ LMSModel.prototype.register = function(servername) {
 	moblerlog("enters regsitration");
 	//phone gap property to get the id of a device
 	var deviceID = device.uuid;
-	var activeURL = self.controller.getActiveURL();
+	var activeURL = self.getActiveServerURL();
 
 	$
 			.ajax({
@@ -308,6 +274,8 @@ LMSModel.prototype.register = function(servername) {
                   moblerlog("ERROR status code is : " + request.status);
                   moblerlog("ERROR returned data is: "+ request.responseText);
                   moblerlog("Error while registering the app with the backend");
+                  // remember in lmsData that the server made a booboo
+                  
 				},
 				//during the registration we send via headers the app id and the device id
 				beforeSend : setHeaders
@@ -335,41 +303,20 @@ LMSModel.prototype.register = function(servername) {
 
 		moblerlog("in app registration");
 		// load server data from local storage
-		var urlsToLMS;
-		var urlsToLMSString = localStorage.getItem("urlsToLMS");
-		moblerlog("urlToLMSString is"+urlsToLMSString);
-		try {
-			urlsToLMS = JSON.parse(urlsToLMSString);
-			moblerlog("urls to lms parsed");
-		} catch(err) {
-			moblerlog("Error while parsing urlsToLMS: " + err);
-		}
-	
+		self.loadData();
+		
 		//create an empty structure for the client keys of the different servers
-		urlsToLMS[servername] = {};
-		
-       // loadData();
-        
-        moblerlog("Received client key: " + data.ClientKey);
-        urlsToLMS[servername].clientKey = data.ClientKey;
-        moblerlog("Received client key: " + data.ClientKey);
-        urlsToLMS[servername].defaultLanguage = data.defaultLanguage || language_root;
-        // store server data in local storage
-        localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
-		
+		self.lmsData.ServerData[servername] = {};
 		// store server data in local storage
-		self.lmsData.servername.appAuthenticationKey = data.ClientKey;
-		self.lmsData.servername.defaultLanguage = data.defaultLanguage || language_root;
+		// requestToken refers to OAuth terminology
+		self.lmsData.ServerData[servername].requestToken = data.ClientKey;
+		self.lmsData.ServerData[servername].defaultLanguage = data.defaultLanguage || language_root;
 		//self.lmsData.servername.activeServername = servername;
 		
-		self.storeData();	
-		//trigger the event to be ready
-		$(document).trigger("registrationready");
-		
-		self.setActiveServer(servername);
-		
+		self.storeData();
+				
+		self.setActiveServer(servername);	
 	}
-
 };
 
 

@@ -200,7 +200,12 @@ function Controller() {
 		}
 	});		
 
-		
+	$(document).bind("activeServerReady", function() {
+		if ( self.appLoaded ) {
+			self.transitionToLogin();
+		}
+	});		
+	
 	// check if 3000 ms have passed
 	// if not we wait until 3000 ms have passed
 	// then we do the transition to the login view
@@ -477,8 +482,9 @@ Controller.prototype.getLoginState = function() {
  * @function getActiveClientKey
  * @return {String} activeClientKey, the client key of the activated server
  **/
+// TODO: Refactor all models to use the term RequestToken in the future
 Controller.prototype.getActiveClientKey = function() {
-	return this.models["lms"].getActiveServerClientKey();
+	return this.models["lms"].getActiveRequestToken();
 };
 
 
@@ -491,6 +497,23 @@ Controller.prototype.getActiveURL = function() {
 	return this.models["lms"].getActiveServerURL();
 };
 
+/**
+ * @prototype
+ * @function getActiveURL
+ * @return {String} url, url of the active server
+ **/
+Controller.prototype.getActiveLogo = function() {
+	return this.models["lms"].getActiveServerImage();
+};
+
+/**
+ * @prototype
+ * @function getActiveURL
+ * @return {String} url, url of the active server
+ **/
+Controller.prototype.getActiveLabel = function() {
+	return this.models["lms"].getActiveServerLabel();
+};
 
 
 /**

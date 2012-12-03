@@ -25,7 +25,7 @@ var URLS_TO_LMS = [
 					{
 						servername: "hornet",
 						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",
+						logoLabel: "Authoring LMS at ISN Zurich",
 						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
 						debug:"0",
 						clientKey: ""
@@ -47,21 +47,6 @@ var URLS_TO_LMS = [
 						clientKey: ""
 					}
 ];
-
-/**
- * TODO: DOCUMENT findServerInfo
- */
-function findServerInfo(servername){
-	var serverinfo = {}, i;
-
-	for ( i=0; i < URLS_TO_LMS.length; i++ ) {
-		if (URLS_TO_LMS[i].servername === servername ){
-			serverinfo =  URLS_TO_LMS[i];
-		}	
-	}
-
-	return serverinfo;	
-}
 
 /** Does nothing
  * @function doNothing
