@@ -239,13 +239,15 @@ LoginView.prototype.clickLoginButton = function() {
  * @function showForm
  */ 
 LoginView.prototype.showForm = function() {
+// THIS IS THE CORRECT CODE, COMMENTING FOR DEBUGGING AND STATIC UI POLISHING
 	$("#lmsImage").attr("src",this.controller.getActiveLogo());
 	$("#pfpLabel1").text(this.controller.getActiveLabel());
 	
+//	$("#lmsImage").attr("src",this.controller.getActiveLogo());
+//	$("#pfpLabel1").text(this.controller.getActiveLabel());
+	
 	this.hideErrorMessage();
 	$("#loginForm").show();
-	// $("#loginButton").show();
-	//$("#loginElements").show();
 	$("#cards").show(); // ??
 	
 	if (this.controller.models['connection'].isOffline()) {

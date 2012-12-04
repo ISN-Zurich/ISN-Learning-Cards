@@ -161,6 +161,7 @@ CourseModel.prototype.loadFromServer = function() {
 	moblerlog("loadFromServer-Course is called");
 	var self = this;
 	var syncStateCache = [];
+	var activeURL = self.controller.getActiveURL();
 	self.checkForTimeOut();
 	if (self.controller.getLoginState()
 			&& !self.syncState) {
@@ -176,12 +177,10 @@ CourseModel.prototype.loadFromServer = function() {
 			}
 		}
 
-		var activeURL = self.controller.getActiveURL();
-		
+			
 		$
 				.ajax({
-					url : self.controller.models['authentication'].urlToLMS + '/courses.php',
-					//url:  activeURL + '/courses.php'
+					url:  activeURL + '/courses.php',
 					type : 'GET',
 					dataType : 'json',
 					success : createCourseList,

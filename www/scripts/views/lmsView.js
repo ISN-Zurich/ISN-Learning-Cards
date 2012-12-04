@@ -55,18 +55,7 @@ function LMSView(controller) {
 		self.closeLMS();
 	});
 
-	
-			
-	function setOrientation() {
-       	self.setIconSize(); 
-    }
-    
-    //when orientation changes, set the new width and height
-    //resize event should be caught, too, because not all devices
-    //send an orientationchange event
-    window.addEventListener("orientationchange", setOrientation, false);
-    window.addEventListener("resize", setOrientation, false);
-       
+      
 }
 
 /**
@@ -113,7 +102,6 @@ LMSView.prototype.open = function() {
 	this.showLMSList();
 	this.firstLoad = false;
 	this.openDiv();
-	this.setIconSize();
 };
 
 /**
@@ -249,16 +237,3 @@ LMSView.prototype.clickLMSItem = function(servername) {
 };
 
 
-
-/**
- * sets the height property of the lms list icon
- * @prototype
- * @function setIconSize
- */ 
-LMSView.prototype.setIconSize = function() {
-//	$("#coursesList li").each(function() {
-//		var height = $(this).height();
-//		$(this).find(".courseListIcon").height(height);
-//		$(this).find(".courseListIcon").css("line-height", height + "px");
-//	});
-};

@@ -39,46 +39,6 @@ under the License.
 var APP_ID = "ch.ethz.isn.learningcards";
 
 
-
-//var DEFAULT_SERVER = "yellowjacket";
-//
-///**
-// *A global property/variable that is used to store info about the different servers to which the application can be connected.
-// *
-// *@property URLS_TO_LMS
-// *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
-// **/
-//var URLS_TO_LMS = {"yellowjacket":  
-//					{
-//						logoImage: "resources/pfpLogo.png", 
-//						logoLabel: "Test Server at ISN Zurich",					
-//						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
-//						clientKey: ""
-//					},
-//					"hornet":  
-//					{
-//						logoImage: "resources/pfpLogo.png", 
-//						logoLabel: "Partnership for Peace LMS at ISN Zurich",
-//						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
-//						clientKey: ""
-//					},
-//					"PFP LMS":  
-//					{
-//						logoImage: "resources/pfpLogo.png", 
-//						logoLabel: "Partnership for Peace LMS at ISN Zurich",
-//						url: "https://pfp.ethz.ch/restservice/learningcards",
-//						clientKey: ""
-//					},
-//					"PFPTEST":  
-//					{
-//						logoImage: "resources/pfpLogo.png", 
-//						logoLabel: "Partnership for Peace LMS at ISN/ETH test",
-//						url: "https://pfp-test.ethz.ch/restservice/learningcards",
-//						clientKey: ""
-//					}
-//};
-//
-
 /**
  * @class ConfigurationModel 
  * This model holds the data about the current configuration
@@ -106,17 +66,6 @@ function ConfigurationModel(controller) {
 	this.loadData();
 	
 	
-	//proceed by selecting the data of the default server such as url, image, logo, label
-	//store in its url in local storage item
-	//register if there is no client key otherwise load data from server
-	//self.selectServerData(DEFAULT_SERVER);
-	
-	
-	//proceed by selecting the data of the default server such as url, image, logo, label
-	//store in its url in local storage item
-	//register if there is no client key otherwise load data from server
-	//this.selectServerData(DEFAULT_SERVER);
-
 	/**It is triggered after all statistics data are sent successful to the server. This happens when the user logsout.
 	 * @event statisticssenttoserver
 	 * @param:a callback function that sends pending data to the server and clears all information from the local storage.
@@ -199,6 +148,7 @@ ConfigurationModel.prototype.loadData = function() {
  */
 ConfigurationModel.prototype.loadFromServer = function() {
 	var self = this;
+	var activeURL = self.controller.getActiveURL();
 	
 	//if the user is not authenticated yet
 	if (this.configuration.userAuthenticationKey
@@ -206,7 +156,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 		// authenticate the user by "GETing" his data/learner information from the server
 		$
 				.ajax({
-					url : self.urlToLMS + '/authentication.php',
+					url : activeURL + '/authentication.php',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -278,15 +228,15 @@ ConfigurationModel.prototype.loadFromServer = function() {
 * @function login
 */ 
 ConfigurationModel.prototype.login = function(username, password) {
-	moblerlog("client key: " + this.configuration.appAuthenticationKey);
+	var self=this;
+	moblerlog("client key: " + self.controller.getActiveClientKey());
 	//remove leading and trailing white spaces
 	username = username.trim(); 
 	//password is encrypted by an MD5 hash
 	passwordHash = faultylabs.MD5(password);
 	moblerlog("md5 password: " + passwordHash);
 	//challenge is computed by applying an MD5 faulty labs function on username and hashed password
-	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()
-                               + this.configuration.appAuthenticationKey);
+	challenge = faultylabs.MD5(username + passwordHash.toUpperCase()+ self.controller.getActiveClientKey());
 	
 	
 	var auth = {
@@ -341,10 +291,11 @@ ConfigurationModel.prototype.logout = function() {
 */
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 	var self = this;
+	var activeURL = self.controller.getActiveURL();
 	moblerlog("url: " + self.urlToLMS + '/authentication.php');
 	$
 			.ajax({
-				url : self.urlToLMS + '/authentication.php',
+				url : activeURL + '/authentication.php',
 				type : 'POST',
 				dataType : 'json',
 				//if any data are sent back during the authentication 
@@ -356,7 +307,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						case "invalid client key":
 							moblerlog("invalid client key - reregister")
 							//if the client key is invalide, register in order to get a new one
-							self.register();
+							self.controller.models['lms'].register();
 							 /**
 	                         * The authentication fails if no valid client key is received. An event is triggered
 	                         * in order notify about the failure and the reason of failure (invalid key)
@@ -442,7 +393,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 */
 ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey) {
 	var sessionKey,self = this;
-  
+	var activeURL = self.controller.getActiveURL();  
 	if (userAuthenticationKey) {
 		sessionKey = userAuthenticationKey;
 	} else {
@@ -451,7 +402,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 	
 	$
 			.ajax({
-				url : self.urlToLMS + '/authentication.php',
+				url : activeURL + '/authentication.php',
 				type : 'DELETE',
 				dataType : 'json',
 				success : function() {
@@ -470,8 +421,6 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 			});
 
 	this.configuration = {
-			"appAuthenticationKey": self.configuration.appAuthenticationKey,
-			//"appAuthenticationKey: self.controller.getActiveClientKey(),"
 			"userAuthenticationKey" : "",
 			"learnerInformation" : {
 				"userId" : 0
@@ -479,6 +428,8 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 			"loginState": "loggedOut",
 			"statisticsLoaded": false
 	};
+	
+	
 
 	//after clearing data from the local storage, save the changes to the local storage item
 	this.storeData();
@@ -576,136 +527,7 @@ ConfigurationModel.prototype.getSessionKey = function() {
 
 
 
-///**
-//* Sends the registration request (appId ,device id) to the server and waiting to get back the app key 
-//* It is called whenever the client(app) key is empty
-//* @prototype
-//* @function register 
-//*/
-//ConfigurationModel.prototype.register = function() {
-//	var self = this;
-//	moblerlog("enters regsitration");
-//	//phone gap property to get the id of a device
-//	var deviceID = device.uuid;
-//
-//	$
-//			.ajax({
-//				url : self.urlToLMS + '/registration.php',
-//				type : 'GET',
-//				dataType : 'json',
-//				success : appRegistration,
-//				// if no registration is done, then use the request parameter
-//				// to display the error that created the problem in the console
-//				error : function(request) {
-//                  moblerlog("ERROR status code is : " + request.status);
-//                  moblerlog("ERROR returned data is: "+ request.responseText);
-//                  moblerlog("Error while registering the app with the backend");
-//				},
-//				//during the registration we send via headers the app id and the device id
-//				beforeSend : setHeaders
-//			});
-//
-//	function setHeaders(xhr) {
-//		xhr.setRequestHeader('AppID', APP_ID);
-//		xhr.setRequestHeader('UUID', deviceID);
-//		moblerlog("register uuid:" + deviceID);
-//	}
-//
-//	
-//	/**
-//	 * In case of a successful registration we store in the local storage the client/app key
-//	 * that we received from the server. Additionally we store locally 
-//	 * the language for the interface of the app.
-//	 * @prototype
-//	 * @function appRegistration
-//	 * @param {String} data, the data exchanged with the server during the registration
-//	 */
-//	function appRegistration(data) {
-//		// if we don't know a user's language we try to use the phone's language.
-//        language = navigator.language.split("-");
-//        language_root = (language[0]);
-//
-//		moblerlog("in app registration");
-//		// load server data from local storage
-//		var urlsToLMS;
-//		var urlsToLMSString = localStorage.getItem("urlsToLMS");
-//		moblerlog("urlToLMSString is"+urlsToLMSString);
-//		try {
-//			urlsToLMS = JSON.parse(urlsToLMSString);
-//			moblerlog("urls to lms parsed");
-//		} catch(err) {
-//			moblerlog("Error while parsing urlsToLMS: " + err);
-//		}
-//	
-//		//create an empty structure for the client keys of the different servers
-//		urlsToLMS[DEFAULT_SERVER] = {};
-//		
-//		// add client key for current lms
-//		moblerlog("Received client key: " + data.ClientKey);
-//		urlsToLMS[DEFAULT_SERVER].clientKey = data.ClientKey;
-//		// store server data in local storage
-//		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
-//		// store in local storage the app Key or else client key
-//		// that we received during the registration from the server
-//		self.configuration.appAuthenticationKey = data.ClientKey;
-//		// store in local storage the default language for the interface logic of the app
-//		// if no default language is set then use the mobile device's language
-//		self.configuration.defaultLanguage = data.defaultLanguage || language_root;
-//		self.storeData();
-//		// we can now safely load the user data (learner information, synchronization state)
-//		self.loadFromServer();
-//	}
-//
-//};
 
-///**
-// * Selects the data (url, image, label, clientkey) of the selected lms that are stored in a global variable.
-// * It stores the image, label and url of the lms in the constructor's variables.
-// * It creates a data structure for storing the client keys of the lms's in local storage. 
-// * @prototype
-// * @function selectServerData
-// * @param {String} servername, the name of the activated server
-// */
-//ConfigurationModel.prototype.selectServerData = function(servername) {
-//	var urlsToLMSString = localStorage.getItem("urlsToLMS");
-//	var urlsToLMS;
-//	//check if exists in the local storage an object with the name "urlToLMS"
-//	//that stores the client keys for the various servers
-//	if (urlsToLMSString && urlsToLMSString.length > 0) {
-//		try {
-//			urlsToLMS = JSON.parse(urlsToLMSString);
-//		} catch(err) {
-//			moblerlog("Error while parsing urlsToLMS: " + err);
-//		}	
-//	} else {
-//		// create an empty data structure for our clientKeys
-//		urlsToLMS ={};
-//		localStorage.setItem("urlsToLMS", JSON.stringify(urlsToLMS));
-//	}
-//	//
-//	this.urlToLMS  = findServerInfo(servername).url;
-//	this.logoimage = findServerInfo(servername).logoImage;
-//	this.logolabel = findServerInfo(servername).logoLabel;
-//
-//	var clientKey;
-//	// a sanity check if the selected lms exists in the local storage
-//	// in order to get its client key only in this case
-//	if (urlsToLMS[servername] ) {
-//		moblerlog("the current lms has already a client key");
-//		// then get this client key from the local storage 
-//		clientKey = urlsToLMS[servername].clientKey;
-//	}
-//
-//	//if there is no client key for the selected server
-//	if (!clientKey || clientKey.length === 0) {
-//		moblerlog("registration is done");
-//		//register the app with the server in order to get an app/client key
-//		this.register();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-//	} else {
-//		//if there is an app/cliet key load data of the user from the server
-//		this.loadFromServer();
-//	}
-//};
 
 
 

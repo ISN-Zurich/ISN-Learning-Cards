@@ -371,10 +371,11 @@ StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
  */
 StatisticsModel.prototype.loadFromServer = function() {
 	var self = this;
+	var activeURL = self.controller.getActiveURL();
 	if (self.controller.models['authentication'].isLoggedIn()) {
 		$
 				.ajax({
-					url : self.controller.models['authentication'].urlToLMS + '/statistics.php',
+					url : activeURL + '/statistics.php',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -458,6 +459,7 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  * */
 StatisticsModel.prototype.sendToServer = function() {
 	var self = this;
+	var activeURL = self.controller.getActiveURL();
 	if (self.controller.getLoginState() ) {
 	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	moblerlog("url statistics: " + url);

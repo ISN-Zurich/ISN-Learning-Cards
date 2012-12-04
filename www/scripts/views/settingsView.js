@@ -40,9 +40,9 @@ under the License.
  *    such as the close button, the logout button and the "more info" icon.
  *  - it binds the event that is triggered when the authentication is ready  
  **/
-function SettingsView() {
+function SettingsView(controller) {
     var self = this;
-    
+    this.controller = controller;
     self.tagID = 'settingsView';
     
     // assigning gesture handlers on the view elements (close, logout  and more info button)
@@ -150,11 +150,12 @@ SettingsView.prototype.logout = function() {
  * @function loadData
  **/
 SettingsView.prototype.loadData = function(){
+	var self=this;
 	var lmsObj = controller.models['lms'];
 	var config = controller.models['authentication'];
 	$("#aboutMore").show();
-	$("#lmsLabelSet").attr("src",findServerInfo(DEFAULT_SERVER).logoImage);
-	$("#pfpItemSet").text(findServerInfo(DEFAULT_SERVER).logoLabel);
+	$("#lmsLabelSet").attr("src",self.controller.getActiveLogo());
+	$("#pfpItemSet").text(self.controller.getActiveLabel());
 	$("#nameItemSet").text(config.getDisplayName());
 	$("#usernameItemSet").text(config.getUserName());
 	$("#emailItemSet").text(config.getEmailAddress());
