@@ -881,3 +881,14 @@ ul#lmsList{
 	position: fixed;
 	top: 0px;
 }
+
+.notClickable{
+	color: red;
+}
+
+#lmserrormessage {
+	display:none;
+	background-color:#a52a2a;
+	color:white;
+
+	}

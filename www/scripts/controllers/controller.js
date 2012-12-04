@@ -168,7 +168,7 @@ function Controller() {
 	$(document).bind("statisticssenttoserver", function() {
 		if ( !self.getLoginState() ){
 			moblerlog("stays in login view, despite the synchronization updates");
-			self.transitionToLogin();
+			//self.transitionToLogin();
 		}
 	});
 
@@ -475,6 +475,17 @@ Controller.prototype.transitionToAbout = function() {
 Controller.prototype.getLoginState = function() {
 	return this.models["authentication"].isLoggedIn();
 };
+
+
+/**
+ * @prototype
+ * @function getConnectionState
+ * @return {boolean} true if the connection state is offline, otherwise false
+ **/
+Controller.prototype.isOffline = function() {
+	return this.models["connection"].isOffline();
+};
+
 
 
 /**

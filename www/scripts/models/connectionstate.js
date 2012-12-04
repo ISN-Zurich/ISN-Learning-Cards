@@ -67,7 +67,7 @@ function ConnectionState(controller) {
  * @return {Boolean} true if the connection state is offline, otherwise false
  */
 ConnectionState.prototype.isOffline = function() {
-	return !this.state;
+	return this.state;
 };
 
 /**

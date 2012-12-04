@@ -45,7 +45,7 @@ function LMSView(controller) {
 	var self = this;
 
 	self.tagID = 'lmsView';
-	self.controller = controller;
+	this.controller = controller;
 	self.active = false;
 	self.firstLoad = true;
 	this.didApologize = false;
@@ -55,7 +55,24 @@ function LMSView(controller) {
 		self.closeLMS();
 	});
 
-      
+	
+	/**
+	 * TO DO COMMENTS
+	 * 
+	 */
+	
+	$(document).bind("lmsNotRegisteredYet", function(servername) {
+			
+		if (self.controller.isOffline()){
+			moblerlog("offline and cannot click and register");
+			self.LMSNotClickable(servername);
+			
+		}	
+		else {
+			moblerlog("will do a registration because we are online");
+			self.controller.models['lms'].register(servername);  //we will get a client key
+		}
+		});
 }
 
 /**
@@ -164,6 +181,7 @@ LMSView.prototype.showLMSList = function() {
 //	moblerlog("lms obj is"+lmsObj.getLMSData());
 	
 	$("#lmsbody").empty();
+	this.hideLMSMessage();
 	if (lmsObj.getLMSData() ){
 		var lmsData = lmsObj.getLMSData(), i = 0;
 
@@ -233,7 +251,35 @@ LMSView.prototype.createLMSItem = function(ul, lmsData) {
  * @param {String} servername, the name of the selected server
  **/ 
 LMSView.prototype.clickLMSItem = function(servername) {
-	this.controller.models['lms'].setActiveServer(servername);	
+	this.controller.models['lms'].setActiveServer(servername);
 };
 
 
+
+LMSView.prototype.LMSNotClickable = function(servername) {
+	var lmsObj = this.controller.models['lms'];
+	var lmsData = lmsObj.getLMSData();
+	// to make the specific LMS item unclickable
+	$("#lms" + lmsData.servername).addClass("notClickable");
+	
+	// to display an error message
+	this.showLMSMessage(jQuery.i18n.prop('msg_lms_message'));
+
+};
+
+
+LMSView.prototype.showLMSMessage = function(message) {
+	// to display an error message that we are
+	//offline and we cannot register with the server
+	
+	$("#lmserrormessage").text(message);
+	$("#lmserrormessage").show();
+};
+
+
+
+LMSView.prototype.hideLMSMessage = function() {
+	
+	$("#lmserrormessage").text("");
+	$("#lmserrormessage").hide();
+}

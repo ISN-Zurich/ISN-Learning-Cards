@@ -221,10 +221,11 @@ LMSModel.prototype.setActiveServer = function(servername) {
 	}
 	
 	 if (!requestToken || requestToken.length === 0){
+		 $(document).trigger("lmsNotRegisteredYet", servername);
 		moblerlog("registration  should be done");
 		//register the app with the server in order to get an app/client key
 		// CGL: this should only happen if the user select the LMS not when the LMSView draws the list. 
-		self.register(servername);  //we will get a client key
+			//self.register(servername);  //we will get a client key
 	}
 	else {
 		//	if the server was not the active one
