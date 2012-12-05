@@ -886,9 +886,15 @@ ul#lmsList{
 	color: red;
 }
 
-#lmserrormessage {
-	display:none;
-	background-color:#a52a2a;
-	color:white;
+.message {
+	background-color: #a52a2a;
+	color: white;
+}
 
-	}
+#lmserrormessage {
+	display: none;
+}
+
+#lmsregistrationmessage {
+	display: none;
+}

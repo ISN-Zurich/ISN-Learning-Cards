@@ -62,17 +62,32 @@ function LMSView(controller) {
 	 */
 	
 	$(document).bind("lmsNotRegisteredYet", function(servername) {
-			
+		
 		if (self.controller.isOffline()){
 			moblerlog("offline and cannot click and register");
 			self.LMSNotClickable(servername);
-			
 		}	
-		else {
+		else { // we are online 
 			moblerlog("will do a registration because we are online");
-			self.controller.models['lms'].register(servername);  //we will get a client key
+
+			// if we had tried to register for the specific server 
+			// and we failed and if this failure took place less than 24 hours ago
+			// then display to the usre the lms registation message t
+			if	(self.controller.models["lms"].lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
+				moblerlog("less than 24 hours have passed");
+				self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));	
+			}else {
+				moblerlog("do the registration");
+				self.controller.models['lms'].register(servername);  //we will get a client key
+			}//end of else
 		}
-		});
+	});
+	
+	
+	$(document).bind("registrationfailed", function() {
+		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));
+	});
+	
 }
 
 /**
@@ -163,7 +178,8 @@ LMSView.prototype.showLMSList = function() {
 	var lmsObj = this.controller.models['lms'];
 	
 	$("#lmsbody").empty();
-	this.hideLMSMessage();
+	this.hideLMSConnectionMessage();
+	this.hideLMSRegistrationMessage();
 	if (lmsObj.getLMSData() ){
 		var lmsData = lmsObj.getLMSData(), i = 0;
 
@@ -246,12 +262,12 @@ LMSView.prototype.LMSNotClickable = function(servername) {
 	$("#lms" + lmsData.servername).addClass("notClickable");
 	
 	// to display an error message
-	this.showLMSMessage(jQuery.i18n.prop('msg_lms_message'));
+	this.showLMSConnectionMessage(jQuery.i18n.prop('msg_lms_connection_message'));
 
 };
 
 
-LMSView.prototype.showLMSMessage = function(message) {
+LMSView.prototype.showLMSConnectionMessage = function(message) {
 	// to display an error message that we are
 	//offline and we cannot register with the server
 	moblerlog("enter show lms message");
@@ -261,8 +277,26 @@ LMSView.prototype.showLMSMessage = function(message) {
 
 
 
-LMSView.prototype.hideLMSMessage = function() {
+LMSView.prototype.hideLMSConnectionMessage = function() {
 	
 	$("#lmserrormessage").text("");
 	$("#lmserrormessage").hide();
-}
+};
+
+
+
+
+LMSView.prototype.showLMSRegistrationMessage = function(message) {
+	var self = this;
+	// to display an error message that we are
+	//offline and we cannot register with the server
+	moblerlog("enter show lms message");
+	$("#lmsregistrationmessage").text(message);
+	$("#lmsregistrationmessage").show();
+};
+
+LMSView.prototype.hideLMSRegistrationMessage = function() {
+	$("#lmsregistrationmessage").text("");
+	$("#lmsregistrationmessage").hide();
+};
+

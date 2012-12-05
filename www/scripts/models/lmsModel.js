@@ -51,6 +51,8 @@ function LMSModel(controller) {
 	this.activeRequestToken = "";
 	this.defaultLanguage = "";
 	
+	this.lastTryToRegister = [];
+	
 	this.setActiveServer(this.lmsData.activeServer);
 }
 
@@ -272,11 +274,13 @@ LMSModel.prototype.register = function(servername) {
 				// if no registration is done, then use the request parameter
 				// to display the error that created the problem in the console
 				error : function(request) {
+					self.lastTryToRegister[servername] = (new Date()).getTime();
                   moblerlog("ERROR status code is : " + request.status);
                   moblerlog("ERROR returned data is: "+ request.responseText);
                   moblerlog("Error while registering the app with the backend");
                   // remember in lmsData that the server made a booboo
                   
+                  $(document).trigger("registrationfailed", servername);
 				},
 				//during the registration we send via headers the app id and the device id
 				beforeSend : setHeaders
