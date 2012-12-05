@@ -45,7 +45,7 @@ function ConnectionState(controller) {
 	var self = this;
 	self.controller = controller;
 
-	var networkState = navigator.connection.type;
+	var networkState = navigator.network.connection.type;
 
 	if (networkState == Connection.NONE) {
 		self.state = false;
@@ -72,7 +72,7 @@ ConnectionState.prototype.isOffline = function() {
 
 /**
  * When online connection is detected any locally stored pending logout information is sent to the server.
- * Addittionally, any pending courses and questions information are loaded from the server.
+ * Additionally, any pending courses and questions information are loaded from the server.
  * Any pending statistics and tracking data are sent to the server as well. 
  * When online connection state is detected the error messages about the lost of connectivity are hiden
  * The switchtoonline event is triggered

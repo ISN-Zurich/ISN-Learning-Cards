@@ -141,21 +141,6 @@ LMSView.prototype.close = function() {
 };
 
 
-/**
- * click on LMS item.
- * it appears as the selected lms on the login view
- * @prototype
- * @function clickLMSItem
- **/ 
-LMSView.prototype.clickLMSItem = function(course_id) {
-//	if (this.controller.models['course'].isSynchronized(course_id)) {
-//		this.controller.models['questionpool'].reset();
-//		this.controller.models['questionpool'].loadData(course_id);
-//		this.controller.models['answers'].setCurrentCourseId(course_id);
-//		this.controller.transitionToQuestion();
-//	}
-};
-
 
 /**
  * leads to settings
@@ -176,9 +161,6 @@ LMSView.prototype.closeLMS = function() {
 LMSView.prototype.showLMSList = function() {
 
 	var lmsObj = this.controller.models['lms'];
-//	var length= lmsObj.getLMSData().length;
-	moblerlog("legth of lmsObj is"+length);
-//	moblerlog("lms obj is"+lmsObj.getLMSData());
 	
 	$("#lmsbody").empty();
 	this.hideLMSMessage();
@@ -257,6 +239,7 @@ LMSView.prototype.clickLMSItem = function(servername) {
 
 
 LMSView.prototype.LMSNotClickable = function(servername) {
+	moblerlog("enter LMS not clickable");
 	var lmsObj = this.controller.models['lms'];
 	var lmsData = lmsObj.getLMSData();
 	// to make the specific LMS item unclickable
@@ -271,7 +254,7 @@ LMSView.prototype.LMSNotClickable = function(servername) {
 LMSView.prototype.showLMSMessage = function(message) {
 	// to display an error message that we are
 	//offline and we cannot register with the server
-	
+	moblerlog("enter show lms message");
 	$("#lmserrormessage").text(message);
 	$("#lmserrormessage").show();
 };
