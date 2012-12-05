@@ -60,15 +60,19 @@ function LoginView(controller) {
 		//handler when taping on the username field 
 	var prevent=false;
 	jester($('#usernameInput')[0]).tap(function(e, prevent){
+		e.stopPropagation();
 			focusLogos(e);
 		});	
-	//handler when taping on the pasword field
+	//handler when taping on the password field
 	jester($('#password')[0]).tap(function(e,prevent) {
+		e.stopPropagation();
 			focusLogos(e);	
 		});	
 	
 	//handler when taping on the select lms button
-	jester($('#selectLMS')[0]).tap(function() {
+	jester($('#selectLMS')[0]).tap(function(e) {
+		e.stopPropagation();
+		e.preventDefault();
 		moblerlog("enters in tap of select lms");
 		//self.clickLoginButton();	
 		self.selectLMS();
@@ -91,17 +95,25 @@ function LoginView(controller) {
 	$("#password")[0].addEventListener("blur", unfocusLogos);
 
 	function focusLogos(e) {
+		e.stopPropagation();
+		e.preventDefault;
 		moblerlog("focus logos " + e.currentTarget);
 		$("#logos").removeClass("bottom");
 		$("#logos").addClass("static");
 	}
 
 	function unfocusLogos(e) {
+		e.stopPropagation();
+		e.preventDefault;
 		moblerlog("unfocus logos " + e.currentTarget);
 		$("#logos").addClass("bottom");
 		$("#logos").removeClass("static");
 	}
 
+	
+	
+	window.addEventListener("click", self.detectClick, false);
+	
 } //end of constructor
 
 
@@ -314,3 +326,7 @@ LoginView.prototype.selectLMS = function() {
 	self.controller.transitionToLMS();
 }
 
+
+LoginView.prototype.detectClick = function() {
+	moblerlog("click in login view detected");
+}
