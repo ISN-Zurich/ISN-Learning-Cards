@@ -45,7 +45,7 @@ under the License.
 
 function LMSModel(controller) {
 	this.controller = controller;
-	// localStorage.removeItem("urlsToLMS"); // for debugging only
+	//localStorage.removeItem("urlsToLMS"); // for debugging only
 	this.loadData();
 
 	this.activeRequestToken = "";
@@ -123,7 +123,7 @@ LMSModel.prototype.storeData = function() {
 		lmsString = "";
 		moblerlog("error while storing");
 	}
-	moblerlog(lmsString);
+	moblerlog("lms string"+lmsString);
 	localStorage.setItem("urlsToLMS", lmsString);
 
 	moblerlog("LMS Storage after storeData: "+ localStorage.getItem("urlsToLMS"));
@@ -223,12 +223,29 @@ LMSModel.prototype.setActiveServer = function(servername) {
 	}
 	
 	 if (!requestToken || requestToken.length === 0){
-		 $(document).trigger("lmsNotRegisteredYet", servername);
-		//moblerlog("registration  should be done");
+		 moblerlog("registration  should be done");
 		//register the app with the server in order to get an app/client key
 		// CGL: this should only happen if the user select the LMS not when the LMSView draws the list. 
-			//self.register(servername);  //we will get a client key
-	}
+		if (self.controller.isOffline()){
+			moblerlog("offline and cannot click and register");
+			$(document).trigger("lmsOffline", servername);
+		}	
+		else { // we are online 
+			moblerlog("will try to do a registration because we are online");
+
+			// if we had tried to register for the specific server 
+			// and we failed and if this failure took place less than 24 hours ago
+			// then display to the usre the lms registation message t
+			if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
+				moblerlog("less than 24 hours have passed");
+				$(document).trigger("lmsNotRegistrableYet", servername);			
+			}else {
+				moblerlog("do the registration");
+				self.register(servername);  //we will get a client key
+			}//end of else
+		}	
+		
+	} 
 	else {
 		//	if the server was not the active one
 		// we do this sanity check because in the case
@@ -236,6 +253,8 @@ LMSModel.prototype.setActiveServer = function(servername) {
 		if (this.lmsData.activeServer !== servername){
 			this.lmsData.activeServer = servername;
 		}
+		
+			
 		this.storeData();
 		
 		// Christian Notes: before we finish we need to store the new active server to the localStorage

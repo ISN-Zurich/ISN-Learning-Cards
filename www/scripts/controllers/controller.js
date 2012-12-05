@@ -54,7 +54,6 @@ function Controller() {
 	// initialize models
 
 	this.models.authentication = new ConfigurationModel(this);
-	this.models.lms = new LMSModel(this);
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel(this);
@@ -63,6 +62,9 @@ function Controller() {
 
 	// add synchronization triggers at the end of the model initialization just to be careful 
 	this.models.connection = new ConnectionState(this);
+	// the lms model is initialized after the connection
+	//because it makes use of the isOffline function 
+	this.models.lms = new LMSModel(this);
 
 	this.models.authentication.loadFromServer();
 
@@ -201,10 +203,11 @@ function Controller() {
 	});		
 
 	$(document).bind("activeServerReady", function() {
-		if ( self.appLoaded ) {
+		if (self.appLoaded ) {
 			self.transitionToLogin();
 		}
 	});		
+	
 	
 	// check if 3000 ms have passed
 	// if not we wait until 3000 ms have passed
@@ -275,8 +278,6 @@ Controller.prototype.setupLanguage = function() {
 			$("#openSource").text(jQuery.i18n.prop('msg_openSource'));
 			$("#license").text(jQuery.i18n.prop('msg_license'));
 			$("#cardQuestionTitle").text(jQuery.i18n.prop('msg_question_title'));
-
-
 		}
 	});
 };
@@ -487,7 +488,6 @@ Controller.prototype.isOffline = function() {
 };
 
 
-
 /**
  * @prototype
  * @function getActiveClientKey
@@ -525,6 +525,9 @@ Controller.prototype.getActiveLogo = function() {
 Controller.prototype.getActiveLabel = function() {
 	return this.models["lms"].getActiveServerLabel();
 };
+
+
+
 
 
 /**

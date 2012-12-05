@@ -61,26 +61,12 @@ function LMSView(controller) {
 	 * 
 	 */
 	
-	$(document).bind("lmsNotRegisteredYet", function(servername) {
-		
-		if (self.controller.isOffline()){
-			moblerlog("offline and cannot click and register");
-			self.LMSNotClickable(servername);
-		}	
-		else { // we are online 
-			moblerlog("will do a registration because we are online");
-
-			// if we had tried to register for the specific server 
-			// and we failed and if this failure took place less than 24 hours ago
-			// then display to the usre the lms registation message t
-			if	(self.controller.models["lms"].lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
-				moblerlog("less than 24 hours have passed");
-				self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));	
-			}else {
-				moblerlog("do the registration");
-				self.controller.models['lms'].register(servername);  //we will get a client key
-			}//end of else
-		}
+	$(document).bind("lmsOffline", function(servername) {
+		self.LMSNotClickable(servername);	
+	});
+	
+	$(document).bind("lmsNotRegistrableYet", function(servername) {
+		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));
 	});
 	
 	
@@ -225,6 +211,7 @@ LMSView.prototype.createLMSItem = function(ul, lmsData) {
 
 	jester(div[0]).tap(function(e) {
 		e.stopPropagation();
+		e.preventDefault();
 		self.clickLMSItem(sn);
 	});
 
@@ -282,8 +269,6 @@ LMSView.prototype.hideLMSConnectionMessage = function() {
 	$("#lmserrormessage").text("");
 	$("#lmserrormessage").hide();
 };
-
-
 
 
 LMSView.prototype.showLMSRegistrationMessage = function(message) {
