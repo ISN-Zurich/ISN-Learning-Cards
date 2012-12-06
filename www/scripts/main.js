@@ -34,6 +34,7 @@ under the License.
 var controller;
 
 document.addEventListener("deviceready", init, false);
+	
 
 /**
  * starts the app
