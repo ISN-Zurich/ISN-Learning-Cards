@@ -59,13 +59,13 @@ function LoginView(controller) {
 	});
 		//handler when taping on the username field 
 	var prevent=false;
-	jester($('#usernameInput')[0]).tap(function(e, prevent){
-		e.stopPropagation();
-			focusLogos(e);
+	jester($('#usernameInput')[0]).tap(function(e,prevent){
+		//e.stopPropagation();
+		focusLogos(e);
 		});	
 	//handler when taping on the password field
 	jester($('#password')[0]).tap(function(e,prevent) {
-		e.stopPropagation();
+		//e.stopPropagation();
 			focusLogos(e);	
 		});	
 	
@@ -79,8 +79,11 @@ function LoginView(controller) {
 	});
 	
 	
-	
-
+	/** 
+	 * It is triggered when an online connection is detected.
+	 * @event errormessagehide
+	 * @param: a function that hides the error message from login view
+	 * **/
 	$(document).bind("errormessagehide", function() {
 		moblerlog(" hide error message loaded ");
 		self.hideErrorMessage();
@@ -110,10 +113,7 @@ function LoginView(controller) {
 		$("#logos").removeClass("static");
 	}
 
-	
-	
-	window.addEventListener("click", self.detectClick, false);
-	
+		
 } //end of constructor
 
 

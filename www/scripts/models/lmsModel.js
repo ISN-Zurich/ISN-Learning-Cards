@@ -31,15 +31,14 @@ under the License.
 
 /**
  * @class LMSModel 
- * This model holds the data about the current configuration
+ * This model holds the data about the different servers of the various lms's.
  * @constructor 
- * It initializes basic properties such as:
- *  - the configuration object of the local storage  
- *  - the url of the selected server,
- *  - the image and the logo of the selected server, 
- * It loads data from the local storage. In the first time there are no data in the local storage. 
- * It specifies the data for the selected server.
- * It listens to an event that is triggered when statistics are sent to the server.
+ * It loads data from the local storage. In the first time there are no data in the local storage and sets 
+ * as active server the default server. 
+ * It initializes:
+ *   - the last time an unsuccessful attempt was made in order an lms to be registered
+ * It sets the active server. During the initialization of the app, the call of this function will 
+ * register the default server and will do the setting of the rest variables.
  * @param {String} controller 
  */
 
@@ -47,12 +46,7 @@ function LMSModel(controller) {
 	this.controller = controller;
 	//localStorage.removeItem("urlsToLMS"); // for debugging only
 	this.loadData();
-
-	this.activeRequestToken = "";
-	this.defaultLanguage = "";
-	
 	this.lastTryToRegister = [];
-	
 	this.setActiveServer(this.lmsData.activeServer);
 }
 
@@ -63,13 +57,11 @@ function LMSModel(controller) {
  */
 LMSModel.prototype.findServerInfo = function(servername) {
 	var serverinfo = {}, i;
-	
 	for ( i=0; i < URLS_TO_LMS.length; i++ ) {
 		if (URLS_TO_LMS[i].servername === servername ){
 			serverinfo =  URLS_TO_LMS[i];
 		}	
 	}
-	
 	return serverinfo;
 };
 
@@ -93,8 +85,8 @@ LMSModel.prototype.loadData = function() {
 		}
 	}
 	else {
-		//create a data structure for 
-		// client keys, lms language and active flag
+		//create a data structure for storing lms info in the local storage
+		// ServerData will store clientkey and default language for each server
 		lmsObject= {
 				"activeServer": DEFAULT_SERVER,
 				"ServerData"  : {} 
@@ -131,9 +123,11 @@ LMSModel.prototype.storeData = function() {
 
 
 /**
+ * This function makes use of the static variable URLS_TO_LMS 
+ * that stores information for all servers
  * @prototype
  * @function getLMSData
- * @return {Array} the array that contains all information for all servers
+ * @return {Array} the array that contains the content of the global URLS_TO_LMS variable
  */
 LMSModel.prototype.getLMSData = function() {
 	return URLS_TO_LMS;
@@ -143,8 +137,8 @@ LMSModel.prototype.getLMSData = function() {
 
 /**
 * @prototype
-* @function getServerLogoImage 
-* @return {String} logoimage, the Url of the logo image of the activated server 
+* @function getActiveServerImage 
+* @return {String} logoimage, the Url of the logo image of the active server 
 */
 LMSModel.prototype.getActiveServerImage = function() {
 	return this.activeServerInfo.logoImage;
@@ -152,9 +146,9 @@ LMSModel.prototype.getActiveServerImage = function() {
 
 
 /**
-* @prototype
+* @prototypegetActiveServerLabel
 * @function getActiveServerLabel  
-* @return {String} logolabel, the info label of the activated server
+* @return {String} logolabel, the info label of the active server
 */
 LMSModel.prototype.getActiveServerLabel = function() {
 	return this.activeServerInfo.logoLabel;
@@ -163,7 +157,7 @@ LMSModel.prototype.getActiveServerLabel = function() {
 /**
 * @prototype
 * @function getActiveServerURL 
-* @return {String} url, the url activated server
+* @return {String} url, the url  of the active server
 */
 
 LMSModel.prototype.getActiveServerURL = function() {
@@ -174,7 +168,7 @@ LMSModel.prototype.getActiveServerURL = function() {
 /**
 * @prototype
 * @function getActiveServerName  
-* @return {String} servername, the name of the activated server
+* @return {String} servername, the name of the active server
 */
 
 LMSModel.prototype.getActiveServerName = function() {
@@ -183,23 +177,33 @@ LMSModel.prototype.getActiveServerName = function() {
 
 /**
 * @prototype
-* @function getActiveServerClientKey  
-* @return {String} servername, the name of the activated server
+* @function getActiveRequestToken  
+* @return {String} activeRequestToken, the client key of the active server
 */
 LMSModel.prototype.getActiveRequestToken = function() {
 	
 	return this.activeRequestToken;
 };
 
-// TODO: Documentation
+/**
+* @prototype
+* @function getDefaultLanguage  
+* @return {String} defaultLanguage, the default language of the active/selected server
+*/
 LMSModel.prototype.getDefaultLanguage = function() {
 	return this.defaultLanguage;
 };
 
 
-
 /**
- * 
+ * This function is executed when we click on an item on the lms list view
+ *	the selected server is set by
+ *- registering itself if has not been previously registered
+ *- by setting itself as the active server and store this info in the local storage
+ *- by storing its client key (request token) in the local storage
+ *- by storing its default language in the local storage
+ * It triggers 3 events depending on internet connectivity status, on the successful or not
+ * registration to the server and on the recent failed attempt to register to the server.
  * @function setActiveServer 
  * @param {String} servername, the activated server
  * 
@@ -225,7 +229,6 @@ LMSModel.prototype.setActiveServer = function(servername) {
 	 if (!requestToken || requestToken.length === 0){
 		 moblerlog("registration  should be done");
 		//register the app with the server in order to get an app/client key
-		// CGL: this should only happen if the user select the LMS not when the LMSView draws the list. 
 		if (self.controller.isOffline()){
 			moblerlog("offline and cannot click and register");
 			$(document).trigger("lmsOffline", servername);
@@ -235,7 +238,7 @@ LMSModel.prototype.setActiveServer = function(servername) {
 
 			// if we had tried to register for the specific server 
 			// and we failed and if this failure took place less than 24 hours ago
-			// then display to the usre the lms registation message t
+			// then display to the user the lms registation message 
 			if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
 				moblerlog("less than 24 hours have passed");
 				$(document).trigger("lmsNotRegistrableYet", servername);			
@@ -256,12 +259,6 @@ LMSModel.prototype.setActiveServer = function(servername) {
 		
 			
 		this.storeData();
-		
-		// Christian Notes: before we finish we need to store the new active server to the localStorage
-		// self.storeData(); or something like this ... 
-		// Evangelia: This is already done in the registration, the only thing that was added is that
-		// the active property for the specific servername was set to true
-		
 		this.defaultLanguage = lmsObject[servername].defaultLanguage;
 		this.activeRequestToken = requestToken;
 		
