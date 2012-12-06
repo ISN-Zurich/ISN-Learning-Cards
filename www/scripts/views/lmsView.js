@@ -33,9 +33,9 @@ under the License.
  * View for displaying the list with the different lms's
  * 
  * @constructor
- * - it sets the tag ID for the settings view
- * - assigns event handler when taping on the settings icon 
- * - bind 2 events, that are related with loading of courses and questions
+ * - it sets the tag ID for the lms view
+ * - assigns event handler when taping on the close icon 
+ * - binds 3 events, that are related with loading of courses and questions
  *   and they handle the  display of the list of courses as well as
  *   the transformation of the loading icon to statistics icon 
  * @param {String} controller
@@ -56,24 +56,34 @@ function LMSView(controller) {
 	});
 
 	
-	/**
-	 * TO DO COMMENTS
-	 * 
+	/**It is triggered when an unregistered lms item is selected and and there is no internet connection
+	 * @event lmsOffline
+	 * @param: a callback function that displays a message that states that we are offline and no registration can take place
+	 * 			for the specific unregistered lms
 	 */
-	
 	$(document).bind("lmsOffline", function(servername) {
+		moblerlog("we are offline");
 		self.LMSNotClickable(servername);	
 	});
 	
+	/**It is triggered when an lms is online and failed to register for any reason. More specifically 
+	 * it is triggered when no more than 24 hours have been passed from the first failed attempt for registration.
+	 * @event lmsNotRegistrableYet
+	 * @param: a callback function that displays a message to the user that the server is not available and the 
+	 * 		   registration cannot take place
+	*/
 	$(document).bind("lmsNotRegistrableYet", function(servername) {
 		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));
 	});
 	
-	
+	/**It is triggered when the registration of an lms fails because of any reason
+	 * @event registrationfailed
+	 * @param:a callback function  that displays a message to the user that the server is not available and the
+	 *		  registration cannot take place 
+	*/
 	$(document).bind("registrationfailed", function() {
 		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));
 	});
-	
 }
 
 /**
@@ -92,13 +102,11 @@ LMSView.prototype.handleTap = doNothing;
 LMSView.prototype.handleSwipe = doNothing;
 
 /**
- * pinch leads to settings view
+ * pinch does nothing
  * @prototype
  * @function handlePinch
  **/ 
-LMSView.prototype.handlePinch = function(){
-    this.controller.transitionToSettings();
-};
+LMSView.prototype.handlePinch = doNothing;
 
 
 /**
@@ -109,7 +117,9 @@ LMSView.prototype.handlePinch = function(){
 LMSView.prototype.openDiv = openView;
 
 /**
- * shows the LMS list and shows it
+ * opens the view,
+ * it sets the current view is the active
+ * it shows the LMS list after clearing previous remaining items
  * @prototype
  * @function open
  **/ 
@@ -130,7 +140,9 @@ LMSView.prototype.open = function() {
 LMSView.prototype.closeDiv = closeView;
 
 /**
- * empties the course list
+ * unsets the closing view from being active
+ * and then closes the view.
+ * empties afterwards the lms list
  * @prototype
  * @function close
  **/ 
@@ -142,11 +154,11 @@ LMSView.prototype.close = function() {
 };
 
 
-
 /**
- * leads to settings
+ * closes the lms view
+ * and leads to login view
  * @prototype
- * @function clickSettingsButton
+ * @function closeLMS
  */
 LMSView.prototype.closeLMS = function() {
 	this.controller.transitionToLogin();
@@ -155,7 +167,10 @@ LMSView.prototype.closeLMS = function() {
 
 /**
  * shows the list with the available
- * different lms's logo image and label
+ * different lms's 
+ * for each lms are displayed:
+ * - logo image
+ * - label
  * @prototype
  * @function showLMSList
  */ 
@@ -168,7 +183,6 @@ LMSView.prototype.showLMSList = function() {
 	this.hideLMSRegistrationMessage();
 	if (lmsObj.getLMSData() ){
 		var lmsData = lmsObj.getLMSData(), i = 0;
-
 		//creation of lms list
 		var ul = $("<ul/>", {
 			"id": "lmsList"
@@ -182,21 +196,22 @@ LMSView.prototype.showLMSList = function() {
 		doApologize();
 	}
 
-	//static list from index.html
-	
-//	$("#lms1Image").attr("src",lmsObj.getServerLogoImage());
-//	$("#lms1label").text(lmsObj.getServerLogoLabel());
-//	$("#lms2Image").attr("src",lmsObj.getServerLogoImage());
-//	$("#lms2label").text(lmsObj.getServerLogoLabel());
-//	$("#lms3Image").attr("src",lmsObj.getServerLogoImage());
-//	$("#lms3label").text(lmsObj.getServerLogoLabel());
-
 };
 
+/**
+ * creates/designs the lms list
+ * assigns tap handlers when tap on an item
+ * prevent default behavior of the "touch start" gesture
+ * in order the transition to login to take place smmothly and not to display
+ * poping out the input fields.
+ * @prototype
+ * @function createLMSItem
+ * @param {String, String} ul, lmsData, the name of the selected server
+ **/ 
 LMSView.prototype.createLMSItem = function(ul, lmsData) {
 	var self = this;
 	var sn = lmsData.servername;
-	// $.each( lmsData, function(c, val) {
+	
 	var li = $(
 			"<li/>",
 			{
@@ -206,14 +221,21 @@ LMSView.prototype.createLMSItem = function(ul, lmsData) {
 	// create the div container within the li element
 	// that will host the image and logo of the lms's
 	var div = $("<div/>", {
-		"class" : "lmsListItem",
+		"class" : "lmsListItem"
 	}).appendTo(li);
 
-	jester(div[0]).tap(function(e) {
-		e.stopPropagation();
+	var prevent=true;
+	jester(div[0]).tap(function(e,prevent) {
 		e.preventDefault();
+		e.stopPropagation();	
 		self.clickLMSItem(sn);
 	});
+
+	$(div[0]).bind("touchstart", function(e) {
+		moblerlog(" gesture start in lms  detected ");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
 
 	img = $("<img/>", {
 		"id":"lmsImage" +sn,
@@ -225,14 +247,17 @@ LMSView.prototype.createLMSItem = function(ul, lmsData) {
 		"class" : "lsmlabel",
 		"text":lmsData.logoLabel
 	}).appendTo(div);
+	
 };
+	
+		
 
 /**
  * click on an lms item 
- * checks if the selected lms has been registered
- * then it goes to login view
+ * and sets properties
+ * of the selected server
  * @prototype
- * @function 
+ * @function clickLMSItem
  * @param {String} servername, the name of the selected server
  **/ 
 LMSView.prototype.clickLMSItem = function(servername) {
@@ -240,7 +265,14 @@ LMSView.prototype.clickLMSItem = function(servername) {
 };
 
 
-
+/**
+ * shows the warning message from lms list view
+ * that displayed a notification because there was
+ * not internet connection and no registration could take place
+ * @prototype
+ * @function LMSNotClickable
+ * @param {String} message, a text with containing the warning message
+ */ 
 LMSView.prototype.LMSNotClickable = function(servername) {
 	moblerlog("enter LMS not clickable");
 	var lmsObj = this.controller.models['lms'];
@@ -250,13 +282,20 @@ LMSView.prototype.LMSNotClickable = function(servername) {
 	
 	// to display an error message
 	this.showLMSConnectionMessage(jQuery.i18n.prop('msg_lms_connection_message'));
-
 };
 
 
+/**
+ * shows the warning message from lms list view
+ * that displayed a notification because there was
+ * not internet connection and no registration could take place
+ * @prototype
+ * @function showLMSConnectionMessage
+ * @param {String} message, a text with containing the warning message
+ */ 
 LMSView.prototype.showLMSConnectionMessage = function(message) {
 	// to display an error message that we are
-	//offline and we cannot register with the server
+	// offline and we cannot register with the server
 	moblerlog("enter show lms message");
 	$("#lmserrormessage").text(message);
 	$("#lmserrormessage").show();
@@ -264,14 +303,28 @@ LMSView.prototype.showLMSConnectionMessage = function(message) {
 
 
 
+/**
+ * hides the warning message from lms list view
+ * that displayed a notification because there was
+ * not internet connection and no registration could take place
+ * @prototype
+ * @function hideLMSConnectionMessage
+ */ 
 LMSView.prototype.hideLMSConnectionMessage = function() {
-	
 	$("#lmserrormessage").text("");
 	$("#lmserrormessage").hide();
 };
 
 
-LMSView.prototype.showLMSRegistrationMessage = function(message) {
+/**
+ * shows the warning message from lms list view
+ * that displayed a notification regarding an error
+ * during the registration of an lms
+ * @prototype
+ * @function showLMSRegistrationMessage
+ * @param {String} message, a text with containing the warning message
+ */ 
+View.prototype.showLMSRegistrationMessage = function(message) {
 	var self = this;
 	// to display an error message that we are
 	//offline and we cannot register with the server
@@ -280,6 +333,14 @@ LMSView.prototype.showLMSRegistrationMessage = function(message) {
 	$("#lmsregistrationmessage").show();
 };
 
+
+/**
+ * hides the warning message from lms list view
+ * that displayed a notification regarding an error
+ * during the registration of an lms
+ * @prototype
+ * @function hideLMSRegistrationMessage
+ */ 
 LMSView.prototype.hideLMSRegistrationMessage = function() {
 	$("#lmsregistrationmessage").text("");
 	$("#lmsregistrationmessage").hide();
