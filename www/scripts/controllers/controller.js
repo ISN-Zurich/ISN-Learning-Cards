@@ -53,6 +53,12 @@ function Controller() {
 
 	// initialize models
 
+	
+	this.models.connection = new ConnectionState(this);
+	// the lms model is initialized after the connection
+	//because it makes use of the isOffline function 
+	this.models.lms = new LMSModel(this);
+	
 	this.models.authentication = new ConfigurationModel(this);
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
@@ -61,11 +67,7 @@ function Controller() {
 	this.models.tracking = new TrackingModel(this);
 
 	// add synchronization triggers at the end of the model initialization just to be careful 
-	this.models.connection = new ConnectionState(this);
-	// the lms model is initialized after the connection
-	//because it makes use of the isOffline function 
-	this.models.lms = new LMSModel(this);
-
+	this.models.connection.synchronizeData();
 	this.models.authentication.loadFromServer();
 
 	moblerlog("models initialized");
@@ -208,6 +210,13 @@ function Controller() {
 		}
 	});		
 	
+	
+	
+	$(document).bind("click", function(e) {
+		moblerlog(" click in login view ");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
 	
 	// check if 3000 ms have passed
 	// if not we wait until 3000 ms have passed
@@ -525,8 +534,6 @@ Controller.prototype.getActiveLogo = function() {
 Controller.prototype.getActiveLabel = function() {
 	return this.models["lms"].getActiveServerLabel();
 };
-
-
 
 
 
