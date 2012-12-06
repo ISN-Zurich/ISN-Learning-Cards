@@ -53,7 +53,7 @@ function ConnectionState(controller) {
 		self.state = true;
 	}
 
-	moblerlog("connection state: " + self.state);
+	moblerlog("connection state during initialization: " + self.state);
 
 	window.addEventListener("offline", self.goOffline, true);
 	window.addEventListener("online", self.goOnline, true);
@@ -71,11 +71,8 @@ ConnectionState.prototype.isOffline = function() {
 };
 
 /**
- * When online connection is detected any locally stored pending logout information is sent to the server.
- * Additionally, any pending courses and questions information are loaded from the server.
- * Any pending statistics and tracking data are sent to the server as well. 
- * When online connection state is detected the error messages about the lost of connectivity are hiden
- * The switchtoonline event is triggered
+ * when are an internet connection is detected then synchronize data
+ * as long as the app is already loaded
  * @prototype
  * @function goOnline
  */
@@ -83,91 +80,108 @@ ConnectionState.prototype.goOnline = function() {
 	moblerlog("**online**");
 	this.state = true;
 	
-	 /** 
-	  * It it triggered when the connection state is online 
-	  * Additionally for statistics purposes we trigger the tracking event in order
-	  * to track the connectivity behavior
-	 * @event trackingEventDetected
-	 * @event online
-	 * **/
-	$(document).trigger("trackingEventDetected","online");
+	 if (this.controller.appLopaded) {
+		 this.synchronizeData();
+	 }
+};
 
-	// if a pending logout exists, send the logout to the server
-	sessionKey = localStorage.getItem("pendingLogout");
-	if (sessionKey) {
-		localStorage.removeItem("pendingLogout");
-		this.controller.models["authentication"].sendLogoutToServer(sessionKey);
-	}
 
-	//hide no connection error message in login view
-	
-	 /** 
-	  * It is triggered when an online connection is detected and consequently
-	  * the error message is hided
-	 * @event errormessagehide
-	 * **/
-	$(document).trigger("errormessagehide");
-	
-    moblerlog('check synchronization - course list');
-	// if a pending course list exist, load the course list from the server
-	var pendingCourseList = localStorage.getItem("pendingCourseList");
-	if (pendingCourseList) {
-		this.controller.models["course"].loadFromServer();
-	}
-    
-    moblerlog('check synchronization - question pools');
-	// if a pending question pool exist, load the question pool from the server
-    if ( this.controller && this.controller.models && this.controller.models["course"] && this.controller.models["course"].courseList) {
-         moblerlog( 'got models ');
-        var courseList = this.controller.models["course"].courseList;
-        if (courseList) {
-            moblerlog( 'interate course list ' );
-            for ( var c in courseList) {
-                moblerlog( 'check course ' + c );
-                
-                var pendingQuestionPools = localStorage.getItem("pendingQuestionPool_" + courseList[c].id);
-                if (pendingQuestionPools) {
-                    moblerlog('check synchronization - question pool missing for course ' + c);
-                    this.controller.models["questionpool"].loadFromServer(courseList[c].id);
-                }
-            }
-        }
-    }
+/**
+ * When online connection is detected any locally stored pending logout information is sent to the server.
+ * Additionally, any pending courses and questions information are loaded from the server.
+ * Any pending statistics and tracking data are sent to the server as well. 
+ * When online connection state is detected the error messages about the lost of connectivity are hiden
+ * The switchtoonline event is triggered
+ ** @prototype
+ * @function synchronizeData
+ */
+ConnectionState.prototype.synchronizeData = function() {
+	if (this.state) {
+		/** 
+		 * It it triggered when the connection state is online 
+		 * Additionally for statistics purposes we trigger the tracking event in order
+		 * to track the connectivity behavior
+		 * @event trackingEventDetected
+		 * @event online
+		 * **/
+		$(document).trigger("trackingEventDetected","online");
 
-    var statisticsModel = this.controller.models["statistics"];
-    
-    moblerlog('check synchronization - statistics');
-	// if pending statistics exist, send them to the server
-	var pendingStatistics = localStorage.getItem("pendingStatistics");
-	if (pendingStatistics) {
-		statisticsModel.sendToServer();
-	}
-	// if statistics data wasn't sent to the server for more than 24 hours
-	// send the data to the server
-	if (this.controller && this.controller.models && this.controller.models["statistics"]) {
-		if (!statisticsModel.lastSendToServer || statisticsModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
-			moblerlog("statistics need to be synchronized in connection state model");
+		// if a pending logout exists, send the logout to the server
+		sessionKey = localStorage.getItem("pendingLogout");
+		if (sessionKey) {
+			localStorage.removeItem("pendingLogout");
+			this.controller.models["authentication"].sendLogoutToServer(sessionKey);
+		}
+
+		//hide no connection error message in login view
+
+		/** 
+		 * It is triggered when an online connection is detected and consequently
+		 * the error message is hided
+		 * @event errormessagehide
+		 * **/
+		$(document).trigger("errormessagehide");
+
+		moblerlog('check synchronization - course list');
+		// if a pending course list exist, load the course list from the server
+		var pendingCourseList = localStorage.getItem("pendingCourseList");
+		if (pendingCourseList) {
+			this.controller.models["course"].loadFromServer();
+		}
+
+		moblerlog('check synchronization - question pools');
+		// if a pending question pool exist, load the question pool from the server
+		if ( this.controller && this.controller.models && this.controller.models["course"] && this.controller.models["course"].courseList) {
+			moblerlog( 'got models ');
+			var courseList = this.controller.models["course"].courseList;
+			if (courseList) {
+				moblerlog( 'interate course list ' );
+				for ( var c in courseList) {
+					moblerlog( 'check course ' + c );
+
+					var pendingQuestionPools = localStorage.getItem("pendingQuestionPool_" + courseList[c].id);
+					if (pendingQuestionPools) {
+						moblerlog('check synchronization - question pool missing for course ' + c);
+						this.controller.models["questionpool"].loadFromServer(courseList[c].id);
+					}
+				}
+			}
+		}
+
+		var statisticsModel = this.controller.models["statistics"];
+
+		moblerlog('check synchronization - statistics');
+		// if pending statistics exist, send them to the server
+		var pendingStatistics = localStorage.getItem("pendingStatistics");
+		if (pendingStatistics) {
 			statisticsModel.sendToServer();
 		}
-	}
-	
-	var trackingModel = this.controller.models["tracking"];
-    
-    moblerlog('check synchronization - tracking');
-	// if pending statistics exist, send them to the server
-	var pendingTracking = localStorage.getItem("pendingTracking");
-	if (pendingTracking) {
-		trackingModel.sendToServer();
-	}
-	// if tracking data wasn't sent to the server for more than 24 hours
-	// send the data to the server
-	if ( this.controller && this.controller.models && this.controller.models["tracking"]) {
-		if (!trackingModel.lastSendToServer || trackingModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+		// if statistics data wasn't sent to the server for more than 24 hours
+		// send the data to the server
+		if (this.controller && this.controller.models && this.controller.models["statistics"]) {
+			if (!statisticsModel.lastSendToServer || statisticsModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+				moblerlog("statistics need to be synchronized in connection state model");
+				statisticsModel.sendToServer();
+			}
+		}
+
+		var trackingModel = this.controller.models["tracking"];
+
+		moblerlog('check synchronization - tracking');
+		// if pending statistics exist, send them to the server
+		var pendingTracking = localStorage.getItem("pendingTracking");
+		if (pendingTracking) {
 			trackingModel.sendToServer();
 		}
+		// if tracking data wasn't sent to the server for more than 24 hours
+		// send the data to the server
+		if ( this.controller && this.controller.models && this.controller.models["tracking"]) {
+			if (!trackingModel.lastSendToServer || trackingModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+				trackingModel.sendToServer();
+			}
+		}
+		moblerlog('check synchronization DONE');
 	}
-    moblerlog('check synchronization DONE');
-
 };
 
 
