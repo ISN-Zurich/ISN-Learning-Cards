@@ -489,7 +489,7 @@ Controller.prototype.getLoginState = function() {
 
 /**
  * @prototype
- * @function getConnectionState
+ * @function isOffline
  * @return {boolean} true if the connection state is offline, otherwise false
  **/
 Controller.prototype.isOffline = function() {
@@ -519,8 +519,8 @@ Controller.prototype.getActiveURL = function() {
 
 /**
  * @prototype
- * @function getActiveURL
- * @return {String} url, url of the active server
+ * @function getActiveLogo
+ * @return {String} url, url of the image of the active server
  **/
 Controller.prototype.getActiveLogo = function() {
 	return this.models["lms"].getActiveServerImage();
@@ -528,8 +528,8 @@ Controller.prototype.getActiveLogo = function() {
 
 /**
  * @prototype
- * @function getActiveURL
- * @return {String} url, url of the active server
+ * @function getActiveLabel
+ * @return {String} label, the label of the active server
  **/
 Controller.prototype.getActiveLabel = function() {
 	return this.models["lms"].getActiveServerLabel();
