@@ -175,7 +175,6 @@ LMSView.prototype.closeLMS = function() {
  * @function showLMSList
  */ 
 LMSView.prototype.showLMSList = function() {
-
 	var lmsObj = this.controller.models['lms'];
 	
 	$("#lmsbody").empty();
@@ -324,8 +323,7 @@ LMSView.prototype.hideLMSConnectionMessage = function() {
  * @function showLMSRegistrationMessage
  * @param {String} message, a text with containing the warning message
  */ 
-View.prototype.showLMSRegistrationMessage = function(message) {
-	var self = this;
+LMSView.prototype.showLMSRegistrationMessage = function(message) {
 	// to display an error message that we are
 	//offline and we cannot register with the server
 	moblerlog("enter show lms message");
