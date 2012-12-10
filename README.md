@@ -16,7 +16,7 @@ HOW YOU CAN HELP
 
 We are always looking for translations of the language specific interfaces. 
 
-Use the [textualStrings_en.properties](https://github.com/ISN-Zurich/ISN-Learning-Cards/master/www/translations/textualStrings_en.properties) file as a reference for your translation.
+Use the [textualStrings_en.properties](https://github.com/ISN-Zurich/ISN-Learning-Cards/blob/master/www/translations/textualStrings_en.properties) file as a reference for your translation.
 
 - rename the file into "textualStrings_[YOU 2 LETTER LANGUAGE CODE].properties". 
 - open the file with the text editor of your preference. 
