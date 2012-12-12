@@ -75,5 +75,11 @@ CONTRIBUTORS
 - Oderbolz Beat Emil
 - Tim Wendel
 
+Acknowledgements
+===================
 
+This software has been partially funded by the "Swiss ADL Research and Prototype Development” grant funded by 
+the ADL Co-Lab and awarded by the Office of Naval Research Global (ONRG) under the Grant No. "N62909-12-1-7022".
+The views and solutions expressed herein are solely those of the contributors and do not represent or reflect the 
+views of any academic, government or industry organization mentioned herein.
 
