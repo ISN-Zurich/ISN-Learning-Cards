@@ -172,3 +172,4 @@ SettingsView.prototype.loadData = function(){
 SettingsView.prototype.clickAboutMore = function() {
 	controller.transitionToAbout();
 }
+
