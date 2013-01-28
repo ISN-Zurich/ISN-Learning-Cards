@@ -184,13 +184,17 @@ AchievementsView.prototype.showAchievementsBody = function() {
 	$("#valueStackHandler").text(statisticsModel.stackHandler.achievementValue+"%");
 
 	if (statisticsModel.stackHandler.achievementValue == 100){
-		$("#stackHandlerIcon").addClass("blue");			
+		$("#stackHandlerIcon").addClass("blue");	
+		$("#stackHandlerDash").removeClass("dashGrey");
+		$("#stackHandlerDash").addClass("select");	
 	};
 	
 	$("#valueCardBurner").text(statisticsModel.cardBurner.achievementValue+"%");
 
 	if (statisticsModel.cardBurner.achievementValue == 100){
-			$("#cardBurnerIcon").addClass("blue");			
+			$("#cardBurnerIcon").addClass("blue");	
+			$("#cardBurnerDash").removeClass("dashGrey");
+			$("#cardBurnerDash").addClass("select");	
 	};
 };
 
@@ -206,3 +210,11 @@ AchievementsView.prototype.showLoadingMessage = function() {
 	$("#loadingMessageAchievements").show();	
 	
 };
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* @prototype
+* @function changeOrientation
+**/ 
+AchievementsView.prototype.changeOrientation = doNothing;
