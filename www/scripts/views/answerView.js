@@ -155,7 +155,9 @@ AnswerView.prototype.open = function() {
 	this.showAnswerTitle();
 	this.showAnswerBody();
 	this.openDiv();
-
+	this.controller.resizeHandler();
+	//set automatic the width of the input field in numeric questions
+	//setNumberInputWidth();
 };
 
 /**Closes the view 
@@ -217,8 +219,6 @@ AnswerView.prototype.showAnswerTitle = function() {
 	$("#answerIcon").removeClass();
 	$("#answerIcon").addClass(jQuery.i18n.prop('msg_' + currentAnswerTitle + '_icon'));
 	$("#cardAnswerTitle").text(jQuery.i18n.prop('msg_' +currentAnswerTitle + '_title'));
-	
-
 };
 
 
@@ -227,14 +227,14 @@ AnswerView.prototype.showAnswerTitle = function() {
  * @function clickDoneButton
  **/
 AnswerView.prototype.clickDoneButton = function() {
-
 	var questionpoolModel = controller.models['questionpool'];
+	var statisticsModel=controller.models['statistics'];
 	var answerModel = controller.models['answers'];
 	moblerlog('check apology ' + this.widget.didApologize);
 	if (this.widget.didApologize) {
 		// if there was a problem with the data, the widget knows
 		// in this case we proceed to the next question
-		statisticsModel.resetTimer();
+		//statisticsModel.resetTimer();
 		questionpoolModel.nextQuestion();
 		controller.transitionToQuestion();
 	} else {
@@ -269,3 +269,28 @@ AnswerView.prototype.clickTitleArea = function() {
 	// These answers have not yet been finally answered.
 	controller.transitionToQuestion();
 };
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* @prototype
+* @function changeOrientation
+**/ 
+AnswerView.prototype.changeOrientation = function(o,w,h){
+	moblerlog("change orientation in answer view " + o + " , " + w + ", " +h);
+	setAnswerWidth(o,w,h);
+	setNumberInputWidth();
+};
+
+
+function setNumberInputWidth(){
+	
+	var questionpoolModel = controller.models['questionpool'];
+
+	var questionType = questionpoolModel.getQuestionType();
+	if (questionType=="assNumeric"){
+		window_width = $(window).width();
+		var inputwidth = window_width - 49- 34 - 18;//49 is the width of the close button on the header
+		$("#numberInput").css("width", inputwidth + "px");
+	}
+}
