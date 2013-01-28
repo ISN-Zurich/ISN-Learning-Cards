@@ -43,12 +43,13 @@ under the License.
 function LMSView(controller) {
 
 	var self = this;
-
+	
 	self.tagID = 'lmsView';
 	this.controller = controller;
 	self.active = false;
 	self.firstLoad = true;
 	this.didApologize = false;
+	this.messageShown=false;
 	
 	//handler when taping on the settings button
 	jester($('#closeLMSIcon')[0]).tap(function() {
@@ -61,9 +62,10 @@ function LMSView(controller) {
 	 * @param: a callback function that displays a message that states that we are offline and no registration can take place
 	 * 			for the specific unregistered lms
 	 */
-	$(document).bind("lmsOffline", function(servername) {
+	$(document).bind("lmsOffline", function(e,servername) {
 		moblerlog("we are offline");
-		self.LMSNotClickable(servername);	
+		self.showLMSConnectionMessage(jQuery.i18n.prop('msg_lms_connection_message'),servername);
+			
 	});
 	
 	/**It is triggered when an lms is online and failed to register for any reason. More specifically 
@@ -72,8 +74,9 @@ function LMSView(controller) {
 	 * @param: a callback function that displays a message to the user that the server is not available and the 
 	 * 		   registration cannot take place
 	*/
-	$(document).bind("lmsNotRegistrableYet", function(servername) {
-		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));
+	$(document).bind("lmsNotRegistrableYet", function(e,servername,previousLMS) {
+		moblerlog("previouslms in bind is "+previousLMS);
+		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'),servername,previousLMS);
 	});
 	
 	/**It is triggered when the registration of an lms fails because of any reason
@@ -81,9 +84,16 @@ function LMSView(controller) {
 	 * @param:a callback function  that displays a message to the user that the server is not available and the
 	 *		  registration cannot take place 
 	*/
-	$(document).bind("registrationfailed", function() {
-		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'));
+	$(document).bind("registrationfailed", function(e,servername,previousLMS) {
+		moblerlog("previous lms in bind 2 is "+previousLMS);
+			self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'),servername,previousLMS);
 	});
+	
+	$(document).bind("registrationIsStarted", function(e,servername) {
+		moblerlog("server name passed "+servername);
+		self.showLoadingIcon(servername);
+	});
+	
 }
 
 /**
@@ -130,6 +140,7 @@ LMSView.prototype.open = function() {
 	this.showLMSList();
 	this.firstLoad = false;
 	this.openDiv();
+	this.controller.resizeHandler();
 };
 
 /**
@@ -167,10 +178,11 @@ LMSView.prototype.closeLMS = function() {
 
 /**
  * shows the list with the available
- * different lms's 
+ * different lms's. 
  * for each lms are displayed:
  * - logo image
  * - label
+ * - a separator line between the these two
  * @prototype
  * @function showLMSList
  */ 
@@ -178,17 +190,25 @@ LMSView.prototype.showLMSList = function() {
 	var lmsObj = this.controller.models['lms'];
 	
 	$("#lmsbody").empty();
-	this.hideLMSConnectionMessage();
-	this.hideLMSRegistrationMessage();
-	if (lmsObj.getLMSData() ){
-		var lmsData = lmsObj.getLMSData(), i = 0;
+	var lmsData, i = 0;
+	if (lmsData = lmsObj.getLMSData()){
 		//creation of lms list
 		var ul = $("<ul/>", {
 			"id": "lmsList"
 		}).appendTo("#lmsbody");
+
 		for (i=0; i< lmsData.length; i++) {
 			this.createLMSItem(ul, lmsData[i]);
 		} //end of for
+
+		var lastli = $("<li/>", {}).appendTo("#lmsList");
+
+		var shadoweddiv = $("<div/>", {
+			"id": "shadowedLiLMS",
+			"class" : "gradient1 shadowedLi"
+		}).appendTo(lastli);
+		
+
 	}//end of if
 	else {
 		this.didApologize = true; 
@@ -198,91 +218,231 @@ LMSView.prototype.showLMSList = function() {
 };
 
 /**
- * creates/designs the lms list
- * assigns tap handlers when tap on an item
- * prevent default behavior of the "touch start" gesture
- * in order the transition to login to take place smmothly and not to display
- * poping out the input fields.
+ * creation of the lms list
  * @prototype
  * @function createLMSItem
- * @param {String, String} ul, lmsData, the name of the selected server
- **/ 
+ * @param {string,string} ul,lmsData
+ */ 
 LMSView.prototype.createLMSItem = function(ul, lmsData) {
 	var self = this;
 	var sn = lmsData.servername;
+	var lmsModel = self.controller.models['lms'];
+	moblerlog("sn is "+sn);
+	var selectedLMS = controller.models["lms"].getSelectedLMS();
 	
 	var li = $(
 			"<li/>",
 			{
-				"id" : "lms " +sn
+				"id" : "selectLMSitem" +sn,
+				"class": (selectedLMS == lmsData.logoLabel ? "gradientSelected":"gradient2 textShadow")
 			}).appendTo(ul);
 	moblerlog("the first lms is" + sn);
+	
 	// create the div container within the li element
 	// that will host the image and logo of the lms's
-	var div = $("<div/>", {
-		"class" : "lmsListItem"
+	
+	var rightDiv = $("<div/>", {
+		"id":"rightDivLMS"+ sn,
+		"class" : "right "
 	}).appendTo(li);
-
+	
+	var separator = $("<div/>",{
+		"id":"separator"+ sn,
+		"class" : "radialCourses lineContainer separatorContainerLMS"
+	}).appendTo(rightDiv);
+	
+	var div = $("<div/>", {
+		"id":"imageContainer"+sn,
+		"class" : " courseListIconLMS lmsIcon  "
+	}).appendTo(rightDiv);
+	
+	var img = $("<img/>", {
+		"id":"lmsImage"+sn,
+		//"class" : "imageLogoLMS",
+		"class": (lmsModel.isRegistrable(sn) ? "imageLogoLMS" : "hidden"),
+		"src":lmsData.logoImage
+	}).appendTo(div);
+	
+	$("<div/>", {
+		"id":"lmsWaiting"+sn,
+		"class":(lmsModel.isRegistrable(sn) ? "hidden" : "icon-cross red")	// check if the lms has failed to register for less than 24 hours 
+																			// and display the red cross
+																			// otherwise display the li as normal
+	}).appendTo(div);
+	
+	var div1 = $("<div/>", {
+		"class": "left lineContainer selectItemContainer"
+		}).appendTo(li);
+	
+	var span = $("<span/>", {
+		"id": "lmsDash"+sn,
+		"class": (lmsModel.isRegistrable(sn) ?"select icon-dash":"dashGrey icon-dash")
+		}).appendTo(div1);
+	
+	var mydiv = $("<div/>", {
+		"id":"label"+sn,
+		"class": (lmsModel.isRegistrable(sn) ? "text marginForCourseList" : "text marginForCourseList lightgrey"),	 // check if the lms has failed to register for less than 24 hours 
+																													// and display light grey font color
+		"text" : lmsData.logoLabel
+	}).appendTo(li);
+	
+	
 	var prevent=true;
-	jester(div[0]).tap(function(e,prevent) {
+	jester(li[0]).tap(function(e,prevent) {
 		e.preventDefault();
 		e.stopPropagation();	
-		self.clickLMSItem(sn);
+		self.clickLMSItem(sn,$(this));
 	});
 
-	$(div[0]).bind("touchstart", function(e) {
+	$(li[0]).bind("touchstart", function(e) {
 		moblerlog(" gesture start in lms  detected ");
 		e.preventDefault();
 		e.stopPropagation();
 	});	
-
-	img = $("<img/>", {
-		"id":"lmsImage" +sn,
-		"class" : "pfp left",
-		"src":lmsData.logoImage
-	}).appendTo(div);
-	span = $("<div/>", {
-		"id":"lmslabel"+sn,
-		"class" : "lsmlabel",
-		"text":lmsData.logoLabel
-	}).appendTo(div);
-	
 };
-	
 		
 
 /**
- * click on an lms item 
- * and sets properties
- * of the selected server
+ * applies a specific gradient color and textshadows to the selected lms
+ * in order to be differentiated from the rest lms items
  * @prototype
- * @function clickLMSItem
+ * @function selectItemVisuals
  * @param {String} servername, the name of the selected server
- **/ 
-LMSView.prototype.clickLMSItem = function(servername) {
-	this.controller.models['lms'].setActiveServer(servername);
+ **/
+LMSView.prototype.selectItemVisuals = function(servername) {
+	$("#selectLMSitem"+servername).addClass("gradientSelected");
+	$("#selectLMSitem"+servername).removeClass("textShadow");
+	$("#selectLMSitem"+servername).addClass("lightShadow");
+};
+
+/**
+ * deselect the gradient color and text shadow of an already selected lms
+ * after the attempt of registrating has been finished
+ * @prototype
+ * @function deselectItemVisuals
+ * @param {String} servername, the name of the selected server
+ **/
+LMSView.prototype.deselectItemVisuals = function(servername) {
+	$("#selectLMSitem"+servername).removeClass("lightShadow");
+	$("#selectLMSitem"+servername).removeClass("gradientSelected");
+	$("#selectLMSitem"+servername).addClass("textShadow");
+};
+
+/**when the attempt of registrating with the selected lms has failed,
+ * the specific lms becomes through this function visually inactive.
+ * both the side dash and the tesxt color become grey, as well as
+ * a red icon cross replaces the image icon 
+ * @prototype
+ * @function deactivateLMS
+ * @param {String} servername, the name of the selected server
+ **/
+LMSView.prototype.deactivateLMS = function(servername) {
+	$("#lmsWaiting"+servername).removeClass("icon-loading loadingRotation");
+	moblerlog("loading rotation has been removed");
+	$("#lmsImage" +servername).hide();
+	$("#lmsDash"+servername).removeClass("select").addClass("dashGrey");
+	$("#lmsWaiting"+servername).addClass("icon-cross red");
+	$("#lmsWaiting"+servername).show();
+	moblerlog("red icon cross has been added");
+	$("#label"+servername).addClass("lightgrey");
 };
 
 
 /**
- * shows the warning message from lms list view
- * that displayed a notification because there was
- * not internet connection and no registration could take place
+ * when the attempt of registering an lms with the server is finished,
+ * the loading rotating icon is beeing replaced by the image
  * @prototype
- * @function LMSNotClickable
- * @param {String} message, a text with containing the warning message
- */ 
-LMSView.prototype.LMSNotClickable = function(servername) {
-	moblerlog("enter LMS not clickable");
-	var lmsObj = this.controller.models['lms'];
-	var lmsData = lmsObj.getLMSData();
-	// to make the specific LMS item unclickable
-	$("#lms" + lmsData.servername).addClass("notClickable");
+ * @function hideRotation
+ * @param {String} servername, the name of the selected server
+ **/
+LMSView.prototype.hideRotation = function(servername) {
+	$("#lmsWaiting"+servername).removeClass("icon-loading loadingRotation");
+	$("#lmsWaiting"+servername).hide();
+	$("#lmsImage" +servername).show();
+};
 	
-	// to display an error message
-	this.showLMSConnectionMessage(jQuery.i18n.prop('msg_lms_connection_message'));
+
+/**
+ * to display a loading icon in the place of the lms image
+ * while a registration with a server is being atempted.
+ * @prototype
+ * @function toggleIconWait
+ * @param {String} servername, the name of the selected server
+ **/
+LMSView.prototype.toggleIconWait = function(servername) {
+	var self=this;
+	moblerlog("toggle icon wait");
+	if ($("#lmsImage"+servername).is(":visible")){
+		moblerlog("removed imagea and added loading icon");
+		$("#lmsImage"+servername).hide();
+		$("#lmsWaiting"+servername).addClass("icon-loading loadingRotation");
+		$("#lmsWaiting"+servername).show();
+
+	}else {
+		self.hideRotation(servername);
+	}	
 };
 
+/**
+ * click on an lms item 
+ * and sets properties of the selected server
+ * @prototype
+ * @function clickLMSItem
+ * @param {String, string} servername,lmsitem the name of the selected server and the current li element that hosts it
+ **/ 
+LMSView.prototype.clickLMSItem = function(servername,lmsitem) {
+	var self=this;
+	var lmsModel = self.controller.models['lms'];
+	
+	
+	self.checkLoadingStatus(servername);
+	
+	if ($("#lmsWaiting"+servername).hasClass("icon-cross red")){
+		moblerlog("cannot do anything because the lms item is selected");
+		jester($("#selectLMSitem"+servername)[0]).tap(function(e) {
+			e.preventDefault();
+		$("#selectLMSitem"+previousSelectedLMSname).addClass("gradientSelected");	
+	});	}else if ($("#lmsImage"+servername).is(":visible")){
+		moblerlog("lms item is clicked " + servername);
+		var previousSelectedLMS= lmsitem.parent().find("li.gradientSelected");
+		var previousSelectedLMSname= previousSelectedLMS.attr("id").substring(13);
+		moblerlog("previous selected li is "+previousSelectedLMSname);
+		previousSelectedLMS.removeClass("gradientSelected").addClass("gradient2 textShadow");
+		this.selectItemVisuals(servername);
+		setTimeout(function() {
+		this.controller.models['lms'].setActiveServer(servername,previousSelectedLMSname);},650);
+	}
+	
+};
+
+/**checks if an lms is trying to be registered.
+ * this is achieved by checking if the loading icon is displayed instead of the image and if has also a dark gradient color.
+ * @prototype
+ * @function checkLoadingStatus
+ * @param {String} servername, the name of the selected server
+ **/ 
+LMSView.prototype.checkLoadingStatus = function(servername){
+	if($("#lmsWaiting"+servername).hasClass("icon-loading loadingRotation") && $("#selectLMSitem"+servername).hasClass("gradientSelected")){
+		moblerlog("deactivate li item when trying to connect");
+		jester($("#selectLMSitem"+servername)[0]).tap(function(e) {
+			e.preventDefault();
+		});
+	}
+};
+
+/**
+ * @prototype
+ * @function checkInactiveStatus
+ * @param {String} servername, the name of the selected server
+ **/ 
+LMSView.prototype.checkInactiveStatus = function(servername){
+	if($("#lmsWaiting"+servername).hasClass("icon-loading loadingRotation") && $("#selectLMSitem"+servername).hasClass("gradientSelected")){
+	moblerlog("deactivate li item when trying to connect");
+	jester($("#selectLMSitem"+servername)[0]).tap(function(e) {
+		e.preventDefault();
+	});
+	}
+};
 
 /**
  * shows the warning message from lms list view
@@ -290,57 +450,138 @@ LMSView.prototype.LMSNotClickable = function(servername) {
  * not internet connection and no registration could take place
  * @prototype
  * @function showLMSConnectionMessage
- * @param {String} message, a text with containing the warning message
+ * @param {String, String} message,servername ,a text containing the warning message, and the name of the
+ * selected lms
  */ 
-LMSView.prototype.showLMSConnectionMessage = function(message) {
-	// to display an error message that we are
+LMSView.prototype.showLMSConnectionMessage = function(message, servername) {
+	var self=this;
+	
+	 // to display an error message that we are
 	// offline and we cannot register with the server
-	moblerlog("enter show lms message");
-	$("#lmserrormessage").text(message);
-	$("#lmserrormessage").show();
+	moblerlog("enter show lms connection message");
+	
+	self.toggleIconWait(servername);
+	self.checkLoadingStatus(servername);
+
+	var warningLi= $('<li/>', { 
+		"id": "lmserrormessage"+servername,
+		"class":"gradientMessages lmsmessage",
+		"text": jQuery.i18n.prop('msg_lms_connection_message')
+	});
+	
+	$("#selectLMSitem"+servername).after(warningLi);
+	$("#lmserrormessage"+servername).hide();
+	$("#lmserrormessage"+servername).slideDown(600);
+	moblerlog("lmsmessage for server"+servername);
+	
+	
+	setTimeout(function(){
+		$("#lmserrormessage"+servername).slideUp(600);
+		},2300);
+	setTimeout(function(){
+	//	$("#lms"+servername).removeClass("gradientSelected");
+	 self.hideRotation(servername);
+	//self.deselectItemVisuals(servername);
+	},2800);
+	
+	
 };
 
 
 
 /**
- * hides the warning message from lms list view
- * that displayed a notification because there was
- * not internet connection and no registration could take place
- * @prototype
- * @function hideLMSConnectionMessage
- */ 
-LMSView.prototype.hideLMSConnectionMessage = function() {
-	$("#lmserrormessage").text("");
-	$("#lmserrormessage").hide();
-};
-
-
-/**
- * shows the warning message from lms list view
- * that displayed a notification regarding an error
- * during the registration of an lms
+ * shows a warning message regarding an error during the registration 
+ * of the selected lms. The message is slided down right below the selected lms
+ * and as soon as it is slided up, the lms becomes inactive, by getting a grey font color
+ * and a red cross in the  place of the image.
  * @prototype
  * @function showLMSRegistrationMessage
- * @param {String} message, a text with containing the warning message
+ * @param {String,String,String} message,servername, previouslms,
+ * a text with containing the warning message, the name of the selected server, thename of the previous selected server
  */ 
-LMSView.prototype.showLMSRegistrationMessage = function(message) {
-	// to display an error message that we are
-	//offline and we cannot register with the server
-	moblerlog("enter show lms message");
-	$("#lmsregistrationmessage").text(message);
-	$("#lmsregistrationmessage").show();
+LMSView.prototype.showLMSRegistrationMessage = function(message,servername,previouslms) {
+	var self=this;
+	
+	$("#lmsregistrationwaitingmessage").hide();
+	
+	self.toggleIconWait(servername);
+	self.checkLoadingStatus(servername);
+	
+	var warningLi= $('<li/>', { 
+		"id": "lmsregistrationmessage"+servername,
+		"class":"gradientMessages lmsmessage",
+		"text": jQuery.i18n.prop('msg_lms_registration_message')
+	});
+
+	$("#selectLMSitem"+servername).after(warningLi);
+	$("#lmsregistrationmessage"+servername).hide();
+	$("#lmsregistrationmessage"+servername).slideDown(600);
+	moblerlog("lmsregistrationmessage for server"+servername);
+
+	// to display an error message that 
+	// there is a problem with the specific server
+	// and we cannot register
+	moblerlog("enter show lms registration message");
+
+	setTimeout(function(){
+		$("#lmsregistrationmessage"+servername).slideUp(600);
+		},2300);
+	setTimeout(function(){
+	//$("#lms"+servername).removeClass("gradientSelected");
+	//self.hideRotation(servername);
+	self.deselectItemVisuals(servername);
+	self.deactivateLMS(servername);
+	moblerlog("previouslms is "+previouslms);
+	$("#selectLMSitem"+previouslms).addClass("gradientSelected");	
+	},2800);
+	
+};
+
+/**
+ * to display a loading icon in the place of the lms image
+ * while a registration with a server is being atempted.
+ * @prototype
+ * @function showLoadingIcon
+ * @param {String} servername, the name of the selected server
+ */ 
+LMSView.prototype.showLoadingIcon = function(servername) {
+	var self=this;
+	self.toggleIconWait(servername);
+};
+
+
+
+/**
+ * handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* - the height of the lms item, as well as the separtor next to it are being calculated dynamically
+ ** @prototype
+ * @function changeOrientation
+ * @param {String, Number, Number}  orientation mode, number, number, the orientation mode  
+ * which could be either horizontal or vertical, the width and the height of the detected orientation mode.
+ */
+LMSView.prototype.changeOrientation = function(o,w,h){
+	moblerlog("change orientation in lms view " + o + " , " + w + ", " +h);
+	this.setLMSHeight(o,w,h);
 };
 
 
 /**
- * hides the warning message from lms list view
- * that displayed a notification regarding an error
- * during the registration of an lms
+ * 
  * @prototype
- * @function hideLMSRegistrationMessage
- */ 
-LMSView.prototype.hideLMSRegistrationMessage = function() {
-	$("#lmsregistrationmessage").text("");
-	$("#lmsregistrationmessage").hide();
+ * @function setLMSHeight
+ * @param {String, Number, Number} orientation mode, number, number, the orientation mode  
+ * which could be either horizontal or vertical, the width and the height of the detected orientation mode
+ */
+LMSView.prototype.setLMSHeight = function(orientationLayout, w, h) {
+	var twidth = w-65;
+	twidth = twidth + "px";
+	$("#lmsbody ul li").each(function() {
+		$(this).find(".text").css("width", twidth );
+		var height = $(this).height()-18;
+		$(this).find(".separatorContainerLMS").css("height", height + "px");
+		$(this).find(".radial").css("height", height + "px");	
+	});
 };
+
 
