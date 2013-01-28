@@ -66,7 +66,7 @@ function QuestionView(controller) {
 	setOrientation();
 	// when orientation changes, set the new width and height
 	// resize event should be caught, too, because not all devices
-	// send an oritentationchange event
+	// send an orientationchange event
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
 	
@@ -205,7 +205,7 @@ QuestionView.prototype.open = function() {
 QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
-	$("#cardQuestionBody").html(currentQuestionBody);
+	$("#questionText").html(currentQuestionBody);
 
 	$("#ButtonTip").hide();
 
@@ -234,3 +234,4 @@ QuestionView.prototype.clickCourseListButton = function() {
 	controller.models["answers"].resetTimer();
 	controller.transitionToCourses();
 };
+
