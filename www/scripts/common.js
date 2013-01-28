@@ -16,8 +16,9 @@ var DEFAULT_SERVER = "yellowjacket";
 var URLS_TO_LMS = [ 
 					{
 						servername: "yellowjacket",
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Test Server at ISN Zurich",					
+						logoImage: "resources/pfpLogo.png",
+						backgroundImage: "",
+						logoLabel: "Yellowjacket",					
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
 						debug:"1",
 						clientKey: ""
@@ -25,25 +26,29 @@ var URLS_TO_LMS = [
 					{
 						servername: "hornet",
 						logoImage: "resources/pfpLogo.png", 
+						backgroundImage: "",
 						logoLabel: "Authoring LMS at ISN Zurich",
 						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
 						debug:"0",
 						clientKey: ""
 					},
+					
 					{
-						servername: "PFP LMS",
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN Zurich",
-						url: "https://pfp.ethz.ch/restservice/learningcards",
-						debug:"0",
+						servername: "PFPTEST",
+						logoImage: "resources/pfpLogo.png",
+						backgroundImage: "",
+						logoLabel: "PfP test LMS at ETH",
+						url: "https://pfp-test.ethz.ch/restservice/learningcards",
+						debug:"1",
 						clientKey: ""
 					},
 					{
-						servername: "PFPTEST",
-						logoImage: "resources/pfpLogo.png", 
-						logoLabel: "Partnership for Peace LMS at ISN/ETH test",
-						url: "https://pfp-test.ethz.ch/restservice/learningcards",
-						debug:"1",
+						servername: "PFPLMS",
+						logoImage: "resources/pfpLogo.png",
+						backgroundImage: "",
+						logoLabel: "PfP LMS at ISN Zurich",
+						url: "https://pfp.ethz.ch/restservice/learningcards",
+						debug:"0",
 						clientKey: ""
 					}
 ];
@@ -156,22 +161,60 @@ function insertAchievement() {
 //helper functions
 
 function checkImprovement(improvementValue) {
-    var retval = msg_neutralImprovement_icon + " green";
+    var retval = msg_neutralImprovement_icon + " green stats";
     if (improvementValue > 0) {
-        retval = msg_positiveImprovement_icon + " green";
+        retval = msg_positiveImprovement_icon + " green stats";
     } else if (improvementValue < 0) {
-        retval = msg_negativeImprovement_icon + " red";
+        retval = msg_negativeImprovement_icon + " red stats";
     }
     return retval;
 }
 
 function checkSpeedImprovement(improvementValue){
-    var retval = msg_neutralImprovement_icon + " green";
+    var retval = msg_neutralImprovement_icon + " green stats";
     if (improvementValue > 0) {
-        retval = msg_positiveImprovement_icon + " red";
+        retval = msg_positiveImprovement_icon + " red stats";
     } else if (improvementValue < 0) {
-        retval = msg_negativeImprovement_icon + " green";
+        retval = msg_negativeImprovement_icon + " green stats";
     }
     return retval;
 }
 
+/**
+ * Calculates the width of an lms item on login view and lms list view.
+ * Additionally it calculates the width of the label container in landing view.
+ * Generally, this function calculates the width of the label container when it is
+ * on the same row with a side dash and the image container on the left along with the separator.
+ * * @function calculateLabelWidth
+ * */
+function calculateLabelWidth(){
+	moblerlog("enters landing view form");
+	w1=$(".imageContainer").width();
+	w2=$(".separator").width();
+	w3=$(".selectItemContainer").width();
+	width = $(window).width() - (w1 + w2 + w3 + w3 + w1) ;	
+	$(".labelContainer").width(width);
+};
+
+
+function setAnswerWidth(orientationLayout, w, h){
+	var twidth = w-65;
+	twidth = twidth + "px";
+	$("#cardAnswerBody ul li").each(function() {
+		$(this).find(".text").css("width", twidth );
+		var height = $(this).height()-18;
+		$(this).find(".separatorContainerCourses").css("height", height + "px");
+		$(this).find(".radial").css("height", height + "px");
+	});
+};
+
+function setFeedbackWidth(orientationLayout,w, h){
+	var twidth = w-65;
+	twidth = twidth + "px";
+	$("#feedbackBody ul li").each(function() {
+		$(this).find(".text").css("width", twidth );
+		var height = $(this).height()-18;
+		$(this).find(".separatorContainerCourses").css("height", height + "px");
+		$(this).find(".radial").css("height", height + "px");
+	});
+};
