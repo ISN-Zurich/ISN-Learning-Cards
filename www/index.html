@@ -49,6 +49,7 @@
 <script type="text/javascript" src="scripts/views/coursesListView.js"></script>
 <script type="text/javascript" src="scripts/views/feedbackView.js"></script>
 <script type="text/javascript" src="scripts/views/loginView.js"></script>
+<script type="text/javascript" src="scripts/views/landingView.js"></script>
 <script type="text/javascript" src="scripts/views/logoutView.js"></script>
 <script type="text/javascript" src="scripts/views/questionView.js"></script>
 <script type="text/javascript" src="scripts/views/settingsView.js"></script>
@@ -58,147 +59,301 @@
 <script type="text/javascript" src="scripts/views/splashScreen.js"></script>
 <script type="text/javascript" src="scripts/testModels.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<link href="css/test.css" rel="stylesheet" type="text/css">
+<!--<link href="css/test.css" rel="stylesheet" type="text/css">-->
+<link href="css/css2.0.css" rel="stylesheet" type="text/css">
 <!-- <link href="css/font-awesome.css" rel="stylesheet" type="text/css"> -->
 <link href="libs/icomoon/style.css" rel="stylesheet" type="text/css">
-<!--<script type="text/javascript" src="scripts/transition.js"></script>-->
-<!--<script type="text/javascript" src="scripts/catchGestures.js"></script>-->
-
 </head>
 
-<body id ="myDoc">
-
-
+<body id="myDoc">
 
 	<div id="splashScreen" class="viewblock">
-
-		<div>
-			<div id="mainTitle">
-				Mobler <span id="cardsTitle">Cards</span>
-			</div>
-			<div id="cards">
-				<div id="card3Login" class="card3">I</div>
-				<div id="card2Login" class="card2">S</div>
-				<div id="card1Login" class="card1">N</div>
-			</div>
-		</div>
-
-		<div id="cover" class="viewblock">
+<div class="viewblock cover">
+		<div class="viewblock cover">
 			<div id="loading">
 				<div class="centered">
 					<span class="icon-loading"></span>
 				</div>
 			</div>
-			<div id="loginForm">
-
-				<ul id="loginElements">
-					<li>
-						<div class="inputBorder">
-							<input class="loginInput" id="usernameInput" required="required"
-								type="text" placeholder="" />
-						</div>
-					</li>
-					<li>
-						<div class="inputBorder">
-							<input id="password" class="loginInput" name="password"
-								required="required" type="password" placeholder="" />
-						</div>
-					</li>
-					<li>
-						<div id="selectLMS" class="selectWidget ">
-						<span id="pfpLabel1" class="lsmlabel"> </span>
-						<img id="lmsImage" class="right" /> 
-						</div>
-
-					</li>
-
-				</ul>
-
-
-				<!-- <div id="LMSContainer">
-					<img id="lmsImage" class="pfp" />
-					<div id="pfpLabel1" class="pfpLabelContainer"></div>
-				</div>-->
-				<div id="errormessage"></div>
-				<div id="warningmessage"></div>
-
-				<div id="loginButton" class="forwardButton">
-					<span class="icon-enter"></span>
-				</div>
-
+		</div>
+	</div>	<!--  end of splah Screen -->	
+		
+		
+		
+	<div id="landingView" class="viewblock">	
+	
+		<div id="landingViewHeader" class="landingHeader">
+			<div> 
+				<div id="landingViewTitle" class="title left"><span class="title1">Mobler </span><span class="title2">Cards</span></div>
+				<div id="cards">
+						<div id="card3Login" class="card3">I</div>
+						<div id="card2Login" class="card2">S</div>
+						<div id="card1Login" class="card1">N</div>
+					</div>
+			  
 			</div>
 
-		</div>
+			</div>
+			
+			<div id="landingBody" class="content full">
+				
+			
+				<div id="landingForm">
+					
+					<ul id="landingElements">
+						<li>
+						<div id="featuredContent" class="selectWidget gradient2 ">
+							<div class=" left lineContainer selectItemContainer ">
+								<span class="select icon-dash"></span>
+							</div>
+							<div id="leftElement1" class="labelContainer">
+								<div id="landingLmsLabel" class="lsmlabel textShadow">Featured
+									Content</div>
+							</div>
+							<div id="rightElements" class="right">
+								<div id="separatorLanding"
+									class="lineContainer separatorContainerCourses radial"></div>
+								<div id="selectarrowLanding"
+									class="lineContainer selectItemContainer select">
+									<span class="icon-bars"></span>
+								</div>
+							</div>
+						</div>
+					</li>
+				<!--<li>
+						<div id="selectFreeContent" class="selectWidget gradient2">
+								<div class=" left lineContainer selectItemContainer ">
+									<span class="select icon-dash"></span>
+								</div>
+								<div id="leftElementLanding" class="labelContainer">
+									<div id="freeCourseLabel" class="lsmlabel textShadow"></div>
+								</div>
+								<span id="rightElementsLanding" class="right">
+						<div id="separatorLandingFreeContent" class="lineContainer separatorContainerCourses radial"></div>
+									<div id="selectarrow"
+										class="lineContainer selectItemContainer select">
+										<span class="icon-enter"></span>
+									</div>
+								</span>
+							</div>
+						</li>  -->
+							<li id="liExclusive">
+						<div id="selectExclusiveContent" class="selectWidget gradientSelected ">
+								<div class=" left lineContainer selectItemContainer ">
+									<span class="select icon-dash"></span>
+								</div>
+								<div id="leftElementExclusive" class="left labelContainer">
 
-		<!--<div id="logos" class="bottom">
-			<div id="ISNlogo"></div>
-			<div id="ETHZlogo"></div>
-		</div>-->
+									<div id="exclusiveContentLabel" class="lsmlabel textShadow">Exclusive Content</div>
+								</div>
+								<span id="rightElements" class="right">
+									<div id="separatorExclusive"
+										class="lineContainer separatorContainerCourses radial"></div>
+									<div id="selectarrowExclusive"
+										class="lineContainer selectItemContainer select">
+										<span class="icon-enter"></span>
+									</div>
+								</span>
+							</div>
+						</li>
+						<li>
+							<div id="errormessageLanding" class="loginMessage gradientMessages"></div>
+						</li>
+						<li>
+							<div id="warningmessageLanding" class="loginMessage gradientMessages"></div>
+						</li>
+					<li>
+						<div class="gradient1 shadowedLi"></div>
+						</li>
+					</ul>
+	
+				</div> <!-- end of landing form -->
+			
+			</div><!-- end of landing body -->
 
-		
 	</div>
+</div>
 
+
+<div id="loginView" class="viewblock">
+<div class="viewblock cover">
+
+			<div id="loginViewHeader" class="headerContainer">
+				<div id="loginViewTitle" class="title">Login/Register</div>
+				<div id="loginIcon" class="titleicon">
+					<span class="icon-lock"></span>
+				</div>
+			</div>
+			<div id="loginViewBackIcon" class="closeButton">
+				<span class="icon-cross"></span>
+			</div>
+			<div id="loginBody" class="content">
+				<div id="loginForm">
+
+					<ul id="loginElements">
+						<li>
+							<div class="left lineContainer selectItemContainer ">
+								<span id="inputNameDash" class="dashGrey icon-dash"></span>
+							</div>
+
+							<div class="inputBorder gradient1 ">
+								<input class="loginInput textShadow" id="usernameInput"
+									required="required" type="text" placeholder="" />
+							</div>
+						</li>
+						<li>
+							<div class=" left lineContainer selectItemContainer ">
+								<span id="inputPasswordDash" class="dashGrey icon-dash"></span>
+							</div>
+							<div class="inputBorder gradient1 ">
+								<input id="password" class="loginInput textShadow"
+									name="password" required="required" type="password"
+									placeholder="" />
+							</div>
+						</li>
+						<li id="selectlms">
+							<div id="selectLMS" class="selectWidget gradient2 ">
+								<div class=" left lineContainer selectItemContainer ">
+									<span class="select icon-dash"></span>
+								</div>
+								<div id="leftElement" class="labelContainer">
+
+									<div id="loginLmsLabel" class="lsmlabel textShadow"></div>
+								</div>
+								<span id="rightElements" class="right">
+									<div class="lineContainer imageContainer">
+										<div class="imageoutline1">
+											<div class="imageoutline2">
+												<img id="lmsImage" class="imageLogo" />
+											</div>
+										</div>
+									</div>
+									<div id="separator"
+										class="lineContainer separatorContainerCourses radial"></div>
+									<div id="selectarrow"
+										class="lineContainer selectItemContainer select">
+										<span class="icon-enter"></span>
+									</div>
+								</span>
+							</div>
+						</li>
+						<li>
+							<div id="errormessage" class="loginMessage gradientMessages"></div>
+						</li>
+						<li>
+							<div id="warningmessage" class="loginMessage gradientMessages"></div>
+						</li>
+						<li>
+							<div class="gradient1 shadowedLi"></div>
+						</li>
+					</ul>
+					<div id="loginButton" class="forwardButton fixed">
+						<span class="icon-enter"></span>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
 
 	<div id="lmsView" class="viewblock">
-
-		<div id="lmsListHeader" class="container headerbgNew topNew">
+		<div id="lmsListHeader" class="headerContainer">
+		<div class="titleicon" id="lmsIcon">
+				<span class="icon-lms"></span>
+			</div>
 			<!-- <div class="left"></div> -->
-			<div id="lmsListTitle" class="titleNew"></div>
+			<div id="lmsListTitle" class="title"></div>
 		</div>
-		<div id="closeLMSIcon" class="generalButtonNew returnButtonNew">
+		<div id="closeLMSIcon" class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
-
-		<div id="lmsbody" class="content">
-
+		<div id="lmsbody" class="content full">
 
 		</div>
-		
-		<div id="lmserrormessage" class="message"></div>
-		<div id="lmsregistrationmessage" class="message"></div>
+
+		<!-- <div id="lmserrormessage" class="gradientSelected"></div> -->
+		<!-- <div id="lmsregistrationmessage" class="gradientSelected"></div> -->
+		<div id="lmsregistrationwaitingmessage" class="gradientSelected"></div>
+
+		<div></div>
 	</div>
 
 	<div id="coursesListView" class="viewblock">
 
-		<div id="coursesListHeader" class="container headerbg top">
-			<!-- <div class="left"></div> -->
+		<div id="coursesListHeader" class="headerContainer">
+		<div id="coursesTitleIcon" class="titleicon">
+				<span class="icon-courses"></span>
+			</div>
 			<div id="coursesListTitle" class="title"></div>
 		</div>
-		<div id="coursesListSetIcon" class="generalButton returnButton">
-			<span class="icon-cog"></span>
+		<div id="coursesListSetIcon" class="closeButton">
+			<span class="icon-settings"></span>
 		</div>
 
-		<div id="courses" class="content">
-			<ul id="coursesList">
+		<div id="courses" class="content full">
+			<ul id="coursesList" class="gradient2">
 			</ul>
 		</div>
+
+<div></div>
 	</div>
 
 	<div id="settingsView" class="viewblock">
-		<div id="settingsHeader" class="container headerbg top">
-			<div id="settingsIcon" class="titleicon left">
-				<span class="icon-cog"></span>
+		<div id="settingsHeader" class="headerContainer">
+			<div id="settingsIcon" class="titleicon">
+				<span class="icon-settings"></span>
 			</div>
 			<div id="settingsTitle" class="title"></div>
 		</div>
-		<div id="closeSettingsIcon" class="generalButton returnButton">
+		<div id="closeSettingsIcon" class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
 		<div class="content">
-		    <div class="iconButton"> 
-			<div id="logOutSettings" class="generalButton iconButton">
-				<span class="icon-exit"></span>
-			</div>
-			<div id="aboutMore" class="generalButton More">
-					<span class="icon-info"></span>
+			<div class="bottom left">
+				<div id="logOutSettings" class="forwardButton fixed">
+					<span class="icon-exit"></span>
 				</div>
 			</div>
-			<ul id="settingsData" class="marginForButtons">
-				<li><div class="settingsLi lms"><img id="lmsLabelSet" class="settingsLabel "/><span id="pfpItemSet"></span></div></li>
-				<li><div class="settingsLi"><span id="nameLabelSet" class="settingsLabel"></span><span id="nameItemSet"></span></div></li>
-				<li><div class="settingsLi"><span id="usernameLabelSet" class="settingsLabel"></span><span id="usernameItemSet"></span></div></li>
-				<li><div class="settingsLi"><span id="emailLabelSet" class="settingsLabel"></span><span id="emailItemSet"></span></div></li>
-				<li><div class="settingsLi"><span id="languageLabelSet" class="settingsLabel"></span><span id="languageItemSet"></span></div></li>
+			<div class="bottom right">
+				<div id="aboutMore" class="feedbackMore">
+					<span class="icon-info"></span>
+				</div>
+
+			</div>
+
+
+			<ul id="settingsData" class="gradient2">
+				<!--  <li><div class="settingsLi lms"><img id="lmsLabelSet" class="settingsLabel "/><span id="pfpItemSet"></span></div></li>-->
+				<li>
+					<div class=" settingsLi lineContainer imageContainer ">
+						<div class="imageoutline1">
+							<div class="imageoutline2">
+								<div class="innerShadow">
+									<img id="lmsLabelSet" class="imageLogo
+													" />
+								</div>
+							</div>
+						</div>
+					</div> <span id="pfpItemSet"></span>
+				</li>
+				<li><div class="settingsLi">
+						<span id="nameLabelSet" class="settingsLabel"></span><span
+							id="nameItemSet"></span>
+					</div></li>
+				<li><div class="settingsLi">
+						<span id="usernameLabelSet" class="settingsLabel"></span><span
+							id="usernameItemSet"></span>
+					</div></li>
+				<li><div class="settingsLi">
+						<span id="emailLabelSet" class="settingsLabel"></span><span
+							id="emailItemSet"></span>
+					</div></li>
+				<li><div class="settingsLi">
+						<span id="languageLabelSet" class="settingsLabel"></span><span
+							id="languageItemSet"></span>
+					</div></li>
+				<li>
+					<div id="shadowSettings" class="gradient1 shadowedLi"></div>
+				</li>
 			</ul>
 
 		</div>
@@ -206,14 +361,14 @@
 
 
 	<div id="aboutView" class="viewblock">
-		<div id="aboutHeader" class="container headerbg top">
+		<div id="aboutHeader" class=" headerContainer">
 			<!-- <div id="aboutIcon" class="titleicon left">
 				<span class="icon-cog"></span>
 			</div>-->
 			<div id="aboutTitle" class="title"></div>
 
 		</div>
-		<div id="closeAboutIcon" class="generalButton returnButton">
+		<div id="closeAboutIcon" class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
 		<div class="content">
@@ -221,7 +376,7 @@
 			<div id="aboutMainTitle">
 				Mobler <span id="cardsTitle">Cards</span>
 			</div>
-			<ul id="aboutData" class="marginForButtons">
+			<ul id="aboutData" class="marginForButtons gradient2">
 				<li><div class="settingsLi about">
 						<span id="copyright" class="aboutLabel"></span>
 					</div></li>
@@ -233,6 +388,9 @@
 				<li><div class="settingsLi about">
 						<span id="license" class="aboutLabel"></span>
 					</div></li>
+				<li>
+					<div id="shadowAbout" class="gradient1 shadowedLi"></div>
+				</li>
 			</ul>
 
 			<div>
@@ -255,40 +413,64 @@
 
 
 	<div id="logoutConfirmationView" class="viewblock">
-		<div class="container headerbg top">
+		<div class="headerContainer">
 			<div id="logoutConfirmationTitle" class="title"></div>
 		</div>
-		<div id="closeIcon" class="generalButton returnButton">
+		<div id="closeIcon" class="closeButton">
 			<span class="icon-cross"></span>
+			<!--<span class="icon-cross"></span> -->
 		</div>
 		<div class="content">
-			<div id="logOut" class="generalButton iconButton">
+			<div id="logoutBody">
+				<ul id="logoutContent" class="gradient2">
+					<li>
+						<div id="logoutText" class="text textShadow gradient2"></div>
+					</li>
+					<li>
+					<div id="shadowlogoutView" class="gradient1 shadowedLi"></div>
+					</li>
+				</ul>
+				
+				<div id="logOut" class="forwardButton fixed">
 				<span class="icon-exit"></span>
+					
+				</div>
 			</div>
-			<div class="cardBody"></div>
 		</div>
 	</div>
 
 
 
 	<div id="cardQuestionView" class="viewblock">
-		<div id="cardQuestionHeader" class="container headerbg top">
-			<div class="left titleicon">
+		<div id="cardQuestionHeader" class="headerContainer">
+			<div class="titleicon">
 				<span id="questionIcon"></span>
 			</div>
 			<div id="cardQuestionTitle" class="title">Choose some</div>
 		</div>
-		<div id="CourseList_FromQuestion" class="generalButton returnButton">
+		<div id="CourseList_FromQuestion"
+			class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
 		<div class="content">
-			<div id="ButtonAnswer" class="generalButton iconButton">
-				<span class="icon-arrow-right"></span>
+			<div id="cardQuestionBody">
+				<ul class="gradient2">
+					<li>
+						<div id="questionText"  class="text textShadow gradient2"></div>
+					</li>
+					<li>
+						<div id="shadowQuestionView" class="gradient1 shadowedLi"></div>
+					</li>
+						</ul>
+		
+				<div id="ButtonAnswer" class="forwardButton fixed">
+					<span class="icon-enter"></span>
+				</div>
 			</div>
-			<div id="cardQuestionBody" class="cardBody"></div>
 		</div>
-		<div class="container bottom">
-			<div id="ButtonTip" class="generalButton">
+		<div></div>
+		<div class="bottom">
+			<div id="ButtonTip" class="closeButton">
 				<span class="icon-question"></span>
 			</div>
 		</div>
@@ -297,24 +479,22 @@
 
 
 	<div id="cardAnswerView" class="viewblock">
-		<div id="cardAnswerHeader" class="container headerbg top">
-			<div id="cardAnswerIcon" class="left titleicon">
-				<span id="answerIcon"></span>
+		<div id="cardAnswerHeader" class="headerContainer">
+			<div id="cardAnswerIcon" class="titleicon">
+			<span id="answerIcon"></span>
 			</div>
 			<div id="cardAnswerTitle" class="title"></div>
-			</div>
-		<div id="CourseList_FromAnswer" class="generalButton returnButton">
+		</div>
+		<div id="CourseList_FromAnswer"
+			class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
 		<div class="content" id="answerContainer">
-			<div id="doneButton" class="generalButton iconButton">
-				<span class="icon-arrow-right"></span>
+			<div id="doneButton" class="forwardButton fixed">
+				<!--<span class="icon-arrow-right"></span>-->
+				<span class="icon-enter"></span>
 			</div>
-			<div id="cardAnswerBody" class="marginForButtons">
-				<ul>
-					<li class="ticked"><div class="right correctAnswer icon-checkmark"></div><div class="text">1</div></li>
-					<li class="ticked"><div class="right correctAnswer icon-checkmark"></div><div class="text">2</div></li>
-				</ul>
+			<div id="cardAnswerBody" >
 			</div>
 			<!--<div class="inputBorder" id="numberInputContainer"></div> -->
 			<div id="dataErrorMessage" class="cardBody"></div>
@@ -324,127 +504,276 @@
 
 
 	<div id="cardFeedbackView" class="viewblock">
-		<div id="cardFeedbackHeader" class="container headerbg top">
-			<div class="left titleicon" id="cardFeedbackIcon">
+		<div id="cardFeedbackHeader" class="headerContainer">
+			<div class="titleicon" id="cardFeedbackIcon">
 				<span id="feedbackIcon"></span>
 			</div>
 			<div id="cardFeedbackTitle" class="title"></div>
 		</div>
-		<div id="CourseList_FromFeedback" class="generalButton returnButton">
+		<div id="CourseList_FromFeedback"
+			class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
 		<div class="content">
-			<div class="iconButton">
-				<div id="FeedbackDoneButon" class="iconButton generalButton">
-					<span class="icon-arrow-right"></span>
-				</div>
-				<div id="FeedbackMore" class="generalButton More">
-					<span class="icon-question"></span>
+			<div class="bottom left foreground">
+				<div id="FeedbackDoneButon"
+					class="forwardButton fixed">
+					<!--<span class="icon-arrow-right"></span>-->
+					<span class="icon-enter"></span>
 				</div>
 			</div>
-			<div id="feedbackBody" class="marginForButtons"></div>
-			<div id="feedbackTip" class="cardBody"></div>
+			<div class="bottom right foreground">
+				<div id="FeedbackMore" class="feedbackMore">
+					<span class="icon-question"></span>
+
+				</div>
+			</div>
+			<div id="feedbackBody"></div>
+		<div id="feedbackTipBody" class="">
+				<ul id="feedbackTipUl" class="gradient2">
+					<li>
+						<div id="feedbackTip" class="text textShadow gradient2"></div>
+					</li>
+					<li>
+						<div id="shadowFeedbackMoreView" class="gradient1 shadowedLi">
+						</div>
+					</li>
+				</ul>
+				<!--<div class="gradient1" id="shadowFeedbackMoreView"></div>-->
+			</div>
+			
 		</div>
 	</div>
 
 
 	<div id="statisticsView" class="viewblock">
-		<div id="statisticsHeader" class="container headerbg top">
-			<div id="statisticsIcon" class="left titleicon">
+		<div id="statisticsHeader" class="headerContainer">
+			<div id="statisticsIcon" class="titleicon">
 				<span class="icon-bars"></span>
 			</div>
 			<div id="statisticsTitle" class="title">Statistics</div>
 		</div>
-		<div id="closeStatisticsIcon" class="generalButton returnButton">
+		<div id="closeStatisticsIcon"
+			class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
-		<div class="content">
-			<div id="statisticsBody" class="content">
-                <div class="statrow">
-                    <div id="statsSlot1" class="statitem1">
-                        <div class="stattitle" id="statBestDayTitle">Best Day</div>
-                        <div class="statvalue" id="statBestDayValue"></div>
-                        <div class="statsiconchange" id="statsBestDayIconchange"></div>
-                        <div class="statsinfo" id="statBestDayInfo">xx</div>
-                    </div>
-                    <div id="statsSlot2" class="statitem1">
-                        <div class="stattitle" id="statBestScoreTitle">BestScore</div>
-                        <div class="statvalue" id="statBestScoreValue"></div>
-                        <div class="statsiconchange" id="statsBestScoreIconchange"></div>
-                        <div class="statsinfo" id="statsBestScoreInfo">xx</div>
-                    </div>
-                </div>
-                <div class="statrow">
-                    <div id="statsSlot3" class="statitem2">
-                        <div class="stattitle" id="statHandledCardsTitle">HandledCards</div>
-                        <div class="statvalue" id="statHandledCardsValue"></div>
-                        <div class="statsiconchange" id="statsHandledCardsIconchange">
-                        </div>
-                        <!--<div class="statsinfo" id="statsHandledCardsInfo"></div>  -->
-                    </div>
-                    <div id="statsSlot4" class="statitem2">
-                        <div class="stattitle" id="statAverageScoreTitle">Average
-                            Score</div>
-                        <div class="statvalue" id="statAverageScoreValue"></div>
-                        <div class="statsiconchange" id="statsAverageScoreIconchange">
-                        </div>
-                        <!--<div class="statsinfo" id="statsAverageScoreInfo"></div>-->
-                    </div>
-                </div>
-                <div class="statrow">
-                    <div id="statsSlot5" class="statitem2">
-                        <div class="stattitle" id="statProgressTitle">Progress</div>
-                        <div class="statvalue" id="statProgressValue"></div>
-                        <div class="statsiconchange" id="statsProgressIconchange"></div>
-                        <div class="statsinfo" id="statsProgressInfo"></div>
-                    </div>
-                    <div id="statsSlot6" class="statitem2">
-                        <div class="stattitle" id="statSpeedTitle">Speed</div>
-                        <div class="statvalue" id="statSpeedValue"></div>
-                        <div class="statsiconchange" id="statsSpeedIconchange"></div>
-                        <div class="statsinfo" id="statsSpeedinfo"></div>
-                    </div>
-                </div>
-			</div>
-			
-			<div id="loadingMessage" class="content">statistics are beeing loaded</div>
+		<div class="content full">
+			<ul id="statisticsBody" class="">
+
+				<li id="statsSlot1" class="gradient1">
+					<div class=" left lineContainer selectItemContainer ">
+						<span class="select icon-dash"></span>
+					</div>
+					<div class="right">
+						<div id="statBestDayValue" class="statsLabel"></div>
+					</div>
+					<div id="statBestDayTitle"
+						class="text textShadow marginForCourseList"></div>
+				</li>
+
+
+				<li id="statsSlot2" class="gradient1">
+					<div class=" left lineContainer selectItemContainer ">
+						<span class="select icon-dash"></span>
+					</div>
+					<div class="right">
+						<div id="statBestScoreValue" class="statsLabel"></div>
+					</div>
+					<div id="statBestScoreTitle"
+						class="text textShadow marginForCourseList"></div>
+				</li>
+
+				<li id="statsSlot3" class="gradient1">
+					<div class="selectWidget gradient1 ">
+						<div class=" left lineContainer selectItemContainer ">
+							<span class="select icon-dash"></span>
+						</div>
+						<span id="rightElements3" class="right">
+						<div id="separatorAchievements"
+								class="lineContainer separatorContainerCourses radial"></div>
+							<div id="selectAchievements"
+								class="lineContainer selectItemContainer select ">
+								<span class="icon-enter"></span>
+							</div>
+							
+						</span>
+						<div id="achievementsReference"
+							class="text textShadow marginForCourseList"></div>
+					</div>
+				</li>
+
+				<li id="statsSlot4" class="gradient2">
+					<!--<div class="selectWidget gradient2 ">-->
+						<div class=" left lineContainer selectItemContainer ">
+
+							<span class="dashGrey icon-dash"></span>
+						</div>
+
+						<span id="rightElements4" class="right">
+							<div class="valueContainer text  textShadow left">
+								<div id="statHandledCardsValue" class="imageLogo right"></div>
+								<!--  <div id="statsProgressInfo" class="clear textSmall "></div>-->
+							</div>
+							<div id="separator4"
+								class="lineContainer separatorContainerCourses radial"></div>
+							<div id="statsHandledCardsIconchange"
+								class="lineContainer selectItemContainer"></div>
+						</span>
+						
+						<div id="statHandledCardsTitle"
+							class="text textShadow marginForCourseList"></div>
+					<!--  </div>-->
+				</li>
+				
+				
+				<li id="statsSlot5" class="gradient2">
+				<!--	<div class="selectWidget gradient2 "> -->
+						<div class=" left lineContainer selectItemContainer ">
+							<span class="dashGrey icon-dash"></span>
+						</div>
+
+
+						<span id="rightElements5" class="right">
+							<div class="valueContainer text  textShadow left">
+								<div id="statAverageScoreValue" class="imageLogo right"></div>
+							</div>
+							<div id="separator5"
+								class="lineContainer separatorContainerCourses radial"></div>
+							<div id="statsAverageScoreIconchange"
+								class="lineContainer selectItemContainer"></div>
+						</span>
+						<div id="statAverageScoreTitle"
+							class="text textShadow marginForCourseList"></div>
+
+					<!-- </div>-->
+
+				</li>
+				<li id="statsSlot6" class="gradient2">
+
+					<div class="selectWidget gradient2 ">
+						<div class=" left lineContainer selectItemContainer ">
+							<span class="dashGrey icon-dash"></span>
+						</div>
+
+
+						<span id="rightElements6" class="right">
+						<div class="valueContainer text  textShadow left">
+								<div id="statProgressValue" class="imageLogo right"></div>
+						</div>
+							
+							<div id="separator6"
+								class="lineContainer separatorContainerCourses radial"></div>
+							<div id="statsProgressIconchange"
+								class="lineContainer selectItemContainer"></div>
+						</span>
+
+						<div id="statProgressTitle"
+							class="text textShadow marginForCourseList"></div>
+					</div>
+				</li>
+
+
+				<li id="statsSlot7" class="gradient2">
+
+					<div class="selectWidget gradient2 ">
+
+						<div class=" left lineContainer selectItemContainer ">
+							<span class="dashGrey icon-dash"></span>
+						</div>
+
+						<span id="rightElements7" class="right">
+							<div class="valueContainer text  textShadow left">
+								<div id="statSpeedValue" class="imageLogo right"></div>
+								<!--  <div id="statsSpeedinfo" class=" clear textSmall "></div>-->
+							</div>
+							
+							<div id="separator7"
+								class="lineContainer separatorContainerCourses radial"></div>
+							<div id="statsSpeedIconchange"
+								class="lineContainer selectItemContainer"></div>
+						</span>
+						<div id="statSpeedTitle" class=" text textShadow marginForCourseList"></div>
+					</div>
+				</li>
+
+				<li>
+					<div id="shadowStatistics" class="gradient1 shadowedLi"></div>
+				</li>
+			</ul>
+
+			<div id="loadingMessage" class="content">statistics are beeing
+				loaded</div>
 		</div>
 	</div>
 
 	<div id="achievementsView" class="viewblock">
-		<div id="achievementsHeader" class="container headerbg top">
-			<div id="closeAchievementsIcon"
-				class="generalButton returnButton right">
+		<div id="achievementsHeader" class=" headerContainer">
+			<div id="closeAchievementsIcon"class="closeButton">
 				<span class="icon-cross"></span>
 			</div>
 			<div id="achievementsTitle" class="title"></div>
+			<div id="achievementsIcon" class="titleicon">
+				<span class="icon-happy"></span>
+				</div>
 		</div>
-		<div class="content">
-			<div id="StackHandlerContainer" class="achievementContainer">
-				<div id="stackHandlerIcon" class="achievementResutlsIcon"></div>
-				<div id="stackHandlerResults" class="achievementResults ">
-					<div id="stackHandlerTitle" class="achievementsResutlsTitle"></div>
-					<div id="stackHandlerExplanation"></div>
-					<div id="stackHandlerResultText">
-						<span id="starterStackHandler"></span> <span
-							id="valueStackHandler"></span> <span id="doneStackHandler"></span>
-					</div>
-				</div>
-			</div>
+		<div class="content full">
+			<ul id="achievementsUl" class="gradient2">
+				<li>
+					<div class="selectWidget2 gradient2 ">
 
-			<div id="CardBurnerContainer" class="achievementContainer">
-				<div id="cardBurnerIcon" class="achievementResutlsIcon"></div>
-				<div id="cardBurnerResutls" class="achievementResults">
-					<div id="cardBurnerTitle" class="achievementsResutlsTitle"></div>
-					<div id="cardBurnerExplanation"></div>
-					<div id="cardBurnerResultText">
-						<span id="starterCardBurner"></span> <span id="valueCardBurner"></span>
-						<span id="doneCardBurner"></span>
+						<div class="left lineContainer selectItemContainer ">
+							<span id="stackHandlerDash" class="dashGrey icon-dash"></span>
+						</div>
+
+						<span id="rightElements" class="right">
+							<div class="lineContainer imageContainer ">
+								<div id="valueStackHandler" class="imageLogo margin"></div>
+							</div>
+							<div id="separatorAchievements"
+								class="lineContainer separatorContainerAchievements radial"></div>
+							<div class="lineContainer selectItemContainer">
+								<span id="stackHandlerIcon" class="achievementsImg nter icon-diamond"></span>
+								</div>
+						</span>
+						<div class="valueContainer text textShadow marginForCourseList">
+							<div id="stackHandlerTitle" class="achievementsResutlsTitle"></div>
+							<div id="stackHandlerExplanation" class="textSmall "></div>
+						</div>
 					</div>
-				</div>
-			</div>
-		
-		<div id="loadingMessageAchievements" class="content">Card Burner and Stack Handler are beeing loaded</div>
+					
+				</li>
+				<li>
+									
+				<div id="cardBurner" class="selectWidget2 gradient2 ">
+
+						<div class="left lineContainer selectItemContainer ">
+							<span id="cardBurnerDash" class="dashGrey icon-dash"></span>
+						</div>
+
+						<span id="rightElements2" class="right">
+							<div class="lineContainer imageContainer ">
+								<div id="valueCardBurner" class="imageLogo margin"></div>
+							</div>
+							<div id="separatorAchievements2"
+								class="lineContainer separatorContainerAchievements radial"></div>
+							<div 
+								class="lineContainer selectItemContainer">
+								<span id="cardBurnerIcon" class="achievementsImg icon-fire"></span>
+								</div>
+						</span>
+						<div class="valueContainer text textShadow marginForCourseList">
+							<div id="cardBurnerTitle" class="achievementsResutlsTitle"></div>
+							<div id="cardBurnerExplanation" class="textSmall "></div>
+						</div>
+					</div>	
+
+				</li>
+				<li>
+					<div id="shadowAchievements" class="gradient1 shadowedLi"></div>
+				</li>
+			</ul>
+			<div id="loadingMessageAchievements" class="content">Card
+				Burner and Stack Handler are beeing loaded</div>
 		</div>
 	</div>
 </body>
