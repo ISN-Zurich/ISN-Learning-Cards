@@ -60,13 +60,13 @@ function StatisticsView(controller) {
     
     jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); });
     
-    jester($('#statsSlot1')[0]).tap(function() {
+    jester($('#statsSlot3')[0]).tap(function() {
 		self.clickToAchievements();
 	});
     
-    jester($('#statsSlot2')[0]).tap(function() {
-		self.clickToAchievements();
-	});
+//    jester($('#statsSlot2')[0]).tap(function() {
+//		self.clickToAchievements();
+//	});
     
     moblerlog('bind the application events');
     /**It is triggered after statistics are loaded locally from the server. This can happen during the 
@@ -97,10 +97,7 @@ function StatisticsView(controller) {
     	});
      
         moblerlog('done');
-    
- 
-  
-}
+  }
 
 /**pinch leads to course list
  * @prototype
@@ -251,7 +248,7 @@ StatisticsView.prototype.loadData = function() {
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
 	$("#statBestScoreValue").text(bestScore+"%");
-	$("#statHandledCardsValue").text(handledCards);
+	$("#statHandledCardsValue").text(handledCards+ " "+ jQuery.i18n.prop('msg_handledCards_info'));
 	$("#statsHandledCardsIconchange").removeClass(removeClasses);
 	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvementhandledCards));
 	$("#statAverageScoreValue").text(avgScore+"%");
@@ -260,12 +257,17 @@ StatisticsView.prototype.loadData = function() {
 	$("#statProgressValue").text(progress+"%");
 	$("#statsProgressIconchange").removeClass(removeClasses);
 	$("#statsProgressIconchange").addClass(checkImprovement(improvementProgress));
-	$("#statSpeedValue").text(avgSpeed);
+	$("#statSpeedValue").text(avgSpeed+" "+ jQuery.i18n.prop('msg_speed_info'));
 	$("#statsSpeedIconchange").removeClass(removeClasses);
 	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));
    
     moblerlog("end load data");
 };	
 
-	
-
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* @prototype
+* @function changeOrientation
+**/ 	
+StatisticsView.prototype.changeOrientation = doNothing;
