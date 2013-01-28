@@ -203,7 +203,8 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	
 	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
 		$("#courseListIcon"+courseID).addClass("icon-loading loadingRotation").removeClass("icon-bars");
-	
+		
+		//icon-loading, icon-bars old name
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
 		this.controller.transitionToStatistics(courseID);
@@ -232,7 +233,7 @@ CoursesListView.prototype.update = function() {
 		}).appendTo("#coursesList");
 		
 		$("<div/>", {
-			"class": "text",
+			"class": "text textShadow",
 			text : (self.firstLoad ? "Courses are being loaded" : "No Courses"),
 		}).appendTo(li);
 		
@@ -241,23 +242,45 @@ CoursesListView.prototype.update = function() {
 			var courseID = courseModel.getId();
 
 			var li = $("<li/>", {
-				"id" : "course" + courseID,
-				
+				"id" : "course" + courseID
 			}).appendTo("#coursesList");
 
+			var rightDiv = $("<div/>", {
+				"class" : "right gradient2"
+			}).appendTo(li);
+				
+			var separator = $("<div/>", {
+				"id":"separator"+ courseID,
+				"class" : " radialCourses lineContainer separatorContainerCourses"
+			}).appendTo(rightDiv);
 			
 			div = $("<div/>", {
-				"class" : "courseListIcon right"
-			}).appendTo(li);
+				//"class" : "courseListIcon right gradient2"
+				"class" : " courseListIcon lineContainerCourses gradient2 "
+			}).appendTo(rightDiv);
 			
 			span = $("<div/>", {
 				"id":"courseListIcon"+ courseID,
-				"class" : (courseModel.isSynchronized(courseID) ? "icon-bars" : "icon-loading loadingRotation")
+				"class" : (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation")
 			}).appendTo(div);
 			
+		
+			
+//			var leftDiv = $("<div/>", {
+//				"class" : "labelContainer"
+//			}).appendTo(li);
+//			
+			
+			var dashDiv = $("<div/>", {
+				"class" : "left lineContainer selectItemContainer"
+			}).appendTo(li);
+			
+			var spanDash = $("<span/>", {
+				"class" : "dashGrey icon-dash"
+			}).appendTo(dashDiv);
+			
 			var mydiv = $("<div/>", {
-				
-				"class" : "text marginForCourseList",
+				"class" : "text textShadow marginForCourseList gradient2",
 				text : courseModel.getTitle()
 			}).appendTo(li);
 			
@@ -265,13 +288,12 @@ CoursesListView.prototype.update = function() {
 				e.stopPropagation();
 				//e.preventDefault();
 				self.clickCourseItem($(this).parent().attr('id').substring(6));
-				
 			});
 
 
 			jester(span[0]).tap(
 					function(e) {
-						self.clickStatisticsIcon($(this).parent().parent().attr('id')
+						self.clickStatisticsIcon($(this).parent().parent().parent().attr('id')
 								.substring(6));
 						e.stopPropagation();
 					});
@@ -280,6 +302,15 @@ CoursesListView.prototype.update = function() {
 		} while (courseModel.nextCourse());
 		self.setIconSize();
 	}
+	
+var lastli = $("<li/>", {
+}).appendTo("#coursesList");
+	
+	var shadoweddiv = $("<div/>", {
+		"id": "shadowedLi",
+		"class" : "gradient1"
+	}).appendTo(lastli);
+	
 };
 
 
@@ -308,3 +339,11 @@ CoursesListView.prototype.setIconSize = function() {
 		$(this).find(".courseListIcon").css("line-height", height + "px");
 	});
 };
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* @prototype
+* @function changeOrientation
+**/ 
+CoursesListView.prototype.changeOrientation=doNothing;
