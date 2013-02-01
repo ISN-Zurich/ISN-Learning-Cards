@@ -179,7 +179,8 @@ CoursesListView.prototype.clickCourseItem = function(course_id) {
 		this.controller.models['questionpool'].reset();
 		this.controller.models['questionpool'].loadData(course_id);
 		this.controller.models['answers'].setCurrentCourseId(course_id);
-		this.controller.transitionToQuestion();
+		var featuredFlag=false;
+		this.controller.transitionToQuestion(featuredFlag);
 	}
 };
 
@@ -339,6 +340,7 @@ CoursesListView.prototype.setIconSize = function() {
 		$(this).find(".courseListIcon").css("line-height", height + "px");
 	});
 };
+
 
 /**
 * handles dynamically any change that should take place on the layout

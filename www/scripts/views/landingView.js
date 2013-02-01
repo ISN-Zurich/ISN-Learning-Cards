@@ -72,6 +72,14 @@ function LandingView(controller) {
 		e.preventDefault();
 		e.stopPropagation();
 	});	
+	
+	
+	$(document).bind("featuredContentlistupdate", function(e) {
+		
+		//self.showForm();
+	});
+	
+	
 } //end of constructor
 
 
@@ -116,6 +124,7 @@ LandingView.prototype.open = function() {
 	this.showForm();
 	this.openDiv();
 	this.active = true;
+	setFeaturedWidth();
 };
 
 
@@ -156,14 +165,76 @@ LandingView.prototype.selectExclusiveContent = function() {
  * @function showForm
  */ 
 LandingView.prototype.showForm = function() {
-	calculateLabelWidth();	
+	var self=this;
+	var featuredModel = self.controller.models['featured'];
 	this.hideErrorMessage();
-	$("#landingViewHeader").show();
-	$("#landingBody").show();
 	if (this.controller.models['connection'].isOffline()) {
-		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));
-	}
-};
+		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
+	$("#landingViewHeader").show();
+	
+	
+	$("#landingLmsLabel").text(featuredModel.getTitle());
+	$("#landingBody").show();	
+	moblerlog("just show the title of the featured courses");
+   
+	jester($('#featuredContent')[0]).tap(function(e) {
+		e.stopPropagation();
+		//e.preventDefault();
+		self.clickFeaturedItem();
+	});
+	
+	
+
+	
+	
+	//**********************Design landing page in Javascript*********************
+//	var li = $("<li/>", { }).appendTo("#landingElements");
+//	
+//	var div = $("<div/>", {
+//		"id" : "featuredContent",
+//		"class": "selectWidget gradient2"
+//	}).appendTo(li);
+//	
+//	var div2 = $("<div/>", {
+//		"class": "left lineContainer selectItemContainer"
+//	}).appendTo(div);
+//	
+//	var span1 = $("<span/>", {
+//		"class": "select icon-dash"
+//	}).appendTo(div2);
+//	
+//	var div3 = $("<div/>", {
+//		"id":"leftElement1",
+//		"class":"labelContainer"
+//	}).appendTo(div);
+//	
+//	
+//	var div3_1=$("<div/>", {
+//		"id":"landingLmsLabel",
+//		"class":"lsmlabel textShadow",
+//		"text":"Featured Content"
+//	}).appendTo(div3);
+//	
+//	var div4 = $("<div/>", {
+//		"id":"rightElements",
+//		"class":"right"
+//	}).appendTo(div);
+//	
+//	var div4_1 = $("<div/>", {
+//		"id":"separatorLanding",
+//		"class":"lineContainer separatorContainerCourses radial"
+//	}).appendTo(div4);
+//	
+//	var div4_2 = $("<div/>", {
+//		"id":"selectarrowLanding",
+//		"class":"lineContainer selectItemContainer select"
+//	}).appendTo(div4);
+//	
+//	var span4_2 = $("<span/>", {
+//		"class": "icon-bars"
+//	}).appendTo(div4_2);
+//	
+}
 
 
 /**
@@ -175,6 +246,21 @@ LandingView.prototype.showErrorMessage = function(message) {
 	$("#warningmessageLanding").hide();
 	$("#errormessageLanding").text(message);
 	$("#errormessageLanding").show();
+};
+
+/**
+ * click on the defautl featured content, loads its questions
+ * @prototype
+ * @function clickFeaturedItem
+ */ 
+LandingView.prototype.clickFeaturedItem = function(){
+	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
+	//this.controller.models['featured'].reset();
+	//	this.controller.models['featured'].loadData(featuredContent_id);//load the json file that is stored locally in the app
+	//	this.controller.models['featured'].setCurrentCourseId(featuredContent_id);
+		var featuredFlag=true;
+		this.controller.transitionToQuestion(featuredFlag);
+	//}
 };
 
 
@@ -197,8 +283,22 @@ LandingView.prototype.hideErrorMessage = function() {
 * @function changeOrientation
 **/ 
 LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
-	
+	setFeaturedWidth();
 };
 
 
+/**
+ * sets dynamically the width of the input elements
+ * of the login form.
+ * it is calculated by substracting from the device width in the current mode (landscape, portrait)
+ * which has been detected in the controller the sum of the widths of the rest dom elements around it
+ * such as: dash bar, icon container and separator.
+ * @function setInputWidth
+ * */
+function setFeaturedWidth(){
+	window_width = $(window).width();
+	var inputwidth = window_width - 49- 34 - 18;
+	$("#landingLmsLabel").css("width", inputwidth + "px");
+	$("#exclusiveContentLabel").css("width", inputwidth + "px");
+}
 

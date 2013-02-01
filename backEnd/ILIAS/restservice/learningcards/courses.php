@@ -49,7 +49,6 @@ global $DEBUG;
 $DEBUG = 1;
 $class_for_logging = "courses.php";
 
-
 $userID = get_session_user_from_headers();
 logging(" my userid is ". $userID);
 

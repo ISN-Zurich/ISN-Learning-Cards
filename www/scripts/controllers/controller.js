@@ -53,12 +53,11 @@ function Controller() {
 
 	// initialize models
 
-	
 	this.models.connection = new ConnectionState(this);
 	// the lms model is initialized after the connection
 	//because it makes use of the isOffline function 
 	this.models.lms = new LMSModel(this);
-	
+	this.models.featured = new FeaturedContentModel(this);
 	this.models.authentication = new ConfigurationModel(this);
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
@@ -232,17 +231,37 @@ function Controller() {
 	// the remaining waiting time is 3000 - deltatime
 	//automatic calculation of min-height
 
-	var currentTime = new Date().getTime();
-	var deltaTime= currentTime - startTime;
-	if (deltaTime < 3000) {
-		setTimeout(function() { self.transitionToEndpoint(); }, 3000 - deltaTime);
-	}
-	else {
-		self.transitionToEndpoint();
-	}
+//	var currentTime = new Date().getTime();
+//	var deltaTime= currentTime - startTime;
+//	if (deltaTime < 3000) {
+//		setTimeout(function() {
+//			$(document).bind("featuredContentlistupdate", function() {
+//			self.transitionToEndpoint(); 
+//			});
+//		
+//		}, 3000 - deltaTime);
+//	}
+//	else {
+//		$(document).bind("featuredContentlistupdate", function() {
+//			self.transitionToEndpoint(); 
+//			});
+//		//self.transitionToEndpoint();
+//	}
 
+	$(document).bind("featuredContentlistupdate", function() {	
+		var currentTime = new Date().getTime();
+		var deltaTime= currentTime - startTime;
+		if (deltaTime < 3000) {
+			setTimeout(function() {
+				self.transitionToEndpoint(); }, 3000 - deltaTime);
+		}
+		else {
+			self.transitionToEndpoint();
+		}
+	});
+	
 	injectStyle();
-//	moblerlog("End of Controller");
+moblerlog("End of Controller");
 } // end of Controller
 
 
@@ -310,14 +329,14 @@ Controller.prototype.setupLanguage = function() {
  * @function transition 
  * @param {String} viewname, the name of the specified target view
  **/
-Controller.prototype.transition = function(viewname) {
+Controller.prototype.transition = function(viewname, featuredFlag) {
 	moblerlog("transition start to " + viewname );
 	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
 	if (this.views[viewname] && ( viewname === "landing" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
 		this.activeView.close();
 		this.activeView = this.views[viewname];
-		this.activeView.open();
+		this.activeView.open(featuredFlag);
 	}
 };
 
@@ -388,9 +407,9 @@ Controller.prototype.transitionToLogout = function() {
  * @function transitionToAuthArea 
  * @param {String} viewname, the name of the targeted view
  **/
-Controller.prototype.transitionToAuthArea = function(viewname) {
+Controller.prototype.transitionToAuthArea = function(viewname,featuredFlag) {
 	if (this.getLoginState()) {
-		this.transition(viewname);
+		this.transition(viewname, featuredFlag);
 	}
 	else {
 		//this.transitionToLogin();
@@ -414,8 +433,8 @@ Controller.prototype.transitionToCourses = function() {
  * @prototype
  * @function transitionToQuestion 
  **/
-Controller.prototype.transitionToQuestion = function() {
-	this.transitionToAuthArea('questionView');
+Controller.prototype.transitionToQuestion = function(featuredFlag) {
+	this.transitionToAuthArea('questionView', featuredFlag);
 };
 
 /**

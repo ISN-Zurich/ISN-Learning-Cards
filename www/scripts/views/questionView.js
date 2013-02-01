@@ -188,9 +188,9 @@ QuestionView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-QuestionView.prototype.open = function() {
+QuestionView.prototype.open = function(featuredFlag) {
 	this.showQuestionTitle();
-	this.showQuestionBody();
+	this.showQuestionBody(featuredFlag);
 	
 	if (!controller.models["answers"].hasStarted()) {
 		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
@@ -202,11 +202,16 @@ QuestionView.prototype.open = function() {
  * @prototype
  * @function showQuestionBody
  **/
-QuestionView.prototype.showQuestionBody = function() {
+QuestionView.prototype.showQuestionBody = function(featuredFlag) {
+	if (!featuredFlag){
+		moblerlog("enter question view from question pool list ");
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
 	$("#questionText").html(currentQuestionBody);
-
+	}else{
+		var featuredContentQuestionBody = controller.models["featured"]
+		.getQuestionBody();
+	}
 	$("#ButtonTip").hide();
 
 };

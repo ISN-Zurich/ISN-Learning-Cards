@@ -49,22 +49,22 @@ $DEBUG = 1;
 $class_for_logging = "featuredContentCourse.php";
 
 
-$userID = get_session_user_from_headers();// TODO:in featured content there should be a user that will create the featured content
+//$userID = get_session_user_from_headers();// TODO:in featured content there should be a user that will create the featured content
                                           // so we should assign here the exact ID numer i.e. $userID=12980
                                                                                 
-                                          
+$userID=12980;
                                           
                                           
 logging(" my userid is ". $userID);
 
-$return_data = getCourseList($userID);// TODO:in featured content we will pass as argument the userId that we got right above
+$return_data = getFeaturedContent($userID);// TODO:in featured content we will pass as argument the userId that we got right above
 											// we can create a mew function getCourse($userID) in order to return the specific
 											// free course, which would be the featured content
 header('content-type: application/json');
 echo (json_encode($return_data));
 
 
-// TODO: write a function  getCourse($userID)similar with below that
+// TODO: write a function  getFeaturedContent($userID)similar with below that
 // will return the course that contains the featured content
 // **** first brainstorming comments************
 // we will not need to pass a userId parameter because unregistered users
@@ -75,77 +75,80 @@ echo (json_encode($return_data));
  *
  * @return course list array
  */
-function getCourseList($userId) {
+function getFeaturedContent($userId) {
+	
+	logging("enters getFeaturedContent");
 	global $ilObjDataCache;
 
 	include_once 'Services/Membership/classes/class.ilParticipants.php';
 	require_once 'Modules/Course/classes/class.ilCourseItems.php';
 	require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 	
-	require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
-
 	//loads all courses in which the current user is a member
-	$items = ilParticipants::_getMembershipByType($userId, 'crs'); //we will need somthering similar, that will return a specific course based on its id.
+	//$items = ilParticipants::_getMembershipByType($userId, 'crs'); //we will need somthering similar, that will return a specific course based on its id.
 	//see getCourseItemObject from clas.ilObjCourse.php...
 	//something like this $featuredCourse= getCourseItemObject();
 	
-	$courses = array();
-	foreach($items as $key => $obj_id)	{
+	$featuredCourses = array();
+	//foreach($items as $key => $obj_id)	{
 
 		//references are needed to get course items (= questionpools, tests, ...)
-		$item_references = ilObject::_getAllReferences($obj_id);
+		//$item_references = ilObject::_getAllReferences(13040);
+		//$item_references = ilObject::_getAllReferences($obj_id);
 
 		//check if valid questionpool for the course exists
-		$validQuestionPool = false;
-		if(is_array($item_references) && count($item_references)) {
-			foreach($item_references as $ref_id) {
+		//$validQuestionPool = false;
+		//if(is_array($item_references) && count($item_references)) {
+		//foreach($item_references as $ref_id) {
 				
 				//get all course items for a course (= questionpools, tests, ...)
-				$courseItems = new ilCourseItems($ref_id);
-				$courseItemsList = $courseItems->getAllItems();
+// 			$courseItems = new ilCourseItems($item_references);
+// 			$courseItemsList = $courseItems->getAllItems();
 
-				foreach($courseItemsList as $courseItem) {
+// 				foreach($courseItemsList as $courseItem) {
 					
-					//the course item has to be of type "qpl" (= questionpool)
-					if (strcmp($courseItem["type"], "qpl") == 0) {
-						logging("course " . $obj_id . " has question pool");
+// 					//the course item has to be of type "qpl" (= questionpool)
+// 					if (strcmp($courseItem["type"], "qpl") == 0) {
+// 					//logging("course " . $obj_id . " has question pool");
 
-						//get the question pool
-						$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
-						$questionPool->read();
-						
-						//calls isValidQuestionPool in questions.php
-						if (isValidQuestionPool($questionPool)) {
-							$validQuestionPool = true;
-						}
-					}
-				}
-			}
-		}
+// 					//get the question pool
+// 				$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
+// 				$questionPool->read();
+
+					//calls isValidQuestionPool in questions.php
+	//if (isValidQuestionPool($questionPool)) {
+	//$validQuestionPool = true;
+	//	}
+	//		}
+//}
+//} 
+//}
 
 		//if the question pool is valid, the course is added to the list
-		if ($validQuestionPool) {
-			$title       = $ilObjDataCache->lookupTitle($obj_id);
-			$description = $ilObjDataCache->lookupDescription($obj_id);
+	//	if ($validQuestionPool) {
+		//$title       = $ilObjDataCache->lookupTitle($obj_id);
+		//$description = $ilObjDataCache->lookupDescription($obj_id);
+			$title       = $ilObjDataCache->lookupTitle(13040);
+			$description = $ilObjDataCache->lookupDescription(13040);
 
-			array_push($courses,
-					array("id"             => $obj_id,
+			array_push($featuredCourses,
+					array("id"             => 13040,
 							"title"        => $title,
 							"syncDateTime" => 0,
 							"syncState"    => false,
 							"isLoaded"     => false,
 							"description"  => $description));
-		}
+	//	}
 
-	}
+	//}
 	
 	//data structure for frontend models
-	$courseList = array("courses" => $courses,
+	$featuredCourseList = array("featuredCourses" => $featuredCourses,
 			"syncDateTime" => 0,
 			"syncState" => false,
 			"syncTimeOut" => $SYNC_TIMEOUT);
-
-	return $courseList;
+logging("featured course list is ".json_encode($featuredCourseList));
+	return json_encode($featuredCourseList);
 
 }
 
