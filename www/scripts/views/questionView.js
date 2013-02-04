@@ -204,11 +204,12 @@ QuestionView.prototype.open = function(featuredFlag) {
  **/
 QuestionView.prototype.showQuestionBody = function(featuredFlag) {
 	if (!featuredFlag){
-		moblerlog("enter question view from question pool list ");
+		moblerlog("enter question view exclusive content");
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
 	$("#questionText").html(currentQuestionBody);
 	}else{
+		moblerlog("enter question view of featured content ");
 		var featuredContentQuestionBody = controller.models["featured"]
 		.getQuestionBody();
 	}

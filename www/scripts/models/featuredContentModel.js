@@ -197,13 +197,14 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 				featuredObject = data;
 
 			} catch (err) {
-				courseObject = {};
+				featuredObject = {};
 				moblerlog("Couldn't load featured courses from server " + err);
 			}
 			moblerlog("featured course data loaded from server");
             moblerlog(featuredObject);
+			//self.featuredContentList = featuredObject.featuredCourses || [];
 			self.featuredContentList = featuredObject.featuredCourses || [];
-			moblerlog("lenght of featuredList "+self.featuredContentList.length);
+			moblerlog("featuredList length "+ self.featuredContentList.length);
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;
 			self.syncTimeOut = featuredObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
@@ -311,10 +312,10 @@ FeaturedContentModel.prototype.checkForTimeOut = function(){
 FeaturedContentModel.prototype.getTitle = function() {
 	var self=this;
 	moblerlog("index of the current course is"+this.index);
-	moblerlog("lenght of featured content list is"+self.featuredContentList.length);
+	moblerlog("length of featured content list in getTitle"+self.featuredContentList.length);
 	
 	return (this.index > this.featuredContentList.length - 1) ? false
-			: this.featuredContentList[this.index].title;
+		: this.featuredContentList[this.index].title;
 	//return  this.featuredContentList[this.index].title;
 };
 
@@ -377,3 +378,13 @@ FeaturedContentModel.prototype.switchToOnline = function() {
 FeaturedContentModel.prototype.reset = function() {
 	this.index = 0;
 };
+
+
+
+/**
+ * 
+ **/
+FeaturedContentModel.prototype.getQuestionBody = function(){
+	
+	
+}

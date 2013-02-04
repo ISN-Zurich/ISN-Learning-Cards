@@ -249,13 +249,16 @@ function Controller() {
 //	}
 
 	$(document).bind("featuredContentlistupdate", function() {	
+		
 		var currentTime = new Date().getTime();
 		var deltaTime= currentTime - startTime;
 		if (deltaTime < 3000) {
 			setTimeout(function() {
+				moblerlog("enter transition point 1");
 				self.transitionToEndpoint(); }, 3000 - deltaTime);
 		}
 		else {
+			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
 	});

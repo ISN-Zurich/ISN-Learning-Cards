@@ -88,46 +88,51 @@ function getFeaturedContent($userId) {
 	//$items = ilParticipants::_getMembershipByType($userId, 'crs'); //we will need somthering similar, that will return a specific course based on its id.
 	//see getCourseItemObject from clas.ilObjCourse.php...
 	//something like this $featuredCourse= getCourseItemObject();
+	//logging("items are ".$items);
 	
 	$featuredCourses = array();
-	//foreach($items as $key => $obj_id)	{
+// 	foreach($items as $key => $obj_id)	{
 
+		// $obj_id =13040;
 		//references are needed to get course items (= questionpools, tests, ...)
 		//$item_references = ilObject::_getAllReferences(13040);
-		//$item_references = ilObject::_getAllReferences($obj_id);
+// 		$item_references = ilObject::_getAllReferences($obj_id);
 
 		//check if valid questionpool for the course exists
 		//$validQuestionPool = false;
-		//if(is_array($item_references) && count($item_references)) {
-		//foreach($item_references as $ref_id) {
+// 		if(is_array($item_references) && count($item_references)) {
+// 		foreach($item_references as $ref_id) {
 				
 				//get all course items for a course (= questionpools, tests, ...)
-// 			$courseItems = new ilCourseItems($item_references);
-// 			$courseItemsList = $courseItems->getAllItems();
+// 	$courseItems = new ilCourseItems($item_references);
+// 	$courseItemsList = $courseItems->getAllItems();
+	
+// 	logging("courseItemList is".$courseItemsList);
 
-// 				foreach($courseItemsList as $courseItem) {
+// 	foreach($courseItemsList as $courseItem) {
 					
-// 					//the course item has to be of type "qpl" (= questionpool)
-// 					if (strcmp($courseItem["type"], "qpl") == 0) {
-// 					//logging("course " . $obj_id . " has question pool");
+// 	the course item has to be of type "qpl" (= questionpool)
+// if (strcmp($courseItem["type"], "qpl") == 0) {
+// 	logging("course " . $obj_id . " has question pool");
 
-// 					//get the question pool
-// 				$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
-// 				$questionPool->read();
+// 	get the question pool
+// 	$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
+// 	$questionPool->read();
 
-					//calls isValidQuestionPool in questions.php
+	//calls isValidQuestionPool in questions.php
 	//if (isValidQuestionPool($questionPool)) {
 	//$validQuestionPool = true;
-	//	}
-	//		}
-//}
-//} 
-//}
+		//}
+	//} //end of strcmp
+	//} //end of foreach-courseItem
+	//} //end of foreach item_references
+	//} //end of if is_array(item_refereces)
 
 		//if the question pool is valid, the course is added to the list
-	//	if ($validQuestionPool) {
+	//if ($validQuestionPool) {
 		//$title       = $ilObjDataCache->lookupTitle($obj_id);
 		//$description = $ilObjDataCache->lookupDescription($obj_id);
+
 			$title       = $ilObjDataCache->lookupTitle(13040);
 			$description = $ilObjDataCache->lookupDescription(13040);
 
@@ -138,7 +143,9 @@ function getFeaturedContent($userId) {
 							"syncState"    => false,
 							"isLoaded"     => false,
 							"description"  => $description));
-	//	}
+			
+	
+	//} //end of if valid question pool
 
 	//}
 	
@@ -147,9 +154,9 @@ function getFeaturedContent($userId) {
 			"syncDateTime" => 0,
 			"syncState" => false,
 			"syncTimeOut" => $SYNC_TIMEOUT);
-logging("featured course list is ".json_encode($featuredCourseList));
-	return json_encode($featuredCourseList);
-
+	
+	logging("featured course list is ".json_encode($featuredCourseList));
+	return $featuredCourseList;
 }
 
 ?>

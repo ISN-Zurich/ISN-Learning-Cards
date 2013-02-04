@@ -258,6 +258,7 @@ LandingView.prototype.clickFeaturedItem = function(){
 	//this.controller.models['featured'].reset();
 	//	this.controller.models['featured'].loadData(featuredContent_id);//load the json file that is stored locally in the app
 	//	this.controller.models['featured'].setCurrentCourseId(featuredContent_id);
+	moblerlog("transition to question view from landing view");
 		var featuredFlag=true;
 		this.controller.transitionToQuestion(featuredFlag);
 	//}
@@ -278,11 +279,13 @@ LandingView.prototype.hideErrorMessage = function() {
 /**
 * handles dynamically any change that should take place on the layout
 * when the orientation changes.
-* (the distance between the cards and the title should be calculated dynamically) 
+* TODO: to check the misbehavior when changing from horizontal mode to vertical mode, 
+* after coming back from login view
 * @prototype
 * @function changeOrientation
 **/ 
 LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
+	moblerlog("change orientation in landing view");
 	setFeaturedWidth();
 };
 
