@@ -79,6 +79,15 @@ function LandingView(controller) {
 		//self.showForm();
 	});
 	
+	jester($('#featuredContent')[0]).tap(function(e) {
+		moblerlog("taped feautured Content");
+		$('#featuredContent').removeClass("gradient2");
+		$('#featuredContent').addClass("gradientSelected");
+		//e.stopPropagation();
+		//e.preventDefault();
+		self.clickFeaturedItem();
+	});
+	
 	
 } //end of constructor
 
@@ -143,6 +152,8 @@ LandingView.prototype.closeDiv = closeView;
  * @function close
  **/ 
 LandingView.prototype.close = function() {
+	$('#featuredContent').removeClass("gradientSelected");
+	$('#featuredContent').addClass("gradient2");
 	this.active = false;
 	this.closeDiv();
 };
@@ -177,11 +188,7 @@ LandingView.prototype.showForm = function() {
 	$("#landingBody").show();	
 	moblerlog("just show the title of the featured courses");
    
-	jester($('#featuredContent')[0]).tap(function(e) {
-		e.stopPropagation();
-		//e.preventDefault();
-		self.clickFeaturedItem();
-	});
+
 	
 	
 
@@ -255,10 +262,10 @@ LandingView.prototype.showErrorMessage = function(message) {
  */ 
 LandingView.prototype.clickFeaturedItem = function(){
 	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
-	//this.controller.models['featured'].reset();
+		this.controller.models['questionpool'].reset();
 	//	this.controller.models['featured'].loadData(featuredContent_id);//load the json file that is stored locally in the app
 	//	this.controller.models['featured'].setCurrentCourseId(featuredContent_id);
-	moblerlog("transition to question view from landing view");
+	moblerlog("enters clickFeauturedItem");
 		var featuredFlag=true;
 		this.controller.transitionToQuestion(featuredFlag);
 	//}

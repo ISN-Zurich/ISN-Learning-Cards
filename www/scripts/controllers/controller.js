@@ -415,11 +415,12 @@ Controller.prototype.transitionToAuthArea = function(viewname,featuredFlag) {
 		this.transition(viewname, featuredFlag);
 	}
 	else {
-		//this.transitionToLogin();
-		this.transitionToLanding();
-	//this.transitionToLMS();
-		//injectStyle();
-	}
+		if (featuredFlag){
+			this.transition(viewname, featuredFlag);
+ 		}else {
+ 			this.transitionToLanding();
+ 		}
+	} 
 };
 
 /**
@@ -437,6 +438,7 @@ Controller.prototype.transitionToCourses = function() {
  * @function transitionToQuestion 
  **/
 Controller.prototype.transitionToQuestion = function(featuredFlag) {
+	moblerlog("enters transition to question in controller");
 	this.transitionToAuthArea('questionView', featuredFlag);
 };
 

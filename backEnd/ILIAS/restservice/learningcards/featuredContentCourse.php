@@ -93,7 +93,7 @@ function getFeaturedContent($userId) {
 	$featuredCourses = array();
 // 	foreach($items as $key => $obj_id)	{
 
-		// $obj_id =13040;
+//		$obj_id =13040;
 		//references are needed to get course items (= questionpools, tests, ...)
 		//$item_references = ilObject::_getAllReferences(13040);
 // 		$item_references = ilObject::_getAllReferences($obj_id);
@@ -103,7 +103,7 @@ function getFeaturedContent($userId) {
 // 		if(is_array($item_references) && count($item_references)) {
 // 		foreach($item_references as $ref_id) {
 				
-				//get all course items for a course (= questionpools, tests, ...)
+//	get all course items for a course (= questionpools, tests, ...)
 // 	$courseItems = new ilCourseItems($item_references);
 // 	$courseItemsList = $courseItems->getAllItems();
 	
@@ -119,7 +119,7 @@ function getFeaturedContent($userId) {
 // 	$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
 // 	$questionPool->read();
 
-	//calls isValidQuestionPool in questions.php
+	//calls isValidQuestionPool in common.php
 	//if (isValidQuestionPool($questionPool)) {
 	//$validQuestionPool = true;
 		//}

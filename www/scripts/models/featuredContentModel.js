@@ -64,11 +64,14 @@ function FeaturedContentModel(controller) {
 
 	
 	this.featuredContentList = [];
+	this.featuredQuestionList =[];
+	this.activeQuestion = {};
 	this.index = 0; // index of the current course
 	this.syncDateTime = 0;
 	this.syncState = false;
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
-	
+	this.queue = [];
+
 	
 	 /** 
 	  * It it binded when an online connection is detected
@@ -136,6 +139,43 @@ FeaturedContentModel.prototype.storeData = function(){
 	}
 	localStorage.setItem("featuredContent", courseString);
 };
+
+
+/**
+ * stores questions data into the local storage 
+ * or TODO: into a local json file
+ * to write more comments
+ **
+ **/
+FeaturedContentModel.prototype.storeQuestionsData = function () {
+	var questionPoolString;
+	try {
+		questionPoolString = JSON.stringify(this.featuredQuestionList);
+	} catch (err) {
+		questionPoolString = "";
+	}
+	localStorage.setItem("featuredQuestionpool_" + course_id, questionPoolString);
+};
+
+
+/**
+ **TODO:
+ */
+FeaturedContentModel.prototype.loadQuestionsData = function(){
+	var questionPoolObject;
+	try {
+		questionPoolObject = JSON.parse(localStorage.getItem("questionpool_"
+				+ course_id))
+				|| [];
+	} catch (err) {
+		questionPoolObject = [];
+	}
+
+	this.questionList = questionPoolObject;
+	this.questionsReset();
+	
+};
+
 
 
 //loadDatafromServer
@@ -226,13 +266,13 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			 **/
 			$(document).trigger("featuredContentlistupdate");
 			
-			//download all the quesitons(questionlist) for each course
-//            var c;
-//            for ( c in self.featuredContentList) {
-//             self.featuredContentList[c].isLoaded = false;
-//
-//             self.loadQuestionsFromServer(13040);
-//             }
+			//download all the questions(questionlist) for each course
+            var c;
+            for ( c in self.featuredContentList) {
+             self.featuredContentList[c].isLoaded = false;
+
+             self.loadQuestionsFromServer(13040);
+             }
 
 		} //end of function createCourseList
 		//} //end of if getLoginState()
@@ -247,15 +287,14 @@ FeaturedContentModel.prototype.loadQuestionsFromServer = function(courseId){
 	var courseId=13040;
 	//var activeURL = self.controller.getActiveURL();
 
-	$
-			.ajax({
+	$			.ajax({
 				url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/featuredQuestions.php",
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
 					moblerlog("success");
 					//if this was a pending question pool, remove it from the storage
-					localStorage.removeItem("pendingQuestionPool" + courseId);
+					localStorage.removeItem("pendingFeaturedQuestionPool" + courseId);
 					if (data) {
                     moblerlog("JSON: " + data);
 						var questionPoolObject;
@@ -272,7 +311,7 @@ FeaturedContentModel.prototype.loadQuestionsFromServer = function(courseId){
 						} catch (err) {
 							questionPoolString = "";
 						}
-						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
+						localStorage.setItem("featuredQuestionpool_" +  data.courseID, questionPoolString);
 						
 						/**It is triggered after the successful loading of questions from the server 
 						 * @event questionpoolready
@@ -287,7 +326,7 @@ FeaturedContentModel.prototype.loadQuestionsFromServer = function(courseId){
 					//if there was an error while sending the request,
 					//store the course id for the question pool in the local storage
 					localStorage.setItem("pendingQuestionPool_" + courseId, true);
-					moblerlog("Error while loading question pool from server");
+					moblerlog("Error while loading featured question pool from server");
 				},
 				beforeSend : setHeader
 			});
@@ -381,10 +420,68 @@ FeaturedContentModel.prototype.reset = function() {
 
 
 
+
 /**
- * 
+ * Resets a question pool by:
+ * 1. Emptying the queue that holds the recently answered questions
+ * 2. Initializing the question id
+ * 3. Clearing the current question body
+ * 4. Reseting the mixing of the answered items of each question
+ * After the reseting of the above elements has been done, we start again the question pool by moving to the next question
+ * @prototype
+ * @function reset
+ */ 
+FeaturedContentModel.prototype.questionsReset = function() {
+	this.queue = [ "-1", "-1", "-1" ];
+	this.id = 0;
+	this.activeQuestion = {};
+	this.currentAnswersAreMixed = false;
+	if (this.featuredQuestionList.length > 0) {
+		this.nextQuestion();
+	}
+};
+
+/**
+ * TODO: write comments
  **/
 FeaturedContentModel.prototype.getQuestionBody = function(){
+	return this.activeQuestion.question;
 	
-	
-}
+};
+
+
+
+/**TODO
+ * to upadte commments to be compatibe with this model
+ * Increases the index. Sets the id to the id of the next question. 
+ * A random number is created in order to get the id of the next question
+ * at the random position/index of the question list. 
+ * If the random number is not the same as the current id and is not an id 
+ * that is stored in the queue, the new id is the random number
+ * @prototype
+ * @function nextQuestion
+ * @return {Boolean} returns false if it has reached the end of the list
+ */
+FeaturedContentModel.prototype.nextQuestion = function() {
+	var random;
+	var newId;
+
+	do {
+		// generates a random number between 0 and questionList.length 
+		random = Math.floor((Math.random() * this.questionList.length));
+		moblerlog("random:" +random);
+		newId = this.featuredQuestionList[random].id;
+		moblerlog("New ID: " + newId);
+		//keeps repeating the process of getting the id of the new random question of question list
+		//while the new random id is still the same with id of the current question or if this new random id is still 
+		//stored in the waiting queue 	
+	} while (this.id === newId
+			|| (this.queue.length * 2 <= this.featuredQuestionList.length && jQuery
+					.inArray(newId, this.queue) >= 0));
+
+	this.id = newId;
+
+	this.activeQuestion = this.featuredQuestionList[random];
+	this.currentAnswersAreMixed = false;
+	return this.id < this.featuredQuestionList.length;
+};

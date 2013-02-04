@@ -147,7 +147,6 @@ function getQuestions($courseId) {
 							 else {
 								$answerList = $assQuestion->getAnswers();
 								logging("answerList for other types of Question".json_encode($answerList));
-								
 							}
 
 							//get feedback
