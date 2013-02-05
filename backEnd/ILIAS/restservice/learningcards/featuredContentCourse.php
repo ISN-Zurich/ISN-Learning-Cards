@@ -35,6 +35,8 @@
 
 //syncTimeOut provides a way for the server to tell the clients how often they are allowed to synchronize
 $SYNC_TIMEOUT = 60000;
+//NEW
+$GLOBALS['WEB_ACCESS_WITHOUT_SESSION'] = (session_id() == "");
 
 require_once './common.php';
 
@@ -42,9 +44,18 @@ chdir("../..");
 require_once ('restservice/include/inc.header.php');
 require_once 'Services/User/classes/class.ilObjUser.php';//don't need it in featured content
 
+//NEW 
+//require_once "./include/inc.header.php";
+require_once "./Services/Utilities/classes/class.ilUtil.php";
+require_once "./classes/class.ilObject.php";
+require_once "./Services/MediaObjects/classes/class.ilObjMediaObject.php";
+
+
 global $ilUser, $class_for_logging;
 
 global $DEBUG;
+
+
 $DEBUG = 1;
 $class_for_logging = "featuredContentCourse.php";
 
@@ -52,9 +63,17 @@ $class_for_logging = "featuredContentCourse.php";
 //$userID = get_session_user_from_headers();// TODO:in featured content there should be a user that will create the featured content
                                           // so we should assign here the exact ID numer i.e. $userID=12980
                                                                                 
-$userID=12980;
-                                          
-                                          
+//$userID=12980;
+
+if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
+	logging("web access without session");
+	$_SESSION["AccountId"] = ANONYMOUS_USER_ID;	
+	$ilUser->setId(ANONYMOUS_USER_ID);
+	$ilUser->read();
+	$userID= $ilUser->getId();
+};
+
+
 logging(" my userid is ". $userID);
 
 $return_data = getFeaturedContent($userID);// TODO:in featured content we will pass as argument the userId that we got right above
@@ -85,19 +104,19 @@ function getFeaturedContent($userId) {
 	require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 	
 	//loads all courses in which the current user is a member
-	//$items = ilParticipants::_getMembershipByType($userId, 'crs'); //we will need somthering similar, that will return a specific course based on its id.
+	$items = ilParticipants::_getMembershipByType($userId,"qpl"); //we will need somthering similar, that will return a specific course based on its id.
 	//see getCourseItemObject from clas.ilObjCourse.php...
 	//something like this $featuredCourse= getCourseItemObject();
-	//logging("items are ".$items);
+	logging("items are ".$items);
 	
 	$featuredCourses = array();
-// 	foreach($items as $key => $obj_id)	{
+	foreach($items as $key => $obj_id)	{
 
 //		$obj_id =13040;
 		//references are needed to get course items (= questionpools, tests, ...)
-		//$item_references = ilObject::_getAllReferences(13040);
+	$item_references = ilObject::_getAllReferences($obj_id);
 // 		$item_references = ilObject::_getAllReferences($obj_id);
-
+	logging("item references are ".$item_references);
 		//check if valid questionpool for the course exists
 		//$validQuestionPool = false;
 // 		if(is_array($item_references) && count($item_references)) {
@@ -132,7 +151,7 @@ function getFeaturedContent($userId) {
 	//if ($validQuestionPool) {
 		//$title       = $ilObjDataCache->lookupTitle($obj_id);
 		//$description = $ilObjDataCache->lookupDescription($obj_id);
-
+	}
 			$title       = $ilObjDataCache->lookupTitle(13040);
 			$description = $ilObjDataCache->lookupDescription(13040);
 
