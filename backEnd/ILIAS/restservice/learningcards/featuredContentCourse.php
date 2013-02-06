@@ -44,12 +44,14 @@ chdir("../..");
 require_once ('restservice/include/inc.header.php');
 require_once 'Services/User/classes/class.ilObjUser.php';//don't need it in featured content
 
-//NEW 
+//NEW to get the anonymous user id
 //require_once "./include/inc.header.php";
 require_once "./Services/Utilities/classes/class.ilUtil.php";
 require_once "./classes/class.ilObject.php";
 require_once "./Services/MediaObjects/classes/class.ilObjMediaObject.php";
 
+//NEW to get the available question pools for the specific anonymous user id
+require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 
 global $ilUser, $class_for_logging;
 
@@ -63,7 +65,7 @@ $class_for_logging = "featuredContentCourse.php";
 //$userID = get_session_user_from_headers();// TODO:in featured content there should be a user that will create the featured content
                                           // so we should assign here the exact ID numer i.e. $userID=12980
                                                                                 
-//$userID=12980;
+
 
 if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
 	logging("web access without session");
@@ -73,8 +75,10 @@ if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
 	$userID= $ilUser->getId();
 };
 
+// $userID="12980";
 
 logging(" my userid is ". $userID);
+//getAssignedRoles($userID);
 
 $return_data = getFeaturedContent($userID);// TODO:in featured content we will pass as argument the userId that we got right above
 											// we can create a mew function getCourse($userID) in order to return the specific
@@ -102,21 +106,33 @@ function getFeaturedContent($userId) {
 	include_once 'Services/Membership/classes/class.ilParticipants.php';
 	require_once 'Modules/Course/classes/class.ilCourseItems.php';
 	require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
+	$userId1=12980;
 	
 	//loads all courses in which the current user is a member
-	$items = ilParticipants::_getMembershipByType($userId,"qpl"); //we will need somthering similar, that will return a specific course based on its id.
+	$items1 = ilParticipants::_getMembershipByType($userId1,"crs"); //we will need somthering similar, that will return a specific course based on its id.
+	foreach ($items1 as $key => $obj_id1)	{
+		$item_references1 = ilObject::_getAllReferences($obj_id1);
+		logging("item references1 are ".json_encode($item_references1));
+		
+	}
+		$items = ilObjQuestionPool::_getAvailableQuestionpools($userId1);
+
 	//see getCourseItemObject from clas.ilObjCourse.php...
 	//something like this $featuredCourse= getCourseItemObject();
-	logging("items are ".$items);
-	
+	logging("courses for evangelia ".json_encode($items1));
+	logging(" public items for evangelia are ".json_encode($items));
+	$myQuestionPool=current($items);
+	logging("first question pool is ".json_encode($myQuestionPool));
 	$featuredCourses = array();
-	foreach($items as $key => $obj_id)	{
-
-//		$obj_id =13040;
-		//references are needed to get course items (= questionpools, tests, ...)
+	//$obj_id=key($items);
+	$obj_id=13012;
+	logging("questionpool id 1 is".$obj_id);
+	//foreach ($items as $key => $obj_id)	{
+	//logging("questionpool id is".$key);
+	//references are needed to get course items (= questionpools, tests, ...)
 	$item_references = ilObject::_getAllReferences($obj_id);
 // 		$item_references = ilObject::_getAllReferences($obj_id);
-	logging("item references are ".$item_references);
+	logging("item references are ".json_encode($item_references));
 		//check if valid questionpool for the course exists
 		//$validQuestionPool = false;
 // 		if(is_array($item_references) && count($item_references)) {
@@ -151,12 +167,14 @@ function getFeaturedContent($userId) {
 	//if ($validQuestionPool) {
 		//$title       = $ilObjDataCache->lookupTitle($obj_id);
 		//$description = $ilObjDataCache->lookupDescription($obj_id);
-	}
-			$title       = $ilObjDataCache->lookupTitle(13040);
-			$description = $ilObjDataCache->lookupDescription(13040);
-
+		//13046
+	//}
+			$title       = $ilObjDataCache->lookupTitle($obj_id);
+			$description = $ilObjDataCache->lookupDescription($obj_id);
+		
+	
 			array_push($featuredCourses,
-					array("id"             => 13040,
+					array("id"             => $obj_id,
 							"title"        => $title,
 							"syncDateTime" => 0,
 							"syncState"    => false,
