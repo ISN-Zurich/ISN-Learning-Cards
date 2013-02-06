@@ -1,0 +1,1436 @@
+/*********************** General ***********************/
+body {
+	width: device-width;
+	height: device-height;
+	overflow: scroll;
+	/*color: #666;*/
+	color:#646464;
+	font: 19px HelveticaNeue, Arial, sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+
+/* close button general characteristics, top right corner of each view*/
+.closeButton {
+	width: 49px;
+	height: 47px; /*it was 47*/
+	line-height: 54px; /*it was 47*/
+	padding: 2px;
+	border:1px solid white;
+	text-align: center;
+	font-weight:none;
+	font-size: 28px;/*it was 24*/
+	color: white;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	z-index:10;
+}
+
+
+/*done button general characteristics, bottom side of each view*/
+.forwardButton {
+	vertical-align: bottom;
+	font-size: 22px;
+	/*position: fixed;*/
+	float:left;
+	bottom: 0px;
+	color: white;
+	text-align: center;
+	border: 1px solid white;
+	line-height: 49px;
+	height: 49px;
+	z-index:10;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #999999), color-stop(100%, #6a6a6a)); /* Safari 4+, Chrome 2+ */
+    background: -webkit-linear-gradient(#999999, #6a6a6a)); /* Safari 5.1+, Chrome 10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#6a6a6a');  /*IE6 & IE7 */
+    background: linear-gradient(#999999, #6a6a6a); /* the standard */
+}
+
+.feedbackMore{
+	position: fixed;
+	width:53px;
+	vertical-align:middle;
+	color:white;
+	float:right;
+	right: 0px;
+	border-left:1px solid white;
+	border-right:1px solid white;
+	border-bottom:1px solid white;
+	height:49px;
+	line-height:49px;
+	z-index:0;
+	font-size:35px;
+	text-align:center;
+	bottom:0px;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #999999), color-stop(100%, #6a6a6a)); /* Safari 4+, Chrome 2+ */
+    background: -webkit-linear-gradient(#999999, #6a6a6a)); /* Safari 5.1+, Chrome 10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#6a6a6a');  /*IE6 & IE7 */
+    background: linear-gradient(#999999, #6a6a6a); /* the standard */
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.top {
+	position: fixed;
+	top: 0px;
+}
+
+.bottom {
+	position: fixed;
+	bottom: 0px;
+}
+
+.static {
+	position: static;
+}
+
+.title {
+    height:49px;
+   	line-height:52px;
+	font-size: 22px;
+	padding: 0px 0px 0px 50px;
+	vertical-align:middle;
+	color: white;
+    line-height: 65px;
+	margin-right: 52px;
+    margin-left: 0xpx;
+	margin-top: -4px;;
+    overflow: hidden;
+    border:0px solid green;
+}
+
+.landingTitle{
+	padding-left:25px;	
+}
+
+
+.title1 {
+ color:#008CC7;
+ font-weight:bold;
+ font-size:26px;
+ padding-top:25px;
+}
+
+
+.title2 {
+ color:grey;
+ font-weight:bold;
+ font-size:26px;	
+ padding-top:25px;
+}
+
+
+.titleicon {
+	height:50px;
+	line-height: 55px;
+	padding: 0px;
+	vertical-align: middle;
+	font-size: 30px;
+	margin-left: 5px;
+	margin-right: 5px;
+	color:white;
+	top:0px;
+	left:5px;
+	position:fixed;
+}
+
+.headerContainer {
+	box-shadow: 0px 3px 5px -1px #ccc;	
+	-webkit-box-shadow: 0px 3px 5px -1px #ccc;
+	/*background-color: #007fb5;*/
+	/*height: 52px;*/
+	border:1px solid white;
+	left:0px;
+	margin-left:0px;
+	width: 100%;
+	margin: 0px;
+	height:51px;
+	display:inline-block;
+	position: fixed;
+	top: 0px;
+	z-index:8;
+	background: -moz-linear-gradient(#008cc7, #0072a2); /* FF 3.6+ */  
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #008cc7), color-stop(100%, #0072a2)); /* Safari 4+, Chrome 2+ */  
+    background: -webkit-linear-gradient(#008cc7, #0072a2); /* Safari 5.1+, Chrome 10+ */  
+    background: -o-linear-gradient(#008cc7, #0072a2); /* Opera 11.10 */  
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#008cc7', endColorstr='#0072a2'); /* IE6 & IE7 */  
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#008cc7', endColorstr='#0072a2')"; /* IE8+ */  
+    background: linear-gradient(#008cc7, #0072a2); /* the standard */  
+   
+}
+
+.landingHeader{
+	position: absolute;
+	box-shadow: 0px 3px 5px -1px #ccc;	
+	-webkit-box-shadow: 0px 3px 5px -1px #ccc;
+	display:inline-block;
+	border:1px solid white;
+	left:0px;
+	margin-left:0px;
+	width: 100%;
+	margin: 0px;
+	height:51px;
+	top: 0px;
+	z-index:8;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dbdbdb), color-stop(100%, #ffffff)); /* Safari 4+, Chrome 2+ */  
+    background: -webkit-linear-gradient(#dcdcdc, #ffffff)); /* Safari 5.1+, Chrome 10+ */  
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dbdbdb', endColorstr='#ffffff'); /* IE6 & IE7 */  
+    background: linear-gradient(#dbdbdb, #ffffff); /* the standard */  
+    overflow:hidden;
+}
+.loginMessage{
+	display: none;
+	border: 1px solid white;
+	color:white;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 15px;
+}
+
+.gradientMessages{
+	background:-moz-linear-gradient(#454545,#8b8b8b);
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#454545), color-stop(100%,#8b8b8b));
+	background:-webkit-linear-gradient(#454545,#8b8b8b);
+	background: linear-gradient(#454545,#8b8b8b);
+}
+
+
+.content {
+	/*background-color:blue;
+	border: 1px solid red;*/
+    
+	margin-top: 55px;
+	width:100%;
+	background-image: url(../resources/app_background.png);
+	background-size:100% auto;
+    /*background-size: 946px auto;*/
+    /*background-size: 100% 5%;*/ 
+    background-repeat:no-repeat;
+    /* background-attachement: fixed; is not working on iOS */
+    background-attachment:absolute;
+    background-position: center bottom; 
+
+}
+
+
+.cardBody {
+	padding:0px;
+	padding-right:0px;
+	background-color:white;
+	display: table-cell;
+	vertical-align: top;
+	border:0px solid green;
+}
+
+ul {
+	border-top: solid 0px red; /*in order not to have a white line at the beginning in course list view*/
+	border-left: solid 1px white;
+	border-right: solid  1px white ;
+	border-bottom: solid 1px white;
+	/*background-color: #ddd;*/
+	color:#696969;
+	list-style-type: none;
+	/*font-size: 14pt;*/
+	/*font-style: normal;
+	font-style:none;
+	font-variant: normal;*/
+	text-align: left;
+	padding: 0px;
+	margin:0px;
+	-webkit-margin-before: 0px;
+	-webkit-margin-after: 0px;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	-webkit-padding-start: 0px;
+	margin-bottom:50px;
+}
+.spacerMargin{
+	
+	margin-bottom:50px;
+}
+
+#landingBody{
+	display:none;
+	z-index:10;
+}
+
+
+#loginBody{
+	display:none;
+	/*z-index:10;*/
+}
+li {
+	list-style-type: none;
+	list-style-position: inside;
+	font-size: 18px;
+	/*font-style: bold;
+	font-variant: bold;*/
+	font-style:none;
+	border-bottom: 1px solid white;
+	text-align: left;
+	padding: 0px;
+	margin:0px;
+	z-index:1;
+}
+
+
+
+/*********************** Views ***********************/
+#coursesListView {
+	display: none;
+}
+
+#settingsView {
+	display: none;
+}
+
+#logoutConfirmationView {
+	display: none;
+}
+
+#cardQuestionView {
+	display: none;
+}
+
+#cardAnswerView {
+	display: none;
+}
+
+#cardFeedbackView {
+	display: none;
+}
+
+#statisticsView {
+	display: none;
+}
+
+#splashScreen {
+/*display: none;*/ 
+}
+
+.viewblock {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+   
+}
+
+/*
+.backgroundImageLanding{
+	background-image:url("resources/app_background.png"");
+	background-repeat:no-repeat;
+	background-attachement:fixed;
+	background-position:bottom; 
+ }
+*/
+
+/*
+.backgroundImage{
+	background-image:url('resources/app_background.png');
+	background-repeat:no-repeat;
+	background-attachement:absolute;
+	background-position:bottom; 
+}*/
+
+/*********************** Splash Screen ***********************/
+#mainTitle {
+	font-size: 20pt;
+	margin: 25px auto 10px 20px;
+}
+
+#cardsTitle {
+	color: #008CC7;
+	font-weight: bold;
+}
+
+#cards {
+	color: white;
+	position: absolute;
+	top: 25px;
+	right: 90px;
+	font-size: 15px;
+	font-weight: bold;
+	}
+
+.card1 {
+	position: absolute;
+	left: 15px;
+	top: 12px;
+	/*z-index:-1;*/
+	background-color: #008CC7;
+	transform:rotate(15deg);
+	-webkit-transform: rotate(15deg); /* Safari and Chrome */
+	height: 40px;
+	width: 60px;
+	padding-left: 3px;
+	padding-top: 3px;
+	
+}
+
+.card2 {
+	position: absolute;
+	/*left: -10px;*/
+	background-color: #29ABE2;
+	height: 50px;
+	width: 60px;
+	padding-left: 3px;
+	padding-top: 3px;
+	/*z-index:-2;*/
+	
+}
+
+ .card3 {
+	position: absolute;
+	left: -15px; 
+	top: -10px; 
+	/*z-index:-3;*/
+	background-color: #7FCBDD;
+	transform: rotate(-15deg);
+	-webkit-transform: rotate(-15deg); /* Safari and Chrome */
+	height: 60px;
+	width: 60px;
+	padding-left: 5px;
+	padding-top: 3px;
+
+}
+
+/*the following was id and was used for splash screen. it will be used in the login view now
+which will be hosted outside splashscreen. the landing view will be hosted inside splash screen*/
+.cover {
+	height: 100%;
+	width: 100%;
+}
+
+#loading {
+	font-size: 100px;
+	height: 200px;
+	width: 200px;
+	text-align: center;
+	vertical-align: middle;
+	margin-left: auto;
+	margin-right: auto;
+	-webkit-animation: spin 4s infinite linear;
+	margin-left: auto;
+}
+
+.centered {
+	display: inline-block;
+	text-align: center;
+	line-height: 200px;
+}
+
+@-webkit-keyframes spin { 
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform:rotate(360deg);}
+}
+
+@-webkit-keyframes spinoff { 
+	0% {-webkit-transform: rotate(0deg);}
+	100% {-webkit-transform:rotate(-360deg);}
+}
+
+/****Landing View*****/
+
+#landingViewHeader {
+	display: none;
+
+}
+
+#landingViewBackIcon {
+	display: none;
+}
+#landingBody{
+	/*there was a z-index before, but we took it out in order to display the cards positively*/
+}
+
+#landingForm {
+	/*display: none;*/
+	width: 100%;
+}
+
+#landingView{
+	/*display:none;*/
+}
+/*********************** Login ***********************/
+#loginForm {
+/*display: none;*/
+	width: 100%;
+}
+
+
+#loginViewHeader {
+	display: none;
+}
+
+#loginViewBackIcon {
+	display: none;
+}
+
+.inputBorder {
+	padding: 10px;
+	border-right: 0px solid white;
+	border-left: 0px solid white;
+	height: 33px;
+	margin-right:0px;	
+}
+
+.loginInput {
+	/*box-shadow: none;
+	-webkit-appearance: none;
+	 border-radius: 0;
+	*/
+	outline: none;
+	border: none;
+	border-width: 0px;
+	
+	font-size: 12pt;
+	margin: 0px;
+	padding: 5px;
+   
+	border-left: 0px solid white;
+	color:#707070;
+	background-color:transparent;
+
+}
+
+*[placeholder] {
+	color: #666;
+}
+
+.loginInput:focus {
+	outline: none;
+	border: none;
+	border-width: 0px;
+	-webkit-appearance: none;
+    border-radius: 0;
+	border-left: 3px solid white;
+
+}
+
+
+
+
+
+/*it is not used, it will be used when we will add loading icons on the warning and error messages*/
+#warningMessageContainer{
+	display:none;
+}
+
+#errorMessageContainer{
+	display:none;
+}
+
+.listicon {
+	width: 20px;
+	display: block;
+	height: 20px;
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+.correctAnswer {
+	background-color: #33CC33;
+	border-left: 1px solid white;
+	color: white;
+	width: 30px;
+	text-align: center;
+	margin:0px;
+}
+
+.green{
+	color: #33CC33;
+	/*width: 30px;
+	text-align: center;
+	margin:0px;*/
+}
+
+.red{
+	color:#EC2F2D;
+	font-size:22px;
+	/*width: 30px;
+	text-align: center;
+	margin:0px;*/
+}
+
+.lightgrey{
+	color:#BEBEBE;
+}
+
+
+.glowRed {
+	
+	text-shadow: -1px -1px 1px #682627,1px 1px 2px #C04A4A;
+	/*-webkit-text-stroke-color: grey;
+	-webkit-text-stroke-width: 3px;*/
+			
+}
+.partiallyCorrectAnswer {
+	background-color: #EEEEEE;
+}
+
+.ticked {
+    padding:0px;
+	margin:0px;
+	background-color: #29ABE2;
+	color: white;
+}
+
+.control {
+    font-size: 28pt;
+	border-radius: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-left: 10px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+
+#feedbackTipBody{
+	display: none;
+}
+
+#FeedbackMore {
+	display: none;
+}
+
+.pfp {
+	vertical-align: bottom;
+	margin-top: 10px;
+	margin-left: 20px;
+	margin-right:10px;
+	clear: both;
+	/*width: 100%;*/
+	height:53px;
+	background-color:white;
+	border: 1px solid blue;
+	float:left;
+}
+
+.pfpLabelContainer {
+	
+	margin-top: 5px;
+	padding-right:10px;
+	font-size: 15pt;
+	border: 1px solid white;
+}
+
+
+#LMSContainer{
+	border: 1px solid white;
+	height:60px;
+	
+}
+
+
+#logos {
+	vertical-align: bottom;
+	margin-top: 10px;
+	clear: both;
+	width: 100%;
+	height:53px;
+	background-color:white;
+	/*content: url(../resources/logos_small.png);*/
+}
+
+#ISNlogo {
+	float: left;
+	content: url(../resources/isn_css.png);
+	width: 142px;
+	height: 53px;
+}
+
+#ETHZlogo {
+	float: right;
+	content: url(../resources/ethz.png);
+	width: 142px;
+	height: 53px;
+}
+
+
+.currentSortedItem {
+	border: 1px solid white;
+	background-color: #ddd;
+}
+
+.placeholder {
+	height: 1.5em;
+	line-height: 1.2em;
+	color: #ccc;
+	background: #ccc;
+}
+
+/*********************** Question View ***********************/
+#cardQuestionBody {
+    font-size: 20px;
+    }
+ul#questionText{
+	padding:20px;
+	/*width:100%;*/
+}
+
+
+
+
+/*********************** Answer View ***********************/
+.marginForButtons {
+	margin-right: 52px;
+	border:1px solid white;
+}
+
+.answerLi {
+	padding: 0px;
+}
+
+.text {
+   /* margin-right: 35px;*/
+	padding: 15px;
+	padding-left: 10px;
+	padding-right:0px;
+	border:0px solid red;
+}
+
+#numberInputContainer, #numberInput, 
+#typedAnswer, #numericFeedback, 
+#correctNumericFeedback {
+	width: 100%;
+}
+
+#typedAnswer, #correctNumericFeedback {
+	text-align: left;
+}
+
+#dataErrorMessage {
+	display: none;
+}
+
+/*********************** Statistics View ***********************/
+#statisticsBody {
+	font-size:0px; /*set the font size to 0, in order the children elements that are displayed as inline blocks, not to have any space between them. The space is applied by default when you use inline block*/
+	
+}
+
+.red{	
+	color:red;
+}
+
+.green{
+	color:green;
+}
+
+/*********************** Achievements View ***********************/
+
+#achievementsView {
+	display: none;
+}
+
+
+.blue{	
+	color:#008CC7;
+}
+
+/****************** Course List View ************************/
+.courseListIcon {
+	border-left: 1px solid red;
+	width: 30px;/*it was 41 and then 34*/
+	line-height:57px;
+	font-size: 24px; /*it was 32, and then 26*/
+	color:white;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.courseListIconLMS {
+	border-left: 1px solid red;
+	width: 34px;/*it was 41*/
+	font-size: 32px;
+	text-align: center;
+	vertical-align: middle;
+	padding-right:4px;
+}
+
+.courseListIconFeedback {
+	border: 0px solid red;
+	width: 41px;
+	line-height:45px;
+	font-size: 32px;
+	text-align: center;
+	position:relative;
+	right:10px;
+	/*vertical-align: middle;*/
+}
+
+.marginForCourseList {
+	margin-right: 54px;
+}
+
+.marginForCourseList2 {
+	margin-right: 70px;
+}
+
+.loadingRotation {
+	-webkit-animation: spin 3s infinite linear;
+	font-size: 25px;
+}
+
+/*********************** Settings View ***********************/
+.settingsLi {
+	padding-bottom: 5px;
+	padding-left:7px;
+}
+
+.settingsLabel {
+	font-size: 14px;
+	color: #999;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 3px;
+}
+
+.More {
+	height: 49px;
+	line-height:49px;
+	position: fixed;
+	bottom: 1px;
+	right: 1px;
+	z-index: 1;
+	border-top: 1px solid white;
+ 	margin: 0px;
+}
+
+#lmsLabelSet {
+	height:38px;
+	width:38px;
+	/*content: url(../resources/pfpLogo.png);*/
+	float:left;
+	/*margin-right:10px;*/
+	margin-top:7px;
+	margin: auto 10px auto 0px;
+	
+
+}
+
+.lms {
+	height: 65px;
+	margin-top:7px;
+}
+
+.pfpItemSet {
+	margin-top:20px;
+	padding-left: 5px;
+}
+
+/*********************** About View ***********************/
+#aboutView {
+	display: none;
+}
+
+#cardsAbout {
+	color: white;
+	position: absolute;
+	top: 88px;
+	right: 90px;
+	font-size: 15px;
+	font-weight: bold;
+	/*border: 1px solid green;*/
+}
+
+#aboutMainTitle {
+	font-size: 20pt;
+	margin: 80px auto 10px 10px;
+}
+
+
+ul#aboutData{
+
+	margin-top:10px;
+	margin-left: 0px;
+	margin-right:0px;
+	font-size: 12px;
+	margin-bottom: 66px;
+	/*border: 1px solid red;
+	padding-top:15px;*/
+	
+}
+
+.aboutLabel {
+	font-size: 18px;
+	color: #999;
+	margin-bottom: 3px;
+}
+
+.settingsLi.about {
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+/******NEW CLASSES********/
+
+
+
+.fixed{
+	position:fixed;
+	
+}
+.foreground{
+	z-index:10;
+}
+
+.background{
+	z-index:8;
+	overflow:hidden;
+}
+
+#loginElements {
+	
+	
+}
+
+.selectWidget {
+	/*display:inline-block;*/
+	padding-left: 0px;
+	/*border: 1px solid black;*/
+	/*border-bottom: 1px solid white;*/
+	border-right: 1px solid white;
+	border-left: 1px solid white;
+	/*background-color: #c6c6c6;*/
+	margin-right:0px;	
+	height:51px;
+}
+li#selectlms{
+	border-bottom:0px solid white;
+}
+
+.selectWidget2 {
+	/*display:inline-block;*/
+	/*padding: 5px;*/
+	/*border-bottom: 1px solid white;*/
+	border-right: 1px solid white;
+	border-left: 1px solid white;
+	background-color: #c6c6c6;
+	margin-right:0px;	
+	height:80px;
+}
+
+ul#loginElements{
+	border:solid white 0px;
+	
+}
+
+
+#lmsView{	
+	display: none;
+}
+
+ul#lmsList{
+	/*border:solid white 1px;*/
+}
+
+
+.lmsListItem {
+	border-left: 1px solid white;
+	height:65px;
+	text-align: left;
+	clear:both;
+}
+
+
+.labelContainer{
+	float:left;
+	/*display:inline-block;*/
+	padding-top:15px;
+	padding-left:0px;
+	border: 0px solid orange;
+	/*word-wrap:break-word;*/
+	/*margin-right:113px;
+	width:180px;*/
+}
+
+.lmslabel{
+	height:49px;
+	line-height:49px;
+	font-weight:bold;
+	float:left;
+	display:inline;
+	
+	border: solid 0px blue;
+	vertical-align:middle;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	overflow: hidden;
+	
+	/* try this temporarily */
+	/*vertical-align: bottom;*/
+}
+
+
+#loginLmsLabel{
+	border: solid 0px blue;
+	vertical-align:middle;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	overflow: hidden;
+}
+
+.pfp {
+	vertical-align: middle;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 20px;
+	margin-right:10px;
+	clear: both;
+	/*width: 100%;
+	height:53px;*/
+	background-color:white;
+	border: 1px solid white;
+	float:left;
+}
+
+
+
+.titleNew {
+	height: 49px;
+	font-size: 22px;
+	font-weight: 900;
+	padding: 0px 0px 0px 10px;
+	color:white;
+    line-height: 58px;
+	margin-right: 52px;
+    margin-left: 0px;
+	margin-top: auto;
+    overflow: hidden;
+   /* border: 1px solid red;*/
+	
+}
+
+
+.notClickable{
+	color: red;
+}
+
+.message {
+	background-color: #a52a2a;
+	color: white;
+}
+
+.lmsmessage {
+	display:none;
+	color: white;
+	/*margin-right:55px;
+	margin-left:38px;*/
+	padding:10px;
+}
+.hidden{
+	display:none;
+}
+/*
+#lmserrormessage {
+	display: none;
+	margin-top:70px;
+	margin-top:-70px;
+	color:weight;
+	margin-right:20px;
+	margin-left:20px;
+	padding:10px;
+	}
+*/
+
+#lmsregistrationmessage {
+	display: none;
+	/*margin-top:-70px;*/
+	margin-right:50px;
+	margin-left:50px;
+	padding:10px;
+}
+
+#lmsregistrationwaitingmessage {
+	display: none;
+	margin-top:-70px;
+	margin-right:50px;
+	margin-left:50px;
+	padding:10px;
+}
+
+#backgroundPopup{
+display:none;
+position:fixed;
+height:100%;
+width:100%;
+top:0;
+left:0;
+background:#000000;
+border:1px solid #cecece;
+/*z-index:1;*/
+}
+
+#popupContact{
+display:none;
+position:fixed;
+_position:absolute; /* hack for internet explorer 6*/
+height:150px;
+width:160px;
+background:#FFFFFF;
+border:2px solid #cecece;
+z-index:2;
+padding:12px;
+font-size:13px;
+}
+
+
+.gradient1{  
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dbdbdb), color-stop(100%, #ffffff)); /* Safari 4+, Chrome 2+ */  
+    background: -webkit-linear-gradient(#dcdcdc, #ffffff)); /* Safari 5.1+, Chrome 10+ */  
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dbdbdb', endColorstr='#ffffff'); /* IE6 & IE7 */  
+    background: linear-gradient(#dbdbdb, #ffffff); /* the standard */  
+}
+
+
+
+/*selected item before being selected*/
+.gradient2{  
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dddddd), color-stop(100%, #bebebe)); /* Safari 4+, Chrome 2+ */  
+    background: -webkit-linear-gradient(#dddddd, #bebebe)); /* Safari 5.1+, Chrome 10+ */  
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#bebebe'); /* IE6 & IE7 */  
+    background: linear-gradient(#dddddd, #bebebe); /* the standard */  
+}
+
+
+
+
+
+
+.gradientSelected{  
+	color:white;
+	/*-webkit-text-stroke-color: white;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: transparent;*/
+
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5e5e5e), color-stop(100%, #8c8c8c)); /* Safari 4+, Chrome 2+ */  
+
+    /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5e5e5e), color-stop(67%, #5e5e5e),color-stop(100%, #8c8c8c));*/ /* Safari 4+, Chrome 2+ */  
+    /*background: -webkit-linear-gradient(#5e5e5e, ##5e5e5e));*/ /* Safari 5.1+, Chrome 10+ */  
+    /*background: -o-linear-gradient(#5e5e5e, #5e5e5e); *//* Opera 11.10 */  
+    /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5e5e5e', endColorstr='#5e5e5e');*/ /* IE6 & IE7 */  
+    /* background: linear-gradient(#5e5e5e, #5e5e5e);*/ /* the standard */ 
+    z-index:10;
+     
+}
+
+
+
+
+.textShadow{
+text-shadow: 0px 1px 1px #898989 ;
+}
+
+.lightShadow {
+	text-shadow: 0px 1px 1px #c9c9c9 ;
+}
+
+.bold {
+font-weight: bold;	
+}
+
+
+.textSmall {
+	font-size:15px;
+	font-style:italic;
+}
+
+
+.lineContainer {
+	display: inline-block;
+	vertical-align:middle;
+	text-align:center;
+	border:solid 0px blue;
+}
+
+.lineContainerCourses {
+	display: inline-block;
+	vertical-align:middle;
+	text-align:center;
+	border:solid 0px blue;
+	margin-right:11px;
+}
+
+/* it is used in lms view for the image container*/
+.lmsIcon {
+	display: inline-block;
+	vertical-align:middle;
+	text-align:center;
+	border:solid 0px green;
+	margin-right:5px;
+}
+
+
+.imageContainer {
+	/*display:inline-block*/
+	height: 47px;
+	line-height: 47px;
+	width: 47px;
+	padding-top:4px;
+	border: solid 0px green;	
+}
+
+.imageoutline1 {
+	height: 39px;
+	line-height: 39px;
+	width: 37px;
+	border-left: solid 1px #8b8b8b;
+	border-top: solid 1px #8b8b8b;
+	}
+
+.imageoutline2 {
+	height: 38px;
+	line-height: 38px;
+	width: 36px;
+	/*border-left: solid 1px #b8b8b8;*/
+	border-left: solid 1px #c1c1c1;
+	/*border-top: solid 1px #b8b8b8;*/	
+	border-top: solid 1px #c1c1c1;		
+}
+
+.selectItemContainer {
+	/*display:inline-block;*/
+	border: solid 0px red;	
+	height: 47px;
+	line-height: 47px;
+	width: 30px;/*it was 34*/
+	text-align:center;
+	padding-top:5px;
+	padding-right:7px;/*there was no padding right it was just added*/
+	font-size:30px; /*it was 32*/
+}
+
+.selectItemContainer2 {
+	/*display:inline-block;*/
+	border: solid 0px red;	
+	height: 47px;
+	line-height: 47px;
+	width: 29px;
+	text-align:center;
+	padding-top:5px;
+	padding-right:5px;
+	font-size:25px;
+}
+
+.separatorContainer {
+	/*display:inline-block;*/
+	border-left: solid 1px #b3b2b2;
+	height: 48px;
+	line-height: 48px;
+	width: 12px;
+	text-align: center;
+	padding-top: 5px;
+	background-color: transparent;
+}
+
+.separatorContainerAchievements {
+	/*display:inline-block;*/
+	border-left: solid 1px #b3b2b2;
+	height: 50px; /*it was 71px*/
+	line-height: 50px;
+	width: 12px;
+	text-align: center;
+	margin-top:15px;
+	margin-bottom:15px;
+	background-color: transparent;
+}
+
+img.imageLogoLMS{
+	display:inline;
+	width:38px;
+	height:38px;
+	padding-right:7px;
+	padding-top:5px;
+	border:solid 0px blue;
+}
+
+.achievementsImg{
+	text-align:center;
+	right:6px;
+	position:absolute;
+	font-size:39px;
+}
+
+.feedbackIcon{
+	padding:8px;
+}
+
+img.imageLogo{
+	display:inline;
+	width:36px;
+	height:38px;
+}
+
+
+ 	.radial{		
+ background:-webkit-radial-gradient(-93px 30px, circle closest-corner, #bbbbbb,  #c8c8c8 20px, #e6e6e6 50px, transparent 100px);
+/*background-image:-webkit-gradient(radial,64 59, 412, 0 44, 412,  from(#FCFCFC), to(#D3D2D4), color-stop(.6,#E8E8E8));*/
+ 	}
+ 	
+ 	
+ .radialCourses{
+background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, transparent 100px);
+/*background-image:-webkit-gradient(radial,64 59, 412, 0 44, 412,  from(#FCFCFC), to(#D3D2D4), color-stop(.6,#E8E8E8));*/
+ 	}
+
+
+.courseContainer{
+	height:45px;
+	line-height:45px;
+}
+
+.separatorContainerCourses {
+	/*display:inline-block;*/
+	border-left: solid 1px #b3b2b2;
+	height: 30px;
+	line-height: 30px;
+	width: 12px;
+	text-align: right;
+	margin-top:4px;
+	margin-bottom:4px;
+	
+}
+
+.separatorContainerLMS {
+	/*display:inline-block;*/
+	border-left: solid 1px #b3b2b2;
+	height: 20px;
+	line-height: 41px;
+	width: 9px;
+	text-align: right;
+	margin-top:4px;
+	margin-bottom:4px;
+	
+}
+
+
+
+#shadowedLi{
+	height:20px;
+}
+
+
+.shadowedLi{
+		height:20px;
+}
+/*** Logout View ***/
+
+
+/* this is for the shadowed div in login view*/
+#shadow{
+	
+ height:20px;
+ }
+
+
+#shadowFeedbackMoreView{
+	
+ height:20px;
+ border:solid 1px white;
+}
+
+#shadowFView{
+	
+ height:20px;
+ border:solid 1px white;
+}
+
+
+
+.dashBlue{
+	color:#0081b8;
+	font-size:26px;
+	text-shadow: 1px 1px 3px grey;
+}
+
+/*select is similar with dashBlue*/
+.select{
+	color:#0081b8;
+	/*font-size:26px;*/
+	text-shadow: 1px 1px 3px grey;
+}
+
+.dashGrey{
+	color:#838383;
+	text-shadow: 1px 1px 3px grey;
+}
+
+.stats{
+	font-size:20px;
+	
+}
+
+/************Statistsics View***************/
+.valueContainer{
+	display:table-cell;
+	margin-right:20px;
+	/*vertical-align:middle;*/
+}
+
+.clear{
+	clear:both;
+
+}
+
+#statsSpeedValue{
+	
+
+}
+
+.statsLabel{
+	font-size:22px;
+	font-weight:none;
+	padding-top:15px;
+	padding-right:10px;	
+}
+
+#statsSlot3{
+	border-bottom:solid 1px white;
+}
+
+#statsSlot4{
+	border-bottom:solid 1px white;
+}
+
+#statsSlot5{
+	border-bottom:solid 1px white;
+}
+
+#statsSlot6{
+	border-bottom:solid 1px white;
+}
+
+#statsSlot7{
+	border-bottom:solid 1px white;
+}
+
+#cardBurner{
+	padding-bottom:4px;
+	margin-bottom:4px;
+}
+
+.spacerMargin{
+	/*height:80px;
+	background:white;
+	background-color:white;
+	*/
+}
+
+.marginSeparatorTop{
+	margin-top:6px;
+	margin-bottom:5px;
+}
+
+.border{
+	border:solid 1px white;
+}

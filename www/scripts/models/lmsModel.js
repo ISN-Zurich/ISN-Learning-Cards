@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -38,16 +39,19 @@ under the License.
  * It initializes:
  *   - the last time an unsuccessful attempt was made in order an lms to be registered
  * It sets the active server. During the initialization of the app, the call of this function will 
- * register the default server and will do the setting of the rest variables.
+ * register the default server and will do the setting of the rest variables
+ * It stores the last unsuccesfful date when a registration attempt failed for a server in order to accordingly visualize this to the user. 
  * @param {String} controller 
  */
 
 function LMSModel(controller) {
 	this.controller = controller;
+	this.selectedLMSList = [];
+	this.previousLMS= "";
 	//localStorage.removeItem("urlsToLMS"); // for debugging only
 	this.loadData();
 	this.lastTryToRegister = [];
-	this.setActiveServer(this.lmsData.activeServer);
+	this.setActiveServer(this.lmsData.activeServer,this.previousLMS);
 }
 
 /**
@@ -93,9 +97,7 @@ LMSModel.prototype.loadData = function() {
 				};
 		localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));
 	}
-
 	moblerlog("lmsObject in localstorage: " + JSON.stringify(lmsObject));
-
 	this.lmsData = lmsObject;
 };
 
@@ -117,7 +119,6 @@ LMSModel.prototype.storeData = function() {
 	}
 	moblerlog("lms string"+lmsString);
 	localStorage.setItem("urlsToLMS", lmsString);
-
 	moblerlog("LMS Storage after storeData: "+ localStorage.getItem("urlsToLMS"));
 };
 
@@ -170,7 +171,6 @@ LMSModel.prototype.getActiveServerURL = function() {
 * @function getActiveServerName  
 * @return {String} servername, the name of the active server
 */
-
 LMSModel.prototype.getActiveServerName = function() {
 	return this.activeServerInfo.servername;	
 };
@@ -209,14 +209,17 @@ LMSModel.prototype.getDefaultLanguage = function() {
  * 
  * THIS FUNCTION IS ONLY USED BY THE LMSVIEW or the constructor
  */
-LMSModel.prototype.setActiveServer = function(servername) {
+LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
+	moblerlog("just enter setActive Server, previousLMS is "+previousLMS);
 	var self=this;
 	var urlsToLMS, lmsObject;
 	this.activeServerInfo = this.findServerInfo(servername);
 	
 	self.loadData();
 	
-	var requestToken, lmsObject = self.lmsData.ServerData;
+	var requestToken;
+	var lastRegister; 
+	var lmsObject = self.lmsData.ServerData;
 	moblerlog("setActiveServer: where is the serverdata? " + lmsObject );
 	// a sanity check if the selected lms exists in the local storage
 	// in order to get its client key only in this case
@@ -224,8 +227,7 @@ LMSModel.prototype.setActiveServer = function(servername) {
 		moblerlog("the current lms has already a client key");
 		// then get this client key from the local storage 
 		requestToken = lmsObject[servername].requestToken;
-	}
-	
+			}
 	 if (!requestToken || requestToken.length === 0){
 		 moblerlog("registration  should be done");
 		//register the app with the server in order to get an app/client key
@@ -235,16 +237,22 @@ LMSModel.prototype.setActiveServer = function(servername) {
 		}	
 		else { // we are online 
 			moblerlog("will try to do a registration because we are online");
-
+			if (lmsObject[servername]){
+			lastRegister=lmsObject[servername].lastRegister;
+			}
 			// if we had tried to register for the specific server 
 			// and we failed and if this failure took place less than 24 hours ago
 			// then display to the user the lms registation message 
-			if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
-				moblerlog("less than 24 hours have passed");
-				$(document).trigger("lmsNotRegistrableYet", servername);			
+			//if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
+			if (lastRegister > ((new Date()).getTime() - 24*60*60*1000)){	
+				moblerlog("less than 24 hours have passed for server"+servername);
+				
+				$(document).trigger("lmsNotRegistrableYet",[servername,previousLMS]);	
+				moblerlog("previouslms in model is"+previousLMS);
 			}else {
-				moblerlog("do the registration");
-				self.register(servername);  //we will get a client key
+				moblerlog("do the registration for server"+servername);
+				$(document).trigger("registrationIsStarted", servername);
+				self.register(servername,previousLMS);  //we will get a client key
 			}//end of else
 		}	
 		
@@ -260,8 +268,7 @@ LMSModel.prototype.setActiveServer = function(servername) {
 			
 		this.storeData();
 		this.defaultLanguage = lmsObject[servername].defaultLanguage;
-		this.activeRequestToken = requestToken;
-		
+		this.activeRequestToken = requestToken;	
 		$(document).trigger("activeServerReady");
 	}
 };
@@ -272,8 +279,10 @@ LMSModel.prototype.setActiveServer = function(servername) {
 * It is called whenever the client(app) key is empty
 * @prototype
 * @function register 
+* @param {string, string} servername, previousLMS, the name of the currently selected lms and the name of the previously selected lms
 */
-LMSModel.prototype.register = function(servername) {
+LMSModel.prototype.register = function(servername,previousLMS) {
+	moblerlog("previous lms in registration is"+previousLMS);
 	var self = this;
 	moblerlog("enters regsitration");
 	//phone gap property to get the id of a device
@@ -282,7 +291,6 @@ LMSModel.prototype.register = function(servername) {
 
 	$
 			.ajax({
-				//url : self.urlToLMS + '/registration.php',
 				url:  activeURL + '/registration.php',
 				type : 'GET',
 				dataType : 'json',
@@ -291,12 +299,15 @@ LMSModel.prototype.register = function(servername) {
 				// to display the error that created the problem in the console
 				error : function(request) {
 					self.lastTryToRegister[servername] = (new Date()).getTime();
+					self.lmsData.ServerData[servername] = {};
+					self.lmsData.ServerData[servername].lastRegister = self.lastTryToRegister[servername];
+					self.storeData();
                   moblerlog("ERROR status code is : " + request.status);
                   moblerlog("ERROR returned data is: "+ request.responseText);
                   moblerlog("Error while registering the app with the backend");
                   // remember in lmsData that the server made a booboo
                   
-                  $(document).trigger("registrationfailed", servername);
+                  $(document).trigger("registrationfailed", [servername,previousLMS]);
 				},
 				//during the registration we send via headers the app id and the device id
 				beforeSend : setHeaders
@@ -337,6 +348,56 @@ LMSModel.prototype.register = function(servername) {
 		self.storeData();
 				
 		self.setActiveServer(servername);	
+	}
+};
+
+/**
+* sets the list with the selected lms
+* (it will contain one lms)
+* @prototype
+* @function setSelectedLMS 
+* @param {string} servername, the name of the currently selected lms
+*/
+LMSModel.prototype.setSelectedLMS=function(selectedLMS){
+	moblerlog("set selected lms");
+	this.selectedLMSList = selectedLMS;
+};
+
+/**
+* gets the selected lms
+* @prototype
+* @function getSelectedLMS 
+*/
+LMSModel.prototype.getSelectedLMS=function(){
+	return this.selectedLMSList;
+};
+
+/**
+ * check if an lms has tried to register in order to display when the lms view opens, either the 
+ * deactivated mode(red cross, light grey) or the normal mode(image, text font)
+ * @prototype
+ * @function isRegistrable 
+ * @param{string} servername, the name of the activated server
+ */
+LMSModel.prototype.isRegistrable = function(servername){
+	
+	var self=this;
+	self.loadData();
+	var lastRegister; 
+	var lmsObject = self.lmsData.ServerData;
+	if (lmsObject[servername]){
+		lastRegister=lmsObject[servername].lastRegister;
+		}
+	for ( i=0; i < URLS_TO_LMS.length; i++ ) {
+		if (lastRegister > ((new Date()).getTime() - 24*60*60*1000)){	
+		moblerlog("lms is not registrable yet");
+			return false
+		}
+		else{
+			$("#selectLMSitem"+servername).prop("disabled",false);	
+			moblerlog("lms is registrable for server"+servername);
+			return true
+		}
 	}
 };
 

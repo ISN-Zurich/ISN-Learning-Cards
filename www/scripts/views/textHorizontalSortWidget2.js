@@ -72,12 +72,12 @@ HorizontalTextSortWidget.prototype.showAnswer = function() {
 
 		// create a new unordered list
 		var ul = $("<ul/>", {
-			"class" : "sortable"
+			"class" : "sortable gradient2"
 		}).appendTo("#cardAnswerBody");
 
 		var mixedAnswers;
 
-		// if sorting has not started yet, mix the answers
+		// if sortingh has not started yet, mix the answers
 		if (!questionpoolModel.currAnswersMixed()) {
 			var tmp_answerModel = new AnswerModel();
 			do {
@@ -107,6 +107,20 @@ HorizontalTextSortWidget.prototype.showAnswer = function() {
 			
 			}).appendTo(li);
 		}	
+		
+		var lastli = $("<li/>", {
+		}).appendTo(ul);
+
+			"id": "lastHSortingLi",
+			"class" : "gradient1 shadowedLi"
+		}).appendTo(lastli);
+
+		
+		//add some space, so that to enable scrolling in landscape mode
+		var marginli = $("<li/>", {
+			"class":"spacerMargin"
+		}).appendTo(ul);
+		
 		
 		// make the list sortable using JQuery UI's function
 		$(".sortable").sortable({
@@ -140,7 +154,9 @@ HorizontalTextSortWidget.prototype.showFeedback = function() {
 		disabled : true
 	});
 
-	var ul = $("<ul/>", {}).appendTo("#feedbackBody");
+	var ul = $("<ul/>", {
+		"class": "gradient2"
+	}).appendTo("#feedbackBody");
 
 	var questionpoolModel = controller.models["questionpool"];
 	var answers = questionpoolModel.getAnswer();
@@ -150,7 +166,7 @@ HorizontalTextSortWidget.prototype.showFeedback = function() {
 	// iterate over all answers
 	for ( var i = 0; i < answers.length; i++) {
 		var li = $("<li/>", {
-			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "ticked" : ""
+			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "gradientSelected" : " "
 		}).appendTo(ul);
 
 		var div = $("<div/>", {

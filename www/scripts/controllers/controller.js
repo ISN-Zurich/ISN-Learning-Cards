@@ -53,12 +53,11 @@ function Controller() {
 
 	// initialize models
 
-	
 	this.models.connection = new ConnectionState(this);
 	// the lms model is initialized after the connection
 	//because it makes use of the isOffline function 
 	this.models.lms = new LMSModel(this);
-	
+	this.models.featured = new FeaturedContentModel(this);
 	this.models.authentication = new ConfigurationModel(this);
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
@@ -79,6 +78,7 @@ function Controller() {
 
 	// initialize views
 	this.views.splashScreen = new SplashScreen(this);
+	this.views.landing = new LandingView(this);
 	this.views.login = new LoginView(this);
 	this.views.lms = new LMSView(this);
 	this.views.logout = new LogoutView();
@@ -141,9 +141,16 @@ function Controller() {
 	}
 
 	// set correct height of icon button
-	window.addEventListener("resize", setButtonHeight, false);
-	window.addEventListener("orientationchange", setButtonHeight, false);
+//	window.addEventListener("resize", setButtonHeight, false);
+//	window.addEventListener("orientationchange", setButtonHeight, false);
 
+	
+	function miniHandler() {
+		self.resizeHandler();
+	} 
+	
+	window.addEventListener("resize", miniHandler, false );
+	window.addEventListener("orientationchange", miniHandler, false);	
 	setButtonHeight();
 	
 	// set correct width of forward buttons
@@ -222,18 +229,42 @@ function Controller() {
 	// if not we wait until 3000 ms have passed
 	// then we do the transition to the login view
 	// the remaining waiting time is 3000 - deltatime
+	//automatic calculation of min-height
 
-	var currentTime = new Date().getTime();
-	var deltaTime= currentTime - startTime;
-	if (deltaTime < 3000) {
-		setTimeout(function() { self.transitionToEndpoint(); }, 3000 - deltaTime);
-	}
-	else {
-		self.transitionToEndpoint();
-	}
+//	var currentTime = new Date().getTime();
+//	var deltaTime= currentTime - startTime;
+//	if (deltaTime < 3000) {
+//		setTimeout(function() {
+//			$(document).bind("featuredContentlistupdate", function() {
+//			self.transitionToEndpoint(); 
+//			});
+//		
+//		}, 3000 - deltaTime);
+//	}
+//	else {
+//		$(document).bind("featuredContentlistupdate", function() {
+//			self.transitionToEndpoint(); 
+//			});
+//		//self.transitionToEndpoint();
+//	}
 
-
-	moblerlog("End of Controller");
+	$(document).bind("featuredContentlistupdate", function() {	
+		
+		var currentTime = new Date().getTime();
+		var deltaTime= currentTime - startTime;
+		if (deltaTime < 3000) {
+			setTimeout(function() {
+				moblerlog("enter transition point 1");
+				self.transitionToEndpoint(); }, 3000 - deltaTime);
+		}
+		else {
+			moblerlog("enter transition point 2");
+			self.transitionToEndpoint();
+		}
+	});
+	
+	injectStyle();
+moblerlog("End of Controller");
 } // end of Controller
 
 
@@ -250,6 +281,7 @@ Controller.prototype.setupLanguage = function() {
 		language:this.models.authentication.getLanguage(), 
 		callback: function() { // initialize the static strings on all views
 			$("#usernameInput").attr("placeholder", msg_placeholder_username);
+			$("#numberInput").attr("placeholder", msg_placeholder_numberinput);
 			$("#password").attr("placeholder", msg_placeholder_password);
 			$("#coursesListTitle").text(msg_courses_list_title);
 			$("#lmsListTitle").text(msg_lms_list_title);
@@ -258,12 +290,13 @@ Controller.prototype.setupLanguage = function() {
 			$("#statBestDayTitle").text(msg_bestDay_title);
 			$("#statBestScoreTitle").text(msg_bestScore_title);
 			$("#statsBestScoreInfo").text(msg_bestScore_info);
+			$("#achievementsReference").text(msg_achievements_reference);
 			$("#statHandledCardsTitle").text(msg_handledCards_title);
 			$("#statAverageScoreTitle").text(msg_averageScore_title);
 			$("#statProgressTitle").text(msg_progress_title);
 			$("#statsProgressInfo").text(msg_progress_info);
 			$("#statSpeedTitle").text(msg_speed_title);
-			$("#statsSpeedinfo").text(msg_speed_info);
+			//$("#statsSpeedinfo").text(msg_speed_info);
 			$("#achievementsTitle").text(msg_achievements_title);
 			$("#stackHandlerIcon").addClass(msg_achievements_Handler_icon);
 			$("#stackHandlerTitle").text(msg_achievementsHandler_title);
@@ -278,7 +311,7 @@ Controller.prototype.setupLanguage = function() {
 			$("#starterCardBurner").text(msg_achievements_text1);
 			$("#doneCardBurner").text(msg_achievements_text2);
 			$("#aboutTitle").text(msg_about_title);
-			$(".cardBody").text(msg_logout_body);
+			$("#logoutText").text(msg_logout_body);
 			$("#nameLabelSet").text(jQuery.i18n.prop('msg_fullname'));
 			$("#usernameLabelSet").text(jQuery.i18n.prop('msg_username'));
 			$("#emailLabelSet").text(jQuery.i18n.prop('msg_email'));
@@ -299,14 +332,14 @@ Controller.prototype.setupLanguage = function() {
  * @function transition 
  * @param {String} viewname, the name of the specified target view
  **/
-Controller.prototype.transition = function(viewname) {
+Controller.prototype.transition = function(viewname, featuredFlag) {
 	moblerlog("transition start to " + viewname );
 	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
-	if (this.views[viewname] && ( viewname === "login" || this.activeView.tagID !== this.views[viewname].tagID)){
+	if (this.views[viewname] && ( viewname === "landing" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
 		this.activeView.close();
 		this.activeView = this.views[viewname];
-		this.activeView.open();
+		this.activeView.open(featuredFlag);
 	}
 };
 
@@ -339,10 +372,16 @@ Controller.prototype.transitionToEndpoint = function() {
  **/
 Controller.prototype.transitionToLogin = function() {
 	if ( this.appLoaded ) {
-		this.transition('login');
+	this.transition('login');
+		
 	}
 };
 
+
+Controller.prototype.transitionToLanding = function() {
+	moblerlog("enter controller transition to login view from landing view");
+	this.transition('landing');
+};
 
 /**
  * Transition to lms view.
@@ -371,12 +410,15 @@ Controller.prototype.transitionToLogout = function() {
  * @function transitionToAuthArea 
  * @param {String} viewname, the name of the targeted view
  **/
-Controller.prototype.transitionToAuthArea = function(viewname) {
+Controller.prototype.transitionToAuthArea = function(viewname,featuredFlag) {
 	if (this.getLoginState()) {
-		this.transition(viewname);
+		this.transition(viewname, featuredFlag);
 	}
 	else {
-		this.transitionToLogin();
+		//this.transitionToLogin();
+		this.transitionToLanding();
+	//this.transitionToLMS();
+		//injectStyle();
 	}
 };
 
@@ -394,8 +436,8 @@ Controller.prototype.transitionToCourses = function() {
  * @prototype
  * @function transitionToQuestion 
  **/
-Controller.prototype.transitionToQuestion = function() {
-	this.transitionToAuthArea('questionView');
+Controller.prototype.transitionToQuestion = function(featuredFlag) {
+	this.transitionToAuthArea('questionView', featuredFlag);
 };
 
 /**
@@ -561,6 +603,15 @@ Controller.prototype.setConfigVariable = function(varname, varvalue) {
 	this.models["authentication"].storeData();
 };
 
+Controller.prototype.resizeHandler = function() { 
+	// detect new Orientation Layout
+	var orientationLayout = false; // e.g. Portrait mode
+	var w = $(window).width(), h= $(window).height();
+	if ( w/h > 1 ) {orientationLayout = true;
+	moblerlog("we are in landscape mode");} // e.g. Landscape mode
+	// window.width / window.height > 1 portrait
+	this.activeView.changeOrientation(orientationLayout, w, h ); 
+};
 
 /**
  * Sets the current height for the icon buttons.
@@ -608,4 +659,30 @@ function setButtonWidth() {
 	
 	$(".forwardButton").css("width", width + "px");
 	//$(".iconButton").css("line-height", height + "px");
+}
+
+function injectStyle() {
+	moblerlog("enter inject Style");
+    var h = $(window).height(), w= $(window).width();
+
+    if ( h < w ) { // oops we are in ladscape mode
+        var t=w; w=h; h=t;
+    }
+    
+    // calculate the heights once and forever. 
+    var cfl = w - 54, cfp = h - 54,cl  = w - 102,cp  = h - 108;
+    var style;
+
+    style  = '@media all and (orientation:portrait) { ';
+    style += '   .content { height: ' + cp + "px; }";
+    style += '   .content.full { height: ' + cfp + "px; }";
+    style += "} ";
+    style += '@media all and (orientation:landscape) { ';
+    style += '   .content { height: ' + cl + "px; }";
+    style += '   .content.full { height: ' + cfl + "px; }";
+    style += "} ";
+
+    var e = $('<style/>', { 'type': 'text/css', 'text': style});
+
+    $('head').append(e);
 }

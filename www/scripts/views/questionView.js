@@ -66,7 +66,7 @@ function QuestionView(controller) {
 	setOrientation();
 	// when orientation changes, set the new width and height
 	// resize event should be caught, too, because not all devices
-	// send an oritentationchange event
+	// send an orientationchange event
 	window.addEventListener("orientationchange", setOrientation, false);
 	window.addEventListener("resize", setOrientation, false);
 	
@@ -188,9 +188,9 @@ QuestionView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-QuestionView.prototype.open = function() {
+QuestionView.prototype.open = function(featuredFlag) {
 	this.showQuestionTitle();
-	this.showQuestionBody();
+	this.showQuestionBody(featuredFlag);
 	
 	if (!controller.models["answers"].hasStarted()) {
 		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
@@ -202,11 +202,17 @@ QuestionView.prototype.open = function() {
  * @prototype
  * @function showQuestionBody
  **/
-QuestionView.prototype.showQuestionBody = function() {
+QuestionView.prototype.showQuestionBody = function(featuredFlag) {
+	if (!featuredFlag){
+		moblerlog("enter question view exclusive content");
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
-	$("#cardQuestionBody").html(currentQuestionBody);
-
+	$("#questionText").html(currentQuestionBody);
+	}else{
+		moblerlog("enter question view of featured content ");
+		var featuredContentQuestionBody = controller.models["featured"]
+		.getQuestionBody();
+	}
 	$("#ButtonTip").hide();
 
 };
@@ -234,3 +240,4 @@ QuestionView.prototype.clickCourseListButton = function() {
 	controller.models["answers"].resetTimer();
 	controller.transitionToCourses();
 };
+

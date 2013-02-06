@@ -247,8 +247,6 @@ CourseModel.prototype.loadFromServer = function() {
 	}
 };
 
-
-
 /**
  * @prototype
  * @function getId

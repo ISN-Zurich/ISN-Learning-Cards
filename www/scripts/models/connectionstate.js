@@ -44,9 +44,12 @@ function ConnectionState(controller) {
 
 	var self = this;
 	self.controller = controller;
-
-	var networkState = navigator.network.connection.type;
-
+    if (device.platform === 'iPhone') {
+        var networkState = navigator.connection.type;
+	    } else {
+    var networkState = navigator.network.connection.type;
+    }
+    
 	if (networkState == Connection.NONE) {
 		self.state = false;
 	} else {

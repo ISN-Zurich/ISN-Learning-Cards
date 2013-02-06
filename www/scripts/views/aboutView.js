@@ -115,7 +115,6 @@ AboutView.prototype.closeAbout = function() {
 };
 
 
-
 /**
  * leads to logout confirmation view
  * @prototype
@@ -139,3 +138,13 @@ AboutView.prototype.loadData = function() {
 
 	$("#logos").show();
 };
+
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* (the distance between the cards and the title should be calculated dynamically) 
+* @prototype
+* @function changeOrientation
+**/ 
+AboutView.prototype.changeOrientation = doNothing;

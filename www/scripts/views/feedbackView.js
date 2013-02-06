@@ -126,10 +126,13 @@ FeedbackView.prototype.handleTap = doNothing;
  * @function handleSwipe
  **/
 FeedbackView.prototype.handleSwipe = function handleSwipe() {
-	$("#feedbackBody").show();
-	$("#feedbackTip").hide();
-	controller.models['questionpool'].nextQuestion();
-	controller.transitionToQuestion();
+	this.clickFeedbackDoneButton();
+//	controller.models["answers"].deleteData();
+//	$("#feedbackTip").empty();
+//	$("#feedbackTip").hide();
+//	$("#feedbackBody").show();
+//	controller.models['questionpool'].nextQuestion();
+//	controller.transitionToQuestion();
 };
 
 
@@ -154,6 +157,8 @@ FeedbackView.prototype.closeDiv = closeView;
  * @function close
  **/
 FeedbackView.prototype.close = function() {
+	$("#feedbackBody").empty();
+	$("#feedbackTip").empty();
 	this.closeDiv();
 };
 
@@ -173,12 +178,17 @@ FeedbackView.prototype.openDiv = openView;
 FeedbackView.prototype.open = function() {
 	// if (coming from answer view){
 	if (controller.models["answers"].answerScore == -1){
+		moblerlog("feedbackview opened after returning from answerview");
 		controller.models["answers"].calculateScore();
-		this.showFeedbackBody();
-		this.showFeedbackTitle();	
-		}
+	}
+	
+	this.showFeedbackBody();
+	this.showFeedbackTitle();	
+	
 	this.openDiv();
+	moblerlog("feedback open");
 	this.widget.setCorrectAnswerTickHeight();
+	this.controller.resizeHandler();
 };
 
 
@@ -188,8 +198,7 @@ FeedbackView.prototype.open = function() {
  **/
 FeedbackView.prototype.clickFeedbackDoneButton = function() {
 	controller.models["answers"].deleteData();
-	$("#feedbackTip").empty();
-	$("#feedbackTip").hide();
+	$("#feedbackTipBody").hide();
 	$("#feedbackBody").show();
 	controller.models['questionpool'].nextQuestion();
 	controller.transitionToQuestion();
@@ -202,7 +211,8 @@ FeedbackView.prototype.clickFeedbackDoneButton = function() {
  **/
 FeedbackView.prototype.clickFeedbackMore = function() {
 	$("#feedbackBody").toggle();
-	$("#feedbackTip").toggle();
+	moblerlog("closed feedback normal");
+	$("#feedbackTipBody").toggle();
 };
 
 
@@ -212,6 +222,10 @@ FeedbackView.prototype.clickFeedbackMore = function() {
  * @function clickCourseListButton
  **/
 FeedbackView.prototype.clickCourseListButton = function() {
+	controller.models["answers"].deleteData();
+	$("#feedbackTip").empty();
+	$("#feedbackTipBody").hide();
+	$("#feedbackBody").show();
 	controller.transitionToCourses();
 };
 
@@ -226,7 +240,7 @@ FeedbackView.prototype.showFeedbackTitle = function() {
 	
 	$("#cardFeedbackTitle").text(jQuery.i18n.prop('msg_' +currentFeedbackTitle + 'Results_title'));
 
-	$("#feedbackIcon").attr('class',jQuery.i18n.prop('msg_' + currentFeedbackTitle + '_icon'));
+	$("#feedbackIcon").attr('class',jQuery.i18n.prop('msg_' +currentFeedbackTitle + '_icon'));
 	
 	
 };
@@ -240,7 +254,7 @@ FeedbackView.prototype.showFeedbackTitle = function() {
  **/
 FeedbackView.prototype.showFeedbackBody = function() {
 	
-	var questionpoolModel = controller.models['questionpool'];
+	var questionpoolModel = this.controller.models['questionpool'];
 	var questionType = questionpoolModel.getQuestionType();
 	var interactive = false;
 	switch (questionType) {
@@ -260,7 +274,24 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		default:
 			break;
 	}
-
+	
+	// show feedback more information, which is the same for all kinds of questions
+	$("#FeedbackMore").hide();
+	
+	var feedbackText = questionpoolModel.getWrongFeedback();
+	var currentFeedbackTitle = this.controller.models["answers"].getAnswerResults(); 
+	
+	if (currentFeedbackTitle == "Excellent") {
+		//gets correct feedback text
+		feedbackText = questionpoolModel.getCorrectFeedback();	
+	}
+	
+	if ( feedbackText.length ) {
+		//$("#feedbackTip").text(feedbackText);
+		$("#feedbackTip").html(feedbackText);
+		$("#FeedbackMore").show();
+	}
+	
 };
 
 /**Transition back to question view when click on the title area
@@ -268,5 +299,17 @@ FeedbackView.prototype.showFeedbackBody = function() {
  * @function clickTitleArea
  **/
 FeedbackView.prototype.clickTitleArea = function() {
+	controller.models["answers"].answerScore == -1; //added 10.01
 	controller.transitionToQuestion();
+};
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* @prototype
+* @function changeOrientation
+**/ 
+FeedbackView.prototype.changeOrientation = function(o,w,h){
+	moblerlog("change orientation in answer view " + o + " , " + w + ", " +h);
+	setFeedbackWidth(o,w,h);
 };

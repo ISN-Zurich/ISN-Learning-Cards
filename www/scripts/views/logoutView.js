@@ -105,3 +105,14 @@ LogoutView.prototype.logout = function() {
 	config.logout();
 	controller.transitionToLogin();
 };
+
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* (the distance between the cards and the title should be calculated dynamically) 
+* @prototype
+* @function changeOrientation
+**/ 
+LogoutView.prototype.changeOrientation = doNothing;
+

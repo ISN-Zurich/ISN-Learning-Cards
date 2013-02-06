@@ -94,8 +94,8 @@ SplashScreen.prototype.closeDiv = closeView;
  **/
 SplashScreen.prototype.close = function() {
 	moblerlog("SplashScreen: close me!");
-    $("#loading").remove();
-    if( this.controller.models["authentication"].isLoggedIn() ) {
+	$("#loading").remove();
+	   if( this.controller.models["authentication"].isLoggedIn() ) {
         this.closeDiv();
     }
 };
@@ -110,3 +110,5 @@ SplashScreen.prototype.showNoConnectionMessage = function() {
 	$("#loginForm").text("Sorry, you need to be online to connect to your LMS");
 }
 
+
+SplashScreen.prototype.changeOrientation = doNothing;

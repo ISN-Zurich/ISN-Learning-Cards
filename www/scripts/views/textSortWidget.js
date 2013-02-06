@@ -90,7 +90,7 @@ TextSortWidget.prototype.showAnswer = function() {
 
 		// create a new unordered list
 		var ul = $("<ul/>", {
-			"class" : "sortable"
+			"class" : "sortable gradient2"
 		}).appendTo("#cardAnswerBody");
 
 		var mixedAnswers;
@@ -118,22 +118,43 @@ TextSortWidget.prototype.showAnswer = function() {
 				"class" : "sortableListItem"
 			}).appendTo(ul);
 			
+			
+				
 			var div = $("<div/>", {
-				"class" : "text",
+				"class" : "text textShadow marginForCourseList",
 				text : answers[mixedAnswers[c]].answertext
 			}).appendTo(li);
+			
+			
 		}	
 		
+		
+var lastli = $("<li/>", {
+}).appendTo(ul);
+
+		var shadoweddiv = $("<div/>", {
+			"id": "shadowedSortingAnswerLi",
+			"class" : "gradient1 shadowedLi"
+		}).appendTo(lastli);
+		
+		var marginLi= $("<li/>", {
+			"class": "spacerMargin"
+		}).appendTo(ul);
+		
+	
 		// make the list sortable using JQuery UI's function
 		$(".sortable").sortable({
 			placeholder : "placeholder",
 			scrollSensitivity : 10,
 			disabled : false,
-			start : function(event, ui) {
+			start : function(event,ui) {
 				$(ui.item).addClass("currentSortedItem");
+				//$("#sortGraber"+mixedAnswers[c]).addClass("currentSortedItem gradientSelected");
+				
 			},
-			stop : function(event, ui) {
-				$(ui.item).removeClass("currentSortedItem");
+			stop : function(event,ui) {
+				(ui.item).removeClass("currentSortedItem");
+				//$("#sortGraber"+mixedAnswers[c]).addClass("currentSortedItem gradientSelected");
 			}
 		});
 		$(".sortable").disableSelection();
@@ -159,7 +180,9 @@ TextSortWidget.prototype.showFeedback = function() {
 		disabled : true
 	});
 
-	var ul = $("<ul/>", {}).appendTo("#feedbackBody");
+	var ul = $("<ul/>", {
+		"class": "gradient2"
+	}).appendTo("#feedbackBody");
 
 	var questionpoolModel = controller.models["questionpool"];
 	var answers = questionpoolModel.getAnswer();
@@ -170,7 +193,7 @@ TextSortWidget.prototype.showFeedback = function() {
 	for ( var i = 0; i < answers.length; i++) {
 		var li = $("<li/>", {
 			//if a ticked answer is in the correct place or in a sequence then use a blue background color
-			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "ticked" : ""
+			"class" : (scores[i] == "1" || scores[i] == "1.5") ? "gradientSelected" : "gradient2 "
 		}).appendTo(ul);
 
 		var div = $("<div/>", {
@@ -282,4 +305,6 @@ TextSortWidget.prototype.setCorrectAnswerTickHeight = function() {
 		$(this).find(".correctAnswer").height(height);
 		$(this).find(".correctAnswer").css("line-height", height + "px");
 	});
-};
+	
+	
+}

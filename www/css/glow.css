@@ -1,0 +1,46 @@
+.cross{
+	
+	margin-top:15px;
+	font-size:38px;
+	color:#EC2F2D;
+	width:39px;
+	height:39px;
+
+
+}
+
+.checkmark{
+	
+	margin-top:15px;
+	font-size:38px;
+	color:green;	
+	width:39px;
+	height:39px;
+}
+
+.glowRed {
+	
+	text-shadow: -1px -1px 1px #682627,1px 4px 5px #C04A4A, 2px 0px 3px #ff6f72;
+		
+}
+
+.glowRed {
+	
+	text-shadow: -1px -1px 1px #682627,1px 4px 5px #C04A4A, 2px 0px 3px #ff6f72;
+		
+}
+
+.radial {
+	width:39px;
+	height:39px;
+	background-color:transparent;
+	background: -webkit-radial-gradient(18px 20px, cover, white 15%, red 50%, #ffffff 80%);
+	z-index:-1;
+	position:relative;
+}
+
+#image{
+	z-index:1;
+	position:relative;
+	
+}

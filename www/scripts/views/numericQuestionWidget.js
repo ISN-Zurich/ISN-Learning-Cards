@@ -91,19 +91,46 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		if (questionpoolModel.questionList && questionpoolModel.getAnswer()) {
 		moblerlog("entered numeric answer body");
 
-		var div = $("<div/>", {
-			"id": "numberInputContainer",
-			"class": "inputBorder"
+		var ul = $("<ul/>", {
+			"id":"numericElements"
+			
 		}).appendTo("#cardAnswerBody");
+		
+		var li = $(
+				"<li/>",
+				{}).appendTo(ul);
+		
+		var div1 = $("<div/>", {
+			"class": "left lineContainer selectItemContainer"
+			}).appendTo(li);
+		
+		var span = $("<span/>", {
+			"id": "numberInputDash",
+			"class": "dashGrey icon-dash"
+			}).appendTo(div1);
+		
+		var div2 = $("<div/>", {
+		"id": "numberInputContainer",
+		"class": "inputBorder gradient2"
+		}).appendTo(li);
 		
 		var input = $("<input/>", {
 			"id" : "numberInput",
-			"class" : "loginInput",
-			"type" : "number",
+			"class" : "loginInput textShadow",
+			"required": "required",
 			"width" : "200px",
-			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : "",
-			"placeholder": "Enter number here"
-		}).appendTo(div);
+			"type" : "number",
+			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : ""
+		}).appendTo(div2);
+		
+		var lastli = $("<li/>", {
+		}).appendTo(ul);
+
+		var shadoweddiv = $("<div/>", {
+			"id": "shadowedNumericLi",
+			"class" : "gradient1 shadowedLi"
+		}).appendTo(lastli);
+	
 		
 		$("#numberInput")[0].addEventListener("blur", function() {setButtonHeight();});
 		
@@ -133,53 +160,116 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var currentFeedbackTitle = answerModel.getAnswerResults();
 
     //display in an input field with the typed numeric answer of the learner
-	var div = $("<div/>", {
-		"id": "typedAnswer",
-		"class": "inputBorder",
-		text: typedAnswer
-	}).appendTo("#feedbackBody");
 	
 	if (currentFeedbackTitle == "Excellent") {
-		//if the typed numeric answer is correct, add background color to the above input field
-		$("#typedAnswer").addClass("correctAnswer");
-		var correctText = questionpoolModel.getCorrectFeedback();
-		if (correctText.length > 0) {
-			//if extra feedback info is available for the correct answer
-			$("#FeedbackMore").show();
-			$("#feedbackTip").text(correctText);
-		} else {
-			//if no extra feedback information is available
-			$("#FeedbackMore").hide();
-		}
-	} else { 
+		
+		var ul = $("<ul/>", {}).appendTo("#feedbackBody");
+			var li = $(
+					"<li/>",
+					{
+						"class" : "gradientSelected"  
+					}).appendTo(ul);
+			
+			var rightDiv = $("<div/>", {
+				"class" : "right"
+			}).appendTo(li);
+				
+			var separator = $("<div/>", {
+				"class" : "radialCourses lineContainer separatorContainerCourses marginSeparatorTop"
+			}).appendTo(rightDiv);
+			
+				
+			div = $("<div/>", {
+				 "class" : "courseListIconFeedback lineContainer background"
+			}).appendTo(rightDiv);
+			
+			span = $("<div/>", {
+				"class" : "right green icon-checkmark" 
+			}).appendTo(div);
+			
+			var div = $("<div/>", {
+				"class" : "text",
+				text : typedAnswer
+			}).appendTo(li);
+		
+			var lastli = $("<li/>", {
+			}).appendTo(ul);
+
+			var shadoweddiv = $("<div/>", {
+				"id": "shadowedNumericAnswerLi",
+				"class" : "gradient1 shadowedLi"
+			}).appendTo(lastli);
+
+		
+
+	} 
+		
+	else { 
 		// if the typed numeric answer is wrong
 		moblerlog('handle answer results');
      
-		// add the following message 
-		$("<div/>", {
-			"id" : "numericFeedback",
-			"class": "text",
-			text : "the correct answer is"
-		}).appendTo("#feedbackBody");
-
-		//display below the message in an input field with the correct answer
-		$("<div/>", {
-			"id" : "correctNumericFeedback",
-			"class" : "inputBorder correctAnswer",
+		var ul = $("<ul/>", {}).appendTo("#feedbackBody");
+		var li = $(
+				"<li/>",
+				{
+					"class" : "gradientSelected"  
+				}).appendTo(ul);
+		
+		
+		var rightDiv = $("<div/>", {
+			"class" : "right"
+		}).appendTo(li);
+			
+		var separator = $("<div/>", {
+			"class" : "radialCourses lineContainer separatorContainerCourses marginSeparatorTop"
+		}).appendTo(rightDiv);
+		
+		divWrong = $("<div/>", {
+			 "class" : "courseListIconFeedback lineContainer background"
+		}).appendTo(rightDiv);
+		
+		var div = $("<div/>", {
+			"class" : "text",
+			text : typedAnswer
+		}).appendTo(li);
+	
+		var li2 = $(
+				"<li/>",
+				{
+					"class" : "gradient2"  
+				}).appendTo(ul);
+		
+		var rightDiv2 = $("<div/>", {
+			"class" : "right"
+		}).appendTo(li2);
+			
+		var separator2 = $("<div/>", {
+			"class" : "radialCourses lineContainer separatorContainerCourses marginSeparatorTop"
+		}).appendTo(rightDiv2);
+		
+			
+		divCorrect = $("<div/>", {
+			 "class" : "courseListIconFeedback lineContainer background"
+		}).appendTo(rightDiv2);
+		
+		span2 = $("<span/>", {
+			"class" : "right green icon-checkmark" 
+		}).appendTo(divCorrect);
+		
+		var div2 = $("<div/>", {
+			"class" : "text",
 			text : correctAnswer
-		}).appendTo("#feedbackBody");
+		}).appendTo(li2);
+		
+		var lastli = $("<li/>", {
+		}).appendTo(ul);
 
-		var wrongText = questionpoolModel.getWrongFeedback();
-		moblerlog("XX " + wrongText);
-		if (wrongText && wrongText.length > 0) {
-			// if extra info is available when we have wrong feedback display it
-			$("#FeedbackMore").show();
-			$("#feedbackTip").text(wrongText);
-		} else {
-			//if no feedback is available then hide the tip button
-			$("#FeedbackMore").hide();
-		}
+		var shadoweddiv = $("<div/>", {
+			"id": "shadowedNumericFeedbackLi",
+			"class" : "gradient1 shadowedLi"
+		}).appendTo(lastli);
 
+	
 	}
 
 };
@@ -206,5 +296,6 @@ NumericQuestionWidget.prototype.storeAnswers = function() {
  * @function setCorrectAnswerTickHeight
  **/ 
 NumericQuestionWidget.prototype.setCorrectAnswerTickHeight = doNothing;
+
 
 moblerlog("end of numeric choice widget");

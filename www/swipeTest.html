@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Droid browser touchmove event test.</title>
+</head>
+<body>
+
+<div id="box">
+
+<script language="javascript" type="text/javascript">
+	var prevent=false;
+	document.addEventListener("touchstart", function(e)
+	{
+		if(prevent){e.preventDefault();}
+		document.getElementById("info").innerHTML = new Date().toString() + ": !touchstart";
+	},false);
+	document.addEventListener("touchmove", function(e)
+	{
+		if(prevent){e.preventDefault();}
+		document.getElementById("info").innerHTML = new Date().toString() + ": !touchmove" + e.touches[0].pageY;
+	},false);
+	document.addEventListener("touchend", function(e)
+	{
+		document.getElementById("info").innerHTML = new Date().toString() + ": !touchend";
+	},false);
+</script>
+
+<div>Fired events: <span id="info"></span></div><br />
+<input id="b" type="button" onclick="prevent=!prevent;this.value=this.title;" value="Click me to start preventing touch events" title="PREVENTED (therefore this button doesn't work)"/>
+<br /><br />
+
+<strong>Issue</strong>: The touchevents are not fired propperly if e.preventDefault() is not used on touchstart and touchmove.<br />
+- Try to touch and move your finger on screen. Look at the first line on the page, where is shown triggering of touch events. If e.preventDefault() is not used on touchstart and touchmove, only "touchstart" and first "touchmove" are fired. No other event fires after.
+- Click on the button to start preventing touch events. After this, "touchstart" and "touchmove" events are prevented (using e.preventDefault() in listening function). You can touch and move your finger on screen and all events are firing propperly, but because of e.preventDefault(), no click are recorder, so the button is unpressable... other elements like links behave the same.
+<br /><br />
+<strong>The correct behavior</strong>: The correct behavior is to fire all events even if e.preventDefault() is not used, to allow handling gestures without impact on normal usability of the page.
+<br /><br />
+This problem is on android 3.X (tested on Asus Transformer with 3.2 honeycomb), but is not the same on gingerbread (tested with Nexus S with 2.3.4 gingerbread)... on gingerbread, touchmove is not fired, but TOUCHEND IS FIRED. It's still bug, but certainly better behavior than on 3.X with no touchend.
+
+
+<br /><br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+row<br />
+
+</div>
+
+</body>
+</html>

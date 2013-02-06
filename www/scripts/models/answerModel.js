@@ -138,6 +138,7 @@ AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	var clickedAnswerIndex = this.answerList[0];
 
 	if (controller.models["questionpool"].getScore(clickedAnswerIndex) > 0) {
+		moblerlog("the score is 1");
 		this.answerScore = 1;
 	} else {
 		this.answerScore = 0;

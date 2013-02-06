@@ -1,5 +1,6 @@
 /**	THIS COMMENT MUST NOT BE REMOVED
 
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file 
 distributed with this work for additional information
@@ -16,8 +17,6 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.	
-
-
 */
 
 
@@ -37,7 +36,7 @@ under the License.
  * fox example: lost of internet connectivity, wrong user name etc.
  * In the bottom part of the view are displayed the logos of the organisation 
  *  @constructor
- *  - it sets the tag ID for the settings view
+ *  - it sets the tag ID for the login view
  *  - assigns various event handlers when taping on the elements of the
  *    login form such as username, password, login button
  *  - it binds synhronization events such as the sending of statistics to the server,
@@ -49,13 +48,18 @@ under the License.
 function LoginView(controller) {
 	var self = this;
 
-	self.tagID = 'splashScreen';
+	self.tagID = 'loginView';
 	this.controller = controller;
 	this.active = false;
+	this.fixedRemoved= false;
 
 	//handler when taping on the login button
 	jester($('#loginButton')[0]).tap(function() {
 		self.clickLoginButton();
+	});
+	//handler when taping on the close button of login button
+	jester($('#loginViewBackIcon')[0]).tap(function() {
+		self.clickCloseLoginButton();
 	});
 		//handler when taping on the username field 
 	var prevent=false;
@@ -74,7 +78,6 @@ function LoginView(controller) {
 		e.stopPropagation();
 		e.preventDefault();
 		moblerlog("enters in tap of select lms");
-		//self.clickLoginButton();	
 		self.selectLMS();
 	});
 	
@@ -100,7 +103,10 @@ function LoginView(controller) {
 	function focusLogos(e) {
 		e.stopPropagation();
 		e.preventDefault;
+		
 		moblerlog("focus logos " + e.currentTarget);
+		$("#loginButton").removeClass("fixed");
+		var fixedRemoved= true;
 		$("#logos").removeClass("bottom");
 		$("#logos").addClass("static");
 	}
@@ -109,20 +115,27 @@ function LoginView(controller) {
 		e.stopPropagation();
 		e.preventDefault;
 		moblerlog("unfocus logos " + e.currentTarget);
+		$("#loginButton").addClass("fixed");
+		$("#loginButton").show();
+		moblerlog("loginButton is now fixed");
+		var fixedRemoved= false; //it is back on its old position
 		$("#logos").addClass("bottom");
 		$("#logos").removeClass("static");
 	}
-
 		
 } //end of constructor
 
 
 /**
- * tap does nothing
+ * 
  * @prototype
  * @function handleTap
  **/
-LoginView.prototype.handleTap = doNothing;
+LoginView.prototype.handleTap = function(){
+	moblerlog("tap shows the loggin button");
+	$("#loginButton").show();
+};
+
 
 /**
  * pinch does nothing
@@ -155,13 +168,15 @@ LoginView.prototype.openDiv = openView;
  * @function open
  **/
 LoginView.prototype.open = function() {
-	// hide unnecessary errors and warnings 
 	moblerlog("loginView: open sesame");
+	// hide unnecessary errors and warnings 
 	this.hideErrorMessage();
 	this.hideWarningMessage();
+	$("#selectLMS").removeClass("gradientSelected");
 	this.showForm();
 	this.openDiv();
 	this.active = true;
+	setInputWidth();
 };
 
 
@@ -251,16 +266,15 @@ LoginView.prototype.clickLoginButton = function() {
  * @function showForm
  */ 
 LoginView.prototype.showForm = function() {
-// THIS IS THE CORRECT CODE, COMMENTING FOR DEBUGGING AND STATIC UI POLISHING
+	moblerlog("show form in login view");
 	$("#lmsImage").attr("src",this.controller.getActiveLogo());
-	$("#pfpLabel1").text(this.controller.getActiveLabel());
-	
-//	$("#lmsImage").attr("src",this.controller.getActiveLogo());
-//	$("#pfpLabel1").text(this.controller.getActiveLabel());
-	
+	$("#loginLmsLabel").text(this.controller.getActiveLabel());
+	calculateLabelWidth();	
+				
 	this.hideErrorMessage();
-	$("#loginForm").show();
-	$("#cards").show(); // ??
+	$("#loginViewHeader").show();
+	$("#loginViewBackIcon").show();
+	$("#loginBody").show();
 	
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_network_message'));
@@ -276,7 +290,7 @@ LoginView.prototype.showErrorMessage = function(message) {
 	$("#warningmessage").hide();
 	$("#errormessage").text(message);
 	$("#errormessage").show();
-}
+};
 
 
 /**
@@ -288,7 +302,7 @@ LoginView.prototype.showWarningMessage = function(message) {
 	$("#errormessage").hide();
 	$("#warningmessage").text(message);
 	$("#warningmessage").show();
-}
+};
 
 
 /**
@@ -297,10 +311,9 @@ LoginView.prototype.showWarningMessage = function(message) {
 * @function hideErrorMessage
 **/ 
 LoginView.prototype.hideErrorMessage = function() {
-	
 	$("#errormessage").text("");
 	$("#errormessage").hide();
-}
+};
 
 
 /**
@@ -311,7 +324,7 @@ LoginView.prototype.hideErrorMessage = function() {
 LoginView.prototype.hideWarningMessage = function() {
 	$("#warningmessage").text("");
 	$("#warningmessage").hide();
-}
+};
 
 
 /**
@@ -323,10 +336,94 @@ LoginView.prototype.hideWarningMessage = function() {
 LoginView.prototype.selectLMS = function() {
 	var self=this;
 	moblerlog("select lms");
-	self.controller.transitionToLMS();
-}
+	$("#selectLMS").removeClass("textShadow");
+	$("#selectLMS").addClass("gradientSelected");
+	self.storeSelectedLMS();
+	setTimeout(function() {self.controller.transitionToLMS();},100);
+};
+
+/** 
+ * storing the selected LMS  in an array
+* @prototype
+* @function storeSelectedLMS
+ * */
+LoginView.prototype.storeSelectedLMS = function(){
+	var selectedLMS=$("#loginLmsLabel").text();
+	moblerlog("stored selected lms is"+JSON.stringify(selectedLMS));
+	this.controller.models["lms"].setSelectedLMS(selectedLMS);
+};
 
 
+/** detects when a click event is happenig in login view
+* @prototype
+* @function detectClick
+ * */
 LoginView.prototype.detectClick = function() {
 	moblerlog("click in login view detected");
+};
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+*  - the width of the lms label in select widget is adjusted dynamically
+* @prototype
+* @function changeOrientation
+**/ 
+LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
+	var self=this;
+	moblerlog("change orientation in login view");
+	w1=$(".imageContainer").height();
+	w2=$(".separator").height();
+	w3=$(".selectItemContainer").height();
+	width = w - (w1 + w2 + w3 + w3 + w1); //rough estimation 
+	$(".labelContainer").css("width", width + "px");
+
+	if (orientationLayout==false || self.fixedRemoved== true) //we are in portrait mode and previously
+															 // we had removed the fixed position of login button
+	{$("#loginButton").removeClass("fixed");}
+	else if (self.fixedRemoved== false){
+		$("#loginButton").addClass("fixed");
+	};
+
+	if (orientationLayout || self.fixedRemoved== true) //we are in landscape mode and previously
+													 //we had removed the fixed position of login button
+	{$("#loginButton").removeClass("fixed");}
+	else if (self.fixedRemoved== false) {
+		$("#loginButton").addClass("fixed");
+	};	
+	
+	
+	var buttonwidth, window_width = $(window).width();
+	buttonwidth = window_width-2;
+	$(".forwardButton").css("width", buttonwidth + "px");
+	
+	setInputWidth();
+};
+
+
+/**
+* transition to landing view when tapping on the
+* close button on the up right corner of login view 
+* @prototype
+* @function clickCloseLoginButton
+ * */
+LoginView.prototype.clickCloseLoginButton=function(){
+	controller.transitionToLanding();
+
+};
+
+/**
+ * sets dynamically the width of the input elements
+ * of the login form.
+ * it is calculated by substracting from the device width in the current mode (landscape, portrait)
+ * which has been detected in the controller the sum of the widths of the rest dom elements around it
+ * such as: dash bar, icon container and separator.
+ * @function setInputWidth
+ * */
+function setInputWidth(){
+	window_width = $(window).width();
+	var inputwidth = window_width - 49- 34 - 18;
+	$("#usernameInput").css("width", inputwidth + "px");
+	$("#password").css("width", inputwidth + "px");
 }
+
