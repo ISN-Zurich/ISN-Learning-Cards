@@ -42,18 +42,28 @@ require_once './common.php';
 
 chdir("../..");
 require_once ('restservice/include/inc.header.php');
-require_once 'Services/User/classes/class.ilObjUser.php';//don't need it in featured content
+//require_once 'Services/User/classes/class.ilObjUser.php';//don't need it in featured content
 
 //NEW to get the anonymous user id
 //require_once "./include/inc.header.php";
-require_once "./Services/Utilities/classes/class.ilUtil.php";
-require_once "./classes/class.ilObject.php";
-require_once "./Services/MediaObjects/classes/class.ilObjMediaObject.php";
+require_once 'Services/Utilities/classes/class.ilUtil.php';
+require_once 'classes/class.ilObject.php';
+require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 
 //NEW to get the available question pools for the specific anonymous user id
 require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 
-global $ilUser, $class_for_logging;
+//NEW to get the container
+require_once 'Services/Container/classes/class.ilContainer.php';
+require_once 'Services/ContainerReference/classes/class.ilContainerReference.php';
+
+include_once 'Services/Membership/classes/class.ilParticipants.php';
+require_once 'Modules/Course/classes/class.ilCourseItems.php';
+require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
+
+//require_once "/Services/0bject/classes/class.ilObjectListGUI.php";
+
+global $ilUser,$ilContainer, $class_for_logging;
 
 global $DEBUG;
 
@@ -74,6 +84,7 @@ if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
 	$ilUser->read();
 	$userID= $ilUser->getId();
 };
+logging("anonymous user id is ".$userID);
 
 // $userID="12980";
 
@@ -98,51 +109,74 @@ echo (json_encode($return_data));
  *
  * @return course list array
  */
-function getFeaturedContent($userId) {
-	
+function getFeaturedContent($userID) {
+
 	logging("enters getFeaturedContent");
-	global $ilObjDataCache;
+	global $ilObjDataCache, $ilUser, $tree;
 
-	include_once 'Services/Membership/classes/class.ilParticipants.php';
-	require_once 'Modules/Course/classes/class.ilCourseItems.php';
-	require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
-	$userId1=12980;
+		$questions=array();
 	
-	//loads all courses in which the current user is a member
-	$items1 = ilParticipants::_getMembershipByType($userId1,"crs"); //we will need somthering similar, that will return a specific course based on its id.
-	foreach ($items1 as $key => $obj_id1)	{
-		$item_references1 = ilObject::_getAllReferences($obj_id1);
-		logging("item references1 are ".json_encode($item_references1));
-		
+	
+	$items = ilObjQuestionPool::_getAvailableQuestionpools();
+	logging(" public questionpools for anonymous user are ".json_encode($items));
+	
+	// now we get the root of the public repository
+	$ref_id= $tree->getRootId();
+	logging("repository root id  is " . $ref_id);
+	// now we are interested in those question pools that are children of the root object.
+	$childrenItems = $tree->getChilds($ref_id);
+	logging("children of root repository are ".json_encode($childrenItems));
+	$featContentId = 0;
+	
+	foreach ($childrenItems as $child => $Value1){
+		logging("child is".json_encode($Value1));
+		$childRef_id=$Value1["ref_id"];
+		logging("ref id for this child is ".$childRef_id);
+		//if the one of the top level chidren of repository is also in the list
+		//of the available questionpools of the anonymous user
+		if ($items[$childRef_id] ) {
+			$questionPool = new ilObjQuestionPool($childRef_id);
+			$questionPool->read();
+			logging("questions for the featured course are: ".$questionPool);
+			$questionList = $questionPool->getQuestionList();
+			logging("Question list: " . json_encode($questionList));
+			
+		//$questionPoolQuestions=getValidQuestionPool($childRef_id);
+		if (isValidQuestionPool($questionPool)){
+			//if($questionPoolQuestions) {
+				$featContentId = $childRef_id;
+				logging("featured content id is ".$featContentId);
+				break;
+			//}
+		}
+		}
 	}
-		$items = ilObjQuestionPool::_getAvailableQuestionpools($userId1);
 
-	//see getCourseItemObject from clas.ilObjCourse.php...
-	//something like this $featuredCourse= getCourseItemObject();
-	logging("courses for evangelia ".json_encode($items1));
-	logging(" public items for evangelia are ".json_encode($items));
-	$myQuestionPool=current($items);
-	logging("first question pool is ".json_encode($myQuestionPool));
-	$featuredCourses = array();
-	//$obj_id=key($items);
-	$obj_id=13012;
-	logging("questionpool id 1 is".$obj_id);
-	//foreach ($items as $key => $obj_id)	{
-	//logging("questionpool id is".$key);
-	//references are needed to get course items (= questionpools, tests, ...)
-	$item_references = ilObject::_getAllReferences($obj_id);
-// 		$item_references = ilObject::_getAllReferences($obj_id);
-	logging("item references are ".json_encode($item_references));
-		//check if valid questionpool for the course exists
+	if( $featContentId > 0 ) {
+		$featContentTitle = $items[$featContentId]["title"];
+		logging("featured content is: " . $featContentId. "title =" . json_encode($featContentTitle));
+		// NOW WE NEED TO GET THE Questions
+		$questions=$questionPoolQuestions;
+			
+	}
+	else {
+		logging("OH NO! WE HAVE NO FEATURED CONTENT!");
+	}
+
+
+	// END HERE
+	
+//check if valid questionpool for the course exists
+
 		//$validQuestionPool = false;
 // 		if(is_array($item_references) && count($item_references)) {
 // 		foreach($item_references as $ref_id) {
 				
 //	get all course items for a course (= questionpools, tests, ...)
-// 	$courseItems = new ilCourseItems($item_references);
-// 	$courseItemsList = $courseItems->getAllItems();
+	//$courseItems = new ilCourseItems($item_references);
+	//$courseItemsList = $courseItems->getAllItems();
 	
-// 	logging("courseItemList is".$courseItemsList);
+	//logging("courseItemList is".$courseItemsList);
 
 // 	foreach($courseItemsList as $courseItem) {
 					
@@ -167,24 +201,25 @@ function getFeaturedContent($userId) {
 	//if ($validQuestionPool) {
 		//$title       = $ilObjDataCache->lookupTitle($obj_id);
 		//$description = $ilObjDataCache->lookupDescription($obj_id);
-		//13046
-	//}
-			$title       = $ilObjDataCache->lookupTitle($obj_id);
-			$description = $ilObjDataCache->lookupDescription($obj_id);
 		
+	//}
+
+	$description = $ilObjDataCache->lookupDescription($featContentId);
+	$featuredCourses = array();
+	$questions=$questionList;
 	
 			array_push($featuredCourses,
-					array("id"             => $obj_id,
-							"title"        => $title,
+					array("id"             => $featContentId,
+							"title"        => $featContentTitle,
 							"syncDateTime" => 0,
 							"syncState"    => false,
 							"isLoaded"     => false,
-							"description"  => $description));
+							"description"  => $description,
+							"questions"    => $questions));
 			
 	
 	//} //end of if valid question pool
 
-	//}
 	
 	//data structure for frontend models
 	$featuredCourseList = array("featuredCourses" => $featuredCourses,
