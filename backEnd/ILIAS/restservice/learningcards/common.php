@@ -43,6 +43,10 @@ along with Ilias Backend. If not, see <http://www.gnu.org/licenses/>.
  * in front of the logging message, depending on of which class the function
  * was called
  */
+
+// chdir("../..");
+// require_once './Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
+
 function logging($message) {
 	global $DEBUG, $class_for_logging;
 
@@ -151,6 +155,26 @@ function isValidQuestionPool($questionpool) {
 	}
 
 	return $validQuestionPool;
+	//return $questionList;
 }
 
+
+// getValidQuestionPool(id)
+// this function checks if a question pool is valid. If the question pool is valid then it is returned.
+// if the question pool is invalid or does not exist, the the function returns nothing
+function getValidQuestionPool($questionpoolid) {
+	$isValid = FALSE;
+	
+	// load the questions
+	
+	// test if they are valid
+if (isValidQuestionPool($questionPool)){
+	$isValid = TRUE;
+	// ONLY IF THE QUESTION POOL IS VALID WE RETURN IT
+	if ($isValid) {
+		return $questionPool;
+	}
+}
+	return undefined;
+}
 ?>
