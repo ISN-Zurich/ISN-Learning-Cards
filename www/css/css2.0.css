@@ -980,6 +980,14 @@ ul#lmsList{
 	overflow: hidden;
 }
 
+#landingLmsLabel{
+	border: solid 0px blue;
+	vertical-align:middle;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	overflow: hidden;
+}
+
 .pfp {
 	vertical-align: middle;
 	margin-top: 5px;
