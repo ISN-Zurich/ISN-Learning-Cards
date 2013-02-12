@@ -44,10 +44,11 @@ function FeedbackView(controller) {
 	var self = this;
 	self.controller = controller;
 	self.tagID = 'cardFeedbackView';
+	var featuredContent_id = FEATURED_CONTENT_ID;
 
 	//Handler when taping on the forward/done grey button on the right of the feedback view
 	jester($('#FeedbackDoneButon')[0]).tap(function() {
-		self.clickFeedbackDoneButton();
+		self.clickFeedbackDoneButton(featuredContent_id);
 	});
 	
 	//Handler when taping on more infor icon on the bottom right corner
@@ -64,7 +65,7 @@ function FeedbackView(controller) {
 	
 	//Handler when taping on the title of the feedbackView area of the answer view
 	jester($('#cardFeedbackTitle')[0]).tap(function() {
-		self.clickTitleArea();
+		self.clickTitleArea(featuredContent_id);
 		moblerlog("feedback title clicked");
 	});
 	
@@ -126,7 +127,7 @@ FeedbackView.prototype.handleTap = doNothing;
  * @function handleSwipe
  **/
 FeedbackView.prototype.handleSwipe = function handleSwipe() {
-	this.clickFeedbackDoneButton();
+	this.clickFeedbackDoneButton(featuredContent_id);
 //	controller.models["answers"].deleteData();
 //	$("#feedbackTip").empty();
 //	$("#feedbackTip").hide();
@@ -196,12 +197,12 @@ FeedbackView.prototype.open = function() {
  * @prototype
  * @function clickFeedbackDoneButton
  **/
-FeedbackView.prototype.clickFeedbackDoneButton = function() {
+FeedbackView.prototype.clickFeedbackDoneButton = function(featuredContent_id) {
 	controller.models["answers"].deleteData();
 	$("#feedbackTipBody").hide();
 	$("#feedbackBody").show();
 	controller.models['questionpool'].nextQuestion();
-	controller.transitionToQuestion();
+	controller.transitionToQuestion(featuredContent_id);
 };
 
 
@@ -298,9 +299,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
  * @prototype
  * @function clickTitleArea
  **/
-FeedbackView.prototype.clickTitleArea = function() {
+FeedbackView.prototype.clickTitleArea = function(featuredContent_id) {
 	controller.models["answers"].answerScore == -1; //added 10.01
-	controller.transitionToQuestion();
+	controller.transitionToQuestion(featuredContent_id);
 };
 
 /**

@@ -48,6 +48,7 @@ function LandingView(controller) {
 	this.active = false;
 	this.fixedRemoved= false;
 	var prevent=true;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	//handler when taping on the exclusive content element
 	jester($('#selectExclusiveContent')[0]).tap(function(e,prevent) {
 		moblerlog(" enters in landing view 1 ");
@@ -85,7 +86,7 @@ function LandingView(controller) {
 		$('#featuredContent').addClass("gradientSelected");
 		//e.stopPropagation();
 		//e.preventDefault();
-		self.clickFeaturedItem();
+		self.clickFeaturedItem(featuredContent_id);
 	});
 	
 	
@@ -128,9 +129,9 @@ LandingView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-LandingView.prototype.open = function() {
+LandingView.prototype.open = function(featuredContent_id) {
 	moblerlog("landingView: open sesame");
-	this.showForm();
+	this.showForm(featuredContent_id);
 	this.openDiv();
 	this.active = true;
 	setFeaturedWidth();
@@ -175,12 +176,13 @@ LandingView.prototype.selectExclusiveContent = function() {
  * @prototype
  * @function showForm
  */ 
-LandingView.prototype.showForm = function() {
+LandingView.prototype.showForm = function(featuredContent_id) {
 	var self=this;
 	var featuredModel = self.controller.models['featured'];
 	this.hideErrorMessage();
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
+	$("#featuredContent").attr("id",featuredContent_id);
 	$("#landingViewHeader").show();
 	
 	
@@ -260,14 +262,13 @@ LandingView.prototype.showErrorMessage = function(message) {
  * @prototype
  * @function clickFeaturedItem
  */ 
-LandingView.prototype.clickFeaturedItem = function(){
+LandingView.prototype.clickFeaturedItem = function(featuredContent_id){
 	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
-		this.controller.models['questionpool'].reset();
-	//	this.controller.models['featured'].loadData(featuredContent_id);//load the json file that is stored locally in the app
-	//	this.controller.models['featured'].setCurrentCourseId(featuredContent_id);
+	this.controller.models['questionpool'].reset();
+	this.controller.models['questionpool'].loadData(featuredContent_id);
+	this.controller.models['answers'].setCurrentCourseId(featuredContent_id);
 	moblerlog("enters clickFeauturedItem");
-		var featuredFlag=true;
-		this.controller.transitionToQuestion(featuredFlag);
+	this.controller.transitionToQuestion(featuredContent_id);
 	//}
 };
 

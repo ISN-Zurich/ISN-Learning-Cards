@@ -47,20 +47,21 @@ function AnswerView(controller) {
 	 self.controller = controller;
 	 self.tagID = 'cardAnswerView';
 	 self.widget = null; 
+	 var featuredContent_id = FEATURED_CONTENT_ID;
 	
 	//Handler when taping on the forward/done grey button on the right of the answer view
 	jester($('#doneButton')[0]).tap(function() {
-		self.clickDoneButton();
+		self.clickDoneButton(featuredContent_id);
 	});
 	
 	//Handler when taping on close button of the answer view
 	jester($('#CourseList_FromAnswer')[0]).tap(function() {
-		self.clickCourseListButton();
+		self.clickCourseListButton(featuredContent_id);
 	});
 
 	//Handler when taping on the title of the answer area of the answer view
 	jester($('#cardAnswerTitle')[0]).tap(function() {
-		self.clickTitleArea();
+		self.clickTitleArea(featuredContent_id);
 		moblerlog("answer title clicked");
 	});
 	
@@ -151,7 +152,7 @@ AnswerView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-AnswerView.prototype.open = function() {
+AnswerView.prototype.open = function(featuredContent_id) {
 	this.showAnswerTitle();
 	this.showAnswerBody();
 	this.openDiv();
@@ -226,7 +227,7 @@ AnswerView.prototype.showAnswerTitle = function() {
  * @prototype
  * @function clickDoneButton
  **/
-AnswerView.prototype.clickDoneButton = function() {
+AnswerView.prototype.clickDoneButton = function(featuredContent_id) {
 	var questionpoolModel = controller.models['questionpool'];
 	var statisticsModel=controller.models['statistics'];
 	var answerModel = controller.models['answers'];
@@ -236,14 +237,14 @@ AnswerView.prototype.clickDoneButton = function() {
 		// in this case we proceed to the next question
 		//statisticsModel.resetTimer();
 		questionpoolModel.nextQuestion();
-		controller.transitionToQuestion();
+		controller.transitionToQuestion(featuredContent_id);
 	} else {
 		// if there was no error with the data we provide feedback to the
 		// learner.
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
 		answerModel.storeScoreInDB();
-		controller.transitionToFeedback();
+		controller.transitionToFeedback(featuredContent_id);
 	}
 };
 
@@ -263,11 +264,11 @@ AnswerView.prototype.clickCourseListButton = function() {
  * @prototype
  * @function clickTitleArea
  **/
-AnswerView.prototype.clickTitleArea = function() {
+AnswerView.prototype.clickTitleArea = function(featuredContent_id) {
 	this.widget.storeAnswers(); 
 	// When switching back and forth between question view  and answer view the currently selected answers are stored. 
 	// These answers have not yet been finally answered.
-	controller.transitionToQuestion();
+	controller.transitionToQuestion(featuredContent_id);
 };
 
 /**
