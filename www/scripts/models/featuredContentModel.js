@@ -30,6 +30,17 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
+
+/**
+ * A global property/variable that stores the id of the 
+ * featured content  d
+ *
+ * @property FEATURED_CONTENT_ID 
+ * @default fd 
+ *
+ **/
+var FEATURED_CONTENT_ID = "fd";
+
 /**
  *A global property/variable that shows for how long the synchronization is valid.
  *The following default value shows the time period after which a new synchromization 
@@ -64,7 +75,7 @@ function FeaturedContentModel(controller) {
 
 	
 	this.featuredContentList = [];
-	this.featuredQuestionList =[];
+	this.featuredQuestionList;
 	this.activeQuestion = {};
 	this.index = 0; // index of the current course
 	this.syncDateTime = 0;
@@ -235,21 +246,35 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			var featuredObject;
 			try {
 				featuredObject = data;
-
-			} catch (err) {
+				} catch (err) {
 				featuredObject = {};
 				moblerlog("Couldn't load featured courses from server " + err);
 			}
 			moblerlog("featured course data loaded from server");
-            moblerlog(featuredObject);
+            moblerlog("featuredOboject is"+featuredObject);
 			//self.featuredContentList = featuredObject.featuredCourses || [];
+           
 			self.featuredContentList = featuredObject.featuredCourses || [];
-			moblerlog("featuredList length "+ self.featuredContentList.length);
+			x=JSON.stringify(self.featuredContentList);
+			moblerlog("JSON Featured Content: "+x);
+			moblerlog("featured Content info length "+ self.featuredContentList.length);//needed this for title debugging
+
+			var pos=x.indexOf("questions");
+			q="questions";
+			l=q.length;
+			var last= x.indexOf(x.length-2);
+			moblerlog("position of last pointer: "+last);
+			var list= x.substring(pos+l+2, x.length-2);
+			moblerlog("featured questions are "+list);
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;
 			self.syncTimeOut = featuredObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
-			self.storeData();
-			moblerlog("JSON Featured Content List: " + self.featuredContentList);
+			moblerlog("sync time out is:"+JSON.stringify(self.syncTimeOut));
+			//question pool model will store the data
+			//this.controller.models["questionpool"].storeData();
+			var featuredCourseId = FEATURED_CONTENT_ID;
+			localStorage.setItem("questionpool_" +  featuredCourseId, list);
+			
 			self.reset();
 			
 			//if there was any saved sync state then assign it to the sync state of the courses of the course list
@@ -268,11 +293,11 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			
 			//download all the questions(questionlist) for each course
             var c;
-            for ( c in self.featuredContentList) {
-             self.featuredContentList[c].isLoaded = false;
-
-             self.loadQuestionsFromServer(13040);
-             }
+//            for ( c in self.featuredContentList) {
+//             self.featuredContentList[c].isLoaded = false;
+//
+//             self.loadQuestionsFromServer(13040);
+//             }
 
 		} //end of function createCourseList
 		//} //end of if getLoginState()
@@ -281,62 +306,6 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 
 
 
-FeaturedContentModel.prototype.loadQuestionsFromServer = function(courseId){
-	
-	var self = this;
-	var courseId=13040;
-	//var activeURL = self.controller.getActiveURL();
-
-	$			.ajax({
-				url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/featuredQuestions.php",
-				type : 'GET',
-				dataType : 'json',
-				success : function(data) {
-					moblerlog("success");
-					//if this was a pending question pool, remove it from the storage
-					localStorage.removeItem("pendingFeaturedQuestionPool" + courseId);
-					if (data) {
-                    moblerlog("JSON: " + data);
-						var questionPoolObject;
-						
-						questionPoolObject = data.questions;				
-						if (!questionPoolObject) {
-							questionPoolObject = [];
-						}
-                        moblerlog("Object: " + questionPoolObject);
-						
-						var questionPoolString;
-						try {
-							questionPoolString = JSON.stringify(questionPoolObject);
-						} catch (err) {
-							questionPoolString = "";
-						}
-						localStorage.setItem("featuredQuestionpool_" +  data.courseID, questionPoolString);
-						
-						/**It is triggered after the successful loading of questions from the server 
-						 * @event questionpoolready
-						 * @param:courseID
-						 */
-						
-                  		$(document).trigger("questionpoolready", data.courseID);
-					}
-				},
-				error : function() {
-					
-					//if there was an error while sending the request,
-					//store the course id for the question pool in the local storage
-					localStorage.setItem("pendingQuestionPool_" + courseId, true);
-					moblerlog("Error while loading featured question pool from server");
-				},
-				beforeSend : setHeader
-			});
-
-	function setHeader(xhr) {
-//		xhr.setRequestHeader('sessionkey',
-//				self.controller.models['authentication'].getSessionKey());
-	}
-	
-};
 
 FeaturedContentModel.prototype.checkForTimeOut = function(){
 	
