@@ -332,14 +332,14 @@ Controller.prototype.setupLanguage = function() {
  * @function transition 
  * @param {String} viewname, the name of the specified target view
  **/
-Controller.prototype.transition = function(viewname, featuredFlag) {
+Controller.prototype.transition = function(viewname, fd) {
 	moblerlog("transition start to " + viewname );
 	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
 	if (this.views[viewname] && ( viewname === "landing" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
 		this.activeView.close();
 		this.activeView = this.views[viewname];
-		this.activeView.open(featuredFlag);
+		this.activeView.open(fd);
 	}
 };
 
@@ -410,14 +410,15 @@ Controller.prototype.transitionToLogout = function() {
  * @function transitionToAuthArea 
  * @param {String} viewname, the name of the targeted view
  **/
-Controller.prototype.transitionToAuthArea = function(viewname,featuredFlag) {
+Controller.prototype.transitionToAuthArea = function(viewname,fd) {
 	if (this.getLoginState()) {
-		this.transition(viewname, featuredFlag);
+		this.transition(viewname);
 	}
 	else {
-		if (featuredFlag){
-			this.transition(viewname, featuredFlag);
+		if (fd){
+			this.transition(viewname,fd);
  		}else {
+ 			moblerlog("no fd value passed");
  			this.transitionToLanding();
  		}
 	} 
@@ -437,9 +438,9 @@ Controller.prototype.transitionToCourses = function() {
  * @prototype
  * @function transitionToQuestion 
  **/
-Controller.prototype.transitionToQuestion = function(featuredFlag) {
+Controller.prototype.transitionToQuestion = function(fd) {
 	moblerlog("enters transition to question in controller");
-	this.transitionToAuthArea('questionView', featuredFlag);
+	this.transitionToAuthArea('questionView',fd);
 };
 
 /**
@@ -447,8 +448,8 @@ Controller.prototype.transitionToQuestion = function(featuredFlag) {
  * @prototype
  * @function transitionToAnswer 
  **/
-Controller.prototype.transitionToAnswer = function() {
-	this.transitionToAuthArea('answerView');
+Controller.prototype.transitionToAnswer = function(fd) {
+	this.transitionToAuthArea('answerView',fd);
 };
 
 /**
@@ -456,8 +457,8 @@ Controller.prototype.transitionToAnswer = function() {
  * @prototype
  * @function transitionToFeedback 
  **/
-Controller.prototype.transitionToFeedback = function() {
-	this.transitionToAuthArea('feedbackView');
+Controller.prototype.transitionToFeedback = function(fd) {
+	this.transitionToAuthArea('feedbackView',fd);
 };
 
 /**
