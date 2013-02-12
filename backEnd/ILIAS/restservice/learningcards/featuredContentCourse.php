@@ -114,8 +114,8 @@ function getFeaturedContent($userID) {
 	logging("enters getFeaturedContent");
 	global $ilObjDataCache, $ilUser, $tree;
 
-		$questions=array();
-	
+	$featuredCourses = array();
+	$questions=array();
 	
 	$items = ilObjQuestionPool::_getAvailableQuestionpools();
 	logging(" public questionpools for anonymous user are ".json_encode($items));
@@ -137,18 +137,12 @@ function getFeaturedContent($userID) {
 		if ($items[$childRef_id] ) {
 			$questionPool = new ilObjQuestionPool($childRef_id);
 			$questionPool->read();
-			logging("questions for the featured course are: ".$questionPool);
-			$questionList = $questionPool->getQuestionList();
-			logging("Question list: " . json_encode($questionList));
-			
-		//$questionPoolQuestions=getValidQuestionPool($childRef_id);
+			logging("questions for the featured course are: ".$questionPool);			
 		if (isValidQuestionPool($questionPool)){
-			//if($questionPoolQuestions) {
 				$featContentId = $childRef_id;
 				logging("featured content id is ".$featContentId);
 				break;
-			//}
-		}
+				}
 		}
 	}
 
@@ -156,58 +150,84 @@ function getFeaturedContent($userID) {
 		$featContentTitle = $items[$featContentId]["title"];
 		logging("featured content is: " . $featContentId. "title =" . json_encode($featContentTitle));
 		// NOW WE NEED TO GET THE Questions
-		$questions=$questionPoolQuestions;
+		//$questions=$questionPoolQuestions;
+		$questionList = $questionPool->getQuestionList();
+		logging("Question list: " . json_encode($questionList));
 			
+		foreach ($questionList as $question) {
+		
+			//get id
+			$questionId = $question["question_id"];
+		
+			//get the question
+			$questionText = $question["question_text"];
+		
+			//get the question type
+			$type = $question["type_tag"];
+		
+		
+			require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
+		
+			$assQuestion = new $type();
+			$assQuestion->loadFromDb($question["question_id"]);
+		
+			//get answers
+			if (strcmp($type, "assNumeric") == 0) {
+				//numeric questions have no "getAnswers()" method!
+				//only lower and upper limit are returned
+				$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
+				logging("answerList for Numeric Question".json_encode($answerList));
+			} else if (strcmp($type, "assOrderingHorizontal") == 0) {
+				//horizontal ordering questions have no "getAnswers()" method!
+				//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
+				//$answerList = $assQuestion->getOrderText();
+				$answers = $assQuestion->getOrderingElements();
+				//$points1 = $assQuestion->calculateReachedPoints();
+				$points = $assQuestion->getPoints();
+					
+				$arr = array();
+				foreach ($answers as $order => $answer)
+					//foreach ($answers as $order => $answer)
+				{
+					array_push($arr, array(
+					"answertext" => (string) $answer,
+					"points"=> $points,
+					"order" => (int)$order+1,
+					"id" => "-1"
+							));
+				}
+				$answerList = $arr;
+				logging("answerList for Horizontal Question".json_encode($answerList));
+				 
+			}
+			else {
+				$answerList = $assQuestion->getAnswers();
+				logging("answerList for other types of Question".json_encode($answerList));
+			}
+		
+			//get feedback
+			$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
+			$feedbackError = $assQuestion->getFeedbackGeneric(0);
+		
+		
+			//add question into the question list
+			array_push($questions, array(
+			"id" => $questionId,
+			"type" => $type,
+			"question" => $questionText,
+			"answer" => $answerList,
+			"correctFeedback" => $feedbackCorrect,
+			"errorFeedback" => $feedbackError));
+		}
+		
 	}
 	else {
 		logging("OH NO! WE HAVE NO FEATURED CONTENT!");
 	}
 
-
-	// END HERE
-	
-//check if valid questionpool for the course exists
-
-		//$validQuestionPool = false;
-// 		if(is_array($item_references) && count($item_references)) {
-// 		foreach($item_references as $ref_id) {
-				
-//	get all course items for a course (= questionpools, tests, ...)
-	//$courseItems = new ilCourseItems($item_references);
-	//$courseItemsList = $courseItems->getAllItems();
-	
-	//logging("courseItemList is".$courseItemsList);
-
-// 	foreach($courseItemsList as $courseItem) {
-					
-// 	the course item has to be of type "qpl" (= questionpool)
-// if (strcmp($courseItem["type"], "qpl") == 0) {
-// 	logging("course " . $obj_id . " has question pool");
-
-// 	get the question pool
-// 	$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
-// 	$questionPool->read();
-
-	//calls isValidQuestionPool in common.php
-	//if (isValidQuestionPool($questionPool)) {
-	//$validQuestionPool = true;
-		//}
-	//} //end of strcmp
-	//} //end of foreach-courseItem
-	//} //end of foreach item_references
-	//} //end of if is_array(item_refereces)
-
-		//if the question pool is valid, the course is added to the list
-	//if ($validQuestionPool) {
-		//$title       = $ilObjDataCache->lookupTitle($obj_id);
-		//$description = $ilObjDataCache->lookupDescription($obj_id);
-		
-	//}
-
+	logging("questions have been loaded");
 	$description = $ilObjDataCache->lookupDescription($featContentId);
-	$featuredCourses = array();
-	$questions=$questionList;
-	
+		
 			array_push($featuredCourses,
 					array("id"             => $featContentId,
 							"title"        => $featContentTitle,
@@ -215,11 +235,9 @@ function getFeaturedContent($userID) {
 							"syncState"    => false,
 							"isLoaded"     => false,
 							"description"  => $description,
-							"questions"    => $questions));
+							"questions"    => $questions
+							));
 			
-	
-	//} //end of if valid question pool
-
 	
 	//data structure for frontend models
 	$featuredCourseList = array("featuredCourses" => $featuredCourses,
