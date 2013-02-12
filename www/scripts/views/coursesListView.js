@@ -179,8 +179,7 @@ CoursesListView.prototype.clickCourseItem = function(course_id) {
 		this.controller.models['questionpool'].reset();
 		this.controller.models['questionpool'].loadData(course_id);
 		this.controller.models['answers'].setCurrentCourseId(course_id);
-		var featuredFlag=false;
-		this.controller.transitionToQuestion(featuredFlag);
+		this.controller.transitionToQuestion();
 	}
 };
 
