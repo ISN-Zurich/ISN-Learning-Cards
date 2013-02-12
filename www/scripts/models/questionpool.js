@@ -95,7 +95,7 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 	} catch (err) {
 		questionPoolObject = [];
 	}
-
+	moblerlog("questionpool pool id is ????:"+course_id);
 	this.questionList = questionPoolObject;
 	this.reset();
 };
@@ -136,6 +136,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						var questionPoolString;
 						try {
 							questionPoolString = JSON.stringify(questionPoolObject);
+							moblerlog("questionpool string "+questionPoolString);
 						} catch (err) {
 							questionPoolString = "";
 						}
