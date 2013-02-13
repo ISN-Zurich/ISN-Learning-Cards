@@ -89,6 +89,11 @@ function LandingView(controller) {
 		self.clickFeaturedItem(featuredContent_id);
 	});
 	
+	jester($('#selectarrowLanding')[0]).tap(function(e) {
+		moblerlog("taped statistics icon landing view");
+			
+		self.clickFeaturedStatisticsIcon(featuredContent_id);
+	});
 	
 } //end of constructor
 
@@ -296,6 +301,29 @@ LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	moblerlog("change orientation in landing view");
 	setFeaturedWidth();
 };
+
+
+/**
+ * click on statistic icon calculates the appropriate statistics and shows them
+ * @prototype
+ * @function clickStatisticsIcon
+ */ 
+LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
+	moblerlog("statistics button clicked");
+	
+	if ($("#selectarrowLanding"+featuredContent_id).hasClass("icon-bars")) {
+		$("#selectarrowLanding"+featuredContent_id).addClass("icon-loading loadingRotation").removeClass("icon-bars");
+		
+		//icon-loading, icon-bars old name
+		//all calculations are done based on the course id and are triggered
+		//within setCurrentCourseId
+		this.controller.transitionToStatistics(featuredContent_id);
+	}
+};
+
+
+
+
 
 
 /**

@@ -55,6 +55,7 @@ function StatisticsView(controller) {
     
     self.tagID = 'statisticsView';
     self.controller = controller;
+    var featuredContent_id = FEATURED_CONTENT_ID;
     
     moblerlog( 'statistics view init touch events');
     

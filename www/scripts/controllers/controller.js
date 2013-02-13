@@ -1,4 +1,3 @@
-
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 Licensed to the Apache Software Foundation (ASF) under one
@@ -500,7 +499,7 @@ Controller.prototype.transitionToStatistics = function(courseID) {
 		}
 	}
 	else {
-		this.transitionToLogin();
+		this.transition("statisticsView");
 	}
 };
 
