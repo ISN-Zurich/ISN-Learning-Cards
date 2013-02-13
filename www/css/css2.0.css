@@ -205,8 +205,7 @@ body {
 .content {
 	/*background-color:blue;
 	border: 1px solid red;*/
-    
-	margin-top: 55px;
+    margin-top: 55px;
 	width:100%;
 	background-image: url(../resources/app_background.png);
 	background-size:100% auto;
@@ -249,7 +248,7 @@ ul {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 	-webkit-padding-start: 0px;
-	margin-bottom:50px;
+	/*margin-bottom:50px;*/
 }
 .spacerMargin{
 	
