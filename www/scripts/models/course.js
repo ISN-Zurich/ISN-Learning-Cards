@@ -123,6 +123,7 @@ CourseModel.prototype.storeData = function() {
 		courseString = "";
 	}
 	localStorage.setItem("courses", courseString);
+	moblerlog("courses object is " +localStorage.getItem("courses"));
 };
 
 /**
@@ -177,8 +178,7 @@ CourseModel.prototype.loadFromServer = function() {
 			}
 		}
 
-			
-		$
+			$
 				.ajax({
 					url:  activeURL + '/courses.php',
 					type : 'GET',
@@ -217,7 +217,7 @@ CourseModel.prototype.loadFromServer = function() {
 			self.syncState = true;
 			self.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 			self.storeData();
-			moblerlog("JSON CourseList: " + self.courseList);
+			moblerlog("JSON CourseList: " + JSON.stringify(self.courseList));
 			self.reset();
 			
 			//if there was any saved sync state then assign it to the sync state of the courses of the course list

@@ -189,9 +189,13 @@ LandingView.prototype.showForm = function(featuredContent_id) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
 	$("#featuredContent").attr("id",featuredContent_id);
 	$("#landingViewHeader").show();
-	
-	
 	$("#landingLmsLabel").text(featuredModel.getTitle());
+	
+	
+	if ($("#selectarrowLanding").hasClass("icon-loading loadingRotation")) {
+			$("#selectarrowLanding").addClass("icon-bars").removeClass("icon-loading loadingRotation");
+		
+	}
 	$("#landingBody").show();	
 	moblerlog("just show the title of the featured courses");
    
@@ -309,10 +313,11 @@ LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
  * @function clickStatisticsIcon
  */ 
 LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
-	moblerlog("statistics button clicked");
+	moblerlog("statistics button in landing view clicked");
 	
-	if ($("#selectarrowLanding"+featuredContent_id).hasClass("icon-bars")) {
-		$("#selectarrowLanding"+featuredContent_id).addClass("icon-loading loadingRotation").removeClass("icon-bars");
+	if ($("#selectarrowLanding").hasClass("icon-bars")) {
+		moblerlog("select arrow landing has icon bars");
+		$("#selectarrowLanding").addClass("icon-loading loadingRotation").removeClass("icon-bars");
 		
 		//icon-loading, icon-bars old name
 		//all calculations are done based on the course id and are triggered

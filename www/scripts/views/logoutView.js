@@ -42,9 +42,9 @@ function LogoutView() {
 	var self = this;
 
 	self.tagID = 'logoutConfirmationView';
-	
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	jester($('#closeIcon')[0]).tap(function(){ self.cancel(); } );  
-	jester($('#logOut')[0]).tap(function(event){ self.logout(); event.stopPropagation(); } );  
+	jester($('#logOut')[0]).tap(function(event){ self.logout(featuredContent_id); event.stopPropagation(); } );  
 } 
 
 
@@ -100,9 +100,9 @@ LogoutView.prototype.cancel = function() {
  * click on the logout button logs the user out and
  * shows the login view
  */
-LogoutView.prototype.logout = function() {
+LogoutView.prototype.logout = function(featuredContent_id) {
 	var config = controller.models['authentication'];
-	config.logout();
+	config.logout(featuredContent_id);
 	controller.transitionToLogin();
 };
 

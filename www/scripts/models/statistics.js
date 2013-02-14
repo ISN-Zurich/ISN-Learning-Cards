@@ -75,6 +75,7 @@ function StatisticsModel(controller) {
 	this.controller = controller;
 	//initialization of model's variables
 	this.lastSendToServer;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',	100000);
 	this.currentCourseId = -1;
 	this.firstActiveDay;
@@ -131,7 +132,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
 	
 	//if statistics are loaded
-	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
+	if ((this.controller.getConfigVariable("statisticsLoaded")== true) || this.currentCourseId == "fd"){	
 		this.getFirstActiveDay();
 	}
 	else {
@@ -342,7 +343,7 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 
 
 /**
- *Checks if any achievements have been achievedn for the specific course
+ *Checks if any achievements have been achieved for the specific course
  * @prototype
  * @function checkAchievements
  * @param {Number}, courseId
@@ -457,7 +458,7 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  * 
  * @function sendToServer
  * */
-StatisticsModel.prototype.sendToServer = function() {
+StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
 	if (self.controller.getLoginState() ) {
@@ -465,7 +466,7 @@ StatisticsModel.prototype.sendToServer = function() {
 	moblerlog("url statistics: " + url);
 		// select all statistics data from the local table "statistics"
 		// and then execute the code in sendStatistics function
-	self.queryDB('SELECT * FROM statistics', [], function(t,r) {sendStatistics(t,r);});
+	self.queryDB('SELECT * FROM statistics where course_id != ?', [featuredContent_id], function(t,r) {sendStatistics(t,r);});
 
 	function sendStatistics(transaction, results) {
 		statistics = [];
@@ -476,6 +477,7 @@ StatisticsModel.prototype.sendToServer = function() {
 		//that were not sent last time succesfully
 		//to the server, they are stored in the local object "pendingStatistics" 
 		if (localStorage.getItem("pendingStatistics")) {
+			moblerlog("there are pending statistics to the server");
 			var pendingStatistics = {};
 			try {
 				pendingStatistics = JSON.parse(localStorage.getItem("pendingStatistics"));
@@ -493,6 +495,9 @@ StatisticsModel.prototype.sendToServer = function() {
 			moblerlog("results length: " + results.rows.length);
 			for ( i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
+//				moblerlog("sent statistics row to the server"+row);
+//				rowCourse= row.course_id;
+//				moblerlog("course id is "+rowCourse);
 				statistics.push(row);
                 moblerlog("sending " + i + ": " + JSON.stringify(row));
 			}
@@ -513,6 +518,7 @@ StatisticsModel.prototype.sendToServer = function() {
 				moblerlog("statistics data successfully send to the server");
 				localStorage.removeItem("pendingStatistics");
 				if (data) {
+					moblerlog("there ");
 					if (numberOfStatisticsItems < data) {
 						moblerlog("server has more items than local database -> fetch statistics from server");
 						self.loadFromServer();

@@ -145,15 +145,21 @@ StatisticsView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/ 
-StatisticsView.prototype.open = function() {
+StatisticsView.prototype.open = function(featuredContent_id) {
 	var self=this;
-	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-		moblerlog("statistics have been loaded from server");
+	
+	if (featuredContent_id){
 		self.loadData();	
 	}
 	else {
+		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
+		moblerlog("statistics have been loaded from server");
+		self.loadData();	
+		}
+		else {
 		self.showLoadingMessage();
-	}  
+			}
+		}
 	this.openDiv();	
 };
 

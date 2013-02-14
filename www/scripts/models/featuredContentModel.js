@@ -136,56 +136,23 @@ FeaturedContentModel.prototype.loadData = function() {
  * or TODO: into a local json file
  **
  **/
-FeaturedContentModel.prototype.storeData = function(){
-	var courseString;
+FeaturedContentModel.prototype.storeData = function(featuredCourseString){
+	var featuredString;
 	try {
-		featuredString = JSON.stringify({
-			featuredCourses : this.featuredContentList,
-			syncDateTime : this.syncDateTime,
-			syncState : this.syncState,
-			syncTimeOut : this.syncTimeOut
-		});
+		featuredString = "{" +
+				"\"featuredCourses\":"+featuredCourseString+","+
+				"\"syncDateTime\":"+ this.syncDateTime+","+
+				"\"syncState\":"+ this.syncState+","+
+				"\"syncTimeOut\" :"+ this.syncTimeOut+
+	"}";
 	} catch (err) {
 		featuredString = "";
 	}
-	localStorage.setItem("featuredContent", courseString);
+	localStorage.setItem("featuredContent", featuredString);
+	moblerlog("featured content object is "+localStorage.getItem("featuredContent"));
 };
 
 
-/**
- * stores questions data into the local storage 
- * or TODO: into a local json file
- * to write more comments
- **
- **/
-FeaturedContentModel.prototype.storeQuestionsData = function () {
-	var questionPoolString;
-	try {
-		questionPoolString = JSON.stringify(this.featuredQuestionList);
-	} catch (err) {
-		questionPoolString = "";
-	}
-	localStorage.setItem("featuredQuestionpool_" + course_id, questionPoolString);
-};
-
-
-/**
- **TODO:
- */
-FeaturedContentModel.prototype.loadQuestionsData = function(){
-	var questionPoolObject;
-	try {
-		questionPoolObject = JSON.parse(localStorage.getItem("questionpool_"
-				+ course_id))
-				|| [];
-	} catch (err) {
-		questionPoolObject = [];
-	}
-
-	this.questionList = questionPoolObject;
-	this.questionsReset();
-	
-};
 
 
 
@@ -204,9 +171,6 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 	var syncStateCache = [];
 	var activeURL = self.controller.getActiveURL();
 	self.checkForTimeOut();
-//	if (self.controller.getLoginState() && !self.syncState) {
-	//	var sessionKey = self.controller.models['authentication']
-	//			.getSessionKey();
 
 		// save current syncStates for this featured course
 		if (self.featuredContentList && self.featuredContentList.length > 0) {
@@ -273,7 +237,13 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			//question pool model will store the data
 			//this.controller.models["questionpool"].storeData();
 			var featuredCourseId = FEATURED_CONTENT_ID;
+			//store the featured questionpool in the local storage allong with the other question pools
 			localStorage.setItem("questionpool_" +  featuredCourseId, list);
+			//store in the local storage all the data except the questions
+			
+			var featuredCourseString=x.substring(0,pos-2).concat("}]");;
+			moblerlog("featured course string is"+featuredCourseString);
+			self.storeData(featuredCourseString);			
 			
 			self.reset();
 			
@@ -300,7 +270,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 //             }
 
 		} //end of function createCourseList
-		//} //end of if getLoginState()
+		
 	
 };
 

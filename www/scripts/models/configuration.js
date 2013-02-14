@@ -56,6 +56,7 @@ var APP_ID = "ch.ethz.isn.learningcards";
 function ConfigurationModel(controller) {
 	var self=this;
 	this.controller = controller;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	//initialization of model's variables
 	this.configuration = {};
 	this.urlToLMS = "";
@@ -255,10 +256,10 @@ ConfigurationModel.prototype.login = function(username, password) {
 * @prototype
 * @function logout
 */
-ConfigurationModel.prototype.logout = function() {
+ConfigurationModel.prototype.logout = function(featuredContent_id) {
 	//send statistics data to server
 	this.configuration.loginState = "loggedOut";
-	this.controller.models['statistics'].sendToServer();
+	this.controller.models['statistics'].sendToServer(featuredContent_id);
 	
 	var self = this;
 
@@ -266,8 +267,11 @@ ConfigurationModel.prototype.logout = function() {
 	var c, courseList = this.controller.models["course"].courseList;
 	if (courseList) {
 		for ( c in courseList ) {
+			moblerlog("clear local question pools");
+			if (courseList[c].id !== FEATURED_CONTENT_ID){
 			localStorage.removeItem("questionpool_" + courseList[c].id);
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
+			}
 		}
 	}
 	

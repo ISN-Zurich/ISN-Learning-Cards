@@ -58,7 +58,7 @@ function AnswerModel() {
 	this.currentCourseId = -1;
 	this.currentQuestionId = -1;
 	this.start = -1;
-
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 	if (!localStorage.getItem("db_version")) {
@@ -370,7 +370,7 @@ AnswerModel.prototype.storeScoreInDB = function() {
 				[ self.currentCourseId, self.currentQuestionId,
 				  day.getTime(), self.answerScore, duration ],
 				  function() {
-					moblerlog("successfully inserted SCORE IN db");
+					moblerlog("successfully inserted SCORE IN db for course "+self.currentCourseId);
 
 					/**It is triggered after the successful insertion of the score in the local database
 					 * @event checkachievements
@@ -391,10 +391,10 @@ AnswerModel.prototype.storeScoreInDB = function() {
  * @prototype
  * @function deleteDB 
  **/
-AnswerModel.prototype.deleteDB = function() {
+AnswerModel.prototype.deleteDB = function(featuredContent_id) {
 	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {
-		tx.executeSql("DELETE FROM statistics", [], function() {
+		tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
 		}, function() {
 			moblerlog("error: statistics table not cleared");

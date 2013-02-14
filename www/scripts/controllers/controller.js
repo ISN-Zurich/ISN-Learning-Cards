@@ -480,6 +480,7 @@ Controller.prototype.transitionToFeedbackMore = function() {
 
 /**
  * Transition to statistics view. The user can reach the statistics view in two ways: 1) either by clicking the statistics icon on the course list view or  2) from the achievements view.
+ * TODO: Refactoring of the function
  * @prototype
  * @function transitionToStatistics 
  **/
@@ -499,7 +500,9 @@ Controller.prototype.transitionToStatistics = function(courseID) {
 		}
 	}
 	else {
-		this.transition("statisticsView");
+		moblerlog("enter the statistics from landing view");
+		this.models['statistics'].setCurrentCourseId(courseID);
+		this.transition("statisticsView", courseID);
 	}
 };
 
