@@ -439,7 +439,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 	this.storeData();
 
 	// drop statistics data table from local database
-	this.controller.models['answers'].deleteDB();	
+	this.controller.models['answers'].deleteDB(featuredContent_id);	
 };
 
 /**

@@ -392,7 +392,7 @@ AnswerModel.prototype.storeScoreInDB = function() {
  * @function deleteDB 
  **/
 AnswerModel.prototype.deleteDB = function(featuredContent_id) {
-	localStorage.removeItem("db_version");
+	//localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {
 		tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
