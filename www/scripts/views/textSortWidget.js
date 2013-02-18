@@ -137,9 +137,9 @@ var lastli = $("<li/>", {
 			"class" : "gradient1 shadowedLi"
 		}).appendTo(lastli);
 		
-		var marginLi= $("<li/>", {
-			"class": "spacerMargin"
-		}).appendTo(ul);
+//		var marginLi= $("<li/>", {
+//			"class": "spacerMargin"
+//		}).appendTo(ul);
 		
 	
 		// make the list sortable using JQuery UI's function
