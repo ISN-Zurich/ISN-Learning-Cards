@@ -48,12 +48,14 @@ function CoursesListView(controller) {
 	self.controller = controller;
 	self.active = false;
 	self.firstLoad = true;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	
 	//handler when taping on the settings button
 	jester($('#coursesListSetIcon')[0]).tap(function() {
 		self.clickSettingsButton();
 	});
 
+	
 	/**
 	 * In some rare cases an automated transition from login view to course list view takes place. 
 	 * This might have happened because a synchronization of questions ( pending questions exist in the local storage) took place.
@@ -139,10 +141,10 @@ CoursesListView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/ 
-CoursesListView.prototype.open = function() {
+CoursesListView.prototype.open = function(featuredContent_id) {
 	moblerlog("open course list view");
 	this.active = true;
-	this.update();
+	this.update(featuredContent_id);
 	this.firstLoad = false;
 	this.openDiv();
 	this.setIconSize();
@@ -217,18 +219,72 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
  * @prototype
  * @function update
  */ 
-CoursesListView.prototype.update = function() {
+CoursesListView.prototype.update = function(featuredContent_id) {
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	var self = this;
 
 	var courseModel = self.controller.models['course'];
 	var statisticsModel = self.controller.models['statistics'];
+	var featuredModel = self.controller.models['featured'];
 	courseModel.reset();
 	$("#coursesList").empty();
 
 	moblerlog("First course id: " + courseModel.getId());
 	
-	if (courseModel.courseList.length == 0) {
-		
+//featured content
+	
+	var liF = $("<li/>", {
+		"id":"featured"+featuredContent_id,
+		"class":"gradientSelected"
+	}).appendTo("#coursesList");
+	
+	
+	var rightdivF = $("<div/>", {
+		"id" : "featuredContent gradientSelected",
+		"class": "right"
+	}).appendTo(liF);
+	
+	var separatorF = $("<div/>", {
+		"class": "radialCourses lineContainer separatorContainerCourses"
+	}).appendTo(rightdivF);
+	
+	
+	divF = $("<div/>", {
+		//"class" : "courseListIcon right gradient2"
+		"class" : " courseListIcon lineContainerCourses "
+	}).appendTo(rightdivF);
+	
+	spanF = $("<div/>", {
+		"id":"courseListIcon"+ featuredContent_id,
+		"class" : "select icon-bars"
+	}).appendTo(divF);
+	
+
+	var dashDivF = $("<div/>", {
+		"class" : "left lineContainer selectItemContainer"
+	}).appendTo(liF);
+	
+	var spanDashF = $("<span/>", {
+		"class" : "select icon-dash"
+	}).appendTo(dashDivF);
+	
+	var mydivF = $("<div/>", {
+		"class" : "text textShadow marginForCourseList gradientSelected",
+		text : featuredModel.getTitle()
+	}).appendTo(liF);
+	
+	
+	jester(mydivF[0]).tap(function(e) {
+	self.clickFeaturedItem(featuredContent_id);
+	});
+
+	jester(spanF[0]).tap(function(e) {
+		moblerlog("taped featured statistics icon in courses list view");
+			
+		self.clickFeaturedStatisticsIcon(featuredContent_id);
+	});
+	
+	if (courseModel.courseList.length == 0) {	
 		var li = $("<li/>", {
 		}).appendTo("#coursesList");
 		
@@ -340,6 +396,45 @@ CoursesListView.prototype.setIconSize = function() {
 	});
 };
 
+
+/**
+ * click on featured content which is on top of 
+ * courses list view, right before the exclusive content
+ * loads the questions of the featured course question pool
+ * @prototype
+ * @function clickFeaturedItem
+ */ 
+CoursesListView.prototype.clickFeaturedItem = function(featuredContent_id){
+	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
+	this.controller.models['questionpool'].reset();
+	this.controller.models['questionpool'].loadData(featuredContent_id);
+	this.controller.models['answers'].setCurrentCourseId(featuredContent_id);
+	moblerlog("enters clickFeauturedItem in course list view");
+	this.controller.transitionToQuestion(featuredContent_id);
+	//}
+};
+
+
+
+/**
+ * click on statistic icon calculates the appropriate statistics and shows them
+ * while we are registered in courses list view
+ * @prototype
+ * @function clickStatisticsIcon
+ */ 
+CoursesListView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
+	moblerlog("statistics button in landing view clicked");
+	
+	if ($("#courseListIcon"+featuredContent_id).hasClass("icon-bars")) {
+		moblerlog("select arrow landing has icon bars");
+		$("#courseListIcon"+featuredContent_id).addClass("icon-loading loadingRotation").removeClass("icon-bars");
+		
+		//icon-loading, icon-bars old name
+		//all calculations are done based on the course id and are triggered
+		//within setCurrentCourseId
+		this.controller.transitionToStatistics(featuredContent_id);
+	}
+};
 
 /**
 * handles dynamically any change that should take place on the layout

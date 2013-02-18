@@ -238,7 +238,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			//this.controller.models["questionpool"].storeData();
 			var featuredCourseId = FEATURED_CONTENT_ID;
 			//store the featured questionpool in the local storage allong with the other question pools
-			localStorage.setItem("questionpool_" +  featuredCourseId, list);
+			localStorage.setItem("questionpool_" +featuredCourseId, list);
 			//store in the local storage all the data except the questions
 			
 			var featuredCourseString=x.substring(0,pos-2).concat("}]");;
@@ -271,16 +271,12 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 
 		} //end of function createCourseList
 		
-	
 };
 
 
 
 
-FeaturedContentModel.prototype.checkForTimeOut = function(){
-	
-	
-};
+FeaturedContentModel.prototype.checkForTimeOut = function(){};
 
 /**
  * @prototype

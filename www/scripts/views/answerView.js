@@ -153,6 +153,7 @@ AnswerView.prototype.openDiv = openView;
  * @function open
  **/
 AnswerView.prototype.open = function(featuredContent_id) {
+	moblerlog("opes answer view");
 	this.showAnswerTitle();
 	this.showAnswerBody();
 	this.openDiv();
@@ -166,7 +167,7 @@ AnswerView.prototype.open = function(featuredContent_id) {
  * @function close
  **/
 AnswerView.prototype.close = function() {
-    this.widget.cleanup();
+   // this.widget.cleanup();
     this.closeDiv();
 };
 

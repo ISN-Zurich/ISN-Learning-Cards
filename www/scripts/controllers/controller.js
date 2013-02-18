@@ -448,6 +448,7 @@ Controller.prototype.transitionToQuestion = function(fd) {
  * @function transitionToAnswer 
  **/
 Controller.prototype.transitionToAnswer = function(fd) {
+	moblerlog("enters transition to answer view in controller");
 	this.transitionToAuthArea('answerView',fd);
 };
 

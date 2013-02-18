@@ -210,6 +210,7 @@ StatisticsView.prototype.loadData = function() {
 	//starts the calculation of the values of the various
 	//statistics metrics
 	var avgScore = statisticsModel.averageScore.averageScore;
+	moblerlog("average score is: "+avgScore);
 	var improvementAvgScore = statisticsModel.averageScore.improvementAverageScore;
 	if (avgScore < 0) {
 		avgScore =  0;

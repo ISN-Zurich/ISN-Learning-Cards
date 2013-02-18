@@ -395,7 +395,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 * @function sendLogoutToServer
 * @param userAuthenticationKey
 */
-ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey) {
+ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey,featuredContent_id) {
 	var sessionKey,self = this;
 	var activeURL = self.controller.getActiveURL();  
 	if (userAuthenticationKey) {

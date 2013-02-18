@@ -58,6 +58,7 @@ function QuestionPoolModel(controller) {
 	// if the question list length is less than this constant,
 	// the queue is not used
 	this.queueConstant = 4;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 }
 
 
@@ -270,7 +271,7 @@ QuestionPoolModel.prototype.mixAnswers = function() {
  * @function nextQuestion
  * @return {Boolean} returns false if it has reached the end of the list
  */
-QuestionPoolModel.prototype.nextQuestion = function() {
+QuestionPoolModel.prototype.nextQuestion = function(featuredContent_id) {
 	var random;
 	var newId;
 
@@ -382,13 +383,19 @@ QuestionPoolModel.prototype.getId = function() {
  * @prototype
  * @function reset
  */ 
-QuestionPoolModel.prototype.reset = function() {
+QuestionPoolModel.prototype.reset = function(featuredContent_id) {
+	moblerlog("reset question pool");
 	this.queue = [ "-1", "-1", "-1" ];
+	if (featuredContent_id){
+		this.id=featuredContent_id;
+	}
+	else{
 	this.id = 0;
+	}
 	this.activeQuestion = {};
 	this.currentAnswersAreMixed = false;
 	if (this.questionList.length > 0) {
-		this.nextQuestion();
+		this.nextQuestion(featuredContent_id);
 	}
 };
 

@@ -267,7 +267,7 @@ LandingView.prototype.showErrorMessage = function(message) {
 };
 
 /**
- * click on the defautl featured content, loads its questions
+ * click on the default featured content, loads its questions
  * @prototype
  * @function clickFeaturedItem
  */ 
@@ -325,11 +325,6 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
 		this.controller.transitionToStatistics(featuredContent_id);
 	}
 };
-
-
-
-
-
 
 /**
  * sets dynamically the width of the input elements

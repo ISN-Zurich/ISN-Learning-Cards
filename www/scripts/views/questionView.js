@@ -156,7 +156,7 @@ QuestionView.prototype.handleTap = function(featuredContent_id) {
 		controller.transitionToFeedback(featuredContent_id);
 	} else { 
 		moblerlog("tap question view to answer");
-		moblerlog("featured id is"+featuredContent_id);
+		moblerlog("featured id is "+featuredContent_id);
 		controller.transitionToAnswer(featuredContent_id);
 	}
 };
@@ -195,11 +195,13 @@ QuestionView.prototype.openDiv = openView;
  **/
 QuestionView.prototype.open = function(featuredContent_id) {
 	this.showQuestionTitle();
-	this.showQuestionBody();
-	
-	if (!controller.models["answers"].hasStarted()) {
-		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
-	}
+	this.showQuestionBody(featuredContent_id);
+//	if (!controller.models["answers"].hasStarted()) {
+//		if(featuredContent_id){
+//			controller.models["answers"].startTimer(featuredContent_id);	
+//		}else{
+//		controller.models["answers"].startTimer(controller.models["questionpool"].getId());}
+//	}
 	this.openDiv();	
 };
 
@@ -245,3 +247,13 @@ QuestionView.prototype.clickCourseListButton = function(featuredContent_id) {
 	}
 };
 
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* @prototype
+* @function changeOrientation
+**/ 
+QuestionView.prototype.changeOrientation = function(o,w,h){
+	
+};
