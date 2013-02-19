@@ -488,12 +488,18 @@ Controller.prototype.transitionToFeedbackMore = function() {
 Controller.prototype.transitionToStatistics = function(courseID) {
 	if (this.getLoginState()) {
 		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
-		moblerlog("enters get logic state in controller");
+		moblerlog("enters get logic state in transition to statistics in controller");
 		if (courseID && courseID > 0) {
 			moblerlog ("enters course id in controller");
 			this.models['statistics'].setCurrentCourseId(courseID);
 		}
-		else {
+		else if (courseID == "fd"){
+			moblerlog("enter the statistics from featured content in courses list view");
+			this.models['statistics'].setCurrentCourseId(courseID);
+			this.transition("statisticsView", courseID);
+		}
+		else
+		{
 			// when the achievements get closed we won't pass the course id
 			// in order to avoid that the statistics are recalculated. Which makes no sense,
 			// because the statistics model has already all the data in place.
