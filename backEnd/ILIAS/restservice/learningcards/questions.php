@@ -143,13 +143,17 @@ function getQuestions($courseId) {
 							$answerList = $arr;
 							logging("answerList for Horizontal Question".json_encode($answerList));
 							 							
-							}	 
-							 else {
+							}	
+								else if(strcmp($type, "assClozeTest") == 0) {
+									//$answerList = $assQuestion->getItems();
+									logging("answerList for close questions".json_encode($answerList));
+									
+								} else {
 								$answerList = $assQuestion->getAnswers();
 								logging("answerList for other types of Question".json_encode($answerList));
 							}
 
-							//get feedback
+							//get feedbackF
 							$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
 							$feedbackError = $assQuestion->getFeedbackGeneric(0);
 

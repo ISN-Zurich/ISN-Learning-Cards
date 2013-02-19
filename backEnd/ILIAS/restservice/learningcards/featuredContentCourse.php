@@ -134,7 +134,7 @@ function getFeaturedContent($userID) {
 		logging("ref id for this child is ".$childRef_id);
 		//if the one of the top level chidren of repository is also in the list
 		//of the available questionpools of the anonymous user
-		if ($items[$childRef_id] ) {
+		if ($items[$childRef_id]) {
 			$questionPool = new ilObjQuestionPool($childRef_id);
 			$questionPool->read();
 			logging("questions for the featured course are: ".$questionPool);			

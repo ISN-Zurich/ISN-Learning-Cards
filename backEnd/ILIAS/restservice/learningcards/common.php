@@ -132,8 +132,7 @@ function getUserIdForSessionKey($sessionKey) {
  */
 function isValidQuestionPool($questionpool) {
 	//only question pools which contain only questions with the types in this array are loaded
-	$VALID_QUESTION_TYPES = array("assMultipleChoice", "assSingleChoice", "assOrderingQuestion", "assNumeric", "assOrderingHorizontal" );
-
+	$VALID_QUESTION_TYPES = array("assMultipleChoice", "assSingleChoice", "assOrderingQuestion", "assNumeric", "assOrderingHorizontal", "assClozeTest");
 
 	//question pool has to be online
 	if($questionpool->getOnline()) {
