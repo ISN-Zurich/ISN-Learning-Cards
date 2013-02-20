@@ -102,6 +102,7 @@ function getCourseList($userId) {
 						
 						//calls isValidQuestionPool in questions.php
 						if (isValidQuestionPool($questionPool)) {
+							logging("valid question pool");
 							$validQuestionPool = true;
 						}
 					}
@@ -130,8 +131,10 @@ function getCourseList($userId) {
 			"syncDateTime" => 0,
 			"syncState" => false,
 			"syncTimeOut" => $SYNC_TIMEOUT);
-
+	logging("course list is ".json_encode($courseList));
 	return $courseList;
+	
+	
 
 }
 

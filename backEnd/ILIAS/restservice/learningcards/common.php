@@ -133,13 +133,15 @@ function getUserIdForSessionKey($sessionKey) {
 function isValidQuestionPool($questionpool) {
 	//only question pools which contain only questions with the types in this array are loaded
 	$VALID_QUESTION_TYPES = array("assMultipleChoice", "assSingleChoice", "assOrderingQuestion", "assNumeric", "assOrderingHorizontal", "assClozeTest");
-
+	logging("check validitiy 1");
 	//question pool has to be online
 	if($questionpool->getOnline()) {
+		logging("check validitiy 2");
 		$questionList = $questionpool->getQuestionList();
 
 		//question pool has to contain at least 4 questions
 		if (count($questionList) >= 4) {
+			logging("check validitiy 3");
 			$onlyValidTypes = true;
 			foreach ($questionList as $question) {
 				$type = $question["type_tag"];
@@ -147,6 +149,7 @@ function isValidQuestionPool($questionpool) {
 				//check if the type of the question is a valid type
 				if (!in_array($type, $VALID_QUESTION_TYPES)) {
 					$onlyValidTypes = false;
+					logging("check validitiy 4");
 				}
 			}
 			$validQuestionPool = $onlyValidTypes;

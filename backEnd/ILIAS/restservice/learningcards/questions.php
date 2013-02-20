@@ -44,6 +44,7 @@ require_once 'Services/User/classes/class.ilObjUser.php';
 require_once 'Modules/Course/classes/class.ilCourseItems.php';
 require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 require_once 'Modules/TestQuestionPool/classes/class.assQuestion.php';
+require_once 'Modules/TestQuestionPool/classes/class.assClozeTest.php';
 
 global $DEBUG;
 $DEBUG = 1;
@@ -109,7 +110,12 @@ function getQuestions($courseId) {
 							//get the question type
 							$type = $question["type_tag"];
 
-
+							if ($type == "assClozeTest") {
+								//$assClozeTest = new assClozeTest();
+								$assClozeTest->setClozeTest($questionText);
+								$questionText= $assClozeTest->getClozeTest($questionText);
+								logging("question text for close questions".$questionText);
+							}
 							require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
 
 							$assQuestion = new $type();
@@ -146,6 +152,7 @@ function getQuestions($courseId) {
 							}	
 								else if(strcmp($type, "assClozeTest") == 0) {
 									//$answerList = $assQuestion->getItems();
+									$answerList = $item->getAnswerText();
 									logging("answerList for close questions".json_encode($answerList));
 									
 								} else {
