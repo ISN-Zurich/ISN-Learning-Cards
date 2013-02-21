@@ -73,6 +73,8 @@ if ($userID != 0) {
  * @return array with questions
  */
 function getQuestions($courseId) {
+	
+	global $assClozeTest;
 	//references are needed to get course items (= questionpools, tests, ...)
 	$item_references = ilObject::_getAllReferences($courseId);
 	//logging("item references".json_encode($item_references));
@@ -104,23 +106,31 @@ function getQuestions($courseId) {
 							//get id
 							$questionId = $question["question_id"];
 								
-							//get the question
-							$questionText = $question["question_text"];
-
 							//get the question type
 							$type = $question["type_tag"];
 
-							if ($type == "assClozeTest") {
-								//$assClozeTest = new assClozeTest();
-								$assClozeTest->setClozeTest($questionText);
-								$questionText= $assClozeTest->getClozeTest($questionText);
-								logging("question text for close questions".$questionText);
-							}
 							require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
 
 							$assQuestion = new $type();
 							$assQuestion->loadFromDb($question["question_id"]);
 
+							
+							//get the question 
+							$questionText = $question["question_text"];
+							
+								
+							if (strcmp($type, "assClozeTest") == 0) {
+								//$assClozeTest = new assClozeTest();
+								//assClozeTest::setClozeTest($questionText);
+								//$questionText1= $assQuestion->getClozeText();
+								$assClozeTest = new assClozeTest();
+								$assQuestion->getClozeText();
+								$startTag= $assQuestion->getStartTag();
+								$endTag= $assQuestion->getEndTag();
+								logging("start tag is ".$startTag);
+								logging("end tag is ".$endTag);
+							}
+														
 							//get answers
 							if (strcmp($type, "assNumeric") == 0) {
 								//numeric questions have no "getAnswers()" method!
@@ -152,7 +162,7 @@ function getQuestions($courseId) {
 							}	
 								else if(strcmp($type, "assClozeTest") == 0) {
 									//$answerList = $assQuestion->getItems();
-									$answerList = $item->getAnswerText();
+									//$answerList = $item->getAnswerText();
 									logging("answerList for close questions".json_encode($answerList));
 									
 								} else {
