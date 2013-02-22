@@ -117,18 +117,9 @@ function getQuestions($courseId) {
 							
 							//get the question 
 							$questionText = $question["question_text"];
-							
-								
+									
 							if (strcmp($type, "assClozeTest") == 0) {
-								//$assClozeTest = new assClozeTest();
-								//assClozeTest::setClozeTest($questionText);
-								//$questionText1= $assQuestion->getClozeText();
-								$assClozeTest = new assClozeTest();
-								$assQuestion->getClozeText();
-								$startTag= $assQuestion->getStartTag();
-								$endTag= $assQuestion->getEndTag();
-								logging("start tag is ".$startTag);
-								logging("end tag is ".$endTag);
+								$questionText = $question["description"];
 							}
 														
 							//get answers
@@ -163,6 +154,19 @@ function getQuestions($courseId) {
 								else if(strcmp($type, "assClozeTest") == 0) {
 									//$answerList = $assQuestion->getItems();
 									//$answerList = $item->getAnswerText();
+									// $assClozeTest = new assClozeTest();
+									
+									//  $startTag= $assQuestion->getStartTag();
+									//  $endTag= $assQuestion->getEndTag();
+										$qaps= $assQuestion->getGaps();
+										logging("qaps are ".json_encode($qaps));
+									//	$assQuestion->flushGaps();
+									// 	$clozeText= $assQuestion->getClozeText();
+									// 	$questionText=$assQuestion->clearGapAnswers();
+									// 	logging("question text for cloze quesiton is ".$questionText);
+									// 	logging("start tag is ".$startTag);
+									// 	logging("end tag is ".$endTag);
+									
 									logging("answerList for close questions".json_encode($answerList));
 									
 								} else {
@@ -195,6 +199,8 @@ function getQuestions($courseId) {
 	return array(
 			"courseID" => $courseId,
 			"questions" => $questions);
+	
+	logging("questions are ".json_encode($questions));
 }
 
 
