@@ -62,7 +62,8 @@ function StatisticsView(controller) {
     jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); });
     
     jester($('#statsSlot3')[0]).tap(function() {
-		self.clickToAchievements();
+    	moblerlog("clicked in achievements in statistics view");
+		self.clickToAchievements(featuredContent_id);
 	});
     
 //    jester($('#statsSlot2')[0]).tap(function() {
@@ -120,8 +121,8 @@ StatisticsView.prototype.handleTap   = doNothing;
  * @prototype
  * @function handleSwipe
  **/
-StatisticsView.prototype.handleSwipe = function() {
-	controller.transitionToAchievements();
+StatisticsView.prototype.handleSwipe = function(featuredContent_id) {
+	controller.transitionToAchievements(featuredContent_id);
 };
 
 
@@ -145,21 +146,37 @@ StatisticsView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/ 
-StatisticsView.prototype.open = function(featuredContent_id) {
+StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 	var self=this;
-	
-	if (featuredContent_id){
-		self.loadData();	
-	}
-	else {
+	if (self.controller.getLoginState()) {
+		if (featuredContent){
+			self.loadData();
+		}else{
+		moblerlog("open statistics view outside featured context");
 		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
 		moblerlog("statistics have been loaded from server");
-		self.loadData();	
+		self.loadData();
 		}
 		else {
 		self.showLoadingMessage();
 			}
 		}
+	}//end of is logged in
+	else //if we are not logged in 
+		{
+			moblerlog("open statistics view in featured course context");
+		self.loadData();	
+		}
+//	else {
+//		moblerlog("open statistics view outside featured context");
+//		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
+//		moblerlog("statistics have been loaded from server");
+//		self.loadData();	
+//		}
+//		else {
+//		self.showLoadingMessage();
+//			}
+//		}
 	this.openDiv();	
 };
 
@@ -187,9 +204,9 @@ StatisticsView.prototype.showLoadingMessage = function() {
  * @prototype
  * @function clickToAchievements
  **/
-StatisticsView.prototype.clickToAchievements = function() {
+StatisticsView.prototype.clickToAchievements = function(featuredContent_id) {
 	moblerlog("slot 1 or slot 2 clicked");
-	this.controller.transitionToAchievements();
+	this.controller.transitionToAchievements(featuredContent_id);
 };
 
 

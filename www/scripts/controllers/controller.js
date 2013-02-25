@@ -331,14 +331,14 @@ Controller.prototype.setupLanguage = function() {
  * @function transition 
  * @param {String} viewname, the name of the specified target view
  **/
-Controller.prototype.transition = function(viewname, fd) {
+Controller.prototype.transition = function(viewname, fd, achievementsFlag) {
 	moblerlog("transition start to " + viewname );
 	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
 	if (this.views[viewname] && ( viewname === "landing" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
 		this.activeView.close();
 		this.activeView = this.views[viewname];
-		this.activeView.open(fd);
+		this.activeView.open(fd,achievementsFlag);
 	}
 };
 
@@ -485,7 +485,7 @@ Controller.prototype.transitionToFeedbackMore = function() {
  * @prototype
  * @function transitionToStatistics 
  **/
-Controller.prototype.transitionToStatistics = function(courseID) {
+Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag) {
 	if (this.getLoginState()) {
 		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
 		moblerlog("enters get logic state in transition to statistics in controller");
@@ -500,16 +500,22 @@ Controller.prototype.transitionToStatistics = function(courseID) {
 		}
 		else
 		{
+			moblerlog("transition to statistics when loggedin and coming from achievements view");
 			// when the achievements get closed we won't pass the course id
 			// in order to avoid that the statistics are recalculated. Which makes no sense,
 			// because the statistics model has already all the data in place.
 			this.transition("statisticsView");
 		}
-	}
+	}//end of is loggedin
 	else {
+		if (courseID && !achievementsFlag){
 		moblerlog("enter the statistics from landing view");
 		this.models['statistics'].setCurrentCourseId(courseID);
 		this.transition("statisticsView", courseID);
+		}else if (achievementsFlag)
+			{
+			this.transition("statisticsView",achievementsFlag);
+			}
 	}
 };
 
@@ -518,8 +524,8 @@ Controller.prototype.transitionToStatistics = function(courseID) {
  * @prototype
  * @function transitionToAchievements 
  **/
-Controller.prototype.transitionToAchievements = function() {
-	this.transitionToAuthArea('achievements');
+Controller.prototype.transitionToAchievements = function(courseID) {
+	this.transitionToAuthArea('achievements',courseID);
 };
 
 /**

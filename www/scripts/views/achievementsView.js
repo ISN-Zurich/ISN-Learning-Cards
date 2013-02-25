@@ -46,6 +46,8 @@ function AchievementsView(controller){
 	 var self = this;
 	 self.controller = controller;  
 	 self.tagID = 'achievementsView';
+	 var featuredContent_id = FEATURED_CONTENT_ID;
+	 var achievementsFlag= true;
 	
 	 // set prevent to false, in order to enable taping
 	 // because the clicks don't work after the set of
@@ -53,7 +55,7 @@ function AchievementsView(controller){
 	 var prevent=false;
 	 jester($('#closeAchievementsIcon')[0]).tap(function(event){
 		 moblerlog("achievements: close tap");
-		 self.closeAchievements();
+		 self.closeAchievements(featuredContent_id);
 		 event.stopPropagation(); } );
 
 		/**It is triggered after statistics loaded locally from the server. This happens during the
@@ -113,8 +115,9 @@ AchievementsView.prototype.handleTap = doNothing;
  * @prototype
  * @function handleSwipe
  **/
-AchievementsView.prototype.handleSwipe = function() {
-	controller.transitionToStatistics();
+AchievementsView.prototype.handleSwipe = function(achievementsFlag) {
+	moblerlog("swiped in achievements view");
+	controller.transitionToStatistics(achievementsFlag);
 };
 
 
@@ -135,14 +138,20 @@ AchievementsView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-AchievementsView.prototype.open = function() {
+AchievementsView.prototype.open = function(featuredContent_id) {
 	var self=this;
+	if (featuredContent_id){
+		self.showAchievementsBody();	
+	}
+	else {
+	
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){
 	this.showAchievementsBody();
 	}
 	else {
 		self.showLoadingMessage();
 	}  
+	}
 	this.openDiv();	
 };
 
@@ -158,9 +167,9 @@ AchievementsView.prototype.close = closeView;
  * @prototype
  * @function closeAchievements
  **/
-AchievementsView.prototype.closeAchievements = function() {
+AchievementsView.prototype.closeAchievements = function(featuredContent_id) {
 	moblerlog("close Achievements button clicked");
-	controller.transitionToStatistics();
+	controller.transitionToStatistics(featuredContent_id);
 };
 
 
