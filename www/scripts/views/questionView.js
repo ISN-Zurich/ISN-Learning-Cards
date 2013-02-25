@@ -214,15 +214,7 @@ QuestionView.prototype.showQuestionBody = function() {
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
 	moblerlog("current question body"+currentQuestionBody);
-//identify the sub part of the question text that embraces the [gap] [/gap]
-//	var startGap=currentQuestionBody.indexOf("[gap]");
-//	var lastGap=currentQuestionBody.indexOf("[/gap]");
-//	var questionText1=currentQuestionBody.substring(0,startGap);
-//	var questionText2=currentQuestionBody.substring(lastGap+6,currentQuestionBody.length);
-
-
 	$("#questionText").html(currentQuestionBody);
-	
 	$("#ButtonTip").hide();
 
 };

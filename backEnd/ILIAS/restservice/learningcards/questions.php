@@ -120,6 +120,7 @@ function getQuestions($courseId) {
 									
 							if (strcmp($type, "assClozeTest") == 0) {
 								$questionText = $question["description"];
+								logging("questionText for cloze questions".$questionText);
 							}
 														
 							//get answers
@@ -160,13 +161,36 @@ function getQuestions($courseId) {
 									//  $endTag= $assQuestion->getEndTag();
 										$qaps= $assQuestion->getGaps();
 										logging("qaps are ".json_encode($qaps));
+										logging("chidren of gaps ".count($qaps));
 									//	$assQuestion->flushGaps();
-									// 	$clozeText= $assQuestion->getClozeText();
+										$clozeText= $assQuestion->getClozeText();
 									// 	$questionText=$assQuestion->clearGapAnswers();
-									// 	logging("question text for cloze quesiton is ".$questionText);
+										logging("cloze text for answer view in cloze quesiton is ".$clozeText);
+									//	$answerList = $clozeText;
 									// 	logging("start tag is ".$startTag);
 									// 	logging("end tag is ".$endTag);
+										$gapIds = array();
+// 										for($i =1; $i<= 2; $i++ ){
+// 										$gapIds[$i]=$i;
+// 										logging("gaps array ".$i. " element is ".$gapIds[$i]);
+// 										$replacement ="<input type=\"text\" id=\"gap_\"".$gapIds[$i].">";
+// 										}
+// 										for($i =1; $i<= count($gaps); $i++ ){
+// 											$gapIds[$i]=$i;
+// 											$replacement[$i] ="<input type=\"text\" id=\"gap_\"".$gapIds[$i].">";
+// 											$answerList = preg_replace($pattern,$replacement[$i],$subject);
+// 										}
+										$gapId=1;
+										$pattern="/\[gap\].*?\[\/gap\]/";
+										$subject=$clozeText;
+										$replacement ="<input type=\"text\" id=\"gap_\"".$gapId.">";
+										$answerList = preg_replace($pattern,$replacement,$subject);
+										
+										
+										//$answerList2 = preg_replace("/\[gap\].*?\[\/gap\]/", $replacement,$clozeText);
+										logging("answer list is ".$answerList);
 									
+									//$answerList = preg_replace("/\[gap\].*?\[\/gap\]/", $replacement,$clozeText);
 									logging("answerList for close questions".json_encode($answerList));
 									
 								} else {

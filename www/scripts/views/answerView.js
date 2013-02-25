@@ -204,6 +204,9 @@ AnswerView.prototype.showAnswerBody = function() {
 	case 'assNumeric':
 		this.widget = new NumericQuestionWidget(interactive);
 		break;
+	case 'assClozeTest':
+		this.widget = new ClozeQuestionType(interactive);
+		break;
 	default:
 		break;
 	}
