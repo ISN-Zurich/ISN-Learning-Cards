@@ -153,44 +153,21 @@ function getQuestions($courseId) {
 							 							
 							}	
 								else if(strcmp($type, "assClozeTest") == 0) {
-									//$answerList = $assQuestion->getItems();
-									//$answerList = $item->getAnswerText();
-									// $assClozeTest = new assClozeTest();
-									
-									//  $startTag= $assQuestion->getStartTag();
-									//  $endTag= $assQuestion->getEndTag();
-										$qaps= $assQuestion->getGaps();
+										$gaps= $assQuestion->getGaps();
 										logging("qaps are ".json_encode($qaps));
-										logging("chidren of gaps ".count($qaps));
-									//	$assQuestion->flushGaps();
 										$clozeText= $assQuestion->getClozeText();
-									// 	$questionText=$assQuestion->clearGapAnswers();
-										logging("cloze text for answer view in cloze quesiton is ".$clozeText);
-									//	$answerList = $clozeText;
-									// 	logging("start tag is ".$startTag);
-									// 	logging("end tag is ".$endTag);
-										$gapIds = array();
-// 										for($i =1; $i<= 2; $i++ ){
-// 										$gapIds[$i]=$i;
-// 										logging("gaps array ".$i. " element is ".$gapIds[$i]);
-// 										$replacement ="<input type=\"text\" id=\"gap_\"".$gapIds[$i].">";
-// 										}
-// 										for($i =1; $i<= count($gaps); $i++ ){
-// 											$gapIds[$i]=$i;
-// 											$replacement[$i] ="<input type=\"text\" id=\"gap_\"".$gapIds[$i].">";
-// 											$answerList = preg_replace($pattern,$replacement[$i],$subject);
-// 										}
-										$gapId=1;
+										logging("cloze text for answer view in cloze question is ".$clozeText);
 										$pattern="/\[gap\].*?\[\/gap\]/";
-										$subject=$clozeText;
-										$replacement ="<input type=\"text\" id=\"gap_\"".$gapId.">";
-										$answerList = preg_replace($pattern,$replacement,$subject);
-										
-										
-										//$answerList2 = preg_replace("/\[gap\].*?\[\/gap\]/", $replacement,$clozeText);
-										logging("answer list is ".$answerList);
-									
-									//$answerList = preg_replace("/\[gap\].*?\[\/gap\]/", $replacement,$clozeText);
+										for($gapid =0; $gapid<= count($gaps); $gapid++ ){
+											logging("enter for in cloze question ".$gapid);
+											$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
+											logging("set the replacement ".$gapid);
+											$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
+											logging("finalised the replacement".$gapid);
+										}
+		
+									$answerList = $clozeText;
+															
 									logging("answerList for close questions".json_encode($answerList));
 									
 								} else {

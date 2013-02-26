@@ -81,8 +81,14 @@ ClozeQuestionType.prototype.showAnswer = function() {
 	if (questionpoolModel.questionList
 			&& questionpoolModel.getAnswer()) {
 		moblerlog("entered cloze question answer body");
-		var currentAnswerBody = controller.models["questionpool"].getAnswer();
-		console.log("answer for cloze question types is: "+currentAnswerBody);
+		var uneditedAnswerBody = controller.models["questionpool"].getAnswer();
+		var s=JSON.stringify(uneditedAnswerBody);
+		console.log("answer for cloze question types is: "+uneditedAnswerBody);
+		var pattern=/\<gap\>.*?\<\/gap\>/;
+		//var replacement="<input type=\"text\"id=\"\"/>"
+		var replacement2="";
+		var currentAnswerBody= s.replace(pattern,replacement2);
+		console.log("current answer body for cloze question types is: "+currentAnswerBody);
 		$("#cardAnswerBody").html(currentAnswerBody);
 	}else {
 		// if there are no data for a question or there is no questionpool then

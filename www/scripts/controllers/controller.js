@@ -409,15 +409,17 @@ Controller.prototype.transitionToLogout = function() {
  * @function transitionToAuthArea 
  * @param {String} viewname, the name of the targeted view
  **/
-Controller.prototype.transitionToAuthArea = function(viewname,fd) {
+Controller.prototype.transitionToAuthArea = function(viewname,featuredContentFlag) {
 	if (this.getLoginState()) {
 		this.transition(viewname);
 	}
 	else {
-		if (fd){
-			this.transition(viewname,fd);
+		//stay on the current view if we are not logged in 
+		if (featuredContentFlag){
+			this.transition(viewname,featuredContentFlag);
  		}else {
  			moblerlog("no fd value passed");
+ 			
  			this.transitionToLanding();
  		}
 	} 
