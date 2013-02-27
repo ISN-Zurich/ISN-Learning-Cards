@@ -81,15 +81,22 @@ ClozeQuestionType.prototype.showAnswer = function() {
 	if (questionpoolModel.questionList
 			&& questionpoolModel.getAnswer()) {
 		moblerlog("entered cloze question answer body");
-		var uneditedAnswerBody = controller.models["questionpool"].getAnswer();
-		var s=JSON.stringify(uneditedAnswerBody);
-		console.log("answer for cloze question types is: "+uneditedAnswerBody);
-		var pattern=/\<gap\>.*?\<\/gap\>/;
-		//var replacement="<input type=\"text\"id=\"\"/>"
-		var replacement2="";
-		var currentAnswerBody= s.replace(pattern,replacement2);
-		console.log("current answer body for cloze question types is: "+currentAnswerBody);
-		$("#cardAnswerBody").html(currentAnswerBody);
+		var answerBody = controller.models["questionpool"].getAnswer();
+		$("#cardAnswerBody").html(answerBody);
+		
+		// wrap everything into li
+		// this is not 100% QTI safe
+		//$("#cardAnswerBody").append("<ul/>");
+		$("#cardAnswerBody").children().wrap("<li/>");
+		
+		// now replace all gap tags in the cardAnswerBody
+		$("#cardAnswerBody gap").each(function(i,gap){
+			var inputtag = '<input type="text" class="" required="required" width="200px" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
+			$(gap).replaceWith(inputtag);
+			
+		}) ;
+		$("#cardAnswerBody :input").wrap("<div class=\"inputBorder gradient2\"/>");
+			
 	}else {
 		// if there are no data for a question or there is no questionpool then
 		// display the error message

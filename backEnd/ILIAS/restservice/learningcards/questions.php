@@ -159,14 +159,11 @@ function getQuestions($courseId) {
 										logging("cloze text for answer view in cloze question is ".$clozeText);
 										$pattern="/\[gap\].*?\[\/gap\]/";
 										for($gapid =0; $gapid<= count($gaps); $gapid++ ){
-											logging("enter for in cloze question ".$gapid);
 											$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
-											logging("set the replacement ".$gapid);
 											$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
-											logging("finalised the replacement".$gapid);
 										}
 		
-									$answerList = $clozeText;
+									$answerList = $gaps;
 															
 									logging("answerList for close questions".json_encode($answerList));
 									

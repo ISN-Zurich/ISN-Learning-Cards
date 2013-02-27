@@ -293,6 +293,8 @@ AnswerModel.prototype.calculateNumericScore = function() {
 };
 
 
+//AnswerModel.prototype.calculateClozeQuestionScore = function() 
+
 /**
  * Sets the course id
  * @prototype

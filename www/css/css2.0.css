@@ -696,6 +696,10 @@ ul#questionText{
 	padding-right:0px;
 	border:0px solid red;
 }
+.marginClozeLi{
+	margin:10px;
+	border:1px solid blue;	
+}
 
 #numberInputContainer, #numberInput, 
 #typedAnswer, #numericFeedback, 
