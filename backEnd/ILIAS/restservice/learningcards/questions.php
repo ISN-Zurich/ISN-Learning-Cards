@@ -163,7 +163,7 @@ function getQuestions($courseId) {
 											$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
 										}
 		
-									$answerList = $gaps;
+									$answerList = $clozeText;
 															
 									logging("answerList for close questions".json_encode($answerList));
 									
