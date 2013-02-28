@@ -86,16 +86,37 @@ ClozeQuestionType.prototype.showAnswer = function() {
 		
 		// wrap everything into li
 		// this is not 100% QTI safe
-		//$("#cardAnswerBody").append("<ul/>");
-		$("#cardAnswerBody").children().wrap("<li/>");
+		
+		$("#cardAnswerBody").addClass("gradient2"); //added the gradient to the whole 
+		
+		$("#cardAnswerBody").wrapAll('<ul class="ulTest"/>');
+		$("#cardAnswerBody").contents().wrap('<li class="marginClozeLi"/>'); //the contents returns also the text nodes. the children not
 		
 		// now replace all gap tags in the cardAnswerBody
 		$("#cardAnswerBody gap").each(function(i,gap){
-			var inputtag = '<input type="text" class="" required="required" width="200px" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
+			var inputtag = '<input type="text" class=" loginInput textShadow" required="required" width="200px" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
 			$(gap).replaceWith(inputtag);
 			
+			$("#cardAnswerBody :input").wrap('<div id="clozeInputContainer'+ $(gap).attr("identifier")+'"class="inputBorder"/>');
+			
+//				var div1 = $("<div/>", {
+//				"class": "left lineContainer selectItemContainer"
+//				}).insertBefore($("#clozeInputContainer"+$(gap).attr("identifier")));
+//				
+//				var span = $("<span/>", {
+//				"id": "clozeInputDash",
+//				"class": "dashGrey icon-dash"
+//				}).appendTo(div1);
+			
+			
 		}) ;
-		$("#cardAnswerBody :input").wrap("<div class=\"inputBorder gradient2\"/>");
+	
+//		$("#cardAnswerBody :input").wrap('<div id="test" class="left lineContainer selectItemContainer"/>');
+//		$("#cardAnswerBody :input #test").wrap('<span class="dashGrey icon-dash"/>');
+	
+//		$("#cardAnswerBody :input").wrap('<div id="clozeInputContainer"class="inputBorder"/>');
+	
+
 			
 	}else {
 		// if there are no data for a question or there is no questionpool then

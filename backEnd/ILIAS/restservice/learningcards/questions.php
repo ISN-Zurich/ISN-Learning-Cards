@@ -162,7 +162,8 @@ function getQuestions($courseId) {
 											$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
 											$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
 										}
-		
+										
+																			
 									$answerList = $clozeText;
 															
 									logging("answerList for close questions".json_encode($answerList));

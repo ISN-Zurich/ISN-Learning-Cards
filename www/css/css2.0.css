@@ -272,13 +272,17 @@ li {
 	/*font-style: bold;
 	font-variant: bold;*/
 	font-style:none;
-	border-bottom: 1px solid white;
+	border: 1px solid red;
 	text-align: left;
 	padding: 0px;
 	margin:0px;
 	z-index:1;
 }
 
+.ulTest{
+	border:1px solid green;
+	
+}
 
 
 /*********************** Views ***********************/
@@ -476,6 +480,7 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	padding: 10px;
 	border-right: 0px solid white;
 	border-left: 0px solid white;
+	border-bottom:1px solid dotted grey;
 	height: 33px;
 	margin-right:0px;	
 }
@@ -494,6 +499,7 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	padding: 5px;
    
 	border-left: 0px solid white;
+	
 	color:#707070;
 	background-color:transparent;
 
@@ -697,8 +703,16 @@ ul#questionText{
 	border:0px solid red;
 }
 .marginClozeLi{
-	margin:10px;
-	border:1px solid blue;	
+	padding:4px;
+	padding-left:15px;
+	/*padding-bottom:4px;
+	border:1px solid red;*/
+}
+.internalPadding{
+	padding:7px;
+}
+#shadowedClozeLi{
+	padding:0px;
 }
 
 #numberInputContainer, #numberInput, 
