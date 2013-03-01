@@ -293,7 +293,26 @@ AnswerModel.prototype.calculateNumericScore = function() {
 };
 
 
-//AnswerModel.prototype.calculateClozeQuestionScore = function() 
+/**
+ * TODO: write comments
+ * @prototype
+ * @function calculateClozeQuestionScore 
+ **/
+AnswerModel.prototype.calculateClozeQuestionScore = function() {
+		//fully correct when all gaps are filled in with correct values
+	//partially correct when at least one gap is correct
+	//wrong when no gaps are are filled
+	
+	//the score will be returned/stored in the answerScore variable
+	//the score in most question types are calculated by getScore function of question pool model
+	//in numeric question type we check the real correct answers(questionpoolModel) with the ones the user typed (answerModel.getAnswers)
+		
+	// HINTS
+	// HOW TO GET AND READ THE CORRECT ANSWER FROM THE SERVER
+	/**
+	 * the getAnswer() function should return the gaps text
+	 */
+}
 
 /**
  * Sets the course id
@@ -427,6 +446,9 @@ AnswerModel.prototype.calculateScore = function () {
 		break;
 	case 'assNumeric':
 		this.calculateNumericScore();
+		break;
+	case 'assClozeTest':
+		this.calculateClozeQuestionScore();
 		break;
 	default:
 		break;

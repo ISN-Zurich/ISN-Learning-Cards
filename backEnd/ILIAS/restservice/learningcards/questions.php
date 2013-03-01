@@ -153,8 +153,7 @@ function getQuestions($courseId) {
 							 							
 							}	
 								else if(strcmp($type, "assClozeTest") == 0) {
-										$gaps= $assQuestion->getGaps();
-										logging("qaps are ".json_encode($qaps));
+									$gaps= $assQuestion->getGaps();
 										$clozeText= $assQuestion->getClozeText();
 										logging("cloze text for answer view in cloze question is ".$clozeText);
 										$pattern="/\[gap\].*?\[\/gap\]/";
@@ -163,7 +162,27 @@ function getQuestions($courseId) {
 											$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
 										}
 										
-																			
+									
+									//$gap1= $gaps[1]["answertext"];
+									//$correctGaps= array();
+									//  for($i=0; $i<=count($gaps);$i++){
+									// 	$correctGaps[$i] =$gaps[$i]["answertext"];
+									//  }
+										
+// 									foreach($gaps as $index =>$gapsChild){
+// 										$gapCorrect= $gapsChild["answertext"];
+// 									logging ("correct item in gaps array is ".json_encode($gapCorrect));									
+// 									}
+									
+									//logging("correct gaps 1 ".$gap1);
+									//logging("correct gaps 1 ".json_encode($gaps));
+									//logging("qaps are ".json_encode($correctGaps));
+										
+// 										$answerList = array(
+// 												"clozeText"  => $clozeText,
+// 												"correctGaps" => $correctGaps
+// 										);
+																						
 									$answerList = $clozeText;
 															
 									logging("answerList for close questions".json_encode($answerList));

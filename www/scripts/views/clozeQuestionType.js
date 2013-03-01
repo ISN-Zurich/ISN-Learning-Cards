@@ -101,6 +101,7 @@ ClozeQuestionType.prototype.showAnswer = function() {
 	
 		$("#cardAnswerBody :input").each(function(index,input){
 			$(input).parent().removeClass("marginClozeLi");
+			
 			var wrap = $(this).wrap('<div id="clozeInputContainer'+ $(input).attr("identifier")+'"class="inputBorder"/>');	
 			var div1 = $("<div/>", {
 				"class": "left lineContainer selectItemContainerCloze"
@@ -129,4 +130,60 @@ ClozeQuestionType.prototype.showAnswer = function() {
 		this.didApologize = true;
 		doApologize();	
 	}
+};
+
+
+/**
+ * Creation of feedback body for cloze type questions. It contains a paragraph 
+ * with the filled in text gaps and the appropriate feedback around them.
+ * For correctly typed gaps a green tick will be displayed on the right column.
+ * For wrongly typed gaps the user will see the list with the alternative correct ones
+ * @prototype
+ * @function showFeedback
+ **/ 
+ClozeQuestionType.prototype.showFeedback = function() {
+moblerlog("enter feedback view in cloze question");
+	
+	$("#feedbackBody").empty();
+	$("#feedbackTip").empty();
+	
+	var self=this;
+	var questionpoolModel = controller.models['questionpool'];
+	
+	
+	
+	
+}
+
+
+
+/**
+ * 
+ * @prototype
+ * @function storeAnswers
+ **/ 
+ClozeQuestionType.prototype.storeAnswers = function(){
+	
+	moblerlog("store answers in cloze question view");
+	var questionpoolModel = controller.models["questionpool"];
+	var gapAnswers = new Array();
+	//to get the answers the user typed in the gaps 
+	//and push the gaped answers in the array
+	
+	$("#cardAnswerBody li :input").each(function(index) {
+		moblerlog("collect filled gaps");
+		var answer=$(this).val();
+		gapAnswers.push(answer);
+	});
+	moblerlog("gapAnswers is "+gapAnswers);
+	controller.models["answers"].setAnswers(gapAnswers);
+}
+
+/**
+ * Sets the height of the list items that contain correct answers
+ * @prototype
+ * @function setCorrectAnswerTickHeight
+ **/ 
+ClozeQuestionType.prototype.setCorrectAnswerTickHeight = function() {
+	
 };

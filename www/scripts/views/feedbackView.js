@@ -272,6 +272,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		case 'assOrderingQuestion':
 			this.widget = new TextSortWidget(interactive);
 			break;
+		case 'assClozeTest':
+			this.widget = new ClozeQuestionType(interactive);
+			break;	
 		default:
 			break;
 	}
