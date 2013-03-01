@@ -478,9 +478,10 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 
 .inputBorder {
 	padding: 10px;
-	border-right: 0px solid white;
+	/*border-right: 0px solid white;
 	border-left: 0px solid white;
-	border-bottom:1px solid dotted grey;
+	border-bottom:1px solid dotted grey;*/
+	border:1px solid green;
 	height: 33px;
 	margin-right:0px;	
 }
@@ -1225,7 +1226,7 @@ font-weight: bold;
 
 .selectItemContainer {
 	/*display:inline-block;*/
-	border: solid 0px red;	
+	border: solid 1px blue;	
 	height: 47px;
 	line-height: 47px;
 	width: 30px;/*it was 34*/

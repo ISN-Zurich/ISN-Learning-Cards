@@ -90,33 +90,41 @@ ClozeQuestionType.prototype.showAnswer = function() {
 		$("#cardAnswerBody").addClass("gradient2"); //added the gradient to the whole 
 		
 		$("#cardAnswerBody").wrapAll('<ul class="ulTest"/>');
-		$("#cardAnswerBody").contents().wrap('<li class="marginClozeLi"/>'); //the contents returns also the text nodes. the children not
+		$("#cardAnswerBody").contents().wrap('<li class=""/>'); //the contents returns also the text nodes. the children not
 		
 		// now replace all gap tags in the cardAnswerBody
 		$("#cardAnswerBody gap").each(function(i,gap){
 			var inputtag = '<input type="text" class=" loginInput textShadow" required="required" width="200px" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
-			$(gap).replaceWith(inputtag);
-			
-			$("#cardAnswerBody :input").wrap('<div id="clozeInputContainer'+ $(gap).attr("identifier")+'"class="inputBorder"/>');
-			
-//				var div1 = $("<div/>", {
-//				"class": "left lineContainer selectItemContainer"
-//				}).insertBefore($("#clozeInputContainer"+$(gap).attr("identifier")));
-//				
-//				var span = $("<span/>", {
-//				"id": "clozeInputDash",
-//				"class": "dashGrey icon-dash"
-//				}).appendTo(div1);
-			
-			
+			$(gap).replaceWith(inputtag);	
 		}) ;
 	
-//		$("#cardAnswerBody :input").wrap('<div id="test" class="left lineContainer selectItemContainer"/>');
-//		$("#cardAnswerBody :input #test").wrap('<span class="dashGrey icon-dash"/>');
+		$("#cardAnswerBody :input").each(function(index,input){
+		$(this).wrap('<div id="clozeInputContainer'+ $(input).attr("identifier")+'"class="inputBorder"/>');
+			
+		});
+		
 	
-//		$("#cardAnswerBody :input").wrap('<div id="clozeInputContainer"class="inputBorder"/>');
-	
+	$("#cardAnswerBody li").each(function(index,li){
+		moblerlog("index is "+index);
+		var inputResults= $(this).find('input').length;
+		//var inputResults= $('#cardAnswerBody li:has(:input)');
+		moblerlog("inputResults are "+inputResults);
+		if ($(this).find('input').length){
+			moblerlog("entered for "+index+ "time");
+		var div1 = $("<div/>", {
+			"class": "left lineContainer selectItemContainer"
+		}).prependTo($(this));
+		moblerlog("before insert dash final");
 
+		var span = $("<span/>", {
+			"id": "clozeInputDash",
+			"class": "dashGrey icon-dash"
+		}).appendTo(div1);
+		moblerlog("after insert dash final");
+		}
+	});
+		
+		
 			
 	}else {
 		// if there are no data for a question or there is no questionpool then
