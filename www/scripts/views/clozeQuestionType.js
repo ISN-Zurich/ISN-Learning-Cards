@@ -90,53 +90,43 @@ ClozeQuestionType.prototype.showAnswer = function() {
 		$("#cardAnswerBody").addClass("gradient2"); //added the gradient to the whole 
 		
 		$("#cardAnswerBody").wrapAll('<ul class="ulTest"/>');
-		$("#cardAnswerBody").contents().wrap('<li class=""/>'); //the contents returns also the text nodes. the children not
+		$("#cardAnswerBody").contents().wrap('<li class="marginClozeLi"/>'); //the contents returns also the text nodes. the children not
 		
+			
 		// now replace all gap tags in the cardAnswerBody
 		$("#cardAnswerBody gap").each(function(i,gap){
-			var inputtag = '<input type="text" class=" loginInput textShadow" required="required" width="200px" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
+			var inputtag = '<input type="text" class=" loginInputCloze textShadow" required="required" width="200px"placeholder="fill in the gap" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
 			$(gap).replaceWith(inputtag);	
 		}) ;
 	
 		$("#cardAnswerBody :input").each(function(index,input){
-		$(this).wrap('<div id="clozeInputContainer'+ $(input).attr("identifier")+'"class="inputBorder"/>');
-			
-		});
-		
-	
-	$("#cardAnswerBody li").each(function(index,li){
-		moblerlog("index is "+index);
-		var inputResults= $(this).find('input').length;
-		//var inputResults= $('#cardAnswerBody li:has(:input)');
-		moblerlog("inputResults are "+inputResults);
-		if ($(this).find('input').length){
-			moblerlog("entered for "+index+ "time");
-		var div1 = $("<div/>", {
-			"class": "left lineContainer selectItemContainer"
-		}).prependTo($(this));
-		moblerlog("before insert dash final");
-
+			$(input).parent().removeClass("marginClozeLi");
+			var wrap = $(this).wrap('<div id="clozeInputContainer'+ $(input).attr("identifier")+'"class="inputBorder"/>');	
+			var div1 = $("<div/>", {
+				"class": "left lineContainer selectItemContainerCloze"
+			});
 		var span = $("<span/>", {
 			"id": "clozeInputDash",
 			"class": "dashGrey icon-dash"
 		}).appendTo(div1);
-		moblerlog("after insert dash final");
-		}
+			div1.insertBefore( wrap );
+		});
+		
+//		var lastli = $("<li/>", {
+//		}).appendTo(ul);
+	
+	var shadoweddiv = $("<div/>", {
+		"id": "shadowedSingleAnswerLi",
+		"class" : "gradient1 shadowedLi"
 	});
+	
+		$("#cardAnswerBody").append(shadoweddiv);
 		
-		
-			
+	
 	}else {
 		// if there are no data for a question or there is no questionpool then
 		// display the error message
 		this.didApologize = true;
-		doApologize();
-		
+		doApologize();	
 	}
-	//identify the sub part of the question text that embraces the [gap] [/gap]
-	//	var startGap=currentQuestionBody.indexOf("[gap]");
-	//	var lastGap=currentQuestionBody.indexOf("[/gap]");
-	//	var questionText1=currentQuestionBody.substring(0,startGap);
-	//	var questionText2=currentQuestionBody.substring(lastGap+6,currentQuestionBody.length);
-	
 };

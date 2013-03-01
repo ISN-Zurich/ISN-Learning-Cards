@@ -116,10 +116,11 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		
 		var input = $("<input/>", {
 			"id" : "numberInput",
-			"class" : "loginInput textShadow",
+			"class" : "loginInputCloze textShadow",
 			"required": "required",
 			"width" : "200px",
 			"type" : "number",
+			"placeholder":"type a number",
 			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : ""
 		}).appendTo(div2);
 		

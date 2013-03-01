@@ -272,7 +272,8 @@ li {
 	/*font-style: bold;
 	font-variant: bold;*/
 	font-style:none;
-	border: 1px solid red;
+	border: 0px solid red;
+	border-bottom: 1px solid white;
 	text-align: left;
 	padding: 0px;
 	margin:0px;
@@ -280,7 +281,7 @@ li {
 }
 
 .ulTest{
-	border:1px solid green;
+	border:0px solid green;
 	
 }
 
@@ -478,12 +479,23 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 
 .inputBorder {
 	padding: 10px;
-	/*border-right: 0px solid white;
+	border-right: 0px solid white;
 	border-left: 0px solid white;
-	border-bottom:1px solid dotted grey;*/
-	border:1px solid green;
+	/*border:1px solid green;*/
 	height: 33px;
 	margin-right:0px;	
+
+}
+
+.inputBorderCloze {
+	padding: 10px;
+	/*border-right: 0px solid white;
+	border-left: 0px solid white;
+	/*border:1px solid green;*/
+	height: 33px;
+	margin-right:0px;	
+	
+	
 }
 
 .loginInput {
@@ -503,8 +515,32 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	
 	color:#707070;
 	background-color:transparent;
+	
+}
+
+.loginInputCloze {
+	/*box-shadow: none;
+	-webkit-appearance: none;
+	 border-radius: 0;
+	
+	
+	border-width: 0px;*/
+	outline: none;
+	border: none;
+	font-size: 12pt;
+	margin: 0px;
+	padding: 5px;
+   
+	border-left: 0px solid white;
+	
+	color:#707070;
+	background-color:transparent;
+	border-bottom-style:dotted;
+	border-bottom-width:1px;
+	border-bottom-color:grey;
 
 }
+
 
 *[placeholder] {
 	color: #666;
@@ -704,11 +740,12 @@ ul#questionText{
 	border:0px solid red;
 }
 .marginClozeLi{
-	padding:4px;
-	padding-left:15px;
-	/*padding-bottom:4px;
+	padding:9px;
+	/*padding-left:15px;
+	padding-bottom:4px;
 	border:1px solid red;*/
 }
+
 .internalPadding{
 	padding:7px;
 }
@@ -1226,7 +1263,7 @@ font-weight: bold;
 
 .selectItemContainer {
 	/*display:inline-block;*/
-	border: solid 1px blue;	
+	border: solid 0px blue;	
 	height: 47px;
 	line-height: 47px;
 	width: 30px;/*it was 34*/
@@ -1236,6 +1273,17 @@ font-weight: bold;
 	font-size:30px; /*it was 32*/
 }
 
+.selectItemContainerCloze {
+	/*display:inline-block;*/
+	border: solid 0px blue;	
+	height: 37px;
+	line-height: 37px;
+	width: 30px;/*it was 34*/
+	text-align:center;
+	padding-right:7px;/*there was no padding right it was just added*/
+	font-size:30px; /*it was 32*/
+	padding-bottom:9px;
+}
 .selectItemContainer2 {
 	/*display:inline-block;*/
 	border: solid 0px red;	
