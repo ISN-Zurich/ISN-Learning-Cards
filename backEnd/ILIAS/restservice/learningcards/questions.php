@@ -163,27 +163,12 @@ function getQuestions($courseId) {
 										}
 										
 									
-									//$gap1= $gaps[1]["answertext"];
-									//$correctGaps= array();
-									//  for($i=0; $i<=count($gaps);$i++){
-									// 	$correctGaps[$i] =$gaps[$i]["answertext"];
-									//  }
-										
-// 									foreach($gaps as $index =>$gapsChild){
-// 										$gapCorrect= $gapsChild["answertext"];
-// 									logging ("correct item in gaps array is ".json_encode($gapCorrect));									
-// 									}
-									
-									//logging("correct gaps 1 ".$gap1);
-									//logging("correct gaps 1 ".json_encode($gaps));
-									//logging("qaps are ".json_encode($correctGaps));
-										
-// 										$answerList = array(
-// 												"clozeText"  => $clozeText,
-// 												"correctGaps" => $correctGaps
-// 										);
+											$answerList = array(
+												"clozeText"  => $clozeText,
+												"correctGaps" => $gaps
+										);
 																						
-									$answerList = $clozeText;
+								// 	$answerList = $clozeText;
 															
 									logging("answerList for close questions".json_encode($answerList));
 									

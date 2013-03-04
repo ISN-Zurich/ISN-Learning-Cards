@@ -136,7 +136,6 @@ AnswerModel.prototype.getAnswerResults = function() {
  **/
 AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	var clickedAnswerIndex = this.answerList[0];
-
 	if (controller.models["questionpool"].getScore(clickedAnswerIndex) > 0) {
 		moblerlog("the score is 1");
 		this.answerScore = 1;
@@ -295,23 +294,69 @@ AnswerModel.prototype.calculateNumericScore = function() {
 
 /**
  * TODO: write comments
+ * we will compare the values that the user typed and we will compare them with actual correct ones.
  * @prototype
  * @function calculateClozeQuestionScore 
  **/
 AnswerModel.prototype.calculateClozeQuestionScore = function() {
-		//fully correct when all gaps are filled in with correct values
+	//fully correct when all gaps are filled in with correct values
 	//partially correct when at least one gap is correct
-	//wrong when no gaps are are filled
-	
+	//wrong when no gaps are are filled or filled wrongly
 	//the score will be returned/stored in the answerScore variable
-	//the score in most question types are calculated by getScore function of question pool model
-	//in numeric question type we check the real correct answers(questionpoolModel) with the ones the user typed (answerModel.getAnswers)
 		
-	// HINTS
-	// HOW TO GET AND READ THE CORRECT ANSWER FROM THE SERVER
-	/**
-	 * the getAnswer() function should return the gaps text
-	 */
+	var answerModel = controller.models["answers"];
+	var questionpoolModel = controller.models['questionpool'];
+	var filledAnswers=answerModel.getAnswers(); //the values that the user typed
+	moblerlog("filled Answers length is "+filledAnswers.length);
+	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
+	moblerlog("gaps array in calculate score is "+JSON.stringify(gapsObject));
+	//var gaps= new array(); //an array that will store the score for every gap of the cloze question body
+	//	var items=gapsObject["correctGaps"][2]["items"];//the sub-child node of retunred object as an answer from the server
+	//													//we will use this sub-child to use its answertext property to get the actual value(s) for each gap
+	var gaps = [];
+	for (i=0; i<filledAnswers.length;i++){
+		var actualCorrectGaps= getCorrectGaps(i);
+		if (filledAnswers[i] in actualCorrectGaps){
+			gaps[i]=1;
+		}else {
+			gaps[i]=0;
+		}
+	}
+	
+	calculateAnswerScoreValue();
+	moblerlog("answer score value is"+this.answerScore);
+	
+	function getCorrectGaps(gapIndex) {
+		var items=gapsObject["correctGaps"][gapIndex]["items"]; //the items sub-array for the specific gap index
+		var correctGaps=new Array();
+		for(k=0; k<jQuery(items).size();k++){
+			moblerlog("k is "+k);
+			moblerlog("items array in loop is "+items);
+			moblerlog("the length of the items array in loop "+jQuery(items).size());
+			correctGaps.push(items[k]["answertext"]);
+			moblerlog("item of correct gaps array is "+correctGaps[k]);
+		}
+		moblerlog("correct gaps array is "+correctGaps);
+		return correctGaps;
+	}
+
+	function calculateAnswerScoreValue(){
+	
+		var sumValue=0;
+		for (gapindex=0; gapindex<gaps.length; gapindex++) {
+			sumValue= sumValue +gaps[gapindex];	
+		}
+		
+		if (sumValue == 0){
+			this.answerScore=0;
+		}else if(sumValue==gaps.length){
+			this.answerScore=1;
+		}else{
+			this.answerScore=0.5;
+		}
+			
+	};
+	
 }
 
 /**
@@ -322,6 +367,8 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
 };
+
+
 
 
 /**
@@ -454,3 +501,7 @@ AnswerModel.prototype.calculateScore = function () {
 		break;
 	}
 };
+
+
+
+

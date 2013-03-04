@@ -82,7 +82,12 @@ ClozeQuestionType.prototype.showAnswer = function() {
 			&& questionpoolModel.getAnswer()) {
 		moblerlog("entered cloze question answer body");
 		var answerBody = controller.models["questionpool"].getAnswer();
-		$("#cardAnswerBody").html(answerBody);
+		moblerlog("answerbody is "+answerBody);
+		//x=JSON.stringify(answerBody);
+		//moblerlog("answerbody is"+JSON.stringify(answerBody));
+		var answertext=answerBody["clozeText"];
+		moblerlog("answertext is "+answertext);
+		$("#cardAnswerBody").html(answertext);
 		
 		// wrap everything into li
 		// this is not 100% QTI safe
