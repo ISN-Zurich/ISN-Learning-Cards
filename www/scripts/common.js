@@ -218,3 +218,18 @@ function setFeedbackWidth(orientationLayout,w, h){
 		$(this).find(".radial").css("height", height + "px");
 	});
 };
+
+
+function getCorrectGaps(gapIndex) {
+	var questionpoolModel = controller.models['questionpool'];
+	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
+var items=gapsObject["correctGaps"][gapIndex]["items"]; //the items sub-array for the specific gap index
+var correctGaps=new Array();
+for(k=0; k<jQuery(items).size();k++){
+	correctGaps.push(items[k]["answertext"]);
+	moblerlog("item of correct gaps array is "+correctGaps[k]);
+}
+moblerlog("correct gaps array is "+correctGaps);
+return correctGaps;
+}
+

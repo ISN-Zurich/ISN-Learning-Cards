@@ -305,10 +305,10 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 	//the score will be returned/stored in the answerScore variable
 		
 	var answerModel = controller.models["answers"];
-	var questionpoolModel = controller.models['questionpool'];
+//	var questionpoolModel = controller.models['questionpool'];
 	var filledAnswers=answerModel.getAnswers(); //the values that the user typed
-	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
-	moblerlog("gaps array in calculate score is "+JSON.stringify(gapsObject));
+//	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
+//	moblerlog("gaps array in calculate score is "+JSON.stringify(gapsObject));
 	var gaps = [];
 	for (i=0; i<filledAnswers.length;i++){
 		var actualCorrectGaps= getCorrectGaps(i);
@@ -321,21 +321,9 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 	}
 	
 	this.answerScore=calculateAnswerScoreValue();
-	
-	
-	function getCorrectGaps(gapIndex) {
-		var items=gapsObject["correctGaps"][gapIndex]["items"]; //the items sub-array for the specific gap index
-		var correctGaps=new Array();
-		for(k=0; k<jQuery(items).size();k++){
-			correctGaps.push(items[k]["answertext"]);
-			moblerlog("item of correct gaps array is "+correctGaps[k]);
-		}
-		moblerlog("correct gaps array is "+correctGaps);
-		return correctGaps;
-	}
-
+		
 	function calculateAnswerScoreValue(){
-	moblerlog("calculates answre score value in cloze questions");
+		moblerlog("calculates answre score value in cloze questions");
 		var sumValue=0;
 		for (gapindex=0; gapindex<gaps.length; gapindex++) {
 			sumValue= sumValue + gaps[gapindex];	
@@ -348,12 +336,13 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 		}else{
 			this.answerScore=0.5;
 		}
-		
+
 		return this.answerScore;
 			moblerlog("answer score value within function is "+this.answerScore);
-	};
-	
+		};
 }
+
+
 
 /**
  * Sets the course id
@@ -499,5 +488,12 @@ AnswerModel.prototype.calculateScore = function () {
 };
 
 
-
+AnswerModel.prototype.checkFilledAnswer = function(filledAnswer,gapIndex) {
+	var correctGaps= getCorrectGaps(gapIndex);
+	if (correctGaps.indexOf(filledAnswer)!==-1){
+		return true;
+	}else{
+			return false;
+			}
+};
 

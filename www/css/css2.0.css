@@ -1363,6 +1363,17 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 	line-height:45px;
 }
 
+.rightDiv{
+	border:0px solid red;
+}
+
+.textDiv{
+	border:1px solid blue;
+	/*margin-right:60px;*/
+}
+.liBorder{
+	border:1px solid green;
+}
 .separatorContainerCourses {
 	/*display:inline-block;*/
 	border-left: solid 1px #b3b2b2;

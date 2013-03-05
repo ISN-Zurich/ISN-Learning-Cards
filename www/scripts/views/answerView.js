@@ -143,7 +143,7 @@ AnswerView.prototype.closeDiv = closeView;
 
 /**Shows the container div element of the current view 
  * @prototype
- * @function openDiv
+ *@function openDiv
  **/
 AnswerView.prototype.openDiv = openView;
 
