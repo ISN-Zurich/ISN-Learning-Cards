@@ -307,32 +307,26 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 	var answerModel = controller.models["answers"];
 	var questionpoolModel = controller.models['questionpool'];
 	var filledAnswers=answerModel.getAnswers(); //the values that the user typed
-	moblerlog("filled Answers length is "+filledAnswers.length);
 	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
 	moblerlog("gaps array in calculate score is "+JSON.stringify(gapsObject));
-	//var gaps= new array(); //an array that will store the score for every gap of the cloze question body
-	//	var items=gapsObject["correctGaps"][2]["items"];//the sub-child node of retunred object as an answer from the server
-	//													//we will use this sub-child to use its answertext property to get the actual value(s) for each gap
 	var gaps = [];
 	for (i=0; i<filledAnswers.length;i++){
 		var actualCorrectGaps= getCorrectGaps(i);
-		if (filledAnswers[i] in actualCorrectGaps){
+		moblerlog("actual Correct Gaps for gap "+i+" is "+actualCorrectGaps);
+		if (actualCorrectGaps.indexOf(filledAnswers[i])!==-1){
 			gaps[i]=1;
 		}else {
 			gaps[i]=0;
 		}
 	}
 	
-	calculateAnswerScoreValue();
-	moblerlog("answer score value is"+this.answerScore);
+	this.answerScore=calculateAnswerScoreValue();
+	
 	
 	function getCorrectGaps(gapIndex) {
 		var items=gapsObject["correctGaps"][gapIndex]["items"]; //the items sub-array for the specific gap index
 		var correctGaps=new Array();
 		for(k=0; k<jQuery(items).size();k++){
-			moblerlog("k is "+k);
-			moblerlog("items array in loop is "+items);
-			moblerlog("the length of the items array in loop "+jQuery(items).size());
 			correctGaps.push(items[k]["answertext"]);
 			moblerlog("item of correct gaps array is "+correctGaps[k]);
 		}
@@ -341,12 +335,12 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 	}
 
 	function calculateAnswerScoreValue(){
-	
+	moblerlog("calculates answre score value in cloze questions");
 		var sumValue=0;
 		for (gapindex=0; gapindex<gaps.length; gapindex++) {
-			sumValue= sumValue +gaps[gapindex];	
+			sumValue= sumValue + gaps[gapindex];	
 		}
-		
+		moblerlog("sumvalue is "+sumValue);
 		if (sumValue == 0){
 			this.answerScore=0;
 		}else if(sumValue==gaps.length){
@@ -354,7 +348,9 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 		}else{
 			this.answerScore=0.5;
 		}
-			
+		
+		return this.answerScore;
+			moblerlog("answer score value within function is "+this.answerScore);
 	};
 	
 }
