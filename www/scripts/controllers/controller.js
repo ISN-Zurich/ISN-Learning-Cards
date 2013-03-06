@@ -178,7 +178,7 @@ function Controller() {
 	$(document).bind("statisticssenttoserver", function() {
 		if ( !self.getLoginState() ){
 			moblerlog("stays in login view, despite the synchronization updates");
-			//self.transitionToLogin();
+//			self.transitionToLogin();
 		}
 	});
 
