@@ -192,7 +192,7 @@ function createClozeQuestionBody(domElement,interactive) {
 //	}).appendTo(ul);
 
 var shadoweddiv = $("<div/>", {
-	"id": "shadowedSingleAnswerLi",
+	"id": "shadowedClozeAnswerLi",
 	"class" : "gradient1 shadowedLi"
 });
 
@@ -283,7 +283,7 @@ var shadoweddiv = $("<div/>", {
 	}) ;
 		
 		var shadoweddiv = $("<div/>", {
-			"id": "shadowedSingleAnswerLi",
+			"id": "shadowedClozeFeedbackLi",
 			"class" : "gradient1 shadowedLi"
 		});
 		$("#feedbackBody").append(shadoweddiv);}	

@@ -155,9 +155,9 @@ SingleChoiceWidget.prototype.showAnswer = function() {
 	}).appendTo(lastli);
 		
 //	//add some space, so that to enable scrolling in landscape mode
-	var marginli = $("<li/>", {
-		"class":"spacerMargin"
-	}).appendTo(ul);
+//	var marginli = $("<li/>", {
+//		"class":"spacerMargin"
+//	}).appendTo(ul);
 
 	
 	} else {

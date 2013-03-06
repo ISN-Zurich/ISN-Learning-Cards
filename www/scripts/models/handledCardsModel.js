@@ -115,7 +115,7 @@ HandledCardsModel.prototype.calculateHandledCards = function(transaction, result
  * Calculates the improvement of number of the handled cards in comparison to the last active day
  * @prototype
  * @function calculateImprovementHandledCards
- * @param transaction, resutls
+ * @param transaction, results
  */
 HandledCardsModel.prototype.calculateImprovementHandledCards = function (transaction,results){
 	

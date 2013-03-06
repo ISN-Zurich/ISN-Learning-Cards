@@ -42,6 +42,7 @@ function Controller() {
 	moblerlog("start controller");
 	self.appLoaded = false;
 	var startTime= new Date().getTime();
+	var featuredContent_id = FEATURED_CONTENT_ID;
 
 	$.ajaxSetup({
 		cache : false
@@ -163,8 +164,8 @@ function Controller() {
 	 * @param: a callback function that executes the transition to statistics view when the event is listened.
 	 * */
 	
-	$(document).bind("allstatisticcalculationsdone", function() {
-		self.transition('statisticsView');
+	$(document).bind("allstatisticcalculationsdone", function(featuredContent_id) {
+		self.transition('statisticsView',featuredContent_id);
 	});
 
 	/**
@@ -333,7 +334,7 @@ Controller.prototype.setupLanguage = function() {
  **/
 Controller.prototype.transition = function(viewname, fd, achievementsFlag) {
 	moblerlog("transition start to " + viewname );
-	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
+	// Check if the current active view exists and either if it is different from the targeted view or if it is the landing view
 	if (this.views[viewname] && ( viewname === "landing" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
 		this.activeView.close();
@@ -498,7 +499,7 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 		else if (courseID == "fd"){
 			moblerlog("enter the statistics from featured content in courses list view");
 			this.models['statistics'].setCurrentCourseId(courseID);
-			this.transition("statisticsView", courseID);
+			this.transition("statisticsView", courseID); //this should be called when the previous executions will be finished
 		}
 		else
 		{
@@ -508,7 +509,7 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 			// because the statistics model has already all the data in place.
 			this.transition("statisticsView");
 		}
-	}//end of is loggedin
+	}//end of is logged in
 	else {
 		if (courseID && !achievementsFlag){
 		moblerlog("enter the statistics from landing view");

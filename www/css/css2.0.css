@@ -248,11 +248,11 @@ ul {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 	-webkit-padding-start: 0px;
-	/*margin-bottom:50px;*/
+	margin-bottom:50px;
 }
 .spacerMargin{
-	
-	margin-bottom:50px;
+	/*background-color:white;
+	margin-bottom:50px;*/
 }
 
 #landingBody{
@@ -700,7 +700,7 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 
 .currentSortedItem {
 	border: 1px solid white;
-	background-color: #ddd;
+	/*background-color: #ddd;*/
 }
 
 .placeholder {
@@ -1504,12 +1504,6 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 	margin-bottom:4px;
 }
 
-.spacerMargin{
-	/*height:80px;
-	background:white;
-	background-color:white;
-	*/
-}
 
 .marginSeparatorTop{
 	margin-top:6px;

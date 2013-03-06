@@ -149,7 +149,7 @@ StatisticsView.prototype.openDiv = openView;
 StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 	var self=this;
 	if (self.controller.getLoginState()) {
-		if (featuredContent){
+		if (featuredContent_id){
 			self.loadData();
 		}else{
 		moblerlog("open statistics view outside featured context");

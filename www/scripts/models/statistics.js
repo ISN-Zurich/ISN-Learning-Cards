@@ -133,7 +133,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	
 	//if statistics are loaded
 	if ((this.controller.getConfigVariable("statisticsLoaded")== true) || this.currentCourseId == "fd"){	
-		this.getFirstActiveDay();
+		this.getFirstActiveDay(courseId);
 	}
 	else {
         // this case is only used if the statistics are not yet loaded from the server
@@ -150,7 +150,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
  * @prototype
  * @function getFirstActiveDay
  */
-StatisticsModel.prototype.getFirstActiveDay = function() {
+StatisticsModel.prototype.getFirstActiveDay = function(courseId) {
 	moblerlog("enters first active day");
 	var self = this;
 	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND duration != -100',
@@ -167,7 +167,6 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 								} else {
 									self.firstActiveDay = (new Date()).getTime(); 
 								}
-								
 							} 
 							// the first time we launch the app
 							// we dont get any min day, because we don't have
@@ -179,7 +178,7 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 							}
 							//check if there was any activity until one day(=24hours) 
 							//before  the current time
-							self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
+							self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS,courseId);
 	});
 };
 
@@ -191,7 +190,7 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
  * @function checkActivity
  * 
  */
-StatisticsModel.prototype.checkActivity = function(day) {
+StatisticsModel.prototype.checkActivity = function(day,courseId) {
 	var self = this;
 	//if one day/24hours back from the current time
 	//is more recent than the first active day
@@ -205,7 +204,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 										moblerlog("active day: " + day);
 										// then set this day to be the last active day
 										self.lastActiveDay = day;
-										self.calculateValues();
+										self.calculateValues(courseId);
 								}
 								//if there was no activity in the past 24 hours 
 								//and if the previous day is not the first active day
@@ -214,7 +213,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 									//continue checking the past activity 
 									//by going each time 24 hours back
 									//until to reach the last active day
-										self.checkActivity(day - TWENTY_FOUR_HOURS);
+										self.checkActivity(day - TWENTY_FOUR_HOURS,courseId);
 								} 
 		});	
 	} 
@@ -226,7 +225,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 		self.lastActiveDay = day;
 		//we proceed and calculate the values 
 		//for the statistics metrics
-		self.calculateValues();
+		self.calculateValues(courseId);
 	}
 };
 
@@ -291,19 +290,19 @@ StatisticsModel.prototype.checkActivity = function(day) {
  * @prototype
  * @function calculateValues
  */
-StatisticsModel.prototype.calculateValues = function() {
+StatisticsModel.prototype.calculateValues = function(courseId) {
 	var self = this;
 
 	self.boolAllDone = 0;
 
-	self.bestDay.calculateValue();
-	self.handledCards.calculateValue();
-	self.averageScore.calculateValue();
-	self.averageSpeed.calculateValue();
-	self.progress.calculateValue();
+	self.bestDay.calculateValue(courseId);
+	self.handledCards.calculateValue(courseId);
+	self.averageScore.calculateValue(courseId);
+	self.averageSpeed.calculateValue(courseId);
+	self.progress.calculateValue(courseId);
 
 	// calculate the achievements
-	self.stackHandler.calculateValue();
+	self.stackHandler.calculateValue(courseId);
 	self.checkAchievements(this.currentCourseId);
 	
 };
@@ -319,10 +318,10 @@ StatisticsModel.prototype.calculateValues = function() {
  * @function allCalculationsDone
  * 
  */
-StatisticsModel.prototype.allCalculationsDone = function() {
+StatisticsModel.prototype.allCalculationsDone = function(courseId) {
 	moblerlog(" finished n="+this.boolAllDone +" calculations");
 	if ( this.boolAllDone === 6) {
-		$(document).trigger("allstatisticcalculationsdone");
+		$(document).trigger("allstatisticcalculationsdone",courseId);
     }
 };
 

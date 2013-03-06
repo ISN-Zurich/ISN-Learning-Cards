@@ -151,14 +151,9 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 	}).appendTo(lastli);
 	
 	var marginLi= $("<li/>", {
-		"class": "spacerMargin"
+		"class": ""
 	}).appendTo(ul);
 	
-var logoImageDiv=	$("<div/>", {
-		"class" : "backgroundImage"
-}).appendTo(viewId);	
-	
-
 	
 	} else {
 		//if there are no data for a question or there is no questionpool then display the error message

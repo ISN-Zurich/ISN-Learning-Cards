@@ -235,12 +235,12 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 	
 	var liF = $("<li/>", {
 		"id":"featured"+featuredContent_id,
-		"class":"gradientSelected"
+		"class":"gradient2"
 	}).appendTo("#coursesList");
 	
 	
 	var rightdivF = $("<div/>", {
-		"id" : "featuredContent gradientSelected",
+		"id" : "featuredContent",
 		"class": "right"
 	}).appendTo(liF);
 	
@@ -256,7 +256,7 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 	
 	spanF = $("<div/>", {
 		"id":"courseListIcon"+ featuredContent_id,
-		"class" : "select icon-bars"
+		"class" : "icon-bars"
 	}).appendTo(divF);
 	
 
@@ -265,11 +265,11 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 	}).appendTo(liF);
 	
 	var spanDashF = $("<span/>", {
-		"class" : "select icon-dash"
+		"class" : "dashGrey icon-dash"
 	}).appendTo(dashDivF);
 	
 	var mydivF = $("<div/>", {
-		"class" : "text textShadow marginForCourseList gradientSelected",
+		"class" : "text textShadow marginForCourseList",
 		text : featuredModel.getTitle()
 	}).appendTo(liF);
 	

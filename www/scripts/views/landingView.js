@@ -49,11 +49,23 @@ function LandingView(controller) {
 	this.fixedRemoved= false;
 	var prevent=true;
 	var featuredContent_id = FEATURED_CONTENT_ID;
+	
+	
+	jester($('#featuredContent')[0]).tap(function(e,prevent) {
+		moblerlog("taped feautured Content");
+//		$('#featuredContent').addClass("gradientSelected");
+//		e.stopPropagation();
+//		e.preventDefault();
+		self.clickFeaturedItem(featuredContent_id);
+	});
+	
+	
 	//handler when taping on the exclusive content element
 	jester($('#selectExclusiveContent')[0]).tap(function(e,prevent) {
+		//$('#selectExclusiveContent').addClass("gradientSelected");
 		moblerlog(" enters in landing view 1 ");
-		e.preventDefault();
-		e.stopPropagation();
+//		e.preventDefault();
+//		e.stopPropagation();
 		self.selectExclusiveContent();
 	});
 		
@@ -67,28 +79,26 @@ function LandingView(controller) {
 		self.hideErrorMessage();
 	});	
 		
-	
 	$('#selectExclusiveContent').bind("touchstart", function(e) {
 		moblerlog(" enters in landing view 2 ");
+		$("#selectExclusiveContent").addClass("gradientSelected");
 		e.preventDefault();
 		e.stopPropagation();
 	});	
 	
+	$('#featuredContent').bind("touchstart", function(e) {
+		moblerlog(" enters in landing view 3 ");
+		$("#featuredContent").addClass("gradientSelected");
+		moblerlog("color changed");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
 	
 	$(document).bind("featuredContentlistupdate", function(e) {
 		
 		//self.showForm();
 	});
-	
-	jester($('#featuredContent')[0]).tap(function(e) {
-		moblerlog("taped feautured Content");
-		$('#featuredContent').removeClass("gradient2");
-		$('#featuredContent').addClass("gradientSelected");
-		//e.stopPropagation();
-		//e.preventDefault();
-		self.clickFeaturedItem(featuredContent_id);
-	});
-	
+
 	jester($('#selectarrowLanding')[0]).tap(function(e) {
 		moblerlog("taped statistics icon landing view");
 			
@@ -158,8 +168,10 @@ LandingView.prototype.closeDiv = closeView;
  * @function close
  **/ 
 LandingView.prototype.close = function() {
-	$('#featuredContent').removeClass("gradientSelected");
-	$('#featuredContent').addClass("gradient2");
+//	$('#featuredContent').removeClass("gradientSelected");
+//	$('#featuredContent').addClass("gradient2");
+	$("#selectExclusiveContent").removeClass("gradientSelected");
+	$("#featuredContent").removeClass("gradientSelected");
 	this.active = false;
 	this.closeDiv();
 };
@@ -273,6 +285,7 @@ LandingView.prototype.showErrorMessage = function(message) {
  */ 
 LandingView.prototype.clickFeaturedItem = function(featuredContent_id){
 	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
+//	$("#featuredContent").addClass("gradientSelected");
 	this.controller.models['questionpool'].reset();
 	this.controller.models['questionpool'].loadData(featuredContent_id);
 	this.controller.models['answers'].setCurrentCourseId(featuredContent_id);
