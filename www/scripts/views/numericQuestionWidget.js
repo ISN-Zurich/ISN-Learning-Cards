@@ -61,7 +61,7 @@ function NumericQuestionWidget(interactive) {
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 
 	}
-} // end of consructor
+} // end of constructor
 
 
 /**
