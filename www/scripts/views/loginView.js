@@ -408,8 +408,8 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 * @prototype
 * @function clickCloseLoginButton
  * */
-LoginView.prototype.clickCloseLoginButton=function(clickCloseLoginButton){
-	controller.transitionToLanding(clickCloseLoginButton);
+LoginView.prototype.clickCloseLoginButton=function(featuredContent_id){
+	controller.transitionToLanding(featuredContent_id);
 
 };
 
