@@ -377,9 +377,9 @@ Controller.prototype.transitionToLogin = function() {
 };
 
 
-Controller.prototype.transitionToLanding = function() {
+Controller.prototype.transitionToLanding = function(fd) {
 	moblerlog("enter controller transition to login view from landing view");
-	this.transition('landing');
+	this.transition('landing',fd);
 };
 
 /**

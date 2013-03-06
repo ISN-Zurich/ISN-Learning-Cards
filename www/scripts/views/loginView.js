@@ -52,6 +52,7 @@ function LoginView(controller) {
 	this.controller = controller;
 	this.active = false;
 	this.fixedRemoved= false;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 
 	//handler when taping on the login button
 	jester($('#loginButton')[0]).tap(function() {
@@ -59,7 +60,7 @@ function LoginView(controller) {
 	});
 	//handler when taping on the close button of login button
 	jester($('#loginViewBackIcon')[0]).tap(function() {
-		self.clickCloseLoginButton();
+		self.clickCloseLoginButton(featuredContent_id);
 	});
 		//handler when taping on the username field 
 	var prevent=false;
@@ -407,8 +408,8 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 * @prototype
 * @function clickCloseLoginButton
  * */
-LoginView.prototype.clickCloseLoginButton=function(){
-	controller.transitionToLanding();
+LoginView.prototype.clickCloseLoginButton=function(clickCloseLoginButton){
+	controller.transitionToLanding(clickCloseLoginButton);
 
 };
 
