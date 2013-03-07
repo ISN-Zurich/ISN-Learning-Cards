@@ -248,11 +248,10 @@ ul {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 	-webkit-padding-start: 0px;
-	margin-bottom:50px;
 }
 .spacerMargin{
-	/*background-color:white;
-	margin-bottom:50px;*/
+	background-color:white;
+	height:100px;
 }
 
 #landingBody{

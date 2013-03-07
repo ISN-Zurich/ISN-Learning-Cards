@@ -141,25 +141,25 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 				text : answers[mixedAnswers[c]].answertext
 			}).appendTo(li);
 			
-		}
+		} //end of for
 		var lastli = $("<li/>", {
 		}).appendTo(ul);
 	
-	var shadoweddiv = $("<div/>", {
+		var shadoweddiv = $("<div/>", {
 		"id": "shadowedAnswerLi",
 		"class" : "gradient1 shadowedLi"
-	}).appendTo(lastli);
+		}).appendTo(lastli);
 	
-	var marginLi= $("<li/>", {
-		"class": ""
-	}).appendTo(ul);
+		var marginLi= $("<li/>", {
+		"class": "spacerMargin"
+		}).insertAfter(shadoweddiv);
 	
 	
-	} else {
+		} else {
 		//if there are no data for a question or there is no questionpool then display the error message
 		this.didApologize = true; 
 		doApologize();
-	}
+		}
 };
 
 
@@ -237,7 +237,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 
 	var marginLi= $("<li/>", {
 		"class": "spacerMargin"
-	}).appendTo(ul);
+	}).insertAfter(shadoweddiv);
 	
 	moblerlog("enter feedback view after switching from question view");
 };
