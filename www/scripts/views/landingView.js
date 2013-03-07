@@ -191,9 +191,10 @@ LandingView.prototype.selectExclusiveContent = function() {
 /**
  * displays the landing form 
  * @prototype
- * @function showForm
+ * @function 
  */ 
 LandingView.prototype.showForm = function(featuredContent_id) {
+	moblerlog("enter show form of landing view");
 	var self=this;
 	var featuredModel = self.controller.models['featured'];
 	this.hideErrorMessage();
@@ -201,6 +202,7 @@ LandingView.prototype.showForm = function(featuredContent_id) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
 	$("#featuredContent").attr("id",featuredContent_id);
 	$("#landingViewHeader").show();
+	moblerlog("showed landing view header");
 	$("#landingLmsLabel").text(featuredModel.getTitle());
 	
 	
@@ -209,7 +211,7 @@ LandingView.prototype.showForm = function(featuredContent_id) {
 		
 	}
 	$("#landingBody").show();	
-	moblerlog("just show the title of the featured courses");
+	moblerlog("showed the body of the landing page");
    
 
 	

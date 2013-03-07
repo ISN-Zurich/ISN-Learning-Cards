@@ -19,6 +19,7 @@ under the License.
 
  */
 
+
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
  */
@@ -370,9 +371,9 @@ Controller.prototype.transitionToEndpoint = function() {
  * @prototype
  * @function transitionToLogin 
  **/
-Controller.prototype.transitionToLogin = function() {
+Controller.prototype.transitionToLogin = function(fd) {
 	if ( this.appLoaded ) {
-	this.transition('login');
+	this.transition('login',fd);
 		
 	}
 };

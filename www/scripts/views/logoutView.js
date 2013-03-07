@@ -103,7 +103,7 @@ LogoutView.prototype.cancel = function() {
 LogoutView.prototype.logout = function(featuredContent_id) {
 	var config = controller.models['authentication'];
 	config.logout(featuredContent_id);
-	controller.transitionToLogin();
+	controller.transitionToLogin(featuredContent_id);
 };
 
 

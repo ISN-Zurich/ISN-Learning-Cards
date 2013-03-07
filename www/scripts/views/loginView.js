@@ -168,7 +168,7 @@ LoginView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-LoginView.prototype.open = function() {
+LoginView.prototype.open = function(featuredContent_id) {
 	moblerlog("loginView: open sesame");
 	// hide unnecessary errors and warnings 
 	this.hideErrorMessage();

@@ -74,7 +74,7 @@ ClozeQuestionType.prototype.cleanup = doNothing;
  * @function showAnswer
  **/ 
 ClozeQuestionType.prototype.showAnswer = function(interactive) {
-	
+//	$("#cardAnswerBody").empty();
 	var questionpoolModel = controller.models['questionpool'];
 	// Check if there is a question pool and if there are answers for a specific
 	// question in order to display the answer body
