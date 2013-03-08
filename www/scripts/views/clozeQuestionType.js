@@ -242,7 +242,7 @@ var shadoweddiv = $("<div/>", {
 		span = $("<div/>", {
 			//"class" : "right green icon-checkmark" //to check if the filled answer is correct.
 												 // if yes add the green icon check mark, otherwise nothing
-			"class": (answerModel.checkFilledAnswer(filledAnswer,i) ? "right green icon-checkmark" : " " )
+			"class": (answerModel.checkFilledAnswer(filledAnswer,i) ? "right icon-checkmark glow2" : " " )
 		}).appendTo(div2);
 		
 		if (!answerModel.checkFilledAnswer(filledAnswer,i)){ //if the filled gap is wrong
@@ -271,7 +271,7 @@ var shadoweddiv = $("<div/>", {
 		}).appendTo(rightDiv2);
 		
 		span2 = $("<span/>", {
-			"class" : "right green icon-checkmark" 
+			"class" : "right glowNone icon-checkmark" 
 		}).appendTo(divCorrect);
 		
 		var div2 = $("<div/>", {
