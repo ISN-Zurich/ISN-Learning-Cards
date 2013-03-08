@@ -83,7 +83,7 @@ ConnectionState.prototype.goOnline = function() {
 	moblerlog("**online**");
 	this.state = true;
 	
-	 if (this.controller.appLopaded) {
+	 if (self.controller.appLopaded) {
 		 this.synchronizeData();
 	 }
 };
@@ -218,5 +218,7 @@ ConnectionState.prototype.goOffline = function() {
 	this.state = false;
 	$(document).trigger("trackingEventDetected","offline");
 	// show no connection error message in login view
+	if (this.controller.views){
 	this.controller.views["login"].showErrorMessage(jQuery.i18n.prop('msg_network_message'));
+	}
 };
