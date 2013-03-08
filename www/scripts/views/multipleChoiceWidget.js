@@ -216,9 +216,10 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 			"class" : "courseListIconFeedback lineContainer "
 		}).appendTo(rightDiv);
 		
-		span = $("<div/>", {
+		span = $("<span/>", {
 			"id":"courseListIcon"+ mixedAnswers[c],
-			"class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0 ?  "right green icon-checkmark background" : ($(li).hasClass("gradientSelected"))?"right red icon-App-Icons  glowRed" :"")
+			// "class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0  ? "right icon-checkmark glow2 background" : ($(li).hasClass("gradientSelected")) ?"right icon-checkmark glowNone background": "")
+			"class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0 ? (($(li).hasClass("gradientSelected")) ? "right icon-checkmark glow2 background" : "right icon-checkmark glowNone") : "")
 		}).appendTo(div);
 		
 		var div = $("<div/>", {

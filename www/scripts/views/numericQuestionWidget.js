@@ -185,7 +185,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 			}).appendTo(rightDiv);
 			
 			span = $("<div/>", {
-				"class" : "right green icon-checkmark" 
+				"class" : "right glow2 icon-checkmark" 
 			}).appendTo(div);
 			
 			var div = $("<div/>", {
@@ -254,7 +254,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		}).appendTo(rightDiv2);
 		
 		span2 = $("<span/>", {
-			"class" : "right green icon-checkmark" 
+			"class" : "right icon-checkmark glowNone" 
 		}).appendTo(divCorrect);
 		
 		var div2 = $("<div/>", {
