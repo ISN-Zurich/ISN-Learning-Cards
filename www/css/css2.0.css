@@ -254,6 +254,11 @@ ul {
 	height:100px;
 }
 
+.borderRemoval {
+	border-bottom: solid 0px white;
+	
+}
+
 #landingBody{
 	display:none;
 	z-index:10;
@@ -1183,10 +1188,39 @@ font-size:13px;
     /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5e5e5e', endColorstr='#5e5e5e');*/ /* IE6 & IE7 */  
     /* background: linear-gradient(#5e5e5e, #5e5e5e);*/ /* the standard */ 
     z-index:10;
+    
      
 }
 
+.glow2 {
+	text-shadow: 0px -1px 1px #1b621c, -1px 0px 1px #1b621c, -2px -2px 3px 62b55b, -3px -2px 8px #66b460, 0px 0px 18px #66b460, 0px 0px 25px 70ab6b, 0px 0px 35px 70ab6b;
+	text-shadow: 0px -1px 1px #1b621c, -1px 0px 1px #1b621c, -2px -2px 3px 62b55b, -0px 0px 8px #66b460, 0px 0px 18px #66b460, 0px 0px 35px 70ab6b;
+	/*font-weight: bold;
+	font-family: helvetica;*/
+	/*color:#000;*/
+	background-color:transparent;
+	/*padding:20px;*/
+	-webkit-text-stroke-color: #2da42c;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: #59fa56;
+	z-index:12;
+	
+}
 
+.glowNone {
+	text-shadow: 0px -2px 3px #1b621c, 1px 0px 1px #1b621c,-1px 0px 1px #1b621c;/* Glow Effect */
+	/*font-size:150px;
+	font-weight: bold;
+	font-family: helvetica;
+	color:#000;
+	background:grey;
+	padding:20px;*/
+	background-color:transparent;
+	-webkit-text-stroke-color: #2da42c;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: #21ae24;
+	
+}
 
 
 .textShadow{
