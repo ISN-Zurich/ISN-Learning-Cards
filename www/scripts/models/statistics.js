@@ -494,9 +494,9 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 			moblerlog("results length: " + results.rows.length);
 			for ( i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
-//				moblerlog("sent statistics row to the server"+row);
-//				rowCourse= row.course_id;
-//				moblerlog("course id is "+rowCourse);
+				//	moblerlog("sent statistics row to the server"+row);
+				//	rowCourse= row.course_id;
+				//	moblerlog("course id is "+rowCourse);
 				statistics.push(row);
                 moblerlog("sending " + i + ": " + JSON.stringify(row));
 			}
