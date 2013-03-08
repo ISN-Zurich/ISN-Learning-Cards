@@ -626,7 +626,7 @@ Controller.prototype.setConfigVariable = function(varname, varvalue) {
 };
 
 Controller.prototype.resizeHandler = function() { 
-	// detect new Orientation Layout
+	//   new Orientation Layout
 	var orientationLayout = false; // e.g. Portrait mode
 	var w = $(window).width(), h= $(window).height();
 	if ( w/h > 1 ) {orientationLayout = true;
