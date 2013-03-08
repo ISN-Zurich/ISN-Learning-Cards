@@ -62,8 +62,8 @@ function CoursesListView(controller) {
 	 * So when the courseListView or the CourseModel bind/listen to that event (because it was triggered when pending questions were loaded), we should check 
 	 * IF WE ARE LOGGED IN in order to perform the callback function
 	 * @event questionpoolready
-	 * @param a callback function that tranforms the loading icon next to a course item, to the statistics icon. this means
-	 *        that the specific course includin all its questions has been fully loaded
+	 * @param a callback function that transforms the loading icon next to a course item, to the statistics icon. this means
+	 *        that the specific course including all its questions has been fully loaded
 	 */
 	$(document).bind("questionpoolready", function(e, courseID) {
 		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn")){
