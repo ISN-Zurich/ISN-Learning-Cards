@@ -89,7 +89,7 @@ CardBurnerModel.prototype.calculateValueHelper = checkAchievement;
 /**
  * Pass the current variables to the above query that will be
  * used in the execution of the transaction
- * The execution of the transacion is done in queryDB
+ * The execution of the transaction is done in queryDB
  * @prototype
  * @function calculateAchievementValues
  */
