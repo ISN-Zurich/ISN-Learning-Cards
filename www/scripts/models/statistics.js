@@ -531,12 +531,13 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 				moblerlog("Error while sending statistics data to server");
 				var statisticsToStore = {
 					sessionkey :sessionkey ,
+					activeServerUrl:activeURL,
 					uuid : device.uuid,
 					statistics : statistics
 				};
 				localStorage.setItem("pendingStatistics", JSON.stringify(statisticsToStore));
 				//FIXME:to pass the session key as argument in the triggering of the event
-				$(document).trigger("statisticssenttoserver");
+				$(document).trigger("statisticssenttoserver",sessionkey,activeURL,featuredContent_id);
 			},
                beforeSend : function setHeader(xhr) {
                xhr.setRequestHeader('sessionkey', sessionkey);
