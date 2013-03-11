@@ -71,12 +71,6 @@ global $DEBUG;
 $DEBUG = 1;
 $class_for_logging = "featuredContentCourse.php";
 
-
-//$userID = get_session_user_from_headers();// TODO:in featured content there should be a user that will create the featured content
-                                          // so we should assign here the exact ID numer i.e. $userID=12980
-                                                                                
-
-
 if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
 	logging("web access without session");
 	$_SESSION["AccountId"] = ANONYMOUS_USER_ID;	
@@ -86,28 +80,19 @@ if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
 };
 logging("anonymous user id is ".$userID);
 
-// $userID="12980";
-
-logging(" my userid is ". $userID);
-//getAssignedRoles($userID);
-
-$return_data = getFeaturedContent($userID);// TODO:in featured content we will pass as argument the userId that we got right above
-											// we can create a mew function getCourse($userID) in order to return the specific
+$return_data = getFeaturedContent($userID);	// we  pass as argument the userId, which we we got from above
+											// the function getCourse($userID) will return the specific
 											// free course, which would be the featured content
 header('content-type: application/json');
 echo (json_encode($return_data));
 
 
-// TODO: write a function  getFeaturedContent($userID)similar with below that
-// will return the course that contains the featured content
-// **** first brainstorming comments************
-// we will not need to pass a userId parameter because unregistered users
-// will have access to it. we might need to pass as a parameter the courseId
 
 /**
- * Gets the course list for the specified user
+ * Gets the featured course for the anonymous user. 
  *
  * @return course list array
+ * @param $userID, the id of the anonymous user
  */
 function getFeaturedContent($userID) {
 
@@ -180,7 +165,6 @@ function getFeaturedContent($userID) {
 			} else if (strcmp($type, "assOrderingHorizontal") == 0) {
 				//horizontal ordering questions have no "getAnswers()" method!
 				//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
-				//$answerList = $assQuestion->getOrderText();
 				$answers = $assQuestion->getOrderingElements();
 				//$points1 = $assQuestion->calculateReachedPoints();
 				$points = $assQuestion->getPoints();
