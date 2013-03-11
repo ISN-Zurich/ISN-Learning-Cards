@@ -118,7 +118,7 @@ function queryDatabase(cbResult){
 
 
 /**
- * Each achivement, either a stackhandler or a card burner, should be reached and calculated only once.
+ * Each achievement, either a stackhandler or a card burner, should be reached and calculated only once.
  * Check in this function if an achievement of any type (stackhandler or card burner) was already achieved
  * If an achievement has not been reached then the value of the achievement is calculated as normal 
  * @function checkAchievements
