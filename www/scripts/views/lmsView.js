@@ -89,6 +89,10 @@ function LMSView(controller) {
 			self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'),servername,previousLMS);
 	});
 	
+	/**It is triggered when the registration of an lms has just started
+	 * @event registrationIsStarted
+	 * @param:a callback function  that displays the loading icon in the place of the statistics icon
+	*/
 	$(document).bind("registrationIsStarted", function(e,servername) {
 		moblerlog("server name passed "+servername);
 		self.showLoadingIcon(servername);
