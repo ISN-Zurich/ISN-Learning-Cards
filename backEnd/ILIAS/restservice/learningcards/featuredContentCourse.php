@@ -102,6 +102,7 @@ function getFeaturedContent($userID) {
 	$featuredCourses = array();
 	$questions=array();
 	
+	//now we get the available questionpools for the anonymous user
 	$items = ilObjQuestionPool::_getAvailableQuestionpools();
 	logging(" public questionpools for anonymous user are ".json_encode($items));
 	
@@ -130,12 +131,13 @@ function getFeaturedContent($userID) {
 				}
 		}
 	}
+	
+	// get the Questions of the featured content 
 
 	if( $featContentId > 0 ) {
 		$featContentTitle = $items[$featContentId]["title"];
 		logging("featured content is: " . $featContentId. "title =" . json_encode($featContentTitle));
-		// NOW WE NEED TO GET THE Questions
-		//$questions=$questionPoolQuestions;
+		
 		$questionList = $questionPool->getQuestionList();
 		logging("Question list: " . json_encode($questionList));
 			
@@ -144,18 +146,21 @@ function getFeaturedContent($userID) {
 			//get id
 			$questionId = $question["question_id"];
 		
-			//get the question
-			$questionText = $question["question_text"];
-		
 			//get the question type
 			$type = $question["type_tag"];
-		
-		
 			require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
-		
 			$assQuestion = new $type();
 			$assQuestion->loadFromDb($question["question_id"]);
 		
+
+			//get the question
+			$questionText = $question["question_text"];
+			
+			if (strcmp($type, "assClozeTest") == 0) {
+				$questionText = $question["description"];
+				logging("questionText for cloze questions".$questionText);
+			}
+			
 			//get answers
 			if (strcmp($type, "assNumeric") == 0) {
 				//numeric questions have no "getAnswers()" method!
@@ -166,7 +171,6 @@ function getFeaturedContent($userID) {
 				//horizontal ordering questions have no "getAnswers()" method!
 				//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
 				$answers = $assQuestion->getOrderingElements();
-				//$points1 = $assQuestion->calculateReachedPoints();
 				$points = $assQuestion->getPoints();
 					
 				$arr = array();
@@ -183,6 +187,22 @@ function getFeaturedContent($userID) {
 				$answerList = $arr;
 				logging("answerList for Horizontal Question".json_encode($answerList));
 				 
+			}else if(strcmp($type, "assClozeTest") == 0) {
+				$gaps= $assQuestion->getGaps();
+				$clozeText= $assQuestion->getClozeText();
+				logging("cloze text for answer view in cloze question is ".$clozeText);
+				$pattern="/\[gap\].*?\[\/gap\]/";
+				for($gapid =0; $gapid<= count($gaps); $gapid++ ){
+					$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
+					$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
+				}
+			
+				$answerList = array(
+						"clozeText"  => $clozeText,
+						"correctGaps" => $gaps
+				);
+				logging("answerList for close questions".json_encode($answerList));
+					
 			}
 			else {
 				$answerList = $assQuestion->getAnswers();
