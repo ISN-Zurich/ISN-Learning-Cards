@@ -179,8 +179,8 @@ function Controller() {
 	 */
 	$(document).bind("statisticssenttoserver", function() {
 		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization updates");
-//			self.transitionToLogin();
+			moblerlog("stays in login view, despite the synchronization of sent statistics");
+			//	self.transitionToLogin();
 		}
 	});
 
@@ -193,8 +193,8 @@ function Controller() {
 	 */
 	$(document).bind("questionpoolready", function() {
 		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization updates");
-			self.transitionToLogin();
+			moblerlog("stays in login view, despite the synchronization of questionpool ready");
+			self.transitionToLogin(); // or we can stay on the current view i.e. lms view, landing view or login view
 		}
 	});
 
@@ -208,7 +208,7 @@ function Controller() {
 	$(document).bind("courselistupdate", function() {
 		if ( !self.getLoginState() ){
 			moblerlog("stays in login view, despite the synchronization updates");
-			self.transitionToLogin();
+			self.transitionToLogin();// or we can stay on the current view i.e. lms view, landing view or login view
 		}
 	});		
 
@@ -380,7 +380,7 @@ Controller.prototype.transitionToLogin = function(fd) {
 
 
 Controller.prototype.transitionToLanding = function(fd) {
-	moblerlog("enter controller transition to login view from landing view");
+	moblerlog("enter controller transition to landing view in controller");
 	this.transition('landing',fd);
 };
 
