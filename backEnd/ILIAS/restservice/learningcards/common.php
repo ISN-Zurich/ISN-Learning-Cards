@@ -161,22 +161,100 @@ function isValidQuestionPool($questionpool) {
 }
 
 
-// getValidQuestionPool(id)
-// this function checks if a question pool is valid. If the question pool is valid then it is returned.
-// if the question pool is invalid or does not exist, the the function returns nothing
-function getValidQuestionPool($questionpoolid) {
-	$isValid = FALSE;
+/**
+ * Checks if the question pool is online, contains at least 4 questions and
+ * the question have only valid question types
+ *
+ * @return true if question pool is valid, otherwise false
+ */
+function getQuestionListBody($questionList){
 	
-	// load the questions
+	$questions = array();
 	
-	// test if they are valid
-if (isValidQuestionPool($questionPool)){
-	$isValid = TRUE;
-	// ONLY IF THE QUESTION POOL IS VALID WE RETURN IT
-	if ($isValid) {
-		return $questionPool;
+	foreach ($questionList as $question) {
+	
+		//get id
+		$questionId = $question["question_id"];
+	
+		//get the question type
+		$type = $question["type_tag"];
+		require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
+		$assQuestion = new $type();
+		$assQuestion->loadFromDb($question["question_id"]);
+	
+	
+		//get the question
+		$questionText = $question["question_text"];
+			
+		if (strcmp($type, "assClozeTest") == 0) {
+			$questionText = $question["description"];
+			logging("questionText for cloze questions".$questionText);
+		}
+			
+		//get answers
+		if (strcmp($type, "assNumeric") == 0) {
+			//numeric questions have no "getAnswers()" method!
+			//only lower and upper limit are returned
+			$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
+			logging("answerList for Numeric Question".json_encode($answerList));
+		} else if (strcmp($type, "assOrderingHorizontal") == 0) {
+			//horizontal ordering questions have no "getAnswers()" method!
+			//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
+			$answers = $assQuestion->getOrderingElements();
+			$points = $assQuestion->getPoints();
+				
+			$arr = array();
+			foreach ($answers as $order => $answer)
+				//foreach ($answers as $order => $answer)
+			{
+				array_push($arr, array(
+				"answertext" => (string) $answer,
+				"points"=> $points,
+				"order" => (int)$order+1,
+				"id" => "-1"
+						));
+			}
+			$answerList = $arr;
+			logging("answerList for Horizontal Question".json_encode($answerList));
+				
+		}else if(strcmp($type, "assClozeTest") == 0) {
+			$gaps= $assQuestion->getGaps();
+			$clozeText= $assQuestion->getClozeText();
+			logging("cloze text for answer view in cloze question is ".$clozeText);
+			$pattern="/\[gap\].*?\[\/gap\]/";
+			for($gapid =0; $gapid<= count($gaps); $gapid++ ){
+				$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
+				$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
+			}
+				
+			$answerList = array(
+					"clozeText"  => $clozeText,
+					"correctGaps" => $gaps
+			);
+			logging("answerList for close questions".json_encode($answerList));
+				
+		}
+		else {
+			$answerList = $assQuestion->getAnswers();
+			logging("answerList for other types of Question".json_encode($answerList));
+		}
+	
+		//get feedback
+		$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
+		$feedbackError = $assQuestion->getFeedbackGeneric(0);
+	
+	
+		//add question into the question list
+		array_push($questions, array(
+		"id" => $questionId,
+		"type" => $type,
+		"question" => $questionText,
+		"answer" => $answerList,
+		"correctFeedback" => $feedbackCorrect,
+		"errorFeedback" => $feedbackError));
 	}
-}
-	return undefined;
+	
+	return $questions;
+	
 }
 ?>
