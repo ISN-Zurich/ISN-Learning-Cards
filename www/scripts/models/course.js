@@ -70,7 +70,7 @@ function CourseModel(controller) {
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 	
 	 /** 
-	  * It is binde when all the questions of a valid questionpol have been loaded from server
+	 * It is binded when all the questions of a valid questionpol have been loaded from server
 	 * @event questionpoolready
 	 * @param: callback function in which are activated to true the flags that
 	 * keep track of the loading of the course and its synchronization state
@@ -87,7 +87,7 @@ function CourseModel(controller) {
 	 *          are loaded from the server
 	 * **/
 	
-	$(document).bind("switchtoonline", function() {
+	$(document).bind("online", function() {
 		self.switchToOnline();
 	});
 	
