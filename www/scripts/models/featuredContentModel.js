@@ -73,10 +73,10 @@ function FeaturedContentModel(controller) {
 
 	this.controller = controller;
 
-	
 	this.featuredContentList = [];
 	this.featuredQuestionList;
 	this.activeQuestion = {};
+	var featuredCourseId = FEATURED_CONTENT_ID;
 	this.index = 0; // index of the current course
 	this.syncDateTime = 0;
 	this.syncState = false;
@@ -91,7 +91,7 @@ function FeaturedContentModel(controller) {
 	 *          are loaded from the server
 	 * **/
 	
-	$(document).bind("switchtoonline", function() {
+	$(document).bind("online", function() {
 		self.switchToOnline();
 	});
 	
@@ -259,7 +259,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			  * It is triggered when the loading of the course list from the server has been finished
 			 * @event courselistupdate 
 			 **/
-			$(document).trigger("featuredContentlistupdate");
+			$(document).trigger("featuredContentlistupdate",featuredCourseId);
 			
 			//download all the questions(questionlist) for each course
             var c;
