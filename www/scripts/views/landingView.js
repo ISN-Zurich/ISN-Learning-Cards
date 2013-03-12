@@ -94,9 +94,10 @@ function LandingView(controller) {
 		e.stopPropagation();
 	});	
 	
-	$(document).bind("featuredContentlistupdate", function(e) {
+	$(document).bind("featuredContentlistupdate", function(e,featuredCourseId) {
 		
-		//self.showForm();
+	self.showForm(featuredCourseId); //this will be called when a synchronization update takes place
+	
 	});
 
 	jester($('#selectarrowLanding')[0]).tap(function(e) {
@@ -203,6 +204,7 @@ LandingView.prototype.showForm = function(featuredContent_id) {
 	$("#featuredContent").attr("id",featuredContent_id);
 	$("#landingViewHeader").show();
 	moblerlog("showed landing view header");
+//	featuredModel.loadData();
 	$("#landingLmsLabel").text(featuredModel.getTitle());
 	
 	
