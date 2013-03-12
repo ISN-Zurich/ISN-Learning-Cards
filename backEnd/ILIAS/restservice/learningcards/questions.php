@@ -134,7 +134,6 @@ function getQuestions($courseId) {
 								//they use the OrderText variable to store the answers and the getOrderText function to retrieve them 
 								//$answerList = $assQuestion->getOrderText();
 							$answers = $assQuestion->getOrderingElements();
-							//$points1 = $assQuestion->calculateReachedPoints();
 							$points = $assQuestion->getPoints();
 							
 							$arr = array();
@@ -162,14 +161,10 @@ function getQuestions($courseId) {
 											$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
 										}
 										
-									
-											$answerList = array(
+									$answerList = array(
 												"clozeText"  => $clozeText,
 												"correctGaps" => $gaps
-										);
-																						
-								// 	$answerList = $clozeText;
-															
+										);				
 									logging("answerList for close questions".json_encode($answerList));
 									
 								} else {
