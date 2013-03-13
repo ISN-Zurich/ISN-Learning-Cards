@@ -237,7 +237,6 @@ QuestionPoolModel.prototype.currAnswersMixed = function() {
 	return this.currentAnswersAreMixed;
 };
 
-
 /**
  * Mixes the answer items of the current question and sets as true the flag 
  * that tracks if the answers are mixed or not

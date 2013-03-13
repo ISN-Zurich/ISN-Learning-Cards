@@ -117,8 +117,7 @@ moblerlog("enter feedback view in cloze question");
 
 
 
-/**
- * 
+/**stores the filled gaps of the user in an array 
  * @prototype
  * @function storeAnswers
  **/ 
@@ -149,12 +148,16 @@ ClozeQuestionType.prototype.setCorrectAnswerTickHeight = function() {
 };
 
 
+/**
+ * Sets the height of the list items that contain correct answers
+ * @prototype
+ * @function setCorrectAnswerTickHeight
+ **/ 
+
 function createClozeQuestionBody(domElement,interactive) {
 	var answerModel = controller.models["answers"];
 	var answerBody = controller.models["questionpool"].getAnswer();
 	moblerlog("answerbody is "+answerBody);
-	//x=JSON.stringify(answerBody);
-	//moblerlog("answerbody is"+JSON.stringify(answerBody));
 	var answertext=answerBody["clozeText"];
 	moblerlog("answertext is "+answertext);
 	domElement.html(answertext);
@@ -199,18 +202,8 @@ var shadoweddiv = $("<div/>", {
 	$("#cardAnswerBody").append(shadoweddiv);
 		}	
 	else {
-	
-		//most of the modifications will be done here
-		//we will design the input fields according to the score results for each gap
-		//we might get rid off the input at all, and use just div's to display the typed and the correct values
-		
-		
-		//	$("#feedbackBody gap").each(function(i,gap){
-		//	var inputtag = '<input type="text" class=" loginInputCloze textShadow" required="required" width="200px" placeholder="fill in the gap" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
-		//	$(gap).replaceWith(inputtag);	
-		//	}) ;
-
-		// now replace all gap tags in the card feedback body with div's
+				
+		// replace all gap tags in the card feedback body with div's
 		$("#feedbackBody gap").each(function(i,gap){
 			var answerModel = controller.models['answers'];
 			$(gap).parent().removeClass("marginClozeLi");

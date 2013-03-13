@@ -249,6 +249,7 @@ function Controller() {
 //		//self.transitionToEndpoint();
 //	}
 
+	//we binded this event here in order to 
 	$(document).bind("featuredContentlistupdate", function() {	
 		
 		var currentTime = new Date().getTime();

@@ -42,35 +42,23 @@ require_once './common.php';
 
 chdir("../..");
 require_once ('restservice/include/inc.header.php');
-//require_once 'Services/User/classes/class.ilObjUser.php';//don't need it in featured content
 
-//NEW to get the anonymous user id
-//require_once "./include/inc.header.php";
+//to get the anonymous user id
 require_once 'Services/Utilities/classes/class.ilUtil.php';
 require_once 'classes/class.ilObject.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 
-//NEW to get the available question pools for the specific anonymous user id
+//to get the available question pools for the specific anonymous user id
 require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 
-//NEW to get the container
-require_once 'Services/Container/classes/class.ilContainer.php';
-require_once 'Services/ContainerReference/classes/class.ilContainerReference.php';
-
-include_once 'Services/Membership/classes/class.ilParticipants.php';
-require_once 'Modules/Course/classes/class.ilCourseItems.php';
-require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
-
-//require_once "/Services/0bject/classes/class.ilObjectListGUI.php";
-
-global $ilUser,$ilContainer, $class_for_logging;
+global $ilUser,$class_for_logging;
 
 global $DEBUG;
-
 
 $DEBUG = 1;
 $class_for_logging = "featuredContentCourse.php";
 
+// get the anonymous user id
 if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
 	logging("web access without session");
 	$_SESSION["AccountId"] = ANONYMOUS_USER_ID;	
@@ -80,9 +68,7 @@ if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
 };
 logging("anonymous user id is ".$userID);
 
-$return_data = getFeaturedContent($userID);	// we  pass as argument the userId, which we we got from above
-											// the function getCourse($userID) will return the specific
-											// free course, which would be the featured content
+$return_data = getFeaturedContent($userID);	
 header('content-type: application/json');
 echo (json_encode($return_data));
 
@@ -96,154 +82,71 @@ echo (json_encode($return_data));
  */
 function getFeaturedContent($userID) {
 
-	logging("enters getFeaturedContent");
 	global $ilObjDataCache, $ilUser, $tree;
 
 	$featuredCourses = array();
 	$questions=array();
 	
-	//now we get the available questionpools for the anonymous user
+	//get the available questionpools for the anonymous user
 	$items = ilObjQuestionPool::_getAvailableQuestionpools();
 	logging(" public questionpools for anonymous user are ".json_encode($items));
 	
-	// now we get the root of the public repository
+	//get the root of the public repository
 	$ref_id= $tree->getRootId();
 	logging("repository root id  is " . $ref_id);
-	// now we are interested in those question pools that are children of the root object.
+	
+	//get those question pools that are children of the root object.
 	$childrenItems = $tree->getChilds($ref_id);
 	logging("children of root repository are ".json_encode($childrenItems));
 	$featContentId = 0;
 	
+	// get the first correct (1. one among the availables for the anonymous user and 2. valid) 
+	// questionpool from the ones under the root object
 	foreach ($childrenItems as $child => $Value1){
 		logging("child is".json_encode($Value1));
 		$childRef_id=$Value1["ref_id"];
 		logging("ref id for this child is ".$childRef_id);
-		//if the one of the top level chidren of repository is also in the list
-		//of the available questionpools of the anonymous user
-		if ($items[$childRef_id]) {
+		if ($items[$childRef_id]) { // 1. if the specific child of the top level of the repository is also in the list
+									// of the available questionpools of the anonymous user
 			$questionPool = new ilObjQuestionPool($childRef_id);
 			$questionPool->read();
-			logging("questions for the featured course are: ".$questionPool);			
-		if (isValidQuestionPool($questionPool)){
+			logging("questions for the featured course are: ".$questionPool);
+			if (isValidQuestionPool($questionPool)){ //2. check if the specific questionpool is valid
 				$featContentId = $childRef_id;
 				logging("featured content id is ".$featContentId);
 				break;
-				}
+			}
 		}
 	}
 	
-	// get the Questions of the featured content 
-
+	// get the list of questions of the featured content course
 	if( $featContentId > 0 ) {
 		$featContentTitle = $items[$featContentId]["title"];
 		logging("featured content is: " . $featContentId. "title =" . json_encode($featContentTitle));
 		
 		$questionList = $questionPool->getQuestionList();
 		logging("Question list: " . json_encode($questionList));
-			
-		foreach ($questionList as $question) {
-		
-			//get id
-			$questionId = $question["question_id"];
-		
-			//get the question type
-			$type = $question["type_tag"];
-			require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
-			$assQuestion = new $type();
-			$assQuestion->loadFromDb($question["question_id"]);
-		
-
-			//get the question
-			$questionText = $question["question_text"];
-			
-			if (strcmp($type, "assClozeTest") == 0) {
-				$questionText = $question["description"];
-				logging("questionText for cloze questions".$questionText);
-			}
-			
-			//get answers
-			if (strcmp($type, "assNumeric") == 0) {
-				//numeric questions have no "getAnswers()" method!
-				//only lower and upper limit are returned
-				$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
-				logging("answerList for Numeric Question".json_encode($answerList));
-			} else if (strcmp($type, "assOrderingHorizontal") == 0) {
-				//horizontal ordering questions have no "getAnswers()" method!
-				//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
-				$answers = $assQuestion->getOrderingElements();
-				$points = $assQuestion->getPoints();
-					
-				$arr = array();
-				foreach ($answers as $order => $answer)
-					//foreach ($answers as $order => $answer)
-				{
-					array_push($arr, array(
-					"answertext" => (string) $answer,
-					"points"=> $points,
-					"order" => (int)$order+1,
-					"id" => "-1"
-							));
-				}
-				$answerList = $arr;
-				logging("answerList for Horizontal Question".json_encode($answerList));
-				 
-			}else if(strcmp($type, "assClozeTest") == 0) {
-				$gaps= $assQuestion->getGaps();
-				$clozeText= $assQuestion->getClozeText();
-				logging("cloze text for answer view in cloze question is ".$clozeText);
-				$pattern="/\[gap\].*?\[\/gap\]/";
-				for($gapid =0; $gapid<= count($gaps); $gapid++ ){
-					$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
-					$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
-				}
-			
-				$answerList = array(
-						"clozeText"  => $clozeText,
-						"correctGaps" => $gaps
-				);
-				logging("answerList for close questions".json_encode($answerList));
-					
-			}
-			else {
-				$answerList = $assQuestion->getAnswers();
-				logging("answerList for other types of Question".json_encode($answerList));
-			}
-		
-			//get feedback
-			$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
-			$feedbackError = $assQuestion->getFeedbackGeneric(0);
-		
-		
-			//add question into the question list
-			array_push($questions, array(
-			"id" => $questionId,
-			"type" => $type,
-			"question" => $questionText,
-			"answer" => $answerList,
-			"correctFeedback" => $feedbackCorrect,
-			"errorFeedback" => $feedbackError));
-		}
-		
+		$questions= getQuestionList($questionList);	
 	}
 	else {
 		logging("OH NO! WE HAVE NO FEATURED CONTENT!");
 	}
 
-	logging("questions have been loaded");
 	$description = $ilObjDataCache->lookupDescription($featContentId);
-		
-			array_push($featuredCourses,
-					array("id"             => $featContentId,
-							"title"        => $featContentTitle,
-							"syncDateTime" => 0,
-							"syncState"    => false,
-							"isLoaded"     => false,
-							"description"  => $description,
-							"questions"    => $questions
-							));
+
+	// add featured content course info (such as title, description, syncDate etc.) and questions into the same  array structure 
+	array_push($featuredCourses,array(
+	"id"   => $featContentId,
+	"title"        => $featContentTitle,
+	"syncDateTime" => 0,
+	"syncState"    => false,
+	"isLoaded"     => false,
+	"description"  => $description,
+	"questions"    => $questions
+	));
 			
-	
 	//data structure for frontend models
+	//add 
 	$featuredCourseList = array("featuredCourses" => $featuredCourses,
 			"syncDateTime" => 0,
 			"syncState" => false,

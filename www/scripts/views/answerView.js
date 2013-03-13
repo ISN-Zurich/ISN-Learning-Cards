@@ -99,8 +99,7 @@ function AnswerView(controller) {
 	 * @param: a callback function that displays the answer body and preventing the display of the statistics view
 	 */	
 	$(document).bind("allstatisticcalculationsdone", function() { 
-    	moblerlog("enters in calculations done in question view1 ");
-    	    
+    	moblerlog("enters in calculations done in question view1 "); 
     	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
     	{
     		moblerlog("enters in calculations done in  answer view 2 ");

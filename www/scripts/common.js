@@ -196,7 +196,11 @@ function calculateLabelWidth(){
 	$(".labelContainer").width(width);
 };
 
-
+/**
+ * 	Calculates the answers width for single and multiple choice questions
+ *  @function setAnswerWidth
+ * 	@ param{string,number,number} orientationLayout,w, h
+ * */
 function setAnswerWidth(orientationLayout, w, h){
 	var twidth = w-65;
 	twidth = twidth + "px";
@@ -208,6 +212,11 @@ function setAnswerWidth(orientationLayout, w, h){
 	});
 };
 
+/**
+ * 	Calculates feedback width for single and multiple choice questions
+ *  @function setFeedbackWidth
+ * 	@ param{string,number,number} orientationLayout,w, h
+ * */
 function setFeedbackWidth(orientationLayout,w, h){
 	var twidth = w-65;
 	twidth = twidth + "px";
@@ -220,16 +229,22 @@ function setFeedbackWidth(orientationLayout,w, h){
 };
 
 
+/**
+ * 	Calculates and returns an array that contains
+ *  the correct gaps for the gap with the specified index (=gapIndex).
+ *  @function getCorrectGaps
+ * 	@ param{number}, index, index of the current gap
+ * */
 function getCorrectGaps(gapIndex) {
 	var questionpoolModel = controller.models['questionpool'];
 	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
-var items=gapsObject["correctGaps"][gapIndex]["items"]; //the items sub-array for the specific gap index
-var correctGaps=new Array();
-for(k=0; k<jQuery(items).size();k++){
-	correctGaps.push(items[k]["answertext"]);
-	moblerlog("item of correct gaps array is "+correctGaps[k]);
-}
-moblerlog("correct gaps array is "+correctGaps);
-return correctGaps;
+	var items=gapsObject["correctGaps"][gapIndex]["items"]; //the items sub-array for the specific gap index
+	var correctGaps=new Array();
+	for(k=0; k<jQuery(items).size();k++){
+		correctGaps.push(items[k]["answertext"]);
+		moblerlog("item of correct gaps array is "+correctGaps[k]);
+	}
+	moblerlog("correct gaps array is "+correctGaps);
+	return correctGaps;
 }
 

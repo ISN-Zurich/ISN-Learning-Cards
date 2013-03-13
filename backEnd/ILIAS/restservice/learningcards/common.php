@@ -157,32 +157,32 @@ function isValidQuestionPool($questionpool) {
 	}
 
 	return $validQuestionPool;
-	//return $questionList;
 }
 
 
 /**
- * Checks if the question pool is online, contains at least 4 questions and
- * the question have only valid question types
- *
- * @return true if question pool is valid, otherwise false
+ * gets the list of questions of a questionpool
+ * for each question of the question list we get:
+ * - its id 
+ * - its type
+ * - its title/text
+ * @function getQuestionList
+ * @return {array} $questions
  */
-function getQuestionListBody($questionList){
-	
+function getQuestionList($questionList){
 	$questions = array();
-	
+
 	foreach ($questionList as $question) {
-	
+
 		//get id
 		$questionId = $question["question_id"];
-	
+
 		//get the question type
 		$type = $question["type_tag"];
 		require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
 		$assQuestion = new $type();
 		$assQuestion->loadFromDb($question["question_id"]);
-	
-	
+			
 		//get the question
 		$questionText = $question["question_text"];
 			
@@ -190,60 +190,27 @@ function getQuestionListBody($questionList){
 			$questionText = $question["description"];
 			logging("questionText for cloze questions".$questionText);
 		}
-			
+
 		//get answers
-		if (strcmp($type, "assNumeric") == 0) {
-			//numeric questions have no "getAnswers()" method!
-			//only lower and upper limit are returned
-			$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
-			logging("answerList for Numeric Question".json_encode($answerList));
-		} else if (strcmp($type, "assOrderingHorizontal") == 0) {
-			//horizontal ordering questions have no "getAnswers()" method!
-			//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
-			$answers = $assQuestion->getOrderingElements();
-			$points = $assQuestion->getPoints();
-				
-			$arr = array();
-			foreach ($answers as $order => $answer)
-				//foreach ($answers as $order => $answer)
-			{
-				array_push($arr, array(
-				"answertext" => (string) $answer,
-				"points"=> $points,
-				"order" => (int)$order+1,
-				"id" => "-1"
-						));
-			}
-			$answerList = $arr;
-			logging("answerList for Horizontal Question".json_encode($answerList));
-				
-		}else if(strcmp($type, "assClozeTest") == 0) {
-			$gaps= $assQuestion->getGaps();
-			$clozeText= $assQuestion->getClozeText();
-			logging("cloze text for answer view in cloze question is ".$clozeText);
-			$pattern="/\[gap\].*?\[\/gap\]/";
-			for($gapid =0; $gapid<= count($gaps); $gapid++ ){
-				$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
-				$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
-			}
-				
-			$answerList = array(
-					"clozeText"  => $clozeText,
-					"correctGaps" => $gaps
-			);
-			logging("answerList for close questions".json_encode($answerList));
-				
+		switch ($type){
+			case "assNumeric":
+				$answerList=calculateNumericAnswer($assQuestion);
+				break;
+			case "assOrderingHorizontal":
+				$answerList=calculateOrderingHorizontalAnswer($assQuestion);
+				break;
+			case"assClozeTest":
+				$answerList=calculateClozeAnswer($assQuestion);
+				break;
+			default:
+				$answerList=calculateAnswerOtherTypes($assQuestion);
+				break;
 		}
-		else {
-			$answerList = $assQuestion->getAnswers();
-			logging("answerList for other types of Question".json_encode($answerList));
-		}
-	
+			
 		//get feedback
 		$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
 		$feedbackError = $assQuestion->getFeedbackGeneric(0);
-	
-	
+
 		//add question into the question list
 		array_push($questions, array(
 		"id" => $questionId,
@@ -253,8 +220,84 @@ function getQuestionListBody($questionList){
 		"correctFeedback" => $feedbackCorrect,
 		"errorFeedback" => $feedbackError));
 	}
-	
 	return $questions;
-	
 }
+
+
+/**
+  *gets the answer list for numeric answering questions
+ * for each question
+ * @function calculateNumericAnswer
+ * @return {array} $answerlist
+ */
+function calculateNumericAnswer($assQuestion){
+	//only lower and upper limit are returned
+	$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
+	logging("answerList for Numeric Question".json_encode($answerList));
+	return $answerList;
+}
+
+/**
+ * gets the answer list for horizontal answering questions
+ * @function calculateOrderingHorizontalAnswer
+ * @return {array} $answerlist
+ */
+function calculateOrderingHorizontalAnswer($assQuestion){
+	//horizontal ordering questions have no "getAnswers()" method!
+	//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
+	$answers = $assQuestion->getOrderingElements();
+	$points = $assQuestion->getPoints();
+	
+	$arr = array();
+	foreach ($answers as $order => $answer)
+		//foreach ($answers as $order => $answer)
+	{
+		array_push($arr, array(
+		"answertext" => (string) $answer,
+		"points"=> $points,
+		"order" => (int)$order+1,
+		"id" => "-1"));
+	}
+	$answerList = $arr;
+	logging("answerList for Horizontal Question".json_encode($answerList));
+	return $answerList;
+}
+
+/**
+ * gets the answer list for cloze questions
+ * @function calculateClozeAnswer
+ * @return {array} $answerlist
+ */
+function calculateClozeAnswer($assQuestion){
+	$gaps= $assQuestion->getGaps();
+	$clozeText= $assQuestion->getClozeText();
+	logging("cloze text for answer view in cloze question is ".$clozeText);
+	$pattern="/\[gap\].*?\[\/gap\]/";
+	for($gapid =0; $gapid<= count($gaps); $gapid++ ){
+		$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
+		$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
+	}
+	
+	// the clozeText will be displayed in answer view
+	// we need also the gaps for the calculation of the score
+	$answerList = array(
+			"clozeText"  => $clozeText,
+			"correctGaps" => $gaps
+	);
+	logging("answerList for close questions".json_encode($answerList));
+	return $answerList;
+}
+
+/**
+ * gets the answer list for single choice, multiple choice and vertical horizontal questions
+ * for each question
+ * @function calculateClozeAnswer
+ * @return {array} $answerlist
+ */
+function calculateAnswerOtherTypes($assQuestion){
+	$answerList = $assQuestion->getAnswers();
+	logging("answerList for other types of Question".json_encode($answerList));
+	return $answerList;
+}
+
 ?>

@@ -33,7 +33,7 @@ under the License.
 
 /**
  * A global property/variable that stores the id of the 
- * featured content  d
+ * featured content
  *
  * @property FEATURED_CONTENT_ID 
  * @default fd 
@@ -45,9 +45,8 @@ var FEATURED_CONTENT_ID = "fd";
  *A global property/variable that shows for how long the synchronization is valid.
  *The following default value shows the time period after which a new synchromization 
  *should take place.
- *
- *@property DEFAULT_SYNC_TIMEOUT 
- *@default 60000 
+ **@property DEFAULT_SYNC_TIMEOUT 
+ **@default 60000 
  *
  **/
 
@@ -97,12 +96,7 @@ function FeaturedContentModel(controller) {
 	
 	
 	//this.loadData(); //we will load data from local storage or from the local json file 
-					// if we decide to have a json file, we will first export it from ILIAS...
-					// and then we will store  it in the resources folder of our client and the json file
 					// will be already there during the installation of the app
-					// the future featured contents/fee course will be exported as json files from ilias 
-					// during runtime
-
 	this.loadFeaturedCourseFromServer();
 }
 
@@ -132,10 +126,10 @@ FeaturedContentModel.prototype.loadData = function() {
 };
 
 /**
- * stores data into the local storage 
- * or TODO: into a local json file
- **
- **/
+ * stores featured course data into the local storage 
+ * @function storeData 
+ * @param {string}, featuredCourseString
+ */
 FeaturedContentModel.prototype.storeData = function(featuredCourseString){
 	var featuredString;
 	try {
@@ -154,17 +148,11 @@ FeaturedContentModel.prototype.storeData = function(featuredCourseString){
 
 
 
-
-
-//loadDatafromServer
-// in this function we will load data from the server, and will store them in a json file in the local folders of the app
-// the loadData function above, will load the contents from the json file or from the local storage if we decide to store them there
-// we will have two functions
-// 1. loadFeaturedCourseFromServer 
-// 2. loadQuestionsDataFromServer
-
-
-
+/**
+ * load featured course and all its questions from the server
+ * stores downloaded featured course data into the local storage 
+ * @function loadFeaturedCourseFromServer 
+ */
 FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 	moblerlog("loadFromServer-Course is called");
 	var self = this;
@@ -181,8 +169,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			}
 		}
 
-			
-		$
+			$
 				.ajax({
 					url:  'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/featuredContentCourse.php',
 					type : 'GET',
@@ -204,24 +191,21 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 		function createFeaturedContentList(data) {
 			moblerlog("success");
 
-			// if there was a pending course list, remove it from the storage
+			// if there was a pending featured course list, remove it from the storage
 			localStorage.removeItem("pendingFeaturedContentList");
 
 			var featuredObject;
 			try {
 				featuredObject = data;
-				} catch (err) {
+			} catch (err) {
 				featuredObject = {};
 				moblerlog("Couldn't load featured courses from server " + err);
 			}
-			moblerlog("featured course data loaded from server");
-            moblerlog("featuredOboject is"+featuredObject);
-			//self.featuredContentList = featuredObject.featuredCourses || [];
-           
+			moblerlog("featuredOboject is"+featuredObject);
 			self.featuredContentList = featuredObject.featuredCourses || [];
 			x=JSON.stringify(self.featuredContentList);
 			moblerlog("JSON Featured Content: "+x);
-			moblerlog("featured Content info length "+ self.featuredContentList.length);//needed this for title debugging
+			moblerlog("featured Content info length "+ self.featuredContentList.length); //needed this for title debugging
 
 			var pos=x.indexOf("questions");
 			q="questions";
@@ -234,13 +218,11 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			self.syncState = true;
 			self.syncTimeOut = featuredObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 			moblerlog("sync time out is:"+JSON.stringify(self.syncTimeOut));
-			//question pool model will store the data
-			//this.controller.models["questionpool"].storeData();
+			//store the data
 			var featuredCourseId = FEATURED_CONTENT_ID;
-			//store the featured questionpool in the local storage allong with the other question pools
 			localStorage.setItem("questionpool_" +featuredCourseId, list);
-			//store in the local storage all the data except the questions
 			
+			//store in the local storage all the data except the questions
 			var featuredCourseString=x.substring(0,pos-2).concat("}]");;
 			moblerlog("featured course string is"+featuredCourseString);
 			self.storeData(featuredCourseString);			
@@ -260,22 +242,16 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			 * @event courselistupdate 
 			 **/
 			$(document).trigger("featuredContentlistupdate",featuredCourseId);
-			
-			//download all the questions(questionlist) for each course
-            var c;
-//            for ( c in self.featuredContentList) {
-//             self.featuredContentList[c].isLoaded = false;
-//
-//             self.loadQuestionsFromServer(13040);
-//             }
-
 		} //end of function createCourseList
 		
 };
 
 
 
-
+/**
+ * @prototype
+ * @function checkForTimeOut
+ */
 FeaturedContentModel.prototype.checkForTimeOut = function(){};
 
 /**
@@ -294,21 +270,18 @@ FeaturedContentModel.prototype.getTitle = function() {
 };
 
 
-
-
 /**
  * Returns the synchronization state of a specific featured course, which means if the locally stored course is
- * in synchronization (has the same data, questions) with the one line.
+ * in synchronization (has the same data, questions) with the online one.
  * @prototype
  * @function isSynchronized
  * @param {Number} featuredContentId, the id of the featured course
- * @return {Boolean} true if the course with the specified id is synchronized, otherwise
- *         false
+ * @return {Boolean} true if the course with the specified id is synchronized, otherwise false
  */
 FeaturedContentModel.prototype.isSynchronized = function(featuredContentId) {
-	if (courseId > 0) {
+	if (featuredContentId > 0) {
 		var c;
-		for ( c in this.featuredContentList) {
+		for (c in this.featuredContentList) {
 			if (this.featuredContentList[c].id === featuredContentId) {
 				return this.featuredContentList[c].syncState;
 			}
@@ -343,12 +316,12 @@ FeaturedContentModel.prototype.switchToOnline = function() {
 	}
 };
 
-
-/**
- * Sets index to 0
- * @prototype
- * @function reset
- */
+//
+///**
+// * Sets index to 0
+// * @prototype
+// * @function reset
+// */
 FeaturedContentModel.prototype.reset = function() {
 	this.index = 0;
 };
@@ -356,67 +329,4 @@ FeaturedContentModel.prototype.reset = function() {
 
 
 
-/**
- * Resets a question pool by:
- * 1. Emptying the queue that holds the recently answered questions
- * 2. Initializing the question id
- * 3. Clearing the current question body
- * 4. Reseting the mixing of the answered items of each question
- * After the reseting of the above elements has been done, we start again the question pool by moving to the next question
- * @prototype
- * @function reset
- */ 
-FeaturedContentModel.prototype.questionsReset = function() {
-	this.queue = [ "-1", "-1", "-1" ];
-	this.id = 0;
-	this.activeQuestion = {};
-	this.currentAnswersAreMixed = false;
-	if (this.featuredQuestionList.length > 0) {
-		this.nextQuestion();
-	}
-};
 
-/**
- * TODO: write comments
- **/
-FeaturedContentModel.prototype.getQuestionBody = function(){
-	return this.activeQuestion.question;
-	
-};
-
-
-
-/**TODO
- * to upadte commments to be compatibe with this model
- * Increases the index. Sets the id to the id of the next question. 
- * A random number is created in order to get the id of the next question
- * at the random position/index of the question list. 
- * If the random number is not the same as the current id and is not an id 
- * that is stored in the queue, the new id is the random number
- * @prototype
- * @function nextQuestion
- * @return {Boolean} returns false if it has reached the end of the list
- */
-FeaturedContentModel.prototype.nextQuestion = function() {
-	var random;
-	var newId;
-
-	do {
-		// generates a random number between 0 and questionList.length 
-		random = Math.floor((Math.random() * this.questionList.length));
-		moblerlog("random:" +random);
-		newId = this.featuredQuestionList[random].id;
-		moblerlog("New ID: " + newId);
-		//keeps repeating the process of getting the id of the new random question of question list
-		//while the new random id is still the same with id of the current question or if this new random id is still 
-		//stored in the waiting queue 	
-	} while (this.id === newId
-			|| (this.queue.length * 2 <= this.featuredQuestionList.length && jQuery
-					.inArray(newId, this.queue) >= 0));
-
-	this.id = newId;
-
-	this.activeQuestion = this.featuredQuestionList[random];
-	this.currentAnswersAreMixed = false;
-	return this.id < this.featuredQuestionList.length;
-};

@@ -293,25 +293,27 @@ AnswerModel.prototype.calculateNumericScore = function() {
 
 
 /**
- * TODO: write comments
- * we will compare the values that the user typed and we will compare them with actual correct ones.
+ * Calculates the answer score for cloze question type
+ * It can be:
+ * - 0 (wrong): if none of the gaps are filled in or filled in correctly
+ * - 0.5 (partially correct): if at least one of the gaps is filled in correctly
+ * - 1 (fully correct): if all gaps are filled in with the correct values
+ * The function compares the values that the user typed and with actual correct ones.
+ * It uses 
  * @prototype
  * @function calculateClozeQuestionScore 
+ * @return {number} answerScore, it can be either 0, 0.5 or 1.
  **/
 AnswerModel.prototype.calculateClozeQuestionScore = function() {
-	//fully correct when all gaps are filled in with correct values
-	//partially correct when at least one gap is correct
-	//wrong when no gaps are are filled or filled wrongly
-	//the score will be returned/stored in the answerScore variable
-		
+			
 	var answerModel = controller.models["answers"];
-//	var questionpoolModel = controller.models['questionpool'];
-	var filledAnswers=answerModel.getAnswers(); //the values that the user typed
-//	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
-//	moblerlog("gaps array in calculate score is "+JSON.stringify(gapsObject));
-	var gaps = [];
+	var filledAnswers=answerModel.getAnswers(); 
+	var gaps = []; // a helper array that will store the result of the comparison between 
+				   // the actual and the filled answers,
+				   // 1 is assigned as a value  if the answer was filled correctly for the specific (index i) gap and 0 if not
 	for (i=0; i<filledAnswers.length;i++){
-		var actualCorrectGaps= getCorrectGaps(i);
+		var actualCorrectGaps= getCorrectGaps(i); // an array containing the correct answers for the gap with the index i in the
+												  // object that is returned from the server
 		moblerlog("actual Correct Gaps for gap "+i+" is "+actualCorrectGaps);
 		if (actualCorrectGaps.indexOf(filledAnswers[i])!==-1){
 			gaps[i]=1;
@@ -321,17 +323,19 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 	}
 	
 	this.answerScore=calculateAnswerScoreValue();
-		
+	
+	
 	function calculateAnswerScoreValue(){
 		moblerlog("calculates answre score value in cloze questions");
-		var sumValue=0;
+		var sumValue=0; // a helper variable that calculates the sum of the values of the gaps array 
 		for (gapindex=0; gapindex<gaps.length; gapindex++) {
 			sumValue= sumValue + gaps[gapindex];	
 		}
 		moblerlog("sumvalue is "+sumValue);
 		if (sumValue == 0){
 			this.answerScore=0;
-		}else if(sumValue==gaps.length){
+		}else if(sumValue==gaps.length){ // if all gaps are filled in correctly, then all elements of the gaps array have value 1
+										 // so the sum of these values is equal to the length of the array
 			this.answerScore=1;
 		}else{
 			this.answerScore=0.5;
@@ -487,13 +491,20 @@ AnswerModel.prototype.calculateScore = function () {
 	}
 };
 
-
+/**
+ * Checks if the filled gap by the user
+ * is among the correct gaps.
+ * @prototype
+ * @function checkFilledAnswer 
+ * @param {string array, number} filledAnswer, gapIndex
+ * @ return true if the filled answer is among the correct answers, false in the opposite case
+ **/
 AnswerModel.prototype.checkFilledAnswer = function(filledAnswer,gapIndex) {
 	var correctGaps= getCorrectGaps(gapIndex);
 	if (correctGaps.indexOf(filledAnswer)!==-1){
 		return true;
 	}else{
-			return false;
-			}
+		return false;
+	}
 };
 

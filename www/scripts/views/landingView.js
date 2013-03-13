@@ -163,8 +163,8 @@ LandingView.prototype.closeDiv = closeView;
 
 
 /**
- * closes the view after firstly clearing
- * the input fields of the login form
+ * closes the view after firstly removing the gradients 
+ * of the featured and exclusive content
  * @prototype
  * @function close
  **/ 
@@ -192,7 +192,8 @@ LandingView.prototype.selectExclusiveContent = function() {
 /**
  * displays the landing form 
  * @prototype
- * @function 
+ * @function showForm
+ * @param{string}, featuredContent_id
  */ 
 LandingView.prototype.showForm = function(featuredContent_id) {
 	moblerlog("enter show form of landing view");
@@ -204,9 +205,7 @@ LandingView.prototype.showForm = function(featuredContent_id) {
 	$("#featuredContent").attr("id",featuredContent_id);
 	$("#landingViewHeader").show();
 	moblerlog("showed landing view header");
-//	featuredModel.loadData();
 	$("#landingLmsLabel").text(featuredModel.getTitle());
-	
 	
 	if ($("#selectarrowLanding").hasClass("icon-loading loadingRotation")) {
 			$("#selectarrowLanding").addClass("icon-bars").removeClass("icon-loading loadingRotation");
@@ -214,60 +213,7 @@ LandingView.prototype.showForm = function(featuredContent_id) {
 	}
 	$("#landingBody").show();	
 	moblerlog("showed the body of the landing page");
-   
-
-	
-	
-
-	
-	
-	//**********************Design landing page in Javascript*********************
-//	var li = $("<li/>", { }).appendTo("#landingElements");
-//	
-//	var div = $("<div/>", {
-//		"id" : "featuredContent",
-//		"class": "selectWidget gradient2"
-//	}).appendTo(li);
-//	
-//	var div2 = $("<div/>", {
-//		"class": "left lineContainer selectItemContainer"
-//	}).appendTo(div);
-//	
-//	var span1 = $("<span/>", {
-//		"class": "select icon-dash"
-//	}).appendTo(div2);
-//	
-//	var div3 = $("<div/>", {
-//		"id":"leftElement1",
-//		"class":"labelContainer"
-//	}).appendTo(div);
-//	
-//	
-//	var div3_1=$("<div/>", {
-//		"id":"landingLmsLabel",
-//		"class":"lsmlabel textShadow",
-//		"text":"Featured Content"
-//	}).appendTo(div3);
-//	
-//	var div4 = $("<div/>", {
-//		"id":"rightElements",
-//		"class":"right"
-//	}).appendTo(div);
-//	
-//	var div4_1 = $("<div/>", {
-//		"id":"separatorLanding",
-//		"class":"lineContainer separatorContainerCourses radial"
-//	}).appendTo(div4);
-//	
-//	var div4_2 = $("<div/>", {
-//		"id":"selectarrowLanding",
-//		"class":"lineContainer selectItemContainer select"
-//	}).appendTo(div4);
-//	
-//	var span4_2 = $("<span/>", {
-//		"class": "icon-bars"
-//	}).appendTo(div4_2);
-//	
+ 
 }
 
 
@@ -289,7 +235,7 @@ LandingView.prototype.showErrorMessage = function(message) {
  */ 
 LandingView.prototype.clickFeaturedItem = function(featuredContent_id){
 	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
-//	$("#featuredContent").addClass("gradientSelected");
+		//	$("#featuredContent").addClass("gradientSelected");
 	this.controller.models['questionpool'].reset();
 	this.controller.models['questionpool'].loadData(featuredContent_id);
 	this.controller.models['answers'].setCurrentCourseId(featuredContent_id);
@@ -313,10 +259,9 @@ LandingView.prototype.hideErrorMessage = function() {
 /**
 * handles dynamically any change that should take place on the layout
 * when the orientation changes.
-* TODO: to check the misbehavior when changing from horizontal mode to vertical mode, 
-* after coming back from login view
 * @prototype
 * @function changeOrientation
+* @param {string, number, number} orientationLayout, width of device screen, height of device screen
 **/ 
 LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	moblerlog("change orientation in landing view");
@@ -325,9 +270,11 @@ LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 
 
 /**
- * click on statistic icon calculates the appropriate statistics and shows them
+ * click on statistic icon calculates the appropriate statistics and 
+ * loads the statistics view after transforming the statistics icon into loading icon
  * @prototype
  * @function clickStatisticsIcon
+ * @param {string} featuredContent_id
  */ 
 LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
 	moblerlog("statistics button in landing view clicked");
@@ -344,8 +291,8 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
 };
 
 /**
- * sets dynamically the width of the input elements
- * of the login form.
+ * sets dynamically the width of the elements
+ * of the landing form.
  * it is calculated by substracting from the device width in the current mode (landscape, portrait)
  * which has been detected in the controller the sum of the widths of the rest dom elements around it
  * such as: dash bar, icon container and separator.
