@@ -289,7 +289,11 @@ li {
 	
 }
 
-
+.defaultHeight{
+	height:47px;
+	border:0px solid green;
+	
+}
 /*********************** Views ***********************/
 #coursesListView {
 	display: none;
@@ -489,6 +493,12 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	height: 33px;
 	margin-right:0px;	
 
+}
+
+.inputBorderTop {
+	clear:both;
+	line-height: 55px;
+	border:0px solid red;
 }
 
 .inputBorderCloze {

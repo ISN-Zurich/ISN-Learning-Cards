@@ -149,7 +149,7 @@ ClozeQuestionType.prototype.setCorrectAnswerTickHeight = function() {
 
 
 /**
- * Sets the height of the list items that contain correct answers
+ *
  * @prototype
  * @function setCorrectAnswerTickHeight
  **/ 
@@ -171,6 +171,7 @@ function createClozeQuestionBody(domElement,interactive) {
 	domElement.contents().wrap('<li class="marginClozeLi"/>'); //the contents returns also the text nodes. the children not
 	
 		if (interactive) {
+			moblerlog("design answer view for cloze question");
 	// now replace all gap tags in the cardAnswerBody
 	$("#cardAnswerBody gap").each(function(i,gap){
 		var inputtag = '<input type="text" class=" loginInputCloze textShadow" required="required" width="200px"placeholder="fill in the gap" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
@@ -202,6 +203,7 @@ var shadoweddiv = $("<div/>", {
 	$("#cardAnswerBody").append(shadoweddiv);
 		}	
 	else {
+		moblerlog("design feedback view for cloze question");
 				
 		// replace all gap tags in the card feedback body with div's
 		$("#feedbackBody gap").each(function(i,gap){
@@ -213,7 +215,8 @@ var shadoweddiv = $("<div/>", {
 			moblerlog("filled gap is "+filledAnswer);
 
 		var div = $("<div/>", {
-				"class" : "text ",
+				//"class" : "text ",
+			"class":( filledAnswer.length > 0  ? "text" : "defaultHeight"),
 				text : filledAnswer
 			}).replaceAll($(this));
 		
@@ -251,7 +254,7 @@ var shadoweddiv = $("<div/>", {
 		
 
 		var rightDiv2 = $("<div/>", {
-			"class" : "right"
+			"class" : "right "
 		}).appendTo(li);
 			
 		var separator2 = $("<div/>", {
@@ -271,6 +274,16 @@ var shadoweddiv = $("<div/>", {
 			"class" : "text",
 			text : correctGapsArray[j]
 		}).appendTo(li);
+		
+		var dashContainer = $("<div/>", {
+			"class": "left lineContainer selectItemContainerCloze"
+		});
+		
+		var dash = $("<span/>", {
+			"id": "clozeInputDashFeedback",
+			"class": " inputBorderTop dashGrey icon-dash"
+		}).appendTo(dashContainer);
+		dashContainer.insertBefore(rightDiv2);
 		}//end for
 		}//end if	
 	}) ;
