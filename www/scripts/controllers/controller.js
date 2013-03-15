@@ -249,9 +249,7 @@ function Controller() {
 //		//self.transitionToEndpoint();
 //	}
 
-	//we binded this event here in order to 
-	$(document).bind("featuredContentlistupdate", function() {	
-		
+	function cbFeaturedContentListUpdate() {	
 		var currentTime = new Date().getTime();
 		var deltaTime= currentTime - startTime;
 		if (deltaTime < 3000) {
@@ -263,7 +261,11 @@ function Controller() {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
-	});
+		$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+	}
+	
+	//we binded this event here in order to 
+	$(document).bind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	
 	injectStyle();
 moblerlog("End of Controller");
@@ -491,6 +493,13 @@ Controller.prototype.transitionToFeedbackMore = function() {
  * @function transitionToStatistics 
  **/
 Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag) {
+	
+	// this.models['statistics'].setCurrentCourseId(courseID);
+	// if ( !this.models['statistics'].dataAvailable() ) {
+	// The user tries to access course statistics w/out being authenticated
+	// send the user to the landing view, because this is only place where a statistics button is available
+	// }
+	
 	if (this.getLoginState()) {
 		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
 		moblerlog("enters get logic state in transition to statistics in controller");
