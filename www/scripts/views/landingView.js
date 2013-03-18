@@ -34,7 +34,7 @@ under the License.
  *  - it sets the tag ID for the landing view
  *  - assigns various event handlers when taping on the elements of the
  *    landing form such as featured content, exclusive content (and free content soon)
- *  - it binds synhronization events such as the sending of statistics to the server,
+ *  - it binds synchronization events such as the sending of statistics to the server,
  *    the update of courses and questions. It prevents the display of the appropriate
  *    views that are also binded with the aforementioned events by displaying the
  *    login form itself.(FIX ME:. stay here instead of redirecting to the login view)
@@ -169,8 +169,6 @@ LandingView.prototype.closeDiv = closeView;
  * @function close
  **/ 
 LandingView.prototype.close = function() {
-//	$('#featuredContent').removeClass("gradientSelected");
-//	$('#featuredContent').addClass("gradient2");
 	$("#selectExclusiveContent").removeClass("gradientSelected");
 	$("#featuredContent").removeClass("gradientSelected");
 	this.active = false;
@@ -208,8 +206,7 @@ LandingView.prototype.showForm = function() {
 	$("#landingLmsLabel").text(featuredModel.getTitle());
 	
 	if ($("#selectarrowLanding").hasClass("icon-loading loadingRotation")) {
-			$("#selectarrowLanding").addClass("icon-bars").removeClass("icon-loading loadingRotation");
-		
+		$("#selectarrowLanding").addClass("icon-bars").removeClass("icon-loading loadingRotation");	
 	}
 	$("#landingBody").show();	
 	moblerlog("showed the body of the landing page");
