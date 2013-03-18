@@ -50,11 +50,12 @@ var DB_VERSION = 1;
  * 	- the start time point that the user reached a question
  * It opens the local html5-type database. If it doesn't exist yet it is initiated in the constructor.  
  */
-function AnswerModel() {
+function AnswerModel(controller) {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = -1;
 
+	this.controller = controller;
 	this.currentCourseId = -1;
 	this.currentQuestionId = -1;
 	this.start = -1;
@@ -449,10 +450,15 @@ AnswerModel.prototype.storeScoreInDB = function() {
  * @function deleteDB 
  **/
 AnswerModel.prototype.deleteDB = function(featuredContent_id) {
+	var self=this;
 	//localStorage.removeItem("db_version");
+	//self.controller.models["course"].getCourseList();
+	var courseList = this.controller.models["course"].courseList;
+	moblerlog();
 	this.db.transaction(function(tx) {
 		// DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
-		tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
+		tx.executeSql("DELETE FROM statistics where course_id IN = ? ", [courseList], function() {
+		//tx.executeSql("DELETE FROM statistics where course_id ! = ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
 		}, function() {
 			moblerlog("error: statistics table not cleared");
