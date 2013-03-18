@@ -268,7 +268,7 @@ ConfigurationModel.prototype.logout = function(featuredContent_id) {
 	if (courseList) {
 		for ( c in courseList ) {
 			moblerlog("clear local question pools");
-			if (courseList[c].id !== FEATURED_CONTENT_ID){
+			if (courseList[c].id !== featuredContent_id){
 			localStorage.removeItem("questionpool_" + courseList[c].id);
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
 			}
