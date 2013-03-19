@@ -294,6 +294,7 @@ ConfigurationModel.prototype.logout = function(featuredContent_id) {
 * @function sendAuthToServer
 */
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
+	moblerlog("enter send Auth to server");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
 	moblerlog("url: " + self.urlToLMS + '/authentication.php');
@@ -351,7 +352,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
                          */   
 						$(document).trigger("authenticationready",
 								self.configuration.userAuthenticationKey);
-						
+						moblerlog("authentication is ready, statistics can be loaded from the server");
 						//sets the language interface for the authenticated user
 						//its language preferences were received during the authentication 
 											
