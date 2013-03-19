@@ -178,6 +178,7 @@ CoursesListView.prototype.close = function() {
  **/ 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
 	if (this.controller.models['course'].isSynchronized(course_id)) {
+		moblerlog("click course item");
 		this.controller.models['questionpool'].reset();
 		this.controller.models['questionpool'].loadData(course_id);
 		this.controller.models['answers'].setCurrentCourseId(course_id);
