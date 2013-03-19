@@ -109,6 +109,8 @@ function StatisticsModel(controller) {
 		$(document).bind("checkachievements", function(p, courseId) {
 		self.cardBurner.calculateValue(courseId);
 	});
+		
+		self.getAllDBEntries
 }
 
 /**
@@ -370,6 +372,7 @@ StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
  * @function dbErrorFunction
  */
 StatisticsModel.prototype.loadFromServer = function() {
+	moblerlog("enter load statistis");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
 	if (self.controller.models['authentication'].isLoggedIn()) {
@@ -440,10 +443,11 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 			           item['duration'] ];
 			self.queryDB(query, values, function cbInsert(transaction,
 					results) {
-                         moblerlog("after inserting");
+                         moblerlog("after inserting in insertStatisticsItem");
 			});
 		}
 	}
+	moblerlog("end of insertStatisticsItem");
 };
 
 
