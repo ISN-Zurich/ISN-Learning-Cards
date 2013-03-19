@@ -50,8 +50,13 @@ function LandingView(controller) {
 	var prevent=true;
 	var featuredContent_id = FEATURED_CONTENT_ID;
 	
+	jester($('#selectarrowLanding')[0]).tap(function(e) {
+//		e.stopPropagation();
+		moblerlog("taped statistics icon landing view");
+		self.clickFeaturedStatisticsIcon(featuredContent_id);
+	});
 	
-	jester($('#featuredContent')[0]).tap(function(e,prevent) {
+	jester($('#landingLmsLabel')[0]).tap(function(e,prevent) {
 		moblerlog("taped feautured Content");
 //		$('#featuredContent').addClass("gradientSelected");
 //		e.stopPropagation();
@@ -100,11 +105,7 @@ function LandingView(controller) {
 	
 	});
 
-	jester($('#selectarrowLanding')[0]).tap(function(e) {
-		moblerlog("taped statistics icon landing view");
-			
-		self.clickFeaturedStatisticsIcon(featuredContent_id);
-	});
+	
 	
 } //end of constructor
 
@@ -281,7 +282,7 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
 	
 	if ($("#selectarrowLanding").hasClass("icon-bars")) {
 		moblerlog("select arrow landing has icon bars");
-		$("#selectarrowLanding").addClass("icon-loading loadingRotation").removeClass("icon-bars");
+		$("#selectarrowLanding").removeClass("icon-bars").addClass("icon-loading loadingRotation");
 		
 		//icon-loading, icon-bars old name
 		//all calculations are done based on the course id and are triggered
