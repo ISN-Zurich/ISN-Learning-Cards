@@ -110,7 +110,6 @@ function StatisticsModel(controller) {
 		self.cardBurner.calculateValue(courseId);
 	});
 		
-		self.getAllDBEntries
 }
 
 /**
@@ -398,6 +397,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 						
 						for ( i = 0; i < statisticsObject.length; i++) {
 							self.insertStatisticItem(statisticsObject[i]);
+							moblerlog("i is "+i+" and the length of statistics object is "+statisticsObject.length);
 						}
 						moblerlog("after inserting statistics from server");
 						// trigger event statistics are loaded from server
@@ -420,7 +420,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 /**
  * inserts the statistic item into the database if it doesn't exist there yet
  * @prototype
- * @function insertStatisticItem 
+ * @function   
  */
 StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	var self = this;
@@ -443,11 +443,11 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 			           item['duration'] ];
 			self.queryDB(query, values, function cbInsert(transaction,
 					results) {
-                         moblerlog("after inserting in insertStatisticsItem");
+                         moblerlog("after inserting in insertStatisticsItem "+JSON.stringify(statisticItem));
 			});
 		}
 	}
-	moblerlog("end of insertStatisticsItem");
+	
 };
 
 
