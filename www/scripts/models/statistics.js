@@ -126,7 +126,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
     moblerlog("course-id: " + courseId);
     
 	// uncomment the following line for debugging purposes
-    // this.getAllDBEntries(); 
+    this.getAllDBEntries(); 
     
 	this.controller.models['questionpool'].loadData(courseId);
 	
@@ -404,6 +404,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 					
 						// Store a flag into the local storage that the data is loaded.
 						self.controller.setConfigVariable("statisticsLoaded", true);
+						moblerlog("config variable is set to true");
 						$(document).trigger("loadstatisticsfromserver");
 					},
 					error : function(xhr, err, errorString) {
