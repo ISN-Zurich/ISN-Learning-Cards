@@ -510,7 +510,7 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 		else if (courseID == "fd"){
 			moblerlog("enter the statistics from featured content in courses list view");
 			this.models['statistics'].setCurrentCourseId(courseID);
-			this.transition("statisticsView", courseID); //this should be called when the previous executions will be finished
+			//this.transition("statisticsView", courseID); //this should be called when the previous executions will be finished
 		}
 		else
 		{
@@ -525,7 +525,7 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 		if (courseID && !achievementsFlag){
 		moblerlog("enter the statistics from landing view");
 		this.models['statistics'].setCurrentCourseId(courseID);
-		this.transition("statisticsView", courseID);
+		//this.transition("statisticsView", courseID);
 		}else if (achievementsFlag)
 			{
 			this.transition("statisticsView",achievementsFlag);
