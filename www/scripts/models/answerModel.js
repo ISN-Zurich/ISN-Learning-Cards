@@ -449,7 +449,7 @@ AnswerModel.prototype.storeScoreInDB = function() {
  * @function deleteDB 
  **/
 AnswerModel.prototype.deleteDB = function(featuredContent_id) {
-	//localStorage.removeItem("db_version");
+	localStorage.removeItem("db_version");
 	this.db.transaction(function(tx) {
 		// DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
 		tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
