@@ -149,18 +149,19 @@ StatisticsView.prototype.openDiv = openView;
 StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 	var self=this;
 	if (self.controller.getLoginState()) {
-		if (featuredContent_id){
+		if (featuredContent_id || self.controller.getConfigVariable("statisticsLoaded")== true){
 			self.loadData();
-		}else{
-		moblerlog("open statistics view outside featured context");
-		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-		moblerlog("statistics have been loaded from server");
-		self.loadData();
 		}
+//		else{
+//		moblerlog("open statistics view outside featured context");
+//		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
+//		moblerlog("statistics have been loaded from server");
+//		self.loadData();
+//		}
 		else {
 		self.showLoadingMessage();
 			}
-		}
+		//}
 	}//end of is logged in
 	else //if we are not logged in 
 		{
