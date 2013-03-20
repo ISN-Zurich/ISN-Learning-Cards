@@ -101,7 +101,7 @@ function LandingView(controller) {
 	
 	$(document).bind("featuredContentlistupdate", function(e,featuredCourseId) {
 		
-	self.showForm(featuredCourseId); //this will be called when a synchronization update takes place
+	self.showForm(); //this will be called when a synchronization update takes place
 	
 	});
 
@@ -146,9 +146,9 @@ LandingView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-LandingView.prototype.open = function(featuredContent_id) {
+LandingView.prototype.open = function() {
 	moblerlog("landingView: open sesame");
-	this.showForm(featuredContent_id);
+	this.showForm();
 	this.openDiv();
 	this.active = true;
 	setFeaturedWidth();
@@ -196,14 +196,14 @@ LandingView.prototype.selectExclusiveContent = function() {
  * @function showForm
  * @param{string}, featuredContent_id
  */ 
-LandingView.prototype.showForm = function(featuredContent_id) {
+LandingView.prototype.showForm = function() {
 	moblerlog("enter show form of landing view");
 	var self=this;
 	var featuredModel = self.controller.models['featured'];
 	this.hideErrorMessage();
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
-	$("#featuredContent").attr("id",featuredContent_id);
+	$("#featuredContent").attr("id",this.featuredContent_id);
 	$("#landingViewHeader").show();
 	moblerlog("showed landing view header");
 	$("#landingLmsLabel").text(featuredModel.getTitle());
@@ -234,14 +234,13 @@ LandingView.prototype.showErrorMessage = function(message) {
  * @prototype
  * @function clickFeaturedItem
  */ 
-LandingView.prototype.clickFeaturedItem = function(featuredContent_id){
-	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
-		//	$("#featuredContent").addClass("gradientSelected");
+LandingView.prototype.clickFeaturedItem = function(featuredCourseId){
+	//if (this.controller.models['featured'].isSynchronized()) {
 	this.controller.models['questionpool'].reset();
-	this.controller.models['questionpool'].loadData(featuredContent_id);
-	this.controller.models['answers'].setCurrentCourseId(featuredContent_id);
+	this.controller.models['questionpool'].loadData(featuredCourseId);
+	this.controller.models['answers'].setCurrentCourseId(featuredCourseId);
 	moblerlog("enters clickFeauturedItem");
-	this.controller.transitionToQuestion(featuredContent_id);
+	this.controller.transitionToQuestion(featuredCourseId);
 	//}
 };
 
