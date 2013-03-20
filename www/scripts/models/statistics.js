@@ -121,7 +121,11 @@ function StatisticsModel(controller) {
  * @function setCurrentCourseId
  */
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
-
+    this.currentCourseId = undefined;
+	
+	// if the course id is one of the free content
+	// OR if the authenticated user has access to the course id
+	
     this.currentCourseId = courseId;
     moblerlog("course-id: " + courseId);
     
@@ -142,6 +146,14 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 		// message to the user
 		$(document).trigger("allstatisticcalculationsdone");	
 	}
+	// endif the user has access to the course id
+};
+
+StatisticsModel.prototype.dataAvailable= function() {
+	if (this.currentCourseId) {
+		return true;
+	}
+	return false;
 };
 
 

@@ -181,8 +181,10 @@ CoursesListView.prototype.clickCourseItem = function(course_id) {
 		moblerlog("click course item");
 		this.controller.models['questionpool'].reset();
 		this.controller.models['questionpool'].loadData(course_id);
+		// if this.controller.models['questionpool'].dataAvailable() 
 		this.controller.models['answers'].setCurrentCourseId(course_id);
 		this.controller.transitionToQuestion();
+		// endif
 	}
 };
 
