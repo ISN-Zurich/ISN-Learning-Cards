@@ -195,7 +195,7 @@ QuestionView.prototype.openDiv = openView;
  **/
 QuestionView.prototype.open = function(featuredContent_id) {
 	this.showQuestionTitle();
-	this.showQuestionBody(featuredContent_id);
+	this.showQuestionBody();
 //	if (!controller.models["answers"].hasStarted()) {
 //		if(featuredContent_id){
 //			controller.models["answers"].startTimer(featuredContent_id);	
