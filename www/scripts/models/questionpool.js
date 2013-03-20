@@ -44,7 +44,6 @@ under the License.
  */
 function QuestionPoolModel(controller) {
 	this.controller = controller;
-
 	this.questionList = [];
 	this.id = 0;
 	this.indexAnswer = 0;

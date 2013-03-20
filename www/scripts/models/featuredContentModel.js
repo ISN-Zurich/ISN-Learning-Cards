@@ -325,7 +325,7 @@ FeaturedContentModel.prototype.switchToOnline = function() {
 	this.checkForTimeOut();
 
 	if (this.syncState) {
-		this.loadFromServer();
+		this.loadFeaturedCourseFromServer();
 	} else {
         var c;
 		for ( c in this.courseList) {
