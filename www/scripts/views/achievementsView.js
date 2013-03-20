@@ -55,7 +55,7 @@ function AchievementsView(controller){
 	 var prevent=false;
 	 jester($('#closeAchievementsIcon')[0]).tap(function(event){
 		 moblerlog("achievements: close tap");
-		 self.closeAchievements(featuredContent_id);
+		 self.closeAchievements(achievementsFlag);
 		 event.stopPropagation(); } );
 
 		/**It is triggered after statistics loaded locally from the server. This happens during the
@@ -167,9 +167,9 @@ AchievementsView.prototype.close = closeView;
  * @prototype
  * @function closeAchievements
  **/
-AchievementsView.prototype.closeAchievements = function(featuredContent_id) {
+AchievementsView.prototype.closeAchievements = function(achievementsFlag) {
 	moblerlog("close Achievements button clicked");
-	controller.transitionToStatistics(featuredContent_id);
+	controller.transitionToStatistics(achievementsFlag);
 };
 
 
