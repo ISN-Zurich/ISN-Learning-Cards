@@ -234,10 +234,10 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			moblerlog("sync time out is:"+JSON.stringify(self.syncTimeOut));
 			//store the featured questions in the same local storage object with the exclusive content questions
 			//they will all be handled by the same model- questionpool.
-			var featuredCourseId = FEATURED_CONTENT_ID;
+			//var featuredCourseId = FEATURED_CONTENT_ID;
 //			localStorage.setItem("questionpool_" +featuredCourseId, list);
 			
-			localStorage.setItem("questionpool_" +featuredCourseId,stringifiedFeaturedQuestions);
+			localStorage.setItem("questionpool_" +self.featuredCourseId,stringifiedFeaturedQuestions);
 			moblerlog("questionpool object for fd is "+localStorage.getItem("questionpool_"+this.featuredCourseId));
 			
 			//store in the local storage all the data except the questions
