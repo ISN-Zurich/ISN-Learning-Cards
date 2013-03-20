@@ -214,11 +214,11 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			self.featuredContentList = featuredObject.featuredCourses || [];
 			self.featuredQuestions = self.featuredContentList[0]["questions"];
 			stringifiedFeaturedQuestions = JSON.stringify(self.featuredQuestions);
-			moblerlog("featured questions are "+JSON.stringify(self.featuredQuestions));
+			moblerlog("featured questions are "+stringifiedFeaturedQuestions);
 						
-			x=JSON.stringify(self.featuredContentList);
-			moblerlog("JSON Featured Content: "+x);
-			moblerlog("featured Content info length "+ self.featuredContentList.length); //needed this for title debugging
+//			x=JSON.stringify(self.featuredContentList);
+//			moblerlog("JSON Featured Content: "+x);
+//			moblerlog("featured Content info length "+ self.featuredContentList.length); //needed this for title debugging
 
 //			var pos=x.indexOf("questions");
 //			q="questions";
@@ -227,23 +227,26 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 //			moblerlog("position of last pointer: "+last);
 //			var list= x.substring(pos+l+2, x.length-2);
 //			moblerlog("featured questions are "+list);
-			
+//			
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;
 			self.syncTimeOut = featuredObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 			moblerlog("sync time out is:"+JSON.stringify(self.syncTimeOut));
 			//store the featured questions in the same local storage object with the exclusive content questions
 			//they will all be handled by the same model- questionpool.
-			//	var featuredCourseId = FEATURED_CONTENT_ID;
-			//	localStorage.setItem("questionpool_" +featuredCourseId, list);
+			var featuredCourseId = FEATURED_CONTENT_ID;
+//			localStorage.setItem("questionpool_" +featuredCourseId, list);
 			
-			localStorage.setItem("questionpool_" +this.featuredCourseId,stringifiedFeaturedQuestions);
+			localStorage.setItem("questionpool_" +featuredCourseId,stringifiedFeaturedQuestions);
 			moblerlog("questionpool object for fd is "+localStorage.getItem("questionpool_"+this.featuredCourseId));
 			
 			//store in the local storage all the data except the questions
-//			var featuredCourseString=x.substring(0,pos-2).concat("}]");
-//			moblerlog("featured course string is"+featuredCourseString);
-//			self.storeData(featuredCourseString);	
+
+			// 	var featuredCourseString=x.substring(0,pos-2).concat("}]");
+			//	moblerlog("featured course string is"+featuredCourseString);
+			//	self.storeData(featuredCourseString);	
+			
+			
 			self.storeData();
 			
 			self.reset();
