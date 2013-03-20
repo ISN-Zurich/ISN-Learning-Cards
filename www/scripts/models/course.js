@@ -130,7 +130,7 @@ CourseModel.prototype.storeData = function() {
  * Loads the data from the local storage (key = "courses"). Therefore the string
  * is converted into a json object of which the data is taken. The very first time
  * we launch the app, everything is initialized and set to false, empty and get the current time.
- * @function loadData
+ * @function //
  */
 CourseModel.prototype.loadData = function() {
 	var courseObject;
@@ -430,3 +430,22 @@ CourseModel.prototype.switchToOnline = function() {
 	this.syncState = false;
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 };
+
+/**
+ * Returns the course list
+ * @prototype
+ * @function getCourseList
+ * */
+CourseModel.prototype.getCourseList = function() {
+	var self=this;
+	//moblerlog("course list in courses model is "+JSON.stringify(this.courseList));
+	self.loadData();
+	moblerlog("course list in getCourseList is"+this.courseList);
+	var c;
+	var coursesIdList=[];
+	for ( c in this.courseList){
+	coursesIdList[c]=this.courseList[c].id;	
+	}
+	moblerlog("courses id list is"+coursesIdList);
+	return coursesIdList;
+}
