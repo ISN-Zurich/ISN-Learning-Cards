@@ -518,7 +518,7 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 			// when the achievements get closed we won't pass the course id
 			// in order to avoid that the statistics are recalculated. Which makes no sense,
 			// because the statistics model has already all the data in place.
-			this.transition("statisticsView");
+			this.transition("statisticsView",achievementsFlag);
 		}
 	}//end of is logged in
 	else {
