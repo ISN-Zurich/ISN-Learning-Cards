@@ -147,6 +147,9 @@ CourseModel.prototype.loadData = function() {
 	this.index = 0;
 
 	this.checkForTimeOut();
+	
+	moblerlog("object courses is "+localStorage.getItem("courses"));
+	moblerlog("course list in load data is "+this.courseList);
 };
 
 /**
@@ -440,7 +443,7 @@ CourseModel.prototype.getCourseList = function() {
 	var self=this;
 	//moblerlog("course list in courses model is "+JSON.stringify(this.courseList));
 	self.loadData();
-	moblerlog("course list in getCourseList is"+this.courseList);
+	moblerlog("course list in getCourseList is"+self.courseList);
 	var c;
 	var coursesIdList=[];
 	for ( c in this.courseList){

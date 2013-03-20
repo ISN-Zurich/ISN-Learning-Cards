@@ -409,7 +409,7 @@ StatisticsModel.prototype.loadFromServer = function() {
 						
 						for ( i = 0; i < statisticsObject.length; i++) {
 							self.insertStatisticItem(statisticsObject[i]);
-							moblerlog("i is "+i+" and the length of statistics object is "+statisticsObject.length);
+							//moblerlog("i is "+i+" and the length of statistics object is "+statisticsObject.length);
 						}
 						moblerlog("after inserting statistics from server");
 						// trigger event statistics are loaded from server
@@ -437,7 +437,7 @@ StatisticsModel.prototype.loadFromServer = function() {
  */
 StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	var self = this;
-    moblerlog("day: " + statisticItem['day']);
+   // moblerlog("day: " + statisticItem['day']);
 	
 	self
 	.queryDB(
@@ -516,7 +516,7 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 				//	rowCourse= row.course_id;
 				//	moblerlog("course id is "+rowCourse);
 				statistics.push(row);
-                moblerlog("sending " + i + ": " + JSON.stringify(row));
+               // moblerlog("sending " + i + ": " + JSON.stringify(row));
 			}
 			sessionkey = self.controller.models['authentication'].getSessionKey();
 			uuid = device.uuid;

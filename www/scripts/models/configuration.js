@@ -277,7 +277,7 @@ ConfigurationModel.prototype.logout = function(featuredContent_id) {
 	
 	// remove course list and pending course list request
 	localStorage.removeItem("pendingCourseList");
-	localStorage.removeItem("courses");
+	//localStorage.removeItem("courses");
 	this.controller.models['course'].resetCourseList();
 
 };
