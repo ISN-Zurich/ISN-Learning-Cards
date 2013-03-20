@@ -478,7 +478,8 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
 	if (self.controller.getLoginState() ) {
-	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
+	//var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
+	var url = activeURL + '/statistics.php';
 	moblerlog("url statistics: " + url);
 		// select all statistics data from the local table "statistics"
 		// and then execute the code in sendStatistics function
