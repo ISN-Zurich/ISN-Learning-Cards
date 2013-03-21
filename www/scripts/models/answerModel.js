@@ -449,15 +449,16 @@ AnswerModel.prototype.storeScoreInDB = function() {
  * @function deleteDB 
  **/
 AnswerModel.prototype.deleteDB = function(featuredContent_id) {
+	moblerlog("featured content id in deleteDB is "+featuredContent_id);
 	var self=this;
 	//localStorage.removeItem("db_version");
 	self.controller.models["course"].getCourseList();
 	var courseList = this.controller.models["course"].courseList;
 	moblerlog("course list for the specific user is "+JSON.stringify(courseList));
 	this.db.transaction(function(tx) {
-		// DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
-		tx.executeSql("DELETE FROM statistics where course_id IN= ? ", [courseList], function() {
-		//tx.executeSql("DELETE FROM statistics where course_id ! = ?", [featuredContent_id], function() {
+		//DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
+		// tx.executeSql('DELETE FROM statistics where course_id IN (?)', [courseList], function() {
+		tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
 		}, function() {
 			moblerlog("error: statistics table not cleared");

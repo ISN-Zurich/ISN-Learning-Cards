@@ -43,7 +43,7 @@ under the License.
 function ConnectionState(controller) {
 
 	var self = this;
-	self.controller = controller;
+	this.controller = controller;
     if (device.platform === 'iPhone') {
         var networkState = navigator.connection.type;
 	    } else {
@@ -214,12 +214,11 @@ ConnectionState.prototype.synchronizeData = function() {
  * @function goOffline
  */ 
 ConnectionState.prototype.goOffline = function() {
-	var self=this;
 	moblerlog("**offline**");
 	this.state = false;
 	$(document).trigger("trackingEventDetected","offline");
 	// show no connection error message in login view
 	if (self.controller.views){
-	this.controller.views["login"].showErrorMessage(jQuery.i18n.prop('msg_network_message'));
+	self.controller.views["login"].showErrorMessage(jQuery.i18n.prop('msg_network_message'));
 	}
 };

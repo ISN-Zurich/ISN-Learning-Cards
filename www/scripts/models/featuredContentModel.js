@@ -97,9 +97,8 @@ function FeaturedContentModel(controller) {
 	});
 	
 	
-	//this.loadData(); //we will load data from local storage or from the local json file 
-					// will be already there during the installation of the app
-	this.loadFeaturedCourseFromServer();
+	this.loadData(); //we will load data from local storage 
+	//this.loadFeaturedCourseFromServer();
 }
 
 
@@ -110,13 +109,16 @@ function FeaturedContentModel(controller) {
  * @function loadData
  */
 FeaturedContentModel.prototype.loadData = function() {
+	moblerlog("enter load data in featured model");
 	var featuredObject;
 	try {
 		featuredObject = JSON.parse(localStorage.getItem("featuredContent")) || {};
 	} catch (err) {
 		featuredObject = {};
 	}
-
+moblerlog("featured object issssss: "+featuredObject);
+moblerlog("featured object lenght isss "+JSON.stringify(featuredObject).length);
+	if (featuredObject.length > 0) {
 	this.featuredContentList = featuredObject.featuredCourses || [];
 	this.syncDateTime = featuredObject.syncDateTime || (new Date()).getTime();
 	this.syncState = featuredObject.syncState || false;
@@ -124,6 +126,13 @@ FeaturedContentModel.prototype.loadData = function() {
 	this.index = 0;
 
 	this.checkForTimeOut();
+	moblerlog("object featuredContent is "+localStorage.getItem("featuredContent"));
+	moblerlog("featured content list in load data is "+JSON.stringify(this.featuredContentList));
+	}
+	else {
+		moblerlog("featured content loaded from server");
+		this.loadFeaturedCourseFromServer();
+	}
 	
 };
 
@@ -257,7 +266,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
                 var c;
 				for ( c in self.featuredContentList) {
 					self.featuredContentList[c].syncState = syncStateCache[self.featuredContentList[c].id];
-					moberlog("sync state of featured content list is "+self.featuredContentList[c].syncState);
+					moblerlog("sync state of featured content list is "+self.featuredContentList[c].syncState);
 				}
 			}
 			

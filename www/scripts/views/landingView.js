@@ -56,11 +56,13 @@ function LandingView(controller) {
 		self.clickFeaturedStatisticsIcon(featuredContent_id);
 	});
 	
+	
 	jester($('#landingLmsLabel')[0]).tap(function(e,prevent) {
 		moblerlog("taped feautured Content");
 //		$('#featuredContent').addClass("gradientSelected");
 //		e.stopPropagation();
 //		e.preventDefault();
+		$("#featuredContent").addClass("gradientSelected");
 		self.clickFeaturedItem(featuredContent_id);
 	});
 	

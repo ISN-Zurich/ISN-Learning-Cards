@@ -456,7 +456,7 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 			           item['duration'] ];
 			self.queryDB(query, values, function cbInsert(transaction,
 					results) {
-                         moblerlog("after inserting in insertStatisticsItem "+JSON.stringify(statisticItem));
+                       //  moblerlog("after inserting in insertStatisticsItem "+JSON.stringify(statisticItem));
 			});
 		}
 	}

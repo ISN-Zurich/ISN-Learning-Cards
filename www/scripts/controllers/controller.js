@@ -261,7 +261,7 @@ function Controller() {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
-		$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+	//	$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	}
 	
 	//we binded this event here in order to 
