@@ -503,14 +503,9 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 	if (this.getLoginState()) {
 		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
 		moblerlog("enters get logic state in transition to statistics in controller");
-		if (courseID && courseID > 0) {
+		if (courseID && (courseID > 0 || courseID === "fd") ) {
 			moblerlog ("enters course id in controller");
 			this.models['statistics'].setCurrentCourseId(courseID);
-		}
-		else if (courseID == "fd"){
-			moblerlog("enter the statistics from featured content in courses list view");
-			this.models['statistics'].setCurrentCourseId(courseID);
-			//this.transition("statisticsView", courseID); //this should be called when the previous executions will be finished
 		}
 		else
 		{
