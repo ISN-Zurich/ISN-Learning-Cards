@@ -261,7 +261,7 @@ function Controller() {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
-	//	$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+		$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	}
 	
 	//we binded this event here in order to 
@@ -446,7 +446,8 @@ Controller.prototype.transitionToCourses = function() {
  **/
 Controller.prototype.transitionToQuestion = function(fd) {
 	moblerlog("enters transition to question in controller");
-	this.transitionToAuthArea('questionView',fd);
+	//this.transitionToAuthArea('questionView',fd);
+	this.transition('questionView',fd);
 };
 
 /**
