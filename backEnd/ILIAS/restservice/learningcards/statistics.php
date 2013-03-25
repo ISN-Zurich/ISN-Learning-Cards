@@ -87,6 +87,7 @@ switch($request_method) {
 		}
 		break;
 	case "DELETE":
+		logging("delete request of featured content statistics");
 	default:
 		logging("request method not supported");
 		break;
