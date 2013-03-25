@@ -235,16 +235,7 @@ LandingView.prototype.showErrorMessage = function(message) {
  */ 
 LandingView.prototype.clickFeaturedItem = function(featuredCourseId){
 	//if (this.controller.models['featured'].isSynchronized()) {
-	this.controller.models['questionpool'].reset();
-	this.controller.models['questionpool'].loadData(featuredCourseId);
-	if (this.controller.models.questionpool.dataAvailable()) {
-		this.controller.models['answers'].setCurrentCourseId(featuredCourseId);
-		moblerlog("enters clickFeauturedItem");
-		this.controller.transitionToQuestion(featuredCourseId);
-	}
-	else {
-		// inform the user that something went wrong. 
-	}
+	selectCourseItem(featuredCourseId);
 	//}
 };
 
