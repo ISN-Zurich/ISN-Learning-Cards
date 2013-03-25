@@ -312,11 +312,13 @@ FeaturedContentModel.prototype.getTitle = function() {
  * @return {Boolean} true if the course with the specified id is synchronized, otherwise false
  */
 FeaturedContentModel.prototype.isSynchronized = function(featuredContentId) {
-	if (featuredContentId > 0) {
+	if (featuredContentId != "") {
+		moblerlog("featured content id is greater than zero");
 		var c;
 		for (c in this.featuredContentList) {
-			moblerlog (""+featuredContentList[c].id);
+			moblerlog ("id of the featuredcontent list"+this.featuredContentList[c].id);
 			if (this.featuredContentList[c].id === featuredContentId) {
+				moblerlog("check id's between featured contentsss");
 				return this.featuredContentList[c].syncState;
 			}
 		}
