@@ -406,3 +406,19 @@ QuestionPoolModel.prototype.reset = function(featuredContent_id) {
  QuestionPoolModel.prototype.resetAnswer = function() {
 	this.indexAnswer = 0;
 };
+
+
+/**
+ * checks the existence and validity 
+ * of the question pool list
+ * @prototype
+ * @function dataAvailable
+ */ 
+QuestionPoolModel.prototype.dataAvailable= function() {
+	if (this.questionList) {
+		moblerlog("questionpool list exists");
+		return true;
+	}
+	moblerlog("questionpool list does not exist");
+	return false;
+};
