@@ -444,10 +444,10 @@ Controller.prototype.transitionToCourses = function() {
  * @prototype
  * @function transitionToQuestion 
  **/
-Controller.prototype.transitionToQuestion = function(fd) {
+Controller.prototype.transitionToQuestion = function() {
 	moblerlog("enters transition to question in controller");
 	//this.transitionToAuthArea('questionView',fd);
-	this.transition('questionView',fd);
+	this.transition('questionView');
 };
 
 /**
@@ -663,7 +663,6 @@ function setButtonHeight() {
 	$(".iconButton").css("line-height", height + "px");
 }
 
-
 /**
  * Sets the width of the forward buttons.
  * The width should expand to the whole width of the screen. 
@@ -713,4 +712,25 @@ function injectStyle() {
     var e = $('<style/>', { 'type': 'text/css', 'text': style});
 
     $('head').append(e);
+}
+
+/**
+ * 	Does the aproropriate calculations when we click on a course item
+ * 	either it is featured content or exclusive content.
+ *  and after loading the data and setting the correct course id we do
+ *  the transiton to the question view as long as we have valid data.
+ *  @function selectCourseItem
+ * 	@ param{string or number}, courseId, the id of the current course
+ * */
+function selectCourseItem(courseId){
+	this.controller.models['questionpool'].reset();//add it within the loadData, similar with statistics (setcurrentCourseId function)...
+	this.controller.models['questionpool'].loadData(courseId);
+	if (this.controller.models.questionpool.dataAvailable()) {
+		this.controller.models['answers'].setCurrentCourseId(courseId);
+		moblerlog("enters clickFeauturedItem");
+		this.controller.transitionToQuestion();
+	}
+	else {
+		// inform the user that something went wrong. 
+	}
 }
