@@ -121,30 +121,36 @@ function StatisticsModel(controller) {
  * @function setCurrentCourseId
  */
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
-    this.currentCourseId = undefined;
-	
-	// if the course id is one of the free content
-	// OR if the authenticated user has access to the course id
-	
-    this.currentCourseId = courseId;
-    moblerlog("course-id: " + courseId);
-    
-	// uncomment the following line for debugging purposes
-   // this.getAllDBEntries(); 
-    
-	this.controller.models['questionpool'].loadData(courseId);
-	
-	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
-	
-	//if statistics are loaded
-	if ((this.controller.getConfigVariable("statisticsLoaded")== true) || this.currentCourseId == "fd"){	
-		this.getFirstActiveDay(courseId);
+	if ( this.currentCourseId !== courseId) {
+		this.currentCourseId = undefined;
+
+		// if the course id is one of the free content
+		// OR if the authenticated user has access to the course id
+
+		this.currentCourseId = courseId;
+		moblerlog("course-id: " + courseId);
+
+		// uncomment the following line for debugging purposes
+		// this.getAllDBEntries(); 
+		
+		// WHY IS THE FOLLOWING LINE
+		this.controller.models['questionpool'].loadData(courseId);
+
+		moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
+
+		//if statistics are loaded
+		if ((this.controller.getConfigVariable("statisticsLoaded")== true) || this.currentCourseId == "fd"){	
+			this.getFirstActiveDay(courseId);
+		}
+		else {
+			// this case is only used if the statistics are not yet loaded from the server
+			// so the controller can move to the statistics view that will then show a nice
+			// message to the user
+			$(document).trigger("allstatisticcalculationsdone");	
+		}
 	}
 	else {
-        // this case is only used if the statistics are not yet loaded from the server
-		// so the controller can move to the statistics view that will then show a nice
-		// message to the user
-		$(document).trigger("allstatisticcalculationsdone");	
+		$(document).trigger("allstatisticcalculationsdone");			
 	}
 	// endif the user has access to the course id
 };

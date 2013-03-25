@@ -433,6 +433,11 @@ AnswerModel.prototype.storeScoreInDB = function() {
 					 * @event checkachievements
 					 * @param:a callback function that sets the id for the current course
 					 */
+					// Now our statistics are no longer correct if we have calculated them
+					if (self.controller.models.statistics.currentCourseId === self.currentCourseId ) {
+						// force that the course statistics have to be recalculated the next time the user requests the course statistics.
+						self.controller.models.statistics.currentCourseId  = -1; 
+					}
 					$(document).trigger("checkachievements", self.currentCourseId);
 				}, function(tx, e) {
 					moblerlog("error! NOT inserted: "+ e.message);
@@ -451,14 +456,16 @@ AnswerModel.prototype.storeScoreInDB = function() {
 AnswerModel.prototype.deleteDB = function(featuredContent_id) {
 	moblerlog("featured content id in deleteDB is "+featuredContent_id);
 	var self=this;
-	//localStorage.removeItem("db_version");
-	self.controller.models["course"].getCourseList();
-	var courseList = this.controller.models["course"].courseList;
+	//localStorage.removeItem("db_version"); // this line is from before we had featured content.
+	var courseList = self.controller.models["course"].getCourseList();
+	//var courseList = this.controller.models["course"].courseList;
 	moblerlog("course list for the specific user is "+JSON.stringify(courseList));
 	this.db.transaction(function(tx) {
 		//DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
-		// tx.executeSql('DELETE FROM statistics where course_id IN (?)', [courseList], function() {
-		tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
+		var qm = [];
+		courselist.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+		tx.executeSql('DELETE FROM statistics where course_id IN ('+ qm.join(",") +')', courseList, function() {
+		// tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
 		}, function() {
 			moblerlog("error: statistics table not cleared");
