@@ -486,11 +486,15 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 	if (self.controller.getLoginState() ) {
 	//var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	var url = activeURL + '/statistics.php';
+	var courseList = self.controller.models["course"].getCourseList();
 	moblerlog("url statistics: " + url);
 		// select all statistics data from the local table "statistics"
 		// and then execute the code in sendStatistics function
-	self.queryDB('SELECT * FROM statistics where course_id != ?', [featuredContent_id], function(t,r) {sendStatistics(t,r);});
-
+	//self.queryDB('SELECT * FROM statistics where course_id != ?', [featuredContent_id], function(t,r) {sendStatistics(t,r);});
+	var qm = [];
+	courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+	self.queryDB('SELECT * FROM statistics where course_id IN ('+ qm.join(",") +')',courseList, function(t,r) {sendStatistics(t,r);});
+	
 	function sendStatistics(transaction, results) {
 		statistics = [];
 		numberOfStatisticsItems = 0;
