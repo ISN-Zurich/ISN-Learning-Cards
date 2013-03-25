@@ -97,7 +97,7 @@ function AchievementsView(controller){
  * @function handlePinch
  **/
 AchievementsView.prototype.handlePinch = function(){
-    controller.transitionToStatistics();
+	this.closeAchievements();
 };
 
 
@@ -115,9 +115,9 @@ AchievementsView.prototype.handleTap = doNothing;
  * @prototype
  * @function handleSwipe
  **/
-AchievementsView.prototype.handleSwipe = function(achievementsFlag) {
+AchievementsView.prototype.handleSwipe = function() {
 	moblerlog("swiped in achievements view");
-	controller.transitionToStatistics(achievementsFlag);
+	this.closeAchievements();
 };
 
 
@@ -167,9 +167,9 @@ AchievementsView.prototype.close = closeView;
  * @prototype
  * @function closeAchievements
  **/
-AchievementsView.prototype.closeAchievements = function(achievementsFlag) {
+AchievementsView.prototype.closeAchievements = function() {
 	moblerlog("close Achievements button clicked");
-	controller.transitionToStatistics(achievementsFlag);
+	controller.transitionToStatistics(controller.models['statistics'].currentCourseId, 1);
 };
 
 
