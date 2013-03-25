@@ -178,14 +178,8 @@ CoursesListView.prototype.close = function() {
  **/ 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
 	if (this.controller.models['course'].isSynchronized(course_id)) {
-		moblerlog("click course item");
-		this.controller.models['questionpool'].reset();
-		this.controller.models['questionpool'].loadData(course_id);
-		// if this.controller.models['questionpool'].dataAvailable() 
-		this.controller.models['answers'].setCurrentCourseId(course_id);
-		this.controller.transitionToQuestion();
-		// endif
-	}
+		selectCourseItem(course_id);
+		}
 };
 
 /**
@@ -409,12 +403,8 @@ CoursesListView.prototype.setIconSize = function() {
  */ 
 CoursesListView.prototype.clickFeaturedItem = function(featuredContent_id){
 	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
-	this.controller.models['questionpool'].reset();
-	this.controller.models['questionpool'].loadData(featuredContent_id);
-	this.controller.models['answers'].setCurrentCourseId(featuredContent_id);
-	moblerlog("enters clickFeauturedItem in course list view");
-	this.controller.transitionToQuestion(featuredContent_id);
-	//}
+	selectCourseItem(courseId);
+//}end of isSynchronized
 };
 
 
