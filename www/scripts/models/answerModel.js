@@ -463,7 +463,7 @@ AnswerModel.prototype.deleteDB = function(featuredContent_id) {
 	this.db.transaction(function(tx) {
 		//DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
 		var qm = [];
-		courselist.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+		courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
 		tx.executeSql('DELETE FROM statistics where course_id IN ('+ qm.join(",") +')', courseList, function() {
 		// tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
