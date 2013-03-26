@@ -193,7 +193,7 @@ QuestionView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-QuestionView.prototype.open = function(featuredContent_id) {
+QuestionView.prototype.open = function() {
 	this.showQuestionTitle();
 	this.showQuestionBody();
 //	if (!controller.models["answers"].hasStarted()) {
