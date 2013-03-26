@@ -89,14 +89,17 @@ QuestionPoolModel.prototype.storeData = function(course_id) {
 QuestionPoolModel.prototype.loadData = function(course_id) {
 	var questionPoolObject;
 	try {
+		moblerlog("question pool object exists");
 		questionPoolObject = JSON.parse(localStorage.getItem("questionpool_"
-				+ course_id))
-				|| [];
+				+ course_id)) || [];
+		moblerlog("questionpool Object is "+questionPoolObject );
 	} catch (err) {
-		questionPoolObject = [];
+		moblerlog("question pool object is zero");
+		questionPoolObject2 = [];
 	}
 	moblerlog("questionpool pool id is ????:"+course_id);
 	this.questionList = questionPoolObject;
+	moblerlog("question pool list for the course_id is "+this.questionList);
 	this.reset();
 };
 
@@ -282,8 +285,7 @@ QuestionPoolModel.prototype.nextQuestion = function(featuredContent_id) {
 		//keeps repeating the process of getting the id of the new random question of question list
 		//while the new random id is still the same with id of the current question or if this new random id is still 
 		//stored in the waiting queue 	
-	} while (this.id === newId
-			|| (this.queue.length * 2 <= this.questionList.length && jQuery
+	} while (this.id === newId || (this.queue.length * 2 <= this.questionList.length && jQuery
 					.inArray(newId, this.queue) >= 0));
 
 	this.id = newId;
