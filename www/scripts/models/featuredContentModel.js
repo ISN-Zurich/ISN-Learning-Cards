@@ -74,10 +74,10 @@ function FeaturedContentModel(controller) {
 
 	this.featuredContentList = [];
 	this.featuredQuestions = [];
-	this.featuredId;
 	this.featuredQuestionList;
 	this.activeQuestion = {};
 	this.featuredCourseId = FEATURED_CONTENT_ID;
+	this.featuredContentActualId;
 	this.index = 0; // index of the current course
 	this.syncDateTime = 0;
 	this.syncState = false;
@@ -223,7 +223,11 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			self.featuredContentList = featuredObject.featuredCourses || [];
 			self.featuredQuestions = self.featuredContentList[0]["questions"];
 			stringifiedFeaturedQuestions = JSON.stringify(self.featuredQuestions);
+			self.featuredContentActualId = self.featuredContentList[0]["id"];
+			var stringifiedfeaturedContentActualId = JSON.stringify(self.featuredContentActualId);
 			moblerlog("featured questions are "+stringifiedFeaturedQuestions);
+			moblerlog(" stringified featured content id is featured model is "+stringifiedfeaturedContentActualId);
+			moblerlog("featured content id is featured model is "+stringifiedfeaturedContentActualId);
 						
 //			x=JSON.stringify(self.featuredContentList);
 //			moblerlog("JSON Featured Content: "+x);
@@ -247,15 +251,17 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 //			localStorage.setItem("questionpool_" +featuredCourseId, list);
 			
 			localStorage.setItem("questionpool_" +self.featuredCourseId,stringifiedFeaturedQuestions);
+			//NEW localStorage.setItem("questionpool_"+self.featuredContentActualId,stringifiedFeaturedQuestions);
+			
 			moblerlog("questionpool object for fd is "+localStorage.getItem("questionpool_"+this.featuredCourseId));
+			//NEW moblerlog("questionpool object for fd is "+localStorage.getItem("questionpool_"+self.featuredContentActualId));
 			
 			//store in the local storage all the data except the questions
 
 			// 	var featuredCourseString=x.substring(0,pos-2).concat("}]");
 			//	moblerlog("featured course string is"+featuredCourseString);
 			//	self.storeData(featuredCourseString);	
-			
-			
+						
 			self.storeData();
 			
 			self.reset();
@@ -275,6 +281,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			 * @event courselistupdate 
 			 **/
 			$(document).trigger("featuredContentlistupdate",this.featuredCourseId);
+			//$(document).trigger("featuredContentlistupdate",stringifiedfeaturedContentActualId);
 		} //end of function createCourseList
 		
 };
@@ -299,6 +306,21 @@ FeaturedContentModel.prototype.getTitle = function() {
 	
 	return (this.index > this.featuredContentList.length - 1) ? false
 		: this.featuredContentList[this.index].title;
+	//return  this.featuredContentList[this.index].title;
+};
+
+
+/**
+ * @prototype
+ * @function getTitle
+ * @return the title of the current course
+ */
+FeaturedContentModel.prototype.getId = function() {
+	var self=this;
+		moblerlog("length of featured content list in getTitle"+self.featuredContentList.length);
+	
+	return (this.index > this.featuredContentList.length - 1) ? false
+		: this.featuredContentList[this.index].id;
 	//return  this.featuredContentList[this.index].title;
 };
 
