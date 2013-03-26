@@ -51,18 +51,21 @@ function LandingView(controller) {
 	var featuredContent_id = FEATURED_CONTENT_ID;
 	
 	jester($('#selectarrowLanding')[0]).tap(function(e) {
-//		e.stopPropagation();
+		//	e.stopPropagation();
 		moblerlog("taped statistics icon landing view");
-		self.clickFeaturedStatisticsIcon(featuredContent_id);
+		self.clickFeaturedStatisticsIcon();
 	});
 	
 	
 	jester($('#landingLmsLabel')[0]).tap(function(e,prevent) {
 		moblerlog("taped feautured Content");
-//		$('#featuredContent').addClass("gradientSelected");
-//		e.stopPropagation();
-//		e.preventDefault();
+		//	$('#featuredContent').addClass("gradientSelected");
+		//	e.stopPropagation();
+		//	e.preventDefault();
 		$("#featuredContent").addClass("gradientSelected");
+		//	NEW
+		// var featuredModel = self.controller.models['featured'];
+		// var feauturedId= featuredModel.getId();
 		self.clickFeaturedItem(featuredContent_id);
 	});
 	
@@ -71,8 +74,8 @@ function LandingView(controller) {
 	jester($('#selectExclusiveContent')[0]).tap(function(e,prevent) {
 		//$('#selectExclusiveContent').addClass("gradientSelected");
 		moblerlog(" enters in landing view 1 ");
-//		e.preventDefault();
-//		e.stopPropagation();
+		//	e.preventDefault();
+		//	e.stopPropagation();
 		self.selectExclusiveContent();
 	});
 		
@@ -203,7 +206,9 @@ LandingView.prototype.showForm = function() {
 	this.hideErrorMessage();
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
-	$("#featuredContent").attr("id",this.featuredContent_id);
+	 $("#featuredContent").attr("id",this.featuredContent_id);
+	//NEW
+	//$("#featuredContent").attr("id",featuredModel.getId());
 	$("#landingViewHeader").show();
 	moblerlog("showed landing view header");
 	$("#landingLmsLabel").text(featuredModel.getTitle());
@@ -233,10 +238,14 @@ LandingView.prototype.showErrorMessage = function(message) {
  * @prototype
  * @function clickFeaturedItem
  */ 
-LandingView.prototype.clickFeaturedItem = function(featuredCourseId){
-	//if (this.controller.models['featured'].isSynchronized()) {
-	selectCourseItem(featuredCourseId);
-	//}
+LandingView.prototype.clickFeaturedItem = function(featuredContent_id){
+//	if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
+//  NEW
+//  var featuredModel = self.controller.models['featured'];
+//	var feauturedId= featuredModel.getId();
+//	moblerlog("featured content id in landing view is "+feauturedId);
+	selectCourseItem(featuredContent_id);
+//}
 };
 
 
@@ -271,7 +280,7 @@ LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
  * @function clickStatisticsIcon
  * @param {string} featuredContent_id
  */ 
-LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
+LandingView.prototype.clickFeaturedStatisticsIcon = function() {
 	moblerlog("statistics button in landing view clicked");
 	
 	if ($("#selectarrowLanding").hasClass("icon-bars")) {
@@ -281,7 +290,10 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
 		//icon-loading, icon-bars old name
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
-		this.controller.transitionToStatistics(featuredContent_id);
+		//this.controller.transitionToStatistics(featuredContent_id);
+		var featuredModel = self.controller.models['featured'];
+		var feauturedId= featuredModel.getId();
+		this.controller.transitionToStatistics(feauturedId);
 	}
 };
 
