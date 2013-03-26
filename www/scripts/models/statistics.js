@@ -492,7 +492,8 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 		// and then execute the code in sendStatistics function
 	//self.queryDB('SELECT * FROM statistics where course_id != ?', [featuredContent_id], function(t,r) {sendStatistics(t,r);});
 	var qm = [];
-	courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+	//courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+	$.each(courseList,function() {qm.push("?");});
 	self.queryDB('SELECT * FROM statistics where course_id IN ('+ qm.join(",") +')',courseList, function(t,r) {sendStatistics(t,r);});
 	
 	function sendStatistics(transaction, results) {

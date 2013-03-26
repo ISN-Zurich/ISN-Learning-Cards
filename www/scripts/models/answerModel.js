@@ -339,7 +339,7 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
 										 // so the sum of these values is equal to the length of the array
 			this.answerScore=1;
 		}else{
-			this.answerScore=0.5;
+			this.answerScore=0.5
 		}
 		return this.answerScore;
 			moblerlog("answer score value within function is "+this.answerScore);
@@ -355,6 +355,7 @@ AnswerModel.prototype.calculateClozeQuestionScore = function() {
  **/ 
 AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
+	moblerlog("currentCourseId "+this.currentCourseId);
 };
 
 
@@ -463,7 +464,8 @@ AnswerModel.prototype.deleteDB = function(featuredContent_id) {
 	this.db.transaction(function(tx) {
 		//DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
 		var qm = [];
-		courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+		//courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+		$.each(courseList,function() {qm.push("?");});
 		tx.executeSql('DELETE FROM statistics where course_id IN ('+ qm.join(",") +')', courseList, function() {
 		// tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
