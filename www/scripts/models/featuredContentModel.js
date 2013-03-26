@@ -97,8 +97,8 @@ function FeaturedContentModel(controller) {
 	});
 	
 	
-	this.loadData(); //we will load data from local storage 
-	//this.loadFeaturedCourseFromServer();
+	//this.loadData(); //we will load data from local storage 
+	this.loadFeaturedCourseFromServer();
 }
 
 
@@ -116,9 +116,10 @@ FeaturedContentModel.prototype.loadData = function() {
 	} catch (err) {
 		featuredObject = {};
 	}
-moblerlog("featured object issssss: "+featuredObject);
-moblerlog("featured object lenght isss "+JSON.stringify(featuredObject).length);
-	if (featuredObject.length > 0) {
+	moblerlog("featured object issssss: "+featuredObject);
+	moblerlog("featured object lenght isss "+JSON.stringify(featuredObject).length);
+	x=JSON.stringify(featuredObject).length;
+	if (x > 0) {
 	this.featuredContentList = featuredObject.featuredCourses || [];
 	this.syncDateTime = featuredObject.syncDateTime || (new Date()).getTime();
 	this.syncState = featuredObject.syncState || false;
@@ -128,6 +129,7 @@ moblerlog("featured object lenght isss "+JSON.stringify(featuredObject).length);
 	this.checkForTimeOut();
 	moblerlog("object featuredContent is "+localStorage.getItem("featuredContent"));
 	moblerlog("featured content list in load data is "+JSON.stringify(this.featuredContentList));
+	$(document).trigger("featuredContentlistupdate");
 	}
 	else {
 		moblerlog("featured content loaded from server");
