@@ -356,8 +356,8 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 		self.setIconSize();
 	}
 	
-var lastli = $("<li/>", {
-}).appendTo("#coursesList");
+	var lastli = $("<li/>", {
+	}).appendTo("#coursesList");
 	
 	var shadoweddiv = $("<div/>", {
 		"id": "shadowedLi",
@@ -375,8 +375,7 @@ var lastli = $("<li/>", {
 CoursesListView.prototype.courseIsLoaded = function(courseId) {
 	moblerlog("courseIsLoaded: " + courseId);
 	moblerlog("selector length: "+ $("#course" + courseId + " .icon-loading").length);
-	$("#course" + courseId + " .icon-loading").addClass("icon-bars")
-			.removeClass("icon-loading loadingRotation");
+	$("#course" + courseId + " .icon-loading").addClass("icon-bars").removeClass("icon-loading loadingRotation");
 };
 
 
@@ -403,7 +402,10 @@ CoursesListView.prototype.setIconSize = function() {
  */ 
 CoursesListView.prototype.clickFeaturedItem = function(featuredContent_id){
 	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
-	selectCourseItem(courseId);
+	//	NEW
+	//	var featuredModel = self.controller.models['featured'];
+	//	var feauturedId= featuredModel.getId();
+	selectCourseItem(featuredContent_id);
 //}end of isSynchronized
 };
 
