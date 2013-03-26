@@ -53,16 +53,16 @@ function LandingView(controller) {
 	jester($('#selectarrowLanding')[0]).tap(function(e) {
 		//	e.stopPropagation();
 		moblerlog("taped statistics icon landing view");
-		self.clickFeaturedStatisticsIcon();
+		self.clickFeaturedStatisticsIcon(featuredContent_id);
 	});
 	
 	
 	jester($('#landingLmsLabel')[0]).tap(function(e,prevent) {
 		moblerlog("taped feautured Content");
-		//	$('#featuredContent').addClass("gradientSelected");
+		$("#featuredContent").addClass("gradientSelected");
 		//	e.stopPropagation();
 		//	e.preventDefault();
-		$("#featuredContent").addClass("gradientSelected");
+		// $("#featuredContent").addClass("gradientSelected");
 		//	NEW
 		// var featuredModel = self.controller.models['featured'];
 		// var feauturedId= featuredModel.getId();
@@ -280,7 +280,7 @@ LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
  * @function clickStatisticsIcon
  * @param {string} featuredContent_id
  */ 
-LandingView.prototype.clickFeaturedStatisticsIcon = function() {
+LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
 	moblerlog("statistics button in landing view clicked");
 	
 	if ($("#selectarrowLanding").hasClass("icon-bars")) {
@@ -291,9 +291,10 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function() {
 		//all calculations are done based on the course id and are triggered
 		//within setCurrentCourseId
 		//this.controller.transitionToStatistics(featuredContent_id);
-		var featuredModel = self.controller.models['featured'];
-		var feauturedId= featuredModel.getId();
-		this.controller.transitionToStatistics(feauturedId);
+//		NEW
+//		var featuredModel = self.controller.models['featured'];
+//		var feauturedId= featuredModel.getId();
+		this.controller.transitionToStatistics(featuredContent_id);
 	}
 };
 

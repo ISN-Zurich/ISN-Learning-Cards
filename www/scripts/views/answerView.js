@@ -230,7 +230,7 @@ AnswerView.prototype.showAnswerTitle = function() {
  * @prototype
  * @function clickDoneButton
  **/
-AnswerView.prototype.clickDoneButton = function(featuredContent_id) {
+AnswerView.prototype.clickDoneButton = function() {
 	var questionpoolModel = controller.models['questionpool'];
 	var statisticsModel=controller.models['statistics'];
 	var answerModel = controller.models['answers'];
@@ -240,14 +240,14 @@ AnswerView.prototype.clickDoneButton = function(featuredContent_id) {
 		// in this case we proceed to the next question
 		//statisticsModel.resetTimer();
 		questionpoolModel.nextQuestion();
-		controller.transitionToQuestion(featuredContent_id);
+		controller.transitionToQuestion();
 	} else {
 		// if there was no error with the data we provide feedback to the
 		// learner.
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
 		answerModel.storeScoreInDB();
-		controller.transitionToFeedback(featuredContent_id);
+		controller.transitionToFeedback();
 	}
 };
 

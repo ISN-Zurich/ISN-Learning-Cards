@@ -454,8 +454,8 @@ AnswerModel.prototype.storeScoreInDB = function() {
  * @prototype
  * @function deleteDB 
  **/
-AnswerModel.prototype.deleteDB = function(featuredContent_id) {
-	moblerlog("featured content id in deleteDB is "+featuredContent_id);
+AnswerModel.prototype.deleteDB = function() {
+	//moblerlog("featured content id in deleteDB is "+featuredContent_id);
 	var self=this;
 	//localStorage.removeItem("db_version"); // this line is from before we had featured content.
 	var courseList = self.controller.models["course"].getCourseList();

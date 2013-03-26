@@ -77,13 +77,13 @@ function QuestionView(controller) {
 		moblerlog("enter button answer in question view");
 		//e.preventDefault();
 		e.stopPropagation();
-		self.handleTap(featuredContent_id);
+		self.handleTap();
 	});
 	
 	jester($('#cardQuestionBody')[0]).tap(function(e) {
 		//e.preventDefault();
 		e.stopPropagation();
-		self.handleTap(featuredContent_id);
+		self.handleTap();
 	});
 	
 	jester($('#cardQuestionHeader')[0]).tap(function(e) {
@@ -150,14 +150,14 @@ moblerlog("pinch works");
  * @prototype
  * @function handleTap
  **/
-QuestionView.prototype.handleTap = function(featuredContent_id) {
+QuestionView.prototype.handleTap = function() {
 	if (controller.models["answers"].answerScore > -1){
 		moblerlog("tap question view to feedback");
-		controller.transitionToFeedback(featuredContent_id);
+		controller.transitionToFeedback();
 	} else { 
 		moblerlog("tap question view to answer");
-		moblerlog("featured id is "+featuredContent_id);
-		controller.transitionToAnswer(featuredContent_id);
+		//moblerlog("featured id is "+featuredContent_id);
+		controller.transitionToAnswer();
 	}
 };
 

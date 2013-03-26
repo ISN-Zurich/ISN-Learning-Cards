@@ -56,7 +56,7 @@ function Controller() {
 
 	this.models.connection = new ConnectionState(this);
 	// the lms model is initialized after the connection
-	//because it makes use of the isOffline function 
+	// because it makes use of the isOffline function 
 	this.models.lms = new LMSModel(this);
 	this.models.featured = new FeaturedContentModel(this);
 	this.models.authentication = new ConfigurationModel(this);
@@ -201,7 +201,7 @@ function Controller() {
 	/**
 	 * This event is triggered  when courses are loaded from the server. It is
 	 * binded also in courses list view and we want to avoid loading of that view.
-	 * For that reason we check IF WE ARE  not LOGGED IN (=logged out)in order to show the login form.
+	 * For that reason we check IF WE ARE not LOGGED IN (=logged out)in order to show the login form.
 	 * @event courselistupdate
 	 * @param a callback function that loads the login form
 	 */
@@ -217,8 +217,6 @@ function Controller() {
 			self.transitionToLogin();
 		}
 	});		
-	
-	
 	
 	$(document).bind("click", function(e) {
 		moblerlog(" click in login view ");
@@ -261,14 +259,14 @@ function Controller() {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
-		$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+		//$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	}
 	
 	//we binded this event here in order to 
 	$(document).bind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	
 	injectStyle();
-moblerlog("End of Controller");
+	moblerlog("End of Controller");
 } // end of Controller
 
 
@@ -420,13 +418,12 @@ Controller.prototype.transitionToAuthArea = function(viewname,featuredContentFla
 	}
 	else {
 		//stay on the current view if we are not logged in 
-		if (featuredContentFlag){
-			this.transition(viewname,featuredContentFlag);
- 		}else {
- 			moblerlog("no fd value passed");
- 			
+//		if (featuredContentFlag){
+//			this.transition(viewname,featuredContentFlag);
+// 		}else {
+ 		//	moblerlog("no fd value passed");
  			this.transitionToLanding();
- 		}
+ 		//}
 	} 
 };
 
@@ -457,7 +454,7 @@ Controller.prototype.transitionToQuestion = function() {
  **/
 Controller.prototype.transitionToAnswer = function(fd) {
 	moblerlog("enters transition to answer view in controller");
-	this.transitionToAuthArea('answerView',fd);
+	this.transition('answerView');
 };
 
 /**
@@ -465,8 +462,8 @@ Controller.prototype.transitionToAnswer = function(fd) {
  * @prototype
  * @function transitionToFeedback 
  **/
-Controller.prototype.transitionToFeedback = function(fd) {
-	this.transitionToAuthArea('feedbackView',fd);
+Controller.prototype.transitionToFeedback = function() {
+	this.transition('feedbackView');
 };
 
 /**
@@ -501,32 +498,44 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 	// send the user to the landing view, because this is only place where a statistics button is available
 	// }
 	
-	if (this.getLoginState()) {
-		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
-		moblerlog("enters get logic state in transition to statistics in controller");
-		if (courseID && (courseID > 0 || courseID === "fd") ) {
-			moblerlog ("enters course id in controller");
-			this.models['statistics'].setCurrentCourseId(courseID);
-		}
-		else
-		{
-			moblerlog("transition to statistics when loggedin and coming from achievements view");
-			// when the achievements get closed we won't pass the course id
-			// in order to avoid that the statistics are recalculated. Which makes no sense,
-			// because the statistics model has already all the data in place.
-			this.transition("statisticsView",achievementsFlag);
-		}
-	}//end of is logged in
-	else {
-		if (courseID && !achievementsFlag){
-		moblerlog("enter the statistics from landing view");
+//	if (this.getLoginState()) {
+//		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
+//		moblerlog("enters get logic state in transition to statistics in controller");
+//		if (courseID && (courseID > 0 || courseID === "fd") ) {
+//			moblerlog ("enters course id in controller");
+//			this.models['statistics'].setCurrentCourseId(courseID);
+//		}
+//		else
+//		{
+//			moblerlog("transition to statistics when loggedin and coming from achievements view");
+//			// when the achievements get closed we won't pass the course id
+//			// in order to avoid that the statistics are recalculated. Which makes no sense,
+//			// because the statistics model has already all the data in place.
+//			this.transition("statisticsView",achievementsFlag);
+//		}
+//	}//end of is logged in
+//	else { //the user is not 
+//		if (courseID && !achievementsFlag){
+//		moblerlog("enter the statistics from landing view");
+//		this.models['statistics'].setCurrentCourseId(courseID);
+//		}else if (achievementsFlag)
+//			{
+//			this.transition("statisticsView",achievementsFlag);
+//			}
+//		}
+	
+	//The transition to statistics view is done by clicking the statistics icon in any list view. 
+	//In this case a courseID is assigned for the clicked option.
+
+	if ((courseID && (courseID > 0 || courseID === "fd")) || !achievementsFlag ) {
 		this.models['statistics'].setCurrentCourseId(courseID);
-		//this.transition("statisticsView", courseID);
-		}else if (achievementsFlag)
-			{
-			this.transition("statisticsView",achievementsFlag);
-			}
-	}
+		if (!this.models['statistics'].dataAvailable()) {
+			this.transition("landing");
+		} }
+	else if (achievementsFlag)
+	{
+		this.transition("statisticsView",achievementsFlag);
+	}	
 };
 
 /**
@@ -731,6 +740,6 @@ function selectCourseItem(courseId){
 		this.controller.transitionToQuestion();
 	}
 	else {
-		// inform the user that something went wrong. 
+		// inform the user that something went wrong
 	}
 }
