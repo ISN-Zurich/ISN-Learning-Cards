@@ -272,7 +272,7 @@ QuestionPoolModel.prototype.mixAnswers = function() {
  * @function nextQuestion
  * @return {Boolean} returns false if it has reached the end of the list
  */
-QuestionPoolModel.prototype.nextQuestion = function(featuredContent_id) {
+QuestionPoolModel.prototype.nextQuestion = function() {
 	var random;
 	var newId;
 

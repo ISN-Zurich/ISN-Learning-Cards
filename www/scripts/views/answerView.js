@@ -51,7 +51,7 @@ function AnswerView(controller) {
 	
 	//Handler when taping on the forward/done grey button on the right of the answer view
 	jester($('#doneButton')[0]).tap(function() {
-		self.clickDoneButton(featuredContent_id);
+		self.clickDoneButton();
 	});
 	
 	//Handler when taping on close button of the answer view
@@ -246,12 +246,9 @@ AnswerView.prototype.clickDoneButton = function() {
 		// learner.
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
-		if (this.controller.models.answers.dataAvailable()) {
-			answerModel.storeScoreInDB();
-			controller.transitionToFeedback();
-		}else {
-			//there are no data. something went wrong. so do nothing.
-		}
+		answerModel.storeScoreInDB();
+		controller.transitionToFeedback();
+		
 	}
 };
 

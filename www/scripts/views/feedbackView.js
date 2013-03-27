@@ -48,7 +48,7 @@ function FeedbackView(controller) {
 
 	//Handler when taping on the forward/done grey button on the right of the feedback view
 	jester($('#FeedbackDoneButon')[0]).tap(function() {
-		self.clickFeedbackDoneButton(featuredContent_id);
+		self.clickFeedbackDoneButton();
 	});
 	
 	//Handler when taping on more infor icon on the bottom right corner
@@ -65,7 +65,7 @@ function FeedbackView(controller) {
 	
 	//Handler when taping on the title of the feedbackView area of the answer view
 	jester($('#cardFeedbackTitle')[0]).tap(function() {
-		self.clickTitleArea(featuredContent_id);
+		self.clickTitleArea();
 		moblerlog("feedback title clicked");
 	});
 	
@@ -127,7 +127,7 @@ FeedbackView.prototype.handleTap = doNothing;
  * @function handleSwipe
  **/
 FeedbackView.prototype.handleSwipe = function handleSwipe() {
-	this.clickFeedbackDoneButton(featuredContent_id);
+	this.clickFeedbackDoneButton();
 //	controller.models["answers"].deleteData();
 //	$("#feedbackTip").empty();
 //	$("#feedbackTip").hide();
@@ -197,12 +197,12 @@ FeedbackView.prototype.open = function() {
  * @prototype
  * @function clickFeedbackDoneButton
  **/
-FeedbackView.prototype.clickFeedbackDoneButton = function(featuredContent_id) {
+FeedbackView.prototype.clickFeedbackDoneButton = function() {
 	controller.models["answers"].deleteData();
 	$("#feedbackTipBody").hide();
 	$("#feedbackBody").show();
 	controller.models['questionpool'].nextQuestion();
-	controller.transitionToQuestion(featuredContent_id);
+	controller.transitionToQuestion();
 };
 
 
@@ -302,9 +302,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
  * @prototype
  * @function clickTitleArea
  **/
-FeedbackView.prototype.clickTitleArea = function(featuredContent_id) {
+FeedbackView.prototype.clickTitleArea = function() {
 	controller.models["answers"].answerScore == -1; //added 10.01
-	controller.transitionToQuestion(featuredContent_id);
+	controller.transitionToQuestion();
 };
 
 /**

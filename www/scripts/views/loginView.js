@@ -60,7 +60,7 @@ function LoginView(controller) {
 	});
 	//handler when taping on the close button of login button
 	jester($('#loginViewBackIcon')[0]).tap(function() {
-		self.clickCloseLoginButton(featuredContent_id);
+		self.clickCloseLoginButton();
 	});
 		//handler when taping on the username field 
 	var prevent=false;
@@ -408,8 +408,8 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 * @prototype
 * @function clickCloseLoginButton
  * */
-LoginView.prototype.clickCloseLoginButton=function(featuredContent_id){
-	controller.transitionToLanding(featuredContent_id);
+LoginView.prototype.clickCloseLoginButton=function(){
+	controller.transitionToLanding();
 
 };
 
