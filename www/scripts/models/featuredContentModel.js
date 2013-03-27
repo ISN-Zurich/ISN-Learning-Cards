@@ -78,6 +78,7 @@ function FeaturedContentModel(controller) {
 	this.activeQuestion = {};
 	this.featuredCourseId = FEATURED_CONTENT_ID;
 	this.featuredContentActualId;
+	var isFeaturedContentLocal=false;
 	this.index = 0; // index of the current course
 	this.syncDateTime = 0;
 	this.syncState = false;
@@ -98,7 +99,17 @@ function FeaturedContentModel(controller) {
 	
 	
 	//this.loadData(); //we will load data from local storage 
-	this.loadFeaturedCourseFromServer();
+	//this.loadFeaturedCourseFromServer();
+	
+	featuredObject = JSON.parse(localStorage.getItem("featuredContent"));
+	if (featuredObject){
+		moblerlog("load featured content data locally");
+		this.loadData();
+	}else {
+		moblerlog("load featured content data from the server");
+		this.loadFeaturedCourseFromServer();
+	}
+
 }
 
 
@@ -119,23 +130,18 @@ FeaturedContentModel.prototype.loadData = function() {
 	moblerlog("featured object issssss: "+featuredObject);
 	moblerlog("featured object lenght isss "+JSON.stringify(featuredObject).length);
 	x=JSON.stringify(featuredObject).length;
-	if (x > 0) {
 	this.featuredContentList = featuredObject.featuredCourses || [];
 	this.syncDateTime = featuredObject.syncDateTime || (new Date()).getTime();
 	this.syncState = featuredObject.syncState || false;
 	this.syncTimeOut = featuredObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 	this.index = 0;
-
 	this.checkForTimeOut();
 	moblerlog("object featuredContent is "+localStorage.getItem("featuredContent"));
 	moblerlog("featured content list in load data is "+JSON.stringify(this.featuredContentList));
-	$(document).trigger("featuredContentlistupdate");
-	}
-	else {
-		moblerlog("featured content loaded from server");
-		this.loadFeaturedCourseFromServer();
-	}
-	
+	//moblerlog("featured content id is"+JSON.stringify(this.featuredContentList[0]["id"]));
+	moblerlog("featuredCourseId in load data "+this.featuredCourseId);
+	//$(document).trigger("featuredContentlistupdateLocal", this.featuredCourseId);	
+	this.isFeaturedContentLocal=true;
 };
 
 /**
@@ -282,7 +288,8 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			  * It is triggered when the loading of the course list from the server has been finished
 			 * @event courselistupdate 
 			 **/
-			$(document).trigger("featuredContentlistupdate",this.featuredCourseId);
+			moblerlog("this.featuredCourseId" +self.featuredCourseId);
+			$(document).trigger("featuredContentlistupdate",self.featuredCourseId);
 			//$(document).trigger("featuredContentlistupdate",stringifiedfeaturedContentActualId);
 		} //end of function createCourseList
 		

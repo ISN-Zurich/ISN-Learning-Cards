@@ -70,7 +70,7 @@ function Controller() {
 	this.models.connection.synchronizeData();
 	this.models.authentication.loadFromServer();
 
-	moblerlog("models initialized");
+	moblerlog("models initialized in controller");
 
 	//initialize user interface language
 	this.setupLanguage();
@@ -92,7 +92,7 @@ function Controller() {
 	this.views.achievements = new AchievementsView(this);
 	this.views.about = new AboutView();
 
-	moblerlog('views initialized');
+	moblerlog('views initialized in controller');
 
 	this.activeView = this.views.splashScreen;
 
@@ -141,6 +141,7 @@ function Controller() {
 		});
 	}
 
+	
 	// set correct height of icon button
 //	window.addEventListener("resize", setButtonHeight, false);
 //	window.addEventListener("orientationchange", setButtonHeight, false);
@@ -224,6 +225,8 @@ function Controller() {
 		e.stopPropagation();
 	});	
 	
+	
+	
 	// check if 3000 ms have passed
 	// if not we wait until 3000 ms have passed
 	// then we do the transition to the login view
@@ -247,7 +250,8 @@ function Controller() {
 //		//self.transitionToEndpoint();
 //	}
 
-	function cbFeaturedContentListUpdate() {	
+	function cbFeaturedContentListUpdate() {
+		moblerlog("featured content list update called");
 		var currentTime = new Date().getTime();
 		var deltaTime= currentTime - startTime;
 		if (deltaTime < 3000) {
@@ -264,9 +268,14 @@ function Controller() {
 	
 	//we binded this event here in order to 
 	$(document).bind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+	//$(document).bind("featuredContentlistupdateLocal", cbFeaturedContentListUpdateLocal);
 	
 	injectStyle();
 	moblerlog("End of Controller");
+	if (this.models['featured'].isFeaturedContentLocal){
+		moblerlog("transition start to end point when featured content is loaded locally");
+		self.transitionToEndpoint();
+	}
 } // end of Controller
 
 
@@ -742,4 +751,9 @@ function selectCourseItem(courseId){
 	else {
 		// inform the user that something went wrong
 	}
+}
+
+function modelsInitialization() {
+	
+	
 }
