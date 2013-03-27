@@ -525,3 +525,17 @@ AnswerModel.prototype.checkFilledAnswer = function(filledAnswer,gapIndex) {
 	}
 };
 
+
+/**
+ * checks the existence and validity 
+ * of the answer list
+ * @prototype
+ * @function dataAvailable
+ */ 
+AnswerModel.prototype.dataAvailable= function() {
+	if (this.answerList) {
+		return true;
+	}
+	return false;
+};
+

@@ -155,6 +155,12 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
 	// endif the user has access to the course id
 };
 
+/**
+ * checks the existence and validity 
+ * of the course id
+ * @prototype
+ * @function dataAvailable
+ */ 
 StatisticsModel.prototype.dataAvailable= function() {
 	if (this.currentCourseId) {
 		return true;

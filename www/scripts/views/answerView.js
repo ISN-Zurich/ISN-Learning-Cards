@@ -56,12 +56,12 @@ function AnswerView(controller) {
 	
 	//Handler when taping on close button of the answer view
 	jester($('#CourseList_FromAnswer')[0]).tap(function() {
-		self.clickCourseListButton(featuredContent_id);
+		self.clickCourseListButton();
 	});
 
 	//Handler when taping on the title of the answer area of the answer view
 	jester($('#cardAnswerTitle')[0]).tap(function() {
-		self.clickTitleArea(featuredContent_id);
+		self.clickTitleArea();
 		moblerlog("answer title clicked");
 	});
 	
@@ -246,8 +246,12 @@ AnswerView.prototype.clickDoneButton = function() {
 		// learner.
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
-		answerModel.storeScoreInDB();
-		controller.transitionToFeedback();
+		if (this.controller.models.answers.dataAvailable()) {
+			answerModel.storeScoreInDB();
+			controller.transitionToFeedback();
+		}else {
+			//there are no data. something went wrong. so do nothing.
+		}
 	}
 };
 
@@ -267,11 +271,16 @@ AnswerView.prototype.clickCourseListButton = function() {
  * @prototype
  * @function clickTitleArea
  **/
-AnswerView.prototype.clickTitleArea = function(featuredContent_id) {
+AnswerView.prototype.clickTitleArea = function() {
 	this.widget.storeAnswers(); 
 	// When switching back and forth between question view  and answer view the currently selected answers are stored. 
 	// These answers have not yet been finally answered.
-	controller.transitionToQuestion(featuredContent_id);
+	if (this.controller.models.answers.dataAvailable()) {
+	controller.transitionToQuestion();
+	}
+	else {
+		// inform the user that something went wrong
+	}
 };
 
 /**

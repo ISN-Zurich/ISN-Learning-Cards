@@ -381,17 +381,17 @@ Controller.prototype.transitionToEndpoint = function() {
  * @prototype
  * @function transitionToLogin 
  **/
-Controller.prototype.transitionToLogin = function(fd) {
+Controller.prototype.transitionToLogin = function() {
 	if ( this.appLoaded ) {
-	this.transition('login',fd);
+	this.transition('login');
 		
 	}
 };
 
 
-Controller.prototype.transitionToLanding = function(fd) {
+Controller.prototype.transitionToLanding = function() {
 	moblerlog("enter controller transition to landing view in controller");
-	this.transition('landing',fd);
+	this.transition('landing');
 };
 
 /**
@@ -461,7 +461,7 @@ Controller.prototype.transitionToQuestion = function() {
  * @prototype
  * @function transitionToAnswer 
  **/
-Controller.prototype.transitionToAnswer = function(fd) {
+Controller.prototype.transitionToAnswer = function() {
 	moblerlog("enters transition to answer view in controller");
 	this.transition('answerView');
 };
@@ -490,7 +490,7 @@ Controller.prototype.transitionToSettings = function() {
  * @function transitionToFeedbackMore 
  **/
 Controller.prototype.transitionToFeedbackMore = function() {
-	this.transitionToAuthArea('feedbackMore');
+	this.transition('feedbackMore');
 };
 
 /**
@@ -553,7 +553,7 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
  * @function transitionToAchievements 
  **/
 Controller.prototype.transitionToAchievements = function(courseID) {
-	this.transitionToAuthArea('achievements',courseID);
+	this.transition('achievements',courseID);
 };
 
 /**
@@ -753,7 +753,3 @@ function selectCourseItem(courseId){
 	}
 }
 
-function modelsInitialization() {
-	
-	
-}
