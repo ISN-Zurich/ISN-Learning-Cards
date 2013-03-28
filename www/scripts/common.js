@@ -105,7 +105,7 @@ function moblerlog(messagestring) {
 }
 
 function debugActivate() {
-	var LMSDEBUG = 0;
+	var LMSDEBUG = 1;
 	moblerlog("debug Activate");
 	if (LMSDEBUG === 1){
 		var lmsData = [];
