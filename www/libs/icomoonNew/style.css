@@ -27,7 +27,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-smiley, .icon-checkmark2, .icon-settings, .icon-checkmark, .icon-question, .icon-bars, .icon-numeric, .icon-arrow-up, .icon-neutral, .icon-lock, .icon-arrow-down, .icon-loadingOld, .icon-loading2, .icon-loading, .icon-lms, .icon-info, .icon-icon-move, .icon-happy, .icon-exit, .icon-equals, .icon-enter, .icon-drag, .icon-dash, .icon-cross, .icon-courses, .icon-clozeQuestion {
+.icon-smiley, .icon-checkmark2, .icon-settings, .icon-checkmark, .icon-question, .icon-bars, .icon-numeric, .icon-arrow-up, .icon-neutral, .icon-lock, .icon-arrow-down, .icon-loadingOld, .icon-loading2, .icon-loading, .icon-lms, .icon-info, .icon-icon-move, .icon-happy, .icon-exit, .icon-equals, .icon-enter, .icon-drag, .icon-dash, .icon-cross, .icon-courses, .icon-clozeQuestion, .icon-fire, .icon-diamonds {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -114,4 +114,10 @@ you can use the generic selector below, but it's slower:
 }
 .icon-clozeQuestion:before {
 	content: "\e019";
+}
+.icon-fire:before {
+	content: "\e01a";
+}
+.icon-diamonds:before {
+	content: "\e01b";
 }
