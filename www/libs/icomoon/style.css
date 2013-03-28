@@ -1,7 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
 	src:url('fonts/icomoon.eot');
-	src:url('fonts/icomoon.ttf') format('truetype');
+	src:url('fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+		url('fonts/icomoon.woff') format('woff'),
+		url('fonts/icomoon.ttf') format('truetype'),
+		url('fonts/icomoon.svg#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -12,6 +15,8 @@
 	content: attr(data-icon);
 	speak: none;
 	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
@@ -20,94 +25,93 @@
 /*
 Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
-[class*="icon-"]:before {
+[class*="icon-"] {
 */
-.icon-diamond:before, .icon-smiley:before, .icon-happy:before, .icon-arrow-down:before, .icon-settings:before, .icon-question:before, .icon-numeric:before, .icon-neutral:before, .icon-lock:before, .icon-exit:before, .icon-equals:before, .icon-enter:before, .icon-drag:before, .icon-dash:before, .icon-cross:before, .icon-loadingOld:before, .icon-loading2:before, .icon-courses:before, .icon-checkmark2:before, .icon-lms:before, .icon-checkmark:before, .icon-loading:before, .icon-info:before, .icon-bars:before, .icon-icon-move:before, .icon-arrow-up:before, .icon-fire:before {
+.icon-smiley, .icon-checkmark2, .icon-settings, .icon-checkmark, .icon-question, .icon-bars, .icon-numeric, .icon-arrow-up, .icon-neutral, .icon-lock, .icon-arrow-down, .icon-loadingOld, .icon-loading2, .icon-loading, .icon-lms, .icon-info, .icon-icon-move, .icon-happy, .icon-exit, .icon-equals, .icon-enter, .icon-drag, .icon-dash, .icon-cross, .icon-courses, .icon-clozeQuestion {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
-.icon-diamond:before {
-	content: "\e039";
-}
 .icon-smiley:before {
-	content: "\e002";
-}
-.icon-happy:before {
-	content: "\e003";
-}
-.icon-arrow-down:before {
-	content: "\e004";
-}
-.icon-settings:before {
-	content: "\e006";
-}
-.icon-question:before {
-	content: "\e007";
-}
-.icon-numeric:before {
-	content: "\e008";
-}
-.icon-neutral:before {
-	content: "\e009";
-}
-.icon-lock:before {
-	content: "\e00a";
-}
-.icon-exit:before {
-	content: "\e00b";
-}
-.icon-equals:before {
-	content: "\e00c";
-}
-.icon-enter:before {
-	content: "\e00d";
-}
-.icon-drag:before {
-	content: "\e00e";
-}
-.icon-dash:before {
-	content: "\e00f";
-}
-.icon-cross:before {
-	content: "\e010";
-}
-.icon-loadingOld:before {
-	content: "\e011";
-}
-.icon-loading2:before {
-	content: "\e012";
-}
-.icon-courses:before {
-	content: "\e013";
+	content: "\e000";
 }
 .icon-checkmark2:before {
-	content: "\e014";
+	content: "\e001";
 }
-.icon-lms:before {
-	content: "\e018";
+.icon-settings:before {
+	content: "\e002";
 }
 .icon-checkmark:before {
-	content: "\e019";
+	content: "\e003";
 }
-.icon-loading:before {
-	content: "\e01a";
-}
-.icon-info:before {
-	content: "\e01b";
+.icon-question:before {
+	content: "\e004";
 }
 .icon-bars:before {
-	content: "\e01c";
+	content: "\e005";
 }
-.icon-icon-move:before {
-	content: "\e01d";
+.icon-numeric:before {
+	content: "\e006";
 }
 .icon-arrow-up:before {
-	content: "\e01e";
+	content: "\e007";
 }
-.icon-fire:before {
-	content: "\e038";
+.icon-neutral:before {
+	content: "\e008";
+}
+.icon-lock:before {
+	content: "\e009";
+}
+.icon-arrow-down:before {
+	content: "\e00a";
+}
+.icon-loadingOld:before {
+	content: "\e00b";
+}
+.icon-loading2:before {
+	content: "\e00c";
+}
+.icon-loading:before {
+	content: "\e00d";
+}
+.icon-lms:before {
+	content: "\e00e";
+}
+.icon-info:before {
+	content: "\e00f";
+}
+.icon-icon-move:before {
+	content: "\e010";
+}
+.icon-happy:before {
+	content: "\e011";
+}
+.icon-exit:before {
+	content: "\e012";
+}
+.icon-equals:before {
+	content: "\e013";
+}
+.icon-enter:before {
+	content: "\e014";
+}
+.icon-drag:before {
+	content: "\e015";
+}
+.icon-dash:before {
+	content: "\e016";
+}
+.icon-cross:before {
+	content: "\e017";
+}
+.icon-courses:before {
+	content: "\e018";
+}
+.icon-clozeQuestion:before {
+	content: "\e019";
 }
