@@ -97,13 +97,12 @@ function LandingView(controller) {
 	});	
 	
 	$('#featuredContent').bind("touchstart", function(e) {
-		moblerlog(" enters in landing view 3 ");
 		$("#featuredContent").addClass("gradientSelected");
 		moblerlog("color changed");
 		e.preventDefault();
 		e.stopPropagation();
 	});	
-	
+
 	$(document).bind("featuredContentlistupdate", function(e,featuredCourseId) {
 		
 	self.showForm(); //this will be called when a synchronization update takes place

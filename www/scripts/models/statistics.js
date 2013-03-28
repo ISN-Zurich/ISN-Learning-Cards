@@ -90,7 +90,7 @@ function StatisticsModel(controller) {
 	// if the the data is not loaded but the user is logged in, then loadFromServer 
 	
 	if (this.controller.getConfigVariable("statisticsLoaded")== false && self.controller.getLoginState()){
-		moblerlog("enters heree");
+		moblerlog("statistics to be loaded from server");
 			self.loadFromServer();
 	}
 	
@@ -555,7 +555,7 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 					moblerlog("there ");
 					if (numberOfStatisticsItems < data) {
 						moblerlog("server has more items than local database -> fetch statistics from server");
-						self.loadFromServer();
+						 self.loadFromServer();
 					}
 				}
 				

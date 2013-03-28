@@ -248,8 +248,7 @@ AnswerView.prototype.clickDoneButton = function() {
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
 		answerModel.storeScoreInDB();
-		controller.transitionToFeedback();
-		
+		controller.transitionToFeedback();	
 	}
 };
 

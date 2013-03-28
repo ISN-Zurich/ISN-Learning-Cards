@@ -193,15 +193,15 @@ QuestionView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-QuestionView.prototype.open = function() {
+QuestionView.prototype.open = function(featuredContent_id) {
 	this.showQuestionTitle();
 	this.showQuestionBody();
-//	if (!controller.models["answers"].hasStarted()) {
-//		if(featuredContent_id){
-//			controller.models["answers"].startTimer(featuredContent_id);	
-//		}else{
-//		controller.models["answers"].startTimer(controller.models["questionpool"].getId());}
-//	}
+	if (!controller.models["answers"].hasStarted()) {
+		 if(featuredContent_id){
+			controller.models["answers"].startTimer(featuredContent_id);	
+			}else{
+		controller.models["answers"].startTimer(controller.models["questionpool"].getId());}
+			}
 	this.openDiv();	
 };
 

@@ -200,7 +200,7 @@ CourseModel.prototype.loadFromServer = function() {
 		}
 
 		function createCourseList(data) {
-			moblerlog("success");
+			moblerlog("success in getting course list");
 
 			// if there was a pending course list, remove it from the storage
 			localStorage.removeItem("pendingCourseList");

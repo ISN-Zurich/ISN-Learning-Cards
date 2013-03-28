@@ -96,7 +96,7 @@ function doApologize() {
 function moblerlog(messagestring) {
 	
 	//A global property/variable that activates and deactivates the display of console logs.
-	var MOBLERDEBUG = 1;
+	var MOBLERDEBUG = 0;
 	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
@@ -105,7 +105,7 @@ function moblerlog(messagestring) {
 }
 
 function debugActivate() {
-	var LMSDEBUG = 1;
+	var LMSDEBUG = 0;
 	moblerlog("debug Activate");
 	if (LMSDEBUG === 1){
 		var lmsData = [];

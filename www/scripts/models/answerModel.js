@@ -368,6 +368,7 @@ AnswerModel.prototype.setCurrentCourseId = function(courseId) {
  **/
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
+	moblerlog("this.start in startTimer is "+this.start);
 	this.currentQuestionId = questionId;
 	moblerlog("currentQuestionId: " + this.currentQuestionId);
 };
@@ -420,7 +421,8 @@ AnswerModel.prototype.storeScoreInDB = function() {
 	moblerlog("enter score in DB");
 	var self = this;
 	var day = new Date();
-	var duration = ((new Date()).getTime() - this.start);
+	var duration = (new Date()).getTime() - this.start;
+	moblerlog("duration is "+duration);
 	this.db
 	.transaction(function(transaction) {
 		transaction
@@ -474,7 +476,7 @@ AnswerModel.prototype.deleteDB = function() {
 			moblerlog("error: statistics table not cleared");
 		});
 	});
-	localStorage.removeItem("courses");
+	//localStorage.removeItem("courses");
 };
 
 /**
@@ -535,8 +537,7 @@ AnswerModel.prototype.checkFilledAnswer = function(filledAnswer,gapIndex) {
  */ 
 AnswerModel.prototype.dataAvailable= function() {
 	if (this.answerList) {
-		return true;
-	}
+		return true;}
 	return false;
 };
 
