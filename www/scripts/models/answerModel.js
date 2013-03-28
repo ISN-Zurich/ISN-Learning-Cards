@@ -417,6 +417,7 @@ AnswerModel.prototype.initDB = function() {
  * @function storeScoreInDB 
  ***/
 AnswerModel.prototype.storeScoreInDB = function() {
+	moblerlog("enter score in DB");
 	var self = this;
 	var day = new Date();
 	var duration = ((new Date()).getTime() - this.start);

@@ -244,6 +244,7 @@ AnswerView.prototype.clickDoneButton = function() {
 	} else {
 		// if there was no error with the data we provide feedback to the
 		// learner.
+		moblerlog("click done button in answer view");
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
 		answerModel.storeScoreInDB();

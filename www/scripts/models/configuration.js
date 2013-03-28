@@ -85,7 +85,6 @@ function ConfigurationModel(controller) {
 		moblerlog("user logged out");
 		}
 	});
-
 }
 
 /**

@@ -131,7 +131,7 @@ LMSModel.prototype.storeData = function() {
  * @return {Array} the array that contains the content of the global URLS_TO_LMS variable
  */
 LMSModel.prototype.getLMSData = function() {
-	return URLS_TO_LMS;
+	return debugActivate();
 };
 
 

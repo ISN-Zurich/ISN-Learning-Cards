@@ -6,7 +6,7 @@
  *@default hornet
  **/
 
-var DEFAULT_SERVER = "yellowjacket";
+var DEFAULT_SERVER = "hornet";
 /**
  *A global property/variable that is used to store info about the different servers to which the application can be connected.
  *
@@ -104,6 +104,23 @@ function moblerlog(messagestring) {
 	}
 }
 
+function debugActivate() {
+	var LMSDEBUG = 1;
+	moblerlog("debug Activate");
+	if (LMSDEBUG === 1){
+		var lmsData = [];
+		for ( i=0; i < URLS_TO_LMS.length; i++ ) {
+			if (URLS_TO_LMS[i].debug === "0"){
+				lmsData.push(URLS_TO_LMS[i]);
+			}	
+		}
+		moblerlog("return lms data");
+		return lmsData;
+	}else {
+		moblerlog("return the urlsto lms");
+		return URLS_TO_LMS;
+	}
+}
 /**Query the database. It is used in all statistics submodels.
  * @function queryDatabase
  * @param cbResult
