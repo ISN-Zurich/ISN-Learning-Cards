@@ -268,7 +268,7 @@ LandingView.prototype.hideErrorMessage = function() {
 **/ 
 LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	moblerlog("change orientation in landing view");
-	setFeaturedWidth();
+	setFeaturedWidth(orientationLayout, w, h);
 };
 
 
@@ -305,10 +305,15 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
  * such as: dash bar, icon container and separator.
  * @function setInputWidth
  * */
-function setFeaturedWidth(){
+function setFeaturedWidth(o,w,h){
 	window_width = $(window).width();
-	var inputwidth = window_width - 49- 34 - 18;
-	$("#landingLmsLabel").css("width", inputwidth + "px");
-	$("#exclusiveContentLabel").css("width", inputwidth + "px");
+	moblerlog("window width in landing view is "+window_width);
+	var inputwidth = w - 49- 34 - 18;
+	var labelwidth=inputwidth-800;
+	moblerlog("input width in landing view is "+inputwidth);
+	$("#lefElement1").css("width", inputwidth + "px");
+	$("#landingLmsLabel").css("width", labelwidth + "px");
+	$("#leftElementExclusive").css("width", inputwidth + "px");
+	$("#exclusiveContentLabel").css("width", labelwidth + "px");
 }
 
