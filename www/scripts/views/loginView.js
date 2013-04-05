@@ -201,6 +201,7 @@ LoginView.prototype.close = function() {
 	$("#password").blur();
 	$("#usernameInput").blur();
 	this.active = false;
+	injectStyle();
 	this.closeDiv();
 };
 
@@ -388,7 +389,9 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 
 	if (orientationLayout || self.fixedRemoved== true) //we are in landscape mode and previously
 													 //we had removed the fixed position of login button
-	{$("#loginButton").removeClass("fixed");}
+	{
+		//$("#loginButton").removeClass("fixed");
+	}
 	else if (self.fixedRemoved== false) {
 		$("#loginButton").addClass("fixed");
 	};	
