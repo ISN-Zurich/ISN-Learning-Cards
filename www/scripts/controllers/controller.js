@@ -215,9 +215,9 @@ function Controller() {
 	 * @param a callback function that loads the login form
 	 */
 	$(document).bind("courselistupdate", function() {
-		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization updates");
-			self.transitionToLogin();// or we can stay on the current view i.e. lms view, landing view or login view
+		if (!self.getLoginState() ){
+			moblerlog("stays in login view, despite the courses synchronization updates");
+			//self.transitionToLogin();// or we can stay on the current view i.e. lms view, landing view or login view
 		}
 	});		
 
@@ -723,7 +723,7 @@ function injectStyle() {
     }
     
     // calculate the heights once and forever. 
-    var cfl = w - 54, cfp = h - 54,cl  = w - 102,cp  = h - 108;
+    var cfl = w - 54, cfp = h - 54,cl  = w - 102,cp  = h - 108; 
     var style;
 
     style  = '@media all and (orientation:portrait) { ';
