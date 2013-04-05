@@ -75,6 +75,7 @@ function StatisticsModel(controller) {
 	this.controller = controller;
 	//initialization of model's variables
 	this.lastSendToServer;
+	this.clickOutOfStatisticsIcon;
 	var featuredContent_id = FEATURED_CONTENT_ID;
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',	100000);
 	this.currentCourseId = -1;
@@ -111,6 +112,7 @@ function StatisticsModel(controller) {
 	});
 		
 }
+
 
 /**
  * Sets the current course id and starts the calculations if the statistics are 
@@ -637,4 +639,35 @@ StatisticsModel.prototype.getAllDBEntries = function(){
 };
 
 
+/**
+ * Sets to true the flag variable that tracks
+ * if any element has been clicked while the user had previously clicked the statistics icon.
+ * * @prototype
+ * @function resetClickOutOfStatisticsIcon
+ */
+StatisticsModel.prototype.setClickOutOfStatisticsIcon = function() {
+	 this.clickOutOfStatisticsIcon=true;
+}
+
+/**
+ * Resets the flag variable that tracks if anything has been clicked after the user had clicked the statistics icon.
+ * It is reset everytime the user clicks only on the statistics icon and waits until the statistics to be calculated.
+ * @prototype
+ * @function resetClickOutOfStatisticsIcon
+ */
+StatisticsModel.prototype.resetClickOutOfStatisticsIcon = function() {
+	 this.clickOutOfStatisticsIcon=false;
+}
+
+/**
+ * Checks if any other element of the view has been tapped/clicked
+ * after the statistics icon  has been clicked in either the course list view or landing view.
+ * @prototype
+ * @function checkclickOutOfStatisticsIcon
+ * @return {Boolean}, true or false.  It returns true if any other element has been clicked, and false if only the statistics icon has been clicked and the user is waiting.
+ */
+StatisticsModel.prototype.checkclickOutOfStatisticsIcon = function() {
+	moblerlog ("check click out of statistics icon is" +this.clickOutOfStatisticsIcon);
+	return this.clickOutOfStatisticsIcon;
+}
 

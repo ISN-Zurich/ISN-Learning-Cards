@@ -167,7 +167,15 @@ function Controller() {
 	 * */
 	
 	$(document).bind("allstatisticcalculationsdone", function(featuredContent_id) {
+		moblerlog("all statistics calculations done is ready");
+		// if the user has clicked anywhere else in the meantime, then the transition to statistics view should not take place
+		if (!self.models["statistics"].checkclickOutOfStatisticsIcon()) {
+			moblerlog("transition to statistics because all calculations have been done");
 		self.transition('statisticsView',featuredContent_id);
+	   }else
+		   {
+		   moblerlog("transition to statistics is not feasible because the user has clicked elsewhere else");
+		   }
 	});
 
 	/**
