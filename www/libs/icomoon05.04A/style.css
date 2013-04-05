@@ -27,7 +27,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-smiley, .icon-checkmark2, .icon-settings, .icon-checkmark, .icon-question, .icon-bars, .icon-numeric, .icon-arrow-up, .icon-neutral, .icon-lock, .icon-arrow-down, .icon-loadingOld, .icon-loading2, .icon-loading, .icon-lms, .icon-info, .icon-icon-move, .icon-happy, .icon-exit, .icon-equals, .icon-enter, .icon-drag, .icon-dash, .icon-cross, .icon-courses, .icon-clozeQuestion, .icon-fire, .icon-diamonds {
+.icon-diamond, .icon-fire, .icon-smiley, .icon-settings, .icon-dash, .icon-cross, .icon-courses, .icon-numeric, .icon-question, .icon-clozeQuestion, .icon-checkmark2, .icon-lock, .icon-checkmark, .icon-neutral, .icon-bars, .icon-loadingOld, .icon-loading2, .icon-loading, .icon-arrow-down, .icon-arrow-up, .icon-lms, .icon-info, .icon-icon-move, .icon-happy, .icon-exit, .icon-equals, .icon-enter, .icon-drag {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -37,87 +37,87 @@ you can use the generic selector below, but it's slower:
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
+.icon-diamond:before {
+	content: "\e016";
+}
+.icon-fire:before {
+	content: "\e017";
+}
 .icon-smiley:before {
 	content: "\e000";
 }
-.icon-checkmark2:before {
+.icon-settings:before {
 	content: "\e001";
 }
-.icon-settings:before {
+.icon-dash:before {
 	content: "\e002";
 }
-.icon-checkmark:before {
+.icon-cross:before {
 	content: "\e003";
 }
-.icon-question:before {
+.icon-courses:before {
 	content: "\e004";
 }
-.icon-bars:before {
+.icon-numeric:before {
 	content: "\e005";
 }
-.icon-numeric:before {
+.icon-question:before {
 	content: "\e006";
 }
-.icon-arrow-up:before {
+.icon-clozeQuestion:before {
 	content: "\e007";
 }
-.icon-neutral:before {
+.icon-checkmark2:before {
 	content: "\e008";
 }
 .icon-lock:before {
 	content: "\e009";
 }
-.icon-arrow-down:before {
+.icon-checkmark:before {
 	content: "\e00a";
 }
-.icon-loadingOld:before {
+.icon-neutral:before {
 	content: "\e00b";
 }
-.icon-loading2:before {
+.icon-bars:before {
 	content: "\e00c";
 }
-.icon-loading:before {
+.icon-loadingOld:before {
 	content: "\e00d";
 }
-.icon-lms:before {
+.icon-loading2:before {
 	content: "\e00e";
 }
-.icon-info:before {
+.icon-loading:before {
 	content: "\e00f";
 }
-.icon-icon-move:before {
+.icon-arrow-down:before {
 	content: "\e010";
 }
-.icon-happy:before {
+.icon-arrow-up:before {
 	content: "\e011";
 }
-.icon-exit:before {
+.icon-lms:before {
 	content: "\e012";
 }
-.icon-equals:before {
+.icon-info:before {
 	content: "\e013";
 }
-.icon-enter:before {
+.icon-icon-move:before {
 	content: "\e014";
 }
-.icon-drag:before {
+.icon-happy:before {
 	content: "\e015";
 }
-.icon-dash:before {
-	content: "\e016";
-}
-.icon-cross:before {
-	content: "\e017";
-}
-.icon-courses:before {
+.icon-exit:before {
 	content: "\e018";
 }
-.icon-clozeQuestion:before {
+.icon-equals:before {
 	content: "\e019";
 }
-.icon-fire:before {
+.icon-enter:before {
 	content: "\e01a";
 }
-.icon-diamonds:before {
+.icon-drag:before {
 	content: "\e01b";
 }
