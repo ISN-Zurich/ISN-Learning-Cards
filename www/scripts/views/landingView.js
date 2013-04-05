@@ -200,15 +200,17 @@ LandingView.prototype.selectExclusiveContent = function() {
  * @param{string}, featuredContent_id
  */ 
 LandingView.prototype.showForm = function() {
+	setFeaturedWidth();
 	moblerlog("enter show form of landing view");
 	var self=this;
 	var featuredModel = self.controller.models['featured'];
 	this.hideErrorMessage();
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
-	 $("#featuredContent").attr("id",this.featuredContent_id);
+	 //$("#featuredContent").attr("id",this.featuredContent_id);
 	//NEW
 	//$("#featuredContent").attr("id",featuredModel.getId());
+	//scalculateLabelWidth();
 	$("#landingViewHeader").show();
 	moblerlog("showed landing view header");
 	$("#landingLmsLabel").text(featuredModel.getTitle());
@@ -310,14 +312,12 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
  * @function setInputWidth
  * */
 function setFeaturedWidth(o,w,h){
+	//injectStyle();
 	window_width = $(window).width();
 	moblerlog("window width in landing view is "+window_width);
 	var inputwidth = w - 49- 34 - 18;
-	var labelwidth=inputwidth-800;
 	moblerlog("input width in landing view is "+inputwidth);
-	$("#lefElement1").css("width", inputwidth + "px");
-	$("#landingLmsLabel").css("width", labelwidth + "px");
+	$("#leftElement1").css("width", inputwidth + "px");
 	$("#leftElementExclusive").css("width", inputwidth + "px");
-	$("#exclusiveContentLabel").css("width", labelwidth + "px");
 }
 
