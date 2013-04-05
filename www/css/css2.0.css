@@ -10,6 +10,8 @@ body {
 	padding: 0px;
 }
 
+
+
 /* close button general characteristics, top right corner of each view*/
 .closeButton {
 	width: 49px;
@@ -209,13 +211,13 @@ body {
 	width:100%;
 	background-image: url(../resources/app_background.png);
 	background-size:100% auto;
-    /*background-size: 946px auto;*/
-    /*background-size: 100% 5%;*/ 
+    /*background-size: 946px auto;
+    background-size:100% 15%;
+    background-size: 100% 5%;*/ 
     background-repeat:no-repeat;
     /* background-attachement: fixed; is not working on iOS */
     background-attachment:absolute;
     background-position: center bottom; 
-
 }
 
 
@@ -810,7 +812,7 @@ ul#questionText{
 .courseListIcon {
 	border-left: 1px solid red;
 	width: 30px;/*it was 41 and then 34*/
-	line-height:57px;
+	/*line-height:30px;*/
 	font-size: 24px; /*it was 32, and then 26*/
 	color:white;
 	text-align: center;
@@ -1031,8 +1033,6 @@ ul#lmsList{
 	font-weight:bold;
 	float:left;
 	display:inline;
-	
-	border: solid 0px blue;
 	vertical-align:middle;
 	white-space: nowrap;
 	text-overflow:ellipsis;
