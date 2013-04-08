@@ -357,7 +357,9 @@ Controller.prototype.transition = function(viewname, fd, achievementsFlag) {
 	if (this.views[viewname] && ( viewname === "landing" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
 		this.activeView.close();
-		this.activeView = this.views[viewname];
+		this.activeView = this.views[viewname]; 
+		//clear all flags that are needed for waiting for model processing
+		//currently only used by the statistics model
 		this.activeView.open(fd,achievementsFlag);
 	}
 };
@@ -546,6 +548,7 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 
 	if ((courseID && (courseID > 0 || courseID === "fd")) || !achievementsFlag ) {
 		this.models['statistics'].setCurrentCourseId(courseID);
+		//set the statistics waiting flag
 		if (!this.models['statistics'].dataAvailable()) {
 			this.transition("landing");
 		} }
