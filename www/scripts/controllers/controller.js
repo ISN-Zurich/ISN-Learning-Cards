@@ -726,7 +726,7 @@ function injectStyle() {
     }
     
     // calculate the heights once and forever. 
-    var cfl = w - 54, cfp = h - 54,cl  = w - 102,cp  = h - 108; 
+    var cfl = w - 54, cfp = h - 54 ,cl  = w - 102,cp  = h - 108; 
     var style;
 
     style  = '@media all and (orientation:portrait) { ';
