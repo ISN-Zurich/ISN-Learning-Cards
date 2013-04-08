@@ -923,11 +923,11 @@ ul#questionText{
 
 ul#aboutData{
 
-	margin-top:10px;
+	/*margin-top:10px;*/
 	margin-left: 0px;
 	margin-right:0px;
 	font-size: 12px;
-	margin-bottom: 66px;
+	/*margin-bottom: 66px;*/
 	z-index:10;
 	/*border: 1px solid red;
 	padding-top:15px;*/
