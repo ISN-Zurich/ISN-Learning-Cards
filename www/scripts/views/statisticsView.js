@@ -56,6 +56,7 @@ function StatisticsView(controller) {
     self.tagID = 'statisticsView';
     self.controller = controller;
     var featuredContent_id = FEATURED_CONTENT_ID;
+    self.dataLoaded=false;
     
     moblerlog( 'statistics view init touch events');
     
@@ -178,7 +179,9 @@ StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 //		self.showLoadingMessage();
 //			}
 //		}
-	this.openDiv();	
+	
+	if (self.dataLoaded) {
+	this.openDiv();	}
 };
 
 /**leads to course list
@@ -219,6 +222,7 @@ StatisticsView.prototype.clickToAchievements = function(featuredContent_id) {
  * @function loadData
  **/
 StatisticsView.prototype.loadData = function() {
+	var self=this;
 	moblerlog("enters load data in statistics");
 	var statisticsModel = this.controller.models['statistics'];
 	$("#loadingMessage").hide();
@@ -288,6 +292,8 @@ StatisticsView.prototype.loadData = function() {
 	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));
    
     moblerlog("end load data");
+    
+    self.dataLoaded=true;
 };	
 
 /**
