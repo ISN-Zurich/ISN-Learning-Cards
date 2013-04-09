@@ -180,8 +180,8 @@ StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 //			}
 //		}
 	
-	if (self.dataLoaded) {
-	this.openDiv();	}
+	this.openDiv();	
+	
 };
 
 /**leads to course list
@@ -225,8 +225,7 @@ StatisticsView.prototype.loadData = function() {
 	var self=this;
 	moblerlog("enters load data in statistics");
 	var statisticsModel = this.controller.models['statistics'];
-	$("#loadingMessage").hide();
-	$("#statisticsBody").show();
+	
 	
 	moblerlog("init values for statistics");
 	//starts the calculation of the values of the various

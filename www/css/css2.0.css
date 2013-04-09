@@ -810,15 +810,18 @@ ul#questionText{
 
 /****************** Course List View ************************/
 .courseListIcon {
-	border-left: 1px solid red;
+	border-left: 0px solid red;
 	width: 30px;/*it was 41 and then 34*/
-	/*line-height:30px;*/
+	line-height:40px;
 	font-size: 24px; /*it was 32, and then 26*/
 	color:white;
 	text-align: center;
-	vertical-align: middle;
+	/*vertical-align: middle;*/
 }
-
+.white{
+	color:white;
+	
+}
 .courseListIconLMS {
 	border-left: 1px solid red;
 	width: 34px;/*it was 41*/
@@ -998,6 +1001,17 @@ ul#loginElements{
 	
 }
 
+#leftElement1 {
+	border:1px solid red;
+}
+
+#separatorFeaturedLanding{
+	border:1px solid black;
+}
+
+#selectarrowLanding{
+	border:1px solid green;
+}
 
 #lmsView{	
 	display: none;
@@ -1016,7 +1030,7 @@ ul#lmsList{
 }
 
 
-.labelContainer{
+.labelContainerOld{
 	float:left;
 	/*display:inline-block;*/
 	padding-top:15px;
@@ -1311,11 +1325,29 @@ font-weight: bold;
 	border: solid 0px blue;	
 	height: 47px;
 	line-height: 47px;
-	width: 30px;/*it was 34*/
+	width: 34px; /*it was 34*/
 	text-align:center;
 	padding-top:5px;
 	padding-right:7px;/*there was no padding right it was just added*/
-	font-size:30px; /*it was 32*/
+	font-size:25px; /*it was 32*/
+}
+
+.courseLiContainer {
+	display: table;
+	width: 100%;
+}
+
+.gridContainer, .dashContainer, .labelContainer, .separatorBlock  {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.separatorBlock {
+	width: 12px;
+}
+
+.gridContainer {
+	width: 34px;
 }
 
 .selectItemContainerCloze {

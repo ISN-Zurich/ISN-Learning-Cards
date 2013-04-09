@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'icomoon';
-	
+	src:url('fonts/icomoon.eot');
 	src:url('fonts/icomoon.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
@@ -12,8 +12,6 @@
 	content: attr(data-icon);
 	speak: none;
 	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
@@ -22,15 +20,13 @@
 /*
 Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
-[class*="icon-"] {
+[class*="icon-"]:before {
 */
-.icon-diamond, .icon-smiley, .icon-happy, .icon-arrow-down, .icon-settings, .icon-question, .icon-numeric, .icon-neutral, .icon-lock, .icon-exit, .icon-equals, .icon-enter, .icon-drag, .icon-dash, .icon-cross, .icon-loadingOld, .icon-loading2, .icon-courses, .icon-checkmark2, .icon-lms, .icon-checkmark, .icon-info, .icon-bars, .icon-icon-move, .icon-arrow-up, .icon-fire, .icon-loading, .icon-clozeQuestion {
+.icon-diamond:before, .icon-smiley:before, .icon-happy:before, .icon-arrow-down:before, .icon-settings:before, .icon-question:before, .icon-numeric:before, .icon-neutral:before, .icon-lock:before, .icon-exit:before, .icon-equals:before, .icon-enter:before, .icon-drag:before, .icon-dash:before, .icon-cross:before, .icon-loadingOld:before, .icon-loading2:before, .icon-courses:before, .icon-checkmark2:before, .icon-lms:before, .icon-checkmark:before, .icon-loading:before, .icon-info:before, .icon-bars:before, .icon-icon-move:before, .icon-arrow-up:before, .icon-fire:before {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
@@ -97,6 +93,9 @@ you can use the generic selector below, but it's slower:
 .icon-checkmark:before {
 	content: "\e019";
 }
+.icon-loading:before {
+	content: "\e01a";
+}
 .icon-info:before {
 	content: "\e01b";
 }
@@ -111,10 +110,4 @@ you can use the generic selector below, but it's slower:
 }
 .icon-fire:before {
 	content: "\e038";
-}
-.icon-loading:before {
-	content: "\e001";
-}
-.icon-clozeQuestion:before {
-	content: "\e000";
 }

@@ -57,7 +57,7 @@ function LandingView(controller) {
 	});
 	
 	
-	jester($('#landingLmsLabel')[0]).tap(function(e,prevent) {
+	jester($('#leftElement1')[0]).tap(function(e,prevent) {
 		moblerlog("taped feautured Content");
 		$("#featuredContent").addClass("gradientSelected");
 		//	e.stopPropagation();
@@ -71,7 +71,7 @@ function LandingView(controller) {
 	
 	
 	//handler when taping on the exclusive content element
-	jester($('#selectExclusiveContent')[0]).tap(function(e,prevent) {
+	jester($('#leftElementExclusive')[0]).tap(function(e,prevent) {
 		//$('#selectExclusiveContent').addClass("gradientSelected");
 		moblerlog(" enters in landing view 1 ");
 		//	e.preventDefault();
@@ -213,7 +213,7 @@ LandingView.prototype.showForm = function() {
 	//scalculateLabelWidth();
 	$("#landingViewHeader").show();
 	moblerlog("showed landing view header");
-	$("#landingLmsLabel").text(featuredModel.getTitle());
+	$("#leftElement1").text(featuredModel.getTitle());
 	
 	if ($("#selectarrowLanding").hasClass("icon-loading loadingRotation")) {
 		$("#selectarrowLanding").addClass("icon-bars").removeClass("icon-loading loadingRotation");	
@@ -312,7 +312,6 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
  * @function setInputWidth
  * */
 function setFeaturedWidth(o,w,h){
-	//injectStyle();
 	window_width = $(window).width();
 	moblerlog("window width in landing view is "+window_width);
 	var inputwidth = w - 49- 34 - 18;

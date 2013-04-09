@@ -65,6 +65,7 @@ function doNothing() {}
  * */ 
 function openView() {
 	$(document).trigger("trackingEventDetected",[this.tagID]);
+	
 	$("#" + this.tagID).show();
 }
 

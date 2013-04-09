@@ -47,7 +47,6 @@ under the License.
  **/
 function LoginView(controller) {
 	var self = this;
-
 	self.tagID = 'loginView';
 	this.controller = controller;
 	this.active = false;

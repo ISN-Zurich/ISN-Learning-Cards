@@ -233,37 +233,18 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 
 	moblerlog("First course id: " + courseModel.getId());
 	
+	
+	
 //featured content
 	
 	var liF = $("<li/>", {
 		"id":"featured"+featuredContent_id,
-		"class":"gradient2"
+		"class":" courseLiContainer gradient2"
 	}).appendTo("#coursesList");
 	
 	
-	var rightdivF = $("<div/>", {
-		"id" : "featuredContent",
-		"class": "right"
-	}).appendTo(liF);
-	
-	var separatorF = $("<div/>", {
-		"class": "radialCourses lineContainer separatorContainerCourses"
-	}).appendTo(rightdivF);
-	
-	
-	divF = $("<div/>", {
-		//"class" : "courseListIcon right gradient2"
-		"class" : " courseListIcon lineContainerCourses "
-	}).appendTo(rightdivF);
-	
-	spanF = $("<div/>", {
-		"id":"courseListIcon"+ featuredContent_id,
-		"class" : "icon-bars"
-	}).appendTo(divF);
-	
-
 	var dashDivF = $("<div/>", {
-		"class" : "left lineContainer selectItemContainer"
+		"class" : "dashContainer lineContainer selectItemContainer"
 	}).appendTo(liF);
 	
 	var spanDashF = $("<span/>", {
@@ -271,16 +252,44 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 	}).appendTo(dashDivF);
 	
 	var mydivF = $("<div/>", {
-		"class" : "text textShadow marginForCourseList",
+		"class" : "text textShadow marginForCourseList labelContainer",
 		text : featuredModel.getTitle()
 	}).appendTo(liF);
+	
+	var sBF = $("<div/>", {"class":"separatorBlock"}).appendTo(liF);
+	
+
+	var separatorF = $("<div/>", {
+		"id":"separator"+ featuredContent_id,
+		"class": "radialCourses lineContainer separatorContainerCourses"
+	}).appendTo(sBF);
+	
+	var divclassF= "lineContainer selectItemContainer  ";
+	divclassF += (featuredModel.isSynchronized(featuredContent_id) ? " icon-bars" : "icon-loading loadingRotation");
+	
+	var rightdivF = $("<div/>", {
+		"id" : "courseListIcon"+ featuredContent_id,
+		"class": "gridContainer lineContainer selectItemContainer icon-bars"
+	}).appendTo(liF);
+	
+//	divF = $("<div/>", {
+//		"class" : " courseListIcon lineContainerCourses "
+//	}).appendTo(rightdivF);
+//	
+//	spanF = $("<div/>", {
+//		"id":"courseListIcon"+ featuredContent_id,
+//		"class" : "icon-bars"
+//	}).appendTo(divF);
+//	
+
+	
 	
 	
 	jester(mydivF[0]).tap(function(e) {
 	self.clickFeaturedItem(featuredContent_id);
 	});
 
-	jester(spanF[0]).tap(function(e) {
+	jester(rightdivF[0]).tap(function(e) {
 		moblerlog("taped featured statistics icon in courses list view");
 			
 		self.clickFeaturedStatisticsIcon(featuredContent_id);
@@ -300,28 +309,15 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 			var courseID = courseModel.getId();
 
 			var li = $("<li/>", {
+				"class": "courseLiContainer gradient2",
 				"id" : "course" + courseID
 			}).appendTo("#coursesList");
 
-			var rightDiv = $("<div/>", {
-				"class" : "right gradient2"
-			}).appendTo(li);
-				
-			var separator = $("<div/>", {
-				"id":"separator"+ courseID,
-				"class" : " radialCourses lineContainer separatorContainerCourses"
-			}).appendTo(rightDiv);
-			
-			div = $("<div/>", {
-				//"class" : "courseListIcon right gradient2"
-				"class" : " courseListIcon lineContainerCourses gradient2 "
-			}).appendTo(rightDiv);
-			
-			span = $("<div/>", {
-				"id":"courseListIcon"+ courseID,
-				"class" : (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation")
-			}).appendTo(div);
-			
+//			span = $("<div/>", {
+//				"id":"courseListIcon"+ courseID,
+//				"class" : (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation")
+//			}).appendTo(div);
+//			
 		
 			
 //			var leftDiv = $("<div/>", {
@@ -330,7 +326,7 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 //			
 			
 			var dashDiv = $("<div/>", {
-				"class" : "left lineContainer selectItemContainer"
+				"class" : "dashContainer lineContainer selectItemContainer"
 			}).appendTo(li);
 			
 			var spanDash = $("<span/>", {
@@ -338,9 +334,27 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 			}).appendTo(dashDiv);
 			
 			var mydiv = $("<div/>", {
-				"class" : "text textShadow marginForCourseList gradient2",
+				"class" : "text textShadow marginForCourseList labelContainer",
 				text : courseModel.getTitle()
 			}).appendTo(li);
+			
+			var sB = $("<div/>", {"class":"separatorBlock"}).appendTo(li);
+			var separator = $("<div/>", {
+				"id":"separator"+ courseID,
+				"class" : "radialCourses lineContainer separatorContainerCourses"
+			}).appendTo(sB);
+
+			var divclass= "lineContainer selectItemContainer  ";
+			divclass += (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation");
+			var rightDiv = $("<div/>", {
+				"class" : "gridContainer " + divclass ,
+				"id": "courseListIcon" + courseID
+			}).appendTo(li);
+			
+//			var div = $("<span/>", {
+//				"class" : divclass
+//			}).appendTo(rightDiv);
+			
 			
 			jester(mydiv[0]).tap(function(e) {
 				e.stopPropagation();
@@ -349,10 +363,9 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 			});
 
 
-			jester(span[0]).tap(
+			jester(rightDiv[0]).tap(
 					function(e) {
-						self.clickStatisticsIcon($(this).parent().parent().parent().attr('id')
-								.substring(6));
+						self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
 						e.stopPropagation();
 					});
 
