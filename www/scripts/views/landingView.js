@@ -314,7 +314,10 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
 function setFeaturedWidth(o,w,h){
 	window_width = $(window).width();
 	moblerlog("window width in landing view is "+window_width);
-	var inputwidth = w - 49- 34 - 18;
+	var gridWidth = 34;
+	var separatorWidth= 12;
+	var dashWidth = 34;
+	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth;
 	moblerlog("input width in landing view is "+inputwidth);
 	$("#leftElement1").css("width", inputwidth + "px");
 	$("#leftElementExclusive").css("width", inputwidth + "px");

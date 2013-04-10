@@ -180,6 +180,7 @@ StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 //			}
 //		}
 	
+	this.changeOrientation();
 	this.openDiv();	
 	
 };
@@ -292,7 +293,7 @@ StatisticsView.prototype.loadData = function() {
    
     moblerlog("end load data");
     
-    self.dataLoaded=true;
+    
 };	
 
 /**
@@ -301,4 +302,21 @@ StatisticsView.prototype.loadData = function() {
 * @prototype
 * @function changeOrientation
 **/ 	
-StatisticsView.prototype.changeOrientation = doNothing;
+StatisticsView.prototype.changeOrientation = function() {
+	moblerlog("change orientation in statistics view");
+	window_width = $(window).width();
+	var gridWidth = 34;
+	var separatorWidth= 12;
+	var dashWidth = 34;
+	var averageValueTextLength = $("#statHandledCardsValue").width();
+	moblerlog("the length of the average text value is "+averageValueTextLength);
+	//var statsValueWidth = averageValueTextLength; /*dynamic, it is statistics metric dependant*/
+	var statsValueWidth = 100 ;
+	var labelContainerWidth = window_width - gridWidth -separatorWidth - dashWidth - statsValueWidth;
+	moblerlog("labelContainer width is "+labelContainerWidth);
+	$(".labelContainer").css("width", labelContainerWidth + "px");
+	var achievementsWidth= window_width - gridWidth - dashWidth;
+	$("#achievementsReference").css("width", achievementsWidth + "px");
+	
+	
+};

@@ -428,5 +428,12 @@ function setInputWidth(){
 	var inputwidth = window_width - 49- 34 - 18;
 	$("#usernameInput").css("width", inputwidth + "px");
 	$("#password").css("width", inputwidth + "px");
+	moblerlog("window width in landing view is "+window_width);
+	var gridWidth = 34;
+	var separatorWidth= 12;
+	var dashWidth = 34;
+	var iconWidth= 30;
+	var lmsWidth = window_width - gridWidth -separatorWidth - dashWidth - iconWidth;
+	$("#lsmlabel").css("width", inputwidth + "px");
 }
 

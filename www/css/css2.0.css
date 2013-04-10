@@ -1001,16 +1001,13 @@ ul#loginElements{
 	
 }
 
-#leftElement1 {
-	border:1px solid red;
-}
 
 #separatorFeaturedLanding{
-	border:1px solid black;
+	border:0px solid black;
 }
 
 #selectarrowLanding{
-	border:1px solid green;
+	border:0px solid green;
 }
 
 #lmsView{	
@@ -1044,10 +1041,8 @@ ul#lmsList{
 .lmslabel{
 	height:49px;
 	line-height:49px;
+	width:50px;
 	font-weight:bold;
-	float:left;
-	display:inline;
-	vertical-align:middle;
 	white-space: nowrap;
 	text-overflow:ellipsis;
 	overflow: hidden;
@@ -1293,7 +1288,7 @@ font-weight: bold;
 }
 
 
-.imageContainer {
+.imageContainerOld {
 	/*display:inline-block*/
 	height: 47px;
 	line-height: 47px;
@@ -1337,13 +1332,46 @@ font-weight: bold;
 	width: 100%;
 }
 
-.gridContainer, .dashContainer, .labelContainer, .separatorBlock  {
+.dashContainer, .labelContainer, .separatorBlock {
 	display: table-cell;
 	vertical-align: middle;
 }
 
+
+.labelContainer {
+	border:0px solid red;
+}
+
+.white{
+	color:white;
+}
+.gridContainer {
+	display: table-cell;
+	vertical-align: middle;
+	margin-right:0px;
+}
+
+.statsValueContainer{
+	display: table-cell;
+	vertical-align: middle;
+	padding-right:15px;
+	border:0px solid black;
+	width:100px;
+	
+}
+
+.imageContainer {
+	display: table-cell;
+	vertical-align: middle;
+	width: 47px;
+	padding-top:4px;
+	border: solid 0px green;	
+	height: 47px;
+	line-height: 47px;
+}
 .separatorBlock {
 	width: 12px;
+	border:0px solid green;
 }
 
 .gridContainer {

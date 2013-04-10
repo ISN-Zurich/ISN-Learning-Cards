@@ -264,12 +264,12 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 		"class": "radialCourses lineContainer separatorContainerCourses"
 	}).appendTo(sBF);
 	
-	var divclassF= "lineContainer selectItemContainer  ";
+	var divclassF= "lineContainer selectItemContainer";
 	divclassF += (featuredModel.isSynchronized(featuredContent_id) ? " icon-bars" : "icon-loading loadingRotation");
 	
 	var rightdivF = $("<div/>", {
 		"id" : "courseListIcon"+ featuredContent_id,
-		"class": "gridContainer lineContainer selectItemContainer icon-bars"
+		"class": "gridContainer lineContainer selectItemContainer white icon-bars"
 	}).appendTo(liF);
 	
 //	divF = $("<div/>", {
@@ -344,7 +344,7 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 				"class" : "radialCourses lineContainer separatorContainerCourses"
 			}).appendTo(sB);
 
-			var divclass= "lineContainer selectItemContainer  ";
+			var divclass= "lineContainer selectItemContainer white ";
 			divclass += (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation");
 			var rightDiv = $("<div/>", {
 				"class" : "gridContainer " + divclass ,

@@ -101,8 +101,9 @@ function FeaturedContentModel(controller) {
 	//this.loadData(); //we will load data from local storage 
 	//this.loadFeaturedCourseFromServer();
 	
-	featuredObject = JSON.parse(localStorage.getItem("featuredContent"));
-	if (featuredObject){
+	//var featuredObject = JSON.parse(localStorage.getItem("featuredContent"));
+	if (localStorage.getItem("featuredContent")){
+		var featuredObject = JSON.parse(localStorage.getItem("featuredContent"));
 		moblerlog("load featured content data locally");
 		this.loadData();
 	}else {
