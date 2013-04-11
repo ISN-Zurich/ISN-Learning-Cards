@@ -1333,15 +1333,18 @@ font-weight: bold;
 	width: 100%;
 }
 
-.dashContainer, .labelContainer, .separatorBlock {
+.dashContainer, .labelContainer, .separatorBlock, .separatorBlockAchievements {
 	display: table-cell;
 	vertical-align: middle;
 }
 
 
 .labelContainer {
-	border:1px solid transparent;
+	border:0px solid red;
 
+}
+.dashContainer {
+border:0px solid blue;	
 }
 
 .white{
@@ -1351,37 +1354,39 @@ font-weight: bold;
 	display: table-cell;
 	vertical-align: middle;
 	margin-right:0px;
-	width: 34px;
+	text-align:center;
+	border:0px solid green;
 }
 
 .statsValueContainer{
 	display: table-cell;
 	vertical-align: middle;
-	padding-right:15px;
+	/*padding-right:15px;*/
 	border:0px solid black;
-	width:45px;
+	width:50px;
 	text-align:center;
+	padding-right:15px;
 	
 }
 
-.separatorBlock{
-	border:1px solid green;
-}
 .imageContainer {
 	display: table-cell;
 	vertical-align: middle;
 	width: 47px;
 	padding-top:4px;
-	border: solid 0px green;	
+	border:0px solid green;	
 	height: 47px;
 	line-height: 47px;
 }
 .separatorBlock {
-	width: 12px;
-	border:0px solid green;
+	width: 18px;
+	border:0px solid black;
 }
 
-
+.separatorBlockAchievements {
+	width: 12px;
+	border:1px solid blue;
+}
 
 .selectItemContainerCloze {
 	/*display:inline-block;*/
@@ -1439,9 +1444,9 @@ img.imageLogoLMS{
 }
 
 .achievementsImg{
-	text-align:center;
-	right:6px;
 	/*position:absolute;*/
+	text-align:center;
+	margin-right:6px;
 	font-size:38px;
 	vertical-align:middle;
 	

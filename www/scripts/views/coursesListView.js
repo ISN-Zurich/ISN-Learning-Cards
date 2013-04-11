@@ -316,8 +316,7 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 //				"class" : (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation")
 //			}).appendTo(div);
 //			
-		
-			
+					
 //			var leftDiv = $("<div/>", {
 //				"class" : "labelContainer"
 //			}).appendTo(li);
@@ -332,6 +331,7 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 			}).appendTo(dashDiv);
 			
 			var mydiv = $("<div/>", {
+				"id":"courseTitle"+courseID,
 				"class" : "text textShadow marginForCourseList labelContainer",
 				text : courseModel.getTitle()
 			}).appendTo(li);
@@ -454,4 +454,13 @@ CoursesListView.prototype.clickFeaturedStatisticsIcon = function(featuredContent
 * @prototype
 * @function changeOrientation
 **/ 
-CoursesListView.prototype.changeOrientation=doNothing;
+CoursesListView.prototype.changeOrientation=function(){
+	window_width = $(window).width();
+	moblerlog("window width in landing view is "+window_width);
+	var gridWidth = 34;
+	var separatorWidth= 15;
+	var dashWidth = 34;
+	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth -40;
+	moblerlog(" width in course list view is "+inputwidth);
+	$(".labelContainer").css("width", inputwidth + "px");
+};

@@ -265,3 +265,5 @@ function getCorrectGaps(gapIndex) {
 	moblerlog("correct gaps array is "+correctGaps);
 	return correctGaps;
 }
+
+function setLabelContainer() {}
