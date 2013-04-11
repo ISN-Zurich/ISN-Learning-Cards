@@ -1039,9 +1039,9 @@ ul#lmsList{
 }
 
 .lmslabel{
-	height:49px;
-	line-height:49px;
-	width:50px;
+	/* height:49px; */
+	/* line-height:49px; */
+	/* width:50px;*/ 
 	font-weight:bold;
 	white-space: nowrap;
 	text-overflow:ellipsis;
@@ -1329,6 +1329,7 @@ font-weight: bold;
 
 .courseLiContainer {
 	display: table;
+	table-layout: fixed;
 	width: 100%;
 }
 
@@ -1339,7 +1340,8 @@ font-weight: bold;
 
 
 .labelContainer {
-	border:0px solid red;
+	border:1px solid transparent;
+
 }
 
 .white{
@@ -1349,6 +1351,7 @@ font-weight: bold;
 	display: table-cell;
 	vertical-align: middle;
 	margin-right:0px;
+	width: 34px;
 }
 
 .statsValueContainer{
@@ -1356,10 +1359,14 @@ font-weight: bold;
 	vertical-align: middle;
 	padding-right:15px;
 	border:0px solid black;
-	width:100px;
+	width:45px;
+	text-align:center;
 	
 }
 
+.separatorBlock{
+	border:1px solid green;
+}
 .imageContainer {
 	display: table-cell;
 	vertical-align: middle;
@@ -1374,9 +1381,7 @@ font-weight: bold;
 	border:0px solid green;
 }
 
-.gridContainer {
-	width: 34px;
-}
+
 
 .selectItemContainerCloze {
 	/*display:inline-block;*/
@@ -1436,8 +1441,10 @@ img.imageLogoLMS{
 .achievementsImg{
 	text-align:center;
 	right:6px;
-	position:absolute;
-	font-size:39px;
+	/*position:absolute;*/
+	font-size:38px;
+	vertical-align:middle;
+	
 }
 
 .feedbackIcon{
