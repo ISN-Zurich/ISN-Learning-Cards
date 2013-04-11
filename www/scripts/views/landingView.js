@@ -188,7 +188,6 @@ LandingView.prototype.close = function() {
  * @function selectExclusiveContent
  */
 LandingView.prototype.selectExclusiveContent = function() {
-	this.controller.models['statistics'].setClickOutOfStatisticsIcon();//prevent transition to statistics once the calculations will be done
 	this.controller.transitionToLogin();
 };
 
@@ -246,7 +245,6 @@ LandingView.prototype.clickFeaturedItem = function(featuredContent_id){
 //  var featuredModel = self.controller.models['featured'];
 //	var feauturedId= featuredModel.getId();
 //	moblerlog("featured content id in landing view is "+feauturedId);
-	this.controller.models['statistics'].setClickOutOfStatisticsIcon();//prevent transition to statistics once the calculatins will be done
 	selectCourseItem(featuredContent_id);
 //}
 };
@@ -286,8 +284,7 @@ LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
 	moblerlog("statistics button in landing view clicked");
 	
-	this.controller.models['statistics'].resetClickOutOfStatisticsIcon(); //enable transition to statistics
-	
+
 	if ($("#selectarrowLanding").hasClass("icon-bars")) {
 		moblerlog("select arrow landing has icon bars");
 		$("#selectarrowLanding").removeClass("icon-bars").addClass("icon-loading loadingRotation");

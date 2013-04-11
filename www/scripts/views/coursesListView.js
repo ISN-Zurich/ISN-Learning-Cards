@@ -177,7 +177,7 @@ CoursesListView.prototype.close = function() {
  * @function clickCourseItem
  **/ 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
-	this.controller.models['statistics'].setClickOutOfStatisticsIcon();//prevent transition to statistics once the calculatins will be done
+
 	if (this.controller.models['course'].isSynchronized(course_id)) {
 		selectCourseItem(course_id);
 		}
@@ -190,7 +190,6 @@ CoursesListView.prototype.clickCourseItem = function(course_id) {
  */
 CoursesListView.prototype.clickSettingsButton = function() {
 	
-	this.controller.models['statistics'].setClickOutOfStatisticsIcon();//prevent transition to statistics once the calculatins will be done
 	this.controller.transitionToSettings();
 };
 
@@ -203,7 +202,6 @@ CoursesListView.prototype.clickSettingsButton = function() {
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	moblerlog("statistics button clicked");
 	
-	this.controller.models['statistics'].resetClickOutOfStatisticsIcon(); //enable transition to statistics
 	
 	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
 		$("#courseListIcon"+courseID).addClass("icon-loading loadingRotation").removeClass("icon-bars");
@@ -419,9 +417,7 @@ CoursesListView.prototype.setIconSize = function() {
  * @function clickFeaturedItem
  */ 
 CoursesListView.prototype.clickFeaturedItem = function(featuredContent_id){
-	
-	this.controller.models['statistics'].setClickOutOfStatisticsIcon(); //to prevent the transition to statistics
-																	  // if the statistics icon had been clicked before
+
 	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
 	//	NEW
 	//	var featuredModel = self.controller.models['featured'];
@@ -440,8 +436,6 @@ CoursesListView.prototype.clickFeaturedItem = function(featuredContent_id){
  */ 
 CoursesListView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
 	moblerlog("statistics button in landing view clicked");
-	
-	this.controller.models['statistics'].resetClickOutOfStatisticsIcon(); // enable the transition to statistics view
 	
 	if ($("#courseListIcon"+featuredContent_id).hasClass("icon-bars")) {
 		moblerlog("select arrow landing has icon bars");

@@ -42,6 +42,7 @@ function Controller() {
 	var self = this;
 	moblerlog("start controller");
 	self.appLoaded = false;
+	self.clickOutOfStatisticsIcon=true;;
 	var startTime= new Date().getTime();
 	var featuredContent_id = FEATURED_CONTENT_ID;
 
@@ -169,7 +170,7 @@ function Controller() {
 	$(document).bind("allstatisticcalculationsdone", function(featuredContent_id) {
 		moblerlog("all statistics calculations done is ready");
 		// if the user has clicked anywhere else in the meantime, then the transition to statistics view should not take place
-		if (!self.models["statistics"].checkclickOutOfStatisticsIcon()) {
+		if (!self.checkclickOutOfStatisticsIcon()) {
 			moblerlog("transition to statistics because all calculations have been done");
 		self.transition('statisticsView',featuredContent_id);
 	   }else
@@ -360,6 +361,7 @@ Controller.prototype.transition = function(viewname, fd, achievementsFlag) {
 		this.activeView = this.views[viewname]; 
 		//clear all flags that are needed for waiting for model processing
 		//currently only used by the statistics model
+		this.clickOutOfStatisticsIcon=true;
 		this.activeView.open(fd,achievementsFlag);
 	}
 };
@@ -543,13 +545,16 @@ Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag
 //			}
 //		}
 	
+	
+	//set the statistics waiting flag
+	this.clickOutOfStatisticsIcon=false;
+	
 	//The transition to statistics view is done by clicking the statistics icon in any list view. 
 	//In this case a courseID is assigned for the clicked option.
 
 	if ((courseID && (courseID > 0 || courseID === "fd")) || !achievementsFlag ) {
 		this.models['statistics'].setCurrentCourseId(courseID);
-		//set the statistics waiting flag
-		if (!this.models['statistics'].dataAvailable()) {
+	if (!this.models['statistics'].dataAvailable()) {
 			this.transition("landing");
 		} }
 	else if (achievementsFlag)
@@ -669,6 +674,19 @@ Controller.prototype.resizeHandler = function() {
 	// window.width / window.height > 1 portrait
 	this.activeView.changeOrientation(orientationLayout, w, h ); 
 };
+
+
+/**
+ * Checks if any other element of the view has been tapped/clicked
+ * after the statistics icon  has been clicked in either the course list view or landing view.
+ * @prototype
+ * @function checkclickOutOfStatisticsIcon
+ * @return {Boolean}, true or false.  It returns true if any other element has been clicked, and false if only the statistics icon has been clicked and the user is waiting.
+ */
+Controller.prototype.checkclickOutOfStatisticsIcon = function() {
+	moblerlog ("check click out of statistics icon is" +this.clickOutOfStatisticsIcon);
+	return this.clickOutOfStatisticsIcon;
+}
 
 /**
  * Sets the current height for the icon buttons.
