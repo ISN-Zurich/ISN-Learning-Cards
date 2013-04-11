@@ -278,7 +278,9 @@ StatisticsView.prototype.loadData = function() {
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
 	$("#statBestScoreValue").text(bestScore+"%");
-	$("#statHandledCardsValue").text(handledCards+ " "+ jQuery.i18n.prop('msg_handledCards_info'));
+	//$("#statHandledCardsValue").text(handledCards+ " "+ jQuery.i18n.prop('msg_handledCards_info'));
+	$("#statHandledCardsValue").text(handledCards);
+	$("#statsHandledCardsInfo").text(jQuery.i18n.prop('msg_handledCards_info'));
 	$("#statsHandledCardsIconchange").removeClass(removeClasses);
 	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvementhandledCards));
 	$("#statAverageScoreValue").text(avgScore+"%");
@@ -287,7 +289,9 @@ StatisticsView.prototype.loadData = function() {
 	$("#statProgressValue").text(progress+"%");
 	$("#statsProgressIconchange").removeClass(removeClasses);
 	$("#statsProgressIconchange").addClass(checkImprovement(improvementProgress));
-	$("#statSpeedValue").text(avgSpeed+" "+ jQuery.i18n.prop('msg_speed_info'));
+	//$("#statSpeedValue").text(avgSpeed+" "+ jQuery.i18n.prop('msg_speed_info'));
+	$("#statSpeedValue").text(avgSpeed);
+	$("#statsSpeedinfo").text(jQuery.i18n.prop('msg_speed_info'));
 	$("#statsSpeedIconchange").removeClass(removeClasses);
 	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));
    
@@ -315,8 +319,6 @@ StatisticsView.prototype.changeOrientation = function() {
 	var labelContainerWidth = window_width - gridWidth -separatorWidth - dashWidth - statsValueWidth;
 	moblerlog("labelContainer width is "+labelContainerWidth);
 	$(".labelContainer").css("width", labelContainerWidth + "px");
-	var achievementsWidth= window_width - gridWidth - dashWidth;
+	var achievementsWidth= window_width - gridWidth - dashWidth - separatorWidth;
 	$("#achievementsReference").css("width", achievementsWidth + "px");
-	
-	
 };
