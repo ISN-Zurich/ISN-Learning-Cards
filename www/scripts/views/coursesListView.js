@@ -455,12 +455,12 @@ CoursesListView.prototype.clickFeaturedStatisticsIcon = function(featuredContent
 * @function changeOrientation
 **/ 
 CoursesListView.prototype.changeOrientation=function(){
-	window_width = $(window).width();
-	moblerlog("window width in landing view is "+window_width);
-	var gridWidth = 34;
-	var separatorWidth= 15;
-	var dashWidth = 34;
-	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth -40;
-	moblerlog(" width in course list view is "+inputwidth);
-	$(".labelContainer").css("width", inputwidth + "px");
+//	window_width = $(window).width();
+//	moblerlog("window width in landing view is "+window_width);
+//	var gridWidth = 34;
+//	var separatorWidth= 15;
+//	var dashWidth = 34;
+//	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth -40;
+//	moblerlog(" width in course list view is "+inputwidth);
+//	$(".labelContainer").css("width", inputwidth + "px");
 };

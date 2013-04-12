@@ -1264,10 +1264,10 @@ font-weight: bold;
 
 
 .lineContainer {
-	display: inline-block;
+	/*display: inline-block;
 	vertical-align:middle;
 	text-align:center;
-	border:solid 0px blue;
+	border:solid 0px blue;*/
 }
 
 .lineContainerCourses {
@@ -1333,36 +1333,41 @@ font-weight: bold;
 	width: 100%;
 }
 
-.dashContainer, .labelContainer, .separatorBlock, .separatorBlockAchievements {
+.dashContainer, .labelContainer, .separatorBlock, .separatorBlockAchievements,.gridContainer, .gridContainerAchievements, .statsValueContainer,.imageContainer  {
 	display: table-cell;
 	vertical-align: middle;
 }
 
 
 .labelContainer {
-	border:0px solid red;
-
+	border:1px solid red;
+	width: auto;
 }
 .dashContainer {
-border:0px solid blue;	
+border:1px solid blue;
+width:34px;
 }
 
 .white{
 	color:white;
 }
 .gridContainer {
-	display: table-cell;
-	vertical-align: middle;
+	width: 34px;
 	margin-right:0px;
 	text-align:center;
-	border:0px solid green;
+	border:1px solid green;
 }
 
+.gridContainerAchievements{
+	/* margin-right:0px; */
+	text-align:center;
+	border:1px solid green;
+	width:40px;
+}
 .statsValueContainer{
-	display: table-cell;
-	vertical-align: middle;
+	
 	/*padding-right:15px;*/
-	border:0px solid black;
+	border:1px solid black;
 	width:50px;
 	text-align:center;
 	padding-right:15px;
@@ -1370,8 +1375,6 @@ border:0px solid blue;
 }
 
 .imageContainer {
-	display: table-cell;
-	vertical-align: middle;
 	width: 47px;
 	padding-top:4px;
 	border:0px solid green;	
@@ -1380,12 +1383,12 @@ border:0px solid blue;
 }
 .separatorBlock {
 	width: 18px;
-	border:0px solid black;
+	border:1px solid black;
 }
 
 .separatorBlockAchievements {
-	width: 12px;
-	border:1px solid blue;
+	width: 6px;
+	border:1px solid black;
 }
 
 .selectItemContainerCloze {
@@ -1444,12 +1447,10 @@ img.imageLogoLMS{
 }
 
 .achievementsImg{
-	/*position:absolute;*/
-	text-align:center;
-	margin-right:6px;
+	/*position:absolute;
+	margin-right:6px;*/
 	font-size:38px;
-	vertical-align:middle;
-	
+	border:1px solid red;
 }
 
 .feedbackIcon{
@@ -1492,15 +1493,14 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 	border:1px solid green;
 }
 .separatorContainerCourses {
-	/*display:inline-block;*/
+	/*display:inline-block;	*/
+	margin-top:4px;
+	margin-bottom:4px;
 	border-left: solid 1px #b3b2b2;
 	height: 30px;
 	line-height: 30px;
 	width: 12px;
 	text-align: right;
-	margin-top:4px;
-	margin-bottom:4px;
-	
 }
 
 .separatorContainerLMS {
@@ -1617,8 +1617,8 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 }
 
 #cardBurner{
-	padding-bottom:4px;
-	margin-bottom:4px;
+	/*padding-bottom:4px;
+	margin-bottom:4px;*/
 }
 
 

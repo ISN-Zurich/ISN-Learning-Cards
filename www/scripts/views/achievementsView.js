@@ -227,13 +227,11 @@ AchievementsView.prototype.showLoadingMessage = function() {
 * @function changeOrientation
 **/ 
 AchievementsView.prototype.changeOrientation = function() {
-	window_width = $(window).width();
-	var gridWidth = 34;
-	var separatorWidth= 12;
-	var dashWidth = 40;
-	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth-59;
-	moblerlog(" width in achievements view is "+inputwidth);
-	$(".labelContainer").css("width", inputwidth + "px");
-	
-	
+//	window_width = $(window).width();
+//	var gridWidth = 48;
+//	var separatorWidth= 8;
+//	var dashWidth = 40;
+//	var inputwidth = window_width - gridWidth - separatorWidth - dashWidth-70;
+//	moblerlog(" width in achievements view is "+inputwidth);
+//	$(".labelContainer").css("width", inputwidth + "px");
 };
