@@ -1264,10 +1264,10 @@ font-weight: bold;
 
 
 .lineContainer {
-	/*display: inline-block;
+	display: inline-block;
 	vertical-align:middle;
 	text-align:center;
-	border:solid 0px blue;*/
+	border:solid 0px blue;
 }
 
 .lineContainerCourses {
@@ -1341,7 +1341,7 @@ font-weight: bold;
 
 .labelContainer {
 	border:1px solid red;
-	width: auto;
+	
 }
 .dashContainer {
 border:1px solid blue;
@@ -1362,7 +1362,7 @@ width:34px;
 	/* margin-right:0px; */
 	text-align:center;
 	border:1px solid green;
-	width:40px;
+	width:50px;
 }
 .statsValueContainer{
 	
@@ -1373,7 +1373,13 @@ width:34px;
 	padding-right:15px;
 	
 }
-
+.statsValueContainerAchievements{
+	
+	/*padding-right:15px;*/
+	border:1px solid black;
+	text-align:right;
+	
+}
 .imageContainer {
 	width: 47px;
 	padding-top:4px;

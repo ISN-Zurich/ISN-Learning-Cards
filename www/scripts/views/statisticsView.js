@@ -307,19 +307,19 @@ StatisticsView.prototype.loadData = function() {
 * @function changeOrientation
 **/ 	
 StatisticsView.prototype.changeOrientation = function() {
-	moblerlog("change orientation in statistics view");
-	window_width = $(window).width();
-	var gridWidth = 34;
-	var separatorWidth= 12;
-	var dashWidth = 40;
-	var averageValueTextLength = $("#statHandledCardsValue").width();
-	moblerlog("the length of the average text value is "+averageValueTextLength);
-	//var statsValueWidth = averageValueTextLength; /*dynamic, it is statistics metric dependant*/
-	var statsValueWidth = 50 ;
-	var labelContainerWidth = window_width - gridWidth -separatorWidth - dashWidth - statsValueWidth;
-	moblerlog("labelContainer width is "+labelContainerWidth);
-	$(".labelContainer").css("width", labelContainerWidth + "px");
-	var achievementsWidth= window_width - gridWidth - dashWidth - separatorWidth - 15;
-	moblerlog("achievements width in statistics view is "+achievementsWidth);
-	$("#achievementsReference").css("width", achievementsWidth + "px");
+//	moblerlog("change orientation in statistics view");
+//	window_width = $(window).width();
+//	var gridWidth = 34;
+//	var separatorWidth= 12;
+//	var dashWidth = 40;
+//	var averageValueTextLength = $("#statHandledCardsValue").width();
+//	moblerlog("the length of the average text value is "+averageValueTextLength);
+//	//var statsValueWidth = averageValueTextLength; /*dynamic, it is statistics metric dependant*/
+//	var statsValueWidth = 50 ;
+//	var labelContainerWidth = window_width - gridWidth -separatorWidth - dashWidth - statsValueWidth;
+//	moblerlog("labelContainer width is "+labelContainerWidth);
+//	$(".labelContainer").css("width", labelContainerWidth + "px");
+//	var achievementsWidth= window_width - gridWidth - dashWidth - separatorWidth - 15;
+//	moblerlog("achievements width in statistics view is "+achievementsWidth);
+//	$("#achievementsReference").css("width", achievementsWidth + "px");
 };
