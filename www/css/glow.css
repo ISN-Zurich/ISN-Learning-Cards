@@ -11,11 +11,10 @@
 
 .checkmark{
 	
-	margin-top:15px;
-	font-size:38px;
-	color:green;	
+	margin-top:5px;
+	
 	width:39px;
-	height:39px;
+	height:34px;
 }
 
 .glowRed {
@@ -43,4 +42,21 @@
 	z-index:1;
 	position:relative;
 	
+}
+
+.gradientSelected{  
+	color:white;
+	/*-webkit-text-stroke-color: white;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: transparent;*/
+
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5e5e5e), color-stop(100%, #8c8c8c)); /* Safari 4+, Chrome 2+ */  
+
+    /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5e5e5e), color-stop(67%, #5e5e5e),color-stop(100%, #8c8c8c));*/ /* Safari 4+, Chrome 2+ */  
+    /*background: -webkit-linear-gradient(#5e5e5e, ##5e5e5e));*/ /* Safari 5.1+, Chrome 10+ */  
+    /*background: -o-linear-gradient(#5e5e5e, #5e5e5e); *//* Opera 11.10 */  
+    /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5e5e5e', endColorstr='#5e5e5e');*/ /* IE6 & IE7 */  
+    /* background: linear-gradient(#5e5e5e, #5e5e5e);*/ /* the standard */ 
+    z-index:10;
+     
 }

@@ -44,7 +44,6 @@ under the License.
  */
 function QuestionPoolModel(controller) {
 	this.controller = controller;
-
 	this.questionList = [];
 	this.id = 0;
 	this.indexAnswer = 0;
@@ -58,6 +57,7 @@ function QuestionPoolModel(controller) {
 	// if the question list length is less than this constant,
 	// the queue is not used
 	this.queueConstant = 4;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 }
 
 
@@ -89,14 +89,17 @@ QuestionPoolModel.prototype.storeData = function(course_id) {
 QuestionPoolModel.prototype.loadData = function(course_id) {
 	var questionPoolObject;
 	try {
+		moblerlog("question pool object exists");
 		questionPoolObject = JSON.parse(localStorage.getItem("questionpool_"
-				+ course_id))
-				|| [];
+				+ course_id)) || [];
+		moblerlog("questionpool Object is "+questionPoolObject );
 	} catch (err) {
-		questionPoolObject = [];
+		moblerlog("question pool object is zero");
+		questionPoolObject2 = [];
 	}
-
+	moblerlog("questionpool pool id is ????:"+course_id);
 	this.questionList = questionPoolObject;
+	moblerlog("question pool list for the course_id is "+this.questionList);
 	this.reset();
 };
 
@@ -136,6 +139,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						var questionPoolString;
 						try {
 							questionPoolString = JSON.stringify(questionPoolObject);
+							moblerlog("questionpool string "+questionPoolString);
 						} catch (err) {
 							questionPoolString = "";
 						}
@@ -235,7 +239,6 @@ QuestionPoolModel.prototype.currAnswersMixed = function() {
 	return this.currentAnswersAreMixed;
 };
 
-
 /**
  * Mixes the answer items of the current question and sets as true the flag 
  * that tracks if the answers are mixed or not
@@ -282,8 +285,7 @@ QuestionPoolModel.prototype.nextQuestion = function() {
 		//keeps repeating the process of getting the id of the new random question of question list
 		//while the new random id is still the same with id of the current question or if this new random id is still 
 		//stored in the waiting queue 	
-	} while (this.id === newId
-			|| (this.queue.length * 2 <= this.questionList.length && jQuery
+	} while (this.id === newId || (this.queue.length * 2 <= this.questionList.length && jQuery
 					.inArray(newId, this.queue) >= 0));
 
 	this.id = newId;
@@ -381,13 +383,19 @@ QuestionPoolModel.prototype.getId = function() {
  * @prototype
  * @function reset
  */ 
-QuestionPoolModel.prototype.reset = function() {
+QuestionPoolModel.prototype.reset = function(featuredContent_id) {
+	moblerlog("reset question pool");
 	this.queue = [ "-1", "-1", "-1" ];
+	if (featuredContent_id){
+		this.id=featuredContent_id;
+	}
+	else{
 	this.id = 0;
+	}
 	this.activeQuestion = {};
 	this.currentAnswersAreMixed = false;
 	if (this.questionList.length > 0) {
-		this.nextQuestion();
+		this.nextQuestion(featuredContent_id);
 	}
 };
 
@@ -399,4 +407,20 @@ QuestionPoolModel.prototype.reset = function() {
  */ 
  QuestionPoolModel.prototype.resetAnswer = function() {
 	this.indexAnswer = 0;
+};
+
+
+/**
+ * checks the existence and validity 
+ * of the question pool list
+ * @prototype
+ * @function dataAvailable
+ */ 
+QuestionPoolModel.prototype.dataAvailable= function() {
+	if (this.questionList) {
+		moblerlog("questionpool list exists");
+		return true;
+	}
+	moblerlog("questionpool list does not exist");
+	return false;
 };

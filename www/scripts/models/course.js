@@ -70,7 +70,7 @@ function CourseModel(controller) {
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 	
 	 /** 
-	  * It is binde when all the questions of a valid questionpol have been loaded from server
+	 * It is binded when all the questions of a valid questionpol have been loaded from server
 	 * @event questionpoolready
 	 * @param: callback function in which are activated to true the flags that
 	 * keep track of the loading of the course and its synchronization state
@@ -87,7 +87,7 @@ function CourseModel(controller) {
 	 *          are loaded from the server
 	 * **/
 	
-	$(document).bind("switchtoonline", function() {
+	$(document).bind("online", function() {
 		self.switchToOnline();
 	});
 	
@@ -123,13 +123,14 @@ CourseModel.prototype.storeData = function() {
 		courseString = "";
 	}
 	localStorage.setItem("courses", courseString);
+	moblerlog("courses object is " +localStorage.getItem("courses"));
 };
 
 /**
  * Loads the data from the local storage (key = "courses"). Therefore the string
  * is converted into a json object of which the data is taken. The very first time
  * we launch the app, everything is initialized and set to false, empty and get the current time.
- * @function loadData
+ * @function //
  */
 CourseModel.prototype.loadData = function() {
 	var courseObject;
@@ -146,6 +147,9 @@ CourseModel.prototype.loadData = function() {
 	this.index = 0;
 
 	this.checkForTimeOut();
+	
+	moblerlog("object courses is "+localStorage.getItem("courses"));
+	moblerlog("course list in load data is "+this.courseList);
 };
 
 /**
@@ -177,8 +181,7 @@ CourseModel.prototype.loadFromServer = function() {
 			}
 		}
 
-			
-		$
+			$
 				.ajax({
 					url:  activeURL + '/courses.php',
 					type : 'GET',
@@ -197,7 +200,7 @@ CourseModel.prototype.loadFromServer = function() {
 		}
 
 		function createCourseList(data) {
-			moblerlog("success");
+			moblerlog("success in getting course list");
 
 			// if there was a pending course list, remove it from the storage
 			localStorage.removeItem("pendingCourseList");
@@ -217,7 +220,7 @@ CourseModel.prototype.loadFromServer = function() {
 			self.syncState = true;
 			self.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 			self.storeData();
-			moblerlog("JSON CourseList: " + self.courseList);
+			moblerlog("JSON CourseList: " + JSON.stringify(self.courseList));
 			self.reset();
 			
 			//if there was any saved sync state then assign it to the sync state of the courses of the course list
@@ -430,3 +433,22 @@ CourseModel.prototype.switchToOnline = function() {
 	this.syncState = false;
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
 };
+
+/**
+ * Returns the course list
+ * @prototype
+ * @function getCourseList
+ * */
+CourseModel.prototype.getCourseList = function() {
+	var self=this;
+	//moblerlog("course list in courses model is "+JSON.stringify(this.courseList));
+	self.loadData();
+	moblerlog("course list in getCourseList is"+self.courseList);
+	var c;
+	var coursesIdList=[];
+	for ( c in this.courseList){
+	coursesIdList[c]=this.courseList[c].id;	
+	}
+	moblerlog("courses id list is"+coursesIdList);
+	return coursesIdList;
+}

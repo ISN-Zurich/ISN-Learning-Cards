@@ -158,10 +158,7 @@ ProgressModel.prototype.calculateImprovementProgress= function (transaction,resu
 	//and calling then the allCalculationsDone() function, where the counting of the so far calculated statistis metrics
 	//will be done summative 
 	this.superModel.boolAllDone++;
-	this.superModel.allCalculationsDone();	
-	
-	
-		
+	this.superModel.allCalculationsDone();		
 };
 
 

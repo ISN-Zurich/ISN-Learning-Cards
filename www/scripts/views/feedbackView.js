@@ -44,6 +44,7 @@ function FeedbackView(controller) {
 	var self = this;
 	self.controller = controller;
 	self.tagID = 'cardFeedbackView';
+	var featuredContent_id = FEATURED_CONTENT_ID;
 
 	//Handler when taping on the forward/done grey button on the right of the feedback view
 	jester($('#FeedbackDoneButon')[0]).tap(function() {
@@ -271,6 +272,9 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		case 'assOrderingQuestion':
 			this.widget = new TextSortWidget(interactive);
 			break;
+		case 'assClozeTest':
+			this.widget = new ClozeQuestionType(interactive);
+			break;	
 		default:
 			break;
 	}

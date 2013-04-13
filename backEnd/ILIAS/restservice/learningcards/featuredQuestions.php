@@ -29,7 +29,6 @@
  * This class loads the questions for the in the path specified course id from ILIAS and
  * returns a json-object with the question list
  * 
- * @author Isabella Nake
  * @author Evangelia Mitsopoulou
  */
 
@@ -50,7 +49,7 @@ $DEBUG = 1;
 
 global $class_for_logging;
 
-$class_for_logging = "questions.php";
+$class_for_logging = "featuredQuestions.php";
 
 
 //$userID = get_session_user_from_headers();

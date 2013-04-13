@@ -50,15 +50,16 @@ var DB_VERSION = 1;
  * 	- the start time point that the user reached a question
  * It opens the local html5-type database. If it doesn't exist yet it is initiated in the constructor.  
  */
-function AnswerModel() {
+function AnswerModel(controller) {
 	this.answerList = [];
 	this.answerScoreList = [];
 	this.answerScore = -1;
 
+	this.controller = controller;
 	this.currentCourseId = -1;
 	this.currentQuestionId = -1;
 	this.start = -1;
-
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',
 			100000);
 	if (!localStorage.getItem("db_version")) {
@@ -136,7 +137,6 @@ AnswerModel.prototype.getAnswerResults = function() {
  **/
 AnswerModel.prototype.calculateSingleChoiceScore = function() {
 	var clickedAnswerIndex = this.answerList[0];
-
 	if (controller.models["questionpool"].getScore(clickedAnswerIndex) > 0) {
 		moblerlog("the score is 1");
 		this.answerScore = 1;
@@ -294,13 +294,71 @@ AnswerModel.prototype.calculateNumericScore = function() {
 
 
 /**
+ * Calculates the answer score for cloze question type
+ * It can be:
+ * - 0 (wrong): if none of the gaps are filled in or filled in correctly
+ * - 0.5 (partially correct): if at least one of the gaps is filled in correctly
+ * - 1 (fully correct): if all gaps are filled in with the correct values
+ * The function compares the values that the user typed and with actual correct ones.
+ * It uses 
+ * @prototype
+ * @function calculateClozeQuestionScore 
+ * @return {number} answerScore, it can be either 0, 0.5 or 1.
+ **/
+AnswerModel.prototype.calculateClozeQuestionScore = function() {
+			
+	var answerModel = controller.models["answers"];
+	var filledAnswers=answerModel.getAnswers(); 
+	var gaps = []; // a helper array that will store the result of the comparison between 
+				   // the actual and the filled answers,
+				   // 1 is assigned as a value  if the answer was filled correctly for the specific (index i) gap and 0 if not
+	for (i=0; i<filledAnswers.length;i++){
+		var actualCorrectGaps= getCorrectGaps(i); // an array containing the correct answers for the gap with the index i in the
+												  // object that is returned from the server
+		moblerlog("actual Correct Gaps for gap "+i+" is "+actualCorrectGaps);
+		if (actualCorrectGaps.indexOf(filledAnswers[i])!==-1){
+			gaps[i]=1;
+		}else {
+			gaps[i]=0;
+		}
+	}
+	
+	this.answerScore=calculateAnswerScoreValue();
+	
+	
+	function calculateAnswerScoreValue(){
+		moblerlog("calculates answre score value in cloze questions");
+		var sumValue=0; // a helper variable that calculates the sum of the values of the gaps array 
+		for (gapindex=0; gapindex<gaps.length; gapindex++) {
+			sumValue= sumValue + gaps[gapindex];	
+		}
+		moblerlog("sumvalue is "+sumValue);
+		if (sumValue == 0){
+			this.answerScore=0;
+		}else if(sumValue==gaps.length){ // if all gaps are filled in correctly, then all elements of the gaps array have value 1
+										 // so the sum of these values is equal to the length of the array
+			this.answerScore=1;
+		}else{
+			this.answerScore=0.5
+		}
+		return this.answerScore;
+			moblerlog("answer score value within function is "+this.answerScore);
+		};
+}
+
+
+
+/**
  * Sets the course id
  * @prototype
  * @function setCurrentCourseId 
  **/ 
 AnswerModel.prototype.setCurrentCourseId = function(courseId) {
 	this.currentCourseId = courseId;
+	moblerlog("currentCourseId "+this.currentCourseId);
 };
+
+
 
 
 /**
@@ -310,6 +368,7 @@ AnswerModel.prototype.setCurrentCourseId = function(courseId) {
  **/
 AnswerModel.prototype.startTimer = function(questionId) {
 	this.start = (new Date()).getTime();
+	moblerlog("this.start in startTimer is "+this.start);
 	this.currentQuestionId = questionId;
 	moblerlog("currentQuestionId: " + this.currentQuestionId);
 };
@@ -359,9 +418,11 @@ AnswerModel.prototype.initDB = function() {
  * @function storeScoreInDB 
  ***/
 AnswerModel.prototype.storeScoreInDB = function() {
+	moblerlog("enter score in DB");
 	var self = this;
 	var day = new Date();
-	var duration = ((new Date()).getTime() - this.start);
+	var duration = (new Date()).getTime() - this.start;
+	moblerlog("duration is "+duration);
 	this.db
 	.transaction(function(transaction) {
 		transaction
@@ -370,12 +431,17 @@ AnswerModel.prototype.storeScoreInDB = function() {
 				[ self.currentCourseId, self.currentQuestionId,
 				  day.getTime(), self.answerScore, duration ],
 				  function() {
-					moblerlog("successfully inserted SCORE IN db");
+					moblerlog("successfully inserted SCORE IN db for course "+self.currentCourseId);
 
 					/**It is triggered after the successful insertion of the score in the local database
 					 * @event checkachievements
 					 * @param:a callback function that sets the id for the current course
 					 */
+					// Now our statistics are no longer correct if we have calculated them
+					if (self.controller.models.statistics.currentCourseId === self.currentCourseId ) {
+						// force that the course statistics have to be recalculated the next time the user requests the course statistics.
+						self.controller.models.statistics.currentCourseId  = -1; 
+					}
 					$(document).trigger("checkachievements", self.currentCourseId);
 				}, function(tx, e) {
 					moblerlog("error! NOT inserted: "+ e.message);
@@ -392,14 +458,25 @@ AnswerModel.prototype.storeScoreInDB = function() {
  * @function deleteDB 
  **/
 AnswerModel.prototype.deleteDB = function() {
-	localStorage.removeItem("db_version");
+	//moblerlog("featured content id in deleteDB is "+featuredContent_id);
+	var self=this;
+	//localStorage.removeItem("db_version"); // this line is from before we had featured content.
+	var courseList = self.controller.models["course"].getCourseList();
+	//var courseList = this.controller.models["course"].courseList;
+	moblerlog("course list for the specific user is "+JSON.stringify(courseList));
 	this.db.transaction(function(tx) {
-		tx.executeSql("DELETE FROM statistics", [], function() {
+		//DELETE FROM statistics WHERE course_id IN (CID LIST FOR THE USER) 
+		var qm = [];
+		//courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+		$.each(courseList,function() {qm.push("?");});
+		tx.executeSql('DELETE FROM statistics where course_id IN ('+ qm.join(",") +')', courseList, function() {
+		// tx.executeSql("DELETE FROM statistics where course_id != ?", [featuredContent_id], function() {
 			moblerlog("statistics table cleared");
 		}, function() {
 			moblerlog("error: statistics table not cleared");
 		});
 	});
+	//localStorage.removeItem("courses");
 };
 
 /**
@@ -426,7 +503,41 @@ AnswerModel.prototype.calculateScore = function () {
 	case 'assNumeric':
 		this.calculateNumericScore();
 		break;
+	case 'assClozeTest':
+		this.calculateClozeQuestionScore();
+		break;
 	default:
 		break;
 	}
 };
+
+/**
+ * Checks if the filled gap by the user
+ * is among the correct gaps.
+ * @prototype
+ * @function checkFilledAnswer 
+ * @param {string array, number} filledAnswer, gapIndex
+ * @ return true if the filled answer is among the correct answers, false in the opposite case
+ **/
+AnswerModel.prototype.checkFilledAnswer = function(filledAnswer,gapIndex) {
+	var correctGaps= getCorrectGaps(gapIndex);
+	if (correctGaps.indexOf(filledAnswer)!==-1){
+		return true;
+	}else{
+		return false;
+	}
+};
+
+
+/**
+ * checks the existence and validity 
+ * of the answer list
+ * @prototype
+ * @function dataAvailable
+ */ 
+AnswerModel.prototype.dataAvailable= function() {
+	if (this.answerList) {
+		return true;}
+	return false;
+};
+

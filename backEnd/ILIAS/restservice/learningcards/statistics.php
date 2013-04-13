@@ -42,7 +42,7 @@ require_once 'Services/User/classes/class.ilObjUser.php';
 require_once 'Services/Database/classes/class.ilDB.php';
 
 global $DEBUG;
-$DEBUG = 0;
+$DEBUG = 1;
 
 global $ilUser, $class_for_logging;
 
@@ -81,12 +81,13 @@ switch($request_method) {
 		if ($userId > 0) {
 			logging("has valid user");
 			$response = json_encode(getStatistics($userId));
-// 			logging("GET response: " . $response);
+		//logging("GET response: " . $response);
 			logging("Get response size: " . strlen($response));
 			echo($response);
 		}
 		break;
 	case "DELETE":
+		logging("delete request of featured content statistics");
 	default:
 		logging("request method not supported");
 		break;

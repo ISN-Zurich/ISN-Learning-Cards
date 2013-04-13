@@ -34,7 +34,7 @@ under the License.
  *  - it sets the tag ID for the landing view
  *  - assigns various event handlers when taping on the elements of the
  *    landing form such as featured content, exclusive content (and free content soon)
- *  - it binds synhronization events such as the sending of statistics to the server,
+ *  - it binds synchronization events such as the sending of statistics to the server,
  *    the update of courses and questions. It prevents the display of the appropriate
  *    views that are also binded with the aforementioned events by displaying the
  *    login form itself.(FIX ME:. stay here instead of redirecting to the login view)
@@ -48,11 +48,34 @@ function LandingView(controller) {
 	this.active = false;
 	this.fixedRemoved= false;
 	var prevent=true;
+	var featuredContent_id = FEATURED_CONTENT_ID;
+	
+	jester($('#selectarrowLanding')[0]).tap(function(e) {
+		//	e.stopPropagation();
+		moblerlog("taped statistics icon landing view");
+		self.clickFeaturedStatisticsIcon(featuredContent_id);
+	});
+	
+	
+	jester($('#leftElement1')[0]).tap(function(e,prevent) {
+		moblerlog("taped feautured Content");
+		$("#featuredContent").addClass("gradientSelected");
+		//	e.stopPropagation();
+		//	e.preventDefault();
+		// $("#featuredContent").addClass("gradientSelected");
+		//	NEW
+		// var featuredModel = self.controller.models['featured'];
+		// var feauturedId= featuredModel.getId();
+		self.clickFeaturedItem(featuredContent_id);
+	});
+	
+	
 	//handler when taping on the exclusive content element
-	jester($('#selectExclusiveContent')[0]).tap(function(e,prevent) {
+	jester($('#leftElementExclusive')[0]).tap(function(e,prevent) {
+		//$('#selectExclusiveContent').addClass("gradientSelected");
 		moblerlog(" enters in landing view 1 ");
-		e.preventDefault();
-		e.stopPropagation();
+		//	e.preventDefault();
+		//	e.stopPropagation();
 		self.selectExclusiveContent();
 	});
 		
@@ -66,18 +89,26 @@ function LandingView(controller) {
 		self.hideErrorMessage();
 	});	
 		
-	
 	$('#selectExclusiveContent').bind("touchstart", function(e) {
 		moblerlog(" enters in landing view 2 ");
+		$("#selectExclusiveContent").addClass("gradientSelected");
 		e.preventDefault();
 		e.stopPropagation();
 	});	
 	
-	
-	$(document).bind("featuredContentlistupdate", function(e) {
+	$('#featuredContent').bind("touchstart", function(e) {
+		$("#featuredContent").addClass("gradientSelected");
+		moblerlog("color changed");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
+
+	$(document).bind("featuredContentlistupdate", function(e,featuredCourseId) {
 		
-		//self.showForm();
+	self.showForm(); //this will be called when a synchronization update takes place
+	
 	});
+
 	
 	
 } //end of constructor
@@ -137,12 +168,14 @@ LandingView.prototype.closeDiv = closeView;
 
 
 /**
- * closes the view after firstly clearing
- * the input fields of the login form
+ * closes the view after firstly removing the gradients 
+ * of the featured and exclusive content
  * @prototype
  * @function close
  **/ 
 LandingView.prototype.close = function() {
+	$("#selectExclusiveContent").removeClass("gradientSelected");
+	$("#featuredContent").removeClass("gradientSelected");
 	this.active = false;
 	this.closeDiv();
 };
@@ -163,77 +196,30 @@ LandingView.prototype.selectExclusiveContent = function() {
  * displays the landing form 
  * @prototype
  * @function showForm
+ * @param{string}, featuredContent_id
  */ 
 LandingView.prototype.showForm = function() {
+	setFeaturedWidth();
+	moblerlog("enter show form of landing view");
 	var self=this;
 	var featuredModel = self.controller.models['featured'];
 	this.hideErrorMessage();
 	if (this.controller.models['connection'].isOffline()) {
 		this.showErrorMessage(jQuery.i18n.prop('msg_landing_message'));}
+	 //$("#featuredContent").attr("id",this.featuredContent_id);
+	//NEW
+	//$("#featuredContent").attr("id",featuredModel.getId());
+	//scalculateLabelWidth();
 	$("#landingViewHeader").show();
+	moblerlog("showed landing view header");
+	$("#leftElement1").text(featuredModel.getTitle());
 	
-	
-	$("#landingLmsLabel").text(featuredModel.getTitle());
+	if ($("#selectarrowLanding").hasClass("icon-loading loadingRotation")) {
+		$("#selectarrowLanding").addClass("icon-bars").removeClass("icon-loading loadingRotation");	
+	}
 	$("#landingBody").show();	
-	moblerlog("just show the title of the featured courses");
-   
-	jester($('#featuredContent')[0]).tap(function(e) {
-		e.stopPropagation();
-		//e.preventDefault();
-		self.clickFeaturedItem();
-	});
-	
-	
-
-	
-	
-	//**********************Design landing page in Javascript*********************
-//	var li = $("<li/>", { }).appendTo("#landingElements");
-//	
-//	var div = $("<div/>", {
-//		"id" : "featuredContent",
-//		"class": "selectWidget gradient2"
-//	}).appendTo(li);
-//	
-//	var div2 = $("<div/>", {
-//		"class": "left lineContainer selectItemContainer"
-//	}).appendTo(div);
-//	
-//	var span1 = $("<span/>", {
-//		"class": "select icon-dash"
-//	}).appendTo(div2);
-//	
-//	var div3 = $("<div/>", {
-//		"id":"leftElement1",
-//		"class":"labelContainer"
-//	}).appendTo(div);
-//	
-//	
-//	var div3_1=$("<div/>", {
-//		"id":"landingLmsLabel",
-//		"class":"lsmlabel textShadow",
-//		"text":"Featured Content"
-//	}).appendTo(div3);
-//	
-//	var div4 = $("<div/>", {
-//		"id":"rightElements",
-//		"class":"right"
-//	}).appendTo(div);
-//	
-//	var div4_1 = $("<div/>", {
-//		"id":"separatorLanding",
-//		"class":"lineContainer separatorContainerCourses radial"
-//	}).appendTo(div4);
-//	
-//	var div4_2 = $("<div/>", {
-//		"id":"selectarrowLanding",
-//		"class":"lineContainer selectItemContainer select"
-//	}).appendTo(div4);
-//	
-//	var span4_2 = $("<span/>", {
-//		"class": "icon-bars"
-//	}).appendTo(div4_2);
-//	
+	moblerlog("showed the body of the landing page");
+ 
 }
 
 
@@ -249,19 +235,18 @@ LandingView.prototype.showErrorMessage = function(message) {
 };
 
 /**
- * click on the defautl featured content, loads its questions
+ * click on the default featured content, loads its questions
  * @prototype
  * @function clickFeaturedItem
  */ 
-LandingView.prototype.clickFeaturedItem = function(){
-	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
-	//this.controller.models['featured'].reset();
-	//	this.controller.models['featured'].loadData(featuredContent_id);//load the json file that is stored locally in the app
-	//	this.controller.models['featured'].setCurrentCourseId(featuredContent_id);
-	moblerlog("transition to question view from landing view");
-		var featuredFlag=true;
-		this.controller.transitionToQuestion(featuredFlag);
-	//}
+LandingView.prototype.clickFeaturedItem = function(featuredContent_id){
+//	if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
+//  NEW
+//  var featuredModel = self.controller.models['featured'];
+//	var feauturedId= featuredModel.getId();
+//	moblerlog("featured content id in landing view is "+feauturedId);
+	selectCourseItem(featuredContent_id);
+//}
 };
 
 
@@ -279,29 +264,59 @@ LandingView.prototype.hideErrorMessage = function() {
 /**
 * handles dynamically any change that should take place on the layout
 * when the orientation changes.
-* TODO: to check the misbehavior when changing from horizontal mode to vertical mode, 
-* after coming back from login view
 * @prototype
 * @function changeOrientation
+* @param {string, number, number} orientationLayout, width of device screen, height of device screen
 **/ 
 LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	moblerlog("change orientation in landing view");
-	setFeaturedWidth();
+	setFeaturedWidth(orientationLayout, w, h);
 };
 
 
 /**
- * sets dynamically the width of the input elements
- * of the login form.
+ * click on statistic icon calculates the appropriate statistics and 
+ * loads the statistics view after transforming the statistics icon into loading icon
+ * @prototype
+ * @function clickStatisticsIcon
+ * @param {string} featuredContent_id
+ */ 
+LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
+	moblerlog("statistics button in landing view clicked");
+	
+
+	if ($("#selectarrowLanding").hasClass("icon-bars")) {
+		moblerlog("select arrow landing has icon bars");
+		$("#selectarrowLanding").removeClass("icon-bars").addClass("icon-loading loadingRotation");
+		
+		//icon-loading, icon-bars old name
+		//all calculations are done based on the course id and are triggered
+		//within setCurrentCourseId
+		//this.controller.transitionToStatistics(featuredContent_id);
+//		NEW
+//		var featuredModel = self.controller.models['featured'];
+//		var feauturedId= featuredModel.getId();
+		this.controller.transitionToStatistics(featuredContent_id);
+	}
+};
+
+/**
+ * sets dynamically the width of the elements
+ * of the landing form.
  * it is calculated by substracting from the device width in the current mode (landscape, portrait)
  * which has been detected in the controller the sum of the widths of the rest dom elements around it
  * such as: dash bar, icon container and separator.
  * @function setInputWidth
  * */
-function setFeaturedWidth(){
-	window_width = $(window).width();
-	var inputwidth = window_width - 49- 34 - 18;
-	$("#landingLmsLabel").css("width", inputwidth + "px");
-	$("#exclusiveContentLabel").css("width", inputwidth + "px");
+function setFeaturedWidth(o,w,h){
+//	window_width = $(window).width();
+//	moblerlog("window width in landing view is "+window_width);
+//	var gridWidth = 34;
+//	var separatorWidth= 12;
+//	var dashWidth = 34;
+//	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth;
+//	moblerlog("input width in landing view is "+inputwidth);
+//	$("#leftElement1").css("width", inputwidth + "px");
+//	$("#leftElementExclusive").css("width", inputwidth + "px");
 }
 

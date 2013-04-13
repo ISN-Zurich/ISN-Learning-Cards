@@ -104,8 +104,7 @@ AverageSpeedModel.prototype.calculateAverageSpeed = function(transaction, result
 		if (row['num'] === 0) {
 			this.averageSpeed = 0;
 		} else {
-			this.averageSpeed = Math
-			.round((row['duration'] / row['num']) / 1000);
+			this.averageSpeed = Math.round((row['duration'] / row['num']) / 1000);
 		}
 		moblerlog("AVERAGE SPEED: " +this.averageSpeed);
 

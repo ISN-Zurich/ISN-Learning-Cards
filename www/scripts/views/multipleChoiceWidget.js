@@ -141,30 +141,25 @@ MultipleChoiceWidget.prototype.showAnswer = function() {
 				text : answers[mixedAnswers[c]].answertext
 			}).appendTo(li);
 			
-		}
+		} //end of for
 		var lastli = $("<li/>", {
 		}).appendTo(ul);
 	
-	var shadoweddiv = $("<div/>", {
+		var shadoweddiv = $("<div/>", {
 		"id": "shadowedAnswerLi",
 		"class" : "gradient1 shadowedLi"
-	}).appendTo(lastli);
+		}).appendTo(lastli);
 	
-	var marginLi= $("<li/>", {
+		var marginLi= $("<li/>", {
 		"class": "spacerMargin"
-	}).appendTo(ul);
+		}).insertAfter(shadoweddiv);
 	
-var logoImageDiv=	$("<div/>", {
-		"class" : "backgroundImage"
-}).appendTo(viewId);	
 	
-
-	
-	} else {
+		} else {
 		//if there are no data for a question or there is no questionpool then display the error message
 		this.didApologize = true; 
 		doApologize();
-	}
+		}
 };
 
 
@@ -221,9 +216,10 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 			"class" : "courseListIconFeedback lineContainer "
 		}).appendTo(rightDiv);
 		
-		span = $("<div/>", {
+		span = $("<span/>", {
 			"id":"courseListIcon"+ mixedAnswers[c],
-			"class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0 ?  "right green icon-checkmark background" : ($(li).hasClass("gradientSelected"))?"right red icon-App-Icons  glowRed" :"")
+			// "class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0  ? "right icon-checkmark glow2 background" : ($(li).hasClass("gradientSelected")) ?"right icon-checkmark glowNone background": "")
+			"class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0 ? (($(li).hasClass("gradientSelected")) ? "right icon-checkmark glow2 background" : "right icon-checkmark glowNone") : "")
 		}).appendTo(div);
 		
 		var div = $("<div/>", {
@@ -242,7 +238,7 @@ MultipleChoiceWidget.prototype.showFeedback = function() {
 
 	var marginLi= $("<li/>", {
 		"class": "spacerMargin"
-	}).appendTo(ul);
+	}).insertAfter(shadoweddiv);
 	
 	moblerlog("enter feedback view after switching from question view");
 };

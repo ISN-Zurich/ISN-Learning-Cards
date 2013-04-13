@@ -69,7 +69,7 @@ TrackingModel.prototype.storeTrackData = function(time, type){
 		transaction
 		.executeSql('INSERT INTO tracking(time_stamp,event_type) VALUES(?,?)',
 				[ time, type ],function() {
-			moblerlog("successfully inserted");
+			moblerlog("successfully inserted in tracking model");
 		}, function(tx, e) {
 			moblerlog("error! NOT inserted: "+ e.message);
 		});

@@ -43,7 +43,7 @@ under the License.
 function ConnectionState(controller) {
 
 	var self = this;
-	self.controller = controller;
+	this.controller = controller;
     if (device.platform === 'iPhone') {
         var networkState = navigator.connection.type;
 	    } else {
@@ -83,7 +83,7 @@ ConnectionState.prototype.goOnline = function() {
 	moblerlog("**online**");
 	this.state = true;
 	
-	 if (this.controller.appLopaded) {
+	 if (self.controller.appLopaded) {
 		 this.synchronizeData();
 	 }
 };
@@ -133,7 +133,7 @@ ConnectionState.prototype.synchronizeData = function() {
 		}
 
 		moblerlog('check synchronization - question pools');
-		// if a pending question pool exist, load the question pool from the server
+		// if a pending question pool exists, load the question pool from the server
 		if ( this.controller && this.controller.models && this.controller.models["course"] && this.controller.models["course"].courseList) {
 			moblerlog( 'got models ');
 			var courseList = this.controller.models["course"].courseList;
@@ -151,6 +151,26 @@ ConnectionState.prototype.synchronizeData = function() {
 			}
 		}
 
+		
+		moblerlog('check synchronization - featured question pools');
+		// if a pending featured content question pool exists, load the question pool from the server
+		if ( this.controller && this.controller.models && this.controller.models["featured"] && this.controller.models["featured"].featuredContentList) {
+			moblerlog( 'got models ');
+			var featuredContentList = this.controller.models["featured"].featuredContentList;
+			if (featuredContentList) {
+				moblerlog( 'interate featured course list ' );
+				//for ( var c in featuredContentList) {
+					moblerlog( 'check featured course ' );
+					var pendingFeaturedQuestionPools = localStorage.getItem("pendingFeaturedContentList" + featuredContentList.id);
+					if (pendingFeaturedQuestionPools) {
+						moblerlog('check synchronization - featured question pool missing for course ');
+						this.controller.models["featured"].loadFromServer(featuredContentList.id);
+					}
+				//}
+			}
+		}
+		
+		
 		var statisticsModel = this.controller.models["statistics"];
 
 		moblerlog('check synchronization - statistics');
@@ -198,5 +218,7 @@ ConnectionState.prototype.goOffline = function() {
 	this.state = false;
 	$(document).trigger("trackingEventDetected","offline");
 	// show no connection error message in login view
-	this.controller.views["login"].showErrorMessage(jQuery.i18n.prop('msg_network_message'));
+	if (self.controller.views){
+	self.controller.views["login"].showErrorMessage(jQuery.i18n.prop('msg_network_message'));
+	}
 };

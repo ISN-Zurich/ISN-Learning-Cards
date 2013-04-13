@@ -74,13 +74,13 @@ function getCourseList($userId) {
 
 	//loads all courses in which the current user is a member
 	$items = ilParticipants::_getMembershipByType($userId, 'crs');
-
+	logging("items are ".json_encode($items));
 	$courses = array();
 	foreach($items as $key => $obj_id)	{
 
 		//references are needed to get course items (= questionpools, tests, ...)
 		$item_references = ilObject::_getAllReferences($obj_id);
-
+		logging("items references are ".json_encode($item_references));
 		//check if valid questionpool for the course exists
 		$validQuestionPool = false;
 		if(is_array($item_references) && count($item_references)) {
@@ -102,6 +102,7 @@ function getCourseList($userId) {
 						
 						//calls isValidQuestionPool in questions.php
 						if (isValidQuestionPool($questionPool)) {
+							logging("valid question pool");
 							$validQuestionPool = true;
 						}
 					}
@@ -130,8 +131,10 @@ function getCourseList($userId) {
 			"syncDateTime" => 0,
 			"syncState" => false,
 			"syncTimeOut" => $SYNC_TIMEOUT);
-
+	logging("course list is ".json_encode($courseList));
 	return $courseList;
+	
+	
 
 }
 

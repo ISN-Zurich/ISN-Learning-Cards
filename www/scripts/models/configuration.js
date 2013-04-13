@@ -56,6 +56,7 @@ var APP_ID = "ch.ethz.isn.learningcards";
 function ConfigurationModel(controller) {
 	var self=this;
 	this.controller = controller;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	//initialization of model's variables
 	this.configuration = {};
 	this.urlToLMS = "";
@@ -84,7 +85,6 @@ function ConfigurationModel(controller) {
 		moblerlog("user logged out");
 		}
 	});
-
 }
 
 /**
@@ -255,10 +255,10 @@ ConfigurationModel.prototype.login = function(username, password) {
 * @prototype
 * @function logout
 */
-ConfigurationModel.prototype.logout = function() {
+ConfigurationModel.prototype.logout = function(featuredContent_id) {
 	//send statistics data to server
 	this.configuration.loginState = "loggedOut";
-	this.controller.models['statistics'].sendToServer();
+	this.controller.models['statistics'].sendToServer(featuredContent_id);
 	
 	var self = this;
 
@@ -266,8 +266,11 @@ ConfigurationModel.prototype.logout = function() {
 	var c, courseList = this.controller.models["course"].courseList;
 	if (courseList) {
 		for ( c in courseList ) {
+			moblerlog("clear local question pools");
+			if (courseList[c].id !== featuredContent_id){
 			localStorage.removeItem("questionpool_" + courseList[c].id);
 			localStorage.removeItem("pendingQuestionPool_" + courseList[c].id);
+			}
 		}
 	}
 	
@@ -290,6 +293,7 @@ ConfigurationModel.prototype.logout = function() {
 * @function sendAuthToServer
 */
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
+	moblerlog("enter send Auth to server");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
 	moblerlog("url: " + self.urlToLMS + '/authentication.php');
@@ -347,7 +351,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
                          */   
 						$(document).trigger("authenticationready",
 								self.configuration.userAuthenticationKey);
-						
+						moblerlog("authentication is ready, statistics can be loaded from the server");
 						//sets the language interface for the authenticated user
 						//its language preferences were received during the authentication 
 											
@@ -391,7 +395,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 * @function sendLogoutToServer
 * @param userAuthenticationKey
 */
-ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey) {
+ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey,featuredContent_id) {
 	var sessionKey,self = this;
 	var activeURL = self.controller.getActiveURL();  
 	if (userAuthenticationKey) {
@@ -435,7 +439,7 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 	this.storeData();
 
 	// drop statistics data table from local database
-	this.controller.models['answers'].deleteDB();	
+	this.controller.models['answers'].deleteDB(featuredContent_id);	
 };
 
 /**
@@ -446,7 +450,8 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 * @return true if user is logged in, otherwise false
 */
 ConfigurationModel.prototype.isLoggedIn = function() {
-	if (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") {
+if (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") {
+	//if (this.configuration.loginState && this.configuration.loginState==="loggedIn"){	
 		return true;
 	}
 	

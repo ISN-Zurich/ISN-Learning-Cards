@@ -47,6 +47,7 @@ function AnswerView(controller) {
 	 self.controller = controller;
 	 self.tagID = 'cardAnswerView';
 	 self.widget = null; 
+	 var featuredContent_id = FEATURED_CONTENT_ID;
 	
 	//Handler when taping on the forward/done grey button on the right of the answer view
 	jester($('#doneButton')[0]).tap(function() {
@@ -98,8 +99,7 @@ function AnswerView(controller) {
 	 * @param: a callback function that displays the answer body and preventing the display of the statistics view
 	 */	
 	$(document).bind("allstatisticcalculationsdone", function() { 
-    	moblerlog("enters in calculations done in question view1 ");
-    	    
+    	moblerlog("enters in calculations done in question view1 "); 
     	if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn"))
     	{
     		moblerlog("enters in calculations done in  answer view 2 ");
@@ -142,7 +142,7 @@ AnswerView.prototype.closeDiv = closeView;
 
 /**Shows the container div element of the current view 
  * @prototype
- * @function openDiv
+ *@function openDiv
  **/
 AnswerView.prototype.openDiv = openView;
 
@@ -151,7 +151,8 @@ AnswerView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-AnswerView.prototype.open = function() {
+AnswerView.prototype.open = function(featuredContent_id) {
+	moblerlog("opes answer view");
 	this.showAnswerTitle();
 	this.showAnswerBody();
 	this.openDiv();
@@ -165,7 +166,7 @@ AnswerView.prototype.open = function() {
  * @function close
  **/
 AnswerView.prototype.close = function() {
-    this.widget.cleanup();
+   // this.widget.cleanup();
     this.closeDiv();
 };
 
@@ -201,6 +202,9 @@ AnswerView.prototype.showAnswerBody = function() {
 	break;
 	case 'assNumeric':
 		this.widget = new NumericQuestionWidget(interactive);
+		break;
+	case 'assClozeTest':
+		this.widget = new ClozeQuestionType(interactive);
 		break;
 	default:
 		break;
@@ -240,10 +244,11 @@ AnswerView.prototype.clickDoneButton = function() {
 	} else {
 		// if there was no error with the data we provide feedback to the
 		// learner.
+		moblerlog("click done button in answer view");
 		questionpoolModel.queueCurrentQuestion();
 		this.widget.storeAnswers();
 		answerModel.storeScoreInDB();
-		controller.transitionToFeedback();
+		controller.transitionToFeedback();	
 	}
 };
 
@@ -267,7 +272,12 @@ AnswerView.prototype.clickTitleArea = function() {
 	this.widget.storeAnswers(); 
 	// When switching back and forth between question view  and answer view the currently selected answers are stored. 
 	// These answers have not yet been finally answered.
+	if (this.controller.models.answers.dataAvailable()) {
 	controller.transitionToQuestion();
+	}
+	else {
+		// inform the user that something went wrong
+	}
 };
 
 /**

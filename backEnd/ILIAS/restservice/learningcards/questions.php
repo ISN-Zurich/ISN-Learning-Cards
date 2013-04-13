@@ -44,6 +44,7 @@ require_once 'Services/User/classes/class.ilObjUser.php';
 require_once 'Modules/Course/classes/class.ilCourseItems.php';
 require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 require_once 'Modules/TestQuestionPool/classes/class.assQuestion.php';
+require_once 'Modules/TestQuestionPool/classes/class.assClozeTest.php';
 
 global $DEBUG;
 $DEBUG = 1;
@@ -72,6 +73,8 @@ if ($userID != 0) {
  * @return array with questions
  */
 function getQuestions($courseId) {
+	
+	global $assClozeTest;
 	//references are needed to get course items (= questionpools, tests, ...)
 	$item_references = ilObject::_getAllReferences($courseId);
 	//logging("item references".json_encode($item_references));
@@ -84,7 +87,7 @@ function getQuestions($courseId) {
 			$courseItems = new ilCourseItems($ref_id);
 			$courseItemsList = $courseItems->getAllItems();
 
-				logging("Questions: " . json_encode($courseItemsList));
+			logging("Questions: " . json_encode($courseItemsList));
 
 			foreach($courseItemsList as $courseItem) {
 
@@ -96,78 +99,11 @@ function getQuestions($courseId) {
 					//check if question pool is valid
 					if(isValidQuestionPool($questionPool)) {
 						$questionList = $questionPool->getQuestionList();
-											logging("Question list: " . json_encode($questionList));
-
-						foreach ($questionList as $question) {
-
-							//get id
-							$questionId = $question["question_id"];
-								
-							//get the question
-							$questionText = $question["question_text"];
-
-							//get the question type
-							$type = $question["type_tag"];
-
-
-							require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
-
-							$assQuestion = new $type();
-							$assQuestion->loadFromDb($question["question_id"]);
-
-							//get answers
-							if (strcmp($type, "assNumeric") == 0) {
-								//numeric questions have no "getAnswers()" method!
-								//only lower and upper limit are returned
-								$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
-								logging("answerList for Numeric Question".json_encode($answerList));
-							} else if (strcmp($type, "assOrderingHorizontal") == 0) {
-								//horizontal ordering questions have no "getAnswers()" method!
-								//they use the OrderText variable to store the answers and the getOrderText function to retrieve them 
-								//$answerList = $assQuestion->getOrderText();
-							$answers = $assQuestion->getOrderingElements();
-							//$points1 = $assQuestion->calculateReachedPoints();
-							$points = $assQuestion->getPoints();
-							
-							$arr = array();
-							foreach ($answers as $order => $answer)
-							//foreach ($answers as $order => $answer)
-							{
-								array_push($arr, array(
-								"answertext" => (string) $answer,
-								"points"=> $points,
-								"order" => (int)$order+1,
-								"id" => "-1"
-								));
-							}
-							$answerList = $arr;
-							logging("answerList for Horizontal Question".json_encode($answerList));
-							 							
-							}	 
-							 else {
-								$answerList = $assQuestion->getAnswers();
-								logging("answerList for other types of Question".json_encode($answerList));
-								
-							}
-
-							//get feedback
-							$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
-							$feedbackError = $assQuestion->getFeedbackGeneric(0);
-
-
-							//add question into the question list
-							array_push($questions, array(
-									"id" => $questionId,
-									"type" => $type,
-									"question" => $questionText,
-									"answer" => $answerList,
-									"correctFeedback" => $feedbackCorrect,
-									"errorFeedback" => $feedbackError));
-						}
+						logging("Question list: " . json_encode($questionList));
+						$questions= getQuestionList($questionList);
 					}
 				}
 			}
-
 		}
 	}
 
@@ -175,6 +111,8 @@ function getQuestions($courseId) {
 	return array(
 			"courseID" => $courseId,
 			"questions" => $questions);
+	
+	logging("questions are ".json_encode($questions));
 }
 
 

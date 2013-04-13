@@ -61,7 +61,7 @@ function NumericQuestionWidget(interactive) {
 		self.showFeedback(); //displays the feedback body of the multiple choice widget
 
 	}
-} // end of consructor
+} // end of constructor
 
 
 /**
@@ -116,10 +116,11 @@ NumericQuestionWidget.prototype.showAnswer = function() {
 		
 		var input = $("<input/>", {
 			"id" : "numberInput",
-			"class" : "loginInput textShadow",
+			"class" : "loginInputCloze textShadow",
 			"required": "required",
 			"width" : "200px",
 			"type" : "number",
+			"placeholder":"type a number",
 			"value": self.tickedAnswers.length != 0 ? self.tickedAnswers : ""
 		}).appendTo(div2);
 		
@@ -156,6 +157,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 	var questionpoolModel = controller.models["questionpool"];
 	var answerModel = controller.models["answers"];
 	var typedAnswer = answerModel.getAnswers();
+	moblerlog("typed answer is "+typedAnswer);
 	var correctAnswer = questionpoolModel.getAnswer()[0];
 	var currentFeedbackTitle = answerModel.getAnswerResults();
 
@@ -184,7 +186,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 			}).appendTo(rightDiv);
 			
 			span = $("<div/>", {
-				"class" : "right green icon-checkmark" 
+				"class" : "right glow2 icon-checkmark" 
 			}).appendTo(div);
 			
 			var div = $("<div/>", {
@@ -229,7 +231,8 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		}).appendTo(rightDiv);
 		
 		var div = $("<div/>", {
-			"class" : "text",
+			//"class" : "text",
+			"class":(answerModel.getAnswers() ? "text" : "defaultHeight"),
 			text : typedAnswer
 		}).appendTo(li);
 	
@@ -253,7 +256,7 @@ NumericQuestionWidget.prototype.showFeedback = function() {
 		}).appendTo(rightDiv2);
 		
 		span2 = $("<span/>", {
-			"class" : "right green icon-checkmark" 
+			"class" : "right icon-checkmark glowNone" 
 		}).appendTo(divCorrect);
 		
 		var div2 = $("<div/>", {

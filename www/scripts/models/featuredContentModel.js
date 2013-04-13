@@ -30,13 +30,23 @@ under the License.
 
 /*jslint vars: true, sloppy: true */
 
+
+/**
+ * A global property/variable that stores the id of the 
+ * featured content
+ *
+ * @property FEATURED_CONTENT_ID 
+ * @default fd 
+ *
+ **/
+var FEATURED_CONTENT_ID = "fd";
+
 /**
  *A global property/variable that shows for how long the synchronization is valid.
  *The following default value shows the time period after which a new synchromization 
  *should take place.
- *
- *@property DEFAULT_SYNC_TIMEOUT 
- *@default 60000 
+ **@property DEFAULT_SYNC_TIMEOUT 
+ **@default 60000 
  *
  **/
 
@@ -62,13 +72,19 @@ function FeaturedContentModel(controller) {
 
 	this.controller = controller;
 
-	
 	this.featuredContentList = [];
+	this.featuredQuestions = [];
+	this.featuredQuestionList;
+	this.activeQuestion = {};
+	this.featuredCourseId = FEATURED_CONTENT_ID;
+	this.featuredContentActualId;
+	var isFeaturedContentLocal=false;
 	this.index = 0; // index of the current course
 	this.syncDateTime = 0;
 	this.syncState = false;
 	this.syncTimeOut = DEFAULT_SYNC_TIMEOUT;
-	
+	this.queue = [];
+
 	
 	 /** 
 	  * It it binded when an online connection is detected
@@ -77,19 +93,24 @@ function FeaturedContentModel(controller) {
 	 *          are loaded from the server
 	 * **/
 	
-	$(document).bind("switchtoonline", function() {
+	$(document).bind("online", function() {
 		self.switchToOnline();
 	});
 	
 	
-	//this.loadData(); //we will load data from local storage or from the local json file 
-					// if we decide to have a json file, we will first export it from ILIAS...
-					// and then we will store  it in the resources folder of our client and the json file
-					// will be already there during the installation of the app
-					// the future featured contents/fee course will be exported as json files from ilias 
-					// during runtime
+	//this.loadData(); //we will load data from local storage 
+	//this.loadFeaturedCourseFromServer();
+	
+	//var featuredObject = JSON.parse(localStorage.getItem("featuredContent"));
+	if (localStorage.getItem("featuredContent")){
+		var featuredObject = JSON.parse(localStorage.getItem("featuredContent"));
+		moblerlog("load featured content data locally");
+		this.loadData();
+	}else {
+		moblerlog("load featured content data from the server");
+		this.loadFeaturedCourseFromServer();
+	}
 
-	this.loadFeaturedCourseFromServer();
 }
 
 
@@ -100,62 +121,71 @@ function FeaturedContentModel(controller) {
  * @function loadData
  */
 FeaturedContentModel.prototype.loadData = function() {
+	moblerlog("enter load data in featured model");
 	var featuredObject;
 	try {
 		featuredObject = JSON.parse(localStorage.getItem("featuredContent")) || {};
 	} catch (err) {
 		featuredObject = {};
 	}
-
+	moblerlog("featured object issssss: "+featuredObject);
+	moblerlog("featured object lenght isss "+JSON.stringify(featuredObject).length);
+	x=JSON.stringify(featuredObject).length;
 	this.featuredContentList = featuredObject.featuredCourses || [];
 	this.syncDateTime = featuredObject.syncDateTime || (new Date()).getTime();
 	this.syncState = featuredObject.syncState || false;
 	this.syncTimeOut = featuredObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 	this.index = 0;
-
 	this.checkForTimeOut();
-	
+	moblerlog("object featuredContent is "+localStorage.getItem("featuredContent"));
+	moblerlog("featured content list in load data is "+JSON.stringify(this.featuredContentList));
+	//moblerlog("featured content id is"+JSON.stringify(this.featuredContentList[0]["id"]));
+	moblerlog("featuredCourseId in load data "+this.featuredCourseId);
+	//$(document).trigger("featuredContentlistupdateLocal", this.featuredCourseId);	
+	this.isFeaturedContentLocal=true;
 };
 
 /**
- * stores data into the local storage 
- * or TODO: into a local json file
- **
- **/
+ * stores featured course data into the local storage 
+ * @function storeData 
+ * @param {string}, featuredCourseString
+ */
 FeaturedContentModel.prototype.storeData = function(){
-	var courseString;
+	var featuredString;
 	try {
+//		featuredString = "{" +
+//				"\"featuredCourses\":"+featuredCourseString+","+
+//				"\"syncDateTime\":"+ this.syncDateTime+","+
+//				"\"syncState\":"+ this.syncState+","+
+//				"\"syncTimeOut\" :"+ this.syncTimeOut+
+//	"}";
+		
 		featuredString = JSON.stringify({
-			featuredCourses : this.featuredContentList,
-			syncDateTime : this.syncDateTime,
-			syncState : this.syncState,
-			syncTimeOut : this.syncTimeOut
-		});
+			featuredCourses: this.featuredContentList,
+			syncDateTime: this.syncDateTime,
+			syncState:this.syncState,
+			syncTimeOut: this.syncTimeOut			
+		});		
 	} catch (err) {
 		featuredString = "";
 	}
-	localStorage.setItem("featuredContent", courseString);
+	localStorage.setItem("featuredContent", featuredString);
+	moblerlog("featured content object is "+localStorage.getItem("featuredContent"));
 };
 
 
-//loadDatafromServer
-// in this function we will load data from the server, and will store them in a json file in the local folders of the app
-// the loadData function above, will load the contents from the json file or from the local storage if we decide to store them there
-// we will have two functions
-// 1. loadFeaturedCourseFromServer 
-// 2. loadQuestionsDataFromServer
 
-
-
+/**
+ * load featured course and all its questions from the server
+ * stores downloaded featured course data into the local storage 
+ * @function loadFeaturedCourseFromServer 
+ */
 FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 	moblerlog("loadFromServer-Course is called");
 	var self = this;
 	var syncStateCache = [];
 	var activeURL = self.controller.getActiveURL();
 	self.checkForTimeOut();
-//	if (self.controller.getLoginState() && !self.syncState) {
-	//	var sessionKey = self.controller.models['authentication']
-	//			.getSessionKey();
 
 		// save current syncStates for this featured course
 		if (self.featuredContentList && self.featuredContentList.length > 0) {
@@ -166,8 +196,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			}
 		}
 
-			
-		$
+			$
 				.ajax({
 					url:  'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/featuredContentCourse.php',
 					type : 'GET',
@@ -189,34 +218,70 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 		function createFeaturedContentList(data) {
 			moblerlog("success");
 
-			// if there was a pending course list, remove it from the storage
+			// if there was a pending featured course list, remove it from the storage
 			localStorage.removeItem("pendingFeaturedContentList");
 
 			var featuredObject;
 			try {
 				featuredObject = data;
-
 			} catch (err) {
 				featuredObject = {};
 				moblerlog("Couldn't load featured courses from server " + err);
 			}
-			moblerlog("featured course data loaded from server");
-            moblerlog(featuredObject);
-			//self.featuredContentList = featuredObject.featuredCourses || [];
+			moblerlog("featuredOboject is"+featuredObject);
 			self.featuredContentList = featuredObject.featuredCourses || [];
-			moblerlog("featuredList length "+ self.featuredContentList.length);
+			self.featuredQuestions = self.featuredContentList[0]["questions"];
+			stringifiedFeaturedQuestions = JSON.stringify(self.featuredQuestions);
+			self.featuredContentActualId = self.featuredContentList[0]["id"];
+			var stringifiedfeaturedContentActualId = JSON.stringify(self.featuredContentActualId);
+			moblerlog("featured questions are "+stringifiedFeaturedQuestions);
+			moblerlog(" stringified featured content id is featured model is "+stringifiedfeaturedContentActualId);
+			moblerlog("featured content id is featured model is "+stringifiedfeaturedContentActualId);
+						
+//			x=JSON.stringify(self.featuredContentList);
+//			moblerlog("JSON Featured Content: "+x);
+//			moblerlog("featured Content info length "+ self.featuredContentList.length); //needed this for title debugging
+
+//			var pos=x.indexOf("questions");
+//			q="questions";
+//			l=q.length;
+//			var last= x.indexOf(x.length-2);
+//			moblerlog("position of last pointer: "+last);
+//			var list= x.substring(pos+l+2, x.length-2);
+//			moblerlog("featured questions are "+list);
+//			
 			self.syncDateTime = (new Date()).getTime();
 			self.syncState = true;
 			self.syncTimeOut = featuredObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
+			moblerlog("sync time out is:"+JSON.stringify(self.syncTimeOut));
+			//store the featured questions in the same local storage object with the exclusive content questions
+			//they will all be handled by the same model- questionpool.
+			//var featuredCourseId = FEATURED_CONTENT_ID;
+//			localStorage.setItem("questionpool_" +featuredCourseId, list);
+			
+			localStorage.setItem("questionpool_" +self.featuredCourseId,stringifiedFeaturedQuestions);
+			//NEW localStorage.setItem("questionpool_"+self.featuredContentActualId,stringifiedFeaturedQuestions);
+			
+			moblerlog("questionpool object for fd is "+localStorage.getItem("questionpool_"+this.featuredCourseId));
+			//NEW moblerlog("questionpool object for fd is "+localStorage.getItem("questionpool_"+self.featuredContentActualId));
+			
+			//store in the local storage all the data except the questions
+
+			// 	var featuredCourseString=x.substring(0,pos-2).concat("}]");
+			//	moblerlog("featured course string is"+featuredCourseString);
+			//	self.storeData(featuredCourseString);	
+						
 			self.storeData();
-			moblerlog("JSON Featured Content List: " + self.featuredContentList);
+			
 			self.reset();
 			
 			//if there was any saved sync state then assign it to the sync state of the courses of the course list
 			if (syncStateCache.length > 0) {
+				moblerlog("sync state cache existis");
                 var c;
 				for ( c in self.featuredContentList) {
 					self.featuredContentList[c].syncState = syncStateCache[self.featuredContentList[c].id];
+					moblerlog("sync state of featured content list is "+self.featuredContentList[c].syncState);
 				}
 			}
 			
@@ -224,85 +289,20 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 			  * It is triggered when the loading of the course list from the server has been finished
 			 * @event courselistupdate 
 			 **/
-			$(document).trigger("featuredContentlistupdate");
-			
-			//download all the quesitons(questionlist) for each course
-//            var c;
-//            for ( c in self.featuredContentList) {
-//             self.featuredContentList[c].isLoaded = false;
-//
-//             self.loadQuestionsFromServer(13040);
-//             }
-
+			moblerlog("this.featuredCourseId" +self.featuredCourseId);
+			$(document).trigger("featuredContentlistupdate",self.featuredCourseId);
+			//$(document).trigger("featuredContentlistupdate",stringifiedfeaturedContentActualId);
 		} //end of function createCourseList
-		//} //end of if getLoginState()
-	
+		
 };
 
 
 
-FeaturedContentModel.prototype.loadQuestionsFromServer = function(courseId){
-	
-	var self = this;
-	var courseId=13040;
-	//var activeURL = self.controller.getActiveURL();
-
-	$
-			.ajax({
-				url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/featuredQuestions.php",
-				type : 'GET',
-				dataType : 'json',
-				success : function(data) {
-					moblerlog("success");
-					//if this was a pending question pool, remove it from the storage
-					localStorage.removeItem("pendingQuestionPool" + courseId);
-					if (data) {
-                    moblerlog("JSON: " + data);
-						var questionPoolObject;
-						
-						questionPoolObject = data.questions;				
-						if (!questionPoolObject) {
-							questionPoolObject = [];
-						}
-                        moblerlog("Object: " + questionPoolObject);
-						
-						var questionPoolString;
-						try {
-							questionPoolString = JSON.stringify(questionPoolObject);
-						} catch (err) {
-							questionPoolString = "";
-						}
-						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
-						
-						/**It is triggered after the successful loading of questions from the server 
-						 * @event questionpoolready
-						 * @param:courseID
-						 */
-						
-                  		$(document).trigger("questionpoolready", data.courseID);
-					}
-				},
-				error : function() {
-					
-					//if there was an error while sending the request,
-					//store the course id for the question pool in the local storage
-					localStorage.setItem("pendingQuestionPool_" + courseId, true);
-					moblerlog("Error while loading question pool from server");
-				},
-				beforeSend : setHeader
-			});
-
-	function setHeader(xhr) {
-//		xhr.setRequestHeader('sessionkey',
-//				self.controller.models['authentication'].getSessionKey());
-	}
-	
-};
-
-FeaturedContentModel.prototype.checkForTimeOut = function(){
-	
-	
-};
+/**
+ * @prototype
+ * @function checkForTimeOut
+ */
+FeaturedContentModel.prototype.checkForTimeOut = function(){};
 
 /**
  * @prototype
@@ -320,22 +320,37 @@ FeaturedContentModel.prototype.getTitle = function() {
 };
 
 
+/**
+ * @prototype
+ * @function getTitle
+ * @return the title of the current course
+ */
+FeaturedContentModel.prototype.getId = function() {
+	var self=this;
+		moblerlog("length of featured content list in getTitle"+self.featuredContentList.length);
+	
+	return (this.index > this.featuredContentList.length - 1) ? false
+		: this.featuredContentList[this.index].id;
+	//return  this.featuredContentList[this.index].title;
+};
 
 
 /**
  * Returns the synchronization state of a specific featured course, which means if the locally stored course is
- * in synchronization (has the same data, questions) with the one line.
+ * in synchronization (has the same data, questions) with the online one.
  * @prototype
  * @function isSynchronized
  * @param {Number} featuredContentId, the id of the featured course
- * @return {Boolean} true if the course with the specified id is synchronized, otherwise
- *         false
+ * @return {Boolean} true if the course with the specified id is synchronized, otherwise false
  */
 FeaturedContentModel.prototype.isSynchronized = function(featuredContentId) {
-	if (courseId > 0) {
+	if (featuredContentId != "") {
+		moblerlog("featured content id is greater than zero");
 		var c;
-		for ( c in this.featuredContentList) {
+		for (c in this.featuredContentList) {
+			moblerlog ("id of the featuredcontent list"+this.featuredContentList[c].id);
 			if (this.featuredContentList[c].id === featuredContentId) {
+				moblerlog("check id's between featured contentsss");
 				return this.featuredContentList[c].syncState;
 			}
 		}
@@ -356,7 +371,7 @@ FeaturedContentModel.prototype.switchToOnline = function() {
 	this.checkForTimeOut();
 
 	if (this.syncState) {
-		this.loadFromServer();
+		this.loadFeaturedCourseFromServer();
 	} else {
         var c;
 		for ( c in this.courseList) {
@@ -369,22 +384,17 @@ FeaturedContentModel.prototype.switchToOnline = function() {
 	}
 };
 
-
-/**
- * Sets index to 0
- * @prototype
- * @function reset
- */
+//
+///**
+// * Sets index to 0
+// * @prototype
+// * @function reset
+// */
 FeaturedContentModel.prototype.reset = function() {
 	this.index = 0;
 };
 
 
 
-/**
- * 
- **/
-FeaturedContentModel.prototype.getQuestionBody = function(){
-	
-	
-}
+
+

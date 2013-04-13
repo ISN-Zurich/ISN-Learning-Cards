@@ -34,7 +34,7 @@ under the License.
  * It assigns a name to the specific statistics model
  * It initializes average score
  * It intializes the improvement value of the average score
- * It initializes the query that will be executed for the calculation of the average score
+ * It iniializes the query that will be executed for the calculation of the average score
  * @param {String} statisticsModel 
  */
 function AverageScoreModel(statisticsModel){
@@ -112,7 +112,7 @@ AverageScoreModel.prototype.calculateAverageScore = function(transaction, result
 		this.averageScore = 0;
 	}
 	
-	// calculate improvemen by executing the same query for the last active day
+	// calculate improvement by executing the same query for the last active day
 	// so the day arguments are different
 		self.values = self.superModel.getLastActiveValues();
 	self.queryDB(function cbCalculateImprovements(t,r) {

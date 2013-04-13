@@ -35,121 +35,118 @@
 
 //syncTimeOut provides a way for the server to tell the clients how often they are allowed to synchronize
 $SYNC_TIMEOUT = 60000;
+//NEW
+$GLOBALS['WEB_ACCESS_WITHOUT_SESSION'] = (session_id() == "");
 
 require_once './common.php';
 
 chdir("../..");
 require_once ('restservice/include/inc.header.php');
-require_once 'Services/User/classes/class.ilObjUser.php';//don't need it in featured content
 
-global $ilUser, $class_for_logging;
+//to get the anonymous user id
+require_once 'Services/Utilities/classes/class.ilUtil.php';
+require_once 'classes/class.ilObject.php';
+require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
+
+//to get the available question pools for the specific anonymous user id
+require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
+
+global $ilUser,$class_for_logging;
 
 global $DEBUG;
+
 $DEBUG = 1;
 $class_for_logging = "featuredContentCourse.php";
 
+// get the anonymous user id
+if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
+	logging("web access without session");
+	$_SESSION["AccountId"] = ANONYMOUS_USER_ID;	
+	$ilUser->setId(ANONYMOUS_USER_ID);
+	$ilUser->read();
+	$userID= $ilUser->getId();
+};
+logging("anonymous user id is ".$userID);
 
-//$userID = get_session_user_from_headers();// TODO:in featured content there should be a user that will create the featured content
-                                          // so we should assign here the exact ID numer i.e. $userID=12980
-                                                                                
-$userID=12980;
-                                          
-                                          
-logging(" my userid is ". $userID);
-
-$return_data = getFeaturedContent($userID);// TODO:in featured content we will pass as argument the userId that we got right above
-											// we can create a mew function getCourse($userID) in order to return the specific
-											// free course, which would be the featured content
+$return_data = getFeaturedContent($userID);	
 header('content-type: application/json');
 echo (json_encode($return_data));
 
 
-// TODO: write a function  getFeaturedContent($userID)similar with below that
-// will return the course that contains the featured content
-// **** first brainstorming comments************
-// we will not need to pass a userId parameter because unregistered users
-// will have access to it. we might need to pass as a parameter the courseId
 
 /**
- * Gets the course list for the specified user
+ * Gets the featured course for the anonymous user. 
  *
  * @return course list array
+ * @param $userID, the id of the anonymous user
  */
-function getFeaturedContent($userId) {
-	
-	logging("enters getFeaturedContent");
-	global $ilObjDataCache;
+function getFeaturedContent($userID) {
 
-	include_once 'Services/Membership/classes/class.ilParticipants.php';
-	require_once 'Modules/Course/classes/class.ilCourseItems.php';
-	require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
-	
-	//loads all courses in which the current user is a member
-	//$items = ilParticipants::_getMembershipByType($userId, 'crs'); //we will need somthering similar, that will return a specific course based on its id.
-	//see getCourseItemObject from clas.ilObjCourse.php...
-	//something like this $featuredCourse= getCourseItemObject();
-	//logging("items are ".$items);
-	
+	global $ilObjDataCache, $ilUser, $tree;
+
 	$featuredCourses = array();
-// 	foreach($items as $key => $obj_id)	{
-
-		// $obj_id =13040;
-		//references are needed to get course items (= questionpools, tests, ...)
-		//$item_references = ilObject::_getAllReferences(13040);
-// 		$item_references = ilObject::_getAllReferences($obj_id);
-
-		//check if valid questionpool for the course exists
-		//$validQuestionPool = false;
-// 		if(is_array($item_references) && count($item_references)) {
-// 		foreach($item_references as $ref_id) {
-				
-				//get all course items for a course (= questionpools, tests, ...)
-// 	$courseItems = new ilCourseItems($item_references);
-// 	$courseItemsList = $courseItems->getAllItems();
+	$questions=array();
 	
-// 	logging("courseItemList is".$courseItemsList);
+	//get the available questionpools for the anonymous user
+	$items = ilObjQuestionPool::_getAvailableQuestionpools();
+	logging(" public questionpools for anonymous user are ".json_encode($items));
+	
+	//get the root of the public repository
+	$ref_id= $tree->getRootId();
+	logging("repository root id  is " . $ref_id);
+	
+	//get those question pools that are children of the root object.
+	$childrenItems = $tree->getChilds($ref_id);
+	logging("children of root repository are ".json_encode($childrenItems));
+	$featContentId = 0;
+	
+	// get the first correct (1. one among the availables for the anonymous user and 2. valid) 
+	// questionpool from the ones under the root object
+	foreach ($childrenItems as $child => $Value1){
+		logging("child is".json_encode($Value1));
+		$childRef_id=$Value1["ref_id"];
+		logging("ref id for this child is ".$childRef_id);
+		if ($items[$childRef_id]) { // 1. if the specific child of the top level of the repository is also in the list
+									// of the available questionpools of the anonymous user
+			$questionPool = new ilObjQuestionPool($childRef_id);
+			$questionPool->read();
+			logging("questions for the featured course are: ".$questionPool);
+			if (isValidQuestionPool($questionPool)){ //2. check if the specific questionpool is valid
+				$featContentId = $childRef_id;
+				logging("featured content id is ".$featContentId);
+				break;
+			}
+		}
+	}
+	
+	// get the list of questions of the featured content course
+	if( $featContentId > 0 ) {
+		$featContentTitle = $items[$featContentId]["title"];
+		logging("featured content is: " . $featContentId. "title =" . json_encode($featContentTitle));
+		
+		$questionList = $questionPool->getQuestionList();
+		logging("Question list: " . json_encode($questionList));
+		$questions= getQuestionList($questionList);	
+	}
+	else {
+		logging("OH NO! WE HAVE NO FEATURED CONTENT!");
+	}
 
-// 	foreach($courseItemsList as $courseItem) {
-					
-// 	the course item has to be of type "qpl" (= questionpool)
-// if (strcmp($courseItem["type"], "qpl") == 0) {
-// 	logging("course " . $obj_id . " has question pool");
+	$description = $ilObjDataCache->lookupDescription($featContentId);
 
-// 	get the question pool
-// 	$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
-// 	$questionPool->read();
-
-	//calls isValidQuestionPool in questions.php
-	//if (isValidQuestionPool($questionPool)) {
-	//$validQuestionPool = true;
-		//}
-	//} //end of strcmp
-	//} //end of foreach-courseItem
-	//} //end of foreach item_references
-	//} //end of if is_array(item_refereces)
-
-		//if the question pool is valid, the course is added to the list
-	//if ($validQuestionPool) {
-		//$title       = $ilObjDataCache->lookupTitle($obj_id);
-		//$description = $ilObjDataCache->lookupDescription($obj_id);
-
-			$title       = $ilObjDataCache->lookupTitle(13040);
-			$description = $ilObjDataCache->lookupDescription(13040);
-
-			array_push($featuredCourses,
-					array("id"             => 13040,
-							"title"        => $title,
-							"syncDateTime" => 0,
-							"syncState"    => false,
-							"isLoaded"     => false,
-							"description"  => $description));
+	// add featured content course info (such as title, description, syncDate etc.) and questions into the same  array structure 
+	array_push($featuredCourses,array(
+	"id"   => $featContentId,
+	"title"        => $featContentTitle,
+	"syncDateTime" => 0,
+	"syncState"    => false,
+	"isLoaded"     => false,
+	"description"  => $description,
+	"questions"    => $questions
+	));
 			
-	
-	//} //end of if valid question pool
-
-	//}
-	
 	//data structure for frontend models
+	//add 
 	$featuredCourseList = array("featuredCourses" => $featuredCourses,
 			"syncDateTime" => 0,
 			"syncState" => false,

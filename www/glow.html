@@ -7,7 +7,7 @@
 <style type="text/css">
 .text-glow {
 	text-shadow: 0px 0px 1px white, 0px 0px 3px orange, 0 0 10px red; /* Glow Effect */
-	font-size:50px;
+	font-size:30px;
 	font-weight: bold;
 	font-family: helvetica;
 	color:#000;
@@ -20,6 +20,33 @@
 }
 
 
+.glow2 {
+	text-shadow: 0px -1px 1px #1b621c, -1px 0px 1px #1b621c, -2px -2px 3px 62b55b, -3px -2px 8px #66b460, 0 0 18px #66b460, 0 0 25px 70ab6b, 0 0 35px 70ab6b;/* Glow Effect */
+	font-size:50px;
+	font-weight: bold;
+	font-family: helvetica;
+	color:#000;
+	/*background:grey;*/
+	padding:20px;
+	-webkit-text-stroke-color: #2da42c;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: #59fa56;
+	
+}
+
+.glowNone {
+	text-shadow: 0px -3px 1px #1b621c, -1px 0px 1px #1b621c;/* Glow Effect */
+	font-size:150px;
+	font-weight: bold;
+	font-family: helvetica;
+	color:#000;
+	/*background:grey;*/
+	padding:20px;
+	-webkit-text-stroke-color: #2da42c;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: #21ae24;
+	
+}
 </style>
 </head>
  
@@ -28,18 +55,23 @@
 <div class="text-glow">
 <em>I</em> Glow Text Effect
 </div>
-<div class="">
+
  <div class="cross glowRed">
  <span class="icon-cross"></span>
-  </div>
-  </div>
+ </div>
+ 
    
   
 
    
  <div class="checkmark">
- <span class="icon-checkmark "> </span>
+ <span class="icon-checkmark glow2 gradientSelected"> </span>
  </div>
+
+  <!-- <div class="checkmark">
+ <span class="icon-checkmark glowNone"> </span>
+ </div>-->
+
 
   <div class="radial"</div>
      

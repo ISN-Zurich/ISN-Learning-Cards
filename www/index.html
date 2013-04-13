@@ -7,7 +7,7 @@
 	content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
 
 <script type="text/javascript" charset="utf-8"
-	src="libs/cordova-2.0.0.js"></script>
+	src="libs/cordova-2.5.0.js"></script>
 
  <!--<script type="text/javascript" charset="utf-8"
  src="libs/cordova.ios.js"></script>
@@ -18,8 +18,7 @@
 <script type="text/javascript" src="libs/jquery-ui.js"></script>
 <script type="text/javascript" src="libs/jester.js"></script>
 <script type="text/javascript" src="libs/md5_faultylabs/md5.js"></script>
-<script type="text/javascript"
-	src="libs/jquery.i18n.properties-1.0.9.js"></script>
+<script type="text/javascript"	src="libs/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="scripts/models/configuration.js"></script>
 <script type="text/javascript" src="scripts/models/connectionstate.js"></script>
 <script type="text/javascript" src="scripts/models/featuredContentModel.js"></script>
@@ -42,6 +41,7 @@
 <script type="text/javascript"
 	src="scripts/views/multipleChoiceWidget.js"></script>
 <script type="text/javascript" src="scripts/views/textSortWidget.js"></script>
+<script type="text/javascript" src="scripts/views/clozeQuestionType.js"></script>
 <script type="text/javascript" src="scripts/views/textHorizontalSortWidget.js"></script>
 <script type="text/javascript"
 	src="scripts/views/numericQuestionWidget.js"></script>
@@ -77,8 +77,8 @@
 				</div>
 			</div>
 		</div>
-	</div>	<!--  end of splah Screen -->	
-		
+	</div>		
+</div>	<!--  end of splah Screen -->	
 		
 		
 	<div id="landingView" class="viewblock">	
@@ -94,23 +94,22 @@
 		<div id="landingBody" class="content full">
 			<div id="landingForm">
 				<ul id="landingElements">
-			<li>
-						<div id="featuredContent" class="selectWidget gradient2">
-							<div class=" left lineContainer selectItemContainer">
+						<li id="featuredContent" class=" courseLiContainer gradient2">
+						<div class="dashContainer lineContainer selectItemContainer">
 								<span class="select icon-dash"></span>
 							</div>
-							<div id="leftElement1" class="labelContainer">
-								<div id="landingLmsLabel" class="lsmlabel textShadow"></div>
+							
+							<div id="leftElement1" class="text textShadow marginForCourseList labelContainer">
 							</div>
-							<div id="rightElements" class="right">
-								<div id="separatorLanding"
-									class="lineContainer separatorContainerCourses radial"></div>
-								<div id="selectarrowLanding"
-									class="lineContainer selectItemContainer select">
-									<span class="icon-bars"></span>
-								</div>
+							
+							<div class="separatorBlock">
+								<div id="separatorLanding" class="radial lineContainer separatorContainerCourses"></div>
 							</div>
-						</div>
+							
+							<div id="selectarrowLanding" class="lineContainer selectItemContainer select gridContainer icon-bars">
+							</div>
+							
+					
 					</li>
 				<!--<li>
 						<div id="selectFreeContent" class="selectWidget gradient2">
@@ -129,31 +128,29 @@
 								</span>
 							</div>
 						</li>  -->
-							<li id="liExclusive">
-						<div id="selectExclusiveContent" class="selectWidget gradientSelected ">
-								<div class=" left lineContainer selectItemContainer ">
+							<li id="selectExclusiveContent" class="courseLiContainer gradient2">
+								<div class=" dashContainer lineContainer selectItemContainer ">
 									<span class="select icon-dash"></span>
 								</div>
-								<div id="leftElementExclusive" class="left labelContainer">
-
-									<div id="exclusiveContentLabel" class="lsmlabel textShadow">Exclusive Content</div>
-								</div>
-								<span id="rightElements" class="right">
+								
+								<div id="leftElementExclusive" class="text textShadow marginForCourseList labelContainer">
+									Exclusive Content </div>
+									
+								<div class="separatorBlock">
 									<div id="separatorExclusive"
-										class="lineContainer separatorContainerCourses radial"></div>
-									<div id="selectarrowExclusive"
-										class="lineContainer selectItemContainer select">
-										<span class="icon-enter"></span>
+										class="radial lineContainer separatorContainerCourses"></div>
+								</div>
+									<div id="selectarrowExclusive" class="lineContainer selectItemContainer select gridContainer">
+									<span class="icon-enter"></span>
 									</div>
-								</span>
-							</div>
+	
 						</li>
-						<li>
+						<li class="borderRemoval">
 							<div id="errormessageLanding" class="loginMessage gradientMessages"></div>
 						</li>
-						<li>
+						<li class="borderRemoval">
 							<div id="warningmessageLanding" class="loginMessage gradientMessages"></div>
-						</li>
+						</li> 
 					<li>
 						<div class="gradient1 shadowedLi"></div>
 						</li>
@@ -163,15 +160,15 @@
 			
 			</div><!-- end of landing body -->
 
-	</div>
-</div>
+	</div> <!-- end of landing view -->
+
 
 
 <div id="loginView" class="viewblock">
 <div class="viewblock cover">
 
 			<div id="loginViewHeader" class="headerContainer">
-				<div id="loginViewTitle" class="title">Login/Register</div>
+				<div id="loginViewTitle" class="title">Login</div>
 				<div id="loginIcon" class="titleicon">
 					<span class="icon-lock"></span>
 				</div>
@@ -203,36 +200,37 @@
 									placeholder="" />
 							</div>
 						</li>
-						<li id="selectlms">
-							<div id="selectLMS" class="selectWidget gradient2 ">
-								<div class=" left lineContainer selectItemContainer ">
+						<li id="selectLMS" class="courseLiContainer gradient2">
+							<!-- <div id="selectLMS" class="selectWidget gradient2 "> -->
+								<div class=" dashContainer lineContainer selectItemContainer ">
 									<span class="select icon-dash"></span>
 								</div>
-								<div id="leftElement" class="labelContainer">
-
-									<div id="loginLmsLabel" class="lsmlabel textShadow"></div>
+								
+								<div id="loginLmsLabel" class=" text textShadow marginForCourseList labelContainer lsmlabel">
 								</div>
-								<span id="rightElements" class="right">
-									<div class="lineContainer imageContainer">
+								
+								
+									<div class="imageContainer">
 										<div class="imageoutline1">
 											<div class="imageoutline2">
 												<img id="lmsImage" class="imageLogo" />
 											</div>
 										</div>
 									</div>
-									<div id="separator"
-										class="lineContainer separatorContainerCourses radial"></div>
+									<div class="separatorBlock">
+									<div id="separator" class="lineContainer separatorContainerCourses radialCourses"></div>
+									</div>
 									<div id="selectarrow"
-										class="lineContainer selectItemContainer select">
+										class="lineContainer selectItemContainer select gridContainer">
 										<span class="icon-enter"></span>
 									</div>
-								</span>
-							</div>
+								
+							<!--</div>-->
 						</li>
-						<li>
+						<li class="borderRemoval">
 							<div id="errormessage" class="loginMessage gradientMessages"></div>
 						</li>
-						<li>
+						<li class="borderRemoval">
 							<div id="warningmessage" class="loginMessage gradientMessages"></div>
 						</li>
 						<li>
@@ -363,7 +361,7 @@
 		<div id="closeAboutIcon" class="closeButton">
 			<span class="icon-cross"></span>
 		</div>
-		<div class="content">
+		<div class="content full">
 
 			<div id="aboutMainTitle">
 				Mobler <span id="cardsTitle">Cards</span>
@@ -397,10 +395,10 @@
 
 		</div>
 
-		<div id="logos" class="bottom">
+		<!-- <div id="logos" class="bottom">
 			<div id="ISNlogo"></div>
 			<div id="ETHZlogo"></div>
-		</div>
+		</div> -->
 	</div>
 
 
@@ -560,7 +558,7 @@
 						<div id="statBestDayValue" class="statsLabel"></div>
 					</div>
 					<div id="statBestDayTitle"
-						class="text textShadow marginForCourseList"></div>
+						class="text textShadow marginForCourseList labelContainer"></div>
 				</li>
 
 
@@ -572,122 +570,112 @@
 						<div id="statBestScoreValue" class="statsLabel"></div>
 					</div>
 					<div id="statBestScoreTitle"
-						class="text textShadow marginForCourseList"></div>
+						class="text textShadow marginForCourseList labelContainer"></div>
 				</li>
 
-				<li id="statsSlot3" class="gradient1">
-					<div class="selectWidget gradient1 ">
-						<div class=" left lineContainer selectItemContainer ">
+				<li id="statsSlot3" class=" courseLiContainer gradient1">
+					<!--<div class="selectWidget gradient1 ">-->
+						<div class="dashContainer lineContainer selectItemContainer ">
 							<span class="select icon-dash"></span>
 						</div>
-						<span id="rightElements3" class="right">
-						<div id="separatorAchievements"
-								class="lineContainer separatorContainerCourses radial"></div>
-							<div id="selectAchievements"
-								class="lineContainer selectItemContainer select ">
-								<span class="icon-enter"></span>
-							</div>
-							
-						</span>
-						<div id="achievementsReference"
-							class="text textShadow marginForCourseList"></div>
-					</div>
-				</li>
-
-				<li id="statsSlot4" class="gradient2">
-					<!--<div class="selectWidget gradient2 ">-->
-						<div class=" left lineContainer selectItemContainer ">
-
-							<span class="dashGrey icon-dash"></span>
-						</div>
-
-						<span id="rightElements4" class="right">
-							<div class="valueContainer text  textShadow left">
-								<div id="statHandledCardsValue" class="imageLogo right"></div>
-								<!--  <div id="statsProgressInfo" class="clear textSmall "></div>-->
-							</div>
-							<div id="separator4"
-								class="lineContainer separatorContainerCourses radial"></div>
-							<div id="statsHandledCardsIconchange"
-								class="lineContainer selectItemContainer"></div>
-						</span>
 						
-						<div id="statHandledCardsTitle"
-							class="text textShadow marginForCourseList"></div>
-					<!--  </div>-->
+						<div id="achievementsReference"
+							class="text textShadow marginForCourseList labelContainer"></div>
+							
+						<div class="separatorBlock">
+						<div id="separatorAchievements" class="lineContainer separatorContainerCourses radial"></div>
+						</div>
+				
+						<div id="selectAchievements" class="lineContainer selectItemContainer select gridContainer ">
+						<span class="icon-enter"></span>
+						</div>
+													
+					<!--</div>-->
 				</li>
-				
-				
-				<li id="statsSlot5" class="gradient2">
-				<!--	<div class="selectWidget gradient2 "> -->
-						<div class=" left lineContainer selectItemContainer ">
+
+				<li id="statsSlot4" class="courseLiContainer gradient2">
+					<div class="dashContainer lineContainer selectItemContainer ">
 							<span class="dashGrey icon-dash"></span>
 						</div>
 
+						<div id="statHandledCardsTitle" class="text textShadow marginForCourseList labelContainer"></div>
+														
+							<div class="text textShadow statsValueContainer">
+								<div id="statHandledCardsValue" class="imageLogo"></div>
+								<div id="statsHandledCardsInfo" class="clear textSmall"></div>
+							</div>
+							
+							<div class="separatorBlock">
+							<div id="separator4"
+								class="lineContainer separatorContainerCourses radialCourses"></div>
+							</div>
+							
+							<div id="statsHandledCardsIconchange"
+								class="lineContainer selectItemContainer gridContainer"></div>
+						</li>
+				
+				
+				<li id="statsSlot5" class=" courseLiContainer gradient2">
+					<div class=" dashContainer lineContainer selectItemContainer ">
+							<span class="dashGrey icon-dash"></span>
+						</div>
 
-						<span id="rightElements5" class="right">
-							<div class="valueContainer text  textShadow left">
+					<div id="statAverageScoreTitle" class="text textShadow marginForCourseList labelContainer"></div>
+					<div class="valueContainer text textShadow statsValueContainer">
 								<div id="statAverageScoreValue" class="imageLogo right"></div>
-							</div>
+					</div>
+								
+						<div class="separatorBlock">
+							
 							<div id="separator5"
-								class="lineContainer separatorContainerCourses radial"></div>
-							<div id="statsAverageScoreIconchange"
-								class="lineContainer selectItemContainer"></div>
-						</span>
-						<div id="statAverageScoreTitle"
-							class="text textShadow marginForCourseList"></div>
-
-					<!-- </div>-->
-
-				</li>
-				<li id="statsSlot6" class="gradient2">
-
-					<div class="selectWidget gradient2 ">
-						<div class=" left lineContainer selectItemContainer ">
-							<span class="dashGrey icon-dash"></span>
+								class="lineContainer separatorContainerCourses radialCourses"></div>
+							
 						</div>
+						<div id="statsAverageScoreIconchange"
+								class="lineContainer selectItemContainer gridContainer"></div>
+						
+				</li>
+				<li id="statsSlot6" class=" courseLiContainer gradient2">
 
-
-						<span id="rightElements6" class="right">
-						<div class="valueContainer text  textShadow left">
+					<div class="dashContainer lineContainer selectItemContainer">
+							<span class="dashGrey icon-dash"></span>
+					</div>
+					
+					<div id="statProgressTitle" class="text textShadow marginForCourseList labelContainer"></div>
+					
+					<div class="text textShadow statsValueContainer">
 								<div id="statProgressValue" class="imageLogo right"></div>
-						</div>
+						</div>	
 							
-							<div id="separator6"
-								class="lineContainer separatorContainerCourses radial"></div>
+						<div class="separatorBlock">
+						<div id="separator6"
+								class="lineContainer separatorContainerCourses radialCourses"></div>
+								</div>
 							<div id="statsProgressIconchange"
-								class="lineContainer selectItemContainer"></div>
-						</span>
+								class="lineContainer selectItemContainer gridContainer"></div>
+						
 
-						<div id="statProgressTitle"
-							class="text textShadow marginForCourseList"></div>
-					</div>
-				</li>
+						
+                      </li>
 
 
-				<li id="statsSlot7" class="gradient2">
-
-					<div class="selectWidget gradient2 ">
-
-						<div class=" left lineContainer selectItemContainer ">
+				<li id="statsSlot7" class=" courseLiContainer gradient2">
+					<div class="dashContainer lineContainer selectItemContainer ">
 							<span class="dashGrey icon-dash"></span>
-						</div>
-
-						<span id="rightElements7" class="right">
-							<div class="valueContainer text  textShadow left">
-								<div id="statSpeedValue" class="imageLogo right"></div>
-								<!--  <div id="statsSpeedinfo" class=" clear textSmall "></div>-->
-							</div>
-							
-							<div id="separator7"
-								class="lineContainer separatorContainerCourses radial"></div>
-							<div id="statsSpeedIconchange"
-								class="lineContainer selectItemContainer"></div>
-						</span>
-						<div id="statSpeedTitle" class=" text textShadow marginForCourseList"></div>
 					</div>
-				</li>
 
+				<div id="statSpeedTitle" class=" text textShadow marginForCourseList labelContainer"></div>
+				
+				<div class="text textShadow statsValueContainer">
+				<div id="statSpeedValue" class="imageLogo"></div>
+				<div id="statsSpeedinfo" class=" clear textSmall"></div>
+				</div>
+							
+					<div class="separatorBlock">
+							<div class="lineContainer separatorContainerCourses radial"></div>
+						</div>
+							<div id="statsSpeedIconchange" class="lineContainer selectItemContainer gridContainer"></div>
+						</li>
 				<li>
 					<div id="shadowStatistics" class="gradient1 shadowedLi"></div>
 				</li>
@@ -709,57 +697,50 @@
 				</div>
 		</div>
 		<div class="content full">
-			<ul id="achievementsUl" class="gradient2">
-				<li>
-					<div class="selectWidget2 gradient2 ">
+			<ul>
+				<li class="courseLiContainer gradient2">
+					<div class="dashContainer lineContainer selectItemContainer ">
+					<span class="dashGrey icon-dash"></span>
+					</div>
 
-						<div class="left lineContainer selectItemContainer ">
-							<span id="stackHandlerDash" class="dashGrey icon-dash"></span>
-						</div>
-
-						<span id="rightElements" class="right">
-							<div class="lineContainer imageContainer ">
-								<div id="valueStackHandler" class="imageLogo margin"></div>
-							</div>
-							<div id="separatorAchievements"
-								class="lineContainer separatorContainerAchievements radial"></div>
-							<div class="lineContainer selectItemContainer">
-								<span id="stackHandlerIcon" class="achievementsImg nter icon-diamond"></span>
-								</div>
-						</span>
-						<div class="valueContainer text textShadow marginForCourseList">
-							<div id="stackHandlerTitle" class="achievementsResutlsTitle"></div>
-							<div id="stackHandlerExplanation" class="textSmall "></div>
-						</div>
+					<div class="text textShadow labelContainer">
+						<div id="stackHandlerTitle" class="achievementsResutlsTitle"></div>
+						<div id="stackHandlerExplanation" class="textSmall "></div>
 					</div>
 					
+					<div class="text textShadow statsValueContainerAchievements right">
+					<div id="valueStackHandler" class="imageLogo margin"></div>
+					</div>
+					
+					<div class="separatorBlockAchievements">	
+						<div id="separatorAchievements" class="lineContainer separatorContainerCourses radialCourses"></div>
+						</div>
+						<div class="lineContainer selectItemContainer gridContainerAchievements ">
+						<span id="stackHandlerIcon" class="icon-diamond achievementsImg"></span>
+					</div>					
 				</li>
-				<li>
-									
-				<div id="cardBurner" class="selectWidget2 gradient2 ">
-
-						<div class="left lineContainer selectItemContainer ">
+				<li id="cardBurner" class=" courseLiContainer gradient2">
+						<div class="dashContainer selectItemContainer  ">
 							<span id="cardBurnerDash" class="dashGrey icon-dash"></span>
 						</div>
 
-						<span id="rightElements2" class="right">
-							<div class="lineContainer imageContainer ">
-								<div id="valueCardBurner" class="imageLogo margin"></div>
-							</div>
-							<div id="separatorAchievements2"
-								class="lineContainer separatorContainerAchievements radial"></div>
-							<div 
-								class="lineContainer selectItemContainer">
-								<span id="cardBurnerIcon" class="achievementsImg icon-fire"></span>
-								</div>
-						</span>
-						<div class="valueContainer text textShadow marginForCourseList">
+						<div class="text textShadow  labelContainer">
 							<div id="cardBurnerTitle" class="achievementsResutlsTitle"></div>
-							<div id="cardBurnerExplanation" class="textSmall "></div>
+							<div id="cardBurnerExplanation" class="textSmall"></div>
 						</div>
-					</div>	
-
-				</li>
+						
+						<div class="text textShadow statsValueContainerAchievements right">
+						<div id="valueCardBurner" class="imageLogo margin"></div>
+						</div>
+						
+						<div class="separatorBlockAchievements">	
+						<div id="separatorAchievements2" class="lineContainer separatorContainerCourses  radialCourses"></div>
+						</div>
+							
+						<div class="lineContainer selectItemContainer gridContainerAchievements ">
+						<span id="cardBurnerIcon" class=" icon-fire achievementsImg"></span>
+						</div>
+					</li>
 				<li>
 					<div id="shadowAchievements" class="gradient1 shadowedLi"></div>
 				</li>

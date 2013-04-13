@@ -75,6 +75,8 @@ function StatisticsModel(controller) {
 	this.controller = controller;
 	//initialization of model's variables
 	this.lastSendToServer;
+	this.clickOutOfStatisticsIcon;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	this.db = openDatabase('ISNLCDB', '1.0', 'ISN Learning Cards Database',	100000);
 	this.currentCourseId = -1;
 	this.firstActiveDay;
@@ -89,7 +91,7 @@ function StatisticsModel(controller) {
 	// if the the data is not loaded but the user is logged in, then loadFromServer 
 	
 	if (this.controller.getConfigVariable("statisticsLoaded")== false && self.controller.getLoginState()){
-		moblerlog("enters heree");
+		moblerlog("statistics to be loaded from server");
 			self.loadFromServer();
 	}
 	
@@ -108,7 +110,9 @@ function StatisticsModel(controller) {
 		$(document).bind("checkachievements", function(p, courseId) {
 		self.cardBurner.calculateValue(courseId);
 	});
+		
 }
+
 
 /**
  * Sets the current course id and starts the calculations if the statistics are 
@@ -119,27 +123,51 @@ function StatisticsModel(controller) {
  * @function setCurrentCourseId
  */
 StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
+	if ( this.currentCourseId !== courseId) {
+		this.currentCourseId = undefined;
 
-    this.currentCourseId = courseId;
-    moblerlog("course-id: " + courseId);
-    
-	// uncomment the following line for debugging purposes
-    // this.getAllDBEntries(); 
-    
-	this.controller.models['questionpool'].loadData(courseId);
-	
-	moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
-	
-	//if statistics are loaded
-	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-		this.getFirstActiveDay();
+		// if the course id is one of the free content
+		// OR if the authenticated user has access to the course id
+
+		this.currentCourseId = courseId;
+		moblerlog("course-id: " + courseId);
+
+		// uncomment the following line for debugging purposes
+		// this.getAllDBEntries(); 
+		
+		// WHY IS THE FOLLOWING LINE
+		this.controller.models['questionpool'].loadData(courseId);
+
+		moblerlog("statistics are loaded? " + (this.controller.getConfigVariable("statisticsLoaded") ? "yes2" : "no2"));
+
+		//if statistics are loaded
+		if ((this.controller.getConfigVariable("statisticsLoaded")== true) || this.currentCourseId == "fd"){	
+			this.getFirstActiveDay(courseId);
+		}
+		else {
+			// this case is only used if the statistics are not yet loaded from the server
+			// so the controller can move to the statistics view that will then show a nice
+			// message to the user
+			$(document).trigger("allstatisticcalculationsdone");	
+		}
 	}
 	else {
-        // this case is only used if the statistics are not yet loaded from the server
-		// so the controller can move to the statistics view that will then show a nice
-		// message to the user
-		$(document).trigger("allstatisticcalculationsdone");	
+		$(document).trigger("allstatisticcalculationsdone");			
 	}
+	// endif the user has access to the course id
+};
+
+/**
+ * checks the existence and validity 
+ * of the course id
+ * @prototype
+ * @function dataAvailable
+ */ 
+StatisticsModel.prototype.dataAvailable= function() {
+	if (this.currentCourseId) {
+		return true;
+	}
+	return false;
 };
 
 
@@ -149,7 +177,7 @@ StatisticsModel.prototype.setCurrentCourseId = function(courseId) {
  * @prototype
  * @function getFirstActiveDay
  */
-StatisticsModel.prototype.getFirstActiveDay = function() {
+StatisticsModel.prototype.getFirstActiveDay = function(courseId) {
 	moblerlog("enters first active day");
 	var self = this;
 	this.queryDB('SELECT min(day) as firstActivity FROM statistics WHERE course_id=? AND duration != -100',
@@ -166,7 +194,6 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 								} else {
 									self.firstActiveDay = (new Date()).getTime(); 
 								}
-								
 							} 
 							// the first time we launch the app
 							// we dont get any min day, because we don't have
@@ -178,7 +205,7 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
 							}
 							//check if there was any activity until one day(=24hours) 
 							//before  the current time
-							self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS);
+							self.checkActivity((new Date()).getTime() - TWENTY_FOUR_HOURS,courseId);
 	});
 };
 
@@ -190,7 +217,7 @@ StatisticsModel.prototype.getFirstActiveDay = function() {
  * @function checkActivity
  * 
  */
-StatisticsModel.prototype.checkActivity = function(day) {
+StatisticsModel.prototype.checkActivity = function(day,courseId) {
 	var self = this;
 	//if one day/24hours back from the current time
 	//is more recent than the first active day
@@ -204,7 +231,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 										moblerlog("active day: " + day);
 										// then set this day to be the last active day
 										self.lastActiveDay = day;
-										self.calculateValues();
+										self.calculateValues(courseId);
 								}
 								//if there was no activity in the past 24 hours 
 								//and if the previous day is not the first active day
@@ -213,7 +240,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 									//continue checking the past activity 
 									//by going each time 24 hours back
 									//until to reach the last active day
-										self.checkActivity(day - TWENTY_FOUR_HOURS);
+										self.checkActivity(day - TWENTY_FOUR_HOURS,courseId);
 								} 
 		});	
 	} 
@@ -225,7 +252,7 @@ StatisticsModel.prototype.checkActivity = function(day) {
 		self.lastActiveDay = day;
 		//we proceed and calculate the values 
 		//for the statistics metrics
-		self.calculateValues();
+		self.calculateValues(courseId);
 	}
 };
 
@@ -290,19 +317,19 @@ StatisticsModel.prototype.checkActivity = function(day) {
  * @prototype
  * @function calculateValues
  */
-StatisticsModel.prototype.calculateValues = function() {
+StatisticsModel.prototype.calculateValues = function(courseId) {
 	var self = this;
 
 	self.boolAllDone = 0;
 
-	self.bestDay.calculateValue();
-	self.handledCards.calculateValue();
-	self.averageScore.calculateValue();
-	self.averageSpeed.calculateValue();
-	self.progress.calculateValue();
+	self.bestDay.calculateValue(courseId);
+	self.handledCards.calculateValue(courseId);
+	self.averageScore.calculateValue(courseId);
+	self.averageSpeed.calculateValue(courseId);
+	self.progress.calculateValue(courseId);
 
 	// calculate the achievements
-	self.stackHandler.calculateValue();
+	self.stackHandler.calculateValue(courseId);
 	self.checkAchievements(this.currentCourseId);
 	
 };
@@ -318,10 +345,10 @@ StatisticsModel.prototype.calculateValues = function() {
  * @function allCalculationsDone
  * 
  */
-StatisticsModel.prototype.allCalculationsDone = function() {
+StatisticsModel.prototype.allCalculationsDone = function(courseId) {
 	moblerlog(" finished n="+this.boolAllDone +" calculations");
 	if ( this.boolAllDone === 6) {
-		$(document).trigger("allstatisticcalculationsdone");
+		$(document).trigger("allstatisticcalculationsdone",courseId);
     }
 };
 
@@ -342,7 +369,7 @@ StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 
 
 /**
- *Checks if any achievements have been achievedn for the specific course
+ *Checks if any achievements have been achieved for the specific course
  * @prototype
  * @function checkAchievements
  * @param {Number}, courseId
@@ -370,6 +397,7 @@ StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
  * @function dbErrorFunction
  */
 StatisticsModel.prototype.loadFromServer = function() {
+	moblerlog("enter load statistis");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
 	if (self.controller.models['authentication'].isLoggedIn()) {
@@ -395,12 +423,14 @@ StatisticsModel.prototype.loadFromServer = function() {
 						
 						for ( i = 0; i < statisticsObject.length; i++) {
 							self.insertStatisticItem(statisticsObject[i]);
+							//moblerlog("i is "+i+" and the length of statistics object is "+statisticsObject.length);
 						}
 						moblerlog("after inserting statistics from server");
 						// trigger event statistics are loaded from server
 					
 						// Store a flag into the local storage that the data is loaded.
 						self.controller.setConfigVariable("statisticsLoaded", true);
+						moblerlog("config variable is set to true");
 						$(document).trigger("loadstatisticsfromserver");
 					},
 					error : function(xhr, err, errorString) {
@@ -417,11 +447,11 @@ StatisticsModel.prototype.loadFromServer = function() {
 /**
  * inserts the statistic item into the database if it doesn't exist there yet
  * @prototype
- * @function insertStatisticItem 
+ * @function   
  */
 StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 	var self = this;
-    moblerlog("day: " + statisticItem['day']);
+   // moblerlog("day: " + statisticItem['day']);
 	
 	self
 	.queryDB(
@@ -440,10 +470,11 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
 			           item['duration'] ];
 			self.queryDB(query, values, function cbInsert(transaction,
 					results) {
-                         moblerlog("after inserting");
+                       //  moblerlog("after inserting in insertStatisticsItem "+JSON.stringify(statisticItem));
 			});
 		}
 	}
+	
 };
 
 
@@ -457,16 +488,22 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  * 
  * @function sendToServer
  * */
-StatisticsModel.prototype.sendToServer = function() {
+StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
 	if (self.controller.getLoginState() ) {
-	var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
+	//var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
+	var url = activeURL + '/statistics.php';
+	var courseList = self.controller.models["course"].getCourseList();
 	moblerlog("url statistics: " + url);
 		// select all statistics data from the local table "statistics"
 		// and then execute the code in sendStatistics function
-	self.queryDB('SELECT * FROM statistics', [], function(t,r) {sendStatistics(t,r);});
-
+	//self.queryDB('SELECT * FROM statistics where course_id != ?', [featuredContent_id], function(t,r) {sendStatistics(t,r);});
+	var qm = [];
+	//courseList.each(function() {qm.push("?");}); // generate the exact number of parameters for the IN clause
+	$.each(courseList,function() {qm.push("?");});
+	self.queryDB('SELECT * FROM statistics where course_id IN ('+ qm.join(",") +')',courseList, function(t,r) {sendStatistics(t,r);});
+	
 	function sendStatistics(transaction, results) {
 		statistics = [];
 		numberOfStatisticsItems = 0;
@@ -476,6 +513,7 @@ StatisticsModel.prototype.sendToServer = function() {
 		//that were not sent last time succesfully
 		//to the server, they are stored in the local object "pendingStatistics" 
 		if (localStorage.getItem("pendingStatistics")) {
+			moblerlog("there are pending statistics to the server");
 			var pendingStatistics = {};
 			try {
 				pendingStatistics = JSON.parse(localStorage.getItem("pendingStatistics"));
@@ -493,8 +531,11 @@ StatisticsModel.prototype.sendToServer = function() {
 			moblerlog("results length: " + results.rows.length);
 			for ( i = 0; i < results.rows.length; i++) {
 				row = results.rows.item(i);
+				//	moblerlog("sent statistics row to the server"+row);
+				//	rowCourse= row.course_id;
+				//	moblerlog("course id is "+rowCourse);
 				statistics.push(row);
-                moblerlog("sending " + i + ": " + JSON.stringify(row));
+               // moblerlog("sending " + i + ": " + JSON.stringify(row));
 			}
 			sessionkey = self.controller.models['authentication'].getSessionKey();
 			uuid = device.uuid;
@@ -513,9 +554,10 @@ StatisticsModel.prototype.sendToServer = function() {
 				moblerlog("statistics data successfully send to the server");
 				localStorage.removeItem("pendingStatistics");
 				if (data) {
+					moblerlog("there ");
 					if (numberOfStatisticsItems < data) {
 						moblerlog("server has more items than local database -> fetch statistics from server");
-						self.loadFromServer();
+						 self.loadFromServer();
 					}
 				}
 				
@@ -526,12 +568,13 @@ StatisticsModel.prototype.sendToServer = function() {
 				moblerlog("Error while sending statistics data to server");
 				var statisticsToStore = {
 					sessionkey :sessionkey ,
+					activeServerUrl:activeURL,
 					uuid : device.uuid,
 					statistics : statistics
 				};
 				localStorage.setItem("pendingStatistics", JSON.stringify(statisticsToStore));
 				//FIXME:to pass the session key as argument in the triggering of the event
-				$(document).trigger("statisticssenttoserver");
+				$(document).trigger("statisticssenttoserver",sessionkey,activeURL,featuredContent_id);
 			},
                beforeSend : function setHeader(xhr) {
                xhr.setRequestHeader('sessionkey', sessionkey);
@@ -596,4 +639,35 @@ StatisticsModel.prototype.getAllDBEntries = function(){
 };
 
 
+/**
+ * Sets to true the flag variable that tracks
+ * if any element has been clicked while the user had previously clicked the statistics icon.
+ * * @prototype
+ * @function resetClickOutOfStatisticsIcon
+ */
+StatisticsModel.prototype.setClickOutOfStatisticsIcon = function() {
+	 this.clickOutOfStatisticsIcon=true;
+}
+
+/**
+ * Resets the flag variable that tracks if anything has been clicked after the user had clicked the statistics icon.
+ * It is reset everytime the user clicks only on the statistics icon and waits until the statistics to be calculated.
+ * @prototype
+ * @function resetClickOutOfStatisticsIcon
+ */
+StatisticsModel.prototype.resetClickOutOfStatisticsIcon = function() {
+	 this.clickOutOfStatisticsIcon=false;
+}
+
+/**
+ * Checks if any other element of the view has been tapped/clicked
+ * after the statistics icon  has been clicked in either the course list view or landing view.
+ * @prototype
+ * @function checkclickOutOfStatisticsIcon
+ * @return {Boolean}, true or false.  It returns true if any other element has been clicked, and false if only the statistics icon has been clicked and the user is waiting.
+ */
+StatisticsModel.prototype.checkclickOutOfStatisticsIcon = function() {
+	moblerlog ("check click out of statistics icon is" +this.clickOutOfStatisticsIcon);
+	return this.clickOutOfStatisticsIcon;
+}
 

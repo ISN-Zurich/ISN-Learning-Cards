@@ -224,7 +224,8 @@ SingleChoiceWidget.prototype.showFeedback = function() {
 		
 		span = $("<div/>", {
 			"id":"courseListIcon"+ mixedAnswers[c],
-			"class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0 ?  "right green icon-checkmark" : ($(li).hasClass("gradientSelected"))?"right red icon-App-Icons glowRed" :"")
+			//"class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0 ?  "right green icon-checkmark" : ($(li).hasClass("gradientSelected"))?"right red icon-App-Icons glowRed" :"")
+			"class" : (questionpoolModel.getScore(parseInt($(li).attr('id').substring(6))) > 0 ? (($(li).hasClass("gradientSelected")) ? "right icon-checkmark glow2 background" : "right icon-checkmark glowNone") : "")
 		}).appendTo(div);
 		
 			//41 replaced icon-checkmark

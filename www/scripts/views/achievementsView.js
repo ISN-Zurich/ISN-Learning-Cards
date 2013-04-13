@@ -46,6 +46,8 @@ function AchievementsView(controller){
 	 var self = this;
 	 self.controller = controller;  
 	 self.tagID = 'achievementsView';
+	 var featuredContent_id = FEATURED_CONTENT_ID;
+	 var achievementsFlag= true;
 	
 	 // set prevent to false, in order to enable taping
 	 // because the clicks don't work after the set of
@@ -53,7 +55,7 @@ function AchievementsView(controller){
 	 var prevent=false;
 	 jester($('#closeAchievementsIcon')[0]).tap(function(event){
 		 moblerlog("achievements: close tap");
-		 self.closeAchievements();
+		 self.closeAchievements(achievementsFlag);
 		 event.stopPropagation(); } );
 
 		/**It is triggered after statistics loaded locally from the server. This happens during the
@@ -95,7 +97,7 @@ function AchievementsView(controller){
  * @function handlePinch
  **/
 AchievementsView.prototype.handlePinch = function(){
-    controller.transitionToStatistics();
+	this.closeAchievements();
 };
 
 
@@ -114,7 +116,8 @@ AchievementsView.prototype.handleTap = doNothing;
  * @function handleSwipe
  **/
 AchievementsView.prototype.handleSwipe = function() {
-	controller.transitionToStatistics();
+	moblerlog("swiped in achievements view");
+	this.closeAchievements();
 };
 
 
@@ -135,14 +138,20 @@ AchievementsView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-AchievementsView.prototype.open = function() {
+AchievementsView.prototype.open = function(featuredContent_id) {
 	var self=this;
+	if (featuredContent_id){
+		self.showAchievementsBody();	
+	}
+	else {
+	
 	if (this.controller.getConfigVariable("statisticsLoaded")== true){
 	this.showAchievementsBody();
 	}
 	else {
 		self.showLoadingMessage();
 	}  
+	}
 	this.openDiv();	
 };
 
@@ -160,7 +169,7 @@ AchievementsView.prototype.close = closeView;
  **/
 AchievementsView.prototype.closeAchievements = function() {
 	moblerlog("close Achievements button clicked");
-	controller.transitionToStatistics();
+	controller.transitionToStatistics(controller.models['statistics'].currentCourseId, 1);
 };
 
 
@@ -217,4 +226,12 @@ AchievementsView.prototype.showLoadingMessage = function() {
 * @prototype
 * @function changeOrientation
 **/ 
-AchievementsView.prototype.changeOrientation = doNothing;
+AchievementsView.prototype.changeOrientation = function() {
+//	window_width = $(window).width();
+//	var gridWidth = 48;
+//	var separatorWidth= 8;
+//	var dashWidth = 40;
+//	var inputwidth = window_width - gridWidth - separatorWidth - dashWidth-70;
+//	moblerlog(" width in achievements view is "+inputwidth);
+//	$(".labelContainer").css("width", inputwidth + "px");
+};

@@ -1,4 +1,3 @@
-
 /**	THIS COMMENT MUST NOT BE REMOVED
 
 Licensed to the Apache Software Foundation (ASF) under one
@@ -19,6 +18,7 @@ specific language governing permissions and limitations
 under the License.	
 
  */
+
 
 /** @author Isabella Nake
  * @author Evangelia Mitsopoulou
@@ -42,7 +42,9 @@ function Controller() {
 	var self = this;
 	moblerlog("start controller");
 	self.appLoaded = false;
+	self.clickOutOfStatisticsIcon=true;;
 	var startTime= new Date().getTime();
+	var featuredContent_id = FEATURED_CONTENT_ID;
 
 	$.ajaxSetup({
 		cache : false
@@ -55,7 +57,7 @@ function Controller() {
 
 	this.models.connection = new ConnectionState(this);
 	// the lms model is initialized after the connection
-	//because it makes use of the isOffline function 
+	// because it makes use of the isOffline function 
 	this.models.lms = new LMSModel(this);
 	this.models.featured = new FeaturedContentModel(this);
 	this.models.authentication = new ConfigurationModel(this);
@@ -69,7 +71,7 @@ function Controller() {
 	this.models.connection.synchronizeData();
 	this.models.authentication.loadFromServer();
 
-	moblerlog("models initialized");
+	moblerlog("models initialized in controller");
 
 	//initialize user interface language
 	this.setupLanguage();
@@ -91,7 +93,7 @@ function Controller() {
 	this.views.achievements = new AchievementsView(this);
 	this.views.about = new AboutView();
 
-	moblerlog('views initialized');
+	moblerlog('views initialized in controller');
 
 	this.activeView = this.views.splashScreen;
 
@@ -140,6 +142,7 @@ function Controller() {
 		});
 	}
 
+	
 	// set correct height of icon button
 //	window.addEventListener("resize", setButtonHeight, false);
 //	window.addEventListener("orientationchange", setButtonHeight, false);
@@ -164,8 +167,16 @@ function Controller() {
 	 * @param: a callback function that executes the transition to statistics view when the event is listened.
 	 * */
 	
-	$(document).bind("allstatisticcalculationsdone", function() {
-		self.transition('statisticsView');
+	$(document).bind("allstatisticcalculationsdone", function(featuredContent_id) {
+		moblerlog("all statistics calculations done is ready");
+		// if the user has clicked anywhere else in the meantime, then the transition to statistics view should not take place
+		if (!self.checkclickOutOfStatisticsIcon()) {
+			moblerlog("transition to statistics because all calculations have been done");
+		self.transition('statisticsView',featuredContent_id);
+	   }else
+		   {
+		   moblerlog("transition to statistics is not feasible because the user has clicked elsewhere else");
+		   }
 	});
 
 	/**
@@ -178,8 +189,8 @@ function Controller() {
 	 */
 	$(document).bind("statisticssenttoserver", function() {
 		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization updates");
-			//self.transitionToLogin();
+			moblerlog("stays in login view, despite the synchronization of sent statistics");
+			//	self.transitionToLogin();
 		}
 	});
 
@@ -192,22 +203,22 @@ function Controller() {
 	 */
 	$(document).bind("questionpoolready", function() {
 		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization updates");
-			self.transitionToLogin();
+			moblerlog("stays in login view, despite the synchronization of questionpool ready");
+			self.transitionToLogin(); // or we can stay on the current view i.e. lms view, landing view or login view
 		}
 	});
 
 	/**
 	 * This event is triggered  when courses are loaded from the server. It is
 	 * binded also in courses list view and we want to avoid loading of that view.
-	 * For that reason we check IF WE ARE  not LOGGED IN (=logged out)in order to show the login form.
+	 * For that reason we check IF WE ARE not LOGGED IN (=logged out)in order to show the login form.
 	 * @event courselistupdate
 	 * @param a callback function that loads the login form
 	 */
 	$(document).bind("courselistupdate", function() {
-		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization updates");
-			self.transitionToLogin();
+		if (!self.getLoginState() ){
+			moblerlog("stays in login view, despite the courses synchronization updates");
+			//self.transitionToLogin();// or we can stay on the current view i.e. lms view, landing view or login view
 		}
 	});		
 
@@ -217,13 +228,13 @@ function Controller() {
 		}
 	});		
 	
-	
-	
 	$(document).bind("click", function(e) {
 		moblerlog(" click in login view ");
 		e.preventDefault();
 		e.stopPropagation();
 	});	
+	
+	
 	
 	// check if 3000 ms have passed
 	// if not we wait until 3000 ms have passed
@@ -248,8 +259,8 @@ function Controller() {
 //		//self.transitionToEndpoint();
 //	}
 
-	$(document).bind("featuredContentlistupdate", function() {	
-		
+	function cbFeaturedContentListUpdate() {
+		moblerlog("featured content list update called");
 		var currentTime = new Date().getTime();
 		var deltaTime= currentTime - startTime;
 		if (deltaTime < 3000) {
@@ -261,10 +272,19 @@ function Controller() {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
-	});
+		//$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+	}
+	
+	//we binded this event here in order to 
+	$(document).bind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+	//$(document).bind("featuredContentlistupdateLocal", cbFeaturedContentListUpdateLocal);
 	
 	injectStyle();
-moblerlog("End of Controller");
+	moblerlog("End of Controller");
+	if (this.models['featured'].isFeaturedContentLocal){
+		moblerlog("transition start to end point when featured content is loaded locally");
+		self.transitionToEndpoint();
+	}
 } // end of Controller
 
 
@@ -332,14 +352,17 @@ Controller.prototype.setupLanguage = function() {
  * @function transition 
  * @param {String} viewname, the name of the specified target view
  **/
-Controller.prototype.transition = function(viewname, featuredFlag) {
+Controller.prototype.transition = function(viewname, fd, achievementsFlag) {
 	moblerlog("transition start to " + viewname );
-	// Check if the current active view exists and either if it is different from the targeted view or if it is the login view
+	// Check if the current active view exists and either if it is different from the targeted view or if it is the landing view
 	if (this.views[viewname] && ( viewname === "landing" || this.activeView.tagID !== this.views[viewname].tagID)){
 		moblerlog("transition: yes we can!");
 		this.activeView.close();
-		this.activeView = this.views[viewname];
-		this.activeView.open(featuredFlag);
+		this.activeView = this.views[viewname]; 
+		//clear all flags that are needed for waiting for model processing
+		//currently only used by the statistics model
+		this.clickOutOfStatisticsIcon=true;
+		this.activeView.open(fd,achievementsFlag);
 	}
 };
 
@@ -379,7 +402,7 @@ Controller.prototype.transitionToLogin = function() {
 
 
 Controller.prototype.transitionToLanding = function() {
-	moblerlog("enter controller transition to login view from landing view");
+	moblerlog("enter controller transition to landing view in controller");
 	this.transition('landing');
 };
 
@@ -410,16 +433,19 @@ Controller.prototype.transitionToLogout = function() {
  * @function transitionToAuthArea 
  * @param {String} viewname, the name of the targeted view
  **/
-Controller.prototype.transitionToAuthArea = function(viewname,featuredFlag) {
+Controller.prototype.transitionToAuthArea = function(viewname,featuredContentFlag) {
 	if (this.getLoginState()) {
-		this.transition(viewname, featuredFlag);
+		this.transition(viewname);
 	}
 	else {
-		//this.transitionToLogin();
-		this.transitionToLanding();
-	//this.transitionToLMS();
-		//injectStyle();
-	}
+		//stay on the current view if we are not logged in 
+//		if (featuredContentFlag){
+//			this.transition(viewname,featuredContentFlag);
+// 		}else {
+ 		//	moblerlog("no fd value passed");
+ 			this.transitionToLanding();
+ 		//}
+	} 
 };
 
 /**
@@ -436,8 +462,10 @@ Controller.prototype.transitionToCourses = function() {
  * @prototype
  * @function transitionToQuestion 
  **/
-Controller.prototype.transitionToQuestion = function(featuredFlag) {
-	this.transitionToAuthArea('questionView', featuredFlag);
+Controller.prototype.transitionToQuestion = function() {
+	moblerlog("enters transition to question in controller");
+	//this.transitionToAuthArea('questionView',fd);
+	this.transition('questionView');
 };
 
 /**
@@ -446,7 +474,8 @@ Controller.prototype.transitionToQuestion = function(featuredFlag) {
  * @function transitionToAnswer 
  **/
 Controller.prototype.transitionToAnswer = function() {
-	this.transitionToAuthArea('answerView');
+	moblerlog("enters transition to answer view in controller");
+	this.transition('answerView');
 };
 
 /**
@@ -455,7 +484,7 @@ Controller.prototype.transitionToAnswer = function() {
  * @function transitionToFeedback 
  **/
 Controller.prototype.transitionToFeedback = function() {
-	this.transitionToAuthArea('feedbackView');
+	this.transition('feedbackView');
 };
 
 /**
@@ -473,32 +502,65 @@ Controller.prototype.transitionToSettings = function() {
  * @function transitionToFeedbackMore 
  **/
 Controller.prototype.transitionToFeedbackMore = function() {
-	this.transitionToAuthArea('feedbackMore');
+	this.transition('feedbackMore');
 };
 
 /**
  * Transition to statistics view. The user can reach the statistics view in two ways: 1) either by clicking the statistics icon on the course list view or  2) from the achievements view.
+ * TODO: Refactoring of the function
  * @prototype
  * @function transitionToStatistics 
  **/
-Controller.prototype.transitionToStatistics = function(courseID) {
-	if (this.getLoginState()) {
-		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
-		moblerlog("enters get logic state in controller");
-		if (courseID && courseID > 0) {
-			moblerlog ("enters course id in controller");
-			this.models['statistics'].setCurrentCourseId(courseID);
-		}
-		else {
-			// when the achievements get closed we won't pass the course id
-			// in order to avoid that the statistics are recalculated. Which makes no sense,
-			// because the statistics model has already all the data in place.
-			this.transition("statisticsView");
-		}
-	}
-	else {
-		this.transitionToLogin();
-	}
+Controller.prototype.transitionToStatistics = function(courseID,achievementsFlag) {
+	
+	// this.models['statistics'].setCurrentCourseId(courseID);
+	// if ( !this.models['statistics'].dataAvailable() ) {
+	// The user tries to access course statistics w/out being authenticated
+	// send the user to the landing view, because this is only place where a statistics button is available
+	// }
+	
+//	if (this.getLoginState()) {
+//		//The transition to statistics view is done by clicking the statistics icon in the course list view. In this case a courseID is assigned for the clicked option.
+//		moblerlog("enters get logic state in transition to statistics in controller");
+//		if (courseID && (courseID > 0 || courseID === "fd") ) {
+//			moblerlog ("enters course id in controller");
+//			this.models['statistics'].setCurrentCourseId(courseID);
+//		}
+//		else
+//		{
+//			moblerlog("transition to statistics when loggedin and coming from achievements view");
+//			// when the achievements get closed we won't pass the course id
+//			// in order to avoid that the statistics are recalculated. Which makes no sense,
+//			// because the statistics model has already all the data in place.
+//			this.transition("statisticsView",achievementsFlag);
+//		}
+//	}//end of is logged in
+//	else { //the user is not 
+//		if (courseID && !achievementsFlag){
+//		moblerlog("enter the statistics from landing view");
+//		this.models['statistics'].setCurrentCourseId(courseID);
+//		}else if (achievementsFlag)
+//			{
+//			this.transition("statisticsView",achievementsFlag);
+//			}
+//		}
+	
+	
+	//set the statistics waiting flag
+	this.clickOutOfStatisticsIcon=false;
+	
+	//The transition to statistics view is done by clicking the statistics icon in any list view. 
+	//In this case a courseID is assigned for the clicked option.
+
+	if ((courseID && (courseID > 0 || courseID === "fd")) || !achievementsFlag ) {
+		this.models['statistics'].setCurrentCourseId(courseID);
+	if (!this.models['statistics'].dataAvailable()) {
+			this.transition("landing");
+		} }
+	else if (achievementsFlag)
+	{
+		this.transition("statisticsView",achievementsFlag);
+	}	
 };
 
 /**
@@ -506,8 +568,8 @@ Controller.prototype.transitionToStatistics = function(courseID) {
  * @prototype
  * @function transitionToAchievements 
  **/
-Controller.prototype.transitionToAchievements = function() {
-	this.transitionToAuthArea('achievements');
+Controller.prototype.transitionToAchievements = function(courseID) {
+	this.transition('achievements',courseID);
 };
 
 /**
@@ -604,7 +666,7 @@ Controller.prototype.setConfigVariable = function(varname, varvalue) {
 };
 
 Controller.prototype.resizeHandler = function() { 
-	// detect new Orientation Layout
+	//   new Orientation Layout
 	var orientationLayout = false; // e.g. Portrait mode
 	var w = $(window).width(), h= $(window).height();
 	if ( w/h > 1 ) {orientationLayout = true;
@@ -612,6 +674,19 @@ Controller.prototype.resizeHandler = function() {
 	// window.width / window.height > 1 portrait
 	this.activeView.changeOrientation(orientationLayout, w, h ); 
 };
+
+
+/**
+ * Checks if any other element of the view has been tapped/clicked
+ * after the statistics icon  has been clicked in either the course list view or landing view.
+ * @prototype
+ * @function checkclickOutOfStatisticsIcon
+ * @return {Boolean}, true or false.  It returns true if any other element has been clicked, and false if only the statistics icon has been clicked and the user is waiting.
+ */
+Controller.prototype.checkclickOutOfStatisticsIcon = function() {
+	moblerlog ("check click out of statistics icon is" +this.clickOutOfStatisticsIcon);
+	return this.clickOutOfStatisticsIcon;
+}
 
 /**
  * Sets the current height for the icon buttons.
@@ -634,7 +709,6 @@ function setButtonHeight() {
 	$(".iconButton").css("height", height + "px");
 	$(".iconButton").css("line-height", height + "px");
 }
-
 
 /**
  * Sets the width of the forward buttons.
@@ -670,7 +744,7 @@ function injectStyle() {
     }
     
     // calculate the heights once and forever. 
-    var cfl = w - 54, cfp = h - 54,cl  = w - 102,cp  = h - 108;
+    var cfl = w - 54, cfp = h - 54 ,cl  = w - 102,cp  = h - 108; 
     var style;
 
     style  = '@media all and (orientation:portrait) { ';
@@ -686,3 +760,25 @@ function injectStyle() {
 
     $('head').append(e);
 }
+
+/**
+ * 	Does the aproropriate calculations when we click on a course item
+ * 	either it is featured content or exclusive content.
+ *  and after loading the data and setting the correct course id we do
+ *  the transiton to the question view as long as we have valid data.
+ *  @function selectCourseItem
+ * 	@ param{string or number}, courseId, the id of the current course
+ * */
+function selectCourseItem(courseId){
+	this.controller.models['questionpool'].reset();//add it within the loadData, similar with statistics (setcurrentCourseId function)...
+	this.controller.models['questionpool'].loadData(courseId);
+	if (this.controller.models.questionpool.dataAvailable()) {
+		this.controller.models['answers'].setCurrentCourseId(courseId);
+		moblerlog("enters clickFeauturedItem");
+		this.controller.transitionToQuestion();
+	}
+	else {
+		// inform the user that something went wrong
+	}
+}
+

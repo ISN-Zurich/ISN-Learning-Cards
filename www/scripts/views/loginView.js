@@ -47,11 +47,11 @@ under the License.
  **/
 function LoginView(controller) {
 	var self = this;
-
 	self.tagID = 'loginView';
 	this.controller = controller;
 	this.active = false;
 	this.fixedRemoved= false;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 
 	//handler when taping on the login button
 	jester($('#loginButton')[0]).tap(function() {
@@ -200,6 +200,7 @@ LoginView.prototype.close = function() {
 	$("#password").blur();
 	$("#usernameInput").blur();
 	this.active = false;
+	injectStyle();
 	this.closeDiv();
 };
 
@@ -387,7 +388,9 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 
 	if (orientationLayout || self.fixedRemoved== true) //we are in landscape mode and previously
 													 //we had removed the fixed position of login button
-	{$("#loginButton").removeClass("fixed");}
+	{
+		//$("#loginButton").removeClass("fixed");
+	}
 	else if (self.fixedRemoved== false) {
 		$("#loginButton").addClass("fixed");
 	};	
@@ -425,5 +428,12 @@ function setInputWidth(){
 	var inputwidth = window_width - 49- 34 - 18;
 	$("#usernameInput").css("width", inputwidth + "px");
 	$("#password").css("width", inputwidth + "px");
+	moblerlog("window width in landing view is "+window_width);
+//	var gridWidth = 34;
+//	var separatorWidth= 12;
+//	var dashWidth = 34;
+//	var iconWidth= 30;
+//	var lmsWidth = window_width - gridWidth -separatorWidth - dashWidth - iconWidth;
+//	$("#lsmlabel").css("width", inputwidth + "px");
 }
 

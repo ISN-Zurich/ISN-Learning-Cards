@@ -131,7 +131,7 @@ LMSModel.prototype.storeData = function() {
  * @return {Array} the array that contains the content of the global URLS_TO_LMS variable
  */
 LMSModel.prototype.getLMSData = function() {
-	return URLS_TO_LMS;
+	return debugActivate();
 };
 
 
@@ -391,12 +391,12 @@ LMSModel.prototype.isRegistrable = function(servername){
 	for ( i=0; i < URLS_TO_LMS.length; i++ ) {
 		if (lastRegister > ((new Date()).getTime() - 24*60*60*1000)){	
 		moblerlog("lms is not registrable yet");
-			return false
+			return false;
 		}
 		else{
 			$("#selectLMSitem"+servername).prop("disabled",false);	
 			moblerlog("lms is registrable for server"+servername);
-			return true
+			return true;
 		}
 	}
 };

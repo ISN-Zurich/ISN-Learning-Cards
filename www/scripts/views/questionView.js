@@ -47,10 +47,11 @@ function QuestionView(controller) {
 	var self = this;
 	self.controller = controller;
 	self.tagID = 'cardQuestionView';
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	var returnButton = $('#CourseList_FromQuestion')[0];
 	if (returnButton) {
-		function cbReturnButtonTap(event) {
-			self.clickCourseListButton();
+		function cbReturnButtonTap(event,featuredContent_id) {
+			self.clickCourseListButton(featuredContent_id);
 			event.stopPropagation();
 		}
 
@@ -73,6 +74,7 @@ function QuestionView(controller) {
 
 	var prevent=false;
 	jester($('#ButtonAnswer')[0]).tap(function(e) {
+		moblerlog("enter button answer in question view");
 		//e.preventDefault();
 		e.stopPropagation();
 		self.handleTap();
@@ -150,8 +152,11 @@ moblerlog("pinch works");
  **/
 QuestionView.prototype.handleTap = function() {
 	if (controller.models["answers"].answerScore > -1){
+		moblerlog("tap question view to feedback");
 		controller.transitionToFeedback();
 	} else { 
+		moblerlog("tap question view to answer");
+		//moblerlog("featured id is "+featuredContent_id);
 		controller.transitionToAnswer();
 	}
 };
@@ -188,13 +193,15 @@ QuestionView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/
-QuestionView.prototype.open = function(featuredFlag) {
+QuestionView.prototype.open = function(featuredContent_id) {
 	this.showQuestionTitle();
-	this.showQuestionBody(featuredFlag);
-	
+	this.showQuestionBody();
 	if (!controller.models["answers"].hasStarted()) {
-		controller.models["answers"].startTimer(controller.models["questionpool"].getId());
-	}
+		 if(featuredContent_id){
+			controller.models["answers"].startTimer(featuredContent_id);	
+			}else{
+		controller.models["answers"].startTimer(controller.models["questionpool"].getId());}
+			}
 	this.openDiv();	
 };
 
@@ -202,17 +209,12 @@ QuestionView.prototype.open = function(featuredFlag) {
  * @prototype
  * @function showQuestionBody
  **/
-QuestionView.prototype.showQuestionBody = function(featuredFlag) {
-	if (!featuredFlag){
-		moblerlog("enter question view exclusive content");
+QuestionView.prototype.showQuestionBody = function() {
+	moblerlog("enter question view exclusive content");
 	var currentQuestionBody = controller.models["questionpool"]
 			.getQuestionBody();
+	moblerlog("current question body"+currentQuestionBody);
 	$("#questionText").html(currentQuestionBody);
-	}else{
-		moblerlog("enter question view of featured content ");
-		var featuredContentQuestionBody = controller.models["featured"]
-		.getQuestionBody();
-	}
 	$("#ButtonTip").hide();
 
 };
@@ -236,8 +238,22 @@ QuestionView.prototype.showQuestionTitle = function() {
  * @prototype
  * @function clickCourseListButton
  **/
-QuestionView.prototype.clickCourseListButton = function() {
+QuestionView.prototype.clickCourseListButton = function(featuredContent_id) {
 	controller.models["answers"].resetTimer();
+	if (featuredContent_id){
+		controller.transitionToLanding();
+	}else{
 	controller.transitionToCourses();
+	}
 };
 
+
+/**
+* handles dynamically any change that should take place on the layout
+* when the orientation changes.
+* @prototype
+* @function changeOrientation
+**/ 
+QuestionView.prototype.changeOrientation = function(o,w,h){
+	
+};

@@ -10,6 +10,8 @@ body {
 	padding: 0px;
 }
 
+
+
 /* close button general characteristics, top right corner of each view*/
 .closeButton {
 	width: 49px;
@@ -205,18 +207,17 @@ body {
 .content {
 	/*background-color:blue;
 	border: 1px solid red;*/
-    
-	margin-top: 55px;
+    margin-top: 55px;
 	width:100%;
 	background-image: url(../resources/app_background.png);
 	background-size:100% auto;
-    /*background-size: 946px auto;*/
-    /*background-size: 100% 5%;*/ 
+    /*background-size: 946px auto;
+    background-size:100% 15%;
+    background-size: 100% 5%;*/ 
     background-repeat:no-repeat;
     /* background-attachement: fixed; is not working on iOS */
     background-attachment:absolute;
     background-position: center bottom; 
-
 }
 
 
@@ -234,8 +235,8 @@ ul {
 	border-left: solid 1px white;
 	border-right: solid  1px white ;
 	border-bottom: solid 1px white;
-	/*background-color: #ddd;*/
-	color:#696969;
+	/*background-color: #ddd;
+	color:#696969;*/
 	list-style-type: none;
 	/*font-size: 14pt;*/
 	/*font-style: normal;
@@ -249,11 +250,15 @@ ul {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 	-webkit-padding-start: 0px;
-	margin-bottom:50px;
 }
 .spacerMargin{
+	background-color:white;
+	height:100px;
+}
+
+.borderRemoval {
+	border-bottom: solid 0px white;
 	
-	margin-bottom:50px;
 }
 
 #landingBody{
@@ -273,6 +278,7 @@ li {
 	/*font-style: bold;
 	font-variant: bold;*/
 	font-style:none;
+	border: 0px solid red;
 	border-bottom: 1px solid white;
 	text-align: left;
 	padding: 0px;
@@ -280,8 +286,16 @@ li {
 	z-index:1;
 }
 
+.ulTest{
+	border:0px solid green;
+	
+}
 
-
+.defaultHeight{
+	height:47px;
+	border:0px solid green;
+	
+}
 /*********************** Views ***********************/
 #coursesListView {
 	display: none;
@@ -456,7 +470,7 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 }
 
 #landingView{
-	/*display:none;*/
+	display:none;
 }
 /*********************** Login ***********************/
 #loginForm {
@@ -477,8 +491,27 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	padding: 10px;
 	border-right: 0px solid white;
 	border-left: 0px solid white;
+	/*border:1px solid green;*/
 	height: 33px;
 	margin-right:0px;	
+
+}
+
+.inputBorderTop {
+	clear:both;
+	line-height: 55px;
+	border:0px solid red;
+}
+
+.inputBorderCloze {
+	padding: 10px;
+	/*border-right: 0px solid white;
+	border-left: 0px solid white;
+	/*border:1px solid green;*/
+	height: 33px;
+	margin-right:0px;	
+	
+	
 }
 
 .loginInput {
@@ -495,10 +528,35 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	padding: 5px;
    
 	border-left: 0px solid white;
+	
 	color:#707070;
 	background-color:transparent;
+	
+}
+
+.loginInputCloze {
+	/*box-shadow: none;
+	-webkit-appearance: none;
+	 border-radius: 0;
+	
+	
+	border-width: 0px;*/
+	outline: none;
+	border: none;
+	font-size: 12pt;
+	margin: 0px;
+	padding: 5px;
+   
+	border-left: 0px solid white;
+	
+	color:#707070;
+	background-color:transparent;
+	border-bottom-style:dotted;
+	border-bottom-width:1px;
+	border-bottom-color:grey;
 
 }
+
 
 *[placeholder] {
 	color: #666;
@@ -658,7 +716,7 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 
 .currentSortedItem {
 	border: 1px solid white;
-	background-color: #ddd;
+	/*background-color: #ddd;*/
 }
 
 .placeholder {
@@ -696,6 +754,19 @@ ul#questionText{
 	padding-left: 10px;
 	padding-right:0px;
 	border:0px solid red;
+}
+.marginClozeLi{
+	padding:9px 9px 9px 20px;
+	/*padding-left:15px;
+	padding-bottom:4px;
+	border:1px solid red;*/
+}
+
+.internalPadding{
+	padding:7px;
+}
+#shadowedClozeLi{
+	padding:0px;
 }
 
 #numberInputContainer, #numberInput, 
@@ -739,15 +810,18 @@ ul#questionText{
 
 /****************** Course List View ************************/
 .courseListIcon {
-	border-left: 1px solid red;
+	border-left: 0px solid red;
 	width: 30px;/*it was 41 and then 34*/
-	line-height:57px;
+	line-height:40px;
 	font-size: 24px; /*it was 32, and then 26*/
 	color:white;
 	text-align: center;
-	vertical-align: middle;
+	/*vertical-align: middle;*/
 }
-
+.white{
+	color:white;
+	
+}
 .courseListIconLMS {
 	border-left: 1px solid red;
 	width: 34px;/*it was 41*/
@@ -840,6 +914,7 @@ ul#questionText{
 	right: 90px;
 	font-size: 15px;
 	font-weight: bold;
+	z-index:-1;
 	/*border: 1px solid green;*/
 }
 
@@ -851,11 +926,12 @@ ul#questionText{
 
 ul#aboutData{
 
-	margin-top:10px;
+	/*margin-top:10px;*/
 	margin-left: 0px;
 	margin-right:0px;
 	font-size: 12px;
-	margin-bottom: 66px;
+	/*margin-bottom: 66px;*/
+	z-index:10;
 	/*border: 1px solid red;
 	padding-top:15px;*/
 	
@@ -926,6 +1002,14 @@ ul#loginElements{
 }
 
 
+#separatorFeaturedLanding{
+	border:0px solid black;
+}
+
+#selectarrowLanding{
+	border:0px solid green;
+}
+
 #lmsView{	
 	display: none;
 }
@@ -943,7 +1027,7 @@ ul#lmsList{
 }
 
 
-.labelContainer{
+.labelContainerOld{
 	float:left;
 	/*display:inline-block;*/
 	padding-top:15px;
@@ -955,14 +1039,10 @@ ul#lmsList{
 }
 
 .lmslabel{
-	height:49px;
-	line-height:49px;
+	/* height:49px; */
+	/* line-height:49px; */
+	/* width:50px;*/ 
 	font-weight:bold;
-	float:left;
-	display:inline;
-	
-	border: solid 0px blue;
-	vertical-align:middle;
 	white-space: nowrap;
 	text-overflow:ellipsis;
 	overflow: hidden;
@@ -973,6 +1053,14 @@ ul#lmsList{
 
 
 #loginLmsLabel{
+	border: solid 0px blue;
+	vertical-align:middle;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	overflow: hidden;
+}
+
+#landingLmsLabel{
 	border: solid 0px blue;
 	vertical-align:middle;
 	white-space: nowrap;
@@ -1121,10 +1209,39 @@ font-size:13px;
     /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5e5e5e', endColorstr='#5e5e5e');*/ /* IE6 & IE7 */  
     /* background: linear-gradient(#5e5e5e, #5e5e5e);*/ /* the standard */ 
     z-index:10;
+    
      
 }
 
+.glow2 {
+	text-shadow: 0px -1px 1px #1b621c, -1px 0px 1px #1b621c, -2px -2px 3px 62b55b, -3px -2px 8px #66b460, 0px 0px 18px #66b460, 0px 0px 25px 70ab6b, 0px 0px 35px 70ab6b;
+	text-shadow: 0px -1px 1px #1b621c, -1px 0px 1px #1b621c, -2px -2px 3px 62b55b, -0px 0px 8px #66b460, 0px 0px 18px #66b460, 0px 0px 35px 70ab6b;
+	/*font-weight: bold;
+	font-family: helvetica;*/
+	/*color:#000;*/
+	background-color:transparent;
+	/*padding:20px;*/
+	-webkit-text-stroke-color: #2da42c;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: #59fa56;
+	z-index:12;
+	
+}
 
+.glowNone {
+	text-shadow: 0px -2px 3px #1b621c, 1px 0px 1px #1b621c,-1px 0px 1px #1b621c;/* Glow Effect */
+	/*font-size:150px;
+	font-weight: bold;
+	font-family: helvetica;
+	color:#000;
+	background:grey;
+	padding:20px;*/
+	background-color:transparent;
+	-webkit-text-stroke-color: #2da42c;
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-fill-color: #21ae24;
+	
+}
 
 
 .textShadow{
@@ -1171,7 +1288,7 @@ font-weight: bold;
 }
 
 
-.imageContainer {
+.imageContainerOld {
 	/*display:inline-block*/
 	height: 47px;
 	line-height: 47px;
@@ -1200,16 +1317,97 @@ font-weight: bold;
 
 .selectItemContainer {
 	/*display:inline-block;*/
-	border: solid 0px red;	
+	border: solid 0px blue;	
 	height: 47px;
 	line-height: 47px;
-	width: 30px;/*it was 34*/
+	width: 34px; /*it was 34*/
 	text-align:center;
 	padding-top:5px;
 	padding-right:7px;/*there was no padding right it was just added*/
-	font-size:30px; /*it was 32*/
+	font-size:25px; /*it was 32*/
 }
 
+.courseLiContainer {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.dashContainer, .labelContainer, .separatorBlock, .separatorBlockAchievements,.gridContainer, .gridContainerAchievements, .statsValueContainer,.imageContainer  {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+
+.labelContainer {
+	border:1px solid red;
+	
+}
+.dashContainer {
+border:1px solid blue;
+width:34px;
+}
+
+.white{
+	color:white;
+}
+.gridContainer {
+	width: 34px;
+	margin-right:0px;
+	text-align:center;
+	border:1px solid green;
+}
+
+.gridContainerAchievements{
+	/* margin-right:0px; */
+	text-align:center;
+	border:1px solid green;
+	width:50px;
+}
+.statsValueContainer{
+	
+	/*padding-right:15px;*/
+	border:1px solid black;
+	width:50px;
+	text-align:center;
+	padding-right:15px;
+	
+}
+.statsValueContainerAchievements{
+	
+	/*padding-right:15px;*/
+	border:1px solid black;
+	text-align:right;
+	
+}
+.imageContainer {
+	width: 47px;
+	padding-top:4px;
+	border:0px solid green;	
+	height: 47px;
+	line-height: 47px;
+}
+.separatorBlock {
+	width: 18px;
+	border:1px solid black;
+}
+
+.separatorBlockAchievements {
+	width: 6px;
+	border:1px solid black;
+}
+
+.selectItemContainerCloze {
+	/*display:inline-block;*/
+	border: solid 0px blue;	
+	height: 37px;
+	line-height: 37px;
+	width: 30px;/*it was 34*/
+	text-align:center;
+	padding-right:7px;/*there was no padding right it was just added*/
+	font-size:30px; /*it was 32*/
+	padding-bottom:9px;
+}
 .selectItemContainer2 {
 	/*display:inline-block;*/
 	border: solid 0px red;	
@@ -1255,10 +1453,10 @@ img.imageLogoLMS{
 }
 
 .achievementsImg{
-	text-align:center;
-	right:6px;
-	position:absolute;
-	font-size:39px;
+	/*position:absolute;
+	margin-right:6px;*/
+	font-size:38px;
+	border:1px solid red;
 }
 
 .feedbackIcon{
@@ -1289,16 +1487,26 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 	line-height:45px;
 }
 
+.rightDiv{
+	border:0px solid red;
+}
+
+.textDiv{
+	border:1px solid blue;
+	/*margin-right:60px;*/
+}
+.liBorder{
+	border:1px solid green;
+}
 .separatorContainerCourses {
-	/*display:inline-block;*/
+	/*display:inline-block;	*/
+	margin-top:4px;
+	margin-bottom:4px;
 	border-left: solid 1px #b3b2b2;
 	height: 30px;
 	line-height: 30px;
 	width: 12px;
 	text-align: right;
-	margin-top:4px;
-	margin-bottom:4px;
-	
 }
 
 .separatorContainerLMS {
@@ -1415,16 +1623,10 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 }
 
 #cardBurner{
-	padding-bottom:4px;
-	margin-bottom:4px;
+	/*padding-bottom:4px;
+	margin-bottom:4px;*/
 }
 
-.spacerMargin{
-	/*height:80px;
-	background:white;
-	background-color:white;
-	*/
-}
 
 .marginSeparatorTop{
 	margin-top:6px;

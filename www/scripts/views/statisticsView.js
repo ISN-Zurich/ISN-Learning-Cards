@@ -55,13 +55,16 @@ function StatisticsView(controller) {
     
     self.tagID = 'statisticsView';
     self.controller = controller;
+    var featuredContent_id = FEATURED_CONTENT_ID;
+    self.dataLoaded=false;
     
     moblerlog( 'statistics view init touch events');
     
     jester($('#closeStatisticsIcon')[0]).tap(function(){ self.closeStatistics(); });
     
     jester($('#statsSlot3')[0]).tap(function() {
-		self.clickToAchievements();
+    	moblerlog("clicked in achievements in statistics view");
+		self.clickToAchievements(featuredContent_id);
 	});
     
 //    jester($('#statsSlot2')[0]).tap(function() {
@@ -119,8 +122,8 @@ StatisticsView.prototype.handleTap   = doNothing;
  * @prototype
  * @function handleSwipe
  **/
-StatisticsView.prototype.handleSwipe = function() {
-	controller.transitionToAchievements();
+StatisticsView.prototype.handleSwipe = function(featuredContent_id) {
+	controller.transitionToAchievements(featuredContent_id);
 };
 
 
@@ -144,16 +147,42 @@ StatisticsView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/ 
-StatisticsView.prototype.open = function() {
+StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 	var self=this;
-	if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-		moblerlog("statistics have been loaded from server");
-		self.loadData();	
-	}
-	else {
+	if (self.controller.getLoginState()) {
+		if (featuredContent_id || self.controller.getConfigVariable("statisticsLoaded")== true){
+			self.loadData();
+		}
+//		else{
+//		moblerlog("open statistics view outside featured context");
+//		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
+//		moblerlog("statistics have been loaded from server");
+//		self.loadData();
+//		}
+		else {
 		self.showLoadingMessage();
-	}  
+			}
+		//}
+	}//end of is logged in
+	else //if we are not logged in 
+		{
+			moblerlog("open statistics view in featured course context");
+		self.loadData();	
+		}
+//	else {
+//		moblerlog("open statistics view outside featured context");
+//		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
+//		moblerlog("statistics have been loaded from server");
+//		self.loadData();	
+//		}
+//		else {
+//		self.showLoadingMessage();
+//			}
+//		}
+	
+	this.changeOrientation();
 	this.openDiv();	
+	
 };
 
 /**leads to course list
@@ -180,9 +209,9 @@ StatisticsView.prototype.showLoadingMessage = function() {
  * @prototype
  * @function clickToAchievements
  **/
-StatisticsView.prototype.clickToAchievements = function() {
+StatisticsView.prototype.clickToAchievements = function(featuredContent_id) {
 	moblerlog("slot 1 or slot 2 clicked");
-	this.controller.transitionToAchievements();
+	this.controller.transitionToAchievements(featuredContent_id);
 };
 
 
@@ -194,15 +223,16 @@ StatisticsView.prototype.clickToAchievements = function() {
  * @function loadData
  **/
 StatisticsView.prototype.loadData = function() {
+	var self=this;
 	moblerlog("enters load data in statistics");
 	var statisticsModel = this.controller.models['statistics'];
-	$("#loadingMessage").hide();
-	$("#statisticsBody").show();
+	
 	
 	moblerlog("init values for statistics");
 	//starts the calculation of the values of the various
 	//statistics metrics
 	var avgScore = statisticsModel.averageScore.averageScore;
+	moblerlog("average score is: "+avgScore);
 	var improvementAvgScore = statisticsModel.averageScore.improvementAverageScore;
 	if (avgScore < 0) {
 		avgScore =  0;
@@ -248,7 +278,9 @@ StatisticsView.prototype.loadData = function() {
 	$("#statBestDayValue").text(oBestDay.getDate()  + " " + jQuery.i18n.prop('msg_monthName_'+ (oBestDay.getMonth() +1)));
 	$("#statBestDayInfo").text(oBestDay.getFullYear());
 	$("#statBestScoreValue").text(bestScore+"%");
-	$("#statHandledCardsValue").text(handledCards+ " "+ jQuery.i18n.prop('msg_handledCards_info'));
+	//$("#statHandledCardsValue").text(handledCards+ " "+ jQuery.i18n.prop('msg_handledCards_info'));
+	$("#statHandledCardsValue").text(handledCards);
+	$("#statsHandledCardsInfo").text(jQuery.i18n.prop('msg_handledCards_info'));
 	$("#statsHandledCardsIconchange").removeClass(removeClasses);
 	$("#statsHandledCardsIconchange").addClass(checkImprovement(improvementhandledCards));
 	$("#statAverageScoreValue").text(avgScore+"%");
@@ -257,11 +289,15 @@ StatisticsView.prototype.loadData = function() {
 	$("#statProgressValue").text(progress+"%");
 	$("#statsProgressIconchange").removeClass(removeClasses);
 	$("#statsProgressIconchange").addClass(checkImprovement(improvementProgress));
-	$("#statSpeedValue").text(avgSpeed+" "+ jQuery.i18n.prop('msg_speed_info'));
+	//$("#statSpeedValue").text(avgSpeed+" "+ jQuery.i18n.prop('msg_speed_info'));
+	$("#statSpeedValue").text(avgSpeed);
+	$("#statsSpeedinfo").text(jQuery.i18n.prop('msg_speed_info'));
 	$("#statsSpeedIconchange").removeClass(removeClasses);
 	$("#statsSpeedIconchange").addClass(checkSpeedImprovement(improvementSpeed));
    
     moblerlog("end load data");
+    
+    
 };	
 
 /**
@@ -270,4 +306,20 @@ StatisticsView.prototype.loadData = function() {
 * @prototype
 * @function changeOrientation
 **/ 	
-StatisticsView.prototype.changeOrientation = doNothing;
+StatisticsView.prototype.changeOrientation = function() {
+//	moblerlog("change orientation in statistics view");
+//	window_width = $(window).width();
+//	var gridWidth = 34;
+//	var separatorWidth= 12;
+//	var dashWidth = 40;
+//	var averageValueTextLength = $("#statHandledCardsValue").width();
+//	moblerlog("the length of the average text value is "+averageValueTextLength);
+//	//var statsValueWidth = averageValueTextLength; /*dynamic, it is statistics metric dependant*/
+//	var statsValueWidth = 50 ;
+//	var labelContainerWidth = window_width - gridWidth -separatorWidth - dashWidth - statsValueWidth;
+//	moblerlog("labelContainer width is "+labelContainerWidth);
+//	$(".labelContainer").css("width", labelContainerWidth + "px");
+//	var achievementsWidth= window_width - gridWidth - dashWidth - separatorWidth - 15;
+//	moblerlog("achievements width in statistics view is "+achievementsWidth);
+//	$("#achievementsReference").css("width", achievementsWidth + "px");
+};

@@ -48,20 +48,22 @@ function CoursesListView(controller) {
 	self.controller = controller;
 	self.active = false;
 	self.firstLoad = true;
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	
 	//handler when taping on the settings button
 	jester($('#coursesListSetIcon')[0]).tap(function() {
 		self.clickSettingsButton();
 	});
 
+	
 	/**
 	 * In some rare cases an automated transition from login view to course list view takes place. 
 	 * This might have happened because a synchronization of questions ( pending questions exist in the local storage) took place.
 	 * So when the courseListView or the CourseModel bind/listen to that event (because it was triggered when pending questions were loaded), we should check 
 	 * IF WE ARE LOGGED IN in order to perform the callback function
 	 * @event questionpoolready
-	 * @param a callback function that tranforms the loading icon next to a course item, to the statistics icon. this means
-	 *        that the specific course includin all its questions has been fully loaded
+	 * @param a callback function that transforms the loading icon next to a course item, to the statistics icon. this means
+	 *        that the specific course including all its questions has been fully loaded
 	 */
 	$(document).bind("questionpoolready", function(e, courseID) {
 		if ((self.tagID === self.controller.activeView.tagID) && (self.controller.models['authentication'].configuration.loginState === "loggedIn")){
@@ -139,10 +141,10 @@ CoursesListView.prototype.openDiv = openView;
  * @prototype
  * @function open
  **/ 
-CoursesListView.prototype.open = function() {
+CoursesListView.prototype.open = function(featuredContent_id) {
 	moblerlog("open course list view");
 	this.active = true;
-	this.update();
+	this.update(featuredContent_id);
 	this.firstLoad = false;
 	this.openDiv();
 	this.setIconSize();
@@ -175,13 +177,10 @@ CoursesListView.prototype.close = function() {
  * @function clickCourseItem
  **/ 
 CoursesListView.prototype.clickCourseItem = function(course_id) {
+
 	if (this.controller.models['course'].isSynchronized(course_id)) {
-		this.controller.models['questionpool'].reset();
-		this.controller.models['questionpool'].loadData(course_id);
-		this.controller.models['answers'].setCurrentCourseId(course_id);
-		var featuredFlag=false;
-		this.controller.transitionToQuestion(featuredFlag);
-	}
+		selectCourseItem(course_id);
+		}
 };
 
 /**
@@ -190,6 +189,7 @@ CoursesListView.prototype.clickCourseItem = function(course_id) {
  * @function clickSettingsButton
  */
 CoursesListView.prototype.clickSettingsButton = function() {
+	
 	this.controller.transitionToSettings();
 };
 
@@ -201,6 +201,7 @@ CoursesListView.prototype.clickSettingsButton = function() {
  */ 
 CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
 	moblerlog("statistics button clicked");
+	
 	
 	if ($("#courseListIcon"+courseID).hasClass("icon-bars")) {
 		$("#courseListIcon"+courseID).addClass("icon-loading loadingRotation").removeClass("icon-bars");
@@ -218,18 +219,81 @@ CoursesListView.prototype.clickStatisticsIcon = function(courseID) {
  * @prototype
  * @function update
  */ 
-CoursesListView.prototype.update = function() {
+CoursesListView.prototype.update = function(featuredContent_id) {
+	var featuredContent_id = FEATURED_CONTENT_ID;
 	var self = this;
 
 	var courseModel = self.controller.models['course'];
 	var statisticsModel = self.controller.models['statistics'];
+	var featuredModel = self.controller.models['featured'];
 	courseModel.reset();
 	$("#coursesList").empty();
 
 	moblerlog("First course id: " + courseModel.getId());
 	
-	if (courseModel.courseList.length == 0) {
-		
+	
+	
+//featured content
+	
+	var liF = $("<li/>", {
+		"id":"featured"+featuredContent_id,
+		"class":" courseLiContainer gradient2"
+	}).appendTo("#coursesList");
+	
+	
+	var dashDivF = $("<div/>", {
+		"class" : "dashContainer lineContainer selectItemContainer"
+	}).appendTo(liF);
+	
+	var spanDashF = $("<span/>", {
+		"class" : "dashGrey icon-dash"
+	}).appendTo(dashDivF);
+	
+	var mydivF = $("<div/>", {
+		"class" : "text textShadow marginForCourseList labelContainer",
+		text : featuredModel.getTitle()
+	}).appendTo(liF);
+	
+	var sBF = $("<div/>", {"class":"separatorBlock"}).appendTo(liF);
+	
+
+	var separatorF = $("<div/>", {
+		"id":"separator"+ featuredContent_id,
+		"class": "radialCourses lineContainer separatorContainerCourses"
+	}).appendTo(sBF);
+	
+	var divclassF= "lineContainer selectItemContainer";
+	divclassF += (featuredModel.isSynchronized(featuredContent_id) ? " icon-bars" : "icon-loading loadingRotation");
+	
+	var rightdivF = $("<div/>", {
+		"id" : "courseListIcon"+ featuredContent_id,
+		"class": "gridContainer lineContainer selectItemContainer white icon-bars"
+	}).appendTo(liF);
+	
+//	divF = $("<div/>", {
+//		"class" : " courseListIcon lineContainerCourses "
+//	}).appendTo(rightdivF);
+//	
+//	spanF = $("<div/>", {
+//		"id":"courseListIcon"+ featuredContent_id,
+//		"class" : "icon-bars"
+//	}).appendTo(divF);
+//	
+
+	
+	
+	
+	jester(mydivF[0]).tap(function(e) {
+	self.clickFeaturedItem(featuredContent_id);
+	});
+
+	jester(rightdivF[0]).tap(function(e) {
+		moblerlog("taped featured statistics icon in courses list view");
+			
+		self.clickFeaturedStatisticsIcon(featuredContent_id);
+	});
+	
+	if (courseModel.courseList.length == 0) {	
 		var li = $("<li/>", {
 		}).appendTo("#coursesList");
 		
@@ -243,37 +307,23 @@ CoursesListView.prototype.update = function() {
 			var courseID = courseModel.getId();
 
 			var li = $("<li/>", {
+				"class": "courseLiContainer gradient2",
 				"id" : "course" + courseID
 			}).appendTo("#coursesList");
 
-			var rightDiv = $("<div/>", {
-				"class" : "right gradient2"
-			}).appendTo(li);
-				
-			var separator = $("<div/>", {
-				"id":"separator"+ courseID,
-				"class" : " radialCourses lineContainer separatorContainerCourses"
-			}).appendTo(rightDiv);
-			
-			div = $("<div/>", {
-				//"class" : "courseListIcon right gradient2"
-				"class" : " courseListIcon lineContainerCourses gradient2 "
-			}).appendTo(rightDiv);
-			
-			span = $("<div/>", {
-				"id":"courseListIcon"+ courseID,
-				"class" : (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation")
-			}).appendTo(div);
-			
-		
-			
+//			span = $("<div/>", {
+//				"id":"courseListIcon"+ courseID,
+//				"class" : (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation")
+//			}).appendTo(div);
+//			
+					
 //			var leftDiv = $("<div/>", {
 //				"class" : "labelContainer"
 //			}).appendTo(li);
 //			
 			
 			var dashDiv = $("<div/>", {
-				"class" : "left lineContainer selectItemContainer"
+				"class" : "dashContainer lineContainer selectItemContainer"
 			}).appendTo(li);
 			
 			var spanDash = $("<span/>", {
@@ -281,9 +331,28 @@ CoursesListView.prototype.update = function() {
 			}).appendTo(dashDiv);
 			
 			var mydiv = $("<div/>", {
-				"class" : "text textShadow marginForCourseList gradient2",
+				"id":"courseTitle"+courseID,
+				"class" : "text textShadow marginForCourseList labelContainer",
 				text : courseModel.getTitle()
 			}).appendTo(li);
+			
+			var sB = $("<div/>", {"class":"separatorBlock"}).appendTo(li);
+			var separator = $("<div/>", {
+				"id":"separator"+ courseID,
+				"class" : "radialCourses lineContainer separatorContainerCourses"
+			}).appendTo(sB);
+
+			var divclass= "lineContainer selectItemContainer white ";
+			divclass += (courseModel.isSynchronized(courseID) ? " icon-bars" : "icon-loading loadingRotation");
+			var rightDiv = $("<div/>", {
+				"class" : "gridContainer " + divclass ,
+				"id": "courseListIcon" + courseID
+			}).appendTo(li);
+			
+//			var div = $("<span/>", {
+//				"class" : divclass
+//			}).appendTo(rightDiv);
+			
 			
 			jester(mydiv[0]).tap(function(e) {
 				e.stopPropagation();
@@ -292,10 +361,9 @@ CoursesListView.prototype.update = function() {
 			});
 
 
-			jester(span[0]).tap(
+			jester(rightDiv[0]).tap(
 					function(e) {
-						self.clickStatisticsIcon($(this).parent().parent().parent().attr('id')
-								.substring(6));
+						self.clickStatisticsIcon($(this).parent().attr('id').substring(6));
 						e.stopPropagation();
 					});
 
@@ -304,8 +372,8 @@ CoursesListView.prototype.update = function() {
 		self.setIconSize();
 	}
 	
-var lastli = $("<li/>", {
-}).appendTo("#coursesList");
+	var lastli = $("<li/>", {
+	}).appendTo("#coursesList");
 	
 	var shadoweddiv = $("<div/>", {
 		"id": "shadowedLi",
@@ -323,8 +391,7 @@ var lastli = $("<li/>", {
 CoursesListView.prototype.courseIsLoaded = function(courseId) {
 	moblerlog("courseIsLoaded: " + courseId);
 	moblerlog("selector length: "+ $("#course" + courseId + " .icon-loading").length);
-	$("#course" + courseId + " .icon-loading").addClass("icon-bars")
-			.removeClass("icon-loading loadingRotation");
+	$("#course" + courseId + " .icon-loading").addClass("icon-bars").removeClass("icon-loading loadingRotation");
 };
 
 
@@ -343,9 +410,57 @@ CoursesListView.prototype.setIconSize = function() {
 
 
 /**
+ * click on featured content which is on top of 
+ * courses list view, right before the exclusive content
+ * loads the questions of the featured course question pool
+ * @prototype
+ * @function clickFeaturedItem
+ */ 
+CoursesListView.prototype.clickFeaturedItem = function(featuredContent_id){
+
+	//if (this.controller.models['featured'].isSynchronized(featuredContent_id)) {
+	//	NEW
+	//	var featuredModel = self.controller.models['featured'];
+	//	var feauturedId= featuredModel.getId();
+	selectCourseItem(featuredContent_id);
+//}end of isSynchronized
+};
+
+
+
+/**
+ * click on statistic icon calculates the appropriate statistics and shows them
+ * while we are registered in courses list view
+ * @prototype
+ * @function clickFeaturedStatisticsIcon
+ */ 
+CoursesListView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id) {
+	moblerlog("statistics button in landing view clicked");
+	
+	if ($("#courseListIcon"+featuredContent_id).hasClass("icon-bars")) {
+		moblerlog("select arrow landing has icon bars");
+		$("#courseListIcon"+featuredContent_id).addClass("icon-loading loadingRotation").removeClass("icon-bars");
+		
+		//icon-loading, icon-bars old name
+		//all calculations are done based on the course id and are triggered
+		//within setCurrentCourseId
+		this.controller.transitionToStatistics(featuredContent_id);
+	}
+};
+
+/**
 * handles dynamically any change that should take place on the layout
 * when the orientation changes.
 * @prototype
 * @function changeOrientation
 **/ 
-CoursesListView.prototype.changeOrientation=doNothing;
+CoursesListView.prototype.changeOrientation=function(){
+//	window_width = $(window).width();
+//	moblerlog("window width in landing view is "+window_width);
+//	var gridWidth = 34;
+//	var separatorWidth= 15;
+//	var dashWidth = 34;
+//	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth -40;
+//	moblerlog(" width in course list view is "+inputwidth);
+//	$(".labelContainer").css("width", inputwidth + "px");
+};

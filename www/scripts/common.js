@@ -65,6 +65,7 @@ function doNothing() {}
  * */ 
 function openView() {
 	$(document).trigger("trackingEventDetected",[this.tagID]);
+	
 	$("#" + this.tagID).show();
 }
 
@@ -104,6 +105,23 @@ function moblerlog(messagestring) {
 	}
 }
 
+function debugActivate() {
+	var LMSDEBUG = 0;
+	moblerlog("debug Activate");
+	if (LMSDEBUG === 1){
+		var lmsData = [];
+		for ( i=0; i < URLS_TO_LMS.length; i++ ) {
+			if (URLS_TO_LMS[i].debug === "0"){
+				lmsData.push(URLS_TO_LMS[i]);
+			}	
+		}
+		moblerlog("return lms data");
+		return lmsData;
+	}else {
+		moblerlog("return the urlsto lms");
+		return URLS_TO_LMS;
+	}
+}
 /**Query the database. It is used in all statistics submodels.
  * @function queryDatabase
  * @param cbResult
@@ -118,7 +136,7 @@ function queryDatabase(cbResult){
 
 
 /**
- * Each achivement, either a stackhandler or a card burner, should be reached and calculated only once.
+ * Each achievement, either a stackhandler or a card burner, should be reached and calculated only once.
  * Check in this function if an achievement of any type (stackhandler or card burner) was already achieved
  * If an achievement has not been reached then the value of the achievement is calculated as normal 
  * @function checkAchievements
@@ -196,7 +214,11 @@ function calculateLabelWidth(){
 	$(".labelContainer").width(width);
 };
 
-
+/**
+ * 	Calculates the answers width for single and multiple choice questions
+ *  @function setAnswerWidth
+ * 	@ param{string,number,number} orientationLayout,w, h
+ * */
 function setAnswerWidth(orientationLayout, w, h){
 	var twidth = w-65;
 	twidth = twidth + "px";
@@ -208,6 +230,11 @@ function setAnswerWidth(orientationLayout, w, h){
 	});
 };
 
+/**
+ * 	Calculates feedback width for single and multiple choice questions
+ *  @function setFeedbackWidth
+ * 	@ param{string,number,number} orientationLayout,w, h
+ * */
 function setFeedbackWidth(orientationLayout,w, h){
 	var twidth = w-65;
 	twidth = twidth + "px";
@@ -218,3 +245,25 @@ function setFeedbackWidth(orientationLayout,w, h){
 		$(this).find(".radial").css("height", height + "px");
 	});
 };
+
+
+/**
+ * 	Calculates and returns an array that contains
+ *  the correct gaps for the gap with the specified index (=gapIndex).
+ *  @function getCorrectGaps
+ * 	@ param{number}, index, index of the current gap
+ * */
+function getCorrectGaps(gapIndex) {
+	var questionpoolModel = controller.models['questionpool'];
+	var gapsObject=questionpoolModel.getAnswer(); //the object that is returned as an answer from the server
+	var items=gapsObject["correctGaps"][gapIndex]["items"]; //the items sub-array for the specific gap index
+	var correctGaps=new Array();
+	for(k=0; k<jQuery(items).size();k++){
+		correctGaps.push(items[k]["answertext"]);
+		moblerlog("item of correct gaps array is "+correctGaps[k]);
+	}
+	moblerlog("correct gaps array is "+correctGaps);
+	return correctGaps;
+}
+
+function setLabelContainer() {}

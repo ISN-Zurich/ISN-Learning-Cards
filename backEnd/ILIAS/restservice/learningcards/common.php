@@ -43,6 +43,10 @@ along with Ilias Backend. If not, see <http://www.gnu.org/licenses/>.
  * in front of the logging message, depending on of which class the function
  * was called
  */
+
+// chdir("../..");
+// require_once './Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
+
 function logging($message) {
 	global $DEBUG, $class_for_logging;
 
@@ -128,15 +132,16 @@ function getUserIdForSessionKey($sessionKey) {
  */
 function isValidQuestionPool($questionpool) {
 	//only question pools which contain only questions with the types in this array are loaded
-	$VALID_QUESTION_TYPES = array("assMultipleChoice", "assSingleChoice", "assOrderingQuestion", "assNumeric", "assOrderingHorizontal" );
-
-
+	$VALID_QUESTION_TYPES = array("assMultipleChoice", "assSingleChoice", "assOrderingQuestion", "assNumeric", "assOrderingHorizontal", "assClozeTest");
+	logging("check validitiy 1");
 	//question pool has to be online
 	if($questionpool->getOnline()) {
+		logging("check validitiy 2");
 		$questionList = $questionpool->getQuestionList();
 
 		//question pool has to contain at least 4 questions
 		if (count($questionList) >= 4) {
+			logging("check validitiy 3");
 			$onlyValidTypes = true;
 			foreach ($questionList as $question) {
 				$type = $question["type_tag"];
@@ -144,6 +149,7 @@ function isValidQuestionPool($questionpool) {
 				//check if the type of the question is a valid type
 				if (!in_array($type, $VALID_QUESTION_TYPES)) {
 					$onlyValidTypes = false;
+					logging("check validitiy 4");
 				}
 			}
 			$validQuestionPool = $onlyValidTypes;
@@ -151,6 +157,147 @@ function isValidQuestionPool($questionpool) {
 	}
 
 	return $validQuestionPool;
+}
+
+
+/**
+ * gets the list of questions of a questionpool
+ * for each question of the question list we get:
+ * - its id 
+ * - its type
+ * - its title/text
+ * @function getQuestionList
+ * @return {array} $questions
+ */
+function getQuestionList($questionList){
+	$questions = array();
+
+	foreach ($questionList as $question) {
+
+		//get id
+		$questionId = $question["question_id"];
+
+		//get the question type
+		$type = $question["type_tag"];
+		require_once 'Modules/TestQuestionPool/classes/class.' . $type . '.php';
+		$assQuestion = new $type();
+		$assQuestion->loadFromDb($question["question_id"]);
+			
+		//get the question
+		$questionText = $question["question_text"];
+			
+		if (strcmp($type, "assClozeTest") == 0) {
+			$questionText = $question["description"];
+			logging("questionText for cloze questions".$questionText);
+		}
+
+		//get answers
+		switch ($type){
+			case "assNumeric":
+				$answerList=calculateNumericAnswer($assQuestion);
+				break;
+			case "assOrderingHorizontal":
+				$answerList=calculateOrderingHorizontalAnswer($assQuestion);
+				break;
+			case"assClozeTest":
+				$answerList=calculateClozeAnswer($assQuestion);
+				break;
+			default:
+				$answerList=calculateAnswerOtherTypes($assQuestion);
+				break;
+		}
+			
+		//get feedback
+		$feedbackCorrect = $assQuestion->getFeedbackGeneric(1);
+		$feedbackError = $assQuestion->getFeedbackGeneric(0);
+
+		//add question into the question list
+		array_push($questions, array(
+		"id" => $questionId,
+		"type" => $type,
+		"question" => $questionText,
+		"answer" => $answerList,
+		"correctFeedback" => $feedbackCorrect,
+		"errorFeedback" => $feedbackError));
+	}
+	return $questions;
+}
+
+
+/**
+  *gets the answer list for numeric answering questions
+ * for each question
+ * @function calculateNumericAnswer
+ * @return {array} $answerlist
+ */
+function calculateNumericAnswer($assQuestion){
+	//only lower and upper limit are returned
+	$answerList = array($assQuestion->getLowerLimit(), $assQuestion->getUpperLimit());
+	logging("answerList for Numeric Question".json_encode($answerList));
+	return $answerList;
+}
+
+/**
+ * gets the answer list for horizontal answering questions
+ * @function calculateOrderingHorizontalAnswer
+ * @return {array} $answerlist
+ */
+function calculateOrderingHorizontalAnswer($assQuestion){
+	//horizontal ordering questions have no "getAnswers()" method!
+	//they use the OrderText variable to store the answers and the getOrderText function to retrieve them
+	$answers = $assQuestion->getOrderingElements();
+	$points = $assQuestion->getPoints();
+	
+	$arr = array();
+	foreach ($answers as $order => $answer)
+		//foreach ($answers as $order => $answer)
+	{
+		array_push($arr, array(
+		"answertext" => (string) $answer,
+		"points"=> $points,
+		"order" => (int)$order+1,
+		"id" => "-1"));
+	}
+	$answerList = $arr;
+	logging("answerList for Horizontal Question".json_encode($answerList));
+	return $answerList;
+}
+
+/**
+ * gets the answer list for cloze questions
+ * @function calculateClozeAnswer
+ * @return {array} $answerlist
+ */
+function calculateClozeAnswer($assQuestion){
+	$gaps= $assQuestion->getGaps();
+	$clozeText= $assQuestion->getClozeText();
+	logging("cloze text for answer view in cloze question is ".$clozeText);
+	$pattern="/\[gap\].*?\[\/gap\]/";
+	for($gapid =0; $gapid<= count($gaps); $gapid++ ){
+		$replacement="<gap identifier=\"gap_".$gapid."\"></gap>";
+		$clozeText = preg_replace($pattern,$replacement,$clozeText,1);
+	}
+	
+	// the clozeText will be displayed in answer view
+	// we need also the gaps for the calculation of the score
+	$answerList = array(
+			"clozeText"  => $clozeText,
+			"correctGaps" => $gaps
+	);
+	logging("answerList for close questions".json_encode($answerList));
+	return $answerList;
+}
+
+/**
+ * gets the answer list for single choice, multiple choice and vertical horizontal questions
+ * for each question
+ * @function calculateClozeAnswer
+ * @return {array} $answerlist
+ */
+function calculateAnswerOtherTypes($assQuestion){
+	$answerList = $assQuestion->getAnswers();
+	logging("answerList for other types of Question".json_encode($answerList));
+	return $answerList;
 }
 
 ?>
