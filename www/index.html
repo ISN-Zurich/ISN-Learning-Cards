@@ -92,18 +92,18 @@
 			</div>
 		</div>
 		<div id="landingBody" class="content full">
-			<div id="landingForm">
+			<div >
 				<ul id="landingElements">
 						<li id="featuredContent" class=" courseLiContainer gradient2">
 						<div class="dashContainer lineContainer selectItemContainer">
 								<span class="select icon-dash"></span>
 							</div>
 							
-							<div id="leftElement1" class="text textShadow marginForCourseList labelContainer">
+							<div id="leftElement1" class="text textShadow labelContainer">
 							</div>
 							
 							<div class="separatorBlock">
-								<div id="separatorLanding" class="radial lineContainer separatorContainerCourses"></div>
+								<div id="separatorLanding" class="lineContainer separatorContainerCourses radialCourses"></div>
 							</div>
 							
 							<div id="selectarrowLanding" class="lineContainer selectItemContainer select gridContainer icon-bars">
@@ -133,8 +133,7 @@
 									<span class="select icon-dash"></span>
 								</div>
 								
-								<div id="leftElementExclusive" class="text textShadow marginForCourseList labelContainer">
-									Exclusive Content </div>
+								<div id="leftElementExclusive" class="text textShadow labelContainer">Exclusive Content </div>
 									
 								<div class="separatorBlock">
 									<div id="separatorExclusive"
@@ -180,52 +179,57 @@
 				<div id="loginForm">
 
 					<ul id="loginElements">
-						<li>
-							<div class="left lineContainer selectItemContainer ">
+						<li class="courseLiContainer gradient1">
+							<div class="dashContainer lineContainer selectItemContainer ">
 								<span id="inputNameDash" class="dashGrey icon-dash"></span>
 							</div>
 
-							<div class="inputBorder gradient1 ">
-								<input class="loginInput textShadow" id="usernameInput"
+							<div class="labelContainer">
+								<input id="usernameInput" class="loginInput textShadow" 
 									required="required" type="text" placeholder="" />
 							</div>
+														
+							<div id="usernameagrid"
+								class="lineContainer selectItemContainer gridContainer"></div>
 						</li>
-						<li>
-							<div class=" left lineContainer selectItemContainer ">
+						<li class="courseLiContainer gradient1">
+							<div class=" dashContainer lineContainer selectItemContainer ">
 								<span id="inputPasswordDash" class="dashGrey icon-dash"></span>
 							</div>
-							<div class="inputBorder gradient1 ">
+							<div class="labelContainer ">
 								<input id="password" class="loginInput textShadow"
 									name="password" required="required" type="password"
 									placeholder="" />
 							</div>
-						</li>
+							
+							
+							<div id="passwordgrid"
+								class="lineContainer selectItemContainer gridContainer"></div>
+							</li>
 						<li id="selectLMS" class="courseLiContainer gradient2">
 							<!-- <div id="selectLMS" class="selectWidget gradient2 "> -->
 								<div class=" dashContainer lineContainer selectItemContainer ">
 									<span class="select icon-dash"></span>
 								</div>
 								
-								<div id="loginLmsLabel" class=" text textShadow marginForCourseList labelContainer lsmlabel">
+								<div id="loginLmsLabel" class=" text textShadow lsmlabel labelContainer">
 								</div>
-								
-								
-									<div class="imageContainer">
-										<div class="imageoutline1">
-											<div class="imageoutline2">
-												<img id="lmsImage" class="imageLogo" />
-											</div>
-										</div>
+
+							<div class="imageContainer">
+								<div class="imageoutline1">
+									<div class="imageoutline2">
+										<img id="lmsImage" class="imageLogo" />
 									</div>
-									<div class="separatorBlock">
-									<div id="separator" class="lineContainer separatorContainerCourses radialCourses"></div>
-									</div>
-									<div id="selectarrow"
-										class="lineContainer selectItemContainer select gridContainer">
-										<span class="icon-enter"></span>
-									</div>
-								
-							<!--</div>-->
+								</div>
+							</div>
+							<div id="separatorSelectLogin " class="separatorBlock">
+								<div id="separator"
+									class="lineContainer separatorContainerCourses radialCourses"></div>
+							</div>
+							<div id="selectarrow"
+								class="lineContainer selectItemContainer select gridContainer">
+								<span class="icon-enter"></span>
+							</div> <!--</div>-->
 						</li>
 						<li class="borderRemoval">
 							<div id="errormessage" class="loginMessage gradientMessages"></div>
@@ -575,13 +579,13 @@
 
 				<li id="statsSlot3" class=" courseLiContainer gradient1">
 					<!--<div class="selectWidget gradient1 ">-->
-						<div class="dashContainer lineContainer selectItemContainer ">
+						<div class="dashContainer lineContainer selectItemContainer">
 							<span class="select icon-dash"></span>
 						</div>
 						
-						<div id="achievementsReference" class="text textShadow  labelContainer"></div>
+						<div id="achievementsReference" class="text textShadow labelContainer"></div>
 							
-						<div class="separatorBlock">
+						<div id="separatorAchievementsStatistics" class="separatorBlock">
 						<div id="separatorAchievements" class="lineContainer separatorContainerCourses radialCourses"></div>
 						</div>
 				
@@ -605,8 +609,7 @@
 							</div>
 							
 							<div class="separatorBlock">
-							<div id="separator4"
-								class="lineContainer separatorContainerCourses radialCourses"></div>
+							<div id="separator4" class="lineContainer separatorContainerCourses radialCourses"></div>
 							</div>
 							
 							<div id="statsHandledCardsIconchange"

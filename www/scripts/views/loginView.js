@@ -176,7 +176,6 @@ LoginView.prototype.open = function() {
 	this.showForm();
 	this.openDiv();
 	this.active = true;
-	setInputWidth();
 };
 
 
@@ -270,7 +269,6 @@ LoginView.prototype.showForm = function() {
 	moblerlog("show form in login view");
 	$("#lmsImage").attr("src",this.controller.getActiveLogo());
 	$("#loginLmsLabel").text(this.controller.getActiveLabel());
-	calculateLabelWidth();	
 				
 	this.hideErrorMessage();
 	$("#loginViewHeader").show();
@@ -372,12 +370,8 @@ LoginView.prototype.detectClick = function() {
 **/ 
 LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	var self=this;
+
 	moblerlog("change orientation in login view");
-	w1=$(".imageContainer").height();
-	w2=$(".separator").height();
-	w3=$(".selectItemContainer").height();
-	width = w - (w1 + w2 + w3 + w3 + w1); //rough estimation 
-	$(".labelContainer").css("width", width + "px");
 
 	if (orientationLayout==false || self.fixedRemoved== true) //we are in portrait mode and previously
 															 // we had removed the fixed position of login button
@@ -386,12 +380,9 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 		$("#loginButton").addClass("fixed");
 	};
 
-	if (orientationLayout || self.fixedRemoved== true) //we are in landscape mode and previously
-													 //we had removed the fixed position of login button
-	{
-		//$("#loginButton").removeClass("fixed");
-	}
-	else if (self.fixedRemoved== false) {
+
+	//we are in landscape mode and previously we had removed the fixed position of login button
+	if (self.fixedRemoved== false) {
 		$("#loginButton").addClass("fixed");
 	};	
 	
@@ -400,7 +391,6 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	buttonwidth = window_width-2;
 	$(".forwardButton").css("width", buttonwidth + "px");
 	
-	setInputWidth();
 };
 
 
@@ -414,26 +404,3 @@ LoginView.prototype.clickCloseLoginButton=function(){
 	controller.transitionToLanding();
 
 };
-
-/**
- * sets dynamically the width of the input elements
- * of the login form.
- * it is calculated by substracting from the device width in the current mode (landscape, portrait)
- * which has been detected in the controller the sum of the widths of the rest dom elements around it
- * such as: dash bar, icon container and separator.
- * @function setInputWidth
- * */
-function setInputWidth(){
-	window_width = $(window).width();
-	var inputwidth = window_width - 49- 34 - 18;
-	$("#usernameInput").css("width", inputwidth + "px");
-	$("#password").css("width", inputwidth + "px");
-	moblerlog("window width in landing view is "+window_width);
-//	var gridWidth = 34;
-//	var separatorWidth= 12;
-//	var dashWidth = 34;
-//	var iconWidth= 30;
-//	var lmsWidth = window_width - gridWidth -separatorWidth - dashWidth - iconWidth;
-//	$("#lsmlabel").css("width", inputwidth + "px");
-}
-

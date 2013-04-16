@@ -289,5 +289,3 @@ MultipleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 		$(this).find(".correctAnswer").css("line-height", height + "px");
 	});
 };
-
-moblerlog("end of mulitple choice widget");

@@ -155,7 +155,6 @@ LandingView.prototype.open = function() {
 	this.showForm();
 	this.openDiv();
 	this.active = true;
-	setFeaturedWidth();
 };
 
 
@@ -199,7 +198,6 @@ LandingView.prototype.selectExclusiveContent = function() {
  * @param{string}, featuredContent_id
  */ 
 LandingView.prototype.showForm = function() {
-	setFeaturedWidth();
 	moblerlog("enter show form of landing view");
 	var self=this;
 	var featuredModel = self.controller.models['featured'];
@@ -299,24 +297,4 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
 		this.controller.transitionToStatistics(featuredContent_id);
 	}
 };
-
-/**
- * sets dynamically the width of the elements
- * of the landing form.
- * it is calculated by substracting from the device width in the current mode (landscape, portrait)
- * which has been detected in the controller the sum of the widths of the rest dom elements around it
- * such as: dash bar, icon container and separator.
- * @function setInputWidth
- * */
-function setFeaturedWidth(o,w,h){
-//	window_width = $(window).width();
-//	moblerlog("window width in landing view is "+window_width);
-//	var gridWidth = 34;
-//	var separatorWidth= 12;
-//	var dashWidth = 34;
-//	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth;
-//	moblerlog("input width in landing view is "+inputwidth);
-//	$("#leftElement1").css("width", inputwidth + "px");
-//	$("#leftElementExclusive").css("width", inputwidth + "px");
-}
 

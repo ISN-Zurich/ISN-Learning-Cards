@@ -6,7 +6,18 @@
  *@default hornet
  **/
 
-var DEFAULT_SERVER = "yellowjacket";
+var DEFAULT_SERVER = "PFPLMS";
+
+//A global property/variable that activates and deactivates the display of console logs.
+/**
+ *A global property/variable that is used to set the default server with which the application will be connected
+ *in order to exchange data.
+ *
+ *@property MOBLERDEBUG
+ *@default hornet
+ **/
+var MOBLERDEBUG = 1;
+
 /**
  *A global property/variable that is used to store info about the different servers to which the application can be connected.
  *
@@ -53,6 +64,42 @@ var URLS_TO_LMS = [
 					}
 ];
 
+
+
+/**Global way of switching on or off the console log messages in all scripts of the front end. 
+ * @function moblerlog
+ * @param {String}messagestring, the text message to be displayed in the console
+ * */
+function moblerlog(messagestring) {
+   if (MOBLERDEBUG === 1) {
+        console.log(messagestring);
+	}
+}
+
+/**
+ * When launching the app live, this function deactivates the testing servers (yellowjacket, pfplms)
+ * as long as the global variable MOBLERDEBUG has been assigned an 1 value 
+ * at the beginning of the document.
+ * @function debugActivate
+ * * */
+function debugActivate() {
+	moblerlog("debug Activate");
+	if (MOBLERDEBUG === 0){
+		var lmsData = [];
+		for ( i=0; i < URLS_TO_LMS.length; i++ ) {
+			if (URLS_TO_LMS[i].debug === "0"){
+				lmsData.push(URLS_TO_LMS[i]);
+			}	
+		}
+		moblerlog("return lms data");
+		return lmsData;
+	}else {
+		DEFAULT_SERVER = "yellowjacket";
+		moblerlog("return the urlsto lms");
+		return URLS_TO_LMS;
+	}
+}
+
 /** Does nothing
  * @function doNothing
  * */
@@ -90,38 +137,7 @@ function doApologize() {
 }
 
 
-/**Global way of switching on or off the console log messages in all scripts of the front end. 
- * @function moblerlog
- * @param {String}messagestring, the text message to be displayed in the console
- * */
-function moblerlog(messagestring) {
-	
-	//A global property/variable that activates and deactivates the display of console logs.
-	var MOBLERDEBUG = 1;
-	
-   if (MOBLERDEBUG === 1) {
-        console.log(messagestring);
-    
-	}
-}
 
-function debugActivate() {
-	var LMSDEBUG = 0;
-	moblerlog("debug Activate");
-	if (LMSDEBUG === 1){
-		var lmsData = [];
-		for ( i=0; i < URLS_TO_LMS.length; i++ ) {
-			if (URLS_TO_LMS[i].debug === "0"){
-				lmsData.push(URLS_TO_LMS[i]);
-			}	
-		}
-		moblerlog("return lms data");
-		return lmsData;
-	}else {
-		moblerlog("return the urlsto lms");
-		return URLS_TO_LMS;
-	}
-}
 /**Query the database. It is used in all statistics submodels.
  * @function queryDatabase
  * @param cbResult
@@ -197,22 +213,6 @@ function checkSpeedImprovement(improvementValue){
     }
     return retval;
 }
-
-/**
- * Calculates the width of an lms item on login view and lms list view.
- * Additionally it calculates the width of the label container in landing view.
- * Generally, this function calculates the width of the label container when it is
- * on the same row with a side dash and the image container on the left along with the separator.
- * * @function calculateLabelWidth
- * */
-function calculateLabelWidth(){
-	moblerlog("enters landing view form");
-	w1=$(".imageContainer").width();
-	w2=$(".separator").width();
-	w3=$(".selectItemContainer").width();
-	width = $(window).width() - (w1 + w2 + w3 + w3 + w1) ;	
-	$(".labelContainer").width(width);
-};
 
 /**
  * 	Calculates the answers width for single and multiple choice questions

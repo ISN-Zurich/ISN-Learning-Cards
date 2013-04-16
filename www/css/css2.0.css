@@ -488,12 +488,15 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 }
 
 .inputBorder {
-	padding: 10px;
+	/*border:1px solid green;
+	 padding: 10px;
+	 height: 33px;
+	 */
+	 padding:5px;
+	 padding-bottom:10px;
 	border-right: 0px solid white;
 	border-left: 0px solid white;
-	/*border:1px solid green;*/
-	height: 33px;
-	margin-right:0px;	
+	margin-right:0px
 
 }
 
@@ -525,7 +528,7 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	
 	font-size: 12pt;
 	margin: 0px;
-	padding: 5px;
+	
    
 	border-left: 0px solid white;
 	
@@ -1333,7 +1336,16 @@ font-weight: bold;
 	width: 100%;
 }
 
-.dashContainer, .labelContainer, .labelContainerAchievements,.separatorBlock, .separatorBlockAchievements,.gridContainer, .gridContainerAchievements, .statsValueContainer, .statsValueContainerAchievements.imageContainer  {
+.dashContainer, 
+.labelContainer, 
+.labelContainerAchievements,
+.separatorBlock, 
+.separatorBlockAchievements,
+.gridContainer, 
+.gridContainerAchievements, 
+.statsValueContainer, 
+.statsValueContainerAchievements, 
+.imageContainer  {
 	display: table-cell;
 	vertical-align: middle;
 }
@@ -1346,7 +1358,7 @@ font-weight: bold;
 
 .labelContainerAchievements{
 width:175px;
-border:1px solid red;
+border:0px solid red;
 }
 .dashContainer {
 border:0px solid blue;
@@ -1390,8 +1402,8 @@ width:34px;
 	width: 47px;
 	padding-top:4px;
 	border:0px solid green;	
-	height: 47px;
-	line-height: 47px;
+	/*height: 47px;
+	line-height: 47px;*/
 }
 .separatorBlock {
 	width: 12px;
@@ -1471,7 +1483,7 @@ img.imageLogoLMS{
 }
 
 img.imageLogo{
-	display:inline;
+	
 	width:36px;
 	height:38px;
 }

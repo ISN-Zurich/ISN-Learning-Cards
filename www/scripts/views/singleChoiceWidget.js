@@ -306,4 +306,3 @@ SingleChoiceWidget.prototype.setCorrectAnswerTickHeight = function() {
 * @function changeOrientation
 **/ 
 SingleChoiceWidget.prototype.changeOrientation = doNothing;
-moblerlog("end of single choice widget");
