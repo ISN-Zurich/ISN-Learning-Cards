@@ -1333,7 +1333,7 @@ font-weight: bold;
 	width: 100%;
 }
 
-.dashContainer, .labelContainer, .separatorBlock, .separatorBlockAchievements,.gridContainer, .gridContainerAchievements, .statsValueContainer,.imageContainer  {
+.dashContainer, .labelContainer, .labelContainerAchievements,.separatorBlock, .separatorBlockAchievements,.gridContainer, .gridContainerAchievements, .statsValueContainer, .statsValueContainerAchievements.imageContainer  {
 	display: table-cell;
 	vertical-align: middle;
 }
@@ -1342,6 +1342,11 @@ font-weight: bold;
 .labelContainer {
 	border:1px solid red;
 	
+}
+
+.labelContainerAchievements{
+width:175px;
+border:1px solid red;
 }
 .dashContainer {
 border:1px solid blue;
@@ -1378,6 +1383,7 @@ width:34px;
 	/*padding-right:15px;*/
 	border:1px solid black;
 	text-align:right;
+	
 	
 }
 .imageContainer {
@@ -1455,6 +1461,7 @@ img.imageLogoLMS{
 .achievementsImg{
 	/*position:absolute;
 	margin-right:6px;*/
+	vertical-align:middle;
 	font-size:38px;
 	border:1px solid red;
 }
