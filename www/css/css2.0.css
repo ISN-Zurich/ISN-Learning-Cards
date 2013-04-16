@@ -1357,7 +1357,7 @@ width:34px;
 	color:white;
 }
 .gridContainer {
-	width: 34px;
+	width: 40px;
 	margin-right:0px;
 	text-align:center;
 	border:1px solid green;
@@ -1394,7 +1394,7 @@ width:34px;
 	line-height: 47px;
 }
 .separatorBlock {
-	width: 18px;
+	width: 12px;
 	border:1px solid black;
 }
 
