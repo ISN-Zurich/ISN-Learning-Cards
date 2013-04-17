@@ -489,9 +489,12 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  * @function sendToServer
  * */
 StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
+	moblerlog("enter sendToServer in statistics model");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
-	if (self.controller.getLoginState() ) {
+	//if (self.controller.getLoginState()) {
+	if 	(self.controller.models["authentication"].configuration.userAuthenticationKey && self.controller.models["authentication"].configuration.userAuthenticationKey !== ""){
+	moblerlog("we enter the get login state in sendToServer");
 	//var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	var url = activeURL + '/statistics.php';
 	var courseList = self.controller.models["course"].getCourseList();
@@ -582,7 +585,7 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
                }
 		});
 	}
-	}
+	}// end of isLoginState
 };
 
 /**Initialization of sub models
