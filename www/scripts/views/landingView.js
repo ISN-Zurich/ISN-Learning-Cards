@@ -268,7 +268,6 @@ LandingView.prototype.hideErrorMessage = function() {
 **/ 
 LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	moblerlog("change orientation in landing view");
-	setFeaturedWidth(orientationLayout, w, h);
 };
 
 

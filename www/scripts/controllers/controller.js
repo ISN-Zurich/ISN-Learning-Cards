@@ -437,7 +437,7 @@ Controller.prototype.transitionToAuthArea = function(viewname,featuredContentFla
 		this.transition(viewname);
 	}
 	else {
-		//stay on the current view if we are not logged in 
+		//stay on the current view if we are not logged in 0
 //		if (featuredContentFlag){
 //			this.transition(viewname,featuredContentFlag);
 // 		}else {

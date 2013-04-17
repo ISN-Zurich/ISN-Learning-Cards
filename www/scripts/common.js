@@ -16,7 +16,7 @@ var DEFAULT_SERVER = "PFPLMS";
  *@property MOBLERDEBUG
  *@default hornet
  **/
-var MOBLERDEBUG = 1;
+ var MOBLERDEBUG = 0;
 
 /**
  *A global property/variable that is used to store info about the different servers to which the application can be connected.
@@ -71,9 +71,26 @@ var URLS_TO_LMS = [
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function moblerlog(messagestring) {
+	var MOBLERDEBUG = 0;
+	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
 	}
+}
+
+/**Global way of switching on or off the console log messages in all scripts of the front end. 
+ * @function getActiveServer
+ * @param {String}messagestring, the text message to be displayed in the console
+ * */
+function getActiveServer(){
+	var MOBLERDEBUG=0;
+	if (MOBLERDEBUG === 1) {
+		DEFAULT_SERVER = "yellowjacket";
+	}else {
+		DEFAULT_SERVER = DEFAULT_SERVER;
+	}
+	moblerlog("DEFAULT SERVER IS"+DEFAULT_SERVER);
+	return DEFAULT_SERVER;
 }
 
 /**
@@ -83,7 +100,9 @@ function moblerlog(messagestring) {
  * @function debugActivate
  * * */
 function debugActivate() {
-	moblerlog("debug Activate");
+	var MOBLERDEBUG = 0;
+	moblerlog("debug Activate and the value of MOBLERDEBUG IS"+MOBLERDEBUG);
+	
 	if (MOBLERDEBUG === 0){
 		var lmsData = [];
 		for ( i=0; i < URLS_TO_LMS.length; i++ ) {
@@ -94,7 +113,7 @@ function debugActivate() {
 		moblerlog("return lms data");
 		return lmsData;
 	}else {
-		DEFAULT_SERVER = "yellowjacket";
+		
 		moblerlog("return the urlsto lms");
 		return URLS_TO_LMS;
 	}

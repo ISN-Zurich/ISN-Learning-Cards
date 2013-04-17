@@ -92,7 +92,8 @@ LMSModel.prototype.loadData = function() {
 		//create a data structure for storing lms info in the local storage
 		// ServerData will store clientkey and default language for each server
 		lmsObject= {
-				"activeServer": DEFAULT_SERVER,
+				//"activeServer": DEFAULT_SERVER,
+				"activeServer": getActiveServer(),
 				"ServerData"  : {} 
 				};
 		localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));
