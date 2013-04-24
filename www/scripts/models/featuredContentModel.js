@@ -198,7 +198,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 
 			$
 				.ajax({
-					url:  'http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards/featuredContentCourse.php',
+					url:  'http://hornet.ethz.ch/scorm_editor/restservice/learningcards/featuredContentCourse.php',
 					type : 'GET',
 					dataType : 'json',
 					success : createFeaturedContentList,
