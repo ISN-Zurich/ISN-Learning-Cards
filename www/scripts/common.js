@@ -71,7 +71,7 @@ var URLS_TO_LMS = [
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function moblerlog(messagestring) {
-	var MOBLERDEBUG = 0;
+	var MOBLERDEBUG = 1;
 	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
