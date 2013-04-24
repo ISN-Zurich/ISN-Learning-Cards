@@ -39,12 +39,58 @@ under the License.
 
 function Controller() {
 	var self = this;
+	
+	self.MoblerVersion = 2.0;
+	
 	moblerlog("start controller");
 	self.appLoaded = false;
 	self.clickOutOfStatisticsIcon=true;;
 	var startTime= new Date().getTime();
 	var featuredContent_id = FEATURED_CONTENT_ID;
 
+	
+	var presentVersion = localStorage.getItem("MoblerVersion");
+	
+	// test if we need to migrate 
+//	if (!presentVersion || presentVersion !== self.MoblerVersion) {
+//		while (!presentVersion || presentVersion < self.MoblerVersion) {
+//			migrate(); //upgrade to the latest version
+//		}
+//	}
+	
+	function migrate(){
+		// first check if this is a fresh installation
+		if (!presentVersion){
+			migrate_to_2();
+			localStorage.setItem("MoblerVersion", "1"); 
+		}
+
+		// if items exist on the localStorage 
+		if (presentVersion < this.MoblerVersion) {
+			// migrate(presentVersion);
+			migrate_to_2();
+		}			
+
+		localStorage.setItem("MoblerVersion", self.MoblerVersion);
+		var presentVersion=localStorage.getItem("MoblerVersion");
+	}
+	
+		
+	function migrate_to_2(){
+		var configuration = localStorage.getItem("configuration");
+		if (configuration.userAuthenticationKey && configuration.userAuthenticationKey.length > 0) {
+			//create the lms object
+			//set a different active server	and assign the active server
+		}
+		
+	
+		var featuredObject;	
+		//the statistics local database will store in the new release 
+	}
+	
+	
+	
+	
 	$.ajaxSetup({
 		cache : false
 	});
@@ -222,8 +268,8 @@ function Controller() {
 	});		
 
 	$(document).bind("activeServerReady", function() {
-		if (self.appLoaded ) {
-			self.transitionToLogin();
+		if (self.appLoaded && localStorage.getItem("featuredContent")) {
+			self.transitionToLanding();
 		}
 	});		
 	
