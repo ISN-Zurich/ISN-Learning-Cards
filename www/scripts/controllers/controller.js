@@ -77,10 +77,34 @@ function Controller() {
 	
 		
 	function migrate_to_2(){
+		var oldDefaultServer="hornet";
 		var configuration = localStorage.getItem("configuration");
-		if (configuration.userAuthenticationKey && configuration.userAuthenticationKey.length > 0) {
-			//create the lms object
-			//set a different active server	and assign the active server
+		if (configuration.appAuthenticationKey) {
+			moblerlog("app authentication key exists in configuration object");
+			//create the new structure for the lms object
+			var lmsObject= {
+					//"activeServer": DEFAULT_SERVER,
+					"activeServer": "PFPLMS",
+					"ServerData"  : {
+						"hornet": {
+							//and store there the authentication key
+							"requestToken":configuration.appAuthenticationKey,
+							//"defaultLanguage": "en" it will be added anyways during the installation of the new version
+						}
+					} 
+			};
+			//configuration.remove(1);
+			delete configuration.appAuthenticationKey;
+			
+			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));
+			
+			//we dont need to set an active server, because in the previous version this info
+			//was not stored in the localstorage
+			
+			// keep the configuration data			
+			// keep the courses
+			// keep the questions
+			
 		}
 		
 	
