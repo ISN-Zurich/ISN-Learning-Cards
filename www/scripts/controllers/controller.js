@@ -99,9 +99,7 @@ function Controller() {
 			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
 		}
 		
-	
 		var featuredObject;	
-		//the statistics local database will store in the new release 
 	}
 	
 	
