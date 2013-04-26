@@ -40,7 +40,7 @@ under the License.
 function Controller() {
 	var self = this;
 	
-	self.MoblerVersion = 2.0;
+	self.MoblerVersion = "2.0";
 	
 	moblerlog("start controller");
 	self.appLoaded = false;
@@ -52,11 +52,11 @@ function Controller() {
 	var presentVersion = localStorage.getItem("MoblerVersion");
 	
 	// test if we need to migrate 
-//	if (!presentVersion || presentVersion !== self.MoblerVersion) {
-//		while (!presentVersion || presentVersion < self.MoblerVersion) {
-//			migrate(); //upgrade to the latest version
-//		}
-//	}
+	if (!presentVersion || presentVersion !== self.MoblerVersion) {
+		while (!presentVersion || presentVersion < self.MoblerVersion) {
+			migrate(); //upgrade to the latest version
+		}
+	}
 	
 	function migrate(){
 		// first check if this is a fresh installation
@@ -101,9 +101,9 @@ function Controller() {
 			//we dont need to set an active server, because in the previous version this info
 			//was not stored in the localstorage
 			
-			// keep the configuration data			
-			// keep the courses
-			// keep the questions
+			// the rest configuration data are kept in the local storage		
+			// the rest courses are kept in the local storage
+			// the rest questions are kept in the local storage
 			
 		}
 		
