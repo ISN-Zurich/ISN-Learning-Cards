@@ -53,58 +53,44 @@ function Controller() {
 	
 	// test if we need to migrate 
 	if (!presentVersion || presentVersion !== self.MoblerVersion) {
-		while (!presentVersion || presentVersion < self.MoblerVersion) {
-			migrate(); //upgrade to the latest version
+		migrate(presentVersion); //upgrade to the latest version
 		}
-	}
 	
-	function migrate(){
+	function migrate(thisVersion){
 		// first check if this is a fresh installation
-		if (!presentVersion){
-			migrate_to_2();
-			localStorage.setItem("MoblerVersion", "1"); 
+		if (!thisVersion){
+			thisVerion = 1;
 		}
 
-		// if items exist on the localStorage 
-		if (presentVersion < this.MoblerVersion) {
-			// migrate(presentVersion);
+		if ( thisVersion < 2 ) {
 			migrate_to_2();
-		}			
+		}
 
 		localStorage.setItem("MoblerVersion", self.MoblerVersion);
-		var presentVersion=localStorage.getItem("MoblerVersion");
 	}
 	
 		
 	function migrate_to_2(){
-		var oldDefaultServer="hornet";
 		var configuration = localStorage.getItem("configuration");
+		language = navigator.language.split("-");
+        language_root = (language[0]);
 		if (configuration.appAuthenticationKey) {
 			moblerlog("app authentication key exists in configuration object");
 			//create the new structure for the lms object
 			var lmsObject= {
-					//"activeServer": DEFAULT_SERVER,
-					"activeServer": "PFPLMS",
+					"activeServer": "hornet",
 					"ServerData"  : {
 						"hornet": {
 							//and store there the authentication key
 							"requestToken":configuration.appAuthenticationKey,
-							//"defaultLanguage": "en" it will be added anyways during the installation of the new version
+							"defaultLanguage": language_root
 						}
 					} 
 			};
-			//configuration.remove(1);
+						
 			delete configuration.appAuthenticationKey;
-			
-			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));
-			
-			//we dont need to set an active server, because in the previous version this info
-			//was not stored in the localstorage
-			
-			// the rest configuration data are kept in the local storage		
-			// the rest courses are kept in the local storage
-			// the rest questions are kept in the local storage
-			
+			localStorage.setItem("configuration", JSON.stringify(configuration));
+			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
 		}
 		
 	
