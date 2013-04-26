@@ -71,7 +71,7 @@ function Controller() {
 	
 		
 	function migrate_to_2(){
-		var configuration;
+		var configuration={};
 		try{
 			configuration=JSON.parse(localStorage.getItem("configuration"));
 		}
@@ -92,8 +92,14 @@ function Controller() {
 							"defaultLanguage": language_root
 						}
 					} 
-			};
-						
+			}
+			if(!configuration){
+				configuration={
+						loginState : "loggedOut",
+						statisticsLoaded: "false"
+				}
+			}
+			
 			delete configuration.appAuthenticationKey;
 			localStorage.setItem("configuration", JSON.stringify(configuration));
 			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
