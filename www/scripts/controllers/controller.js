@@ -52,9 +52,9 @@ function Controller() {
 	var presentVersion = localStorage.getItem("MoblerVersion");
 	
 	// test if we need to migrate 
-//	if (!presentVersion || presentVersion !== self.MoblerVersion) {
-//		migrate(presentVersion); //upgrade to the latest version
-//		}
+	if (!presentVersion || presentVersion !== self.MoblerVersion) {
+		migrate(presentVersion); //upgrade to the latest version
+		}
 	
 	function migrate(thisVersion){
 		// first check if this is a fresh installation
@@ -71,9 +71,9 @@ function Controller() {
 	
 		
 	function migrate_to_2(){
-		var configurationObject;
+		var configuration;
 		try{
-			configurationObject=JSON.parse(localStorage.getItem("configuration"));
+			configuration=JSON.parse(localStorage.getItem("configuration"));
 		}
 		catch (err) {
 			moblerlog("error! while loading configuration in migration");
