@@ -40,7 +40,7 @@ under the License.
 function Controller() {
 	var self = this;
 	
-	self.MoblerVersion = "2.0";
+	self.MoblerVersion = 2.0;
 	
 	moblerlog("start controller");
 	self.appLoaded = false;
@@ -52,9 +52,9 @@ function Controller() {
 	var presentVersion = localStorage.getItem("MoblerVersion");
 	
 	// test if we need to migrate 
-	if (!presentVersion || presentVersion !== self.MoblerVersion) {
-		migrate(presentVersion); //upgrade to the latest version
-		}
+//	if (!presentVersion || presentVersion !== self.MoblerVersion) {
+//		migrate(presentVersion); //upgrade to the latest version
+//		}
 	
 	function migrate(thisVersion){
 		// first check if this is a fresh installation
@@ -71,9 +71,15 @@ function Controller() {
 	
 		
 	function migrate_to_2(){
-		var configuration = localStorage.getItem("configuration");
-		language = navigator.language.split("-");
-        language_root = (language[0]);
+		var configurationObject;
+		try{
+			configurationObject=JSON.parse(localStorage.getItem("configuration"));
+		}
+		catch (err) {
+			moblerlog("error! while loading configuration in migration");
+		}
+		var language = navigator.language.split("-");
+		var  language_root = (language[0]);
 		if (configuration.appAuthenticationKey) {
 			moblerlog("app authentication key exists in configuration object");
 			//create the new structure for the lms object
