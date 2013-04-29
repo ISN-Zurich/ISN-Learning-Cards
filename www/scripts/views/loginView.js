@@ -174,8 +174,10 @@ LoginView.prototype.open = function() {
 	this.hideWarningMessage();
 	$("#selectLMS").removeClass("gradientSelected");
 	this.showForm();
-	this.openDiv();
 	this.active = true;
+	controller.models['featured'].loadFeaturedCourseFromServer();
+	this.openDiv();
+	
 };
 
 

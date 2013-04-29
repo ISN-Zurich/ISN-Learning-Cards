@@ -334,6 +334,8 @@ function Controller() {
 //	}
 
 	function cbFeaturedContentListUpdate() {
+		if (self.activeView !== self.views.login && self.activeView == !self.views.statistics) {
+		
 		moblerlog("featured content list update called");
 		var currentTime = new Date().getTime();
 		var deltaTime= currentTime - startTime;
@@ -345,6 +347,8 @@ function Controller() {
 		else {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
+		}
+		
 		}
 		//$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	}
