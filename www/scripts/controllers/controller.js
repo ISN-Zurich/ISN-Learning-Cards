@@ -287,15 +287,20 @@ function Controller() {
 	$(document).bind("courselistupdate", function() {
 		if (!self.getLoginState() ){
 			moblerlog("stays in login view, despite the courses synchronization updates");
-			//self.transitionToLogin();// or we can stay on the current view i.e. lms view, landing view or login view
+			//self.transitionToLogin();
+			// or we can stay on the current view i.e. lms view, landing view or login view
 		}
 	});		
 
 	$(document).bind("activeServerReady", function() {
-		if (self.appLoaded && localStorage.getItem("featuredContent")) {
+		if (self.appLoaded && self.activeView == self.views.lms) {
+			moblerlog("transition to login view after selecting server in lms view");
+			self.transitionToLogin();
+			}else {  
+				moblerlog("transition to login view after the default server has been registered");	
 			self.transitionToLanding();
 		}
-	});		
+	});	
 	
 	$(document).bind("click", function(e) {
 		moblerlog(" click in login view ");
