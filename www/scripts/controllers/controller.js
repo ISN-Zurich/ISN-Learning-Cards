@@ -71,16 +71,20 @@ function Controller() {
 	
 		
 	function migrate_to_2(){
-		var configuration={};
+		var configuration;
 		try{
-			configuration=JSON.parse(localStorage.getItem("configuration"));
+			//configuration=JSON.parse(localStorage.getItem("configuration"));
+			var configurationObject=localStorage.getItem("configuration");
+			if (configurationObject){
+				var configuration = JSON.parse(configurationObject);
+			}
 		}
 		catch (err) {
 			moblerlog("error! while loading configuration in migration");
 		}
 		var language = navigator.language.split("-");
 		var  language_root = (language[0]);
-		if (configuration.appAuthenticationKey) {
+		if (configuration && configuration.appAuthenticationKey) {
 			moblerlog("app authentication key exists in configuration object");
 			//create the new structure for the lms object
 			var lmsObject= {
