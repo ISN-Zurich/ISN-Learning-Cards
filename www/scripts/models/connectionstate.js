@@ -182,7 +182,7 @@ ConnectionState.prototype.synchronizeData = function() {
 		// if statistics data wasn't sent to the server for more than 24 hours
 		// send the data to the server
 		if (this.controller && this.controller.models && this.controller.models["statistics"]) {
-			if (!statisticsModel.lastSendToServer || statisticsModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+			if (!statisticsModel.lastSendToServer || statisticsModel.lastSendToServer < ((new Date()).getTime() - 60*60*1000)) { // it was 24*60*60*1000 (check once every day)
 				moblerlog("statistics need to be synchronized in connection state model");
 				statisticsModel.sendToServer();
 			}
@@ -199,7 +199,7 @@ ConnectionState.prototype.synchronizeData = function() {
 		// if tracking data wasn't sent to the server for more than 24 hours
 		// send the data to the server
 		if ( this.controller && this.controller.models && this.controller.models["tracking"]) {
-			if (!trackingModel.lastSendToServer || trackingModel.lastSendToServer < ((new Date()).getTime() - 24*60*60*1000)) {
+			if (!trackingModel.lastSendToServer || trackingModel.lastSendToServer < ((new Date()).getTime() - 60*60*1000)) {
 				trackingModel.sendToServer();
 			}
 		}

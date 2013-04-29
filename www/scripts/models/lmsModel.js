@@ -245,7 +245,7 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 			// and we failed and if this failure took place less than 24 hours ago
 			// then display to the user the lms registation message 
 			//if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
-			if (lastRegister > ((new Date()).getTime() - 24*60*60*1000)){	
+			if (lastRegister > ((new Date()).getTime() - 60*60*1000)){	//it was 24*60*60*1000 once every day
 				moblerlog("less than 24 hours have passed for server"+servername);
 				
 				$(document).trigger("lmsNotRegistrableYet",[servername,previousLMS]);	
