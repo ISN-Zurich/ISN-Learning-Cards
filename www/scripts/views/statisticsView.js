@@ -160,7 +160,7 @@ StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 			moblerlog("open statistics view in featured course context");
 		self.loadData();	
 		}
-	
+	controller.models['featured'].loadFeaturedCourseFromServer();
 	this.changeOrientation();
 	this.openDiv();	
 	
