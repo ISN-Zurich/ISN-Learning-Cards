@@ -1,15 +1,29 @@
-I. INTRODUCTION 
+INTRODUCTION 
 ===============
 
 The name of this software module is ISN Mobler Cards. It is Mobile Web Application developed in ISN ETH Zurich and its main purpose is to run Learning Cards for Courses on an Ilias LMS. 
 
 
-II. FEATURES
+FEATURES
 ============
 
 ISN Mobler Cards consists of a front-end and a backend module. The front-end module (client) provides the user interface of the application and enables the interaction of the end user with it.
 The front end module's code and logic is structured according to an MVC architecture. The backend module is responsible for the communication between the mobile application and the server. 
 It loads and sends data to the server.
+
+HOW YOU CAN HELP
+==================
+
+We are always looking for translations of the language specific interfaces. 
+
+Use the [textualStrings_en.properties](https://github.com/ISN-Zurich/ISN-Learning-Cards/blob/master/www/translations/textualStrings_en.properties) file as a reference for your translation.
+
+- rename the file into "textualStrings_[YOU 2 LETTER LANGUAGE CODE].properties". 
+- open the file with the text editor of your preference. 
+- Translate all parts behind equal signs.
+- Save the file and upload it to github and send a pull request.
+
+Note: You can ignore lines that start with a hash character ('#'). 
 
 
 INSTALLATION
@@ -54,7 +68,18 @@ Copyright 2012, ETH Zürich
 CONTRIBUTORS
 =============
 
-Isabella Nake, Evangelia Mitsopoulou, Christian Glahn, Reto Beat Schillinger, Oderbolz Beat Emil, Tim Wendel
+- Isabella Nake
+- Evangelia Mitsopoulou
+- Christian Glahn
+- Reto Beat Schillinger
+- Oderbolz Beat Emil
+- Tim Wendel
 
+Acknowledgements
+===================
 
+This software has been partially funded by the "Swiss ADL Research and Prototype Development” grant funded by 
+the ADL Co-Lab and awarded by the Office of Naval Research Global (ONRG) under the Grant No. "N62909-12-1-7022".
+The views and solutions expressed herein are solely those of the contributors and do not represent or reflect the 
+views of any academic, government or industry organization mentioned herein.
 
