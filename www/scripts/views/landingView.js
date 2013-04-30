@@ -71,11 +71,12 @@ function LandingView(controller) {
 	
 	
 	//handler when taping on the exclusive content element
-	jester($('#leftElementExclusive')[0]).tap(function(e,prevent) {
+	jester($('#selectExclusiveContent')[0]).tap(function(e,prevent) {
 		//$('#selectExclusiveContent').addClass("gradientSelected");
 		moblerlog(" enters in landing view 1 ");
 		//	e.preventDefault();
 		//	e.stopPropagation();
+		$("#selectExclusiveContent").addClass("gradientSelected");
 		self.selectExclusiveContent();
 	});
 		
@@ -93,7 +94,7 @@ function LandingView(controller) {
 		moblerlog(" enters in landing view 2 ");
 		$("#selectExclusiveContent").addClass("gradientSelected");
 		e.preventDefault();
-		e.stopPropagation();
+		//e.stopPropagation();
 	});	
 	
 	$('#featuredContent').bind("touchstart", function(e) {
