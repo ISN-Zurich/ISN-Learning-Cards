@@ -292,5 +292,10 @@ var shadoweddiv = $("<div/>", {
 			"id": "shadowedClozeFeedbackLi",
 			"class" : "gradient1 shadowedLi"
 		});
+		
+		
 		$("#feedbackBody").append(shadoweddiv);}	
+		var marginLi= $("<div/>", {
+			"class": "spacerMargin"
+		}).appendTo("#feedbackBody");
 }

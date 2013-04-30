@@ -758,6 +758,10 @@ ul#questionText{
 	padding-right:0px;
 	border:0px solid red;
 }
+.textBottom{
+	padding-bottom:50px;
+}
+
 .marginClozeLi{
 	padding:9px 9px 9px 20px;
 	/*padding-left:15px;
