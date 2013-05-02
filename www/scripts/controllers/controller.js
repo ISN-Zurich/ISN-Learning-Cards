@@ -104,11 +104,12 @@ function Controller() {
 			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
 		}
 		
-		if(!configuration){
-			configuration={
+		if(!configurationObject){
+			configurationObject={
 					loginState : "loggedOut",
 					statisticsLoaded: "false"
 			}
+		localStorage.setItem("configuration", JSON.stringify(configurationObject));
 		}
 	}
 	
