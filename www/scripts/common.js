@@ -61,6 +61,15 @@ var URLS_TO_LMS = [
 						url: "https://pfp.ethz.ch/restservice/learningcards",
 						debug:"0",
 						clientKey: ""
+					},
+					{
+						servername: "JukuLab Test",
+						logoImage: "",
+						backgroundImage: "",
+						logoLabel: "JukuLab Test Server",
+						url: "http://ilias.jukulab.ee/restservice/learningcards",
+						debug: "1",
+						clientKey: ""
 					}
 ];
 
