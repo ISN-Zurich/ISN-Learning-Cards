@@ -97,19 +97,19 @@ function Controller() {
 						}
 					} 
 			}
-			if(!configuration){
-				configuration={
-						loginState : "loggedOut",
-						statisticsLoaded: "false"
-				}
-			}
+		
 			
 			delete configuration.appAuthenticationKey;
 			localStorage.setItem("configuration", JSON.stringify(configuration));
 			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
 		}
 		
-		var featuredObject;	
+		if(!configuration){
+			configuration={
+					loginState : "loggedOut",
+					statisticsLoaded: "false"
+			}
+		}
 	}
 	
 	
