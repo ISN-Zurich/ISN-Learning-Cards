@@ -25,6 +25,7 @@
 	<key>ExternalHosts</key>
 	<array>
 		<string>*.ethz.ch</string>
+		<string>*.jukulab.ee</string>
 	</array>
 	<key>Plugins</key>
 	<dict>
