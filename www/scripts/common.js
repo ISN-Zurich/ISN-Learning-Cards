@@ -63,8 +63,8 @@ var URLS_TO_LMS = [
 						clientKey: ""
 					},
 					{
-						servername: "JukuLab Test",
-						logoImage: "",
+						servername: "JukuLabTest",
+						logoImage: "resources/pfpLogo.png",
 						backgroundImage: "",
 						logoLabel: "JukuLab Test Server",
 						url: "http://ilias.jukulab.ee/restservice/learningcards",
@@ -188,12 +188,14 @@ function queryDatabase(cbResult){
 function checkAchievement() {
 	var self = this;
 	self.superModel.db.transaction(function(transaction) {
-		transaction.executeSql( "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?", [this.courseId, this.achievementName], 
+		transaction.executeSql( "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?", [self.courseId, self.achievementName], 
                                function cbSuccess(t,r) {
                                if ( r.rows.length > 0 ) {
+                            	   moblerlog("found " + self.achievementName + " in the local database");
                                   self.achievementValue = 100;
                                   self.superModel.allDone();
                                } else {
+                            	   moblerlog("no " + self.achievementName + " in the local database");
                                   self.calculateAchievementValues();
                                }
                                },

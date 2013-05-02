@@ -268,7 +268,7 @@ StatisticsModel.prototype.checkActivity = function(day,courseId) {
  * 			are passed to the specific query 
  */
  StatisticsModel.prototype.getCurrentValues = function(val) {
-	var timeNow = new Date().getTime();
+	var timeNow = (new Date()).getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
     var retval = [];
     switch (val){
