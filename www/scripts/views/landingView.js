@@ -90,12 +90,12 @@ function LandingView(controller) {
 		self.hideErrorMessage();
 	});	
 		
-	$('#selectExclusiveContent').bind("touchstart", function(e) {
-		moblerlog(" enters in landing view 2 ");
-		$("#selectExclusiveContent").addClass("gradientSelected");
-		e.preventDefault();
-		//e.stopPropagation();
-	});	
+//	$('#selectExclusiveContent').bind("touchstart", function(e) {
+//		moblerlog(" enters in landing view 2 ");
+//		$("#selectExclusiveContent").addClass("gradientSelected");
+//		e.preventDefault();
+//		//e.stopPropagation();
+//	});	
 	
 	$('#featuredContent').bind("touchstart", function(e) {
 		$("#featuredContent").addClass("gradientSelected");
