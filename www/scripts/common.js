@@ -92,7 +92,7 @@ function moblerlog(messagestring) {
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function getActiveServer(){
-	var MOBLERDEBUG=0;
+	var MOBLERDEBUG=1;
 	if (MOBLERDEBUG === 1) {
 		DEFAULT_SERVER = "yellowjacket";
 	}else {
