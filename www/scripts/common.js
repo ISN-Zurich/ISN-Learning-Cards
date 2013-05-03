@@ -64,7 +64,7 @@ var URLS_TO_LMS = [
 					},
 					{
 						servername: "JukuLabTest",
-						logoImage: "resources/pfpLogo.png",
+						logoImage: "resources/EstonianForces3.png",
 						backgroundImage: "",
 						logoLabel: "JukuLab Test Server",
 						url: "http://ilias.jukulab.ee/restservice/learningcards",
