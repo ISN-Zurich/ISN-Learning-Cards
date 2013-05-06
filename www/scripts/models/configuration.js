@@ -168,7 +168,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
                         moblerlog("JSON: " + data);
 						var authenticationObject;
 						try {
-							//the autentication data are successfully received 
+							//the authentication data are successfully received 
 							//its object format is assigned to the authentication object variable
 							authenticationObject = data;
 							moblerlog("authenticationData from server");

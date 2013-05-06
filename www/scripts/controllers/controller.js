@@ -100,7 +100,9 @@ function Controller() {
 		
 			delete configuration.appAuthenticationKey;
 			//var configurationObject=localStorage.getItem("configuration");
-			localStorage.setItem("configuration", JSON.stringify(localStorage.getItem("configuration")));
+			//localStorage.setItem("configuration", JSON.stringify(localStorage.getItem("configuration")));
+			localStorage.setItem("configuration", JSON.stringify(configuration));
+			moblerlog("configuration object after delete of appAuthenticationKey "+localStorage.getItem("configuration"));
 			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
 		}
 		
