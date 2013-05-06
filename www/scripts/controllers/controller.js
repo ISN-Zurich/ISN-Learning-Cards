@@ -98,18 +98,19 @@ function Controller() {
 					} 
 			}
 		
-			
 			delete configuration.appAuthenticationKey;
-			localStorage.setItem("configuration", JSON.stringify(configuration));
+			//var configurationObject=localStorage.getItem("configuration");
+			localStorage.setItem("configuration", JSON.stringify(localStorage.getItem("configuration")));
 			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
 		}
 		
-		if(!configurationObject){
-			configurationObject={
+		if(!configuration){
+			moblerlog("configuration object didn't exist during the migration");
+			var configurationObject={
 					loginState : "loggedOut",
 					statisticsLoaded: "false"
 			}
-		localStorage.setItem("configuration", JSON.stringify(configurationObject));
+			localStorage.setItem("configuration", JSON.stringify(configurationObject));
 		}
 	}
 	
