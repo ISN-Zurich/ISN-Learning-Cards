@@ -57,9 +57,18 @@ function LandingView(controller) {
 	});
 	
 	
+	
+	
+	$('#featuredContent').bind("touchstart", function(e) {
+		$("#featuredContent").addClass("gradientSelected");
+		moblerlog("color changed in featured content touchstart");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
+	
 	jester($('#leftElement1')[0]).tap(function(e,prevent) {
 		moblerlog("taped feautured Content");
-		$("#featuredContent").addClass("gradientSelected");
+		//$("#featuredContent").addClass("gradientSelected");
 		//	e.stopPropagation();
 		//	e.preventDefault();
 		// $("#featuredContent").addClass("gradientSelected");
@@ -68,18 +77,24 @@ function LandingView(controller) {
 		// var feauturedId= featuredModel.getId();
 		self.clickFeaturedItem(featuredContent_id);
 	});
-	
-	
+
 	//handler when taping on the exclusive content element
-	jester($('#selectExclusiveContent')[0]).tap(function(e,prevent) {
+	jester($('#leftElementExclusive')[0]).tap(function(e,prevent) {
 		//$('#selectExclusiveContent').addClass("gradientSelected");
-		moblerlog(" enters in landing view 1 ");
-		//	e.preventDefault();
-		//	e.stopPropagation();
-		$("#selectExclusiveContent").addClass("gradientSelected");
+		moblerlog(" taped exclusive conent in landing view 1");
+		//e.preventDefault();
+		//e.stopPropagation();
 		self.selectExclusiveContent();
 	});
 		
+	
+	$('#selectExclusiveContent').bind("touchstart", function(e) {
+		moblerlog(" enters in landing view 2 ");
+		$("#selectExclusiveContent").addClass("gradientSelected");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
+	
 	/** 
 	 * It is triggered when an online connection is detected.
 	 * @event errormessagehide
@@ -90,19 +105,10 @@ function LandingView(controller) {
 		self.hideErrorMessage();
 	});	
 		
-//	$('#selectExclusiveContent').bind("touchstart", function(e) {
-//		moblerlog(" enters in landing view 2 ");
-//		$("#selectExclusiveContent").addClass("gradientSelected");
-//		e.preventDefault();
-//		//e.stopPropagation();
-//	});	
 	
-	$('#featuredContent').bind("touchstart", function(e) {
-		$("#featuredContent").addClass("gradientSelected");
-		moblerlog("color changed");
-		e.preventDefault();
-		e.stopPropagation();
-	});	
+
+	
+	
 
 	$(document).bind("featuredContentlistupdate", function(e,featuredCourseId) {
 		
