@@ -314,11 +314,11 @@ function Controller() {
 	
 	
 	
-	// check if 3000 ms have passed
-	// if not we wait until 3000 ms have passed
-	// then we do the transition to the login view
-	// the remaining waiting time is 3000 - deltatime
-	//automatic calculation of min-height
+// check if 3000 ms have passed
+// if not we wait until 3000 ms have passed
+// then we do the transition to the login view
+// the remaining waiting time is 3000 - deltatime
+//automatic calculation of min-height
 
 //	var currentTime = new Date().getTime();
 //	var deltaTime= currentTime - startTime;
