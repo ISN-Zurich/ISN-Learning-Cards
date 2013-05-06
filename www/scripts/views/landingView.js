@@ -194,6 +194,7 @@ LandingView.prototype.close = function() {
  * @function selectExclusiveContent
  */
 LandingView.prototype.selectExclusiveContent = function() {
+	moblerlog("enter selectExclusiveContent");
 	this.controller.transitionToLogin();
 };
 

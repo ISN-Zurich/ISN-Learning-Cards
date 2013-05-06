@@ -338,6 +338,7 @@ function Controller() {
 //	}
 
 	function cbFeaturedContentListUpdate() {
+		if (!self.models['featured'].isFeaturedContentLocal){
 		//if (this.activeView !== this.views.login && this.activeView == !this.views.statistics) {
 		moblerlog("featured content list update called");
 		var currentTime = new Date().getTime();
@@ -353,6 +354,8 @@ function Controller() {
 		}
 		
 		//}
+		}
+	
 		$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	}
 	
@@ -475,7 +478,9 @@ Controller.prototype.transitionToEndpoint = function() {
  * @function transitionToLogin 
  **/
 Controller.prototype.transitionToLogin = function() {
+	moblerlog("enter transitionToLogin in controller");
 	if ( this.appLoaded ) {
+		moblerlog("the app is loaded in transition to login in controller");
 	this.transition('login');
 		
 	}
