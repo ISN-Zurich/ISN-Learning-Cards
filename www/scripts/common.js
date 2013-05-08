@@ -109,7 +109,7 @@ function getActiveServer(){
  * @function debugActivate
  * * */
 function debugActivate() {
-	var MOBLERDEBUG = 0;
+	var MOBLERDEBUG = 1;
 	moblerlog("debug Activate and the value of MOBLERDEBUG IS"+MOBLERDEBUG);
 	
 	if (MOBLERDEBUG === 0){

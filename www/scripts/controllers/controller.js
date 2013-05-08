@@ -44,7 +44,7 @@ function Controller() {
 	
 	moblerlog("start controller");
 	self.appLoaded = false;
-	self.clickOutOfStatisticsIcon=true;;
+	self.clickOutOfStatisticsIcon=true;
 	var startTime= new Date().getTime();
 	var featuredContent_id = FEATURED_CONTENT_ID;
 
