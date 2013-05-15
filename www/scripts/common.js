@@ -80,6 +80,15 @@ var URLS_TO_LMS = [
 						debug: "1",
 						clientKey: ""
 					},
+					{
+						servername: "TestADLRomania",
+						logoImage: "resources/adlromania.png",
+						backgroundImage: "",
+						logoLabel: "Test Romanian LMS",
+						url: "http://test.adlunap.ro/restservice/learningcards",
+						debug: "1",
+						clientKey: ""
+					},
 ];
 
 
