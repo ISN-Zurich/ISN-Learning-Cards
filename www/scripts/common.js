@@ -70,7 +70,16 @@ var URLS_TO_LMS = [
 						url: "http://ilias.jukulab.ee/restservice/learningcards",
 						debug: "1",
 						clientKey: ""
-					}
+					},
+					{
+						servername: "ADLRomania",
+						logoImage: "resources/adlromania.png",
+						backgroundImage: "",
+						logoLabel: "Romanian Didad LMS",
+						url: "http://lms.adlunap.ro/restservice/learningcards",
+						debug: "1",
+						clientKey: ""
+					},
 ];
 
 
@@ -80,7 +89,7 @@ var URLS_TO_LMS = [
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function moblerlog(messagestring) {
-	var MOBLERDEBUG = 0;
+	var MOBLERDEBUG = 1;
 	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
