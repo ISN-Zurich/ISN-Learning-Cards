@@ -30,7 +30,7 @@ var URLS_TO_LMS = [
 						logoImage: "resources/pfpLogo.png",
 						backgroundImage: "",
 						logoLabel: "Yellowjacket",					
-						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
+						url: "http://yellowjacket.ethz.ch/ilias_4_2/Customizing/global/Services/...../restservice/learningcards",
 						debug:"1",
 						clientKey: ""
 					},
@@ -77,7 +77,7 @@ var URLS_TO_LMS = [
 						backgroundImage: "",
 						logoLabel: "Romanian Didad LMS",
 						url: "http://lms.adlunap.ro/restservice/learningcards",
-						debug: "1",
+						debug: "0",
 						clientKey: ""
 					},
 					{
@@ -89,6 +89,17 @@ var URLS_TO_LMS = [
 						debug: "1",
 						clientKey: ""
 					},
+					
+					{
+						servername: "LocalTests",
+						logoImage: "resources/adlromania.png",
+						backgroundImage: "",
+						logoLabel: "Local Tests",
+						//url: "http://public-docking-pat-als-0125.ethz.ch:8888/ilias/restservice/learningcards",
+						url:"http://gess-sipo-als-dock-1-008.ethz.ch:8888/ilias/restservice/learningcards",
+						debug: "1",
+						clientKey: ""
+					}
 ];
 
 
@@ -98,7 +109,7 @@ var URLS_TO_LMS = [
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function moblerlog(messagestring) {
-	var MOBLERDEBUG = 1;
+	var MOBLERDEBUG = 0;
 	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
@@ -127,7 +138,7 @@ function getActiveServer(){
  * @function debugActivate
  * * */
 function debugActivate() {
-	var MOBLERDEBUG = 1;
+	var MOBLERDEBUG = 0;
 	moblerlog("debug Activate and the value of MOBLERDEBUG IS"+MOBLERDEBUG);
 	
 	if (MOBLERDEBUG === 0){
