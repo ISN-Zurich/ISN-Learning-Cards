@@ -36,9 +36,12 @@
 require_once './common.php';
 chdir("../..");
 require_once ('restservice/include/inc.header.php');
-
 global $DEBUG;
 $DEBUG = 1;
+
+//if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
+
+
 
 $class_for_logging = "registration.php";
 
@@ -125,5 +128,9 @@ function generateAppKey($appId, $uuid){
 	//return the client key (= app key)
 	return $appKey;
 };
+        
+// } else {
+// header("HTTP/1.1 403 Forbidden");
+// }
 
 ?>
