@@ -36,14 +36,16 @@
 require_once './common.php';
 chdir("../..");
 require_once ('restservice/include/inc.header.php');
-global $DEBUG;
+require_once 'Component/classes/class.ilPluginAdmin.php';
+require_once 'Component/classes/class.ilPlugin.php';
+
+global $DEBUG, $ilPluginAdmin;
 $DEBUG = 1;
-
-//if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
-
-
-
+logging("enter registation.php");
 $class_for_logging = "registration.php";
+logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
+ //$x=$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards");
+if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
 
 //create client key (= app key)
 $clientkey = get_appkey_from_headers();
@@ -67,6 +69,8 @@ function get_appkey_from_headers() {
 
 	logging("app id from header: " .$appID);
 	logging("device id from header: " .$deviceID);
+	error_log("app id from header: " .$appID);
+	error_log("device id from header: " .$deviceID);
 
 	return generateAppKey($appID,$deviceID);
 }
@@ -81,7 +85,7 @@ function generateAppKey($appId, $uuid){
 	
 	// creates a new database table for the registration if no one exists yet
 	logging(" check if our table is present already ");
-	if (!in_array("isnlc_reg_info",$ilDB->listTables())) {
+	if (!in_array("ui_uihk_xmob_reg",$ilDB->listTables())) {
 		logging("create a new table");
 		//create table that will store the app keys and any such info in the database
 		//ONLY CREATE IF THE TABLE DOES NOT EXIST
@@ -103,9 +107,9 @@ function generateAppKey($appId, $uuid){
 
 		$ilDB->createTable("isnlc_reg_info",$fields);
 	}
-	if (in_array("isnlc_reg_info",$ilDB->listTables())) {
+	if (in_array("ui_uihk_xmob_reg",$ilDB->listTables())) {
 		//if for the specified app id and uuid an client key (= app key) already exists, use this one instead of creating a new one
-		$result = $ilDB->query("SELECT client_key FROM isnlc_reg_info WHERE uuid = " .$ilDB->quote($uuid, "text") . " AND app_id =" .$ilDB->quote($appId, "text"));
+		$result = $ilDB->query("SELECT client_key FROM ui_uihk_xmob_reg WHERE uuid = " .$ilDB->quote($uuid, "text") . " AND app_id =" .$ilDB->quote($appId, "text"));
 		$fetch = $ilDB->fetchAssoc($result);
 		logging("fetch: " . json_encode($fetch));
 		$appKey = $fetch["client_key"];
@@ -116,7 +120,7 @@ function generateAppKey($appId, $uuid){
 			$randomSeed = rand();
 			$appKey = md5($uuid . $appId . $randomSeed);
 			//store the new client key (= app key) in the database
-			$affected_rows= $ilDB->manipulateF("INSERT INTO isnlc_reg_info (app_id, uuid, client_key) VALUES ".
+			$affected_rows= $ilDB->manipulateF("INSERT INTO ui_uihk_xmob_reg (app_id, uuid, client_key) VALUES ".
 					" (%s,%s,%s)",
 					array("text", "text", "text"),
 					array($appId, $uuid, $appKey));
@@ -129,8 +133,8 @@ function generateAppKey($appId, $uuid){
 	return $appKey;
 };
         
-// } else {
-// header("HTTP/1.1 403 Forbidden");
-// }
+} else {
+header("HTTP/1.1 403 Forbidden");
+ }
 
 ?>

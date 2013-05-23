@@ -119,7 +119,7 @@ function authenticate() {
 	logging("1");
 	//get user id for username
 	$userId = $ilUser->getUserIdByLogin($authData["username"]);
-
+	logging("userId: " .$authData["username"]);
 	if ($userId > 0) {
 		logging("2 " . $userId);
 		//set the user id for the current user
@@ -219,7 +219,7 @@ function getClientKeyForUUID($UUID, $APPID) {
 //		logging("***" . json_encode($record));
 //	}
 
-	$result = $ilDB->query("SELECT client_key FROM isnlc_reg_info WHERE uuid = " .$ilDB->quote($UUID, "text") . " AND app_id =" .$ilDB->quote($APPID, "text"));
+	$result = $ilDB->query("SELECT client_key FROM ui_uihk_xmob_reg WHERE uuid = " .$ilDB->quote($UUID, "text") . " AND app_id =" .$ilDB->quote($APPID, "text"));
 	$fetch = $ilDB->fetchAssoc($result);
 	logging("fetch: " . json_encode($fetch));
 	$clientKey = $fetch["client_key"];
@@ -238,7 +238,7 @@ function storeAuthDataInDB($userid, $clientKey, $sessionKey) {
 
 	// get list of tables
 	// check if our table is present already
-	if (!in_array("isnlc_auth_info",$ilDB->listTables())) {
+	if (!in_array("ui_uihk_xmob_auth",$ilDB->listTables())) {
 
 		logging("create new auth info table");
 
@@ -260,15 +260,15 @@ function storeAuthDataInDB($userid, $clientKey, $sessionKey) {
 		$ilDB->createTable("isnlc_auth_info",$fields);
 	}
 
-	$old_session_key_result = $ilDB->query("SELECT session_key FROM isnlc_auth_info WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
+	$old_session_key_result = $ilDB->query("SELECT session_key FROM ui_uihk_xmob_auth WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
 	$old_session_key =  $ilDB->fetchAssoc($old_session_key_result);
 
 	//if an old sessionkey for the user exists already, overwrite the old one with the new one
 	//if no sessionkey exists, insert the new one
 	if ($old_session_key) {
-		$ilDB->manipulate("UPDATE isnlc_auth_info SET session_key = " . $ilDB->quote($sessionKey, "text") . " WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
+		$ilDB->manipulate("UPDATE ui_uihk_xmob_auth SET session_key = " . $ilDB->quote($sessionKey, "text") . " WHERE user_id = " .$ilDB->quote($userid, "text") . "AND client_key = " .$ilDB->quote($clientKey, "text"));
 	} else {
-		$ilDB->manipulateF("INSERT isnlc_auth_info(user_id, client_key, session_key)  VALUES ".
+		$ilDB->manipulateF("INSERT ui_uihk_xmob_auth(user_id, client_key, session_key)  VALUES ".
 				" (%s,%s,%s)",
 				array("text", "text", "text"),
 				array($userid, $clientKey, $sessionKey));
@@ -282,7 +282,7 @@ function storeAuthDataInDB($userid, $clientKey, $sessionKey) {
 function invalidateSessionKey($sessionkey) {
 	logging("entered invalidate session key");
 	global $ilDB;
-	$result = $ilDB->manipulate("DELETE FROM isnlc_auth_info WHERE session_key = " .$ilDB->quote($sessionkey, "text"));
+	$result = $ilDB->manipulate("DELETE FROM ui_uihk_xmob_auth WHERE session_key = " .$ilDB->quote($sessionkey, "text"));
 	logging("end of invalidate session key");
 }
 ?>

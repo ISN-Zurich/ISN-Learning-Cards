@@ -912,7 +912,7 @@ class ilInitialisation
 		self::initClient();
 
 		if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
-			self::initUser();
+		self::initUser();
 		}else{
 			return;
 		}
@@ -946,7 +946,7 @@ class ilInitialisation
 				
 				self::initHTML();		
 			}							
-		}	*/				
+		}		*/			
 	}
 	
 	/**

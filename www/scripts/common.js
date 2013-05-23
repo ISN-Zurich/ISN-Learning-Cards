@@ -95,8 +95,8 @@ var URLS_TO_LMS = [
 						logoImage: "resources/adlromania.png",
 						backgroundImage: "",
 						logoLabel: "Local Tests",
-						//url: "http://public-docking-pat-als-0125.ethz.ch:8888/ilias/restservice/learningcards",
-						url:"http://gess-sipo-als-dock-1-008.ethz.ch:8888/ilias/restservice/learningcards",
+						url: "http://public-docking-pat-als-0125.ethz.ch:8888/ilias/restservice/learningcards",
+						//url:"http://gess-sipo-als-dock-1-008.ethz.ch:8888/ilias/restservice/learningcards",
 						debug: "1",
 						clientKey: ""
 					}
@@ -109,7 +109,7 @@ var URLS_TO_LMS = [
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function moblerlog(messagestring) {
-	var MOBLERDEBUG = 0;
+	var MOBLERDEBUG = 1;
 	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
@@ -138,7 +138,7 @@ function getActiveServer(){
  * @function debugActivate
  * * */
 function debugActivate() {
-	var MOBLERDEBUG = 0;
+	var MOBLERDEBUG = 1;
 	moblerlog("debug Activate and the value of MOBLERDEBUG IS"+MOBLERDEBUG);
 	
 	if (MOBLERDEBUG === 0){
