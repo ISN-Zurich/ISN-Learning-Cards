@@ -181,7 +181,7 @@ FeaturedContentModel.prototype.storeData = function(){
  * @function loadFeaturedCourseFromServer 
  */
 FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
-	moblerlog("loadFromServer-Course is called");
+	moblerlog("loadFromServer-Featured Course is called");
 	var self = this;
 	var syncStateCache = [];
 	var activeURL = self.controller.getActiveURL();
@@ -204,8 +204,9 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 					success : createFeaturedContentList,
 					error : function() {
 						localStorage.setItem("pendingFeaturedContentList", true);
-						console
-								.log("Error while loading featured course list from server");
+						console.log("Error while loading featured course list from server");
+						 moblerlog("ERROR status code is : " + request.status);
+		                 moblerlog("ERROR returned data is: "+ request.responseText);
 					},
 					beforeSend : setHeader
 				});

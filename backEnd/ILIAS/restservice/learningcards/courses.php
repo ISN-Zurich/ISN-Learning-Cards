@@ -42,12 +42,16 @@ require_once './common.php';
 chdir("../..");
 require_once ('restservice/include/inc.header.php');
 require_once 'Services/User/classes/class.ilObjUser.php';
+require_once 'Services/Component/classes/class.ilPluginAdmin.php';
+require_once 'Services/Component/classes/class.ilPlugin.php';
 
 global $ilUser, $class_for_logging;
 
-global $DEBUG;
+global $DEBUG,$ilPluginAdmin;
 $DEBUG = 1;
 $class_for_logging = "courses.php";
+logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
+if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
 
 $userID = get_session_user_from_headers();
 logging(" my userid is ". $userID);
@@ -56,8 +60,10 @@ $return_data = getCourseList($userID);
 
 header('content-type: application/json');
 echo (json_encode($return_data));
-
-
+	} 
+else {
+	header("HTTP/1.1 403 Forbidden");
+}
 
 
 /**

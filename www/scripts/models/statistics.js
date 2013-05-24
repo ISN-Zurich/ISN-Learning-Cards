@@ -433,8 +433,11 @@ StatisticsModel.prototype.loadFromServer = function() {
 						moblerlog("config variable is set to true");
 						$(document).trigger("loadstatisticsfromserver");
 					},
-					error : function(xhr, err, errorString) {
+					error : function(xhr, err, errorString, request) {
 						moblerlog("Error while getting statistics data from server: " + errorString);
+						moblerlog("Error while loading course list from server");
+						moblerlog("ERROR status code is : " + request.status);
+						moblerlog("ERROR returned data is: "+ request.responseText); 
 					},
                       beforeSend : function setHeader(xhr) {
                       xhr.setRequestHeader('sessionkey',

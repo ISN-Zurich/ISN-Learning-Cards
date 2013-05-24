@@ -41,10 +41,12 @@ require_once ('restservice/include/inc.header.php');
 
 require_once 'Services/User/classes/class.ilObjUser.php';
 require_once 'Services/Database/classes/class.ilDB.php';
+require_once 'Services/Component/classes/class.ilPluginAdmin.php';
+require_once 'Services/Component/classes/class.ilPlugin.php';
 
 global $ilUser, $class_for_logging;
 
-global $DEBUG;
+global $DEBUG,$ilPluginAdmin;
 $DEBUG = 1;
 
 $class_for_logging = "authentication.php";
@@ -52,8 +54,8 @@ $class_for_logging = "authentication.php";
 //global $ilDB;
 
 //$ilDB->manipulate("DELETE FROM isnlc_reg_info WHERE uuid = '3c1875c18a7402de'");
-
-$class_for_logging = "authentication.php";
+logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
+if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
 
 $request_method = $_SERVER['REQUEST_METHOD'];
 logging("request method: '" . $request_method . "'");
@@ -99,7 +101,9 @@ switch($request_method) {
 	default:
 		break;
 }
-
+} else {
+	header("HTTP/1.1 403 Forbidden");
+}
 
 /**
  * authenticates the user and creates a new session key

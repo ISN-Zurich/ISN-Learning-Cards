@@ -153,12 +153,15 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
                   		$(document).trigger("questionpoolready", data.courseID);
 					}
 				},
-				error : function() {
+				error : function(request) {
 					
 					//if there was an error while sending the request,
 					//store the course id for the question pool in the local storage
 					localStorage.setItem("pendingQuestionPool_" + courseId, true);
 					moblerlog("Error while loading question pool from server");
+					moblerlog("Error while loading course list from server");
+					moblerlog("ERROR status code is : " + request.status);
+					moblerlog("ERROR returned data is: "+ request.responseText); 
 				},
 				beforeSend : setHeader
 			});
