@@ -30,7 +30,7 @@ var URLS_TO_LMS = [
 						logoImage: "resources/pfpLogo.png",
 						backgroundImage: "",
 						logoLabel: "Yellowjacket",					
-						url: "http://yellowjacket.ethz.ch/ilias_4_2/Customizing/global/Services/...../restservice/learningcards",
+						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
 						debug:"1",
 						clientKey: ""
 					},
