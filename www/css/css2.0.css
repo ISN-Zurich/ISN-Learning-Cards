@@ -663,6 +663,10 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	display: none;
 }
 
+#feedbackTip {
+	padding:20px;	
+}
+
 .pfp {
 	vertical-align: bottom;
 	margin-top: 10px;
