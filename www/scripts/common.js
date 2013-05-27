@@ -72,6 +72,15 @@ var URLS_TO_LMS = [
 						clientKey: ""
 					},
 					{
+						servername: "EsthonianCollege",
+						logoImage: "resources/esthonia.jpg",
+						backgroundImage: "",
+						logoLabel: "Estonian Defense College",
+						url: "https://eope.ksk.edu.ee/ilias/restservice/learningcards",
+						debug: "0",
+						clientKey: ""
+					},
+					{
 						servername: "ADLRomania",
 						logoImage: "resources/adlromania.png",
 						backgroundImage: "",
@@ -109,7 +118,7 @@ var URLS_TO_LMS = [
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function moblerlog(messagestring) {
-	var MOBLERDEBUG = 1;
+	var MOBLERDEBUG = 0;
 	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
@@ -138,7 +147,7 @@ function getActiveServer(){
  * @function debugActivate
  * * */
 function debugActivate() {
-	var MOBLERDEBUG = 1;
+	var MOBLERDEBUG = 0;
 	moblerlog("debug Activate and the value of MOBLERDEBUG IS"+MOBLERDEBUG);
 	
 	if (MOBLERDEBUG === 0){
