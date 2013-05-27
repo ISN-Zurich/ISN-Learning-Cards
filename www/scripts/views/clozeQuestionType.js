@@ -174,7 +174,7 @@ function createClozeQuestionBody(domElement,interactive) {
 			moblerlog("design answer view for cloze question");
 	// now replace all gap tags in the cardAnswerBody
 	$("#cardAnswerBody gap").each(function(i,gap){
-		var inputtag = '<input type="text" class=" loginInputCloze textShadow" required="required" width="200px"placeholder="fill in the gap" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
+		var inputtag = '<input type="text" class=" loginInputCloze textShadow" required="required" autocorrect="off" autocapitalize="off" width="200px"placeholder="fill in the gap" id="gap_'+ $(gap).attr("identifier") +'"/>' ;
 		$(gap).replaceWith(inputtag);	
 	}) ;
 
