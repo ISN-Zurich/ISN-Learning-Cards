@@ -733,8 +733,8 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 #cardQuestionBody {
     font-size: 20px;
     }
-ul#questionText{
-	padding:20px;
+#questionText{
+	padding:15px;
 	/*width:100%;*/
 }
 
