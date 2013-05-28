@@ -143,6 +143,18 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						} catch (err) {
 							questionPoolString = "";
 						}
+						
+						// remove images by using regular expression
+						questionPoolString = questionPoolString.replace(/<img[^>]*>/g,"");
+						
+						// remove br by using regual expression
+						questionPoolString=questionPoolString.replace(/<br[^>]*>/g,"");
+						
+						// remove empty p
+						questionPoolString=questionPoolString.replace('/<p>\s*</p>/', '');
+						
+						moblerlog("questionpool string after removal of tags "+questionPoolString);
+						//var questionPoolString1=$.parseHTML(questionPoolString);
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
 						/**It is triggered after the successful loading of questions from the server 
