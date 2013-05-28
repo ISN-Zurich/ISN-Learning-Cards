@@ -64,8 +64,7 @@ function LMSView(controller) {
 	 */
 	$(document).bind("lmsOffline", function(e,servername) {
 		moblerlog("we are offline");
-		self.showLMSConnectionMessage(jQuery.i18n.prop('msg_lms_connection_message'),servername);
-			
+		self.showLMSConnectionMessage(jQuery.i18n.prop('msg_lms_connection_message'),servername);	
 	});
 	
 	/**It is triggered when an lms is online and failed to register for any reason. More specifically 
@@ -212,6 +211,10 @@ LMSView.prototype.showLMSList = function() {
 			"class" : "gradient1 shadowedLi"
 		}).appendTo(lastli);
 		
+		var marginli = $("<li/>", {
+			"class":"spacerMargin"
+		}).appendTo(ul);
+
 
 	}//end of if
 	else {
@@ -297,12 +300,6 @@ LMSView.prototype.createLMSItem = function(ul, lmsData) {
 		e.stopPropagation();	
 		self.clickLMSItem(sn,$(this));
 	});
-
-	$(li[0]).bind("touchstart", function(e) {
-		moblerlog(" gesture start in lms  detected ");
-		e.preventDefault();
-		e.stopPropagation();
-	});	
 };
 		
 
