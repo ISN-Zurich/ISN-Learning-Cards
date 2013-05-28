@@ -503,7 +503,6 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 .inputBorderTop {
 	clear:both;
 	line-height: 55px;
-	border:0px solid red;
 }
 
 .inputBorderCloze {
@@ -1662,4 +1661,8 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 
 .border{
 	border:solid 1px white;
+}
+
+#clozeInputDashFeedback{
+	line-height:50px;
 }
