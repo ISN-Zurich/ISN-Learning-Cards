@@ -290,7 +290,7 @@ FeedbackView.prototype.showFeedbackBody = function() {
 		feedbackText = questionpoolModel.getCorrectFeedback();	
 	}
 	
-	if ( feedbackText.length ) {
+	if ( feedbackText && feedbackText.length>0 ) {
 		//$("#feedbackTip").text(feedbackText);
 		$("#feedbackTip").html(feedbackText);
 		$("#FeedbackMore").show();
