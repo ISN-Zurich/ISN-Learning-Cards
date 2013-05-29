@@ -10,8 +10,9 @@ body {
 	padding: 0px;
 }
 
-br{
-	display:none;	
+/*hidden html element that will be used for cleaning html-tags in questionpool model*/
+#modelHelperQuestionpool{
+	display:none;
 }
 
 /* close button general characteristics, top right corner of each view*/
