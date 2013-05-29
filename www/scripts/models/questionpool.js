@@ -104,6 +104,7 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 };
 
 
+
 /**
  * Loads the question pool from the server and stores it in the local storage
  * When all data is loaded, the questionpoolready event is triggered. 
@@ -134,7 +135,24 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						if (!questionPoolObject) {
 							questionPoolObject = [];
 						}
-                        moblerlog("Object: " + questionPoolObject);
+						
+						//clean html before inserting the data into the localstorage
+						if (questionPoolObject.length > 0) {
+							for (var j = 0; j < questionPoolObject.length; j++) {
+								var question = questionPoolObject[j];				
+								//clear the answertext 
+								self.cleanupAnswertext(question,j);
+								
+								//clear the question
+								question["question"] = self.cleanupHTML(question["question"]);
+								
+								//clear the feedback-more 
+								question["errorFeedback"] = self.cleanupHTML(question["errorFeedback"]);
+								question["correctFeedback"] = self.cleanupHTML(question["correctFeedback"]);		
+							}
+						}
+										
+						moblerlog("Object: " + questionPoolObject);
 						
 						var questionPoolString;
 						try {
@@ -144,16 +162,17 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 							questionPoolString = "";
 						}
 						
+						//OLD Regular Expressions
 						// remove images by using regular expression
-						questionPoolString = questionPoolString.replace(/<img[^>]*>/g,"");
+						// questionPoolString = questionPoolString.replace(/<img[^>]*>/g,"");
 						
 						// remove br by using regual expression
-						questionPoolString=questionPoolString.replace(/<br[^>]*>/g,"");
+						// questionPoolString=questionPoolString.replace(/<br[^>]*>/g,"");
 						
 						// remove empty p
-						questionPoolString=questionPoolString.replace('/<p>\s*</p>/', '');
+						// questionPoolString=questionPoolString.replace('/<p>\s*</p>/', '');
 						
-						moblerlog("questionpool string after removal of tags "+questionPoolString);
+						// moblerlog("questionpool string after removal of tags "+questionPoolString);
 						//var questionPoolString1=$.parseHTML(questionPoolString);
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
@@ -185,7 +204,97 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 };
 
+/**
+ * we use this function when we want explicitily to define which html-tags we want to remove
+ * and from which part of the text.
+ * the tags we want to remove are:
+ * - empty <p>
+ * - <hr>
+ * - dublicate <br/>
+ * - <img>
+ * - leading and trailing <br/> 
+ * @prototype
+ * @function cleanupHTML
+ * @param {string} htmltext, it can be the question view text, the feedback more view text or the cloze question text
+ * */
+QuestionPoolModel.prototype.cleanupHTML = function(htmltext) {
+	//cleaning leading and trailing empty tags
+	var helperDiv = $("#modelHelperQuestionpool");
+	helperDiv.empty();
+	helperDiv.html(htmltext);
+	// remove all the image tags
+	helperDiv.find("img, hr, br + br").remove();
 
+	// remove all the empty p tags
+	var pTags = helperDiv.find("p");
+	pTags.each(function(){if ( ! /\S/.test($(this).text()) ) { $(this).remove(); } });
+
+	// now remove the leading and trailing BRs
+	var brTags = helperDiv.find("br");
+	// we are only interested in the first and the last element in this list
+	// for the first BR we need to check if there is anything else than whitespaces in front of it
+	// for the last BR we need to check if there is anything else than whitespaces in front of it
+	
+	// finally we return the resulting htmltext
+	htmltext = helperDiv.html();
+	helperDiv.empty();
+	return htmltext;
+};
+
+/**
+ * We use this function when we want to clear the answer text from any html-tags
+ * that's why we use the text() function to get only the text from the html elements.
+ * For the text of clozeQuestions we need to be picky on the removal of the html elements.
+ * For that reason we use there the cleanUpHtml function, which is used also in the cases for
+ * a) question view text
+ * b) feedbback more text (correct and wrong one)
+ * @prototype
+ * @function cleanupAnswertext
+ * @param {array} questionobject, the current question
+ * */
+QuestionPoolModel.prototype.cleanupAnswertext = function(questionobject,questionIndex) {
+	switch (questionobject.type) {
+	case "assSingleChoice":
+	case "assMultipleChoice":
+	case "assOrderingQuestion":
+	case "assOrderingHorizontal":
+		//the answer is an array, so we need to loop
+		for (var i = 0; i < questionobject.answer.length; i++) {
+			questionobject.answer[i].answertext = $("#modelHelperQuestionpool").html(questionobject.answer[i].answertext).text();
+			moblerlog("passed clearing answer view for various question types");
+			$("#modelHelperQuestionpool").empty();
+		}
+		break;
+	case "assClozeTest":
+		moblerlog("enter cloze question type case");
+		// this is a bit more complicated
+		// for the cloze Text
+		moblerlog("cloze text is"+questionobject.answer["clozeText"]);
+		questionobject.clozeText = this.cleanupHTML(questionobject.answer["clozeText"]);
+		// we clean the correct gap definition as well, just to be save.
+		
+//		var items=questionobject["answer"]["correctGaps"]["items"]; //the items sub-array for the specific gap index
+//		moblerlog("the size of the items is "+jQuery(items).size());
+//		var correctGaps=new Array();
+//		for(k=0; k<jQuery(items).size();k++){
+//			correctGaps.push(items[k]["answertext"]);
+//			moblerlog("item of correct gaps array is "+correctGaps[k]);
+//			correctGaps[k] = $("#modelHelperQuestionpool").html(correctGaps[k]).text();
+//		}
+//		$("#modelHelperQuestionpool").empty();
+	
+//	for (var i = 0; i < jQuery(questionobject.answer.correctGaps.items).size(); i++) {
+//		moblerlog("enter the loop for cloze questions ");
+//			questionobject.answer.correctGaps.items[i].answertext = $("#modelHelperQuestionpool").html(questionobject.answer.correctGaps.items[i].answertext).text();
+//		moblerlog("passed clearing text of cloze questions");
+//		$("#modelHelperQuestionpool").empty();
+//	}
+		break;
+	case "assNumeric":
+	default: 		
+		break;
+	}
+};
 
 /**
  * Removes the data for the specified course id from the local storage
