@@ -270,25 +270,21 @@ QuestionPoolModel.prototype.cleanupAnswertext = function(questionobject,question
 		// this is a bit more complicated
 		// for the cloze Text
 		moblerlog("cloze text is"+questionobject.answer["clozeText"]);
-		questionobject.clozeText = this.cleanupHTML(questionobject.answer["clozeText"]);
-		// we clean the correct gap definition as well, just to be save.
+		questionobject.answer["clozeText"] = this.cleanupHTML(questionobject.answer["clozeText"]);
 		
-//		var items=questionobject["answer"]["correctGaps"]["items"]; //the items sub-array for the specific gap index
-//		moblerlog("the size of the items is "+jQuery(items).size());
-//		var correctGaps=new Array();
-//		for(k=0; k<jQuery(items).size();k++){
-//			correctGaps.push(items[k]["answertext"]);
-//			moblerlog("item of correct gaps array is "+correctGaps[k]);
-//			correctGaps[k] = $("#modelHelperQuestionpool").html(correctGaps[k]).text();
-//		}
-//		$("#modelHelperQuestionpool").empty();
+		// we clean the correct gap definition as well, just to be safe.
+		//NOTE:Ilias automatically correct the p, br and hr tags
+		//it keeps the b,i 
+		for (gapIndex=0; gapIndex<jQuery(questionobject.answer.correctGaps).size();gapIndex++){
+			var items=questionobject.answer.correctGaps[gapIndex]["items"];
+			for(k=0; k<jQuery(items).size();k++){
+				items[k]["answertext"]=$("#modelHelperQuestionpool").html(items[k]["answertext"]).text();
+				questionobject.answer.correctGaps[gapIndex].items[k]["answertext"] = $("#modelHelperQuestionpool").html(items[k]["answertext"]).text();
+			}
+		}
+		$("#modelHelperQuestionpool").empty();
 	
-//	for (var i = 0; i < jQuery(questionobject.answer.correctGaps.items).size(); i++) {
-//		moblerlog("enter the loop for cloze questions ");
-//			questionobject.answer.correctGaps.items[i].answertext = $("#modelHelperQuestionpool").html(questionobject.answer.correctGaps.items[i].answertext).text();
-//		moblerlog("passed clearing text of cloze questions");
-//		$("#modelHelperQuestionpool").empty();
-//	}
+
 		break;
 	case "assNumeric":
 	default: 		
