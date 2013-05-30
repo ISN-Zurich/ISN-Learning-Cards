@@ -162,18 +162,6 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 							questionPoolString = "";
 						}
 						
-						//OLD Regular Expressions
-						// remove images by using regular expression
-						// questionPoolString = questionPoolString.replace(/<img[^>]*>/g,"");
-						
-						// remove br by using regual expression
-						// questionPoolString=questionPoolString.replace(/<br[^>]*>/g,"");
-						
-						// remove empty p
-						// questionPoolString=questionPoolString.replace('/<p>\s*</p>/', '');
-						
-						// moblerlog("questionpool string after removal of tags "+questionPoolString);
-						//var questionPoolString1=$.parseHTML(questionPoolString);
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
 						/**It is triggered after the successful loading of questions from the server 
@@ -232,8 +220,22 @@ QuestionPoolModel.prototype.cleanupHTML = function(htmltext) {
 	// now remove the leading and trailing BRs
 	var brTags = helperDiv.find("br");
 	// we are only interested in the first and the last element in this list
+	moblerlog("brTags is"+brTags);
 	// for the first BR we need to check if there is anything else than whitespaces in front of it
+	
+	var firstbrTag=helperDiv.find("br:first");
+	//we check if it the first element of the contents (it returns the chidlren of an element including text nodes and element nodes)
+	if (firstbrTag.is(helperDiv.contents().first())){
+		moblerlog("br is  the first child");
+		firstbrTag.remove();	
+	}	
+
 	// for the last BR we need to check if there is anything else than whitespaces in front of it
+	var lastbrTag=helperDiv.find("br:last");
+	//we check if it the last element of the contents.
+	if (lastbrTag.is(helperDiv.contents().last())){
+	lastbrTag.remove();}
+	
 	
 	// finally we return the resulting htmltext
 	htmltext = helperDiv.html();
