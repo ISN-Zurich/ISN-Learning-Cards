@@ -46,13 +46,19 @@ require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
 require_once 'Modules/TestQuestionPool/classes/class.assQuestion.php';
 require_once 'Modules/TestQuestionPool/classes/class.assClozeTest.php';
 
-global $DEBUG;
+require_once 'Services/Component/classes/class.ilPluginAdmin.php';
+require_once 'Services/Component/classes/class.ilPlugin.php';
+
+
+global $DEBUG,$ilPluginAdmin;
 $DEBUG = 1;
 
 global $class_for_logging;
 
 $class_for_logging = "questions.php";
 
+logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
+if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
 
 $userID = get_session_user_from_headers();
 logging(" my userid is ". $userID);
@@ -65,6 +71,9 @@ if ($userID != 0) {
 	$return_data = getQuestions($courseID);
 
 	echo(json_encode($return_data));
+	}
+} else {
+	header("HTTP/1.1 403 Forbidden");
 }
 
 /**

@@ -57,9 +57,18 @@ function LandingView(controller) {
 	});
 	
 	
+	
+	
+	$('#featuredContent').bind("touchstart", function(e) {
+		$("#featuredContent").addClass("gradientSelected");
+		moblerlog("color changed in featured content touchstart");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
+	
 	jester($('#leftElement1')[0]).tap(function(e,prevent) {
 		moblerlog("taped feautured Content");
-		$("#featuredContent").addClass("gradientSelected");
+		//$("#featuredContent").addClass("gradientSelected");
 		//	e.stopPropagation();
 		//	e.preventDefault();
 		// $("#featuredContent").addClass("gradientSelected");
@@ -68,17 +77,24 @@ function LandingView(controller) {
 		// var feauturedId= featuredModel.getId();
 		self.clickFeaturedItem(featuredContent_id);
 	});
-	
-	
+
 	//handler when taping on the exclusive content element
 	jester($('#leftElementExclusive')[0]).tap(function(e,prevent) {
 		//$('#selectExclusiveContent').addClass("gradientSelected");
-		moblerlog(" enters in landing view 1 ");
-		//	e.preventDefault();
-		//	e.stopPropagation();
+		moblerlog(" taped exclusive conent in landing view 1");
+		//e.preventDefault();
+		//e.stopPropagation();
 		self.selectExclusiveContent();
 	});
 		
+	
+	$('#selectExclusiveContent').bind("touchstart", function(e) {
+		moblerlog(" enters in landing view 2 ");
+		$("#selectExclusiveContent").addClass("gradientSelected");
+		e.preventDefault();
+		e.stopPropagation();
+	});	
+	
 	/** 
 	 * It is triggered when an online connection is detected.
 	 * @event errormessagehide
@@ -89,19 +105,10 @@ function LandingView(controller) {
 		self.hideErrorMessage();
 	});	
 		
-	$('#selectExclusiveContent').bind("touchstart", function(e) {
-		moblerlog(" enters in landing view 2 ");
-		$("#selectExclusiveContent").addClass("gradientSelected");
-		e.preventDefault();
-		e.stopPropagation();
-	});	
 	
-	$('#featuredContent').bind("touchstart", function(e) {
-		$("#featuredContent").addClass("gradientSelected");
-		moblerlog("color changed");
-		e.preventDefault();
-		e.stopPropagation();
-	});	
+
+	
+	
 
 	$(document).bind("featuredContentlistupdate", function(e,featuredCourseId) {
 		
@@ -155,7 +162,6 @@ LandingView.prototype.open = function() {
 	this.showForm();
 	this.openDiv();
 	this.active = true;
-	setFeaturedWidth();
 };
 
 
@@ -188,6 +194,7 @@ LandingView.prototype.close = function() {
  * @function selectExclusiveContent
  */
 LandingView.prototype.selectExclusiveContent = function() {
+	moblerlog("enter selectExclusiveContent");
 	this.controller.transitionToLogin();
 };
 
@@ -199,7 +206,6 @@ LandingView.prototype.selectExclusiveContent = function() {
  * @param{string}, featuredContent_id
  */ 
 LandingView.prototype.showForm = function() {
-	setFeaturedWidth();
 	moblerlog("enter show form of landing view");
 	var self=this;
 	var featuredModel = self.controller.models['featured'];
@@ -270,7 +276,6 @@ LandingView.prototype.hideErrorMessage = function() {
 **/ 
 LandingView.prototype.changeOrientation = function(orientationLayout, w, h) {
 	moblerlog("change orientation in landing view");
-	setFeaturedWidth(orientationLayout, w, h);
 };
 
 
@@ -299,24 +304,4 @@ LandingView.prototype.clickFeaturedStatisticsIcon = function(featuredContent_id)
 		this.controller.transitionToStatistics(featuredContent_id);
 	}
 };
-
-/**
- * sets dynamically the width of the elements
- * of the landing form.
- * it is calculated by substracting from the device width in the current mode (landscape, portrait)
- * which has been detected in the controller the sum of the widths of the rest dom elements around it
- * such as: dash bar, icon container and separator.
- * @function setInputWidth
- * */
-function setFeaturedWidth(o,w,h){
-//	window_width = $(window).width();
-//	moblerlog("window width in landing view is "+window_width);
-//	var gridWidth = 34;
-//	var separatorWidth= 12;
-//	var dashWidth = 34;
-//	var inputwidth = window_width - gridWidth -separatorWidth - dashWidth;
-//	moblerlog("input width in landing view is "+inputwidth);
-//	$("#leftElement1").css("width", inputwidth + "px");
-//	$("#leftElementExclusive").css("width", inputwidth + "px");
-}
 

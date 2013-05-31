@@ -268,7 +268,7 @@ StatisticsModel.prototype.checkActivity = function(day,courseId) {
  * 			are passed to the specific query 
  */
  StatisticsModel.prototype.getCurrentValues = function(val) {
-	var timeNow = new Date().getTime();
+	var timeNow = (new Date()).getTime();
 	var time24hAgo = timeNow - TWENTY_FOUR_HOURS;
     var retval = [];
     switch (val){
@@ -433,8 +433,11 @@ StatisticsModel.prototype.loadFromServer = function() {
 						moblerlog("config variable is set to true");
 						$(document).trigger("loadstatisticsfromserver");
 					},
-					error : function(xhr, err, errorString) {
+					error : function(xhr, err, errorString, request) {
 						moblerlog("Error while getting statistics data from server: " + errorString);
+						moblerlog("Error while loading course list from server");
+						moblerlog("ERROR status code is : " + request.status);
+						moblerlog("ERROR returned data is: "+ request.responseText); 
 					},
                       beforeSend : function setHeader(xhr) {
                       xhr.setRequestHeader('sessionkey',
@@ -489,9 +492,12 @@ StatisticsModel.prototype.insertStatisticItem = function(statisticItem) {
  * @function sendToServer
  * */
 StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
+	moblerlog("enter sendToServer in statistics model");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
-	if (self.controller.getLoginState() ) {
+	//if (self.controller.getLoginState()) {
+	if 	(self.controller.models["authentication"].configuration.userAuthenticationKey && self.controller.models["authentication"].configuration.userAuthenticationKey !== ""){
+	moblerlog("we enter the get login state in sendToServer");
 	//var url = self.controller.models['authentication'].urlToLMS + '/statistics.php';
 	var url = activeURL + '/statistics.php';
 	var courseList = self.controller.models["course"].getCourseList();
@@ -582,7 +588,7 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
                }
 		});
 	}
-	}
+	}// end of isLoginState
 };
 
 /**Initialization of sub models

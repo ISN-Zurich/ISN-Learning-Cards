@@ -10,7 +10,10 @@ body {
 	padding: 0px;
 }
 
-
+/*hidden html element that will be used for cleaning html-tags in questionpool model*/
+#modelHelperQuestionpool{
+	display:none;
+}
 
 /* close button general characteristics, top right corner of each view*/
 .closeButton {
@@ -488,19 +491,21 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 }
 
 .inputBorder {
-	padding: 10px;
+	/*border:1px solid green;
+	 padding: 10px;
+	 height: 33px;
+	 */
+	 padding:5px;
+	 padding-bottom:10px;
 	border-right: 0px solid white;
 	border-left: 0px solid white;
-	/*border:1px solid green;*/
-	height: 33px;
-	margin-right:0px;	
+	margin-right:0px
 
 }
 
 .inputBorderTop {
 	clear:both;
 	line-height: 55px;
-	border:0px solid red;
 }
 
 .inputBorderCloze {
@@ -525,7 +530,7 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	
 	font-size: 12pt;
 	margin: 0px;
-	padding: 5px;
+	
    
 	border-left: 0px solid white;
 	
@@ -660,6 +665,10 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 	display: none;
 }
 
+#feedbackTip {
+	padding:20px;	
+}
+
 .pfp {
 	vertical-align: bottom;
 	margin-top: 10px;
@@ -730,8 +739,8 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 #cardQuestionBody {
     font-size: 20px;
     }
-ul#questionText{
-	padding:20px;
+#questionText{
+	padding:15px;
 	/*width:100%;*/
 }
 
@@ -755,6 +764,10 @@ ul#questionText{
 	padding-right:0px;
 	border:0px solid red;
 }
+.textBottom{
+	padding-bottom:50px;
+}
+
 .marginClozeLi{
 	padding:9px 9px 9px 20px;
 	/*padding-left:15px;
@@ -1333,18 +1346,32 @@ font-weight: bold;
 	width: 100%;
 }
 
-.dashContainer, .labelContainer, .separatorBlock, .separatorBlockAchievements,.gridContainer, .gridContainerAchievements, .statsValueContainer,.imageContainer  {
+.dashContainer, 
+.labelContainer, 
+.labelContainerAchievements,
+.separatorBlock, 
+.separatorBlockAchievements,
+.gridContainer, 
+.gridContainerAchievements, 
+.statsValueContainer, 
+.statsValueContainerAchievements, 
+.imageContainer  {
 	display: table-cell;
 	vertical-align: middle;
 }
 
 
 .labelContainer {
-	border:1px solid red;
+	border:0px solid red;
 	
 }
+
+.labelContainerAchievements{
+width:175px;
+border:0px solid red;
+}
 .dashContainer {
-border:1px solid blue;
+border:0px solid blue;
 width:34px;
 }
 
@@ -1352,22 +1379,22 @@ width:34px;
 	color:white;
 }
 .gridContainer {
-	width: 34px;
+	width: 40px;
 	margin-right:0px;
 	text-align:center;
-	border:1px solid green;
+	border:0px solid green;
 }
 
 .gridContainerAchievements{
 	/* margin-right:0px; */
 	text-align:center;
-	border:1px solid green;
+	border:0px solid green;
 	width:50px;
 }
 .statsValueContainer{
 	
 	/*padding-right:15px;*/
-	border:1px solid black;
+	border:0px solid black;
 	width:50px;
 	text-align:center;
 	padding-right:15px;
@@ -1376,25 +1403,26 @@ width:34px;
 .statsValueContainerAchievements{
 	
 	/*padding-right:15px;*/
-	border:1px solid black;
+	border:0px solid black;
 	text-align:right;
+	
 	
 }
 .imageContainer {
 	width: 47px;
 	padding-top:4px;
 	border:0px solid green;	
-	height: 47px;
-	line-height: 47px;
+	/*height: 47px;
+	line-height: 47px;*/
 }
 .separatorBlock {
-	width: 18px;
-	border:1px solid black;
+	width: 12px;
+	border:0px solid black;
 }
 
 .separatorBlockAchievements {
 	width: 6px;
-	border:1px solid black;
+	border:0px solid black;
 }
 
 .selectItemContainerCloze {
@@ -1455,8 +1483,9 @@ img.imageLogoLMS{
 .achievementsImg{
 	/*position:absolute;
 	margin-right:6px;*/
+	vertical-align:middle;
 	font-size:38px;
-	border:1px solid red;
+	border:0px solid red;
 }
 
 .feedbackIcon{
@@ -1464,7 +1493,7 @@ img.imageLogoLMS{
 }
 
 img.imageLogo{
-	display:inline;
+	
 	width:36px;
 	height:38px;
 }
@@ -1635,4 +1664,8 @@ background:-webkit-radial-gradient(-94px 25px, circle closest-corner, #ba996e, t
 
 .border{
 	border:solid 1px white;
+}
+
+#clozeInputDashFeedback{
+	line-height:50px;
 }

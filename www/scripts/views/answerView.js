@@ -272,12 +272,12 @@ AnswerView.prototype.clickTitleArea = function() {
 	this.widget.storeAnswers(); 
 	// When switching back and forth between question view  and answer view the currently selected answers are stored. 
 	// These answers have not yet been finally answered.
-	if (this.controller.models.answers.dataAvailable()) {
+	//if (this.controller.models.answers.dataAvailable()) {
 	controller.transitionToQuestion();
-	}
-	else {
-		// inform the user that something went wrong
-	}
+	//}
+//	else {
+//		// inform the user that something went wrong
+//	}
 };
 
 /**

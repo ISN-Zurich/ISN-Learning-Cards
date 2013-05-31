@@ -80,7 +80,11 @@ function ConfigurationModel(controller) {
 	*/
 
 	$(document).bind("statisticssenttoserver", function() {
+		moblerlog("statistics sent to server is binded");
+		moblerlog("self.controller.appLoaded is "+self.controller.appLoaded);
+		moblerlog("self.configuration.loginState is"+self.configuration.loginState);
 		if (self.controller.appLoaded && self.configuration.loginState === "loggedOut") {
+			moblerlog("before call sendLogoutToServer");
 		self.sendLogoutToServer();
 		moblerlog("user logged out");
 		}
@@ -103,7 +107,6 @@ ConfigurationModel.prototype.storeData = function() {
 	}
 	moblerlog(configString);
 	localStorage.setItem("configuration", configString);
-
 	moblerlog("Configuration Storage after storeData: "+ localStorage.getItem("configuration"));
 };
 
@@ -136,6 +139,7 @@ ConfigurationModel.prototype.loadData = function() {
 	}
 	
  	this.configuration = configObject;
+ 	moblerlog("configuration login state in load data " +this.configuration.loginState);
 
 };
 
@@ -164,7 +168,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
                         moblerlog("JSON: " + data);
 						var authenticationObject;
 						try {
-							//the autentication data are successfully received 
+							//the authentication data are successfully received 
 							//its object format is assigned to the authentication object variable
 							authenticationObject = data;
 							moblerlog("authenticationData from server");
@@ -256,8 +260,12 @@ ConfigurationModel.prototype.login = function(username, password) {
 * @function logout
 */
 ConfigurationModel.prototype.logout = function(featuredContent_id) {
+	moblerlog("enter logout in configuration model");
 	//send statistics data to server
 	this.configuration.loginState = "loggedOut";
+	var configString= JSON.stringify(this.configuration);
+	localStorage.setItem("configuration", configString);
+	moblerlog("configuration login state in logout is "+this.configuration.loginState);
 	this.controller.models['statistics'].sendToServer(featuredContent_id);
 	
 	var self = this;
@@ -396,6 +404,7 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 * @param userAuthenticationKey
 */
 ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey,featuredContent_id) {
+	moblerlog("enter send logout to server");
 	var sessionKey,self = this;
 	var activeURL = self.controller.getActiveURL();  
 	if (userAuthenticationKey) {
@@ -430,13 +439,19 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 				"userId" : 0
 			},
 			"loginState": "loggedOut",
+			//"loginState": this.configuration.loginState;
 			"statisticsLoaded": false
 	};
 	
-	
+	moblerlog("configuration object after loging out"
+			 +JSON.stringify(this.configuration));
 
+	var configString= JSON.stringify(this.configuration);
+	localStorage.setItem("configuration", configString);
+	moblerlog("Configuration Storage: "+ localStorage.getItem("configuration"));
+	
 	//after clearing data from the local storage, save the changes to the local storage item
-	this.storeData();
+	//this.storeData();
 
 	// drop statistics data table from local database
 	this.controller.models['answers'].deleteDB(featuredContent_id);	
@@ -450,8 +465,9 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 * @return true if user is logged in, otherwise false
 */
 ConfigurationModel.prototype.isLoggedIn = function() {
-if (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") {
-	//if (this.configuration.loginState && this.configuration.loginState==="loggedIn"){	
+//if (this.configuration.userAuthenticationKey && this.configuration.userAuthenticationKey !== "") {
+	moblerlog("this.configuration.logingState is "+this.configuration.loginState);
+	if (this.configuration.loginState && this.configuration.loginState==="loggedIn"){	
 		return true;
 	}
 	

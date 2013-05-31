@@ -187,10 +187,11 @@ CourseModel.prototype.loadFromServer = function() {
 					type : 'GET',
 					dataType : 'json',
 					success : createCourseList,
-					error : function() {
-						localStorage.setItem("pendingCourseList", true);
-						console
-								.log("Error while loading course list from server");
+					error : function(request) {
+					localStorage.setItem("pendingCourseList", true);
+					moblerlog("Error while loading course list from server");
+					moblerlog("ERROR status code is : " + request.status);
+					moblerlog("ERROR returned data is: "+ request.responseText); 
 					},
 					beforeSend : setHeader
 				});

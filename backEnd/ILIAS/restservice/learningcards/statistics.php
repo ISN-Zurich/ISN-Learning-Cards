@@ -40,8 +40,10 @@ require_once ('restservice/include/inc.header.php');
 
 require_once 'Services/User/classes/class.ilObjUser.php';
 require_once 'Services/Database/classes/class.ilDB.php';
+require_once 'Services/Component/classes/class.ilPluginAdmin.php';
+require_once 'Services/Component/classes/class.ilPlugin.php';
 
-global $DEBUG;
+global $DEBUG,$ilPluginAdmin;
 $DEBUG = 1;
 
 global $ilUser, $class_for_logging;
@@ -52,6 +54,8 @@ $class_for_logging = "statistics.php";
 //ini_set('memory_limit', '-1');
 
 // creates a new database table for the statistics if no one exists yet
+logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
+if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
 generateTable();
 
 $request_method = $_SERVER['REQUEST_METHOD'];
@@ -92,7 +96,10 @@ switch($request_method) {
 		logging("request method not supported");
 		break;
 }
-
+}
+else {
+	header("HTTP/1.1 403 Forbidden");
+}
 /**
  * stores all statistics that are not yet in the database (of which the timestamp
  * doesn't exist in the database yet) into the database
@@ -112,7 +119,7 @@ function setStatistics($userId, $uuid, $statistics) {
 // 		logging(json_encode($statisticItem));
 
 		//get the id of the item with the current timestamp
-		$result = $ilDB->query("SELECT id FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text") .
+		$result = $ilDB->query("SELECT id FROM ui_uihk_xmob_stat WHERE user_id =" . $ilDB->quote($userId, "text") .
 				" AND day = " . $ilDB->quote($statisticItem['day'], "integer"));
 		$record = $ilDB->fetchAssoc($result);
 		$id = $record['id'];
@@ -125,7 +132,7 @@ function setStatistics($userId, $uuid, $statistics) {
 			$myID = $ilDB->nextID("isnlc_statistics");
 // 			logging("new ID: " . $myID);
 
-			$ilDB->manipulateF("INSERT INTO isnlc_statistics(id, user_id, uuid, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+			$ilDB->manipulateF("INSERT INTO ui_uihk_xmob_stat(id, user_id, uuid, course_id, question_id, day, score, duration) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
 					array("integer", "text", "text", "text", "text", "integer", "float", "integer"),
 					array ($myID, $userId, $uuid, $statisticItem['course_id'], $statisticItem['question_id'],
 							$statisticItem['day'], $statisticItem['score'], $statisticItem['duration']));
@@ -137,7 +144,7 @@ function setStatistics($userId, $uuid, $statistics) {
 	logging("after inserting");
 	
 	// get the number of statistic items for the user
-	$result = $ilDB->query("SELECT count(id) as number FROM isnlc_statistics WHERE user_id =" . $ilDB->quote($userId, "text"));
+	$result = $ilDB->query("SELECT count(id) as number FROM ui_uihk_xmob_stat WHERE user_id =" . $ilDB->quote($userId, "text"));
 	$record = $ilDB->fetchAssoc($result);
 	$number_of_items = $record['number'];
 	
@@ -157,7 +164,7 @@ function getStatistics($userId) {
 	$statistics = array();
 
 	
-	$result = $ilDB->query("SELECT * FROM isnlc_statistics WHERE user_id = " . $ilDB->quote($userId, "text"));
+	$result = $ilDB->query("SELECT * FROM ui_uihk_xmob_stat WHERE user_id = " . $ilDB->quote($userId, "text"));
 	while ($record = $ilDB->fetchAssoc($result)){
 	logging(json_encode($record));
 		array_push($statistics, array(
@@ -180,7 +187,7 @@ function generateTable() {
 	global $ilDB;
 
 	logging("check if our table is present already");
-	if (!in_array("isnlc_statistics",$ilDB->listTables())) {
+	if (!in_array("ui_uihk_xmob_stat",$ilDB->listTables())) {
 		logging("create a new table");
 		$fields= array(
 				"id" => array(
@@ -216,16 +223,16 @@ function generateTable() {
 				)
 		);
 
-		$ilDB->createTable("isnlc_statistics",$fields);
-		$ilDB->addPrimaryKey("isnlc_statistics", array("id"));
+		$ilDB->createTable("ui_uihk_xmob_stat",$fields);
+		$ilDB->addPrimaryKey("ui_uihk_xmob_stat", array("id"));
 
-		$ilDB->createSequence("isnlc_statistics");
+		$ilDB->createSequence("ui_uihk_xmob_stat");
 
 		logging("after creating the table");
 	}	
 	
 	
-	$ilDB->manipulate("UPDATE isnlc_statistics SET duration=-100 WHERE question_id IN ('cardburner','stackhandler')");
+	$ilDB->manipulate("UPDATE ui_uihk_xmob_stat SET duration=-100 WHERE question_id IN ('cardburner','stackhandler')");
 }
 
 ?>

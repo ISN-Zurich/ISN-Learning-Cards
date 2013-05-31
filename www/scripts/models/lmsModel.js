@@ -92,7 +92,8 @@ LMSModel.prototype.loadData = function() {
 		//create a data structure for storing lms info in the local storage
 		// ServerData will store clientkey and default language for each server
 		lmsObject= {
-				"activeServer": DEFAULT_SERVER,
+				//"activeServer": DEFAULT_SERVER,
+				"activeServer": getActiveServer(),
 				"ServerData"  : {} 
 				};
 		localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));
@@ -244,7 +245,7 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 			// and we failed and if this failure took place less than 24 hours ago
 			// then display to the user the lms registation message 
 			//if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
-			if (lastRegister > ((new Date()).getTime() - 24*60*60*1000)){	
+			if (lastRegister > ((new Date()).getTime() - 60*60*1000)){	//it was 24*60*60*1000 once every day
 				moblerlog("less than 24 hours have passed for server"+servername);
 				
 				$(document).trigger("lmsNotRegistrableYet",[servername,previousLMS]);	
@@ -288,6 +289,7 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 	//phone gap property to get the id of a device
 	var deviceID = device.uuid;
 	var activeURL = self.getActiveServerURL();
+	moblerlog("active url in register function is "+activeURL);
 
 	$
 			.ajax({
@@ -341,6 +343,7 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 		self.lmsData.ServerData[servername] = {};
 		// store server data in local storage
 		// requestToken refers to OAuth terminology
+		moblerlog("data in register is "+data);
 		self.lmsData.ServerData[servername].requestToken = data.ClientKey;
 		self.lmsData.ServerData[servername].defaultLanguage = data.defaultLanguage || language_root;
 		//self.lmsData.servername.activeServername = servername;

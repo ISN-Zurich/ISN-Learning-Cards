@@ -8,15 +8,14 @@ to you under the Apache License, Version 2.0 (the
 "License"); you may not use this file except in compliance
 with the License.  You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0  or see LICENSE.txt
+http://www.apache.org/licenses/LICENSE-2.0 or see LICENSE.txt
 
 Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an
 "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
-under the License.	
-
+under the License.
  */
 
 
@@ -40,12 +39,86 @@ under the License.
 
 function Controller() {
 	var self = this;
+	
+	self.MoblerVersion = 2.0;
+	
 	moblerlog("start controller");
 	self.appLoaded = false;
-	self.clickOutOfStatisticsIcon=true;;
+	self.clickOutOfStatisticsIcon=true;
 	var startTime= new Date().getTime();
 	var featuredContent_id = FEATURED_CONTENT_ID;
 
+	
+	var presentVersion = localStorage.getItem("MoblerVersion");
+	
+	// test if we need to migrate 
+	if (!presentVersion || presentVersion !== self.MoblerVersion) {
+		migrate(presentVersion); //upgrade to the latest version
+		}
+	
+	function migrate(thisVersion){
+		// first check if this is a fresh installation
+		if (!thisVersion){
+			thisVerion = 1;
+		}
+
+		if ( thisVersion < 2 ) {
+			migrate_to_2();
+		}
+
+		localStorage.setItem("MoblerVersion", self.MoblerVersion);
+	}
+	
+		
+	function migrate_to_2(){
+		var configuration;
+		try{
+			//configuration=JSON.parse(localStorage.getItem("configuration"));
+			var configurationObject=localStorage.getItem("configuration");
+			if (configurationObject){
+				var configuration = JSON.parse(configurationObject);
+			}
+		}
+		catch (err) {
+			moblerlog("error! while loading configuration in migration");
+		}
+		var language = navigator.language.split("-");
+		var  language_root = (language[0]);
+		if (configuration && configuration.appAuthenticationKey) {
+			moblerlog("app authentication key exists in configuration object");
+			//create the new structure for the lms object
+			var lmsObject= {
+					"activeServer": "hornet",
+					"ServerData"  : {
+						"hornet": {
+							//and store there the authentication key
+							"requestToken":configuration.appAuthenticationKey,
+							"defaultLanguage": language_root
+						}
+					} 
+			}
+		
+			delete configuration.appAuthenticationKey;
+			//var configurationObject=localStorage.getItem("configuration");
+			//localStorage.setItem("configuration", JSON.stringify(localStorage.getItem("configuration")));
+			localStorage.setItem("configuration", JSON.stringify(configuration));
+			moblerlog("configuration object after delete of appAuthenticationKey "+localStorage.getItem("configuration"));
+			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
+		}
+		
+		if(!configuration){
+			moblerlog("configuration object didn't exist during the migration");
+			var configurationObject={
+					loginState : "loggedOut",
+					statisticsLoaded: "false"
+			}
+			localStorage.setItem("configuration", JSON.stringify(configurationObject));
+		}
+	}
+	
+	
+	
+	
 	$.ajaxSetup({
 		cache : false
 	});
@@ -218,15 +291,20 @@ function Controller() {
 	$(document).bind("courselistupdate", function() {
 		if (!self.getLoginState() ){
 			moblerlog("stays in login view, despite the courses synchronization updates");
-			//self.transitionToLogin();// or we can stay on the current view i.e. lms view, landing view or login view
+			//self.transitionToLogin();
+			// or we can stay on the current view i.e. lms view, landing view or login view
 		}
 	});		
 
 	$(document).bind("activeServerReady", function() {
-		if (self.appLoaded ) {
+		if (self.appLoaded && self.activeView == self.views.lms) {
+			moblerlog("transition to login view after selecting server in lms view");
 			self.transitionToLogin();
+			}else {  
+				moblerlog("transition to login view after the default server has been registered");	
+			self.transitionToLanding();
 		}
-	});		
+	});	
 	
 	$(document).bind("click", function(e) {
 		moblerlog(" click in login view ");
@@ -236,11 +314,11 @@ function Controller() {
 	
 	
 	
-	// check if 3000 ms have passed
-	// if not we wait until 3000 ms have passed
-	// then we do the transition to the login view
-	// the remaining waiting time is 3000 - deltatime
-	//automatic calculation of min-height
+// check if 3000 ms have passed
+// if not we wait until 3000 ms have passed
+// then we do the transition to the login view
+// the remaining waiting time is 3000 - deltatime
+//automatic calculation of min-height
 
 //	var currentTime = new Date().getTime();
 //	var deltaTime= currentTime - startTime;
@@ -260,6 +338,8 @@ function Controller() {
 //	}
 
 	function cbFeaturedContentListUpdate() {
+		if (!self.models['featured'].isFeaturedContentLocal){
+		//if (this.activeView !== this.views.login && this.activeView == !this.views.statistics) {
 		moblerlog("featured content list update called");
 		var currentTime = new Date().getTime();
 		var deltaTime= currentTime - startTime;
@@ -272,7 +352,11 @@ function Controller() {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
-		//$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+		
+		//}
+		}
+	
+		$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	}
 	
 	//we binded this event here in order to 
@@ -394,7 +478,9 @@ Controller.prototype.transitionToEndpoint = function() {
  * @function transitionToLogin 
  **/
 Controller.prototype.transitionToLogin = function() {
+	moblerlog("enter transitionToLogin in controller");
 	if ( this.appLoaded ) {
+		moblerlog("the app is loaded in transition to login in controller");
 	this.transition('login');
 		
 	}
@@ -438,7 +524,7 @@ Controller.prototype.transitionToAuthArea = function(viewname,featuredContentFla
 		this.transition(viewname);
 	}
 	else {
-		//stay on the current view if we are not logged in 
+		//stay on the current view if we are not logged in 0
 //		if (featuredContentFlag){
 //			this.transition(viewname,featuredContentFlag);
 // 		}else {
@@ -781,4 +867,3 @@ function selectCourseItem(courseId){
 		// inform the user that something went wrong
 	}
 }
-

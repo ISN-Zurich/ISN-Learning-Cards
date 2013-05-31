@@ -50,13 +50,18 @@ require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 
 //to get the available question pools for the specific anonymous user id
 require_once 'Modules/TestQuestionPool/classes/class.ilObjQuestionPool.php';
+require_once 'Services/Component/classes/class.ilPluginAdmin.php';
+require_once 'Services/Component/classes/class.ilPlugin.php';
 
 global $ilUser,$class_for_logging;
 
-global $DEBUG;
+global $DEBUG,$ilPluginAdmin;
 
 $DEBUG = 1;
 $class_for_logging = "featuredContentCourse.php";
+
+logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
+if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
 
 // get the anonymous user id
 if ($GLOBALS['WEB_ACCESS_WITHOUT_SESSION']){
@@ -71,7 +76,9 @@ logging("anonymous user id is ".$userID);
 $return_data = getFeaturedContent($userID);	
 header('content-type: application/json');
 echo (json_encode($return_data));
-
+} else {
+	header("HTTP/1.1 403 Forbidden");
+}
 
 
 /**

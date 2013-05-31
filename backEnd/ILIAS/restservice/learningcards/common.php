@@ -114,7 +114,7 @@ function getUserIdForSessionKey($sessionKey) {
 	$userId = 0;
 
 	if ($sessionKey) {
-		$result = $ilDB->query("SELECT user_id FROM isnlc_auth_info WHERE session_key = " .$ilDB->quote($sessionKey, "text"));
+		$result = $ilDB->query("SELECT user_id FROM ui_uihk_xmob_auth WHERE session_key = " .$ilDB->quote($sessionKey, "text"));
 		$userIdArray = $ilDB->fetchAssoc($result);
 		$userId = $userIdArray["user_id"];
 		
@@ -299,5 +299,6 @@ function calculateAnswerOtherTypes($assQuestion){
 	logging("answerList for other types of Question".json_encode($answerList));
 	return $answerList;
 }
+
 
 ?>

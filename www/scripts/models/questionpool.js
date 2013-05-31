@@ -104,6 +104,7 @@ QuestionPoolModel.prototype.loadData = function(course_id) {
 };
 
 
+
 /**
  * Loads the question pool from the server and stores it in the local storage
  * When all data is loaded, the questionpoolready event is triggered. 
@@ -134,7 +135,27 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						if (!questionPoolObject) {
 							questionPoolObject = [];
 						}
-                        moblerlog("Object: " + questionPoolObject);
+						
+						//clean html before inserting the data into the localstorage
+						if (questionPoolObject.length > 0) {
+							for (var j = 0; j < questionPoolObject.length; j++) {
+								var question = questionPoolObject[j];				
+								//clear the answertext 
+								self.cleanupAnswertext(question,j);
+								
+								//clear the question
+								moblerlog("*****************************************************************");
+								moblerlog("--> question id " + question.id);
+								
+								question["question"] = self.cleanupHTML(question["question"]);
+								
+								//clear the feedback-more 
+								question["errorFeedback"] = self.cleanupHTML(question["errorFeedback"]);
+								question["correctFeedback"] = self.cleanupHTML(question["correctFeedback"]);		
+							}
+						}
+										
+						moblerlog("Object: " + questionPoolObject);
 						
 						var questionPoolString;
 						try {
@@ -143,6 +164,7 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 						} catch (err) {
 							questionPoolString = "";
 						}
+						
 						localStorage.setItem("questionpool_" +  data.courseID, questionPoolString);
 						
 						/**It is triggered after the successful loading of questions from the server 
@@ -153,12 +175,15 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
                   		$(document).trigger("questionpoolready", data.courseID);
 					}
 				},
-				error : function() {
+				error : function(request) {
 					
 					//if there was an error while sending the request,
 					//store the course id for the question pool in the local storage
 					localStorage.setItem("pendingQuestionPool_" + courseId, true);
 					moblerlog("Error while loading question pool from server");
+					moblerlog("Error while loading course list from server");
+					moblerlog("ERROR status code is : " + request.status);
+					moblerlog("ERROR returned data is: "+ request.responseText); 
 				},
 				beforeSend : setHeader
 			});
@@ -170,7 +195,129 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 
 };
 
+/**
+ * we use this function when we want explicitily to define which html-tags we want to remove
+ * and from which part of the text.
+ * the tags we want to remove are:
+ * - empty <p>
+ * - <hr>
+ * - dublicate <br/>
+ * - <img>
+ * - leading and trailing <br/> 
+ * @prototype
+ * @function cleanupHTML
+ * @param {string} htmltext, it can be the question view text, the feedback more view text or the cloze question text
+ * */
+QuestionPoolModel.prototype.cleanupHTML = function(htmltext) {
+	//cleaning leading and trailing empty tags
+	var helperDiv = $("#modelHelperQuestionpool");
+	
+	helperDiv.empty();
+	helperDiv.html(htmltext);
+	// remove all the image tags
+	helperDiv.find("img, hr, br + br").remove();
 
+	var contentsArray = elementContents(helperDiv[0]);
+	for (var i=0; i<contentsArray.length; i++){
+		moblerlog("element in loop is"+contentsArray[i]);
+		if (! trimHelper(i, contentsArray[i]) ) {
+			break;
+		} 	
+	}
+	
+	moblerlog(">>>PRE REVERSE>>> " + helperDiv.html());
+	
+	contentsArray = elementContents(helperDiv[0]);
+	
+	var reversedArray=contentsArray.reverse();
+	for (var k=0; k<reversedArray.length; k++){
+		moblerlog("enter reverse loop");
+		if(! trimHelper(k, reversedArray[k])) {
+			break;
+		} 
+	}
+	
+	
+	// the following piece of code trims all the leading and trailing brs.
+	function trimHelper(index, element) {
+		moblerlog("element at "+index +" in trim helper is a "+ element);
+		// if the element is a text node AND it contains something other than white-spaces, then we will stop!
+		if ( element.nodeType === 3 && /\S/.test(element.nodeValue) ) { 
+			moblerlog("found a text node with text. stop processing!");
+			return false;
+		}
+		//   if the element is a tag element check if it is a BR. in this case remove it
+		if ( element.nodeType === 1 ) {
+			moblerlog( "id: " + index + "; tagname: " + element.nodeName) ;
+			if  (element.nodeName === "br" || element.nodeName === "BR" ) {
+				moblerlog("found a br element");
+				$(element).remove();
+				moblerlog("removed "+index+" br");
+			}
+		}
+		return true;
+	}
+		
+	// remove all the empty p, div, span tags
+	var pTags = helperDiv.find("p, div, span");
+	pTags.each(function(){if ( ! /\S/.test($(this).text()) ) { $(this).remove(); } });
+	
+	// finally we return the resulting htmltext
+	var rethtmltext = helperDiv.html();
+	helperDiv.empty();
+	
+	moblerlog(">>>HTML>>> " + rethtmltext);
+	return rethtmltext;
+};
+
+/**
+ * We use this function when we want to clear the answer text from any html-tags
+ * that's why we use the text() function to get only the text from the html elements.
+ * For the text of clozeQuestions we need to be picky on the removal of the html elements.
+ * For that reason we use there the cleanUpHtml function, which is used also in the cases for
+ * a) question view text
+ * b) feedback more text (correct and wrong one)
+ * @prototype
+ * @function cleanupAnswertext
+ * @param {array} questionobject, the current question
+ * */
+QuestionPoolModel.prototype.cleanupAnswertext = function(questionobject,questionIndex) {
+	switch (questionobject.type) {
+	case "assSingleChoice":
+	case "assMultipleChoice":
+	case "assOrderingQuestion":
+	case "assOrderingHorizontal":
+		//the answer is an array, so we need to loop
+		for (var i = 0; i < questionobject.answer.length; i++) {
+			questionobject.answer[i].answertext = $("#modelHelperQuestionpool").html(questionobject.answer[i].answertext).text();
+			moblerlog("passed clearing answer view for various question types");
+			$("#modelHelperQuestionpool").empty();
+		}
+		break;
+	case "assClozeTest":
+		moblerlog("enter cloze question type case");
+		// this is a bit more complicated
+		// for the cloze Text
+		moblerlog("cloze text is"+questionobject.answer["clozeText"]);
+		questionobject.answer["clozeText"] = this.cleanupHTML(questionobject.answer["clozeText"]);
+		
+		// we clean the correct gap definition as well, just to be safe.
+		//NOTE:Ilias automatically correct the p, br and hr tags
+		//it keeps the b,i 
+		for (gapIndex=0; gapIndex<jQuery(questionobject.answer.correctGaps).size();gapIndex++){
+			var items=questionobject.answer.correctGaps[gapIndex]["items"];
+			for(k=0; k<jQuery(items).size();k++){
+				//items[k]["answertext"]=$("#modelHelperQuestionpool").html(items[k]["answertext"]).text();
+				questionobject.answer.correctGaps[gapIndex].items[k]["answertext"] = $("#modelHelperQuestionpool").html(items[k]["answertext"]).text();
+				$("#modelHelperQuestionpool").empty();
+			}
+		}
+		break;
+	case "assNumeric":
+	default: 		
+		break;
+	}
+};
 
 /**
  * Removes the data for the specified course id from the local storage

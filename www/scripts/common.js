@@ -6,7 +6,18 @@
  *@default hornet
  **/
 
-var DEFAULT_SERVER = "yellowjacket";
+var DEFAULT_SERVER = "PFPLMS";
+
+//A global property/variable that activates and deactivates the display of console logs.
+/**
+ *A global property/variable that is used to set the default server with which the application will be connected
+ *in order to exchange data.
+ *
+ *@property MOBLERDEBUG
+ *@default hornet
+ **/
+ var MOBLERDEBUG = 0;
+
 /**
  *A global property/variable that is used to store info about the different servers to which the application can be connected.
  *
@@ -52,15 +63,108 @@ var URLS_TO_LMS = [
 						clientKey: ""
 					},
 					{
-						servername: "JukuLab Test",
-						logoImage: "",
+						servername: "JukuLabTest",
+						logoImage: "resources/EstonianForces3.png",
 						backgroundImage: "",
 						logoLabel: "JukuLab Test Server",
 						url: "http://ilias.jukulab.ee/restservice/learningcards",
 						debug: "1",
 						clientKey: ""
-					}
+					},
+					{
+						servername: "EsthonianCollege",
+						logoImage: "resources/esthonia.jpg",
+						backgroundImage: "",
+						logoLabel: "Estonian Defense College",
+						url: "https://eope.ksk.edu.ee/ilias/restservice/learningcards",
+						debug: "0",
+						clientKey: ""
+					},
+					{
+						servername: "ADLRomania",
+						logoImage: "resources/adlromania.png",
+						backgroundImage: "",
+						logoLabel: "Romanian Didad LMS",
+						url: "http://lms.adlunap.ro/restservice/learningcards",
+						debug: "0",
+						clientKey: ""
+					},
+					{
+						servername: "TestADLRomania",
+						logoImage: "resources/adlromania.png",
+						backgroundImage: "",
+						logoLabel: "Test Romanian LMS",
+						url: "http://test.adlunap.ro/restservice/learningcards",
+						debug: "1",
+						clientKey: ""
+					},
+					
+					{
+						servername: "LocalTests",
+						logoImage: "resources/adlromania.png",
+						backgroundImage: "",
+						logoLabel: "Local Tests",
+						url: "http://public-docking-pat-als-0125.ethz.ch:8888/ilias/restservice/learningcards",
+						//url:"http://gess-sipo-als-dock-1-008.ethz.ch:8888/ilias/restservice/learningcards",
+						debug: "1",
+						clientKey: ""
+          }
 ];
+
+
+
+/**Global way of switching on or off the console log messages in all scripts of the front end. 
+ * @function moblerlog
+ * @param {String}messagestring, the text message to be displayed in the console
+ * */
+function moblerlog(messagestring) {
+	var MOBLERDEBUG = 1;
+	
+   if (MOBLERDEBUG === 1) {
+        console.log(messagestring);
+	}
+}
+
+/**Global way of switching on or off the console log messages in all scripts of the front end. 
+ * @function getActiveServer
+ * @param {String}messagestring, the text message to be displayed in the console
+ * */
+function getActiveServer(){
+	var MOBLERDEBUG=0;
+	if (MOBLERDEBUG === 1) {
+		DEFAULT_SERVER = "yellowjacket";
+	}else {
+		DEFAULT_SERVER = DEFAULT_SERVER;
+	}
+	moblerlog("DEFAULT SERVER IS"+DEFAULT_SERVER);
+	return DEFAULT_SERVER;
+}
+
+/**
+ * When launching the app live, this function deactivates the testing servers (yellowjacket, pfplms)
+ * as long as the global variable MOBLERDEBUG has been assigned an 1 value 
+ * at the beginning of the document.
+ * @function debugActivate
+ * * */
+function debugActivate() {
+	var MOBLERDEBUG = 1;
+	moblerlog("debug Activate and the value of MOBLERDEBUG IS"+MOBLERDEBUG);
+	
+	if (MOBLERDEBUG === 0){
+		var lmsData = [];
+		for ( i=0; i < URLS_TO_LMS.length; i++ ) {
+			if (URLS_TO_LMS[i].debug === "0"){
+				lmsData.push(URLS_TO_LMS[i]);
+			}	
+		}
+		moblerlog("return lms data");
+		return lmsData;
+	}else {
+		
+		moblerlog("return the urlsto lms");
+		return URLS_TO_LMS;
+	}
+}
 
 /** Does nothing
  * @function doNothing
@@ -99,38 +203,7 @@ function doApologize() {
 }
 
 
-/**Global way of switching on or off the console log messages in all scripts of the front end. 
- * @function moblerlog
- * @param {String}messagestring, the text message to be displayed in the console
- * */
-function moblerlog(messagestring) {
-	
-	//A global property/variable that activates and deactivates the display of console logs.
-	var MOBLERDEBUG = 1;
-	
-   if (MOBLERDEBUG === 1) {
-        console.log(messagestring);
-    
-	}
-}
 
-function debugActivate() {
-	var LMSDEBUG = 0;
-	moblerlog("debug Activate");
-	if (LMSDEBUG === 1){
-		var lmsData = [];
-		for ( i=0; i < URLS_TO_LMS.length; i++ ) {
-			if (URLS_TO_LMS[i].debug === "0"){
-				lmsData.push(URLS_TO_LMS[i]);
-			}	
-		}
-		moblerlog("return lms data");
-		return lmsData;
-	}else {
-		moblerlog("return the urlsto lms");
-		return URLS_TO_LMS;
-	}
-}
 /**Query the database. It is used in all statistics submodels.
  * @function queryDatabase
  * @param cbResult
@@ -153,12 +226,14 @@ function queryDatabase(cbResult){
 function checkAchievement() {
 	var self = this;
 	self.superModel.db.transaction(function(transaction) {
-		transaction.executeSql( "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?", [this.courseId, this.achievementName], 
+		transaction.executeSql( "SELECT * FROM statistics WHERE course_id = ? AND question_id = ?", [self.courseId, self.achievementName], 
                                function cbSuccess(t,r) {
                                if ( r.rows.length > 0 ) {
+                            	   moblerlog("found " + self.achievementName + " in the local database");
                                   self.achievementValue = 100;
                                   self.superModel.allDone();
                                } else {
+                            	   moblerlog("no " + self.achievementName + " in the local database");
                                   self.calculateAchievementValues();
                                }
                                },
@@ -206,22 +281,6 @@ function checkSpeedImprovement(improvementValue){
     }
     return retval;
 }
-
-/**
- * Calculates the width of an lms item on login view and lms list view.
- * Additionally it calculates the width of the label container in landing view.
- * Generally, this function calculates the width of the label container when it is
- * on the same row with a side dash and the image container on the left along with the separator.
- * * @function calculateLabelWidth
- * */
-function calculateLabelWidth(){
-	moblerlog("enters landing view form");
-	w1=$(".imageContainer").width();
-	w2=$(".separator").width();
-	w3=$(".selectItemContainer").width();
-	width = $(window).width() - (w1 + w2 + w3 + w3 + w1) ;	
-	$(".labelContainer").width(width);
-};
 
 /**
  * 	Calculates the answers width for single and multiple choice questions
@@ -276,3 +335,42 @@ function getCorrectGaps(gapIndex) {
 }
 
 function setLabelContainer() {}
+
+/**
+ * jQuery.contents(): bad stuff cos jquery fails big time
+ *	TODO:write comments 
+ * * @param element
+ * @returns {Array}
+ */
+// elementContents(jqElement[0]);
+function elementContents(element) {
+	var x=element.getElementsByTagName('*');
+	var retval = [];
+	var p = x.parentNode;
+
+	for (i=0;i<x.length;i++)
+	{
+		if (  p !== x[i].parentNode ) {
+			p = x[i].parentNode;
+			if ( x[i].previousSibling ) {
+				var s = x[i].previousSibling;
+				while (s && (s.nodeType === 3 || s.nodeType === 8 ) ) {
+					retval.push(s);
+					s = s.previousSibling;
+				}
+			}
+		}
+		
+		retval.push(x[i]);
+		
+		if ( x[i].nextSibling ) {
+			s = x[i].nextSibling;
+			while (s && (s.nodeType === 3 || s.nodeType === 8 ) ) {
+				retval.push(s);
+				s = s.nextSibling;
+			}
+		}
+	}
+	return retval;
+}
+

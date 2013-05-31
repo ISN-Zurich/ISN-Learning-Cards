@@ -226,12 +226,4 @@ AchievementsView.prototype.showLoadingMessage = function() {
 * @prototype
 * @function changeOrientation
 **/ 
-AchievementsView.prototype.changeOrientation = function() {
-//	window_width = $(window).width();
-//	var gridWidth = 48;
-//	var separatorWidth= 8;
-//	var dashWidth = 40;
-//	var inputwidth = window_width - gridWidth - separatorWidth - dashWidth-70;
-//	moblerlog(" width in achievements view is "+inputwidth);
-//	$(".labelContainer").css("width", inputwidth + "px");
-};
+AchievementsView.prototype.changeOrientation = doNothing;

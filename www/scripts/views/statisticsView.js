@@ -67,9 +67,6 @@ function StatisticsView(controller) {
 		self.clickToAchievements(featuredContent_id);
 	});
     
-//    jester($('#statsSlot2')[0]).tap(function() {
-//		self.clickToAchievements();
-//	});
     
     moblerlog('bind the application events');
     /**It is triggered after statistics are loaded locally from the server. This can happen during the 
@@ -153,33 +150,17 @@ StatisticsView.prototype.open = function(featuredContent_id,achievementsFlag) {
 		if (featuredContent_id || self.controller.getConfigVariable("statisticsLoaded")== true){
 			self.loadData();
 		}
-//		else{
-//		moblerlog("open statistics view outside featured context");
-//		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-//		moblerlog("statistics have been loaded from server");
-//		self.loadData();
-//		}
 		else {
 		self.showLoadingMessage();
 			}
-		//}
+		
 	}//end of is logged in
 	else //if we are not logged in 
 		{
 			moblerlog("open statistics view in featured course context");
 		self.loadData();	
 		}
-//	else {
-//		moblerlog("open statistics view outside featured context");
-//		if (this.controller.getConfigVariable("statisticsLoaded")== true){	
-//		moblerlog("statistics have been loaded from server");
-//		self.loadData();	
-//		}
-//		else {
-//		self.showLoadingMessage();
-//			}
-//		}
-	
+	controller.models['featured'].loadFeaturedCourseFromServer();
 	this.changeOrientation();
 	this.openDiv();	
 	
@@ -306,20 +287,4 @@ StatisticsView.prototype.loadData = function() {
 * @prototype
 * @function changeOrientation
 **/ 	
-StatisticsView.prototype.changeOrientation = function() {
-//	moblerlog("change orientation in statistics view");
-//	window_width = $(window).width();
-//	var gridWidth = 34;
-//	var separatorWidth= 12;
-//	var dashWidth = 40;
-//	var averageValueTextLength = $("#statHandledCardsValue").width();
-//	moblerlog("the length of the average text value is "+averageValueTextLength);
-//	//var statsValueWidth = averageValueTextLength; /*dynamic, it is statistics metric dependant*/
-//	var statsValueWidth = 50 ;
-//	var labelContainerWidth = window_width - gridWidth -separatorWidth - dashWidth - statsValueWidth;
-//	moblerlog("labelContainer width is "+labelContainerWidth);
-//	$(".labelContainer").css("width", labelContainerWidth + "px");
-//	var achievementsWidth= window_width - gridWidth - dashWidth - separatorWidth - 15;
-//	moblerlog("achievements width in statistics view is "+achievementsWidth);
-//	$("#achievementsReference").css("width", achievementsWidth + "px");
-};
+StatisticsView.prototype.changeOrientation = doNothing;

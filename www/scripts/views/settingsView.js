@@ -109,7 +109,7 @@ SettingsView.prototype.openDiv = openView;
 SettingsView.prototype.open = function() {
 	this.loadData();
 	this.openDiv();
-	
+	controller.models['featured'].loadFeaturedCourseFromServer();
 	controller.models['authentication'].loadFromServer();	
 };
 
