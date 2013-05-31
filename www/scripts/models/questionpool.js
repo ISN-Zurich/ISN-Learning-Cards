@@ -144,6 +144,9 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 								self.cleanupAnswertext(question,j);
 								
 								//clear the question
+								moblerlog("*****************************************************************");
+								moblerlog("--> question id " + question.id);
+								
 								question["question"] = self.cleanupHTML(question["question"]);
 								
 								//clear the feedback-more 
@@ -208,39 +211,63 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 QuestionPoolModel.prototype.cleanupHTML = function(htmltext) {
 	//cleaning leading and trailing empty tags
 	var helperDiv = $("#modelHelperQuestionpool");
+	
 	helperDiv.empty();
 	helperDiv.html(htmltext);
 	// remove all the image tags
 	helperDiv.find("img, hr, br + br").remove();
 
-	// remove all the empty p tags
-	var pTags = helperDiv.find("p");
+	var contentsArray = elementContents(helperDiv[0]);
+	for (var i=0; i<contentsArray.length; i++){
+		moblerlog("element in loop is"+contentsArray[i]);
+		if (! trimHelper(i, contentsArray[i]) ) {
+			break;
+		} 	
+	}
+	
+	moblerlog(">>>PRE REVERSE>>> " + helperDiv.html());
+	
+	contentsArray = elementContents(helperDiv[0]);
+	
+	var reversedArray=contentsArray.reverse();
+	for (var k=0; k<reversedArray.length; k++){
+		moblerlog("enter reverse loop");
+		if(! trimHelper(k, reversedArray[k])) {
+			break;
+		} 
+	}
+	
+	
+	// the following piece of code trims all the leading and trailing brs.
+	function trimHelper(index, element) {
+		moblerlog("element at "+index +" in trim helper is a "+ element);
+		// if the element is a text node AND it contains something other than white-spaces, then we will stop!
+		if ( element.nodeType === 3 && /\S/.test(element.nodeValue) ) { 
+			moblerlog("found a text node with text. stop processing!");
+			return false;
+		}
+		//   if the element is a tag element check if it is a BR. in this case remove it
+		if ( element.nodeType === 1 ) {
+			moblerlog( "id: " + index + "; tagname: " + element.nodeName) ;
+			if  (element.nodeName === "br" || element.nodeName === "BR" ) {
+				moblerlog("found a br element");
+				$(element).remove();
+				moblerlog("removed "+index+" br");
+			}
+		}
+		return true;
+	}
+		
+	// remove all the empty p, div, span tags
+	var pTags = helperDiv.find("p, div, span");
 	pTags.each(function(){if ( ! /\S/.test($(this).text()) ) { $(this).remove(); } });
-
-	// now remove the leading and trailing BRs
-	var brTags = helperDiv.find("br");
-	// we are only interested in the first and the last element in this list
-	moblerlog("brTags is"+brTags);
-	// for the first BR we need to check if there is anything else than whitespaces in front of it
-	
-	var firstbrTag=helperDiv.find("br:first");
-	//we check if it the first element of the contents (it returns the chidlren of an element including text nodes and element nodes)
-	if (firstbrTag.is(helperDiv.contents().first())){
-		moblerlog("br is  the first child");
-		firstbrTag.remove();	
-	}	
-
-	// for the last BR we need to check if there is anything else than whitespaces in front of it
-	var lastbrTag=helperDiv.find("br:last");
-	//we check if it the last element of the contents.
-	if (lastbrTag.is(helperDiv.contents().last())){
-	lastbrTag.remove();}
-	
 	
 	// finally we return the resulting htmltext
-	htmltext = helperDiv.html();
+	var rethtmltext = helperDiv.html();
 	helperDiv.empty();
-	return htmltext;
+	
+	moblerlog(">>>HTML>>> " + rethtmltext);
+	return rethtmltext;
 };
 
 /**
@@ -249,7 +276,7 @@ QuestionPoolModel.prototype.cleanupHTML = function(htmltext) {
  * For the text of clozeQuestions we need to be picky on the removal of the html elements.
  * For that reason we use there the cleanUpHtml function, which is used also in the cases for
  * a) question view text
- * b) feedbback more text (correct and wrong one)
+ * b) feedback more text (correct and wrong one)
  * @prototype
  * @function cleanupAnswertext
  * @param {array} questionobject, the current question
@@ -280,13 +307,11 @@ QuestionPoolModel.prototype.cleanupAnswertext = function(questionobject,question
 		for (gapIndex=0; gapIndex<jQuery(questionobject.answer.correctGaps).size();gapIndex++){
 			var items=questionobject.answer.correctGaps[gapIndex]["items"];
 			for(k=0; k<jQuery(items).size();k++){
-				items[k]["answertext"]=$("#modelHelperQuestionpool").html(items[k]["answertext"]).text();
+				//items[k]["answertext"]=$("#modelHelperQuestionpool").html(items[k]["answertext"]).text();
 				questionobject.answer.correctGaps[gapIndex].items[k]["answertext"] = $("#modelHelperQuestionpool").html(items[k]["answertext"]).text();
+				$("#modelHelperQuestionpool").empty();
 			}
 		}
-		$("#modelHelperQuestionpool").empty();
-	
-
 		break;
 	case "assNumeric":
 	default: 		

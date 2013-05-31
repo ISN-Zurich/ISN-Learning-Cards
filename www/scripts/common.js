@@ -335,3 +335,40 @@ function getCorrectGaps(gapIndex) {
 }
 
 function setLabelContainer() {}
+/**
+ * jQuery.contents(): bad stuff cos jquery fails big time
+ *	TODO:write comments 
+ * * @param element
+ * @returns {Array}
+ */
+// elementContents(jqElement[0]);
+function elementContents(element) {
+	var x=element.getElementsByTagName('*');
+	var retval = [];
+	var p = x.parentNode;
+
+	for (i=0;i<x.length;i++)
+	{
+		if (  p !== x[i].parentNode ) {
+			p = x[i].parentNode;
+			if ( x[i].previousSibling ) {
+				var s = x[i].previousSibling;
+				while (s && (s.nodeType === 3 || s.nodeType === 8 ) ) {
+					retval.push(s);
+					s = s.previousSibling;
+				}
+			}
+		}
+		
+		retval.push(x[i]);
+		
+		if ( x[i].nextSibling ) {
+			s = x[i].nextSibling;
+			while (s && (s.nodeType === 3 || s.nodeType === 8 ) ) {
+				retval.push(s);
+				s = s.nextSibling;
+			}
+		}
+	}
+	return retval;
+}
