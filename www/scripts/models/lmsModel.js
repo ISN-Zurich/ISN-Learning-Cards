@@ -245,7 +245,7 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 			// and we failed and if this failure took place less than 24 hours ago
 			// then display to the user the lms registation message 
 			//if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
-			if (lastRegister > ((new Date()).getTime() - 60*60*1000)){	//it was 24*60*60*1000 once every day
+			if (lastRegister > ((new Date()).getTime() - 60*60*1000) && !DEACTIVATE){	//it was 24*60*60*1000 once every day
 				moblerlog("less than 24 hours have passed for server"+servername);
 				
 				$(document).trigger("lmsNotRegistrableYet",[servername,previousLMS]);	
@@ -304,12 +304,22 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 					self.lmsData.ServerData[servername] = {};
 					self.lmsData.ServerData[servername].lastRegister = self.lastTryToRegister[servername];
 					self.storeData();
-                  moblerlog("ERROR status code is : " + request.status);
-                  moblerlog("ERROR returned data is: "+ request.responseText);
-                  moblerlog("Error while registering the app with the backend");
+                 
                   // remember in lmsData that the server made a booboo
                   
-                  $(document).trigger("registrationfailed", [servername,previousLMS]);
+                  //***************DEACTIVATE CHECK******************************
+					//if we get an error because of a probable error on the server i.e. deactivation of backend
+					if (request.status === 403) { 
+						DEACTIVATE=true;	//set the general deactivate status to true. 
+						moblerlog("ERROR status code is : " + request.status);
+						moblerlog("ERROR returned data is: "+ request.responseText);
+						moblerlog("Error while registering the app with the backend");
+						$(document).trigger("registrationTemporaryfailed", [servername,previousLMS]);
+					}
+                  if (request.status=== 404){
+                	  $(document).trigger("registrationfailed", [servername,previousLMS]);
+                  }
+                  
 				},
 				//during the registration we send via headers the app id and the device id
 				beforeSend : setHeaders
@@ -331,6 +341,8 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 	 * @param {String} data, the data exchanged with the server during the registration
 	 */
 	function appRegistration(data) {
+		
+		DEACTIVATE=true;
 		// if we don't know a user's language we try to use the phone's language.
         language = navigator.language.split("-");
         language_root = (language[0]);
@@ -383,7 +395,6 @@ LMSModel.prototype.getSelectedLMS=function(){
  * @param{string} servername, the name of the activated server
  */
 LMSModel.prototype.isRegistrable = function(servername){
-	
 	var self=this;
 	self.loadData();
 	var lastRegister; 

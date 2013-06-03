@@ -12,18 +12,29 @@ var DEFAULT_SERVER = "PFPLMS";
 /**
  *A global property/variable that is used to set the default server with which the application will be connected
  *in order to exchange data.
- *
- *@property MOBLERDEBUG
+ * 
+ *@property DEFAULT_SERVER 
  *@default hornet
  **/
- var MOBLERDEBUG = 0;
+ 
+var MOBLERDEBUG = 0;
 
 /**
- *A global property/variable that is used to store info about the different servers to which the application can be connected.
+ *	A global property/variable that is used to store info about the different servers to which the application can be connected.
  *
- *@property URLS_TO_LMS
- *@default {"yellowjacket", "hornet", "PFP LMS", "PFP TEST"}
+ *@property MOBLERDEBUG
  **/
+ 
+ var DEACTIVATE = false;
+
+ /**
+  * A global property/variable that is used to track the (de)-activation status 
+  * of the back-end service for a specific server.
+  *
+  *@property URLS_TO_LMS
+  *@default false
+  **/
+ 
 var URLS_TO_LMS = [ 
 					{
 						servername: "yellowjacket",
@@ -118,7 +129,7 @@ var URLS_TO_LMS = [
  * @param {String}messagestring, the text message to be displayed in the console
  * */
 function moblerlog(messagestring) {
-	var MOBLERDEBUG = 0;
+	var MOBLERDEBUG = 1;
 	
    if (MOBLERDEBUG === 1) {
         console.log(messagestring);
@@ -147,7 +158,7 @@ function getActiveServer(){
  * @function debugActivate
  * * */
 function debugActivate() {
-	var MOBLERDEBUG = 0;
+	var MOBLERDEBUG = 1;
 	moblerlog("debug Activate and the value of MOBLERDEBUG IS"+MOBLERDEBUG);
 	
 	if (MOBLERDEBUG === 0){

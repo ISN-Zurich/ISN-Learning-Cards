@@ -88,6 +88,16 @@ function LMSView(controller) {
 			self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'),servername,previousLMS);
 	});
 	
+	/**It is triggered when the registration of an lms fails because the backend is not activated
+	 * @event registrationfailed
+	 * @param:a callback function  that displays a message to the user that the server is not available temporarily 
+	*/
+	$(document).bind("registrationTemporaryfailed", function(e,servername,previousLMS) {
+		moblerlog("previous lms in temporary failed lms is "+previousLMS);
+			self.showLMSTemporaryRegistrationMessage(jQuery.i18n.prop('msg_lms_deactivate_registration_message'),servername,previousLMS);
+	});
+	
+	
 	/**It is triggered when the registration of an lms has just started
 	 * @event registrationIsStarted
 	 * @param:a callback function  that displays the loading icon in the place of the statistics icon
@@ -349,6 +359,21 @@ LMSView.prototype.deactivateLMS = function(servername) {
 };
 
 
+/**when an lms has been temporarily (for one hour) been abanded 
+ * from trying to be registered due to an 403 server error.
+ * the lms is activated when the one hour has passed.
+ * @prototype
+ * @function deactivateLMS
+ * @param {String} servername, the name of the selected server
+ **/
+LMSView.prototype.activateLMS = function(servername) {
+	$("#lmsWaiting"+servername).removeClass("icon-cross red");
+	$("#lmsWaiting"+servername).show();
+	$("#lmsImage" +servername).show();
+	$("#label"+servername).removeClass("lightgrey");	
+	$("#lmsDash"+servername).removeClass("dashGrey").addClass("select");
+};
+
 /**
  * when the attempt of registering an lms with the server is finished,
  * the loading rotating icon is beeing replaced by the image
@@ -538,6 +563,69 @@ LMSView.prototype.showLMSRegistrationMessage = function(message,servername,previ
 	
 };
 
+/**
+* @prototype
+* @function showLMSRegistrationMessage
+* @param {String,String,String} message,servername, previouslms,
+* a text with containing the warning message, the name of the selected server, thename of the previous selected server
+*/ 
+LMSView.prototype.showLMSTemporaryRegistrationMessage = function(message,servername,previouslms) {
+	var self=this;
+	moblerlog("enter temporar");
+	$("#lmstemporaryregistrationwaitingmessage").hide();
+	self.toggleIconWait(servername);
+	self.checkLoadingStatus(servername);
+	
+	var warningLi= $('<li/>', { 
+		"id": "lmstemporaryregistrationwaitingmessage"+servername,
+		"class":"gradientMessages lmsmessage",
+		"text": jQuery.i18n.prop('msg_lms_deactivate_message')
+	});
+
+	$("#selectLMSitem"+servername).after(warningLi);
+	$("#lmstemporaryregistrationwaitingmessage"+servername).hide();
+	$("#lmstemporaryregistrationwaitingmessage"+servername).slideDown(600);
+	
+	// to display an message that there is a problem with the specific server
+	// and we cannot register for the next hour
+	setTimeout(function(){
+		$("#lmstemporaryregistrationwaitingmessage"+servername).slideUp(600);
+		
+	},2300);
+
+	setTimeout(function(){
+	self.deselectItemVisuals(servername);
+	self.deactivateLMS(servername);
+	moblerlog("previouslms is "+previouslms);
+	$("#selectLMSitem"+previouslms).addClass("gradientSelected");},2800);
+
+//after one hour check if the server is active 
+//if yes activated it 
+	setTimeout(function(){
+		moblerlog("reactivation?");
+		self.controller.models['lms'].register(servername);
+		if (DEACTIVATE) //if we got an 403 again and we are still in deactivate mode
+			{moblerlog("is calling itself again");
+			setTimeout(myTimer,60*1000);
+			}
+		else	
+			{moblerlog("yes reactivation");
+			self.activateLMS(servername);}
+	},60*1000);
+
+	function myTimer(){
+		moblerlog("reactivation?");
+		self.controller.models['lms'].register(servername);
+		if (DEACTIVATE) //if we got an 403 again and we are still in deactivate mode
+		{moblerlog("is calling itself again");
+		setTimeout(this,60*1000);
+		}
+		else	
+		{moblerlog("yes reactivation");
+		self.activateLMS(servername);}
+	}
+	
+};
 /**
  * to display a loading icon in the place of the lms image
  * while a registration with a server is being atempted.
