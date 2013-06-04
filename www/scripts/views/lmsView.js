@@ -185,6 +185,28 @@ LMSView.prototype.close = function() {
  * @function closeLMS
  */
 LMSView.prototype.closeLMS = function() {
+	
+	var self=this;
+	var lmsObj = self.controller.models['lms'];
+	var lmsData=lmsObj.getLMSData();
+	//the item that has a dark grey gradient background color
+	//will be set as the active server
+	
+	var ul= $("#lmsList");
+	$("#lmsList li").each(function(){
+		if ($(this).hasClass("gradientSelected")){
+			var selectedLMSname=$(this).attr("id").substring(13);
+			moblerlog("selectedName in cloze is "+selectedLMSname);
+			if (lmsData.activeServer !== selectedLMSname){
+				lmsData.activeServer = selectedLMSname;
+			}
+			lmsObj.storeData();
+			lmsObj.activeServerInfo = lmsObj.findServerInfo(selectedLMSname);
+		}
+		
+	});
+	
+
 	this.controller.transitionToLogin();
 };
 
@@ -243,7 +265,7 @@ LMSView.prototype.showLMSList = function() {
 LMSView.prototype.createLMSItem = function(ul, lmsData) {
 	var self = this;
 	var sn = lmsData.servername;
-	var lmsModel = self.controller.models['lms'];
+	var lmsModel= self.controller.models['lms'];
 	moblerlog("sn is "+sn);
 	var selectedLMS = controller.models["lms"].getSelectedLMS();
 	
@@ -431,6 +453,8 @@ LMSView.prototype.clickLMSItem = function(servername,lmsitem) {
 	});	}else if ($("#lmsImage"+servername).is(":visible")){
 		moblerlog("lms item is clicked " + servername);
 		var previousSelectedLMS= lmsitem.parent().find("li.gradientSelected");
+		moblerlog("selected lms in click item is "+previousSelectedLMS);
+		moblerlog("attr id in click item is "+previousSelectedLMS.attr("id"));
 		var previousSelectedLMSname= previousSelectedLMS.attr("id").substring(13);
 		moblerlog("previous selected li is "+previousSelectedLMSname);
 		previousSelectedLMS.removeClass("gradientSelected").addClass("gradient2 textShadow");
@@ -598,6 +622,7 @@ LMSView.prototype.showLMSTemporaryRegistrationMessage = function(message,servern
 	self.deactivateLMS(servername);
 	moblerlog("previouslms is "+previouslms);
 	$("#selectLMSitem"+previouslms).addClass("gradientSelected");},2800);
+		
 
 //after one hour check if the server is active 
 //if yes activated it 
