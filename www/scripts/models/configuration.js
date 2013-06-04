@@ -201,14 +201,23 @@ ConfigurationModel.prototype.loadFromServer = function() {
 								authenticationObject.learnerInformation.userId);
 					},
 					// the receive of authenticated data was failed
-					error : function() {
+					error : function(request) {
 						moblerlog("Error while authentication to server");
+						if (request.status === 403) {
+							DEACTIVATE=true;
+							moblerlog("ERROR status code is : " + request.status);
+							moblerlog("ERROR returned data is: "+ request.responseText);
+							$(document).trigger("authenticationTemporaryfailed");
+						}
+						 if (request.status=== 404){
 						/**
                          * When authentication data are not received from the server
                          * the authenticationfailed event is triggered
                          * @event authenticationfailed
                          */
 						$(document).trigger("authenticationfailed");
+						 }
+						
 					},
 						// we send the user authentication key as "sessionkey" via headers
 						// before the autentication takes plae and in order it to be validated or not

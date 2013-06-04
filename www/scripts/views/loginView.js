@@ -242,6 +242,10 @@ LoginView.prototype.clickLoginButton = function() {
 			break;
 		}
 	}
+	
+	function cbLoginTemporaryFailure() {
+		self.showErrorMessage(jQuery.i18n.prop('msg_login_deactivate_message'));
+		}
 
 	moblerlog("check logIn data");
 	if ($("#usernameInput").val() && $("#password").val()) {
@@ -250,6 +254,7 @@ LoginView.prototype.clickLoginButton = function() {
 
 			$(document).bind("authenticationready", cbLoginSuccess);
 			$(document).bind("authenticationfailed", cbLoginFailure);
+			$(document).bind("authenticationTemporaryfailed", cbLoginTemporaryFailure);
 
 			self.showWarningMessage(jQuery.i18n.prop('msg_warning_message'));
 			controller.models['authentication'].login(
