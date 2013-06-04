@@ -640,7 +640,7 @@ LMSView.prototype.showLMSTemporaryRegistrationMessage = function(message,servern
 
 	function myTimer(){
 		moblerlog("reactivation?");
-		self.controller.models['lms'].register(servername);
+		self.controller.models['lms'].register(servername); //instead of executing the whole registration we can just send the ajax request
 		if (DEACTIVATE) //if we got an 403 again and we are still in deactivate mode
 		{moblerlog("is calling itself again");
 		setTimeout(this,60*1000);

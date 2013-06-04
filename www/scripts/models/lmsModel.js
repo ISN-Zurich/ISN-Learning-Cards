@@ -245,7 +245,7 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 			// and we failed and if this failure took place less than 24 hours ago
 			// then display to the user the lms registation message 
 			//if	(self.lastTryToRegister[servername] > ((new Date()).getTime() - 24*60*60*1000)){
-			if (lastRegister > ((new Date()).getTime() - 60*60*1000) && !DEACTIVATE){	//it was 24*60*60*1000 once every day
+			if (lastRegister > ((new Date()).getTime() - 60*60*1000) && DEACTIVATE){	//it was 24*60*60*1000 once every day
 				moblerlog("less than 24 hours have passed for server"+servername);
 				
 				$(document).trigger("lmsNotRegistrableYet",[servername,previousLMS]);	
@@ -266,7 +266,6 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 			this.lmsData.activeServer = servername;
 		}
 		
-			
 		this.storeData();
 		this.defaultLanguage = lmsObject[servername].defaultLanguage;
 		this.activeRequestToken = requestToken;	
@@ -342,7 +341,7 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 	 */
 	function appRegistration(data) {
 		
-		DEACTIVATE=true;
+		DEACTIVATE=false;
 		// if we don't know a user's language we try to use the phone's language.
         language = navigator.language.split("-");
         language_root = (language[0]);
@@ -402,12 +401,12 @@ LMSModel.prototype.isRegistrable = function(servername){
 	if (lmsObject[servername]){
 		lastRegister=lmsObject[servername].lastRegister;
 		}
-	for ( i=0; i < URLS_TO_LMS.length; i++ ) {
-		if (lastRegister > ((new Date()).getTime() - 24*60*60*1000)){	
+	for ( i=0; i < URLS_TO_LMS.length; i++) {
+		if (lastRegister > (new Date()).getTime() - 24*60*60*1000){	
 		moblerlog("lms is not registrable yet");
 			return false;
 		}
-		else{
+		else {
 			$("#selectLMSitem"+servername).prop("disabled",false);	
 			moblerlog("lms is registrable for server"+servername);
 			return true;
