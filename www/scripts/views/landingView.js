@@ -56,9 +56,6 @@ function LandingView(controller) {
 		self.clickFeaturedStatisticsIcon(featuredContent_id);
 	});
 	
-	
-	
-	
 	$('#featuredContent').bind("touchstart", function(e) {
 		$("#featuredContent").addClass("gradientSelected");
 		moblerlog("color changed in featured content touchstart");

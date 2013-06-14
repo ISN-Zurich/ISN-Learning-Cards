@@ -197,8 +197,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
                          * @event authenticationready
                          * @param the user id 
                          */                        
-						$(document).trigger("authenticationready",
-								authenticationObject.learnerInformation.userId);
+						$(document).trigger("authenticationready",authenticationObject.learnerInformation.userId);
 					},
 					// the receive of authenticated data was failed
 					error : function(request) {

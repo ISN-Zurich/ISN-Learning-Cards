@@ -75,7 +75,7 @@ var URLS_TO_LMS = [
 					},
 					{
 						servername: "JukuLabTest",
-						logoImage: "resources/EstonianForces3.png",
+						logoImage: "resources/esthonia.jpg",
 						backgroundImage: "",
 						logoLabel: "JukuLab Test Server",
 						url: "http://ilias.jukulab.ee/restservice/learningcards",
@@ -84,7 +84,7 @@ var URLS_TO_LMS = [
 					},
 					{
 						servername: "EsthonianCollege",
-						logoImage: "resources/esthonia.jpg",
+						logoImage: "resources/EstonianForces3.png",
 						backgroundImage: "",
 						logoLabel: "Estonian Defense College",
 						url: "https://eope.ksk.edu.ee/ilias/restservice/learningcards",

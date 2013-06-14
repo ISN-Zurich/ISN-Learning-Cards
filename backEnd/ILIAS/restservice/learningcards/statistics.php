@@ -113,7 +113,7 @@ function setStatistics($userId, $uuid, $statistics) {
 
 	logging("count statistics: " . count($statistics));
 
-	// for each item check if it is already in the database
+// for each item check if it is already in the database
 	for ($i = 0; $i < count($statistics); $i++) {
 		$statisticItem = $statistics[$i];
 // 		logging(json_encode($statisticItem));
@@ -127,7 +127,7 @@ function setStatistics($userId, $uuid, $statistics) {
 // 		logging("day: " + $statisticItem['day']);
 // 		logging("id: " + $id);
 		
-		// if the id doesn't exist yet, the item has to be inserted in the database
+// if the id doesn't exist yet, the item has to be inserted in the database
 		if (!$id) {
 			$myID = $ilDB->nextID("isnlc_statistics");
 // 			logging("new ID: " . $myID);
