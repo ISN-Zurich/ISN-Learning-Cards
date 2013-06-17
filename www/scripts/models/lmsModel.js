@@ -51,7 +51,8 @@ function LMSModel(controller) {
 	//localStorage.removeItem("urlsToLMS"); // for debugging only
 	this.loadData();
 	this.lastTryToRegister = [];
-	this.setActiveServer(this.lmsData.activeServer,this.previousLMS);
+	this.temporaryFailure="";
+	this.setActiveServer(this.lmsData.activeServer);
 }
 
 /**
@@ -94,6 +95,7 @@ LMSModel.prototype.loadData = function() {
 		lmsObject= {
 				//"activeServer": DEFAULT_SERVER,
 				"activeServer": getActiveServer(),
+				"previousServer": "",
 				"ServerData"  : {} 
 				};
 		localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));
@@ -220,6 +222,7 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 	
 	var requestToken;
 	var lastRegister; 
+	var deactivate;
 	var lmsObject = self.lmsData.ServerData;
 	moblerlog("setActiveServer: where is the serverdata? " + lmsObject );
 	// a sanity check if the selected lms exists in the local storage
@@ -239,7 +242,7 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 		else { // we are online 
 			moblerlog("will try to do a registration because we are online");
 			if (lmsObject[servername]){
-			lastRegister=lmsObject[servername].lastRegister;
+				lastRegister=lmsObject[servername].lastRegister;
 			}
 			// if we had tried to register for the specific server 
 			// and we failed and if this failure took place less than 24 hours ago
@@ -248,12 +251,11 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 			if (lastRegister > ((new Date()).getTime() - 60*60*1000) && DEACTIVATE){	//it was 24*60*60*1000 once every day
 				moblerlog("less than 24 hours have passed for server"+servername);
 				
-				$(document).trigger("lmsNotRegistrableYet",[servername,previousLMS]);	
-				moblerlog("previouslms in model is"+previousLMS);
+				$(document).trigger("lmsNotRegistrableYet",[servername]);	
 			}else {
 				moblerlog("do the registration for server"+servername);
 				$(document).trigger("registrationIsStarted", servername);
-				self.register(servername,previousLMS);  //we will get a client key
+				self.register(servername);  //we will get a client key
 			}//end of else
 		}	
 		
@@ -273,6 +275,32 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 	}
 };
 
+/**
+* Stores in the local storage the previous selected lms
+* @prototype
+* @function storePreviousServer 
+* @param {string} servername, the name of the previously selected lms
+*/
+LMSModel.prototype.storePreviousServer = function(servername){
+
+this.loadData();
+this.lmsData.previousServer=servername;
+moblerlog("previous server ");
+this.storeData();
+	
+}
+
+/**
+* Returns the previously selected LMS
+* @prototype
+* @function getPreviousServer 
+* @return {string} servername, the name of the previously selected lms
+*/
+LMSModel.prototype.getPreviousServer = function(){
+
+return this.lmsData.previousServer;
+	
+}
 
 /**
 * Sends the registration request (appId ,device id) to the server and waiting to get back the app key 
@@ -281,8 +309,7 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 * @function register 
 * @param {string, string} servername, previousLMS, the name of the currently selected lms and the name of the previously selected lms
 */
-LMSModel.prototype.register = function(servername,previousLMS) {
-	moblerlog("previous lms in registration is"+previousLMS);
+LMSModel.prototype.register = function(servername) {
 	var self = this;
 	moblerlog("enters regsitration");
 	//phone gap property to get the id of a device
@@ -299,10 +326,6 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 				// if no registration is done, then use the request parameter
 				// to display the error that created the problem in the console
 				error : function(request) {
-					self.lastTryToRegister[servername] = (new Date()).getTime();
-					self.lmsData.ServerData[servername] = {};
-					self.lmsData.ServerData[servername].lastRegister = self.lastTryToRegister[servername];
-					self.storeData();
                  
                   // remember in lmsData that the server made a booboo
                   
@@ -310,13 +333,21 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 					//if we get an error because of a probable error on the server i.e. deactivation of backend
 					if (request.status === 403) { 
 						DEACTIVATE=true;	//set the general deactivate status to true. 
+						self.lmsData.ServerData[servername] = {};
+						self.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
+						self.lmsData.ServerData[servername].lastdeactivate=(new Date()).getTime();
+						self.storeData();
 						moblerlog("ERROR status code is : " + request.status);
 						moblerlog("ERROR returned data is: "+ request.responseText);
 						moblerlog("Error while registering the app with the backend");
-						$(document).trigger("registrationTemporaryfailed", [servername,previousLMS]);
+						$(document).trigger("registrationTemporaryfailed", [servername]);
 					}
                   if (request.status=== 404){
-                	  $(document).trigger("registrationfailed", [servername,previousLMS]);
+                	  	self.lastTryToRegister[servername] = (new Date()).getTime();
+  						self.lmsData.ServerData[servername] = {};
+  						self.lmsData.ServerData[servername].lastRegister = self.lastTryToRegister[servername];
+  						self.storeData();
+  						$(document).trigger("registrationfailed", [servername,previousLMS]);
                   }
                   
 				},
@@ -340,8 +371,8 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 	 * @param {String} data, the data exchanged with the server during the registration
 	 */
 	function appRegistration(data) {
-		
-		DEACTIVATE=false;
+				
+		var DEACTIVATE=false;
 		// if we don't know a user's language we try to use the phone's language.
         language = navigator.language.split("-");
         language_root = (language[0]);
@@ -357,11 +388,10 @@ LMSModel.prototype.register = function(servername,previousLMS) {
 		moblerlog("data in register is "+data);
 		self.lmsData.ServerData[servername].requestToken = data.ClientKey;
 		self.lmsData.ServerData[servername].defaultLanguage = data.defaultLanguage || language_root;
+		self.lmsData.ServerData[servername].deactivateFlag=false;
 		//self.lmsData.servername.activeServername = servername;
-		
-		self.storeData();
-				
-		self.setActiveServer(servername);	
+		self.storeData();		
+		self.setActiveServer(servername);
 	}
 };
 
@@ -394,24 +424,46 @@ LMSModel.prototype.getSelectedLMS=function(){
  * @param{string} servername, the name of the activated server
  */
 LMSModel.prototype.isRegistrable = function(servername){
+	moblerlog("enterisRegistrable for server"+servername);
 	var self=this;
 	self.loadData();
 	var lastRegister; 
 	var lmsObject = self.lmsData.ServerData;
 	if (lmsObject[servername]){
 		lastRegister=lmsObject[servername].lastRegister;
-		}
+	}
 	for ( i=0; i < URLS_TO_LMS.length; i++) {
+		moblerlog("enter in for loop");
+		if (lmsObject[servername] && lmsObject[servername].lastRegister){
 		if (lastRegister > (new Date()).getTime() - 24*60*60*1000){	
-		moblerlog("lms is not registrable yet");
+			moblerlog("lms is not registrable yet");
 			return false;
-		}
-		else {
+		//}else if (lastRegister < (new Date()).getTime() - 24*60*60*1000 || (lmsObject[servername] && !lmsObject[servername].deactivateFlag)){
+		}else{
 			$("#selectLMSitem"+servername).prop("disabled",false);	
 			moblerlog("lms is registrable for server"+servername);
 			return true;
-		}
-	}
+		}}
+				
+		if (lmsObject[servername] && lmsObject[servername].deactivateFlag){ //if the specific lms item was inactive because of an 403 error
+			moblerlog("already 403 for server"+servername);
+			//try to send a registration request
+			self.register(servername);
+			
+			// this case should be handled in the success handler of the register request.
+			if (!lmsObject[servername].deactivateFlag) {
+				$("#selectLMSitem"+servername).prop("disabled",false);	
+				moblerlog("specific lms is active again ");
+				return true;
+			}
+			
+			moblerlog("specific lms is still deactivate");	
+			return false;
+		}	
+		return true;
+	}//end for
+	
 };
+
 
 
