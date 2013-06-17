@@ -300,8 +300,8 @@ function Controller() {
 		if (self.appLoaded && self.activeView == self.views.lms) {
 			moblerlog("transition to login view after selecting server in lms view");
 			self.transitionToLogin();
-			}else {  
-				moblerlog("transition to login view after the default server has been registered");	
+		} else if ( self.appLoaded && self.activeView == self.views.splashScreen ){  
+			moblerlog("transition to login view after the default server has been registered");	
 			self.transitionToLanding();
 		}
 	});	
