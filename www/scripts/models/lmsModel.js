@@ -378,7 +378,7 @@ LMSModel.prototype.register = function(servername) {
 						moblerlog("ERROR returned data is: "+ request.responseText);
 						moblerlog("Error while registering the app with the backend");
 						}
-						$(document).trigger("registrationTemporaryfailed", [servername],previousLMS);
+						$(document).trigger("registrationTemporaryfailed", [servername,previousLMS]);
 					}
                   if (request.status=== 404){
                 	  	self.lastTryToRegister[servername] = (new Date()).getTime();

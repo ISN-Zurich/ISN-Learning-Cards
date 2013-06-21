@@ -211,7 +211,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
 							moblerlog("ERROR returned data is: "+ request.responseText);
 							moblerlog("Error while authentication to server");
 							}
-							$(document).trigger("authenticationTemporaryfailed");
+							$(document).trigger("authenticationTemporaryfailed",[servername]);
 						}
 						 if (request.status=== 404){
 							 
