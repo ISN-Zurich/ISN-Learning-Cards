@@ -212,8 +212,8 @@ LMSModel.prototype.getDefaultLanguage = function() {
  * 
  * THIS FUNCTION IS ONLY USED BY THE LMSVIEW or the constructor
  */
-LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
-	moblerlog("just enter setActive Server, previousLMS is "+previousLMS);
+LMSModel.prototype.setActiveServer = function(servername) {
+	//moblerlog("just enter setActive Server, previousLMS is "+previousLMS);
 	var self=this;
 	var urlsToLMS, lmsObject;
 	this.activeServerInfo = this.findServerInfo(servername);
@@ -275,6 +275,42 @@ LMSModel.prototype.setActiveServer = function(servername,previousLMS) {
 	}
 };
 
+
+
+/**
+* Stores in the local storage the active server
+* This step is executed within the set active server function above.
+* However it is need in cases we just want the storing of the active server to take place
+* without any further registration and transition to login view. This is happening in the cases where
+* a server cannot be registered  and automatically the previously selected lms should be stored as 
+* the active server before we close the view.
+* @prototype
+* @function storeActiveServer 
+* @param {string} servername, the name of the previously selected lms 
+*/
+LMSModel.prototype.storeActiveServer = function(servername){
+
+this.loadData();
+this.activeServerInfo = this.findServerInfo(servername);
+this.lmsData.activeServer=servername;
+moblerlog("active server set ");
+this.storeData();
+	
+}
+
+/**
+* 
+* @prototype
+* @function getActiveServer 
+* @param {string} servername, the name of the active server 
+*/
+LMSModel.prototype.getActiveServer = function(servername){
+
+//this.activeServerInfo = this.findServerInfo(servername);
+//this.lmsData.activeServer=servername;
+return this.activerServer;
+	
+}
 /**
 * Stores in the local storage the previous selected lms
 * @prototype
@@ -332,15 +368,17 @@ LMSModel.prototype.register = function(servername) {
                   //***************DEACTIVATE CHECK******************************
 					//if we get an error because of a probable error on the server i.e. deactivation of backend
 					if (request.status === 403) { 
+						if (!DEACTIVATE){
 						DEACTIVATE=true;	//set the general deactivate status to true. 
 						self.lmsData.ServerData[servername] = {};
 						self.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
-						self.lmsData.ServerData[servername].lastdeactivate=(new Date()).getTime();
 						self.storeData();
+						var previousLMS=self.lmsData.ServerData[servername].previousServer;
 						moblerlog("ERROR status code is : " + request.status);
 						moblerlog("ERROR returned data is: "+ request.responseText);
 						moblerlog("Error while registering the app with the backend");
-						$(document).trigger("registrationTemporaryfailed", [servername]);
+						}
+						$(document).trigger("registrationTemporaryfailed", [servername],previousLMS);
 					}
                   if (request.status=== 404){
                 	  	self.lastTryToRegister[servername] = (new Date()).getTime();
@@ -448,6 +486,7 @@ LMSModel.prototype.isRegistrable = function(servername){
 		if (lmsObject[servername] && lmsObject[servername].deactivateFlag){ //if the specific lms item was inactive because of an 403 error
 			moblerlog("already 403 for server"+servername);
 			//try to send a registration request
+			self.controller.models['lms'].storeActiveServer(servername);
 			self.register(servername);
 			
 			// this case should be handled in the success handler of the register request.
