@@ -202,7 +202,7 @@ FeaturedContentModel.prototype.loadFeaturedCourseFromServer = function(){
 					type : 'GET',
 					dataType : 'json',
 					success : createFeaturedContentList,
-					error : function() {
+					error : function(request) {
 						localStorage.setItem("pendingFeaturedContentList", true);
 						console.log("Error while loading featured course list from server");
 						 moblerlog("ERROR status code is : " + request.status);

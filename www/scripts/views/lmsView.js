@@ -73,20 +73,33 @@ function LMSView(controller) {
 	 * @param: a callback function that displays a message to the user that the server is not available and the 
 	 * 		   registration cannot take place
 	*/
-	$(document).bind("lmsNotRegistrableYet", function(e,servername,previousLMS) {
+	$(document).bind("lmsNotRegistrableYet", function(e,servername) {
 		moblerlog("previouslms in bind is "+previousLMS);
+		var previousLMS=self.controller.models['lms'].getPreviousServer();
 		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'),servername,previousLMS);
 	});
 	
 	/**It is triggered when the registration of an lms fails because of any reason
 	 * @event registrationfailed
-	 * @param:a callback function  that displays a message to the user that the server is not available and the
+	 * @param:a callback function that displays a message to the user that the server is not available and the
 	 *		  registration cannot take place 
 	*/
-	$(document).bind("registrationfailed", function(e,servername,previousLMS) {
+	$(document).bind("registrationfailed", function(e,servername) {
 		moblerlog("previous lms in bind 2 is "+previousLMS);
-			self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'),servername,previousLMS);
+		var previousLMS=self.controller.models['lms'].getPreviousServer();
+		self.showLMSRegistrationMessage(jQuery.i18n.prop('msg_lms_registration_message'),servername,previousLMS);
 	});
+	
+	/**It is triggered when the registration of an lms fails because the backend is not activated
+	 * @event registrationfailed
+	 * @param:a callback function  that displays a message to the user that the server is not available temporarily 
+	*/
+	$(document).bind("registrationTemporaryfailed", function(e,servername,previousLMS) {
+		moblerlog("previous lms in temporary failed lms is "+previousLMS);
+		//var previousLMS=self.controller.models['lms'].getPreviousServer();
+		self.showLMSTemporaryRegistrationMessage(jQuery.i18n.prop('msg_lms_deactivate_registration_message'),servername,previousLMS);
+	});
+	
 	
 	/**It is triggered when the registration of an lms has just started
 	 * @event registrationIsStarted
@@ -144,6 +157,10 @@ LMSView.prototype.open = function() {
 	this.firstLoad = false;
 	this.openDiv();
 	this.controller.resizeHandler();
+	
+	//1. check which lms item has been inactive because of a 403 error
+	//2. check if this is OK now, by sending a registration request
+	//3. if we don't get back an error (403 or 404) then we should activate the visuals but NOT register without tapping first.
 };
 
 /**
@@ -175,7 +192,11 @@ LMSView.prototype.close = function() {
  * @function closeLMS
  */
 LMSView.prototype.closeLMS = function() {
+	
+	var self=this;
+	$("#lmstemporaryregistrationwaitingmessage").remove();
 	this.controller.transitionToLogin();
+	
 };
 
 
@@ -214,8 +235,7 @@ LMSView.prototype.showLMSList = function() {
 		var marginli = $("<li/>", {
 			"class":"spacerMargin"
 		}).appendTo(ul);
-
-
+		
 	}//end of if
 	else {
 		this.didApologize = true; 
@@ -233,7 +253,7 @@ LMSView.prototype.showLMSList = function() {
 LMSView.prototype.createLMSItem = function(ul, lmsData) {
 	var self = this;
 	var sn = lmsData.servername;
-	var lmsModel = self.controller.models['lms'];
+	var lmsModel= self.controller.models['lms'];
 	moblerlog("sn is "+sn);
 	var selectedLMS = controller.models["lms"].getSelectedLMS();
 	
@@ -349,6 +369,21 @@ LMSView.prototype.deactivateLMS = function(servername) {
 };
 
 
+/**when an lms has been temporarily (for one hour) been abanded 
+ * from trying to be registered due to an 403 server error.
+ * the lms is activated when the one hour has passed.
+ * @prototype
+ * @function deactivateLMS
+ * @param {String} servername, the name of the selected server
+ **/
+LMSView.prototype.activateLMS = function(servername) {
+	$("#lmsWaiting"+servername).removeClass("icon-cross red");
+	$("#lmsWaiting"+servername).show();
+	$("#lmsImage" +servername).show();
+	$("#label"+servername).removeClass("lightgrey");	
+	$("#lmsDash"+servername).removeClass("dashGrey").addClass("select");
+};
+
 /**
  * when the attempt of registering an lms with the server is finished,
  * the loading rotating icon is beeing replaced by the image
@@ -395,7 +430,6 @@ LMSView.prototype.clickLMSItem = function(servername,lmsitem) {
 	var self=this;
 	var lmsModel = self.controller.models['lms'];
 	
-	
 	self.checkLoadingStatus(servername);
 	
 	if ($("#lmsWaiting"+servername).hasClass("icon-cross red")){
@@ -406,12 +440,18 @@ LMSView.prototype.clickLMSItem = function(servername,lmsitem) {
 	});	}else if ($("#lmsImage"+servername).is(":visible")){
 		moblerlog("lms item is clicked " + servername);
 		var previousSelectedLMS= lmsitem.parent().find("li.gradientSelected");
+		moblerlog("selected lms in click item is "+previousSelectedLMS);
+		moblerlog("attr id in click item is "+previousSelectedLMS.attr("id"));
 		var previousSelectedLMSname= previousSelectedLMS.attr("id").substring(13);
 		moblerlog("previous selected li is "+previousSelectedLMSname);
+		//store in the model the previous selected lms and not pass it as an argument in the setActive server
+		this.controller.models['lms'].storePreviousServer(previousSelectedLMSname);
+		//or previousLMS=lmsModel.getPreviousServer();
 		previousSelectedLMS.removeClass("gradientSelected").addClass("gradient2 textShadow");
 		this.selectItemVisuals(servername);
 		setTimeout(function() {
-		this.controller.models['lms'].setActiveServer(servername,previousSelectedLMSname);},650);
+		this.controller.models['lms'].setActiveServer(servername);
+		},650);
 	}
 	
 };
@@ -500,10 +540,10 @@ LMSView.prototype.showLMSConnectionMessage = function(message, servername) {
  * @param {String,String,String} message,servername, previouslms,
  * a text with containing the warning message, the name of the selected server, thename of the previous selected server
  */ 
-LMSView.prototype.showLMSRegistrationMessage = function(message,servername,previouslms) {
+LMSView.prototype.showLMSRegistrationMessage = function(message,servername) {
 	var self=this;
 	
-	$("#lmsregistrationwaitingmessage").hide();
+	$("#lmsregistrationwaitingmessage").empty();
 	
 	self.toggleIconWait(servername);
 	self.checkLoadingStatus(servername);
@@ -533,11 +573,80 @@ LMSView.prototype.showLMSRegistrationMessage = function(message,servername,previ
 	self.deselectItemVisuals(servername);
 	self.deactivateLMS(servername);
 	moblerlog("previouslms is "+previouslms);
+	// activate the previsous LMS before changing the visuals
+	var previouslms=this.controller.models['lms'].getPreviousServer();
+	self.controller.models['lms'].setActiveServer(previouslms);
 	$("#selectLMSitem"+previouslms).addClass("gradientSelected");	
 	},2800);
 	
 };
 
+/**
+* @prototype
+* @function showLMSRegistrationMessage
+* @param {String,String,String} message,servername, previouslms,
+* a text with containing the warning message, the name of the selected server, thename of the previous selected server
+*/ 
+LMSView.prototype.showLMSTemporaryRegistrationMessage = function(message,servername,previousLMS) {
+	var self=this;
+	moblerlog("enter temporar");
+	$("#lmstemporaryregistrationwaitingmessage"+servername).remove();
+	self.toggleIconWait(servername);
+	self.checkLoadingStatus(servername);
+	
+	var warningLi= $('<li/>', { 
+		"id": "lmstemporaryregistrationwaitingmessage"+servername,
+		"class":"gradientMessages lmsmessage",
+		"text": jQuery.i18n.prop('msg_lms_deactivate_message')
+	});
+
+	$("#selectLMSitem"+servername).after(warningLi);
+	$("#lmstemporaryregistrationwaitingmessage"+servername).hide();
+	$("#lmstemporaryregistrationwaitingmessage"+servername).slideDown(600);
+	
+	// to display an message that there is a problem with the specific server
+	// and we cannot register for the next hour
+	//	slide up this message after a couple of seconds
+	setTimeout(function(){
+		$("#lmstemporaryregistrationwaitingmessage"+servername).slideUp(600);
+	},2300);
+	
+	//to make visually this lms as inactive 
+	//and activate the previously selected lms
+	setTimeout(function(){
+	self.deselectItemVisuals(servername);
+	self.deactivateLMS(servername);
+	//moblerlog("previouslms is "+previouslms);
+	//var previouslms=this.controller.models['lms'].getPreviousServer();
+	self.controller.models['lms'].storeActiveServer(previousLMS);
+	$("#selectLMSitem"+previousLMS).addClass("gradientSelected");},2800);
+		
+	
+//	after one hour check if the server is active 
+//	if yes activated it 
+//	we need firstly to check if the active view is the lms list view	
+	if (self.active) {
+		moblerlog("lms is active, try setTimeOut again");
+	setTimeout(function(){
+		moblerlog("reactivation?");
+		self.controller.models['lms'].storeActiveServer(servername);
+		self.controller.models['lms'].register(servername);
+	},60*1000);
+	}	//if the active view is the lms list view
+
+	function myTimer(){
+		moblerlog("reactivation?");
+		self.controller.models['lms'].register(servername); //instead of executing the whole registration we can just send the ajax request
+		if (DEACTIVATE) //if we got an 403 again and we are still in deactivate mode
+		{moblerlog("is calling itself again");
+		setTimeout(this,60*1000);
+		}
+		else	
+		{moblerlog("yes reactivation");
+		self.activateLMS(servername);}
+	}
+	
+};
 /**
  * to display a loading icon in the place of the lms image
  * while a registration with a server is being atempted.

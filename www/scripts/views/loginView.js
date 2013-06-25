@@ -172,6 +172,7 @@ LoginView.prototype.open = function() {
 	// hide unnecessary errors and warnings 
 	this.hideErrorMessage();
 	this.hideWarningMessage();
+	this.hideDeactivateMessage();
 	$("#selectLMS").removeClass("gradientSelected");
 	this.showForm();
 	this.active = true;
@@ -242,6 +243,14 @@ LoginView.prototype.clickLoginButton = function() {
 			break;
 		}
 	}
+	
+	function cbLoginTemporaryFailure(servername) {
+		moblerlog("enter cbLogin tempoerary failure");
+		//if (self.controller.models['lms'].getActiveServer() !== servername){
+			moblerlog("will show the deactivate message");
+			self.showDeactivateMessage(jQuery.i18n.prop('msg_login_deactivate_message'));
+		//}
+	}
 
 	moblerlog("check logIn data");
 	if ($("#usernameInput").val() && $("#password").val()) {
@@ -250,6 +259,7 @@ LoginView.prototype.clickLoginButton = function() {
 
 			$(document).bind("authenticationready", cbLoginSuccess);
 			$(document).bind("authenticationfailed", cbLoginFailure);
+			$(document).bind("authenticationTemporaryfailed", cbLoginTemporaryFailure);
 
 			self.showWarningMessage(jQuery.i18n.prop('msg_warning_message'));
 			controller.models['authentication'].login(
@@ -269,10 +279,12 @@ LoginView.prototype.clickLoginButton = function() {
  */ 
 LoginView.prototype.showForm = function() {
 	moblerlog("show form in login view");
+	moblerlog("active server in login view is ");
 	$("#lmsImage").attr("src",this.controller.getActiveLogo());
 	$("#loginLmsLabel").text(this.controller.getActiveLabel());
 				
 	this.hideErrorMessage();
+	this.hideDeactivateMessage();
 	$("#loginViewHeader").show();
 	$("#loginViewBackIcon").show();
 	$("#loginBody").show();
@@ -289,10 +301,23 @@ LoginView.prototype.showForm = function() {
  */ 
 LoginView.prototype.showErrorMessage = function(message) {
 	$("#warningmessage").hide();
+	$("#deactivatemessage").hide();
 	$("#errormessage").text(message);
 	$("#errormessage").show();
 };
 
+/**
+ * shows the specified error message
+ * @prototype
+ * @function showErrorMessage
+ */ 
+LoginView.prototype.showDeactivateMessage = function(message) {
+	moblerlog("show deactivate message");
+	$("#warningmessage").hide();
+	$("#errormessage").hide();
+	$("#deactivatemessage").text(message);
+	$("#deactivatemessage").show();
+};
 
 /**
  * shows the specified warning message
@@ -301,6 +326,7 @@ LoginView.prototype.showErrorMessage = function(message) {
  */ 
 LoginView.prototype.showWarningMessage = function(message) {
 	$("#errormessage").hide();
+	$("#deactivatemessage").hide();
 	$("#warningmessage").text(message);
 	$("#warningmessage").show();
 };
@@ -327,6 +353,17 @@ LoginView.prototype.hideWarningMessage = function() {
 	$("#warningmessage").hide();
 };
 
+/**
+* hides the specified dectivate message
+* @prototype
+* @function hideDeactivateMessage
+**/ 
+LoginView.prototype.hideDeactivateMessage = function() {
+	moblerlog("enter hide deactivate message");
+	$("#deactivatemessage").text("");
+	$("#deactivatemessage").hide();
+	moblerlog("hided deactivate message");
+};
 
 /**
 * when user taps on the select lms button
@@ -398,11 +435,15 @@ LoginView.prototype.changeOrientation = function(orientationLayout, w, h) {
 
 /**
 * transition to landing view when tapping on the
-* close button on the up right corner of login view 
+* ,pr button on the up right corner of login view 
 * @prototype
 * @function clickCloseLoginButton
  * */
 LoginView.prototype.clickCloseLoginButton=function(){
+	//set the active server to be the previous server
+	var lmsModel= self.controller.models['lms'];
+	var activeServer=lmsModel.getActiveServer();
+	lmsModel.storePreviousServer(activeServer);
 	controller.transitionToLanding();
 
 };

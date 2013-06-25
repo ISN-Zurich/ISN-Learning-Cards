@@ -230,8 +230,7 @@ CoursesListView.prototype.update = function(featuredContent_id) {
 	$("#coursesList").empty();
 
 	moblerlog("First course id: " + courseModel.getId());
-	
-	
+
 	
 //featured content
 	

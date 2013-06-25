@@ -197,18 +197,33 @@ ConfigurationModel.prototype.loadFromServer = function() {
                          * @event authenticationready
                          * @param the user id 
                          */                        
-						$(document).trigger("authenticationready",
-								authenticationObject.learnerInformation.userId);
+						$(document).trigger("authenticationready",authenticationObject.learnerInformation.userId);
 					},
 					// the receive of authenticated data was failed
-					error : function() {
-						moblerlog("Error while authentication to server");
+					error : function(request) {
+						if (request.status === 403) { 
+							if (!DEACTIVATE){
+							DEACTIVATE=true;	//set the general deactivate status to true. 
+							self.lmsData.ServerData[servername] = {};
+							self.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
+							self.storeData();
+							moblerlog("ERROR status code is : " + request.status);
+							moblerlog("ERROR returned data is: "+ request.responseText);
+							moblerlog("Error while authentication to server");
+							}
+							$(document).trigger("authenticationTemporaryfailed",[servername]);
+						}
+						 if (request.status=== 404){
+							 
 						/**
                          * When authentication data are not received from the server
                          * the authenticationfailed event is triggered
                          * @event authenticationfailed
                          */
+							 moblerlog("ERROR status code is : " + request.status);
+							moblerlog("ERROR returned data is: "+ request.responseText);
 						$(document).trigger("authenticationfailed");
+						 }
 					},
 						// we send the user authentication key as "sessionkey" via headers
 						// before the autentication takes plae and in order it to be validated or not
@@ -374,15 +389,31 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 					}
 				},
 				//the authentication to the server failed because of unknown reason
-				error : function(jqXHR, textStatus, errorThrown) {
-					moblerlog("Error while authentication to server: status:" + jqXHR.status + ", " + jqXHR.responseText);
-					/**
-                     * When the authentication to the server fails for any unknown reason that is independent from validity of the received data
-                     * but related with any internet connectivity or server issue, the authenticationfailed and connectionerror events are triggered
-                     * @event authenticationfailed
-                     * @event connectionerror
-                     */   
-					$(document).trigger("authenticationfailed","connectionerror");
+				error : function(request, textStatus, errorThrown) {
+					
+					if (request.status === 403) { 
+						if (!DEACTIVATE){
+						DEACTIVATE=true;	//set the general deactivate status to true.
+						var lmsModel=self.controller.models['lms'];
+						var servername=lmsModel.lmsData.activeServer;
+						lmsModel.lmsData.ServerData[servername] = {};
+						lmsModel.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
+						lmsModel.storeData();
+						moblerlog("ERROR status code is : " + request.status);
+						moblerlog("ERROR returned data is: "+ request.responseText);
+						moblerlog("Error while authentication to server");
+						}
+						$(document).trigger("authenticationTemporaryfailed");
+					}else{
+						moblerlog("Error while authentication to server: status:" + request.status + ", " + request.responseText);
+						/**
+						 * When the authentication to the server fails for any unknown reason that is independent from validity of the received data
+						 * but related with any internet connectivity or server issue, the authenticationfailed and connectionerror events are triggered
+						 * @event authenticationfailed
+						 * @event connectionerror
+						 */   
+						$(document).trigger("authenticationfailed","connectionerror");
+					}
 				},
 				//the authentication data (uuid, appid, username, challenge) are sent to the server via headers
                   beforeSend :function setHeader(xhr) {
