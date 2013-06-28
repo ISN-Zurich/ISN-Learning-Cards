@@ -181,17 +181,29 @@ CourseModel.prototype.loadFromServer = function() {
 			}
 		}
 
-			$
-				.ajax({
+			$.ajax({
 					url:  activeURL + '/courses.php',
 					type : 'GET',
 					dataType : 'json',
 					success : createCourseList,
 					error : function(request) {
+						var lmsModel=self.controller.models['lms'];
+						var servername=lmsModel.lmsData.activeServer;
+						
+						if (request.status === 403) { 
+							if (lmsModel.lmsData.ServerData[servername].deactivateFlag==false){
+								turnOnDeactivate();
+								moblerlog("Error while loading course list from server");
+								showErrorResponses(request);
+							}
+						}
+					
+						if (request.status === 404) { 
+							moblerlog("Error while loading course list from server");
+							showErrorResponses(request);
+						}
 					localStorage.setItem("pendingCourseList", true);
-					moblerlog("Error while loading course list from server");
-					moblerlog("ERROR status code is : " + request.status);
-					moblerlog("ERROR returned data is: "+ request.responseText); 
+					
 					},
 					beforeSend : setHeader
 				});
@@ -202,7 +214,8 @@ CourseModel.prototype.loadFromServer = function() {
 
 		function createCourseList(data) {
 			moblerlog("success in getting course list");
-
+			moblerlog("before enter turn off deactivate in course model");
+			turnOffDeactivate();
 			// if there was a pending course list, remove it from the storage
 			localStorage.removeItem("pendingCourseList");
 
@@ -221,6 +234,9 @@ CourseModel.prototype.loadFromServer = function() {
 			self.syncState = true;
 			self.syncTimeOut = courseObject.syncTimeOut || DEFAULT_SYNC_TIMEOUT;
 			self.storeData();
+			
+			
+			
 			moblerlog("JSON CourseList: " + JSON.stringify(self.courseList));
 			self.reset();
 			

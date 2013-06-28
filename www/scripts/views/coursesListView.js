@@ -167,6 +167,7 @@ CoursesListView.prototype.closeDiv = closeView;
 CoursesListView.prototype.close = function() {
 	moblerlog("close course list view");
 	this.active = false;
+	controller.models['course'].loadFromServer();	
 	this.closeDiv();
 	$("#coursesList").empty();
 };

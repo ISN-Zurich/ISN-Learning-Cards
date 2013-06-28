@@ -408,11 +408,13 @@ StatisticsModel.prototype.loadFromServer = function() {
 					dataType : 'json',
 					success : function(data) {
 						moblerlog("success");
-                      moblerlog("JSON: " + data);
+
+						turnOffDeactivate();
+						moblerlog("JSON: " + data);
 						var i, statisticsObject;
 						try {
 							statisticsObject = data;
-                      moblerlog("statistics data from server: " + JSON.stringify(statisticsObject));
+							moblerlog("statistics data from server: " + JSON.stringify(statisticsObject));
 						} catch (err) {
 							moblerlog("Error: Couldn't parse JSON for statistics");
 						}
@@ -420,24 +422,34 @@ StatisticsModel.prototype.loadFromServer = function() {
 						if (!statisticsObject) {
 							statisticsObject = [];
 						}
-						
+
 						for ( i = 0; i < statisticsObject.length; i++) {
 							self.insertStatisticItem(statisticsObject[i]);
 							//moblerlog("i is "+i+" and the length of statistics object is "+statisticsObject.length);
 						}
 						moblerlog("after inserting statistics from server");
 						// trigger event statistics are loaded from server
-					
+
 						// Store a flag into the local storage that the data is loaded.
 						self.controller.setConfigVariable("statisticsLoaded", true);
 						moblerlog("config variable is set to true");
 						$(document).trigger("loadstatisticsfromserver");
 					},
 					error : function(xhr, err, errorString, request) {
-						moblerlog("Error while getting statistics data from server: " + errorString);
-						moblerlog("Error while loading course list from server");
-						moblerlog("ERROR status code is : " + request.status);
-						moblerlog("ERROR returned data is: "+ request.responseText); 
+						var lmsModel=self.controller.models['lms'];
+						var servername=lmsModel.lmsData.activeServer;
+						if(request.status===403){
+							if (lmsModel.lmsData.ServerData[servername].deactivateFlag==false){
+								turnOnDeactivate();
+								moblerlog("Error while getting statistics data from server: " + errorString);
+								showErrorResponses(request);
+							}
+						}
+						
+						if (request.status===404){
+							moblerlog("Error while getting statistics data from server: " + errorString);
+							showErrorResponses(request);
+						}
 					},
                       beforeSend : function setHeader(xhr) {
                       xhr.setRequestHeader('sessionkey',
@@ -570,7 +582,16 @@ StatisticsModel.prototype.sendToServer = function(featuredContent_id) {
 				self.lastSendToServer = (new Date()).getTime();
 				$(document).trigger("statisticssenttoserver");
 			},
-			error : function() {
+			error : function(request) {
+				var lmsModel=self.controller.models['lms'];
+				var servername=lmsModel.lmsData.activeServer;
+				if (request.status === 403) { 
+					if (lmsModel.lmsData.ServerData[servername].deactivateFlag==false){
+						turnOnDeactivate();
+						moblerlog("Error while sending statistics data to server");
+						showErrorResponses(request);
+					}
+				}
 				moblerlog("Error while sending statistics data to server");
 				var statisticsToStore = {
 					sessionkey :sessionkey ,

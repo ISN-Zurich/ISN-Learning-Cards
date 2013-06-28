@@ -369,13 +369,12 @@ LMSModel.prototype.register = function(servername) {
 					//if we get an error because of a probable error on the server i.e. deactivation of backend
 					if (request.status === 403) { 
 						if (!DEACTIVATE){
-						DEACTIVATE=true;	//set the general deactivate status to true. 
-						self.lmsData.ServerData[servername] = {};
-						self.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
-						self.storeData();
-						var previousLMS=self.lmsData.ServerData[servername].previousServer;
-						moblerlog("ERROR status code is : " + request.status);
-						moblerlog("ERROR returned data is: "+ request.responseText);
+							DEACTIVATE=true;	//set the general deactivate status to true. 
+							self.lmsData.ServerData[servername] = {};
+							self.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
+							self.storeData();
+							var previousLMS=self.lmsData.ServerData[servername].previousServer;
+						showErrorResponses(request);
 						moblerlog("Error while registering the app with the backend");
 						}
 						$(document).trigger("registrationTemporaryfailed", [servername,previousLMS]);

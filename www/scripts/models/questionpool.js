@@ -125,6 +125,9 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 				dataType : 'json',
 				success : function(data) {
 					moblerlog("success");
+					
+					turnOffDeactivate();
+					
 					//if this was a pending question pool, remove it from the storage
 					localStorage.removeItem("pendingQuestionPool" + courseId);
 					if (data) {
@@ -176,15 +179,24 @@ QuestionPoolModel.prototype.loadFromServer = function(courseId) {
 					}
 				},
 				error : function(request) {
-					
+					var lmsModel=self.controller.models['lms'];
+					var servername=lmsModel.lmsData.activeServer;	
+					if (request.status===403){
+						if (lmsModel.lmsData.ServerData[servername].deactivateFlag==false){
+							turnOnDeactivate();
+							moblerlog("Error while loading question pool from server");
+							showErrorResponses(request);
+						}
+					}
+										
 					//if there was an error while sending the request,
 					//store the course id for the question pool in the local storage
-					localStorage.setItem("pendingQuestionPool_" + courseId, true);
-					moblerlog("Error while loading question pool from server");
-					moblerlog("Error while loading course list from server");
-					moblerlog("ERROR status code is : " + request.status);
-					moblerlog("ERROR returned data is: "+ request.responseText); 
-				},
+					if (request.status===404){
+						moblerlog("Error while loading question pool from server");
+						showErrorResponses(request);
+					}
+						localStorage.setItem("pendingQuestionPool_" + courseId, true);
+					},
 				beforeSend : setHeader
 			});
 
