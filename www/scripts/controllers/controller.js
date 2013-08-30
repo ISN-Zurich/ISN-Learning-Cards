@@ -134,9 +134,9 @@ function Controller() {
 	this.models.lms = new LMSModel(this);
 	this.models.featured = new FeaturedContentModel(this);
 	//if the lms is configured to run on an old API(v==1) run the Configuration Model
-	if (this.models.lms.getActiveServerAPI == "v1"){
+	//if (this.models.lms.getActiveServerAPI == "v1"){
 		this.models.authentication = new ConfigurationModel(this);
-	}else{
+	//	}else{
 		//else run the new authentication model
 		// this.models.authentication = new authServiceModel(this);
 	}
