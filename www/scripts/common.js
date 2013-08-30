@@ -44,6 +44,7 @@ var URLS_TO_LMS = [
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
 						debug:"1",
 						clientKey: "",
+						API:"v2",
 						// API: "v1" == old mobler cards backend, "v2" == powerTLA
 					},
 					{
@@ -53,7 +54,8 @@ var URLS_TO_LMS = [
 						logoLabel: "Authoring LMS at ISN Zurich",
 						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
 						debug:"0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					
 					{
@@ -63,7 +65,8 @@ var URLS_TO_LMS = [
 						logoLabel: "PfP test LMS at ETH",
 						url: "https://pfp-test.ethz.ch/restservice/learningcards",
 						debug:"1",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "PFPLMS",
@@ -72,7 +75,8 @@ var URLS_TO_LMS = [
 						logoLabel: "PfP LMS at ISN Zurich",
 						url: "https://pfp.ethz.ch/restservice/learningcards",
 						debug:"0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "JukuLabTest",
@@ -81,7 +85,8 @@ var URLS_TO_LMS = [
 						logoLabel: "JukuLab Test Server",
 						url: "http://ilias.jukulab.ee/restservice/learningcards",
 						debug: "1",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "EsthonianCollege",
@@ -90,7 +95,8 @@ var URLS_TO_LMS = [
 						logoLabel: "Estonian Defense College",
 						url: "https://eope.ksk.edu.ee/ilias/restservice/learningcards",
 						debug: "0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "ADLRomania",
@@ -99,7 +105,8 @@ var URLS_TO_LMS = [
 						logoLabel: "Romanian Didad LMS",
 						url: "http://lms.adlunap.ro/restservice/learningcards",
 						debug: "0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "TestADLRomania",
@@ -108,7 +115,8 @@ var URLS_TO_LMS = [
 						logoLabel: "Test Romanian LMS",
 						url: "http://test.adlunap.ro/restservice/learningcards",
 						debug: "1",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					}
 					
 //					{

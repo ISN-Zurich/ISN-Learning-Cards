@@ -165,7 +165,14 @@ LMSModel.prototype.getActiveServerLabel = function() {
 */
 
 LMSModel.prototype.getActiveServerURL = function() {
-	return this.activeServerInfo.url;
+	//http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards
+	var api= this.getActiveServerAPI();
+	if (api == "v1"){
+		return this.activeServerInfo.url;
+	}else{
+		//http://yellowjacket.ethz.ch/ilias_4_2/restservice/
+		return this.activeServerInfo.url.substring(0,49);
+	}
 };
 
 
@@ -177,6 +184,17 @@ LMSModel.prototype.getActiveServerURL = function() {
 LMSModel.prototype.getActiveServerName = function() {
 	return this.activeServerInfo.servername;	
 };
+
+
+/**
+* @prototype
+* @function getActiveServerAPI   
+* @return {String} serverapi, the version of API of the backend on which the lms is running
+* */
+LMSModel.prototype.getActiveServerAPI = function() {
+	return this.activeServerInfo.API;	
+};
+
 
 /**
 * @prototype
@@ -255,7 +273,11 @@ LMSModel.prototype.setActiveServer = function(servername) {
 			}else {
 				moblerlog("do the registration for server"+servername);
 				$(document).trigger("registrationIsStarted", servername);
+				//TODO:based on the value of the API of the lms run either the (old) register function of this model
+				// or run a the new register function that will call the new backend. This new function will be created here, in the lms model.
 				self.register(servername);  //we will get a client key
+				//self.registerApi2(servername);
+				
 			}//end of else
 		}	
 		
@@ -392,6 +414,97 @@ LMSModel.prototype.register = function(servername) {
 				beforeSend : setHeaders
 			});
 
+	function setHeaders(xhr) {
+		xhr.setRequestHeader('AppID', APP_ID);
+		xhr.setRequestHeader('UUID', deviceID);
+		moblerlog("register uuid:" + deviceID);
+	}
+
+	
+	/**
+	 * In case of a successful registration we store in the local storage the client/app key
+	 * that we received from the server. Additionally we store locally 
+	 * the language for the interface of the app.
+	 * @prototype
+	 * @function appRegistration
+	 * @param {String} data, the data exchanged with the server during the registration
+	 */
+	function appRegistration(data) {
+				
+		var DEACTIVATE=false;
+		// if we don't know a user's language we try to use the phone's language.
+        language = navigator.language.split("-");
+        language_root = (language[0]);
+
+		moblerlog("in app registration");
+		// load server data from local storage
+		self.loadData();
+		
+		//create an empty structure for the client keys of the different servers
+		self.lmsData.ServerData[servername] = {};
+		// store server data in local storage
+		// requestToken refers to OAuth terminology
+		moblerlog("data in register is "+data);
+		self.lmsData.ServerData[servername].requestToken = data.ClientKey;
+		self.lmsData.ServerData[servername].defaultLanguage = data.defaultLanguage || language_root;
+		self.lmsData.ServerData[servername].deactivateFlag=false;
+		//self.lmsData.servername.activeServername = servername;
+		self.storeData();		
+		self.setActiveServer(servername);
+	}
+};
+
+
+
+LMSModel.prototype.registerApi2 = function(servername) {
+	var self = this;
+	moblerlog("enters regsitration in API 2");
+	//phone gap property to get the id of a device
+	var deviceID = device.uuid;
+	var activeURL = self.getActiveServerURL();
+	moblerlog("active url in register function is "+activeURL)
+	
+	$
+	.ajax({
+		url:  activeURL + '/oauth.php/register',
+		type : 'GET',
+		dataType : 'json',
+		success : appRegistration,
+		// if no registration is done, then use the request parameter
+		// to display the error that created the problem in the console
+		error : function(request) {
+         
+          // remember in lmsData that the server made a booboo
+          
+          //***************DEACTIVATE CHECK******************************
+			//if we get an error because of a probable error on the server i.e. deactivation of backend
+			if (request.status === 403) { 
+				if (!DEACTIVATE){
+					DEACTIVATE=true;	//set the general deactivate status to true. 
+					self.lmsData.ServerData[servername] = {};
+					self.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
+					self.storeData();
+					var previousLMS=self.lmsData.ServerData[servername].previousServer;
+				showErrorResponses(request);
+				moblerlog("Error while registering the app with the backend");
+				}
+				$(document).trigger("registrationTemporaryfailed", [servername,previousLMS]);
+			}
+          if (request.status=== 404){
+        	  	self.lastTryToRegister[servername] = (new Date()).getTime();
+					self.lmsData.ServerData[servername] = {};
+					self.lmsData.ServerData[servername].lastRegister = self.lastTryToRegister[servername];
+					self.storeData();
+					$(document).trigger("registrationfailed", [servername,previousLMS]);
+          }
+          
+		},
+		//during the registration we send via headers the app id and the device id
+		beforeSend : setHeaders
+	});
+
+	
+	
 	function setHeaders(xhr) {
 		xhr.setRequestHeader('AppID', APP_ID);
 		xhr.setRequestHeader('UUID', deviceID);

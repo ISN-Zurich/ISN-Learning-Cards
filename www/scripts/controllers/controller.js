@@ -133,7 +133,13 @@ function Controller() {
 	// because it makes use of the isOffline function 
 	this.models.lms = new LMSModel(this);
 	this.models.featured = new FeaturedContentModel(this);
-	this.models.authentication = new ConfigurationModel(this);
+	//if the lms is configured to run on an old API(v==1) run the Configuration Model
+	if (this.models.lms.getActiveServerAPI == "v1"){
+		this.models.authentication = new ConfigurationModel(this);
+	}else{
+		//else run the new authentication model
+		// this.models.authentication = new authServiceModel(this);
+	}
 	this.models.course = new CourseModel(this);
 	this.models.questionpool = new QuestionPoolModel(this);
 	this.models.answers = new AnswerModel(this);
