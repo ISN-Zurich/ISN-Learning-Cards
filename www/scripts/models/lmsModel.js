@@ -273,10 +273,15 @@ LMSModel.prototype.setActiveServer = function(servername) {
 			}else {
 				moblerlog("do the registration for server"+servername);
 				$(document).trigger("registrationIsStarted", servername);
+				var api=this.getActiveServerAPI(servername);
 				//TODO:based on the value of the API of the lms run either the (old) register function of this model
 				// or run a the new register function that will call the new backend. This new function will be created here, in the lms model.
-				self.register(servername);  //we will get a client key
-				//self.registerApi2(servername);
+				if (api == "v1"){
+				self.register(servername); 
+				//we will get a client key
+				} else {
+				self.registerApi2(servername);
+				}
 				
 			}//end of else
 		}	
@@ -462,7 +467,7 @@ LMSModel.prototype.registerApi2 = function(servername) {
 	//phone gap property to get the id of a device
 	var deviceID = device.uuid;
 	var activeURL = self.getActiveServerURL();
-	moblerlog("active url in register function is "+activeURL)
+	moblerlog("active url in register 2 function is "+activeURL)
 	
 	$
 	.ajax({
