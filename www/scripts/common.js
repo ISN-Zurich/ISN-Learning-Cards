@@ -44,7 +44,7 @@ var URLS_TO_LMS = [
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
 						debug:"1",
 						clientKey: "",
-						API:"v2",
+						API:"v1",
 						// API: "v1" == old mobler cards backend, "v2" == powerTLA
 					},
 					{

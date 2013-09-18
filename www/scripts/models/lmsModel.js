@@ -277,10 +277,10 @@ LMSModel.prototype.setActiveServer = function(servername) {
 				//TODO:based on the value of the API of the lms run either the (old) register function of this model
 				// or run a the new register function that will call the new backend. This new function will be created here, in the lms model.
 				if (api == "v1"){
-				self.register(servername); 
-				//we will get a client key
+					self.register(servername); 
+					//we will get a client key
 				} else {
-				self.registerApi2(servername);
+					self.registerApi2(servername);
 				}
 				
 			}//end of else
