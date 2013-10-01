@@ -317,6 +317,7 @@ ConfigurationModel.prototype.logout = function(featuredContent_id) {
 * @function sendAuthToServer
 */
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
+	
 	moblerlog("enter send Auth to server");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();

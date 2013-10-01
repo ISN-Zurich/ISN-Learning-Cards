@@ -42,9 +42,10 @@ var URLS_TO_LMS = [
 						backgroundImage: "",
 						logoLabel: "Yellowjacket",					
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
+						url2: "http://yellowjacket.ethz.ch/ilias_4_2/restservice",
 						debug:"1",
 						clientKey: "",
-						API:"v1",
+						API:"v2",
 						// API: "v1" == old mobler cards backend, "v2" == powerTLA
 					},
 					{
@@ -412,7 +413,10 @@ function turnOnDeactivate(){
 	lmsModel.storeData();
 }
 
+
 function showErrorResponses(request){
-	moblerlog("ERROR status code is : " + request.status);
-	moblerlog("ERROR returned data is: "+ request.responseText);
+	console.log("ERROR status text: "+ request.statusText); 
+	console.log("ERROR status code: "+ request.statusCode()); 
+	console.log("ERROR status code is : " + request.status);
+	console.log("ERROR responsetext: "+ request.responseText);
 }

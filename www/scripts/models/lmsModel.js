@@ -168,10 +168,12 @@ LMSModel.prototype.getActiveServerURL = function() {
 	//http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards
 	var api= this.getActiveServerAPI();
 	if (api == "v1"){
+		console.log("calculate activer server url for v1");
 		return this.activeServerInfo.url;
 	}else{
 		//http://yellowjacket.ethz.ch/ilias_4_2/restservice/
-		return this.activeServerInfo.url.substring(0,49);
+		console.log("calculate activer server url for v2");
+		return this.activeServerInfo.url2;
 	}
 };
 
@@ -459,7 +461,12 @@ LMSModel.prototype.register = function(servername) {
 	}
 };
 
-
+/**
+ *  This is the first step of the OAuth-Process.
+ *  We send the uuid and the appkey and we receive back the Consumer Key
+ *  and Consumer Secret.
+ * 
+ */
 
 LMSModel.prototype.registerApi2 = function(servername) {
 	var self = this;
@@ -468,11 +475,17 @@ LMSModel.prototype.registerApi2 = function(servername) {
 	var deviceID = device.uuid;
 	var activeURL = self.getActiveServerURL();
 	moblerlog("active url in register 2 function is "+activeURL)
+	var method = "PUT";
+	var data = {
+			"APPID": APP_ID,
+			"UUID":deviceID
+	}
 	
 	$
 	.ajax({
 		url:  activeURL + '/oauth.php/register',
-		type : 'GET',
+		type : method,
+		data:data,
 		dataType : 'json',
 		success : appRegistration,
 		// if no registration is done, then use the request parameter
@@ -491,7 +504,7 @@ LMSModel.prototype.registerApi2 = function(servername) {
 					self.storeData();
 					var previousLMS=self.lmsData.ServerData[servername].previousServer;
 				showErrorResponses(request);
-				moblerlog("Error while registering the app with the backend");
+				moblerlog("Error while registering2 the app with the backend");
 				}
 				$(document).trigger("registrationTemporaryfailed", [servername,previousLMS]);
 			}
@@ -511,9 +524,7 @@ LMSModel.prototype.registerApi2 = function(servername) {
 	
 	
 	function setHeaders(xhr) {
-		xhr.setRequestHeader('AppID', APP_ID);
-		xhr.setRequestHeader('UUID', deviceID);
-		moblerlog("register uuid:" + deviceID);
+	
 	}
 
 	
@@ -541,12 +552,16 @@ LMSModel.prototype.registerApi2 = function(servername) {
 		// store server data in local storage
 		// requestToken refers to OAuth terminology
 		moblerlog("data in register is "+data);
-		self.lmsData.ServerData[servername].requestToken = data.ClientKey;
+		
+		//stote consumer credentials (key and secret) in the local storage
+		self.lmsData.ServerData[servername].consumerKey = data.consumerKey;
+		self.lmsData.ServerData[servername].consumerSecret = data.consumerSecret;
 		self.lmsData.ServerData[servername].defaultLanguage = data.defaultLanguage || language_root;
 		self.lmsData.ServerData[servername].deactivateFlag=false;
 		//self.lmsData.servername.activeServername = servername;
 		self.storeData();		
 		self.setActiveServer(servername);
+		$(document).trigger("consumerReady");
 	}
 };
 
