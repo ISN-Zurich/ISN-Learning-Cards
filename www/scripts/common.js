@@ -397,9 +397,6 @@ function elementContents(element) {
 	return retval;
 }
 
-<<<<<<< HEAD
-=======
-
 function turnOffDeactivate(){
 	moblerlog("enter turn off deactivate");
 	var DEACTIVATE=false;
@@ -425,4 +422,4 @@ function showErrorResponses(request){
 	console.log("ERROR status code is : " + request.status);
 	console.log("ERROR responsetext: "+ request.responseText);
 }
->>>>>>> refs/remotes/Evangelia/master
+
