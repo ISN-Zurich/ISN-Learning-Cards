@@ -118,25 +118,20 @@ var URLS_TO_LMS = [
 						logoLabel: "Test Romanian LMS",
 						url: "http://test.adlunap.ro/restservice/learningcards",
 						debug: "1",
-<<<<<<< HEAD
-						clientKey: ""
-					},
-=======
 						clientKey: "",
 						API: "v1"
 					}
->>>>>>> refs/remotes/Evangelia/master
 					
-					{
-						servername: "LocalTests",
-						logoImage: "resources/adlromania.png",
-						backgroundImage: "",
-						logoLabel: "Local Tests",
-						url: "http://public-docking-pat-als-0125.ethz.ch:8888/ilias/restservice/learningcards",
-						//url:"http://gess-sipo-als-dock-1-008.ethz.ch:8888/ilias/restservice/learningcards",
-						debug: "1",
-						clientKey: ""
-          }
+//					{
+//						servername: "LocalTests",
+//						logoImage: "resources/adlromania.png",
+//						backgroundImage: "",
+//						logoLabel: "Local Tests",
+//						url: "",
+//						//url:"",
+//						debug: "1",
+//						clientKey: ""
+//          }
 ];
 
 
