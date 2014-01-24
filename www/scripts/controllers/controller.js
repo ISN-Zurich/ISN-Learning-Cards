@@ -39,23 +39,23 @@ under the License.
 
 function Controller() {
 	var self = this;
-	
+
 	self.MoblerVersion = 2.0;
-	
+
 	moblerlog("start controller");
 	self.appLoaded = false;
 	self.clickOutOfStatisticsIcon=true;
 	var startTime= new Date().getTime();
 	var featuredContent_id = FEATURED_CONTENT_ID;
 
-	
+
 	var presentVersion = localStorage.getItem("MoblerVersion");
-	
+
 	// test if we need to migrate 
 	if (!presentVersion || presentVersion !== self.MoblerVersion) {
 		migrate(presentVersion); //upgrade to the latest version
-		}
-	
+	}
+
 	function migrate(thisVersion){
 		// first check if this is a fresh installation
 		if (!thisVersion){
@@ -68,8 +68,8 @@ function Controller() {
 
 		localStorage.setItem("MoblerVersion", self.MoblerVersion);
 	}
-	
-		
+
+
 	function migrate_to_2(){
 		var configuration;
 		try{
@@ -97,7 +97,7 @@ function Controller() {
 						}
 					} 
 			}
-		
+
 			delete configuration.appAuthenticationKey;
 			//var configurationObject=localStorage.getItem("configuration");
 			//localStorage.setItem("configuration", JSON.stringify(localStorage.getItem("configuration")));
@@ -105,7 +105,7 @@ function Controller() {
 			moblerlog("configuration object after delete of appAuthenticationKey "+localStorage.getItem("configuration"));
 			localStorage.setItem("urlsToLMS", JSON.stringify(lmsObject));						
 		}
-		
+
 		if(!configuration){
 			moblerlog("configuration object didn't exist during the migration");
 			var configurationObject={
@@ -115,10 +115,10 @@ function Controller() {
 			localStorage.setItem("configuration", JSON.stringify(configurationObject));
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	$.ajaxSetup({
 		cache : false
 	});
@@ -133,212 +133,220 @@ function Controller() {
 	// because it makes use of the isOffline function 
 	this.models.lms = new LMSModel(this);
 	this.models.featured = new FeaturedContentModel(this);
-	this.models.authentication = new ConfigurationModel(this);
-	this.models.course = new CourseModel(this);
-	this.models.questionpool = new QuestionPoolModel(this);
-	this.models.answers = new AnswerModel(this);
-	this.models.statistics = new StatisticsModel(this);
-	this.models.tracking = new TrackingModel(this);
-
-	// add synchronization triggers at the end of the model initialization just to be careful 
-	this.models.connection.synchronizeData();
-	this.models.authentication.loadFromServer();
-
-	moblerlog("models initialized in controller");
-
-	//initialize user interface language
-	this.setupLanguage();
-
-	moblerlog('languages are set up');
-
-	// initialize views
-	this.views.splashScreen = new SplashScreen(this);
-	this.views.landing = new LandingView(this);
-	this.views.login = new LoginView(this);
-	this.views.lms = new LMSView(this);
-	this.views.logout = new LogoutView();
-	this.views.coursesList = new CoursesListView(this);
-	this.views.questionView = new QuestionView(this);
-	this.views.answerView = new AnswerView(this);
-	this.views.feedbackView = new FeedbackView(this);
-	this.views.settings = new SettingsView(this);
-	this.views.statisticsView = new StatisticsView(this);
-	this.views.achievements = new AchievementsView(this);
-	this.views.about = new AboutView();
-
-	moblerlog('views initialized in controller');
-
-	this.activeView = this.views.splashScreen;
-
-	/**
-	 * A handler that is executed when a swipe gesture is detected on the active view
-	 * @function swipeCatcher
-	 * @param  swipe event that is captured by jester
-	 */	
-
-	function swipeCatcher(event) {
-		self.activeView.handleSwipe(event);
-	}
-
-	/**
-	 * A handler that is executed when a tap gesture is detected on the active view
-	 * @function tapCatcher
-	 * @param  tap event that is captured by jester
-	 */	
-
-	function tapCatcher(event) {
-		self.activeView.handleTap(event);
-	}
-
-
-	//define jester options that affect the way gestures are recognized
-	self.jesteroptions = {
-			swipeDistance : 100,
-			avoidFlick : true
-	};
-
-	//implementation of basic jester syntax in order to recognize swipe and tap events
-
-	var gestureHandler = jester(window, self.jesteroptions).swipe(
-			swipeCatcher).tap(tapCatcher);
-
-
-	moblerlog('core gestures done');
-
-	// if device is an iPhone enable pinching
-	moblerlog('platform' + device.platform);
-	if (device.platform === 'iPhone') {
-
-
-		gestureHandler.pinched(function pinchCatcher(event) {
-			self.activeView.handlePinch(event);
-		});
-	}
-
+	//if the lms is configured to run on an old API(v==1) run the Configuration Model
 	
-	// set correct height of icon button
-//	window.addEventListener("resize", setButtonHeight, false);
-//	window.addEventListener("orientationchange", setButtonHeight, false);
+	//if (this.models.lms.getActiveServerAPI() == "v1"){
+		this.models.authentication = new ConfigurationModel(this);
+	//}else{
+		//console.log("run the new authentication model");
+		//else run the new authentication model
+		//this.models.authentication = new AuthServiceModel(this);
+	//}
+this.models.course = new CourseModel(this);
+this.models.questionpool = new QuestionPoolModel(this);
+this.models.answers = new AnswerModel(this);
+this.models.statistics = new StatisticsModel(this);
+this.models.tracking = new TrackingModel(this);
 
-	
-	function miniHandler() {
-		self.resizeHandler();
-	} 
-	
-	window.addEventListener("resize", miniHandler, false );
-	window.addEventListener("orientationchange", miniHandler, false);	
-	setButtonHeight();
-	
-	// set correct width of forward buttons
-	window.addEventListener("resize", setButtonWidth, false);
-	window.addEventListener("orientationchange", setButtonWidth, false);
-	setButtonWidth();
+// add synchronization triggers at the end of the model initialization just to be careful 
+this.models.connection.synchronizeData();
+this.models.authentication.loadFromServer();
 
-	/**
-	 * It is triggered in Statistics Model when calculations are done in all statistics sub models.  
-	 * @event allstatisticcalculationsdone
-	 * @param: a callback function that executes the transition to statistics view when the event is listened.
-	 * */
-	
-	$(document).bind("allstatisticcalculationsdone", function(featuredContent_id) {
-		moblerlog("all statistics calculations done is ready");
-		// if the user has clicked anywhere else in the meantime, then the transition to statistics view should not take place
-		if (!self.checkclickOutOfStatisticsIcon()) {
-			moblerlog("transition to statistics because all calculations have been done");
+moblerlog("models initialized in controller");
+
+//initialize user interface language
+this.setupLanguage();
+
+moblerlog('languages are set up');
+
+// initialize views
+this.views.splashScreen = new SplashScreen(this);
+this.views.landing = new LandingView(this);
+this.views.login = new LoginView(this);
+this.views.lms = new LMSView(this);
+this.views.logout = new LogoutView();
+this.views.coursesList = new CoursesListView(this);
+this.views.questionView = new QuestionView(this);
+this.views.answerView = new AnswerView(this);
+this.views.feedbackView = new FeedbackView(this);
+this.views.settings = new SettingsView(this);
+this.views.statisticsView = new StatisticsView(this);
+this.views.achievements = new AchievementsView(this);
+this.views.about = new AboutView();
+
+moblerlog('views initialized in controller');
+
+this.activeView = this.views.splashScreen;
+
+/**
+ * A handler that is executed when a swipe gesture is detected on the active view
+ * @function swipeCatcher
+ * @param  swipe event that is captured by jester
+ */	
+
+function swipeCatcher(event) {
+	self.activeView.handleSwipe(event);
+}
+
+/**
+ * A handler that is executed when a tap gesture is detected on the active view
+ * @function tapCatcher
+ * @param  tap event that is captured by jester
+ */	
+
+function tapCatcher(event) {
+	self.activeView.handleTap(event);
+}
+
+
+//define jester options that affect the way gestures are recognized
+self.jesteroptions = {
+		swipeDistance : 100,
+		avoidFlick : true
+};
+
+//implementation of basic jester syntax in order to recognize swipe and tap events
+
+var gestureHandler = jester(window, self.jesteroptions).swipe(
+		swipeCatcher).tap(tapCatcher);
+
+
+moblerlog('core gestures done');
+
+// if device is an iPhone enable pinching
+moblerlog('platform' + device.platform);
+if (device.platform === 'iPhone') {
+
+
+	gestureHandler.pinched(function pinchCatcher(event) {
+		self.activeView.handlePinch(event);
+	});
+}
+
+
+// set correct height of icon button
+//window.addEventListener("resize", setButtonHeight, false);
+//window.addEventListener("orientationchange", setButtonHeight, false);
+
+
+function miniHandler() {
+	self.resizeHandler();
+} 
+
+window.addEventListener("resize", miniHandler, false );
+window.addEventListener("orientationchange", miniHandler, false);	
+setButtonHeight();
+
+// set correct width of forward buttons
+window.addEventListener("resize", setButtonWidth, false);
+window.addEventListener("orientationchange", setButtonWidth, false);
+setButtonWidth();
+
+/**
+ * It is triggered in Statistics Model when calculations are done in all statistics sub models.  
+ * @event allstatisticcalculationsdone
+ * @param: a callback function that executes the transition to statistics view when the event is listened.
+ * */
+
+$(document).bind("allstatisticcalculationsdone", function(featuredContent_id) {
+	moblerlog("all statistics calculations done is ready");
+	// if the user has clicked anywhere else in the meantime, then the transition to statistics view should not take place
+	if (!self.checkclickOutOfStatisticsIcon()) {
+		moblerlog("transition to statistics because all calculations have been done");
 		self.transition('statisticsView',featuredContent_id);
-	   }else
-		   {
-		   moblerlog("transition to statistics is not feasible because the user has clicked elsewhere else");
-		   }
-	});
+	}else
+	{
+		moblerlog("transition to statistics is not feasible because the user has clicked elsewhere else");
+	}
+});
 
-	/**
-	 * This event is triggered  when statistics are sent to the server during
-	 * a)loggout b)synchronization.  
-	 * When are not LOGGED IN (=logged out) and have open the login form and listen to this
-	 * event, we want to stay in the login form.
-	 * @event statisticssenttoserver
-	 * @param a callback function that loads the login form
-	 */
-	$(document).bind("statisticssenttoserver", function() {
-		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization of sent statistics");
-			//	self.transitionToLogin();
-		}
-	});
+/**
+ * This event is triggered  when statistics are sent to the server during
+ * a)loggout b)synchronization.  
+ * When are not LOGGED IN (=logged out) and have open the login form and listen to this
+ * event, we want to stay in the login form.
+ * @event statisticssenttoserver
+ * @param a callback function that loads the login form
+ */
+$(document).bind("statisticssenttoserver", function() {
+	if ( !self.getLoginState() ){
+		moblerlog("stays in login view, despite the synchronization of sent statistics");
+		//	self.transitionToLogin();
+	}
+});
 
-	/**
-	 * This event is triggered  when questions are loaded from the server. It is
-	 * binded also in courses list view and we want to avoid loading that view.
-	 * For that reason we check IF WE ARE  not LOGGED IN(=logged out) in order to show the login form.
-	 * @event questionpoolready
-	 * @param a callback function that loads the login form
-	 */
-	$(document).bind("questionpoolready", function() {
-		if ( !self.getLoginState() ){
-			moblerlog("stays in login view, despite the synchronization of questionpool ready");
-			self.transitionToLogin(); // or we can stay on the current view i.e. lms view, landing view or login view
-		}
-	});
+/**
+ * This event is triggered  when questions are loaded from the server. It is
+ * binded also in courses list view and we want to avoid loading that view.
+ * For that reason we check IF WE ARE  not LOGGED IN(=logged out) in order to show the login form.
+ * @event questionpoolready
+ * @param a callback function that loads the login form
+ */
+$(document).bind("questionpoolready", function() {
+	if ( !self.getLoginState() ){
+		moblerlog("stays in login view, despite the synchronization of questionpool ready");
+		self.transitionToLogin(); // or we can stay on the current view i.e. lms view, landing view or login view
+	}
+});
 
-	/**
-	 * This event is triggered  when courses are loaded from the server. It is
-	 * binded also in courses list view and we want to avoid loading of that view.
-	 * For that reason we check IF WE ARE not LOGGED IN (=logged out)in order to show the login form.
-	 * @event courselistupdate
-	 * @param a callback function that loads the login form
-	 */
-	$(document).bind("courselistupdate", function() {
-		if (!self.getLoginState() ){
-			moblerlog("stays in login view, despite the courses synchronization updates");
-			//self.transitionToLogin();
-			// or we can stay on the current view i.e. lms view, landing view or login view
-		}
-	});		
+/**
+ * This event is triggered  when courses are loaded from the server. It is
+ * binded also in courses list view and we want to avoid loading of that view.
+ * For that reason we check IF WE ARE not LOGGED IN (=logged out)in order to show the login form.
+ * @event courselistupdate
+ * @param a callback function that loads the login form
+ */
+$(document).bind("courselistupdate", function() {
+	if (!self.getLoginState() ){
+		moblerlog("stays in login view, despite the courses synchronization updates");
+		//self.transitionToLogin();
+		// or we can stay on the current view i.e. lms view, landing view or login view
+	}
+});		
 
-	$(document).bind("activeServerReady", function() {
-		if (self.appLoaded && self.activeView == self.views.lms) {
-			moblerlog("transition to login view after selecting server in lms view");
-			self.transitionToLogin();
-		} else if ( self.appLoaded && self.activeView == self.views.splashScreen ){  
-			moblerlog("transition to login view after the default server has been registered");	
-			self.transitionToLanding();
-		}
-	});	
-	
-	$(document).bind("click", function(e) {
-		moblerlog(" click in login view ");
-		e.preventDefault();
-		e.stopPropagation();
-	});	
-	
-	
-	
-// check if 3000 ms have passed
-// if not we wait until 3000 ms have passed
-// then we do the transition to the login view
-// the remaining waiting time is 3000 - deltatime
+$(document).bind("activeServerReady", function() {
+	if (self.appLoaded && self.activeView == self.views.lms) {
+		moblerlog("transition to login view after selecting server in lms view");
+		self.transitionToLogin();
+	} else if ( self.appLoaded && self.activeView == self.views.splashScreen ){  
+		moblerlog("transition to login view after the default server has been registered");	
+		self.transitionToLanding();
+	}
+});	
+
+$(document).bind("click", function(e) {
+	moblerlog(" click in login view ");
+	e.preventDefault();
+	e.stopPropagation();
+});	
+
+
+
+//check if 3000 ms have passed
+//if not we wait until 3000 ms have passed
+//then we do the transition to the login view
+//the remaining waiting time is 3000 - deltatime
 //automatic calculation of min-height
 
-//	var currentTime = new Date().getTime();
-//	var deltaTime= currentTime - startTime;
-//	if (deltaTime < 3000) {
-//		setTimeout(function() {
-//			$(document).bind("featuredContentlistupdate", function() {
-//			self.transitionToEndpoint(); 
-//			});
-//		
-//		}, 3000 - deltaTime);
-//	}
-//	else {
-//		$(document).bind("featuredContentlistupdate", function() {
-//			self.transitionToEndpoint(); 
-//			});
-//		//self.transitionToEndpoint();
-//	}
+//var currentTime = new Date().getTime();
+//var deltaTime= currentTime - startTime;
+//if (deltaTime < 3000) {
+//setTimeout(function() {
+//$(document).bind("featuredContentlistupdate", function() {
+//self.transitionToEndpoint(); 
+//});
 
-	function cbFeaturedContentListUpdate() {
-		if (!self.models['featured'].isFeaturedContentLocal){
+//}, 3000 - deltaTime);
+//}
+//else {
+//$(document).bind("featuredContentlistupdate", function() {
+//self.transitionToEndpoint(); 
+//});
+////self.transitionToEndpoint();
+//}
+
+function cbFeaturedContentListUpdate() {
+	if (!self.models['featured'].isFeaturedContentLocal){
 		//if (this.activeView !== this.views.login && this.activeView == !this.views.statistics) {
 		moblerlog("featured content list update called");
 		var currentTime = new Date().getTime();
@@ -352,23 +360,23 @@ function Controller() {
 			moblerlog("enter transition point 2");
 			self.transitionToEndpoint();
 		}
-		
+
 		//}
-		}
-	
-		$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
 	}
-	
-	//we binded this event here in order to 
-	$(document).bind("featuredContentlistupdate", cbFeaturedContentListUpdate);
-	//$(document).bind("featuredContentlistupdateLocal", cbFeaturedContentListUpdateLocal);
-	
-	injectStyle();
-	moblerlog("End of Controller");
-	if (this.models['featured'].isFeaturedContentLocal){
-		moblerlog("transition start to end point when featured content is loaded locally");
-		self.transitionToEndpoint();
-	}
+
+	$(document).unbind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+}
+
+//we binded this event here in order to 
+$(document).bind("featuredContentlistupdate", cbFeaturedContentListUpdate);
+//$(document).bind("featuredContentlistupdateLocal", cbFeaturedContentListUpdateLocal);
+
+injectStyle();
+moblerlog("End of Controller");
+if (this.models['featured'].isFeaturedContentLocal){
+	moblerlog("transition start to end point when featured content is loaded locally");
+	self.transitionToEndpoint();
+}
 } // end of Controller
 
 

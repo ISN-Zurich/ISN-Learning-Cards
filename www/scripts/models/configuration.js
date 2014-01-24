@@ -165,6 +165,8 @@ ConfigurationModel.prototype.loadFromServer = function() {
 					dataType : 'json',
 					success : function(data) {
 						moblerlog("success");
+						moblerlog("in success before turining off deactivate");
+						 turnOffDeactivate();
                         moblerlog("JSON: " + data);
 						var authenticationObject;
 						try {
@@ -191,6 +193,8 @@ ConfigurationModel.prototype.loadFromServer = function() {
 						//and  were stored in the local storage in the previous step
                         self.controller.setupLanguage();
                         
+                   
+                        	   					
                         /**
                          * When all authentication data are received and stored in the local storage
                          * the authenticationready event is triggered
@@ -201,17 +205,15 @@ ConfigurationModel.prototype.loadFromServer = function() {
 					},
 					// the receive of authenticated data was failed
 					error : function(request) {
+						var lmsModel=self.controller.models['lms'];
+						var servername=lmsModel.lmsData.activeServer;
 						if (request.status === 403) { 
-							if (!DEACTIVATE){
-							DEACTIVATE=true;	//set the general deactivate status to true. 
-							self.lmsData.ServerData[servername] = {};
-							self.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
-							self.storeData();
-							moblerlog("ERROR status code is : " + request.status);
-							moblerlog("ERROR returned data is: "+ request.responseText);
-							moblerlog("Error while authentication to server");
+							if (lmsModel.lmsData.ServerData[servername].deactivateFlag==false){
+								turnOnDeactivate();
+								showErrorResponses(request);
+								moblerlog("Error while authentication to server");
 							}
-							$(document).trigger("authenticationTemporaryfailed",[servername]);
+							$(document).trigger("authenticationTemporaryfailed");
 						}
 						 if (request.status=== 404){
 							 
@@ -220,8 +222,7 @@ ConfigurationModel.prototype.loadFromServer = function() {
                          * the authenticationfailed event is triggered
                          * @event authenticationfailed
                          */
-							 moblerlog("ERROR status code is : " + request.status);
-							moblerlog("ERROR returned data is: "+ request.responseText);
+						showErrorResponses(request);	 
 						$(document).trigger("authenticationfailed");
 						 }
 					},
@@ -316,6 +317,7 @@ ConfigurationModel.prototype.logout = function(featuredContent_id) {
 * @function sendAuthToServer
 */
 ConfigurationModel.prototype.sendAuthToServer = function(authData) {
+	
 	moblerlog("enter send Auth to server");
 	var self = this;
 	var activeURL = self.controller.getActiveURL();
@@ -366,6 +368,8 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 						self.configuration.learnerInformation = data.learnerInformation;
 						self.configuration.loginState = "loggedIn";
 						self.storeData();
+						
+						turnOffDeactivate();
 						/**
                          * When all authentication data are received and stored in the local storage
                          * the authenticationready event is triggered
@@ -391,16 +395,12 @@ ConfigurationModel.prototype.sendAuthToServer = function(authData) {
 				//the authentication to the server failed because of unknown reason
 				error : function(request, textStatus, errorThrown) {
 					
-					if (request.status === 403) { 
-						if (!DEACTIVATE){
-						DEACTIVATE=true;	//set the general deactivate status to true.
+					if (request.status === 403) {
 						var lmsModel=self.controller.models['lms'];
 						var servername=lmsModel.lmsData.activeServer;
-						lmsModel.lmsData.ServerData[servername] = {};
-						lmsModel.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
-						lmsModel.storeData();
-						moblerlog("ERROR status code is : " + request.status);
-						moblerlog("ERROR returned data is: "+ request.responseText);
+						if (lmsModel.lmsData.ServerData[servername].deactivateFlag==false){
+						turnOnDeactivate();
+						showErrorResponses(request);
 						moblerlog("Error while authentication to server");
 						}
 						$(document).trigger("authenticationTemporaryfailed");
@@ -450,10 +450,19 @@ ConfigurationModel.prototype.sendLogoutToServer = function(userAuthenticationKey
 				type : 'DELETE',
 				dataType : 'json',
 				success : function() {
-					
+					console.log("success in logging out");
+					turnOffDeactivate();	
 				},
-				error : function() {
-					moblerlog("Error while logging out from server");
+				error : function(request) {
+					var lmsModel=self.controller.models['lms'];
+					var servername=lmsModel.lmsData.activeServer;
+					if (request.status===403){
+						if (lmsModel.lmsData.ServerData[servername].deactivateFlag==false){
+							turnOnDeactivate();
+							moblerlog("Error while logging out from server");
+						}	
+					}
+					
 					//adding in the local storage the session key of the pending
 					localStorage.setItem("pendingLogout", sessionKey);
 				},

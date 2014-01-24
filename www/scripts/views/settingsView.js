@@ -107,10 +107,11 @@ SettingsView.prototype.openDiv = openView;
  * @function open
  **/
 SettingsView.prototype.open = function() {
+	controller.models['featured'].loadFeaturedCourseFromServer();
+	controller.models['course'].loadFromServer();	
 	this.loadData();
 	this.openDiv();
-	controller.models['featured'].loadFeaturedCourseFromServer();
-	controller.models['authentication'].loadFromServer();	
+	
 };
 
 
@@ -150,9 +151,24 @@ SettingsView.prototype.logout = function() {
  * @function loadData
  **/
 SettingsView.prototype.loadData = function(){
+	$("#deactivateLi").hide();
 	var self=this;
 	var lmsObj = controller.models['lms'];
 	var config = controller.models['authentication'];
+	
+	moblerlog("the value of DEACTIVATE IS "+DEACTIVATE);
+	var lmsModel=self.controller.models['lms'];
+	var servername=lmsModel.lmsData.activeServer;
+	
+	moblerlog("deactivate flag is "+lmsModel.lmsData.ServerData[servername].deactivateFlag);	
+	var servername=self.controller.models['lms'].lmsData.activeServer;
+	if (lmsModel.lmsData.ServerData[servername].deactivateFlag== true){
+		moblerlog(" deactivate flag is: will show deactive msg");
+		$("#deactivateLi").show();
+	}else{
+		moblerlog(" deactivate flag is: will NOT show deactivate msg");
+	}
+	
 	$("#aboutMore").show();
 	$("#lmsLabelSet").attr("src",self.controller.getActiveLogo());
 	$("#pfpItemSet").text(self.controller.getActiveLabel());

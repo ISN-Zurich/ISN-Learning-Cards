@@ -204,6 +204,7 @@ body {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#454545), color-stop(100%,#8b8b8b));
 	background:-webkit-linear-gradient(#454545,#8b8b8b);
 	background: linear-gradient(#454545,#8b8b8b);
+	color:white;
 }
 
 
@@ -877,6 +878,14 @@ which will be hosted outside splashscreen. the landing view will be hosted insid
 .settingsLabel {
 	font-size: 14px;
 	color: #999;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 3px;
+}
+
+.settingsDeactivate{
+	font-size: 14px;
+	font-color: white;
 	display: inline-block;
 	width: 100%;
 	margin-bottom: 3px;

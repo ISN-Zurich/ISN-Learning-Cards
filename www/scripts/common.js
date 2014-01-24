@@ -17,12 +17,14 @@ var DEFAULT_SERVER = "PFPLMS";
  *@default hornet
  **/
  
-var MOBLERDEBUG = 1;
+var MOBLERDEBUG = 0;
 
 /**
- *	A global property/variable that is used to store info about the different servers to which the application can be connected.
+ * A global property/variable that is used to describe the status of the activation or
+ * deactivation of Mobler Cards app on Ilias LMS.
  *
  *@property MOBLERDEBUG
+ *@return boolean
  **/
  
  var DEACTIVATE = false;
@@ -42,8 +44,11 @@ var URLS_TO_LMS = [
 						backgroundImage: "",
 						logoLabel: "Yellowjacket",					
 						url: "http://yellowjacket.ethz.ch/ilias_4_2/restservice/learningcards",
+						url2: "http://yellowjacket.ethz.ch/ilias_4_2/restservice",
 						debug:"1",
-						clientKey: ""
+						clientKey: "",
+						API:"v2",
+						// API: "v1" == old mobler cards backend, "v2" == powerTLA
 					},
 					{
 						servername: "hornet",
@@ -52,7 +57,8 @@ var URLS_TO_LMS = [
 						logoLabel: "Authoring LMS at ISN Zurich",
 						url: "http://hornet.ethz.ch/scorm_editor/restservice/learningcards",
 						debug:"0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					
 					{
@@ -62,7 +68,8 @@ var URLS_TO_LMS = [
 						logoLabel: "PfP test LMS at ETH",
 						url: "https://pfp-test.ethz.ch/restservice/learningcards",
 						debug:"1",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "PFPLMS",
@@ -71,7 +78,8 @@ var URLS_TO_LMS = [
 						logoLabel: "PfP LMS at ISN Zurich",
 						url: "https://pfp.ethz.ch/restservice/learningcards",
 						debug:"0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "JukuLabTest",
@@ -80,7 +88,8 @@ var URLS_TO_LMS = [
 						logoLabel: "JukuLab Test Server",
 						url: "http://ilias.jukulab.ee/restservice/learningcards",
 						debug: "1",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "EsthonianCollege",
@@ -89,7 +98,8 @@ var URLS_TO_LMS = [
 						logoLabel: "Estonian Defense College",
 						url: "https://eope.ksk.edu.ee/ilias/restservice/learningcards",
 						debug: "0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "ADLRomania",
@@ -98,7 +108,8 @@ var URLS_TO_LMS = [
 						logoLabel: "Romanian Didad LMS",
 						url: "http://lms.adlunap.ro/restservice/learningcards",
 						debug: "0",
-						clientKey: ""
+						clientKey: "",
+						API: "v1"
 					},
 					{
 						servername: "TestADLRomania",
@@ -107,8 +118,14 @@ var URLS_TO_LMS = [
 						logoLabel: "Test Romanian LMS",
 						url: "http://test.adlunap.ro/restservice/learningcards",
 						debug: "1",
+<<<<<<< HEAD
 						clientKey: ""
 					},
+=======
+						clientKey: "",
+						API: "v1"
+					}
+>>>>>>> refs/remotes/Evangelia/master
 					
 					{
 						servername: "LocalTests",
@@ -385,3 +402,32 @@ function elementContents(element) {
 	return retval;
 }
 
+<<<<<<< HEAD
+=======
+
+function turnOffDeactivate(){
+	moblerlog("enter turn off deactivate");
+	var DEACTIVATE=false;
+	var lmsModel=self.controller.models['lms'];
+	var servername=lmsModel.lmsData.activeServer;
+	lmsModel.lmsData.ServerData[servername].deactivateFlag=false;
+	lmsModel.storeData();
+}
+
+function turnOnDeactivate(){
+	DEACTIVATE=true;	//set the general deactivate status to true. 
+	var lmsModel=self.controller.models['lms'];
+	var servername=lmsModel.lmsData.activeServer;
+	lmsModel.lmsData.ServerData[servername] = {};
+	lmsModel.lmsData.ServerData[servername].deactivateFlag=true; //store and set the deactivate status to true
+	lmsModel.storeData();
+}
+
+
+function showErrorResponses(request){
+	console.log("ERROR status text: "+ request.statusText); 
+	console.log("ERROR status code: "+ request.statusCode()); 
+	console.log("ERROR status code is : " + request.status);
+	console.log("ERROR responsetext: "+ request.responseText);
+}
+>>>>>>> refs/remotes/Evangelia/master
