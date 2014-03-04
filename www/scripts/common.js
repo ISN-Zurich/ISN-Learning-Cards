@@ -95,7 +95,7 @@ var URLS_TO_LMS = [
 						servername: "EsthonianCollege",
 						logoImage: "resources/EstonianForces3.png",
 						backgroundImage: "",
-						logoLabel: "Estonian Defense College",
+						logoLabel: "Estonian Defense Forces",
 						url: "https://eope.ksk.edu.ee/ilias/restservice/learningcards",
 						debug: "0",
 						clientKey: "",
