@@ -22,6 +22,7 @@ under the License.
 /**
  * @author Isabella Nake
  * @author Evangelia Mitsopoulou
+ * @author Christian Glahn 
 */
 
 /*jslint vars: true, sloppy: true */
@@ -107,9 +108,9 @@ function StatisticsModel(controller) {
 	 * @param: a callback function that 
 	 * FIXME: the call back is undefined
 	 **/
-		$(document).bind("checkachievements", function(p, courseId) {
-		self.cardBurner.calculateValue(courseId);
-	});
+    $(document).bind("checkachievements", function(p, courseId) {
+        self.cardBurner.calculateValue(courseId);
+    });
 		
 }
 
@@ -362,8 +363,13 @@ StatisticsModel.prototype.allCalculationsDone = function(courseId) {
 StatisticsModel.prototype.queryDB = function(query, values, cbResult) {
 	var self = this;
 	self.db.transaction(function(transaction) {
-                        transaction.executeSql(query, values, cbResult, function(tx,e) {self.dbErrorFunction(tx,e);});
+                        transaction.executeSql(query, 
+                                               values, 
+                                               cbResult, 
+                                               function(tx,e) {
+                            self.dbErrorFunction(tx,e);
                         });
+    });
 };
 
 
@@ -384,7 +390,8 @@ StatisticsModel.prototype.checkAchievements = function(courseId) {
  *Function that is called if an error occurs while querying the database
  * @prototype
  * @function dbErrorFunction
- * @param tx,e
+ * @param tx - transaction object
+ * @param e - error object
  */
 StatisticsModel.prototype.dbErrorFunction = function(tx, e) {
 	moblerlog("DB Error: " + e.message);

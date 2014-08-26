@@ -20,10 +20,11 @@ under the License.
 
 */
 
-/** @author Isabella Nake
+/** 
+ * @author Isabella Nake
  * @author Evangelia Mitsopoulou
-
-*/
+ * @author Christian Glahn 
+ * */
 
 /*jslint vars: true, sloppy: true */
 

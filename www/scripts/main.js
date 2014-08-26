@@ -32,7 +32,6 @@ under the License.
 /*jslint vars: true, sloppy: true */
 
 var controller;
-
 document.addEventListener("deviceready", init, false);
 	
 
