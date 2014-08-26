@@ -1,13 +1,13 @@
 <?php
 /* 	THIS COMMENT MUST NOT BE REMOVED
-	
- 
-	Copyright (c) 2012 ETH Zürich, Affero GPL, see backend/ILIAS/AGPL_LICENSE.txt
-   	if you don't have a license file, then you can obtain it from the project΄s page 
-   	 on github <https://github.com/ISN-Zurich/ISN-Learning-Cards/blob/master/backEnd/ILIAS/LICENSE.txt> 
-   
-	
-	This file is part of Mobler Cards ILIAS Backend.
+
+
+    Copyright (c) 2012 ETH Zürich, Affero GPL, see backend/ILIAS/AGPL_LICENSE.txt
+   	if you don't have a license file, then you can obtain it from the project΄s page
+   	 on github <https://github.com/ISN-Zurich/ISN-Learning-Cards/blob/master/backEnd/ILIAS/LICENSE.txt>
+
+
+    This file is part of Mobler Cards ILIAS Backend.
 
     Mobler Cards Ilias Backend is free software: you can redistribute this code and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -28,9 +28,10 @@
 /**
  * This class loads the questions for the in the path specified course id from ILIAS and
  * returns a json-object with the question list
- * 
+ *
  * @author Isabella Nake
  * @author Evangelia Mitsopoulou
+ * @author Christian Glahn
  */
 
 
@@ -57,23 +58,23 @@ global $class_for_logging;
 
 $class_for_logging = "questions.php";
 
-logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
+//logging("is plugin active or not ".$ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards"));
 if ($ilPluginAdmin->isActive(IL_COMP_SERVICE, "UIComponent", "uihk", "TLAMoblerCards")) {
 
 $userID = get_session_user_from_headers();
-logging(" my userid is ". $userID);
+//logging(" my userid is ". $userID);
 
 if ($userID != 0) {
-	$courseID = $_SERVER['PATH_INFO'];
-	$courseID = preg_replace("/\//", "", $courseID); //remove leading backslash
-	logging($courseID);
+    $courseID = $_SERVER['PATH_INFO'];
+    $courseID = preg_replace("/\//", "", $courseID); //remove leading backslash
+    //logging($courseID);
 
-	$return_data = getQuestions($courseID);
+    $return_data = getQuestions($courseID);
 
-	echo(json_encode($return_data));
-	}
+    echo(json_encode($return_data));
+    }
 } else {
-	header("HTTP/1.1 403 Forbidden");
+    header("HTTP/1.1 403 Forbidden");
 }
 
 /**
@@ -82,46 +83,46 @@ if ($userID != 0) {
  * @return array with questions
  */
 function getQuestions($courseId) {
-	
-	global $assClozeTest;
-	//references are needed to get course items (= questionpools, tests, ...)
-	$item_references = ilObject::_getAllReferences($courseId);
-	//logging("item references".json_encode($item_references));
-	$questions = array();
 
-	if(is_array($item_references) && count($item_references)) {
-		foreach($item_references as $ref_id) {
+    global $assClozeTest;
+    //references are needed to get course items (= questionpools, tests, ...)
+    $item_references = ilObject::_getAllReferences($courseId);
+    //logging("item references".json_encode($item_references));
+    $questions = array();
 
-			//get all course items for a course (= questionpools, tests, ...)
-			$courseItems = new ilCourseItems($ref_id);
-			$courseItemsList = $courseItems->getAllItems();
+    if(is_array($item_references) && count($item_references)) {
+        foreach($item_references as $ref_id) {
 
-			logging("Questions: " . json_encode($courseItemsList));
+            //get all course items for a course (= questionpools, tests, ...)
+            $courseItems = new ilCourseItems($ref_id);
+            $courseItemsList = $courseItems->getAllItems();
 
-			foreach($courseItemsList as $courseItem) {
+            // logging("Questions: " . json_encode($courseItemsList));
 
-				//the course item has to be of type "qpl" (= questionpool)
-				if (strcmp($courseItem["type"], "qpl") == 0) {
-					$questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
-					$questionPool->read();
+            foreach($courseItemsList as $courseItem) {
 
-					//check if question pool is valid
-					if(isValidQuestionPool($questionPool)) {
-						$questionList = $questionPool->getQuestionList();
-						logging("Question list: " . json_encode($questionList));
-						$questions= getQuestionList($questionList);
-					}
-				}
-			}
-		}
-	}
+                //the course item has to be of type "qpl" (= questionpool)
+                if (strcmp($courseItem["type"], "qpl") == 0) {
+                    $questionPool = new ilObjQuestionPool($courseItem["ref_id"]);
+                    $questionPool->read();
 
-	//data structure for frontend models
-	return array(
-			"courseID" => $courseId,
-			"questions" => $questions);
-	
-	logging("questions are ".json_encode($questions));
+                    //check if question pool is valid
+                    if(isValidQuestionPool($questionPool)) {
+                        $questionList = $questionPool->getQuestionList();
+                        // logging("Question list: " . json_encode($questionList));
+                        $questions = array_merge($questions, getQuestionList($questionList));
+                    }
+                }
+            }
+        }
+    }
+
+    //data structure for frontend models
+    return array(
+            "courseID" => $courseId,
+            "questions" => $questions);
+
+    //logging("questions are ".json_encode($questions));
 }
 
 
